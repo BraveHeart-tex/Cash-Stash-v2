@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  name           String?
+  email          String?       @unique
+  hashedPassword String?
+  image          String?
+  emailVerified  Boolean?      @default(false)
+  userAccounts   UserAccount[]
+  transactions   Transaction[]
+  budgets        Budget[]
+  goals          Goal[]
+  reminders      Reminder[]
+  accounts       Account[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.String
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model UserAccount {
+  id           String        @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  balance      Float
+  userId       String        @db.ObjectId
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+  budgets      Budget[]
+  goals        Goal[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@map("userAccounts")
+}
+
+model Transaction {
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  amount      Float
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  description String
+  category    String
+  accountId   String      @db.ObjectId
+  account     UserAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  userId      String      @db.ObjectId
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("transactions")
+}
+
+model Budget {
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId
+  budgetAmount Float
+  spentAmount  Float
+  userId       String       @db.ObjectId
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accountId    String?      @db.ObjectId
+  account      UserAccount? @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  category     Category     @default(OTHER)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@map("budgets")
+}
+
+model Goal {
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  goalAmount    Float
+  currentAmount Float
+  userId        String       @db.ObjectId
+  user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accountId     String?      @db.ObjectId
+  account       UserAccount? @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  @@map("goals")
+}
+
+model Reminder {
+  id     String   @id @default(auto()) @map("_id") @db.ObjectId
+  title  String
+  amount Float
+  date   DateTime
+  userId String   @db.ObjectId
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("reminders")
+}
+
+enum Category {
+  FOOD
+  TRANSPORTATION
+  ENTERTAINMENT
+  UTILITIES
+  SHOPPING
+  HOUSING
+  OTHER
+
+  @@map("categories")
+}
