@@ -19,7 +19,7 @@ import Image from 'next/image';
 import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
 import logo from '@/app/components/Logo.svg';
-import { signIn } from 'next-auth/react';
+import { SignInResponse, signIn } from 'next-auth/react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 
@@ -27,6 +27,7 @@ const LoginClient = () => {
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
   const { colorMode } = useColorMode();
+  const router = useRouter();
 
   const { register, handleSubmit } = useForm<FieldValues>({
     defaultValues: {
@@ -40,16 +41,29 @@ const LoginClient = () => {
 
     signIn('credentials', {
       ...data,
-      callbackUrl: '/',
-      redirect: true,
-    }).then((callback) => {
+      redirect: false,
+    }).then((callback: SignInResponse | undefined) => {
       setIsLoading(false);
+
+      if (callback?.ok) {
+        toast({
+          title: 'Sign in successful.',
+          description: 'Welcome back!',
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+          position: 'top',
+        });
+        router.push('/');
+      }
       if (callback?.error) {
         toast({
           title: 'Sign in failed, please try again.',
+          description: 'Invalid email or password.',
           status: 'error',
           duration: 5000,
           isClosable: true,
+          position: 'top',
         });
       }
     });

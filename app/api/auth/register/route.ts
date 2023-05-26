@@ -8,7 +8,26 @@ export async function POST(request: Request) {
   const { name, email, password, img: image } = body;
 
   if (!name || !email || !password) {
-    return NextResponse.error();
+    return NextResponse.json(
+      {
+        error:
+          'Missing name, email or password. Please fill all the required fields',
+      },
+      { status: 400 }
+    );
+  }
+
+  const userExists = await prisma.user.findUnique({
+    where: {
+      email,
+    },
+  });
+
+  if (userExists) {
+    return NextResponse.json(
+      { error: `User already exists with the given email: ${email}` },
+      { status: 400 }
+    );
   }
 
   const hashedPassword = await bcrypt.hash(password, 12);
@@ -22,5 +41,5 @@ export async function POST(request: Request) {
     },
   });
 
-  return NextResponse.json(user);
+  return NextResponse.json({ user }, { status: 201 });
 }

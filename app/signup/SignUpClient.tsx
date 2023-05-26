@@ -13,6 +13,8 @@ import {
   useToast,
   useColorModeValue,
   useColorMode,
+  FormControl,
+  FormErrorMessage,
 } from '@chakra-ui/react';
 import Image from 'next/image';
 import { FcGoogle } from 'react-icons/fc';
@@ -22,6 +24,7 @@ import { CldUploadWidget } from 'next-cloudinary';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import axios, { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 
 const SignUpClient = () => {
   const router = useRouter();
@@ -58,7 +61,7 @@ const SignUpClient = () => {
 
     axios
       .post('/api/auth/register', data)
-      .then(() => {
+      .then((response) => {
         toast({
           title: 'Successfully signed up.',
           description: 'We have created your account for you.',
@@ -74,6 +77,12 @@ const SignUpClient = () => {
         if (httpError) {
           toast({
             title: 'An error occurred.',
+            // @ts-ignore
+            description: error.response?.data.error,
+            status: 'error',
+            duration: 5000,
+            isClosable: true,
+            position: 'top',
           });
         }
       })
@@ -118,50 +127,71 @@ const SignUpClient = () => {
         </Flex>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing={4}>
-            <Input
-              id='name'
-              type='text'
-              placeholder='Full Name'
-              size='lg'
-              borderRadius='md'
-              bg={useColorModeValue('gray.100', 'gray.800')}
-              _hover={{ bg: useColorModeValue('gray.200', 'gray.900') }}
-              {...register('name', {
-                required: 'This is required',
-              })}
-            />
-            <Input
-              id='email'
-              type='email'
-              placeholder='Email'
-              size='lg'
-              borderRadius='md'
-              bg={useColorModeValue('gray.100', 'gray.800')}
-              _hover={{ bg: useColorModeValue('gray.200', 'gray.900') }}
-              {...register('email', {
-                required: 'This is required',
-                pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: 'Please enter a valid email.',
-                },
-              })}
-            />
-            <Input
-              id='password'
-              type={'password'}
-              placeholder='Password'
-              size='lg'
-              borderRadius='md'
-              bg={useColorModeValue('gray.100', 'gray.800')}
-              _hover={{ bg: useColorModeValue('gray.200', 'gray.900') }}
-              {...register('password', {
-                required: 'This is required',
-                minLength: {
-                  value: 6,
-                  message: 'Password must have at least 6 characters',
-                },
-              })}
-            />
+            {/* @ts-ignore */}
+            <FormControl isInvalid={errors.name}>
+              <Input
+                id='name'
+                type='text'
+                placeholder='Full Name'
+                size='lg'
+                borderRadius='md'
+                bg={useColorModeValue('gray.100', 'gray.800')}
+                _hover={{ bg: useColorModeValue('gray.200', 'gray.900') }}
+                {...register('name', {
+                  required: 'Full name is required.',
+                })}
+              />
+              <FormErrorMessage>
+                {/* @ts-ignore */}
+                {errors.name && errors.name.message}
+              </FormErrorMessage>
+            </FormControl>
+            {/* @ts-ignore */}
+            <FormControl isInvalid={errors.email}>
+              <Input
+                id='email'
+                type='email'
+                placeholder='Email'
+                size='lg'
+                borderRadius='md'
+                bg={useColorModeValue('gray.100', 'gray.800')}
+                _hover={{ bg: useColorModeValue('gray.200', 'gray.900') }}
+                {...register('email', {
+                  required: 'A valid email is required',
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: 'Please enter a valid email.',
+                  },
+                })}
+              />
+              <FormErrorMessage>
+                {/* @ts-ignore */}
+                {errors.email && errors.email.message}
+              </FormErrorMessage>
+            </FormControl>
+            {/* @ts-ignore */}
+            <FormControl isInvalid={errors.password}>
+              <Input
+                id='password'
+                type={'password'}
+                placeholder='Password'
+                size='lg'
+                borderRadius='md'
+                bg={useColorModeValue('gray.100', 'gray.800')}
+                _hover={{ bg: useColorModeValue('gray.200', 'gray.900') }}
+                {...register('password', {
+                  required: 'Password is required.',
+                  minLength: {
+                    value: 6,
+                    message: 'Password must have at least 6 characters',
+                  },
+                })}
+              />
+              <FormErrorMessage>
+                {/* @ts-ignore */}
+                {errors.password && errors.password.message}
+              </FormErrorMessage>
+            </FormControl>
             <Box
               bg={useColorModeValue('blue.400', 'blue.700')}
               transition={'all .3s ease'}
@@ -215,7 +245,11 @@ const SignUpClient = () => {
               leftIcon={<FcGoogle />}
               size='lg'
               borderRadius='md'
-              onClick={() => {}}
+              onClick={() =>
+                signIn('google', {
+                  callbackUrl: '/',
+                })
+              }
               fontSize={{ base: '15px', md: '17px', lg: '18px' }}
               disabled={isLoading}
             >
@@ -226,7 +260,11 @@ const SignUpClient = () => {
               leftIcon={<FaGithub />}
               size='lg'
               borderRadius='md'
-              onClick={() => {}}
+              onClick={() =>
+                signIn('github', {
+                  callbackUrl: '/',
+                })
+              }
               fontSize={{ base: '15px', md: '17px', lg: '18px' }}
               disabled={isLoading}
             >
