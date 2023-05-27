@@ -10,7 +10,6 @@ import {
   DrawerHeader,
   DrawerBody,
   Stack,
-  Text,
   useDisclosure,
   useColorMode,
 } from '@chakra-ui/react';
@@ -19,12 +18,7 @@ import { HamburgerIcon, MoonIcon, SunIcon } from '@chakra-ui/icons';
 import Logo from './Logo.svg';
 import Image from 'next/image';
 import UserMenu from './UserMenu';
-import { User } from '@prisma/client';
-import { useSession } from 'next-auth/react';
-
-interface INavigationProps {
-  user: User | null;
-}
+import useFetchCurrentUser from '../hooks/useFetchCurrentUser';
 
 const NAV_LINKS = [
   { name: 'Dashboard', href: '/' },
@@ -35,7 +29,7 @@ const NAV_LINKS = [
   { name: 'Reports', href: '/reports' },
 ];
 
-const Navigation = ({ user }: INavigationProps) => {
+const Navigation = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { colorMode, toggleColorMode } = useColorMode();
   return (
@@ -75,7 +69,7 @@ const Navigation = ({ user }: INavigationProps) => {
             _hover={{ bg: colorMode === 'light' ? 'gray.200' : 'gray.700' }}
             color={colorMode === 'light' ? 'gray.600' : 'yellow.400'}
           />
-          <UserMenu user={user} />
+          <UserMenu />
         </Flex>
       </Flex>
 

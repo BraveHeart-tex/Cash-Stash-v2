@@ -46,16 +46,15 @@ model Account {
 }
 
 model UserAccount {
-  id           String        @id @default(auto()) @map("_id") @db.ObjectId
+  id           String              @id @default(auto()) @map("_id") @db.ObjectId
   name         String
   balance      Float
-  userId       String        @db.ObjectId
-  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String              @db.ObjectId
+  user         User                @relation(fields: [userId], references: [id], onDelete: Cascade)
   transactions Transaction[]
-  budgets      Budget[]
-  goals        Goal[]
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  category     UserAccountCategory @default(CHECKING)
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
 
   @@map("userAccounts")
 }
@@ -76,31 +75,27 @@ model Transaction {
 }
 
 model Budget {
-  id           String       @id @default(auto()) @map("_id") @db.ObjectId
+  id           String               @id @default(auto()) @map("_id") @db.ObjectId
   budgetAmount Float
   spentAmount  Float
-  userId       String       @db.ObjectId
-  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  accountId    String?      @db.ObjectId
-  account      UserAccount? @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  category     Category     @default(OTHER)
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  userId       String               @db.ObjectId
+  user         User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category     NotificationCategory @default(OTHER)
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
 
   @@map("budgets")
 }
 
 model Goal {
-  id            String       @id @default(auto()) @map("_id") @db.ObjectId
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
   name          String
   goalAmount    Float
   currentAmount Float
-  userId        String       @db.ObjectId
-  user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  accountId     String?      @db.ObjectId
-  account       UserAccount? @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  userId        String   @db.ObjectId
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   @@map("goals")
 }
@@ -116,7 +111,7 @@ model Reminder {
   @@map("reminders")
 }
 
-enum Category {
+enum NotificationCategory {
   FOOD
   TRANSPORTATION
   ENTERTAINMENT
@@ -125,5 +120,16 @@ enum Category {
   HOUSING
   OTHER
 
-  @@map("categories")
+  @@map("notificationCategories")
+}
+
+enum UserAccountCategory {
+  CHECKING
+  SAVINGS
+  CREDIT_CARD
+  INVESTMENT
+  LOAN
+  OTHER
+
+  @@map("userAccountCategories")
 }

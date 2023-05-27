@@ -10,14 +10,11 @@ import {
   MenuItem,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { User } from '@prisma/client';
 import { signOut } from 'next-auth/react';
+import useFetchCurrentUser from '../hooks/useFetchCurrentUser';
 
-interface IUserMenuProps {
-  user: User | null;
-}
-
-const UserMenu = ({ user }: IUserMenuProps) => {
+const UserMenu = () => {
+  const { user } = useFetchCurrentUser();
   return (
     <Menu>
       <MenuButton
@@ -52,8 +49,6 @@ const UserMenu = ({ user }: IUserMenuProps) => {
         </Center>
         <br />
         <MenuDivider />
-        <MenuItem>Your Servers</MenuItem>
-        <MenuItem>Account Settings</MenuItem>
         <MenuItem
           onClick={() =>
             signOut({
