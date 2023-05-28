@@ -101,7 +101,6 @@ const EditUserAccountForm = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      ID: {selectedAccountId}
       <Stack spacing={4}>
         {/* @ts-ignore */}
         <FormControl isRequired isInvalid={errors.name}>

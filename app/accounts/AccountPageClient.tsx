@@ -14,6 +14,8 @@ import useColorModeStyles from '../hooks/useColorModeStyles';
 import AccountInformation from '../components/AccountInformation';
 import LoadingSpinner from '../components/Loading';
 import CreateUserAccountModal from '../components/CreateUserAccountModal';
+import CreateUserAccountOptions from '../utils/CreateUserAccountOptions';
+import AccountsFilter from '../components/AccountFilter';
 
 export default function AccountsPageClient() {
   const { user, isLoading: isLoadingCurrentUser } = useFetchCurrentUser();
@@ -44,7 +46,6 @@ export default function AccountsPageClient() {
       <Heading as='h3' fontSize={'3xl'} mb={4} color={headingColor}>
         Accounts
       </Heading>
-
       <Box
         display={'flex'}
         justifyContent={'center'}
@@ -59,7 +60,8 @@ export default function AccountsPageClient() {
           flexDirection={'column'}
           width={'100%'}
         >
-          <AccountInformation userAccounts={userAccounts} />
+          <AccountsFilter accounts={userAccounts} />
+          {/* <AccountInformation userAccounts={userAccounts} /> */}
           <Button mt={4} onClick={onOpen}>
             Create Account
           </Button>

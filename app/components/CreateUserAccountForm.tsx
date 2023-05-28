@@ -10,12 +10,13 @@ import {
   Button,
 } from '@chakra-ui/react';
 import CreateUserAccountOptions from '../utils/CreateUserAccountOptions';
-import React from 'react';
+import React, { useState } from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import axios from 'axios';
 import useColorModeStyles from '../hooks/useColorModeStyles';
 
 const CreateUserAccountForm = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
   const accountOptions = Object.values(CreateUserAccountOptions);
   const { btnColor, btnBgColor, btnHoverBgColor } = useColorModeStyles();
@@ -23,7 +24,8 @@ const CreateUserAccountForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isLoading, isSubmitting },
+    formState: { errors, isSubmitting },
+    reset,
   } = useForm<FieldValues>({
     defaultValues: {
       balance: 10,
@@ -33,9 +35,12 @@ const CreateUserAccountForm = () => {
   });
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    setIsLoading(true);
     axios
       .post('/api/user/accounts', data)
       .then(() => {
+        setIsLoading(false);
+        reset();
         toast({
           title: 'Account created.',
           description:
@@ -45,8 +50,12 @@ const CreateUserAccountForm = () => {
           isClosable: true,
           position: 'top',
         });
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       })
       .catch(() => {
+        setIsLoading(false);
         toast({
           title: 'Error creating account.',
           description: 'There was an error creating your account.',
@@ -119,18 +128,21 @@ const CreateUserAccountForm = () => {
             {errors.balance && errors.balance.message}
           </FormErrorMessage>
         </FormControl>
-        <Button
-          color={btnColor}
-          bg={btnBgColor}
-          _hover={{
-            bg: btnHoverBgColor,
-          }}
-          type='submit'
-          isLoading={isSubmitting}
-          isDisabled={isLoading}
-        >
-          Create
-        </Button>
+        {isLoading ? (
+          <Button>Loading...</Button>
+        ) : (
+          <Button
+            color={btnColor}
+            bg={btnBgColor}
+            _hover={{
+              bg: btnHoverBgColor,
+            }}
+            type='submit'
+            disabled={isSubmitting || isLoading}
+          >
+            Create
+          </Button>
+        )}
       </Stack>
     </form>
   );

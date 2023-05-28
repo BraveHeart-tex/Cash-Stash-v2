@@ -4,7 +4,6 @@ TODO: Clear Account Information: Displaying additional information about each ac
 TODO: Edit Account: Add the ability for users to edit account details. This could include changing the account name, updating the balance, or modifying any other relevant account information.
 TODO: Confirmation Dialog: Adding a confirmation dialog or prompt before deleting an account. This helps prevent accidental deletions and allows users to confirm their actions.
 TODO: Implement filters based on account categories
-TODO: Implement multi-currency support for accounts / account creation
 
 - User:
 
