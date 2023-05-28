@@ -1,5 +1,6 @@
+'use client';
 import React, { useState } from 'react';
-import { Select, Box, List, ListItem, Heading, Flex } from '@chakra-ui/react';
+import { Select, Box, Flex } from '@chakra-ui/react';
 import { UserAccount } from '@prisma/client';
 import CreateUserAccountOptions from '../utils/CreateUserAccountOptions';
 import AccountInformation from './AccountInformation';

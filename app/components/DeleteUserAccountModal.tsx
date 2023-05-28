@@ -1,3 +1,4 @@
+'use client';
 import {
   Modal,
   ModalOverlay,
@@ -7,7 +8,6 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-  Box,
   Heading,
   Flex,
   useToast,

@@ -6,14 +6,8 @@ import {
   ModalHeader,
   ModalCloseButton,
   ModalBody,
-  Stack,
-  FormControl,
-  FormLabel,
-  Input,
   ModalFooter,
   Button,
-  useDisclosure,
-  Select,
 } from '@chakra-ui/react';
 import React from 'react';
 import useColorModeStyles from '../hooks/useColorModeStyles';

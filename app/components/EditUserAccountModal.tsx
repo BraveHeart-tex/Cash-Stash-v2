@@ -8,7 +8,6 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-  useColorModeValue,
 } from '@chakra-ui/react';
 import React from 'react';
 import useColorModeStyles from '../hooks/useColorModeStyles';

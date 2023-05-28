@@ -2,16 +2,13 @@
 import React from 'react';
 import {
   Box,
-  Text,
   Stat,
   StatLabel,
   StatNumber,
   StatHelpText,
-  useColorMode,
 } from '@chakra-ui/react';
 
 const FinancialInsights = () => {
-  const { colorMode } = useColorMode();
   const totalIncome = 5000;
   const totalExpenses = 2500;
   const netIncome = totalIncome - totalExpenses;

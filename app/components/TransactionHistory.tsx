@@ -1,13 +1,6 @@
 'use client';
 import React from 'react';
-import {
-  Box,
-  Text,
-  Stack,
-  Badge,
-  Divider,
-  useColorMode,
-} from '@chakra-ui/react';
+import { Box, Text, Stack, Badge, useColorMode } from '@chakra-ui/react';
 
 const TransactionHistory = () => {
   const { colorMode } = useColorMode();

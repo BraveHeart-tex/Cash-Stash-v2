@@ -1,3 +1,4 @@
+'use client';
 import { BsTrash } from 'react-icons/bs';
 import { Icon } from '@chakra-ui/react';
 
