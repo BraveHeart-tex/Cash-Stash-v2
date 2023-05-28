@@ -1,5 +1,9 @@
 import getUserAccountById from '@/app/actions/getUserAccountById';
 import prisma from '@/app/libs/prismadb';
+import CreateUserAccountOptions, {
+  getKeyByValue,
+} from '@/app/utils/CreateUserAccountOptions';
+import { UserAccountCategory } from '@prisma/client';
 import { NextResponse } from 'next/server';
 
 interface IParams {
@@ -73,13 +77,15 @@ export async function PUT(request: Request, { params }: { params: IParams }) {
 
   const { balance, category, name } = await request.json();
 
+  const mappedCategory = getKeyByValue(CreateUserAccountOptions, category);
+
   const updatedAccount = await prisma.userAccount.update({
     where: {
       id: currentAccount.id,
     },
     data: {
-      balance,
-      category,
+      balance: parseFloat(balance),
+      category: mappedCategory as UserAccountCategory,
       name,
     },
   });

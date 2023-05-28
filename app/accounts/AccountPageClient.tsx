@@ -4,17 +4,6 @@ import {
   Heading,
   Text,
   Button,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  FormControl,
-  FormLabel,
-  Input,
-  Stack,
   useDisclosure,
   Container,
 } from '@chakra-ui/react';
@@ -44,17 +33,18 @@ export default function AccountsPageClient() {
   return (
     <Container maxW={'8xl'} p={4}>
       <Navigation />
-      <Heading as='h1' mb={4} color={headingColor}>
-        Accounts
-      </Heading>
       <Box mb={4}>
-        <Heading as={'h2'} color={headingColor}>
+        <Heading as={'h1'} color={headingColor}>
           Welcome, {user?.name}!
         </Heading>
         <Text color={textColor}>
           Here you can see the accounts you&apos;ve created.
         </Text>
       </Box>
+      <Heading as='h3' fontSize={'3xl'} mb={4} color={headingColor}>
+        Accounts
+      </Heading>
+
       <Box
         display={'flex'}
         justifyContent={'center'}

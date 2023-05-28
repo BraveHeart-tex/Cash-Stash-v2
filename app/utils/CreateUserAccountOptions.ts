@@ -14,4 +14,17 @@ export function getOptionLabel(
   return options[selectedOption] || '';
 }
 
+export function getKeyByValue<T>(
+  object: Record<string, T>,
+  value: T
+): string | null {
+  const keys = Object.keys(object);
+  for (const key of keys) {
+    if (object[key] === value) {
+      return key;
+    }
+  }
+  return null;
+}
+
 export default CreateUserAccountOptions;

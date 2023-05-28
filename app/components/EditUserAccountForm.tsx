@@ -7,8 +7,9 @@ import {
   Input,
   Select,
   Stack,
+  useToast,
 } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import useColorModeStyles from '../hooks/useColorModeStyles';
 import { useForm, FieldValues, SubmitHandler } from 'react-hook-form';
 import CreateUserAccountOptions, {
@@ -16,6 +17,8 @@ import CreateUserAccountOptions, {
 } from '../utils/CreateUserAccountOptions';
 import useFetchCurrentAccount from '../hooks/useFetchCurrentAccount';
 import FormLoadingSpinner from './FormLoadingSpinner';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 interface IEditUserAccountFormProps {
   selectedAccountId: string | null;
@@ -26,10 +29,12 @@ const EditUserAccountForm = ({
 }: IEditUserAccountFormProps) => {
   const { currentAccount, isLoading: isCurrentAccountLoading } =
     useFetchCurrentAccount(selectedAccountId);
+  const router = useRouter();
 
   const accountOptions = Object.values(CreateUserAccountOptions);
 
   const { btnColor, btnBgColor, btnHoverBgColor } = useColorModeStyles();
+  const toast = useToast();
 
   const {
     register,
@@ -58,7 +63,36 @@ const EditUserAccountForm = ({
   }, [currentAccount, setValue]);
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    // TODO: Make the request to update the account.
+    try {
+      const response = await axios.put(
+        `/api/user/accounts/${selectedAccountId}`,
+        data
+      );
+
+      if (response.status === 200) {
+        toast({
+          title: 'Account updated.',
+          description:
+            'Account has been updated successfully. You can close this window now. You will be redirected to the dashboard.',
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+          position: 'top',
+        });
+        setTimeout(() => {
+          router.push('/');
+        }, 2000);
+      }
+    } catch (error: any) {
+      toast({
+        title: 'An error occurred.',
+        description: error.response?.data.error,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'top',
+      });
+    }
   };
 
   if (loading) {

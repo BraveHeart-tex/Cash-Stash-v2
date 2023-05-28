@@ -11,7 +11,6 @@ import {
 } from '@chakra-ui/react';
 import CreateUserAccountOptions from '../utils/CreateUserAccountOptions';
 import React from 'react';
-import { formatNumber } from '../utils/FormUtils';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import axios from 'axios';
 import useColorModeStyles from '../hooks/useColorModeStyles';
@@ -39,7 +38,8 @@ const CreateUserAccountForm = () => {
       .then(() => {
         toast({
           title: 'Account created.',
-          description: 'Your account has been created.',
+          description:
+            'Your account has been created. You can close this window now.',
           status: 'success',
           duration: 4000,
           isClosable: true,

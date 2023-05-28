@@ -1,6 +1,3 @@
-import getCurrentUser from '../actions/getCurrentUser';
-import Navigation from '../components/Navigation';
-
 export const metadata = {
   title: 'Cash Stash | Accounts',
   description:
