@@ -1,9 +1,13 @@
 import './globals.css';
-import { Nunito } from 'next/font/google';
-import { Providers } from './providers';
+import { Inter, JetBrains_Mono, Nunito, Roboto } from 'next/font/google';
+import { Providers as ChakraUIProviders } from './providers';
+import { Providers as ReduxProviders } from '@/app/redux/provider';
 import { NextAuthProvider } from './provider';
 
-const NunitoFont = Nunito({ subsets: ['latin'] });
+const RobotoFont = Roboto({
+  weight: ['400', '500', '700'],
+  subsets: ['latin'],
+});
 
 export const metadata = {
   title: 'Cash Stash | Personal Finance',
@@ -18,9 +22,11 @@ interface ILayoutProps {
 export default function RootLayout({ children }: ILayoutProps) {
   return (
     <html lang='en'>
-      <body className={NunitoFont.className}>
+      <body className={RobotoFont.className}>
         <NextAuthProvider>
-          <Providers>{children}</Providers>
+          <ReduxProviders>
+            <ChakraUIProviders>{children}</ChakraUIProviders>
+          </ReduxProviders>
         </NextAuthProvider>
       </body>
     </html>

@@ -8,13 +8,31 @@ import {
   Center,
   MenuDivider,
   MenuItem,
-  useColorModeValue,
+  Spinner,
+  useColorMode,
 } from '@chakra-ui/react';
 import { signOut } from 'next-auth/react';
-import useFetchCurrentUser from '../hooks/useFetchCurrentUser';
+import { useAppSelector } from '../redux/hooks';
+import { useDispatch } from 'react-redux';
+import { fetchCurrentUser } from '../redux/features/userSlice';
+import { useEffect } from 'react';
+import { AppDispatch } from '../redux/store';
 
 const UserMenu = () => {
-  const { user } = useFetchCurrentUser();
+  const user = useAppSelector((state) => state.userReducer.currentUser);
+  const isLoading = useAppSelector((state) => state.userReducer.isLoading);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { colorMode } = useColorMode();
+
+  useEffect(() => {
+    dispatch(fetchCurrentUser());
+  }, [dispatch]);
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+
   return (
     <Menu>
       <MenuButton
@@ -28,8 +46,8 @@ const UserMenu = () => {
         <Avatar
           src={user?.image as string}
           name={user?.name as string}
-          bg={useColorModeValue('gray.200', 'gray.700')}
-          color={useColorModeValue('gray.600', 'gray.200')}
+          bg={colorMode === 'light' ? 'gray.200' : 'gray.700'}
+          color={colorMode === 'light' ? 'gray.600' : 'gray.200'}
         />
       </MenuButton>
       <MenuList alignItems={'center'}>
@@ -38,8 +56,8 @@ const UserMenu = () => {
           <Avatar
             src={user?.image as string}
             name={user?.name as string}
-            bg={useColorModeValue('gray.200', 'gray.700')}
-            color={useColorModeValue('gray.600', 'gray.200')}
+            bg={colorMode === 'light' ? 'gray.200' : 'gray.700'}
+            color={colorMode === 'light' ? 'gray.600' : 'gray.200'}
             size={'xl'}
           />
         </Center>

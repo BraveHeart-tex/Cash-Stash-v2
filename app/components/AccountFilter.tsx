@@ -1,16 +1,28 @@
 'use client';
-import React, { useState } from 'react';
-import { Select, Box, Flex } from '@chakra-ui/react';
-import { UserAccount } from '@prisma/client';
+import React, { useEffect, useState } from 'react';
+import { Select, Box, Flex, Spinner, Skeleton } from '@chakra-ui/react';
 import CreateUserAccountOptions from '../utils/CreateUserAccountOptions';
 import AccountInformation from './AccountInformation';
+import { useAppSelector } from '../redux/hooks';
+import { AppDispatch } from '../redux/store';
+import { useDispatch } from 'react-redux';
+import { fetchCurrentUserAccounts } from '../redux/features/userAccountSlice';
 
-interface IAccountFilterProps {
-  accounts: UserAccount[] | null | undefined;
-}
+const AccountsFilter = () => {
+  const { currentUserAccounts: accounts, isLoading } = useAppSelector(
+    (state) => state.userAccountReducer
+  );
+  const dispatch = useDispatch<AppDispatch>();
 
-const AccountsFilter = ({ accounts }: IAccountFilterProps) => {
+  useEffect(() => {
+    dispatch(fetchCurrentUserAccounts());
+  }, [dispatch]);
+
   const [selectedAccountType, setSelectedAccountType] = useState('');
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   if (accounts?.length === 0 || !accounts) {
     return null;

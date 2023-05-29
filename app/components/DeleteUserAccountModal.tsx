@@ -17,6 +17,8 @@ import useColorModeStyles from '../hooks/useColorModeStyles';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
+import { useAppDispatch } from '../redux/hooks';
+import { fetchCurrentUserAccounts } from '../redux/features/userAccountSlice';
 
 interface IDeleteUserAccountModalProps {
   selectedAccountId: string | null;
@@ -30,8 +32,8 @@ const DeleteUserAccountModal = ({
   onClose,
 }: IDeleteUserAccountModalProps) => {
   const { headingColor } = useColorModeStyles();
+  const dispatch = useAppDispatch();
   const toast = useToast();
-  const router = useRouter();
 
   const {
     handleSubmit,
@@ -41,6 +43,7 @@ const DeleteUserAccountModal = ({
   const onSubmit = async (id: string) => {
     try {
       await axios.delete(`/api/user/accounts/${id}`);
+      dispatch(fetchCurrentUserAccounts());
       toast({
         title: 'Account deleted.',
         description: 'The account has been deleted.',
@@ -50,9 +53,6 @@ const DeleteUserAccountModal = ({
         position: 'top',
       });
       onClose();
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
     } catch (error) {
       toast({
         title: 'An error occurred.',

@@ -14,8 +14,11 @@ import React, { useState } from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import axios from 'axios';
 import useColorModeStyles from '../hooks/useColorModeStyles';
+import { useAppDispatch } from '../redux/hooks';
+import { fetchCurrentUserAccounts } from '../redux/features/userAccountSlice';
 
 const CreateUserAccountForm = () => {
+  const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
   const accountOptions = Object.values(CreateUserAccountOptions);
@@ -41,6 +44,7 @@ const CreateUserAccountForm = () => {
       .then(() => {
         setIsLoading(false);
         reset();
+        dispatch(fetchCurrentUserAccounts());
         toast({
           title: 'Account created.',
           description:
@@ -50,9 +54,6 @@ const CreateUserAccountForm = () => {
           isClosable: true,
           position: 'top',
         });
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
       })
       .catch(() => {
         setIsLoading(false);

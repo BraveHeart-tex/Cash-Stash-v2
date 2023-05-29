@@ -18,7 +18,6 @@ import { HamburgerIcon, MoonIcon, SunIcon } from '@chakra-ui/icons';
 import Logo from './Logo.svg';
 import Image from 'next/image';
 import UserMenu from './UserMenu';
-import useFetchCurrentUser from '../hooks/useFetchCurrentUser';
 
 const NAV_LINKS = [
   { name: 'Dashboard', href: '/' },

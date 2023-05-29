@@ -15,10 +15,13 @@ import { useForm, FieldValues, SubmitHandler } from 'react-hook-form';
 import CreateUserAccountOptions, {
   getOptionLabel,
 } from '../utils/CreateUserAccountOptions';
-import useFetchCurrentAccount from '../hooks/useFetchCurrentAccount';
 import FormLoadingSpinner from './FormLoadingSpinner';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import { useAppSelector } from '../redux/hooks';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../redux/store';
+import { fetchCurrentAccount } from '../redux/features/currentAccountSlice';
+import { fetchCurrentUserAccounts } from '../redux/features/userAccountSlice';
 
 interface IEditUserAccountFormProps {
   selectedAccountId: string | null;
@@ -27,9 +30,11 @@ interface IEditUserAccountFormProps {
 const EditUserAccountForm = ({
   selectedAccountId,
 }: IEditUserAccountFormProps) => {
-  const { currentAccount, isLoading: isCurrentAccountLoading } =
-    useFetchCurrentAccount(selectedAccountId);
-  const router = useRouter();
+  const { currentAccount, isLoading: isCurrentAccountLoading } = useAppSelector(
+    (state) => state.currentAccountReducer
+  );
+
+  const dispatch = useDispatch<AppDispatch>();
 
   const accountOptions = Object.values(CreateUserAccountOptions);
 
@@ -52,6 +57,12 @@ const EditUserAccountForm = ({
   const loading = isCurrentAccountLoading || isLoading;
 
   useEffect(() => {
+    if (selectedAccountId) {
+      dispatch(fetchCurrentAccount(selectedAccountId));
+    }
+  }, [dispatch, selectedAccountId]);
+
+  useEffect(() => {
     if (currentAccount) {
       setValue('name', currentAccount.name);
       setValue(
@@ -70,18 +81,16 @@ const EditUserAccountForm = ({
       );
 
       if (response.status === 200) {
+        dispatch(fetchCurrentUserAccounts());
         toast({
           title: 'Account updated.',
           description:
-            'Account has been updated successfully. You can close this window now. You will be redirected to the dashboard.',
+            'Account has been updated successfully. You can close this window now.',
           status: 'success',
           duration: 5000,
           isClosable: true,
           position: 'top',
         });
-        setTimeout(() => {
-          router.push('/');
-        }, 2000);
       }
     } catch (error: any) {
       toast({
