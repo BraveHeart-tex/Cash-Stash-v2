@@ -8,7 +8,6 @@ import {
   Center,
   MenuDivider,
   MenuItem,
-  Spinner,
   useColorMode,
 } from '@chakra-ui/react';
 import { signOut } from 'next-auth/react';
@@ -20,7 +19,6 @@ import { AppDispatch } from '../redux/store';
 
 const UserMenu = () => {
   const user = useAppSelector((state) => state.userReducer.currentUser);
-  const isLoading = useAppSelector((state) => state.userReducer.isLoading);
   const dispatch = useDispatch<AppDispatch>();
 
   const { colorMode } = useColorMode();
@@ -28,10 +26,6 @@ const UserMenu = () => {
   useEffect(() => {
     dispatch(fetchCurrentUser());
   }, [dispatch]);
-
-  if (isLoading) {
-    return <Spinner />;
-  }
 
   return (
     <Menu>

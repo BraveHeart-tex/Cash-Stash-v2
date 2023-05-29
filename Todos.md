@@ -1,7 +1,5 @@
 # Log
 
-TODO: Clear Account Information: Displaying additional information about each account, such as account type, account number, or associated transactions.
-
 - User:
 
 At least one of the following fields is required: name or email.
