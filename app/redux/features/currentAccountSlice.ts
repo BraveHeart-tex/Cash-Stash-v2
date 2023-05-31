@@ -1,6 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { UserAccount } from '@prisma/client';
-import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 interface UserAccountsState {

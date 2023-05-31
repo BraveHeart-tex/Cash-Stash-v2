@@ -19,13 +19,13 @@ import { fetchBudgets } from '../redux/features/budgetSlice';
 import FormLoadingSpinner from './FormLoadingSpinner';
 
 interface IEditUserBudgetFormProps {
-  selectedBudgetId: string;
+  selectedBudgetId: string | null;
 }
 
 const EditUserBudgetForm = ({ selectedBudgetId }: IEditUserBudgetFormProps) => {
   const toast = useToast();
   const budgetOptions = Object.values(CreateBudgetOptions);
-  const { currentBudget, isLoading } = useAppSelector(
+  const { currentBudget, isLoading: isCurrentBudgetLoading } = useAppSelector(
     (state) => state.currentBudgetReducer
   );
   const dispatch = useAppDispatch();
@@ -33,7 +33,7 @@ const EditUserBudgetForm = ({ selectedBudgetId }: IEditUserBudgetFormProps) => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isLoading, isSubmitting },
     setValue,
   } = useForm<FieldValues>({
     defaultValues: {
@@ -42,6 +42,8 @@ const EditUserBudgetForm = ({ selectedBudgetId }: IEditUserBudgetFormProps) => {
       spentAmount: 0,
     },
   });
+
+  const loading = isCurrentBudgetLoading || isLoading;
 
   useEffect(() => {
     if (selectedBudgetId) {
@@ -91,7 +93,7 @@ const EditUserBudgetForm = ({ selectedBudgetId }: IEditUserBudgetFormProps) => {
     }
   };
 
-  if (isLoading) {
+  if (loading) {
     return <FormLoadingSpinner />;
   }
 

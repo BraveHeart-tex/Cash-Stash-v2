@@ -12,11 +12,22 @@ const initialState: CurrentBudgetState = {
   isLoading: false,
 };
 
+interface FetchCurrentBudgetResponse {
+  budget: Budget;
+}
+
 export const fetchBudgetById = createAsyncThunk(
   'budgets/fetchBudgetById',
   async (budgetId: string) => {
-    const response = await axios.get(`/api/user/budgets/${budgetId}`);
-    return response.data.budget;
+    try {
+      const response = await axios.get<FetchCurrentBudgetResponse>(
+        `/api/user/budgets/${budgetId}`
+      );
+      return response.data.budget;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
   }
 );
 

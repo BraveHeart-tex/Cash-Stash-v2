@@ -11,6 +11,18 @@ interface IParams {
 
 // get budget by id
 export async function GET(request: Request, { params }: { params: IParams }) {
+  const { budgetId } = params;
+  if (!budgetId || typeof budgetId !== 'string') {
+    return NextResponse.json(
+      {
+        message: 'Invalid budgetId',
+      },
+      {
+        status: 400,
+      }
+    );
+  }
+
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
@@ -20,18 +32,6 @@ export async function GET(request: Request, { params }: { params: IParams }) {
       },
       {
         status: 401,
-      }
-    );
-  }
-
-  const { budgetId } = params;
-  if (!budgetId || typeof budgetId !== 'string') {
-    return NextResponse.json(
-      {
-        message: 'Invalid budgetId',
-      },
-      {
-        status: 400,
       }
     );
   }

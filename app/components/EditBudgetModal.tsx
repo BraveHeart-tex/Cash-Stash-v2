@@ -17,7 +17,7 @@ import EditUserBudgetForm from './EditUserBudgetForm';
 interface IEditBudgetModalProps {
   isOpen: boolean;
   onClose: () => void;
-  selectedBudgetId: string;
+  selectedBudgetId: string | null;
 }
 
 const EditBudgetModal = ({
