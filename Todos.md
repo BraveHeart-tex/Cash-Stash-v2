@@ -1,6 +1,5 @@
 # Log
 
-TODO: Add progress bar to the budget cards (Current / Target)
 TODO: Refactor folder structure for components
 
 - User:

@@ -18,6 +18,7 @@ import {
   Box,
   Flex,
   Container,
+  useColorMode,
 } from '@chakra-ui/react';
 import { UserAccount } from '@prisma/client';
 import CreateUserAccountOptions, {
@@ -36,6 +37,7 @@ interface IAccountInformationProps {
 }
 
 const AccountInformation = ({ userAccounts }: IAccountInformationProps) => {
+  const { colorMode } = useColorMode();
   const [selectedAccountId, setSelectedAccountId] = useState<string | null>(
     null
   );
@@ -64,7 +66,12 @@ const AccountInformation = ({ userAccounts }: IAccountInformationProps) => {
       <SimpleGrid columns={{ base: 1, md: 2, xl: 3 }} gap={8}>
         {userAccounts && userAccounts?.length > 0 ? (
           userAccounts.map((userAccount) => (
-            <Card key={userAccount.id}>
+            <Card
+              key={userAccount.id}
+              bg={'transparent'}
+              borderWidth={1}
+              borderColor={colorMode === 'light' ? 'gray.200' : 'gray.700'}
+            >
               <Popover>
                 <PopoverTrigger>
                   <IconButton
@@ -125,7 +132,9 @@ const AccountInformation = ({ userAccounts }: IAccountInformationProps) => {
                   </PopoverBody>
                 </PopoverContent>
               </Popover>
-              <CardHeader>
+              <CardHeader
+                color={colorMode === 'light' ? 'gray.600' : 'gray.300'}
+              >
                 <Heading size='md'>{userAccount.name}</Heading>
                 <Text fontSize={'md'} textTransform={'capitalize'}>
                   Account type:{' '}
@@ -135,8 +144,10 @@ const AccountInformation = ({ userAccounts }: IAccountInformationProps) => {
                   )}
                 </Text>
               </CardHeader>
-              <CardBody>
-                <Text>Account Balance: ${userAccount.balance}</Text>
+              <CardBody color={colorMode === 'light' ? 'gray.600' : 'gray.300'}>
+                <Text fontWeight={'600'}>
+                  Account Balance: ${userAccount.balance}
+                </Text>
               </CardBody>
             </Card>
           ))
