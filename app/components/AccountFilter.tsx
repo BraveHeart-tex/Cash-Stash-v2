@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { Select, Box, Flex, Spinner, Skeleton } from '@chakra-ui/react';
+import { Select, Box, Flex, Spinner, Text } from '@chakra-ui/react';
 import CreateUserAccountOptions from '../utils/CreateUserAccountOptions';
 import AccountInformation from './AccountInformation';
 import { useAppSelector } from '../redux/hooks';
@@ -21,7 +21,17 @@ const AccountsFilter = () => {
   const [selectedAccountType, setSelectedAccountType] = useState('');
 
   if (isLoading) {
-    return <Spinner />;
+    return (
+      <Box
+        display={'flex'}
+        justifyContent={'center'}
+        alignItems={'center'}
+        gap={4}
+      >
+        <Text>Loading accounts... </Text>
+        <Spinner />
+      </Box>
+    );
   }
 
   if (accounts?.length === 0 || !accounts) {
