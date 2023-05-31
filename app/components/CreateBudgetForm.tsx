@@ -13,6 +13,7 @@ import {
 import CreateBudgetOptions from '../utils/CreateBudgetOptions';
 import { FieldValues, useForm } from 'react-hook-form';
 import useColorModeStyles from '../hooks/useColorModeStyles';
+import axios from 'axios';
 
 interface ICreateBudgetFormProps {}
 
@@ -35,7 +36,31 @@ const CreateBudgetForm = ({}: ICreateBudgetFormProps) => {
     },
   });
 
-  const onSubmit = async (data: FieldValues) => {};
+  const onSubmit = async (data: FieldValues) => {
+    try {
+      const response = await axios.post('/api/user/budgets', data);
+      const budget = response.data.budget;
+      toast({
+        title: 'Budget created.',
+        description: `Budget for ${budget.category} has been created. You can close this window now.`,
+        status: 'success',
+        duration: 4000,
+        isClosable: true,
+        position: 'top',
+      });
+      reset();
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: 'An error occurred.',
+        description: 'Unable to create budget.',
+        status: 'error',
+        duration: 4000,
+        isClosable: true,
+        position: 'top',
+      });
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -109,7 +134,7 @@ const CreateBudgetForm = ({}: ICreateBudgetFormProps) => {
             {errors.spentAmount && errors.spentAmount.message}
           </FormErrorMessage>
         </FormControl>
-        {isLoading ? (
+        {isSubmitting ? (
           <Button isDisabled={isSubmitting}>
             <Spinner />
           </Button>

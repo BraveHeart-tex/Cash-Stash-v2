@@ -3,6 +3,7 @@ import getCurrentUserBudgets from '@/app/actions/getCurrentUserBudgets';
 import getCurrentUser from '@/app/actions/getCurrentUser';
 import createBudget from '@/app/actions/createBudget';
 import { NotificationCategory } from '@prisma/client';
+import CreateBudgetOptions from '@/app/utils/CreateBudgetOptions';
 
 // @desc GET all budgets
 // @route GET /api/user/budgets
@@ -47,16 +48,18 @@ export async function POST(request: Request) {
     );
   }
 
-  // TODO: MAP THE STRING TO THE ENUM (category)
+  const mappedCategory = Object.entries(CreateBudgetOptions).find(
+    ([key, value]) => value === category
+  )?.[0];
 
   const createdBudget = await createBudget(
     budgetAmount,
     spentAmount,
-    category as NotificationCategory,
+    mappedCategory as NotificationCategory,
     currentUser.id
   );
 
-  if (!createBudget) {
+  if (!createdBudget) {
     return NextResponse.json(
       { error: 'Could not create budget for current user.' },
       { status: 500 }
