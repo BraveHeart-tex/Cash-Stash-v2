@@ -143,6 +143,7 @@ const theme = extendTheme({
     global: (props: StyleFunctionProps) => ({
       body: {
         bg: mode('gray.100', 'gray.800 !important')(props),
+        transition: 'all 0.3s ease-out !important',
       },
       a: {
         color: mode('gray.600', 'gray.200 !important')(props),
@@ -152,11 +153,3 @@ const theme = extendTheme({
 });
 
 export default theme;
-
-// .chakra-ui-dark {
-//   background-color: #2e3744;
-// }
-
-// .chakra-ui-light {
-//   background-color: #f1f1f2;
-// }
