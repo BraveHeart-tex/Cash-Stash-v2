@@ -132,8 +132,12 @@ const BudgetCards = () => {
               rounded={'md'}
             />
             <Text color={textColor} mt={3} fontWeight={'300'}>
-              {budget.spentAmount / budget.budgetAmount > 0.5
-                ? 'You are almost over your budget!'
+              {budget.spentAmount / budget.budgetAmount > 1
+                ? 'You are over budget!'
+                : budget.spentAmount / budget.budgetAmount > 0.7
+                ? 'You are almost over budget!'
+                : budget.spentAmount / budget.budgetAmount > 0.4
+                ? 'You are halfway to your budget!'
                 : 'You are under budget!'}
             </Text>
             <Popover>
