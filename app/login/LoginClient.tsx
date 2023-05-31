@@ -157,7 +157,7 @@ const LoginClient = () => {
                   redirect: true,
                 })
               }
-              disabled={isLoading}
+              isDisabled={isLoading}
               fontSize={{ base: '15px', md: '17px', lg: '18px' }}
             >
               Sign In with Google
@@ -173,7 +173,7 @@ const LoginClient = () => {
                   redirect: true,
                 })
               }
-              disabled={isLoading}
+              isDisabled={isLoading}
               fontSize={{ base: '15px', md: '17px', lg: '18px' }}
             >
               Sign In with Github

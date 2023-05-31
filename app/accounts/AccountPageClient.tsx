@@ -28,23 +28,17 @@ export default function AccountsPageClient() {
         flexDirection={'column'}
         gap={4}
       >
-        <Box
-          display={'flex'}
-          justifyContent={'center'}
-          alignItems={'center'}
-          flexDirection={'column'}
-          width={'100%'}
-        >
+        <Box width={'100%'}>
           <AccountsFilter />
-          <Button
-            mt={4}
-            onClick={onOpen}
-            fontWeight={500}
-            bg={useColorModeValue('gray.300', 'gray.700')}
-          >
-            Create Account
-          </Button>
         </Box>
+        <Button
+          mt={4}
+          onClick={onOpen}
+          fontWeight={500}
+          bg={useColorModeValue('gray.300', 'gray.700')}
+        >
+          Create Account
+        </Button>
         <CreateUserAccountModal isOpen={isOpen} onClose={onClose} />
       </Box>
     </Container>

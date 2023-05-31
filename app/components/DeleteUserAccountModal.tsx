@@ -87,7 +87,7 @@ const DeleteUserAccountModal = ({
             </Heading>
             <Button
               colorScheme='red'
-              disabled={isLoading || isSubmitting}
+              isDisabled={isLoading || isSubmitting}
               isLoading={isLoading || isSubmitting}
               type='submit'
               onClick={handleSubmit(() =>

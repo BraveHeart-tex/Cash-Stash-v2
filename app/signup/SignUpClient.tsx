@@ -251,7 +251,7 @@ const SignUpClient = () => {
                 })
               }
               fontSize={{ base: '15px', md: '17px', lg: '18px' }}
-              disabled={isLoading}
+              isDisabled={isLoading}
             >
               Sign Up with Google
             </Button>
@@ -266,7 +266,7 @@ const SignUpClient = () => {
                 })
               }
               fontSize={{ base: '15px', md: '17px', lg: '18px' }}
-              disabled={isLoading}
+              isDisabled={isLoading}
             >
               Sign Up with Github
             </Button>

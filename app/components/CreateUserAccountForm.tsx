@@ -86,7 +86,8 @@ const CreateUserAccountForm = () => {
             {errors.name && errors.name.message}
           </FormErrorMessage>
         </FormControl>
-        <FormControl isRequired>
+        {/* @ts-ignore */}
+        <FormControl isRequired isInvalid={errors.category}>
           <FormLabel>Account Type</FormLabel>
           <Select
             id='category'
@@ -139,7 +140,7 @@ const CreateUserAccountForm = () => {
               bg: btnHoverBgColor,
             }}
             type='submit'
-            disabled={isSubmitting || isLoading}
+            isDisabled={isSubmitting || isLoading}
           >
             Create
           </Button>

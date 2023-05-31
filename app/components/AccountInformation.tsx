@@ -116,11 +116,7 @@ const AccountInformation = ({ userAccounts }: IAccountInformationProps) => {
                             bg={'transparent'}
                             mr={2}
                           />
-                          <Text
-                            width={'50%'}
-                            letterSpacing={-0.5}
-                            color={textColor}
-                          >
+                          <Text width={'50%'} color={textColor}>
                             Delete
                           </Text>
                         </Flex>

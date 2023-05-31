@@ -81,6 +81,7 @@ const BudgetCards = () => {
           borderWidth={1}
           borderRadius='md'
           position={'relative'}
+          borderColor={colorMode === 'light' ? 'gray.200' : 'gray.700'}
         >
           <Stat position={'relative'}>
             <StatLabel>{budget.category}</StatLabel>
@@ -119,7 +120,6 @@ const BudgetCards = () => {
               ? 'You are almost over your budget!'
               : 'You are under budget!'}
           </Text>
-
           <Popover>
             <PopoverTrigger>
               <IconButton
