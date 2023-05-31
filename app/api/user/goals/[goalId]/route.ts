@@ -2,8 +2,8 @@ interface IParams {
   goalId: string;
 }
 
-// get goal by id
+// TODO: get goal by id
 
-// update goal by id
+// TODO: update goal by id
 
-// delete goal by id
+// TODO: delete goal by id

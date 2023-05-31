@@ -4,6 +4,8 @@ import currentAccountReducer from './features/currentAccountSlice';
 import userReducer from './features/userSlice';
 import budgetReducer from './features/budgetSlice';
 import currentBudgetReducer from './features/currentBudgetSlice';
+import currentGoalReducer from './features/currentGoalSlice';
+import goalReducer from './features/goalSlice';
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +14,8 @@ export const store = configureStore({
     currentAccountReducer,
     budgetReducer,
     currentBudgetReducer,
+    goalReducer,
+    currentGoalReducer,
   },
   devTools: process.env.NODE_ENV !== 'production',
 });
