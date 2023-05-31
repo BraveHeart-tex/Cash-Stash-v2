@@ -69,7 +69,7 @@ const DeleteBudgetModal = ({
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay bg={'rgba(0, 0, 0, 0.25)'} />
       <ModalContent>
-        <ModalHeader color={headingColor}>Delete Account:</ModalHeader>
+        <ModalHeader color={headingColor}>Delete Budget:</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Flex
@@ -79,7 +79,7 @@ const DeleteBudgetModal = ({
             gap={4}
           >
             <Heading as={'h1'} fontSize={'xl'}>
-              Are you sure you want to delete this account?
+              Are you sure you want to delete this budget?
             </Heading>
             <Heading as={'h2'} fontSize={'md'}>
               This action cannot be undone.
