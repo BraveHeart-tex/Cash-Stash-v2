@@ -2,12 +2,12 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { Budget } from '@prisma/client';
 import axios from 'axios';
 
-interface UserAccountsState {
+interface BudgetsState {
   budgets: Budget[] | null;
   isLoading: boolean;
 }
 
-const initialState: UserAccountsState = {
+const initialState: BudgetsState = {
   budgets: null,
   isLoading: false,
 };

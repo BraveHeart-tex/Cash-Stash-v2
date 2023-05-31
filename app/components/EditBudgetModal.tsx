@@ -12,6 +12,7 @@ import {
 import React from 'react';
 import EditUserAccountForm from './EditUserAccountForm';
 import useColorModeStyles from '../hooks/useColorModeStyles';
+import EditUserBudgetForm from './EditUserBudgetForm';
 
 interface IEditBudgetModalProps {
   isOpen: boolean;
@@ -29,9 +30,11 @@ const EditBudgetModal = ({
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay bg={'rgba(0, 0, 0, 0.25)'} />
       <ModalContent>
-        <ModalHeader color={headingColor}>Edit Account:</ModalHeader>
+        <ModalHeader color={headingColor}>Edit Budget:</ModalHeader>
         <ModalCloseButton />
-        <ModalBody>Form here</ModalBody>
+        <ModalBody>
+          <EditUserBudgetForm selectedBudgetId={selectedBudgetId} />
+        </ModalBody>
         <ModalFooter>
           <Button variant='ghost' mr={3} onClick={onClose}>
             Cancel
