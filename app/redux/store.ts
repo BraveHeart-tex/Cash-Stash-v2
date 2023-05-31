@@ -2,12 +2,14 @@ import { configureStore } from '@reduxjs/toolkit';
 import userAccountReducer from './features/userAccountSlice';
 import currentAccountReducer from './features/currentAccountSlice';
 import userReducer from './features/userSlice';
+import budgetReducer from './features/budgetSlice';
 
 export const store = configureStore({
   reducer: {
     userAccountReducer,
     userReducer,
     currentAccountReducer,
+    budgetReducer,
   },
   devTools: process.env.NODE_ENV !== 'production',
 });

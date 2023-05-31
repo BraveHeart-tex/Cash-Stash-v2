@@ -13,14 +13,16 @@ import {
 import CreateBudgetOptions from '../utils/CreateBudgetOptions';
 import { FieldValues, useForm } from 'react-hook-form';
 import useColorModeStyles from '../hooks/useColorModeStyles';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
+import { useAppDispatch } from '../redux/hooks';
+import { fetchBudgets } from '../redux/features/budgetSlice';
 
 interface ICreateBudgetFormProps {}
 
 const CreateBudgetForm = ({}: ICreateBudgetFormProps) => {
   const toast = useToast();
   const budgetOptions = Object.values(CreateBudgetOptions);
-  let isLoading = false;
+  const dispatch = useAppDispatch();
   const { btnColor, btnBgColor, btnHoverBgColor } = useColorModeStyles();
 
   const {
@@ -48,12 +50,12 @@ const CreateBudgetForm = ({}: ICreateBudgetFormProps) => {
         isClosable: true,
         position: 'top',
       });
+      dispatch(fetchBudgets());
       reset();
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
       toast({
         title: 'An error occurred.',
-        description: 'Unable to create budget.',
+        description: error.response.data.error,
         status: 'error',
         duration: 4000,
         isClosable: true,

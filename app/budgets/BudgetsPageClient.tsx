@@ -23,8 +23,6 @@ const BudgetsPageClient = ({}: IBudgetsPageClientProps) => {
       <Heading as='h1' mb={4}>
         Budgets
       </Heading>
-
-      {/* TODO: handle the case where budgets.length = 0 */}
       <Box
         display={'flex'}
         justifyContent={'center'}

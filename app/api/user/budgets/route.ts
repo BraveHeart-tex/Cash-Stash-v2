@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import getCurrentUserBudgets from '@/app/actions/getCurrentUserBudgets';
 import getCurrentUser from '@/app/actions/getCurrentUser';
 import createBudget from '@/app/actions/createBudget';
-import { NotificationCategory } from '@prisma/client';
+import { NotificationCategory, Budget } from '@prisma/client';
 import CreateBudgetOptions from '@/app/utils/CreateBudgetOptions';
 
 // @desc GET all budgets
@@ -58,6 +58,18 @@ export async function POST(request: Request) {
     mappedCategory as NotificationCategory,
     currentUser.id
   );
+
+  if (typeof createdBudget !== 'object' || 'error' in createdBudget) {
+    // The createdBudget is not of type Budget or it contains an error property
+    return NextResponse.json(
+      {
+        error: createdBudget.error,
+      },
+      {
+        status: 400,
+      }
+    );
+  }
 
   if (!createdBudget) {
     return NextResponse.json(
