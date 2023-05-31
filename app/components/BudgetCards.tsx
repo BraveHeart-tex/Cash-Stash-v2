@@ -16,6 +16,9 @@ import {
   PopoverBody,
   Flex,
   useDisclosure,
+  Progress,
+  useColorMode,
+  Badge,
 } from '@chakra-ui/react';
 import { Budget } from '@prisma/client';
 import ActionsIcon from './ActionsIcon';
@@ -24,10 +27,13 @@ import DeleteIcon from './DeleteIcon';
 import EditBudgetModal from './EditBudgetModal';
 import DeleteBudgetModal from './DeleteBudgetModal';
 import { useState } from 'react';
+import useColorModeStyles from '../hooks/useColorModeStyles';
 
 const BudgetCards = () => {
   const [selectedBudgetId, setSelectedBudgetId] = useState<string>('');
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+  const { textColor, headingColor } = useColorModeStyles();
+  const { colorMode } = useColorMode();
 
   const deleteModalOnClose = () => {
     setIsDeleteModalOpen(false);
@@ -76,14 +82,44 @@ const BudgetCards = () => {
           borderRadius='md'
           position={'relative'}
         >
-          <Stat>
+          <Stat position={'relative'}>
             <StatLabel>{budget.category}</StatLabel>
-            <StatNumber>${budget.spentAmount}</StatNumber>
+            <StatNumber color={headingColor}>
+              Spent: ${budget.spentAmount}
+            </StatNumber>
+            <Badge
+              color={
+                budget.spentAmount / budget.budgetAmount > 0.5 ? 'red' : 'green'
+              }
+              bg={
+                budget.spentAmount / budget.budgetAmount > 0.5
+                  ? 'red.100'
+                  : 'green.100'
+              }
+              position={'absolute'}
+              top={'50%'}
+              right={1}
+              mb={2}
+            >
+              {(budget.spentAmount / budget.budgetAmount) * 100}%
+            </Badge>
           </Stat>
-          <Text mt={2}>
-            Budget: ${budget.budgetAmount} (
-            {Math.round((budget.spentAmount / budget.budgetAmount) * 100)}%)
+          <Text mt={2}>Budget: ${budget.budgetAmount}</Text>
+          <Progress
+            value={(budget.spentAmount / budget.budgetAmount) * 100}
+            mt={4}
+            colorScheme={
+              budget.spentAmount / budget.budgetAmount > 0.5 ? 'red' : 'green'
+            }
+            bg={colorMode === 'light' ? 'gray.300' : 'gray.200'}
+            rounded={'md'}
+          />
+          <Text color={textColor} mt={3} fontWeight={'300'}>
+            {budget.spentAmount / budget.budgetAmount > 0.5
+              ? 'You are almost over your budget!'
+              : 'You are under budget!'}
           </Text>
+
           <Popover>
             <PopoverTrigger>
               <IconButton

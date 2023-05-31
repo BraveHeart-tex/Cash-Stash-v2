@@ -1,11 +1,11 @@
 import './globals.css';
-import { Inter, JetBrains_Mono, Nunito, Roboto } from 'next/font/google';
+import { Poppins } from 'next/font/google';
 import { Providers as ChakraUIProviders } from './providers';
 import { Providers as ReduxProviders } from '@/app/redux/provider';
 import { NextAuthProvider } from './provider';
 
-const RobotoFont = Roboto({
-  weight: ['400', '500', '700'],
+const PoppinsFont = Poppins({
+  weight: ['300', '400', '500', '700'],
   subsets: ['latin'],
 });
 
@@ -22,7 +22,7 @@ interface ILayoutProps {
 export default function RootLayout({ children }: ILayoutProps) {
   return (
     <html lang='en'>
-      <body className={RobotoFont.className}>
+      <body className={PoppinsFont.className}>
         <NextAuthProvider>
           <ReduxProviders>
             <ChakraUIProviders>{children}</ChakraUIProviders>

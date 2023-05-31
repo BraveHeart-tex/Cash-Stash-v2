@@ -10,7 +10,6 @@ import {
   useDisclosure,
   Popover,
   PopoverTrigger,
-  Button,
   PopoverContent,
   PopoverArrow,
   PopoverCloseButton,
@@ -30,6 +29,7 @@ import { useState } from 'react';
 import ActionsIcon from './ActionsIcon';
 import DeleteIcon from './DeleteIcon';
 import DeleteUserAccountModal from './DeleteUserAccountModal';
+import useColorModeStyles from '../hooks/useColorModeStyles';
 
 interface IAccountInformationProps {
   userAccounts: UserAccount[] | undefined | null;
@@ -42,6 +42,7 @@ const AccountInformation = ({ userAccounts }: IAccountInformationProps) => {
   const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] =
     useState(false);
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const { headingColor, textColor } = useColorModeStyles();
 
   const handleEditAccount = (accountId: string) => {
     setSelectedAccountId(accountId);
@@ -81,7 +82,11 @@ const AccountInformation = ({ userAccounts }: IAccountInformationProps) => {
                 <PopoverContent>
                   <PopoverArrow />
                   <PopoverCloseButton />
-                  <PopoverHeader fontWeight={'bold'} textAlign={'center'}>
+                  <PopoverHeader
+                    textAlign={'center'}
+                    fontWeight={'bold'}
+                    color={headingColor}
+                  >
                     Account Actions
                   </PopoverHeader>
                   <PopoverBody>
@@ -92,24 +97,32 @@ const AccountInformation = ({ userAccounts }: IAccountInformationProps) => {
                             aria-label={'Edit user account'}
                             onClick={() => handleEditAccount(userAccount.id)}
                             icon={<EditIcon />}
-                            width={5}
-                            height={5}
+                            width={4}
+                            height={4}
                             bg={'transparent'}
                             mr={2}
                           />
-                          <Text width={'50%'}>Edit </Text>
+                          <Text width={'50%'} fontSize={'md'} color={textColor}>
+                            Edit{' '}
+                          </Text>
                         </Flex>
                         <Flex justifyContent={'center'} alignItems={'center'}>
                           <IconButton
                             aria-label={'Delete user account'}
                             onClick={() => handleDeleteAccount(userAccount.id)}
                             icon={<DeleteIcon />}
-                            width={5}
-                            height={5}
+                            width={4}
+                            height={4}
                             bg={'transparent'}
                             mr={2}
                           />
-                          <Text width={'50%'}>Delete </Text>
+                          <Text
+                            width={'50%'}
+                            letterSpacing={-0.5}
+                            color={textColor}
+                          >
+                            Delete
+                          </Text>
                         </Flex>
                       </SimpleGrid>
                     </Flex>

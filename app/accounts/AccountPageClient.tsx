@@ -5,6 +5,7 @@ import {
   Button,
   useDisclosure,
   Container,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import Navigation from '../components/Navigation';
 import useColorModeStyles from '../hooks/useColorModeStyles';
@@ -35,7 +36,12 @@ export default function AccountsPageClient() {
           width={'100%'}
         >
           <AccountsFilter />
-          <Button mt={4} onClick={onOpen}>
+          <Button
+            mt={4}
+            onClick={onOpen}
+            fontWeight={500}
+            bg={useColorModeValue('gray.300', 'gray.700')}
+          >
             Create Account
           </Button>
         </Box>
