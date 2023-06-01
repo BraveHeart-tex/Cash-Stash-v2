@@ -2,7 +2,6 @@ import createTransaction from '@/app/actions/createTransaction';
 import getCurrentUser from '@/app/actions/getCurrentUser';
 import getCurrentUserTransactions from '@/app/actions/getCurrentUserTransactions';
 import { NextResponse } from 'next/server';
-import prisma from '@/app/libs/prismadb';
 
 // get all transactions
 export async function GET(request: Request) {

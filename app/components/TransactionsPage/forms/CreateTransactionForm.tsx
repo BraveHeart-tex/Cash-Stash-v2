@@ -11,18 +11,27 @@ import {
   Button,
   Select,
   useToast,
+  Spinner,
 } from '@chakra-ui/react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm, FieldValues, SubmitHandler } from 'react-hook-form';
 import { fetchCurrentUserAccounts } from '@/app/redux/features/userAccountSlice';
 import FormLoadingSpinner from '../../FormLoadingSpinner';
 import CreateBudgetOptions from '@/app/utils/CreateBudgetOptions';
 import axios from 'axios';
+import {
+  fetchTransactions,
+  setCreateModalOpen,
+} from '@/app/redux/features/transactionsSlice';
 
 const CreateTransactionForm = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useAppDispatch();
   const { currentUserAccounts, isLoading: userAccountsLoading } =
     useAppSelector((state) => state.userAccountReducer);
+  const { createModalOpen } = useAppSelector(
+    (state) => state.transactionsReducer
+  );
   const categories = Object.values(CreateBudgetOptions);
 
   useEffect(() => {
@@ -30,7 +39,6 @@ const CreateTransactionForm = () => {
   }, [dispatch]);
 
   const toast = useToast();
-
   const { btnColor, btnBgColor, btnHoverBgColor } = useColorModeStyles();
 
   const {
@@ -53,13 +61,31 @@ const CreateTransactionForm = () => {
     return <FormLoadingSpinner />;
   }
 
-  // TODO: Handle field values properly
-
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    setIsLoading(true);
     try {
       const response = await axios.post('/api/user/transactions', data);
-      console.log(response.data);
+      toast({
+        title: 'Transaction created.',
+        description: `Transaction for ${response.data.transaction.amount}₺ created.`,
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+        position: 'top',
+      });
+      setIsLoading(false);
+      dispatch(fetchTransactions());
+      dispatch(setCreateModalOpen(!createModalOpen));
     } catch (error) {
+      setIsLoading(false);
+      toast({
+        title: 'An error occurred.',
+        description: 'Unable to create transaction.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'top',
+      });
       console.log(error);
     }
   };
@@ -184,7 +210,9 @@ const CreateTransactionForm = () => {
           </FormErrorMessage>
         </FormControl>
         {isSubmitting ? (
-          <Button>Loading...</Button>
+          <Button>
+            <Spinner />
+          </Button>
         ) : (
           <Button
             color={btnColor}
@@ -193,7 +221,7 @@ const CreateTransactionForm = () => {
               bg: btnHoverBgColor,
             }}
             type='submit'
-            isDisabled={isSubmitting}
+            isDisabled={isLoading}
           >
             Create
           </Button>

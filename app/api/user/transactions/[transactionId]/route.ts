@@ -106,6 +106,35 @@ export async function DELETE(
     );
   }
 
+  // check if the transaction type is income or transfer, if so,
+  // delete the transaction and update the account balance
+
+  if (transaction.isIncome) {
+    await prisma.userAccount.update({
+      where: {
+        id: transaction.accountId,
+      },
+      data: {
+        balance: {
+          decrement: transaction.amount,
+        },
+      },
+    });
+  }
+
+  if (!transaction.isIncome) {
+    await prisma.userAccount.update({
+      where: {
+        id: transaction.accountId,
+      },
+      data: {
+        balance: {
+          increment: transaction.amount,
+        },
+      },
+    });
+  }
+
   await prisma.transaction.delete({
     where: {
       id: Number(transactionId),

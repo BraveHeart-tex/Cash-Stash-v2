@@ -16,6 +16,7 @@ import TransactionList from '../components/TransactionsPage/TransactionList';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { setCreateModalOpen } from '../redux/features/transactionsSlice';
 import CreateTransactionModal from '../components/TransactionsPage/modals/CreateTransactionModal';
+import DeleteTransactionModal from '../components/TransactionsPage/modals/DeleteTransactionModal';
 
 const TransactionsClient = () => {
   const { colorMode } = useColorMode();
@@ -69,6 +70,7 @@ const TransactionsClient = () => {
         </GridItem>
       </Grid>
       <CreateTransactionModal />
+      <DeleteTransactionModal />
     </Container>
   );
 };

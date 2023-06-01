@@ -9,13 +9,17 @@ import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/app/redux/hooks';
 import { Box } from '@chakra-ui/react';
 import { fetchTransactions } from '../../redux/features/transactionsSlice';
+import { fetchCurrentUserAccounts } from '@/app/redux/features/userAccountSlice';
 
 const TransactionsFilter = () => {
-  const { data, filteredData } = useAppSelector(
-    (state) => state.transactionsReducer
+  const dispatch = useAppDispatch();
+  const { currentUserAccounts, isLoading } = useAppSelector(
+    (state) => state.userAccountReducer
   );
 
-  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(fetchCurrentUserAccounts());
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(fetchTransactions());
@@ -76,9 +80,12 @@ const TransactionsFilter = () => {
             defaultValue={''}
           >
             <option value=''>All</option>
-            <option value='1'>1</option>
-            <option value='2'>2</option>
-            <option value='3'>3</option>
+            {currentUserAccounts &&
+              currentUserAccounts.map((account) => (
+                <option key={account.id} value={account.id}>
+                  {account.name}
+                </option>
+              ))}
           </Select>
         </Box>
       </Stack>

@@ -16,23 +16,41 @@ import {
   Stack,
   Heading,
   Badge,
+  Spinner,
+  Skeleton,
 } from '@chakra-ui/react';
 import { Transaction } from '@prisma/client';
 import ActionsIcon from '../Icons/ActionsIcon';
-import EyeIcon from '../Icons/EyeIcon';
-import EditIcon from '../Icons/EditIcon';
 import DeleteIcon from '../Icons/DeleteIcon';
-
+import { useAppDispatch, useAppSelector } from '@/app/redux/hooks';
+import { setDeleteModalOpen } from '@/app/redux/features/transactionsSlice';
+import { fetchCurrentAccount } from '@/app/redux/features/currentAccountSlice';
+import { useEffect } from 'react';
 interface ITransactionCardProps {
   transaction: Transaction;
 }
 
 const TransactionCard = ({ transaction }: ITransactionCardProps) => {
+  const { currentAccount, isLoading } = useAppSelector(
+    (state) => state.currentAccountReducer
+  );
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchCurrentAccount(transaction.accountId));
+  }, [dispatch, transaction.accountId]);
+
   const { colorMode } = useColorMode();
 
-  const handleEditTransaction = (id: number) => {};
-  const handleDeleteTransaction = (id: number) => {};
-  const handleViewTransactionDetails = (id: number) => {};
+  const handleDeleteTransaction = (id: number) => {
+    dispatch(
+      setDeleteModalOpen({ isDeleteModalOpen: true, transactionId: id })
+    );
+  };
+
+  if (isLoading) {
+    return <Skeleton height={'11.25rem'} isLoaded={!isLoading} />;
+  }
 
   return (
     <Box
@@ -64,10 +82,9 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
             day: 'numeric',
           })}
         </Text>
-        {/* TODO: Display associated account name with the transaction */}
+        <Text>Account Name: {currentAccount?.name}</Text>
         <Text>{transaction.amount}₺</Text>
       </Stack>
-
       <Popover>
         <PopoverTrigger>
           <IconButton
@@ -82,7 +99,7 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
             mb={2}
           />
         </PopoverTrigger>
-        <PopoverContent>
+        <PopoverContent bg={colorMode === 'light' ? 'gray.50' : 'gray.700'}>
           <PopoverArrow />
           <PopoverCloseButton />
           <PopoverHeader fontWeight={'bold'} textAlign={'center'}>
@@ -91,18 +108,6 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
           <PopoverBody>
             <Flex justifyContent={'center'} alignItems={'center'}>
               <SimpleGrid columns={1} gap={4}>
-                <Flex justifyContent={'center'} alignItems={'center'}>
-                  <IconButton
-                    aria-label={'Edit transaction'}
-                    onClick={() => handleEditTransaction(transaction.id)}
-                    icon={<EditIcon />}
-                    width={5}
-                    height={5}
-                    bg={'transparent'}
-                    mr={2}
-                  />
-                  <Text width={'50%'}>Edit </Text>
-                </Flex>
                 <Flex justifyContent={'center'} alignItems={'center'}>
                   <IconButton
                     aria-label={'Delete transaction'}
@@ -114,18 +119,6 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
                     mr={2}
                   />
                   <Text width={'50%'}>Delete </Text>
-                </Flex>
-                <Flex justifyContent={'center'} alignItems={'center'}>
-                  <IconButton
-                    aria-label={'View transaction details'}
-                    onClick={() => handleViewTransactionDetails(transaction.id)}
-                    icon={<EyeIcon />}
-                    width={5}
-                    height={5}
-                    bg={'transparent'}
-                    mr={2}
-                  />
-                  <Text width={'52%'}>Details</Text>
                 </Flex>
               </SimpleGrid>
             </Flex>
