@@ -19,12 +19,7 @@ import {
   Progress,
   useColorMode,
   Badge,
-  Spinner,
-  Container,
-  Skeleton,
 } from '@chakra-ui/react';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import ActionsIcon from './ActionsIcon';
 import EditIcon from './EditIcon';
 import DeleteIcon from './DeleteIcon';
@@ -32,54 +27,29 @@ import EditBudgetModal from './EditBudgetModal';
 import DeleteBudgetModal from './DeleteBudgetModal';
 import { useState } from 'react';
 import useColorModeStyles from '../hooks/useColorModeStyles';
-import { useAppSelector } from '../redux/hooks';
-import { fetchBudgets } from '../redux/features/budgetSlice';
-import { AppDispatch } from '../redux/store';
-import LoadingSpinner from './Loading';
+import { Budget } from '@prisma/client';
 
-const BudgetCards = () => {
-  const { budgets, isLoading } = useAppSelector((state) => state.budgetReducer);
-  const dispatch = useDispatch<AppDispatch>();
+interface IBudgetCardsProps {
+  budgets: Budget[] | null;
+}
 
-  useEffect(() => {
-    dispatch(fetchBudgets());
-  }, [dispatch]);
-
+const BudgetCards = ({ budgets }: IBudgetCardsProps) => {
   const [selectedBudgetId, setSelectedBudgetId] = useState<string>('');
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
 
   const { textColor, headingColor } = useColorModeStyles();
   const { colorMode } = useColorMode();
-
-  const deleteModalOnClose = () => {
-    setIsDeleteModalOpen(false);
-  };
-
-  const { isOpen, onClose, onOpen } = useDisclosure();
+  const editModal = useDisclosure();
+  const deleteModal = useDisclosure();
 
   const handleEditBudget = (budgetId: string) => {
     setSelectedBudgetId(budgetId);
-    onOpen();
+    editModal.onOpen();
   };
 
   const handleDeleteBudget = (budgetId: string) => {
     setSelectedBudgetId(budgetId);
-    setIsDeleteModalOpen(true);
+    deleteModal.onOpen();
   };
-
-  if (isLoading) {
-    return (
-      <Box
-        display={'flex'}
-        justifyContent={'flex-start'}
-        alignItems={'center'}
-        gap={4}
-      >
-        <Text>Loading budgets...</Text>
-        <Spinner />
-      </Box>
-    );
-  }
 
   return (
     <>
@@ -114,7 +84,7 @@ const BudgetCards = () => {
                 right={1}
                 mb={2}
               >
-                {(budget.spentAmount / budget.budgetAmount) * 100}%
+                {((budget.spentAmount / budget.budgetAmount) * 100).toFixed(0)}%
               </Badge>
             </Stat>
             <Text mt={2}>Budget: ${budget.budgetAmount}</Text>
@@ -192,18 +162,18 @@ const BudgetCards = () => {
                 </PopoverBody>
               </PopoverContent>
             </Popover>
-            <EditBudgetModal
-              isOpen={isOpen}
-              onClose={onClose}
-              selectedBudgetId={selectedBudgetId}
-            />
-            <DeleteBudgetModal
-              isOpen={isDeleteModalOpen}
-              onClose={deleteModalOnClose}
-              selectedBudgetId={selectedBudgetId}
-            />
           </Box>
         ))}
+      <EditBudgetModal
+        isOpen={editModal.isOpen}
+        onClose={editModal.onClose}
+        selectedBudgetId={selectedBudgetId}
+      />
+      <DeleteBudgetModal
+        isOpen={deleteModal.isOpen}
+        onClose={deleteModal.onClose}
+        selectedBudgetId={selectedBudgetId}
+      />
     </>
   );
 };
