@@ -27,7 +27,7 @@ const GoalsPageClient = () => {
     dispatch(fetchGoals());
   }, [dispatch]);
 
-  if (!goals) {
+  if (goals?.length === 0) {
     return (
       <Container maxW={'8xl'} p={4}>
         <Navigation />

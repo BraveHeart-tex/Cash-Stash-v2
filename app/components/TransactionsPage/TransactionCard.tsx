@@ -16,7 +16,6 @@ import {
   Stack,
   Heading,
   Badge,
-  Spinner,
   Skeleton,
 } from '@chakra-ui/react';
 import { Transaction } from '@prisma/client';
@@ -24,21 +23,21 @@ import ActionsIcon from '../Icons/ActionsIcon';
 import DeleteIcon from '../Icons/DeleteIcon';
 import { useAppDispatch, useAppSelector } from '@/app/redux/hooks';
 import { setDeleteModalOpen } from '@/app/redux/features/transactionsSlice';
-import { fetchCurrentAccount } from '@/app/redux/features/currentAccountSlice';
+import { fetchCurrentUserAccounts } from '@/app/redux/features/userAccountSlice';
 import { useEffect } from 'react';
 interface ITransactionCardProps {
   transaction: Transaction;
 }
 
 const TransactionCard = ({ transaction }: ITransactionCardProps) => {
-  const { currentAccount, isLoading } = useAppSelector(
-    (state) => state.currentAccountReducer
+  const { currentUserAccounts, isLoading } = useAppSelector(
+    (state) => state.userAccountReducer
   );
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fetchCurrentAccount(transaction.accountId));
-  }, [dispatch, transaction.accountId]);
+    dispatch(fetchCurrentUserAccounts());
+  }, [dispatch]);
 
   const { colorMode } = useColorMode();
 
@@ -82,7 +81,13 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
             day: 'numeric',
           })}
         </Text>
-        <Text>Account Name: {currentAccount?.name}</Text>
+        <Text>
+          Account Name:{' '}
+          {currentUserAccounts &&
+            currentUserAccounts.find(
+              (account) => account.id === transaction.accountId
+            )?.name}
+        </Text>
         <Text>{transaction.amount}₺</Text>
       </Stack>
       <Popover>
