@@ -6,7 +6,6 @@ import {
   Heading,
   SimpleGrid,
   useDisclosure,
-  useColorModeValue,
   Spinner,
   Text,
   useColorMode,
@@ -28,7 +27,7 @@ const GoalsPageClient = () => {
     dispatch(fetchGoals());
   }, [dispatch]);
 
-  if (!goals || goals?.length === 0) {
+  if (!goals) {
     return (
       <Container maxW={'8xl'} p={4}>
         <Navigation />
