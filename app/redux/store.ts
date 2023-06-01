@@ -1,11 +1,12 @@
-import { configureStore } from '@reduxjs/toolkit';
-import userAccountReducer from './features/userAccountSlice';
-import currentAccountReducer from './features/currentAccountSlice';
-import userReducer from './features/userSlice';
-import budgetReducer from './features/budgetSlice';
-import currentBudgetReducer from './features/currentBudgetSlice';
-import currentGoalReducer from './features/currentGoalSlice';
-import goalReducer from './features/goalSlice';
+import { configureStore } from "@reduxjs/toolkit";
+import userAccountReducer from "./features/userAccountSlice";
+import currentAccountReducer from "./features/currentAccountSlice";
+import userReducer from "./features/userSlice";
+import budgetReducer from "./features/budgetSlice";
+import currentBudgetReducer from "./features/currentBudgetSlice";
+import currentGoalReducer from "./features/currentGoalSlice";
+import goalReducer from "./features/goalSlice";
+import transactionsReducer from "./features/transactionsSlice";
 
 export const store = configureStore({
   reducer: {
@@ -16,8 +17,9 @@ export const store = configureStore({
     currentBudgetReducer,
     goalReducer,
     currentGoalReducer,
+    transactionsReducer,
   },
-  devTools: process.env.NODE_ENV !== 'production',
+  devTools: process.env.NODE_ENV !== "production",
 });
 
 export type RootState = ReturnType<typeof store.getState>;

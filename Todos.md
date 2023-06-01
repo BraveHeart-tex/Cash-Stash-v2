@@ -1,5 +1,7 @@
 # Log
 
+TODO: Refactor Modal and forms to Redux Toolkit
+
 - User:
 
 At least one of the following fields is required: name or email.
