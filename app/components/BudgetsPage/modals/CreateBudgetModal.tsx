@@ -10,7 +10,7 @@ import {
   Button,
 } from '@chakra-ui/react';
 import React from 'react';
-import CreateBudgetForm from './CreateBudgetForm';
+import CreateBudgetForm from '../forms/CreateBudgetForm';
 
 interface ICreateBudgetModalProps {
   isOpen: boolean;

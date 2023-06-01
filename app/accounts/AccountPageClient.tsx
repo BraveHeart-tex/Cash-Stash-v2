@@ -9,8 +9,8 @@ import {
 } from '@chakra-ui/react';
 import Navigation from '../components/Navigation';
 import useColorModeStyles from '../hooks/useColorModeStyles';
-import CreateUserAccountModal from '../components/CreateUserAccountModal';
-import AccountsFilter from '../components/AccountFilter';
+import CreateUserAccountModal from '../components/AccountsPage/modals/CreateUserAccountModal';
+import AccountsFilter from '../components/AccountsPage/AccountFilter';
 
 export default function AccountsPageClient() {
   const { isOpen, onOpen, onClose } = useDisclosure();

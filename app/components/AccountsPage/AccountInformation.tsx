@@ -23,14 +23,14 @@ import {
 import { UserAccount } from '@prisma/client';
 import CreateUserAccountOptions, {
   getOptionLabel,
-} from '../utils/CreateUserAccountOptions';
-import EditUserAccountModal from './EditUserAccountModal';
+} from '../../utils/CreateUserAccountOptions';
+import EditUserAccountModal from './modals/EditUserAccountModal';
 import { EditIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
-import ActionsIcon from './ActionsIcon';
-import DeleteIcon from './DeleteIcon';
-import DeleteUserAccountModal from './DeleteUserAccountModal';
-import useColorModeStyles from '../hooks/useColorModeStyles';
+import ActionsIcon from '../Icons/ActionsIcon';
+import DeleteIcon from '../Icons/DeleteIcon';
+import DeleteUserAccountModal from './modals/DeleteUserAccountModal';
+import useColorModeStyles from '../../hooks/useColorModeStyles';
 
 interface IAccountInformationProps {
   userAccounts: UserAccount[] | undefined | null;

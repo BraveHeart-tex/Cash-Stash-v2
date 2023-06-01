@@ -1,4 +1,3 @@
-'use client';
 import {
   Modal,
   ModalOverlay,
@@ -9,31 +8,29 @@ import {
   ModalFooter,
   Button,
 } from '@chakra-ui/react';
-import React from 'react';
-import useColorModeStyles from '../hooks/useColorModeStyles';
-import EditUserAccountForm from './EditUserAccountForm';
+import useColorModeStyles from '../../../hooks/useColorModeStyles';
+import EditUserGoalForm from '../forms/EditUserGoalForm';
 
-interface IEditUserAccountModalModalProps {
+interface IEditGoalModalProps {
   isOpen: boolean;
   onClose: () => void;
-  selectedAccountId: string | null;
+  selectedGoalId: string | null | undefined;
 }
 
-const EditUserAccountModal = ({
+const EditGoalModal = ({
   isOpen,
   onClose,
-  selectedAccountId,
-}: IEditUserAccountModalModalProps) => {
+  selectedGoalId,
+}: IEditGoalModalProps) => {
   const { headingColor } = useColorModeStyles();
-
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay bg={'rgba(0, 0, 0, 0.25)'} />
       <ModalContent>
-        <ModalHeader color={headingColor}>Edit Account:</ModalHeader>
+        <ModalHeader color={headingColor}>Edit Goal</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <EditUserAccountForm selectedAccountId={selectedAccountId} />
+          <EditUserGoalForm selectedGoalId={selectedGoalId} />
         </ModalBody>
         <ModalFooter>
           <Button variant='ghost' mr={3} onClick={onClose}>
@@ -45,4 +42,4 @@ const EditUserAccountModal = ({
   );
 };
 
-export default EditUserAccountModal;
+export default EditGoalModal;

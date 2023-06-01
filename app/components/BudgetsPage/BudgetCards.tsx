@@ -20,13 +20,13 @@ import {
   useColorMode,
   Badge,
 } from '@chakra-ui/react';
-import ActionsIcon from './ActionsIcon';
-import EditIcon from './EditIcon';
-import DeleteIcon from './DeleteIcon';
-import EditBudgetModal from './EditBudgetModal';
-import DeleteBudgetModal from './DeleteBudgetModal';
+import ActionsIcon from '../Icons/ActionsIcon';
+import EditIcon from '../Icons/EditIcon';
+import DeleteIcon from '../Icons/DeleteIcon';
+import EditBudgetModal from './modals/EditBudgetModal';
+import DeleteBudgetModal from './modals/DeleteBudgetModal';
 import { useState } from 'react';
-import useColorModeStyles from '../hooks/useColorModeStyles';
+import useColorModeStyles from '../../hooks/useColorModeStyles';
 import { Budget } from '@prisma/client';
 
 interface IBudgetCardsProps {

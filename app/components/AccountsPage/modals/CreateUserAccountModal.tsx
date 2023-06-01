@@ -1,3 +1,4 @@
+'use client';
 import {
   Modal,
   ModalOverlay,
@@ -9,25 +10,28 @@ import {
   Button,
 } from '@chakra-ui/react';
 import React from 'react';
-import CreateUserGoalForm from './CreateUserGoalForm';
+import useColorModeStyles from '../../../hooks/useColorModeStyles';
+import CreateUserAccountForm from '../forms/CreateUserAccountForm';
 
-interface ICreateUserGoalModalProps {
+interface ICreateUserAccountModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const CreateUserGoalModal = ({
+const CreateUserAccountModal = ({
   isOpen,
   onClose,
-}: ICreateUserGoalModalProps) => {
+}: ICreateUserAccountModalProps) => {
+  const { headingColor } = useColorModeStyles();
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Create Goal</ModalHeader>
+        <ModalHeader color={headingColor}>Create Account</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <CreateUserGoalForm />
+          <CreateUserAccountForm />
         </ModalBody>
         <ModalFooter>
           <Button variant='ghost' mr={3} onClick={onClose}>
@@ -39,4 +43,4 @@ const CreateUserGoalModal = ({
   );
 };
 
-export default CreateUserGoalModal;
+export default CreateUserAccountModal;

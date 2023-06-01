@@ -10,12 +10,12 @@ import {
   Stack,
   useToast,
 } from '@chakra-ui/react';
-import CreateBudgetOptions from '../utils/CreateBudgetOptions';
+import CreateBudgetOptions from '../../../utils/CreateBudgetOptions';
 import { FieldValues, useForm } from 'react-hook-form';
-import useColorModeStyles from '../hooks/useColorModeStyles';
+import useColorModeStyles from '../../../hooks/useColorModeStyles';
 import axios, { AxiosError } from 'axios';
-import { useAppDispatch } from '../redux/hooks';
-import { fetchBudgets } from '../redux/features/budgetSlice';
+import { useAppDispatch } from '../../../redux/hooks';
+import { fetchBudgets } from '../../../redux/features/budgetSlice';
 
 interface ICreateBudgetFormProps {}
 

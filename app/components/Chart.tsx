@@ -1,5 +1,4 @@
 'use client';
-import React from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,7 +9,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import { Box, useColorMode } from '@chakra-ui/react';
+import { useColorMode } from '@chakra-ui/react';
 
 ChartJS.register(
   CategoryScale,

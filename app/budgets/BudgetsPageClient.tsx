@@ -11,8 +11,8 @@ import {
   useDisclosure,
   Text,
 } from '@chakra-ui/react';
-import BudgetCards from '../components/BudgetCards';
-import CreateBudgetModal from '../components/CreateBudgetModal';
+import BudgetCards from '../components/BudgetsPage/BudgetCards';
+import CreateBudgetModal from '../components/BudgetsPage/modals/CreateBudgetModal';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { useEffect } from 'react';
 import { fetchBudgets } from '../redux/features/budgetSlice';

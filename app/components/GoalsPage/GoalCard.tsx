@@ -22,13 +22,13 @@ import {
   useColorMode,
   Spinner,
 } from '@chakra-ui/react';
-import ActionsIcon from './ActionsIcon';
-import useColorModeStyles from '../hooks/useColorModeStyles';
-import DeleteGoalModal from './DeleteGoalModal';
-import EditGoalModal from './EditGoalModal';
+import ActionsIcon from '../Icons/ActionsIcon';
+import useColorModeStyles from '../../hooks/useColorModeStyles';
+import DeleteGoalModal from './modals/DeleteGoalModal';
+import EditGoalModal from './modals/EditGoalModal';
 import { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { fetchGoals } from '../redux/features/goalSlice';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { fetchGoals } from '../../redux/features/goalSlice';
 import { Goal } from '@prisma/client';
 
 interface IGoalCardProps {

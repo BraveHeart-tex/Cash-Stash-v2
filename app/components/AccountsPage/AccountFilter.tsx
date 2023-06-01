@@ -1,12 +1,12 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { Select, Box, Flex, Spinner, Text } from '@chakra-ui/react';
-import CreateUserAccountOptions from '../utils/CreateUserAccountOptions';
+import CreateUserAccountOptions from '../../utils/CreateUserAccountOptions';
 import AccountInformation from './AccountInformation';
-import { useAppSelector } from '../redux/hooks';
-import { AppDispatch } from '../redux/store';
+import { useAppSelector } from '../../redux/hooks';
+import { AppDispatch } from '../../redux/store';
 import { useDispatch } from 'react-redux';
-import { fetchCurrentUserAccounts } from '../redux/features/userAccountSlice';
+import { fetchCurrentUserAccounts } from '../../redux/features/userAccountSlice';
 
 const AccountsFilter = () => {
   const { currentUserAccounts: accounts, isLoading } = useAppSelector(

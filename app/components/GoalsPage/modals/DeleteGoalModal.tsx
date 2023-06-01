@@ -12,11 +12,11 @@ import {
   useToast,
   Spinner,
 } from '@chakra-ui/react';
-import useColorModeStyles from '../hooks/useColorModeStyles';
+import useColorModeStyles from '../../../hooks/useColorModeStyles';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
-import { useAppDispatch } from '../redux/hooks';
-import { fetchGoals } from '../redux/features/goalSlice';
+import { useAppDispatch } from '../../../redux/hooks';
+import { fetchGoals } from '../../../redux/features/goalSlice';
 import { useState } from 'react';
 
 interface IDeleteGoalModalProps {

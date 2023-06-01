@@ -8,29 +8,26 @@ import {
   ModalFooter,
   Button,
 } from '@chakra-ui/react';
-import useColorModeStyles from '../hooks/useColorModeStyles';
-import EditUserGoalForm from './EditUserGoalForm';
+import React from 'react';
+import CreateUserGoalForm from '../forms/CreateGoalForm';
 
-interface IEditGoalModalProps {
+interface ICreateUserGoalModalProps {
   isOpen: boolean;
   onClose: () => void;
-  selectedGoalId: string | null | undefined;
 }
 
-const EditGoalModal = ({
+const CreateUserGoalModal = ({
   isOpen,
   onClose,
-  selectedGoalId,
-}: IEditGoalModalProps) => {
-  const { headingColor } = useColorModeStyles();
+}: ICreateUserGoalModalProps) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
-      <ModalOverlay bg={'rgba(0, 0, 0, 0.25)'} />
+      <ModalOverlay />
       <ModalContent>
-        <ModalHeader color={headingColor}>Edit Goal</ModalHeader>
+        <ModalHeader>Create Goal</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <EditUserGoalForm selectedGoalId={selectedGoalId} />
+          <CreateUserGoalForm />
         </ModalBody>
         <ModalFooter>
           <Button variant='ghost' mr={3} onClick={onClose}>
@@ -42,4 +39,4 @@ const EditGoalModal = ({
   );
 };
 
-export default EditGoalModal;
+export default CreateUserGoalModal;

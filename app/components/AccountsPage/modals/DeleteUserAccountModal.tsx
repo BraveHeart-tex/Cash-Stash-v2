@@ -8,30 +8,30 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-  Flex,
   Heading,
+  Flex,
   useToast,
 } from '@chakra-ui/react';
 import React from 'react';
-import useColorModeStyles from '../hooks/useColorModeStyles';
-import { useAppDispatch } from '../redux/hooks';
+import useColorModeStyles from '../../../hooks/useColorModeStyles';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
-import { fetchBudgets } from '../redux/features/budgetSlice';
+import { useRouter } from 'next/navigation';
+import { useAppDispatch } from '../../../redux/hooks';
+import { fetchCurrentUserAccounts } from '../../../redux/features/userAccountSlice';
 
-interface IDeleteBudgetModalProps {
+interface IDeleteUserAccountModalProps {
+  selectedAccountId: string | null;
   isOpen: boolean;
   onClose: () => void;
-  selectedBudgetId: string;
 }
 
-const DeleteBudgetModal = ({
+const DeleteUserAccountModal = ({
+  selectedAccountId,
   isOpen,
   onClose,
-  selectedBudgetId,
-}: IDeleteBudgetModalProps) => {
+}: IDeleteUserAccountModalProps) => {
   const { headingColor } = useColorModeStyles();
-
   const dispatch = useAppDispatch();
   const toast = useToast();
 
@@ -42,11 +42,11 @@ const DeleteBudgetModal = ({
 
   const onSubmit = async (id: string) => {
     try {
-      await axios.delete(`/api/user/budgets/${id}`);
-      dispatch(fetchBudgets());
+      await axios.delete(`/api/user/accounts/${id}`);
+      dispatch(fetchCurrentUserAccounts());
       toast({
-        title: 'Budget deleted.',
-        description: 'The budget has been deleted.',
+        title: 'Account deleted.',
+        description: 'The account has been deleted.',
         status: 'success',
         duration: 5000,
         isClosable: true,
@@ -56,12 +56,13 @@ const DeleteBudgetModal = ({
     } catch (error) {
       toast({
         title: 'An error occurred.',
-        description: 'Unable to delete budget. Please try again later.',
+        description: 'Unable to delete account. Please try again later.',
         status: 'error',
         duration: 5000,
         isClosable: true,
         position: 'top',
       });
+      console.log(error);
     }
   };
 
@@ -69,7 +70,7 @@ const DeleteBudgetModal = ({
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay bg={'rgba(0, 0, 0, 0.25)'} />
       <ModalContent>
-        <ModalHeader color={headingColor}>Delete Budget:</ModalHeader>
+        <ModalHeader color={headingColor}>Delete Account:</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Flex
@@ -79,7 +80,7 @@ const DeleteBudgetModal = ({
             gap={4}
           >
             <Heading as={'h1'} fontSize={'xl'}>
-              Are you sure you want to delete this budget?
+              Are you sure you want to delete this account?
             </Heading>
             <Heading as={'h2'} fontSize={'md'}>
               This action cannot be undone.
@@ -89,7 +90,9 @@ const DeleteBudgetModal = ({
               isDisabled={isLoading || isSubmitting}
               isLoading={isLoading || isSubmitting}
               type='submit'
-              onClick={handleSubmit(() => onSubmit(selectedBudgetId as string))}
+              onClick={handleSubmit(() =>
+                onSubmit(selectedAccountId as string)
+              )}
             >
               Delete
             </Button>
@@ -105,4 +108,4 @@ const DeleteBudgetModal = ({
   );
 };
 
-export default DeleteBudgetModal;
+export default DeleteUserAccountModal;

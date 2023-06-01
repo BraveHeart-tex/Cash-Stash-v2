@@ -11,8 +11,8 @@ import {
   Text,
 } from '@chakra-ui/react';
 import Navigation from '../components/Navigation';
-import GoalCard from '../components/GoalCard';
-import CreateUserGoalModal from '../components/CreateUserGoalModal';
+import GoalCard from '../components/GoalsPage/GoalCard';
+import CreateUserGoalModal from '../components/GoalsPage/modals/CreateGoalModal';
 import { useEffect } from 'react';
 import { fetchGoals } from '../redux/features/goalSlice';
 import { useAppSelector, useAppDispatch } from '../redux/hooks';

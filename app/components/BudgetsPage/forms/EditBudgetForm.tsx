@@ -10,13 +10,13 @@ import {
 } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { fetchBudgetById } from '../redux/features/currentBudgetSlice';
-import CreateBudgetOptions from '../utils/CreateBudgetOptions';
-import { getOptionLabel } from '../utils/CreateUserAccountOptions';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { fetchBudgetById } from '../../../redux/features/currentBudgetSlice';
+import CreateBudgetOptions from '../../../utils/CreateBudgetOptions';
+import { getOptionLabel } from '../../../utils/CreateUserAccountOptions';
 import axios from 'axios';
-import { fetchBudgets } from '../redux/features/budgetSlice';
-import FormLoadingSpinner from './FormLoadingSpinner';
+import { fetchBudgets } from '../../../redux/features/budgetSlice';
+import FormLoadingSpinner from '../../FormLoadingSpinner';
 
 interface IEditUserBudgetFormProps {
   selectedBudgetId: string | null;

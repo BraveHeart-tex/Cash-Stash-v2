@@ -1,34 +1,51 @@
 'use client';
 import {
-  Stack,
+  Button,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   Input,
   Select,
-  FormErrorMessage,
+  Stack,
   useToast,
-  Button,
 } from '@chakra-ui/react';
-import CreateUserAccountOptions from '../utils/CreateUserAccountOptions';
-import React, { useState } from 'react';
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+import React, { useEffect } from 'react';
+import useColorModeStyles from '../../../hooks/useColorModeStyles';
+import { useForm, FieldValues, SubmitHandler } from 'react-hook-form';
+import CreateUserAccountOptions, {
+  getOptionLabel,
+} from '../../../utils/CreateUserAccountOptions';
+import FormLoadingSpinner from '../../FormLoadingSpinner';
 import axios from 'axios';
-import useColorModeStyles from '../hooks/useColorModeStyles';
-import { useAppDispatch } from '../redux/hooks';
-import { fetchCurrentUserAccounts } from '../redux/features/userAccountSlice';
+import { useAppSelector } from '../../../redux/hooks';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../../redux/store';
+import { fetchCurrentAccount } from '../../../redux/features/currentAccountSlice';
+import { fetchCurrentUserAccounts } from '../../../redux/features/userAccountSlice';
 
-const CreateUserAccountForm = () => {
-  const dispatch = useAppDispatch();
-  const [isLoading, setIsLoading] = useState(false);
-  const toast = useToast();
+interface IEditUserAccountFormProps {
+  selectedAccountId: string | null;
+}
+
+const EditUserAccountForm = ({
+  selectedAccountId,
+}: IEditUserAccountFormProps) => {
+  const { currentAccount, isLoading: isCurrentAccountLoading } = useAppSelector(
+    (state) => state.currentAccountReducer
+  );
+
+  const dispatch = useDispatch<AppDispatch>();
+
   const accountOptions = Object.values(CreateUserAccountOptions);
+
   const { btnColor, btnBgColor, btnHoverBgColor } = useColorModeStyles();
+  const toast = useToast();
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
-    reset,
+    formState: { errors, isLoading, isSubmitting },
+    setValue,
   } = useForm<FieldValues>({
     defaultValues: {
       balance: 10,
@@ -37,36 +54,59 @@ const CreateUserAccountForm = () => {
     },
   });
 
+  const loading = isCurrentAccountLoading || isLoading;
+
+  useEffect(() => {
+    if (selectedAccountId) {
+      dispatch(fetchCurrentAccount(selectedAccountId));
+    }
+  }, [dispatch, selectedAccountId]);
+
+  useEffect(() => {
+    if (currentAccount) {
+      setValue('name', currentAccount.name);
+      setValue(
+        'category',
+        getOptionLabel(CreateUserAccountOptions, currentAccount.category)
+      );
+      setValue('balance', currentAccount.balance);
+    }
+  }, [currentAccount, setValue]);
+
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    setIsLoading(true);
-    axios
-      .post('/api/user/accounts', data)
-      .then(() => {
-        setIsLoading(false);
-        reset();
+    try {
+      const response = await axios.put(
+        `/api/user/accounts/${selectedAccountId}`,
+        data
+      );
+
+      if (response.status === 200) {
         dispatch(fetchCurrentUserAccounts());
         toast({
-          title: 'Account created.',
+          title: 'Account updated.',
           description:
-            'Your account has been created. You can close this window now.',
+            'Account has been updated successfully. You can close this window now.',
           status: 'success',
-          duration: 4000,
+          duration: 5000,
           isClosable: true,
           position: 'top',
         });
-      })
-      .catch(() => {
-        setIsLoading(false);
-        toast({
-          title: 'Error creating account.',
-          description: 'There was an error creating your account.',
-          status: 'error',
-          duration: 4000,
-          isClosable: true,
-          position: 'top',
-        });
+      }
+    } catch (error: any) {
+      toast({
+        title: 'An error occurred.',
+        description: error.response?.data.error,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'top',
       });
+    }
   };
+
+  if (loading) {
+    return <FormLoadingSpinner />;
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -86,8 +126,7 @@ const CreateUserAccountForm = () => {
             {errors.name && errors.name.message}
           </FormErrorMessage>
         </FormControl>
-        {/* @ts-ignore */}
-        <FormControl isRequired isInvalid={errors.category}>
+        <FormControl isRequired>
           <FormLabel>Account Type</FormLabel>
           <Select
             id='category'
@@ -130,24 +169,21 @@ const CreateUserAccountForm = () => {
             {errors.balance && errors.balance.message}
           </FormErrorMessage>
         </FormControl>
-        {isLoading ? (
-          <Button>Loading...</Button>
-        ) : (
-          <Button
-            color={btnColor}
-            bg={btnBgColor}
-            _hover={{
-              bg: btnHoverBgColor,
-            }}
-            type='submit'
-            isDisabled={isSubmitting || isLoading}
-          >
-            Create
-          </Button>
-        )}
+        <Button
+          color={btnColor}
+          bg={btnBgColor}
+          _hover={{
+            bg: btnHoverBgColor,
+          }}
+          type='submit'
+          isLoading={isSubmitting}
+          isDisabled={isLoading}
+        >
+          Update
+        </Button>
       </Stack>
     </form>
   );
 };
 
-export default CreateUserAccountForm;
+export default EditUserAccountForm;

@@ -4,51 +4,79 @@ import {
   Input,
   FormErrorMessage,
   FormControl,
+  Select,
   Button,
   useToast,
 } from '@chakra-ui/react';
+import React, { useEffect } from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
-import useColorModeStyles from '../hooks/useColorModeStyles';
+import useColorModeStyles from '../../../hooks/useColorModeStyles';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { fetchGoalById } from '../../../redux/features/currentGoalSlice';
+import { fetchGoals } from '../../../redux/features/goalSlice';
 import axios from 'axios';
-import { useAppDispatch } from '../redux/hooks';
-import { fetchGoals } from '../redux/features/goalSlice';
 
-const CreateUserGoalForm = () => {
+interface IEditUserGoalFormProps {
+  selectedGoalId: string | null | undefined;
+}
+
+const EditUserGoalForm = ({ selectedGoalId }: IEditUserGoalFormProps) => {
+  const { currentGoal, isLoading: isCurrentGoalLoading } = useAppSelector(
+    (state) => state.currentGoalReducer
+  );
   const dispatch = useAppDispatch();
-  const { btnColor, btnBgColor, btnHoverBgColor } = useColorModeStyles();
+  const { headingColor, btnColor, btnBgColor, btnHoverBgColor } =
+    useColorModeStyles();
   const toast = useToast();
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
-    reset,
+    formState: { errors, isLoading, isSubmitting },
+    setValue,
   } = useForm<FieldValues>({
     defaultValues: {
       goalName: '',
       goalAmount: 10,
-      currentAmount: '0',
+      currentAmount: 0,
     },
   });
 
-  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+  useEffect(() => {
+    if (selectedGoalId) {
+      dispatch(fetchGoalById(selectedGoalId));
+    }
+  }, [dispatch, selectedGoalId]);
+
+  useEffect(() => {
+    if (currentGoal) {
+      setValue('goalName', currentGoal.name);
+      setValue('goalAmount', currentGoal.goalAmount);
+      setValue('currentAmount', currentGoal.currentAmount);
+    }
+  }, [currentGoal, setValue]);
+
+  const onSubmit: SubmitHandler<FieldValues> = async (data: FieldValues) => {
     try {
-      const response = await axios.post('/api/user/goals', data);
+      const response = await axios.put(
+        `api/user/goals/${selectedGoalId}`,
+        data
+      );
       toast({
-        title: 'Goal created.',
+        title: 'Goal updated.',
         description:
-          'Your goal has been created. You can close this window now.',
+          'Your goal has been updated. You can close this window now.',
         status: 'success',
         duration: 4000,
         isClosable: true,
         position: 'top',
       });
       dispatch(fetchGoals());
-      reset();
     } catch (error: any) {
+      console.log(error);
       toast({
         title: 'An error occurred.',
-        description: error.response.data.error,
+        description: `Unable to update the selected goal.`,
         status: 'error',
         duration: 4000,
         isClosable: true,
@@ -90,14 +118,14 @@ const CreateUserGoalForm = () => {
             type='number'
             id='goalAmount'
             {...register('goalAmount', {
-              required: 'Goal amount is required.',
+              required: 'Goal Amount is required.',
               min: {
                 value: 10,
-                message: 'Goal amount must be at least $10.',
+                message: 'Goal Amount must be at least $10.',
               },
               max: {
                 value: 1000000,
-                message: 'Goal amount cannot exceed $1,000,000.',
+                message: 'Goal Amount cannot exceed $1,000,000.',
               },
             })}
           />
@@ -113,14 +141,14 @@ const CreateUserGoalForm = () => {
             type='number'
             id='currentAmount'
             {...register('currentAmount', {
-              required: 'Current amount is required.',
+              required: 'Current Amount is required.',
               min: {
                 value: 0,
-                message: 'Current amount must be at least $0.',
+                message: 'Current Amount must be at least $0.',
               },
               max: {
                 value: 1000000,
-                message: 'Current amount cannot exceed $1,000,000.',
+                message: 'Current Amount cannot exceed $1,000,000.',
               },
             })}
           />
@@ -129,24 +157,21 @@ const CreateUserGoalForm = () => {
             {errors.currentAmount && errors.currentAmount.message}
           </FormErrorMessage>
         </FormControl>
-        {isSubmitting ? (
-          <Button>Loading...</Button>
-        ) : (
-          <Button
-            color={btnColor}
-            bg={btnBgColor}
-            _hover={{
-              bg: btnHoverBgColor,
-            }}
-            type='submit'
-            isDisabled={isSubmitting}
-          >
-            Create
-          </Button>
-        )}
+        <Button
+          color={btnColor}
+          bg={btnBgColor}
+          _hover={{
+            bg: btnHoverBgColor,
+          }}
+          type='submit'
+          isLoading={isSubmitting}
+          isDisabled={isLoading}
+        >
+          Update
+        </Button>
       </Stack>
     </form>
   );
 };
 
-export default CreateUserGoalForm;
+export default EditUserGoalForm;

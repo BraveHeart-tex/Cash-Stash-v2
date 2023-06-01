@@ -10,30 +10,30 @@ import {
   Button,
 } from '@chakra-ui/react';
 import React from 'react';
-import EditUserAccountForm from './EditUserAccountForm';
-import useColorModeStyles from '../hooks/useColorModeStyles';
-import EditUserBudgetForm from './EditUserBudgetForm';
+import useColorModeStyles from '../../../hooks/useColorModeStyles';
+import EditUserAccountForm from '../forms/EditUserAccountForm';
 
-interface IEditBudgetModalProps {
+interface IEditUserAccountModalModalProps {
   isOpen: boolean;
   onClose: () => void;
-  selectedBudgetId: string | null;
+  selectedAccountId: string | null;
 }
 
-const EditBudgetModal = ({
+const EditUserAccountModal = ({
   isOpen,
   onClose,
-  selectedBudgetId,
-}: IEditBudgetModalProps) => {
+  selectedAccountId,
+}: IEditUserAccountModalModalProps) => {
   const { headingColor } = useColorModeStyles();
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay bg={'rgba(0, 0, 0, 0.25)'} />
       <ModalContent>
-        <ModalHeader color={headingColor}>Edit Budget:</ModalHeader>
+        <ModalHeader color={headingColor}>Edit Account:</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <EditUserBudgetForm selectedBudgetId={selectedBudgetId} />
+          <EditUserAccountForm selectedAccountId={selectedAccountId} />
         </ModalBody>
         <ModalFooter>
           <Button variant='ghost' mr={3} onClick={onClose}>
@@ -45,4 +45,4 @@ const EditBudgetModal = ({
   );
 };
 
-export default EditBudgetModal;
+export default EditUserAccountModal;
