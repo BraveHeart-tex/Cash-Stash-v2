@@ -62,17 +62,17 @@ model UserAccount {
 }
 
 model Transaction {
-  id          Int         @id @default(autoincrement())
+  id          Int                  @id @default(autoincrement())
   amount      Float
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
   description String
-  category    String
+  category    NotificationCategory @default(OTHER)
   accountId   Int
-  account     UserAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  account     UserAccount          @relation(fields: [accountId], references: [id], onDelete: Cascade)
   userId      Int
-  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  isIncome    Boolean     @default(false)
+  user        User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  isIncome    Boolean              @default(false)
 
   @@map(name: "transactions")
 }
