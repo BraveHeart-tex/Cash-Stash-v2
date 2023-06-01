@@ -27,7 +27,7 @@ const EditGoalModal = ({
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay bg={'rgba(0, 0, 0, 0.25)'} />
       <ModalContent>
-        <ModalHeader color={headingColor}>Edit Goal:</ModalHeader>
+        <ModalHeader color={headingColor}>Edit Goal</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <EditUserGoalForm selectedGoalId={selectedGoalId} />

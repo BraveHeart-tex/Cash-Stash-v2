@@ -4,17 +4,17 @@ import {
   Input,
   FormErrorMessage,
   FormControl,
-  Select,
   Button,
   useToast,
 } from '@chakra-ui/react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import useColorModeStyles from '../hooks/useColorModeStyles';
 import axios from 'axios';
+import { useAppDispatch } from '../redux/hooks';
+import { fetchGoals } from '../redux/features/goalSlice';
 
-interface ICreateUserGoalFormProps {}
-
-const CreateUserGoalForm = (props: ICreateUserGoalFormProps) => {
+const CreateUserGoalForm = () => {
+  const dispatch = useAppDispatch();
   const { btnColor, btnBgColor, btnHoverBgColor } = useColorModeStyles();
   const toast = useToast();
 
@@ -27,7 +27,7 @@ const CreateUserGoalForm = (props: ICreateUserGoalFormProps) => {
     defaultValues: {
       goalName: '',
       goalAmount: 10,
-      currentAmount: 0,
+      currentAmount: '0',
     },
   });
 
@@ -36,12 +36,15 @@ const CreateUserGoalForm = (props: ICreateUserGoalFormProps) => {
       const response = await axios.post('/api/user/goals', data);
       toast({
         title: 'Goal created.',
-        description: 'Your goal has been created.',
+        description:
+          'Your goal has been created. You can close this window now.',
         status: 'success',
         duration: 4000,
         isClosable: true,
         position: 'top',
       });
+      dispatch(fetchGoals());
+      reset();
     } catch (error: any) {
       toast({
         title: 'An error occurred.',

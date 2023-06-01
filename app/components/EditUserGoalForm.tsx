@@ -6,20 +6,28 @@ import {
   FormControl,
   Select,
   Button,
+  useToast,
 } from '@chakra-ui/react';
-import React from 'react';
-import { FieldValues, useForm } from 'react-hook-form';
+import React, { useEffect } from 'react';
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import useColorModeStyles from '../hooks/useColorModeStyles';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { fetchGoalById } from '../redux/features/currentGoalSlice';
+import { fetchGoals } from '../redux/features/goalSlice';
+import axios from 'axios';
 
 interface IEditUserGoalFormProps {
   selectedGoalId: string | null | undefined;
 }
 
 const EditUserGoalForm = ({ selectedGoalId }: IEditUserGoalFormProps) => {
+  const { currentGoal, isLoading: isCurrentGoalLoading } = useAppSelector(
+    (state) => state.currentGoalReducer
+  );
+  const dispatch = useAppDispatch();
   const { headingColor, btnColor, btnBgColor, btnHoverBgColor } =
     useColorModeStyles();
-  // TODO: implement editing a goal with the selectedGoalId
-  // set the values of the form to the selected goal's values
+  const toast = useToast();
 
   const {
     register,
@@ -34,7 +42,48 @@ const EditUserGoalForm = ({ selectedGoalId }: IEditUserGoalFormProps) => {
     },
   });
 
-  const onSubmit = async (data: FieldValues) => {};
+  useEffect(() => {
+    if (selectedGoalId) {
+      dispatch(fetchGoalById(selectedGoalId));
+    }
+  }, [dispatch, selectedGoalId]);
+
+  useEffect(() => {
+    if (currentGoal) {
+      setValue('goalName', currentGoal.name);
+      setValue('goalAmount', currentGoal.goalAmount);
+      setValue('currentAmount', currentGoal.currentAmount);
+    }
+  }, [currentGoal, setValue]);
+
+  const onSubmit: SubmitHandler<FieldValues> = async (data: FieldValues) => {
+    try {
+      const response = await axios.put(
+        `api/user/goals/${selectedGoalId}`,
+        data
+      );
+      toast({
+        title: 'Goal updated.',
+        description:
+          'Your goal has been updated. You can close this window now.',
+        status: 'success',
+        duration: 4000,
+        isClosable: true,
+        position: 'top',
+      });
+      dispatch(fetchGoals());
+    } catch (error: any) {
+      console.log(error);
+      toast({
+        title: 'An error occurred.',
+        description: `Unable to update the selected goal.`,
+        status: 'error',
+        duration: 4000,
+        isClosable: true,
+        position: 'top',
+      });
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

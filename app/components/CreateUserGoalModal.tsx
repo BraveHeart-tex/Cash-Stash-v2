@@ -9,7 +9,6 @@ import {
   Button,
 } from '@chakra-ui/react';
 import React from 'react';
-import CreateBudgetForm from './CreateBudgetForm';
 import CreateUserGoalForm from './CreateUserGoalForm';
 
 interface ICreateUserGoalModalProps {
@@ -25,7 +24,7 @@ const CreateUserGoalModal = ({
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Create Budget</ModalHeader>
+        <ModalHeader>Create Goal</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <CreateUserGoalForm />

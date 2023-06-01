@@ -9,9 +9,15 @@ import {
   Heading,
   Button,
   ModalFooter,
+  useToast,
+  Spinner,
 } from '@chakra-ui/react';
-import React from 'react';
 import useColorModeStyles from '../hooks/useColorModeStyles';
+import axios from 'axios';
+import { useForm } from 'react-hook-form';
+import { useAppDispatch } from '../redux/hooks';
+import { fetchGoals } from '../redux/features/goalSlice';
+import { useState } from 'react';
 
 interface IDeleteGoalModalProps {
   isOpen: boolean;
@@ -24,8 +30,45 @@ const DeleteGoalModal = ({
   onClose,
   selectedGoalId,
 }: IDeleteGoalModalProps) => {
+  const [isLoading, setIsLoading] = useState(false);
   const { headingColor } = useColorModeStyles();
-  // TODO: implement deleting a goal with the selectedGoalId
+  const dispatch = useAppDispatch();
+  const toast = useToast();
+
+  const {
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm();
+
+  const onSubmit = async (id: string) => {
+    setIsLoading(true);
+    try {
+      await axios.delete(`/api/user/goals/${id}`);
+      toast({
+        title: 'Goal deleted.',
+        description: 'The selected goal has been deleted.',
+        status: 'success',
+        duration: 4000,
+        isClosable: true,
+        position: 'top',
+      });
+      setIsLoading(false);
+      onClose();
+      dispatch(fetchGoals());
+    } catch (error: any) {
+      toast({
+        title: 'An error occurred.',
+        description: error.response.data.error,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'top',
+      });
+      setIsLoading(false);
+      console.log(error);
+    }
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay bg={'rgba(0, 0, 0, 0.25)'} />
@@ -45,14 +88,21 @@ const DeleteGoalModal = ({
             <Heading as={'h2'} fontSize={'md'}>
               This action cannot be undone.
             </Heading>
-            <Button
-              colorScheme='red'
-              // isDisabled={isLoading || isSubmitting}
-              // isLoading={isLoading || isSubmitting}
-              type='submit'
-            >
-              Delete
-            </Button>
+            {isLoading ? (
+              <Spinner />
+            ) : (
+              <Button
+                colorScheme='red'
+                isDisabled={isLoading}
+                isLoading={isLoading}
+                type='submit'
+                onClick={handleSubmit(() => {
+                  onSubmit(selectedGoalId as string);
+                })}
+              >
+                Delete
+              </Button>
+            )}
           </Flex>
         </ModalBody>
         <ModalFooter>

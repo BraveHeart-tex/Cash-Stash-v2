@@ -3,12 +3,12 @@ import { Goal } from '@prisma/client';
 import axios from 'axios';
 
 interface GoalsState {
-  budgets: Goal[] | null;
+  goals: Goal[] | null;
   isLoading: boolean;
 }
 
 const initialState: GoalsState = {
-  budgets: null,
+  goals: null,
   isLoading: false,
 };
 
@@ -27,7 +27,7 @@ const goalsSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(fetchGoals.fulfilled, (state, action) => {
-        state.budgets = action.payload;
+        state.goals = action.payload;
         state.isLoading = false;
       })
       .addCase(fetchGoals.rejected, (state) => {

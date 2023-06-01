@@ -27,8 +27,6 @@ const GoalsPageClient = () => {
         <Box width={'100%'}>
           <SimpleGrid columns={{ base: 1, lg: 2, xl: 3 }} gap={4} mt={4}>
             <GoalCard />
-            <GoalCard />
-            <GoalCard />
           </SimpleGrid>
         </Box>
         <Button

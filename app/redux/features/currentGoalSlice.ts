@@ -21,7 +21,7 @@ export const fetchGoalById = createAsyncThunk(
   async (goalId: string) => {
     try {
       const response = await axios.get<FetchCurrentGoalResponse>(
-        `/api/user/budgets/${goalId}`
+        `/api/user/goals/${goalId}`
       );
       return response.data.goal;
     } catch (error) {
