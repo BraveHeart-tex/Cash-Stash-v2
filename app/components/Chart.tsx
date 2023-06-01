@@ -10,6 +10,7 @@ import {
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import { useColorMode } from '@chakra-ui/react';
+import { Budget, Goal, Transaction } from '@prisma/client';
 
 ChartJS.register(
   CategoryScale,
@@ -20,7 +21,15 @@ ChartJS.register(
   Legend
 );
 
-const Chart = () => {
+interface IChartProps<T extends Budget | Goal | Transaction> {
+  datasetToBeCompared: Array<T> | null;
+  datasetToCompare: Array<T> | null;
+}
+
+const Chart = ({
+  datasetToBeCompared,
+  datasetToCompare,
+}: IChartProps<Budget | Goal | Transaction>) => {
   const { colorMode } = useColorMode();
 
   const options = {
@@ -34,7 +43,7 @@ const Chart = () => {
       },
       title: {
         display: true,
-        text: 'Budget vs Expenses',
+        text: 'Income vs Expenses',
         color: colorMode === 'dark' ? 'white' : 'black',
       },
     },
@@ -55,30 +64,33 @@ const Chart = () => {
   };
 
   const labels = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'November',
-    'December',
+    datasetToBeCompared?.map((item) =>
+      new Date(item.createdAt).toLocaleDateString('en-US', {
+        month: 'short',
+        year: 'numeric',
+      })
+    ) || [],
   ];
 
   const data = {
     labels,
     datasets: [
       {
-        label: 'Budget',
-        data: [165, 159, 180, 181, 156, 155, 140],
+        label: 'Income',
+        // if datasetToBeCompared is of type Budget, then map over it and return the amount
+        // if datasetToBeCompared is of type Goal, then map over it and return the amount
+        // if datasetToBeCompared is of type Transaction, then map over it and return the amount
+        // @ts-ignore
+        data: datasetToBeCompared?.map((item) => item.amount) || [],
         backgroundColor: colorMode === 'dark' ? '#63b3ed' : '#3182ce',
       },
       {
         label: 'Expenses',
-        data: [128, 148, 140, 119, 186, 127, 190],
+        // if datasetToBeCompare is of type Budget, then map over it and return the amount
+        // if datasetToBeCompare is of type Goal, then map over it and return the amount
+        // if datasetToBeCompare is of type Transaction, then map over it and return the amount
+        // @ts-ignore
+        data: datasetToCompare?.map((item) => item.amount) || [],
         backgroundColor: colorMode === 'dark' ? '#f56565' : '#e53e3e',
       },
     ],

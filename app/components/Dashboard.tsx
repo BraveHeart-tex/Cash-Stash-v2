@@ -92,7 +92,7 @@ const Dashboard = () => {
             rounded={'md'}
             shadow={'xl'}
           >
-            <Chart />
+            {/* <Chart /> TODO: Implement datasets to loop through here. */}
             {/* Render financial insights */}
             <FinancialInsights />
           </Box>
