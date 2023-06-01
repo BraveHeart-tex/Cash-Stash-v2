@@ -16,12 +16,11 @@ import React from 'react';
 import useColorModeStyles from '../../../hooks/useColorModeStyles';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/navigation';
 import { useAppDispatch } from '../../../redux/hooks';
 import { fetchCurrentUserAccounts } from '../../../redux/features/userAccountSlice';
 
 interface IDeleteUserAccountModalProps {
-  selectedAccountId: string | null;
+  selectedAccountId: number | null;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -40,7 +39,7 @@ const DeleteUserAccountModal = ({
     formState: { isLoading, isSubmitting },
   } = useForm();
 
-  const onSubmit = async (id: string) => {
+  const onSubmit = async (id: number) => {
     try {
       await axios.delete(`/api/user/accounts/${id}`);
       dispatch(fetchCurrentUserAccounts());
@@ -91,7 +90,7 @@ const DeleteUserAccountModal = ({
               isLoading={isLoading || isSubmitting}
               type='submit'
               onClick={handleSubmit(() =>
-                onSubmit(selectedAccountId as string)
+                onSubmit(selectedAccountId as number)
               )}
             >
               Delete

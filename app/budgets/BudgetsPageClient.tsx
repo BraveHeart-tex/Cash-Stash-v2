@@ -7,8 +7,8 @@ import {
   Heading,
   SimpleGrid,
   Spinner,
-  useColorModeValue,
   useDisclosure,
+  useColorMode,
   Text,
 } from '@chakra-ui/react';
 import BudgetCards from '../components/BudgetsPage/BudgetCards';
@@ -20,12 +20,53 @@ import { fetchBudgets } from '../redux/features/budgetSlice';
 const BudgetsPageClient = () => {
   const { budgets, isLoading } = useAppSelector((state) => state.budgetReducer);
   const dispatch = useAppDispatch();
+  const { colorMode } = useColorMode();
 
   useEffect(() => {
     dispatch(fetchBudgets());
   }, [dispatch]);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  if (budgets?.length === 0) {
+    return (
+      <Container maxW={'8xl'} p={4}>
+        <Navigation />
+        <Heading as='h1' mb={4}>
+          Budgets
+        </Heading>
+        <Box
+          display={'flex'}
+          justifyContent={'center'}
+          alignItems={'center'}
+          flexDirection={'column'}
+          gap={4}
+        >
+          <Heading
+            display='inline-block'
+            as='h2'
+            size='2xl'
+            bgGradient='linear(to-r, gray.600, gray.800)'
+            backgroundClip='text'
+          >
+            404
+          </Heading>
+          <Text>No budgets found. Add a budget to get started!</Text>
+          <Button
+            bg={colorMode === 'light' ? 'gray.200' : 'gray.700'}
+            _hover={{
+              bg: colorMode === 'light' ? 'gray.300' : 'gray.600',
+            }}
+            color={colorMode === 'light' ? 'gray.800' : 'gray.50'}
+            onClick={onOpen}
+          >
+            Create Budget
+          </Button>
+        </Box>
+        <CreateBudgetModal isOpen={isOpen} onClose={onClose} />
+      </Container>
+    );
+  }
 
   return (
     <Container maxW={'8xl'} p={4}>
@@ -40,7 +81,7 @@ const BudgetsPageClient = () => {
         flexDirection={'column'}
         gap={4}
       >
-        {budgets?.length === 0 && (
+        {budgets && budgets.length === 0 && (
           <Box>
             <Text>No budgets found. Add a budget to get started!</Text>
           </Box>
@@ -65,11 +106,11 @@ const BudgetsPageClient = () => {
           </Box>
         )}
         <Button
-          bg={useColorModeValue('gray.200', 'gray.700')}
+          bg={colorMode === 'light' ? 'gray.200' : 'gray.700'}
           _hover={{
-            bg: useColorModeValue('gray.300', 'gray.600'),
+            bg: colorMode === 'light' ? 'gray.300' : 'gray.600',
           }}
-          color={useColorModeValue('gray.800', 'gray.50')}
+          color={colorMode === 'light' ? 'gray.800' : 'gray.50'}
           onClick={onOpen}
         >
           Create Budget

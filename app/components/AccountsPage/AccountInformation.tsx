@@ -38,7 +38,7 @@ interface IAccountInformationProps {
 
 const AccountInformation = ({ userAccounts }: IAccountInformationProps) => {
   const { colorMode } = useColorMode();
-  const [selectedAccountId, setSelectedAccountId] = useState<string | null>(
+  const [selectedAccountId, setSelectedAccountId] = useState<number | null>(
     null
   );
   const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] =
@@ -46,12 +46,12 @@ const AccountInformation = ({ userAccounts }: IAccountInformationProps) => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const { headingColor, textColor } = useColorModeStyles();
 
-  const handleEditAccount = (accountId: string) => {
+  const handleEditAccount = (accountId: number) => {
     setSelectedAccountId(accountId);
     onOpen();
   };
 
-  const handleDeleteAccount = (accountId: string) => {
+  const handleDeleteAccount = (accountId: number) => {
     setSelectedAccountId(accountId);
     setIsDeleteAccountModalOpen(true);
   };

@@ -99,7 +99,7 @@ export async function PUT(request: Request, { params }: { params: IParams }) {
 
   const updatedBudget = await prisma.budget.update({
     where: {
-      id: budgetId,
+      id: parseInt(budgetId),
     },
     data: {
       budgetAmount: parseFloat(budgetAmount),
@@ -155,7 +155,7 @@ export async function DELETE(
 
   await prisma.budget.delete({
     where: {
-      id: budgetId,
+      id: parseInt(budgetId),
     },
   });
 

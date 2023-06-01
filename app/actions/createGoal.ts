@@ -4,7 +4,7 @@ const createGoal = async (
   goalName: string,
   goalAmount: string,
   currentAmount: string,
-  userId: string
+  userId: number
 ) => {
   const existingGoal = await prisma.goal.findFirst({
     where: {

@@ -2,13 +2,20 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// datasource db {
+//   provider = "postgresql"
+//   url      = env("DATABASE_URL")
+// }
+
 datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
+  provider          = "postgresql"
+  url               = env("POSTGRES_PRISMA_URL")
+  directUrl         = env("POSTGRES_URL_NON_POOLING")
+  shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
 model User {
-  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  id             Int           @id @default(autoincrement())
   name           String?
   email          String?       @unique
   hashedPassword String?
@@ -23,12 +30,12 @@ model User {
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
 
-  @@map("users")
+  @@map(name: "users")
 }
 
 model Account {
-  id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String  @db.ObjectId
+  id                Int     @id @default(autoincrement())
+  userId            Int
   type              String
   provider          String
   providerAccountId String
@@ -37,7 +44,7 @@ model Account {
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.String
+  id_token          String?
   session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -46,69 +53,69 @@ model Account {
 }
 
 model UserAccount {
-  id           String              @id @default(auto()) @map("_id") @db.ObjectId
+  id           Int                 @id @default(autoincrement())
   name         String
   balance      Float
-  userId       String              @db.ObjectId
+  userId       Int
   user         User                @relation(fields: [userId], references: [id], onDelete: Cascade)
   transactions Transaction[]
   category     UserAccountCategory @default(CHECKING)
   createdAt    DateTime            @default(now())
   updatedAt    DateTime            @updatedAt
 
-  @@map("userAccounts")
+  @@map(name: "userAccounts")
 }
 
 model Transaction {
-  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  id          Int         @id @default(autoincrement())
   amount      Float
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   description String
   category    String
-  accountId   String      @db.ObjectId
+  accountId   Int
   account     UserAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  userId      String      @db.ObjectId
+  userId      Int
   user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("transactions")
+  @@map(name: "transactions")
 }
 
 model Budget {
-  id           String               @id @default(auto()) @map("_id") @db.ObjectId
+  id           Int                  @id @default(autoincrement())
   budgetAmount Float
   spentAmount  Float
-  userId       String               @db.ObjectId
+  userId       Int
   user         User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
   category     NotificationCategory @default(OTHER)
   createdAt    DateTime             @default(now())
   updatedAt    DateTime             @updatedAt
 
-  @@map("budgets")
+  @@map(name: "budgets")
 }
 
 model Goal {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  id            Int      @id @default(autoincrement())
   name          String
   goalAmount    Float
   currentAmount Float
-  userId        String   @db.ObjectId
+  userId        Int
   user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  @@map("goals")
+  @@map(name: "goals")
 }
 
 model Reminder {
-  id     String   @id @default(auto()) @map("_id") @db.ObjectId
+  id     Int      @id @default(autoincrement())
   title  String
   amount Float
   date   DateTime
-  userId String   @db.ObjectId
+  userId Int
   user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("reminders")
+  @@map(name: "reminders")
 }
 
 enum NotificationCategory {
@@ -120,7 +127,7 @@ enum NotificationCategory {
   HOUSING
   OTHER
 
-  @@map("notificationCategories")
+  @@map(name: "notificationCategories")
 }
 
 enum UserAccountCategory {
@@ -131,5 +138,5 @@ enum UserAccountCategory {
   LOAN
   OTHER
 
-  @@map("userAccountCategories")
+  @@map(name: "userAccountCategories")
 }

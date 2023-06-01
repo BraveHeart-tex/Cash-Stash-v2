@@ -7,7 +7,7 @@ const getBudgetById = async (budgetId: string | null) => {
 
   const budget = await prisma.budget.findUnique({
     where: {
-      id: budgetId,
+      id: parseInt(budgetId),
     },
   });
 

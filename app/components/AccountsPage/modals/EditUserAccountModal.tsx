@@ -16,7 +16,7 @@ import EditUserAccountForm from '../forms/EditUserAccountForm';
 interface IEditUserAccountModalModalProps {
   isOpen: boolean;
   onClose: () => void;
-  selectedAccountId: string | null;
+  selectedAccountId: number | null;
 }
 
 const EditUserAccountModal = ({

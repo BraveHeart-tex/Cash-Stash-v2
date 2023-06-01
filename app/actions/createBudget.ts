@@ -5,7 +5,7 @@ const createBudget = async (
   budgetAmount: string,
   spentAmount: string,
   category: NotificationCategory,
-  userId: string
+  userId: number
 ) => {
   const existingBudget = await prisma.budget.findFirst({
     where: {

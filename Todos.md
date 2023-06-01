@@ -1,7 +1,5 @@
 # Log
 
-TODO: Refactor folder structure for components
-
 - User:
 
 At least one of the following fields is required: name or email.

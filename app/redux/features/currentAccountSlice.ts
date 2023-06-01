@@ -18,7 +18,7 @@ interface FetchCurrentAccountResponse {
 
 export const fetchCurrentAccount = createAsyncThunk(
   'currentAccount/fetchCurrentAccount',
-  async (id: string | null) => {
+  async (id: number | null) => {
     try {
       const response = await axios.get<FetchCurrentAccountResponse>(
         `/api/user/accounts/${id}`

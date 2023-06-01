@@ -7,11 +7,11 @@ const getGoalById = async (goalId: string | null) => {
 
   const goal = await prisma.goal.findUnique({
     where: {
-      id: goalId,
+      id: parseInt(goalId),
     },
   });
 
-  if (!goalId) {
+  if (!goal) {
     return null;
   }
 

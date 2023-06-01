@@ -15,6 +15,7 @@ import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { fetchGoalById } from '../../../redux/features/currentGoalSlice';
 import { fetchGoals } from '../../../redux/features/goalSlice';
 import axios from 'axios';
+import FormLoadingSpinner from '../../FormLoadingSpinner';
 
 interface IEditUserGoalFormProps {
   selectedGoalId: string | null | undefined;
@@ -84,6 +85,10 @@ const EditUserGoalForm = ({ selectedGoalId }: IEditUserGoalFormProps) => {
       });
     }
   };
+
+  if (!currentGoal) {
+    return <FormLoadingSpinner />;
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

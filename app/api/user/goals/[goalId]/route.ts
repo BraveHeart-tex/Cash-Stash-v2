@@ -103,7 +103,7 @@ export async function PUT(request: Request, { params }: { params: IParams }) {
 
   const updatedGoal = await prisma.goal.update({
     where: {
-      id: goalId,
+      id: parseInt(goalId),
     },
     data: {
       goalAmount: parseFloat(goalAmount),
@@ -159,7 +159,7 @@ export async function DELETE(
 
   const deletedGoal = await prisma.goal.delete({
     where: {
-      id: goalId,
+      id: parseInt(goalId),
     },
   });
 

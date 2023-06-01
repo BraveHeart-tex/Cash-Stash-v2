@@ -48,6 +48,15 @@ const AccountsFilter = () => {
     setSelectedAccountType(event.target.value);
   };
 
+  if (!accounts || accounts.length === 0) {
+    return (
+      <Text>
+        You don&apos;t have any accounts yet. Create one by clicking the Create
+        Account button.
+      </Text>
+    );
+  }
+
   return (
     <Box>
       <Flex justifyContent={'center'} alignItems={'center'}>

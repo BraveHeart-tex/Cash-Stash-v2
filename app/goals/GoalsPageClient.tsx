@@ -9,6 +9,7 @@ import {
   useColorModeValue,
   Spinner,
   Text,
+  useColorMode,
 } from '@chakra-ui/react';
 import Navigation from '../components/Navigation';
 import GoalCard from '../components/GoalsPage/GoalCard';
@@ -19,13 +20,54 @@ import { useAppSelector, useAppDispatch } from '../redux/hooks';
 
 const GoalsPageClient = () => {
   const createGoalModal = useDisclosure();
-
+  const { colorMode } = useColorMode();
   const { goals, isLoading } = useAppSelector((state) => state.goalReducer);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(fetchGoals());
   }, [dispatch]);
+
+  if (!goals || goals?.length === 0) {
+    return (
+      <Container maxW={'8xl'} p={4}>
+        <Navigation />
+        <Heading>Goals</Heading>
+        <Box
+          display={'flex'}
+          justifyContent={'center'}
+          alignItems={'center'}
+          flexDirection={'column'}
+          gap={4}
+        >
+          <Heading
+            display='inline-block'
+            as='h2'
+            size='2xl'
+            bgGradient='linear(to-r, gray.600, gray.800)'
+            backgroundClip='text'
+          >
+            404
+          </Heading>
+          <Text>No goals found. Add a goal to get started!</Text>
+          <Button
+            bg={colorMode === 'light' ? 'gray.200' : 'gray.700'}
+            _hover={{
+              bg: colorMode === 'light' ? 'gray.300' : 'gray.600',
+            }}
+            color={colorMode === 'light' ? 'gray.800' : 'gray.50'}
+            onClick={createGoalModal.onOpen}
+          >
+            Create Goal
+          </Button>
+        </Box>
+        <CreateUserGoalModal
+          isOpen={createGoalModal.isOpen}
+          onClose={createGoalModal.onClose}
+        />
+      </Container>
+    );
+  }
 
   return (
     <Container maxW={'8xl'} p={4}>
@@ -59,11 +101,11 @@ const GoalsPageClient = () => {
         <Button
           mt={4}
           onClick={createGoalModal.onOpen}
-          bg={useColorModeValue('gray.200', 'gray.700')}
+          bg={colorMode === 'light' ? 'gray.200' : 'gray.700'}
           _hover={{
-            bg: useColorModeValue('gray.300', 'gray.600'),
+            bg: colorMode === 'light' ? 'gray.300' : 'gray.600',
           }}
-          color={useColorModeValue('gray.800', 'gray.50')}
+          color={colorMode === 'light' ? 'gray.800' : 'gray.50'}
         >
           Create Goal
         </Button>

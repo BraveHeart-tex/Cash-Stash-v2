@@ -24,7 +24,13 @@ import { fetchCurrentAccount } from '../../../redux/features/currentAccountSlice
 import { fetchCurrentUserAccounts } from '../../../redux/features/userAccountSlice';
 
 interface IEditUserAccountFormProps {
-  selectedAccountId: string | null;
+  selectedAccountId: number | null;
+}
+
+interface FormValues {
+  name: string;
+  category: string;
+  balance: number;
 }
 
 const EditUserAccountForm = ({
@@ -46,7 +52,7 @@ const EditUserAccountForm = ({
     handleSubmit,
     formState: { errors, isLoading, isSubmitting },
     setValue,
-  } = useForm<FieldValues>({
+  } = useForm<FormValues>({
     defaultValues: {
       balance: 10,
       category: '',
@@ -73,7 +79,7 @@ const EditUserAccountForm = ({
     }
   }, [currentAccount, setValue]);
 
-  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
       const response = await axios.put(
         `/api/user/accounts/${selectedAccountId}`,
