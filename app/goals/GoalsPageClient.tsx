@@ -7,13 +7,26 @@ import {
   SimpleGrid,
   useDisclosure,
   useColorModeValue,
+  Spinner,
+  Text,
 } from '@chakra-ui/react';
 import Navigation from '../components/Navigation';
 import GoalCard from '../components/GoalCard';
 import CreateUserGoalModal from '../components/CreateUserGoalModal';
+import { useEffect } from 'react';
+import { fetchGoals } from '../redux/features/goalSlice';
+import { useAppSelector, useAppDispatch } from '../redux/hooks';
 
 const GoalsPageClient = () => {
   const createGoalModal = useDisclosure();
+
+  const { goals, isLoading } = useAppSelector((state) => state.goalReducer);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchGoals());
+  }, [dispatch]);
+
   return (
     <Container maxW={'8xl'} p={4}>
       <Navigation />
@@ -24,11 +37,25 @@ const GoalsPageClient = () => {
         alignItems={'center'}
         flexDirection={'column'}
       >
-        <Box width={'100%'}>
-          <SimpleGrid columns={{ base: 1, lg: 2, xl: 3 }} gap={4} mt={4}>
-            <GoalCard />
-          </SimpleGrid>
-        </Box>
+        {isLoading ? (
+          <Box
+            height={'50vh'}
+            display={'flex'}
+            flexDirection={'column'}
+            justifyContent={'center'}
+            alignItems={'center'}
+            gap={4}
+          >
+            <Text>Loading goals... </Text>
+            <Spinner />
+          </Box>
+        ) : (
+          <Box width={'100%'}>
+            <SimpleGrid columns={{ base: 1, lg: 2, xl: 3 }} gap={4} mt={4}>
+              <GoalCard goals={goals} />
+            </SimpleGrid>
+          </Box>
+        )}
         <Button
           mt={4}
           onClick={createGoalModal.onOpen}

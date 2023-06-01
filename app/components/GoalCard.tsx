@@ -29,17 +29,14 @@ import EditGoalModal from './EditGoalModal';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { fetchGoals } from '../redux/features/goalSlice';
+import { Goal } from '@prisma/client';
 
-const GoalCard = () => {
-  const { goals, isLoading } = useAppSelector((state) => state.goalReducer);
-  const dispatch = useAppDispatch();
+interface IGoalCardProps {
+  goals: Goal[] | null;
+}
 
-  useEffect(() => {
-    dispatch(fetchGoals());
-  }, [dispatch]);
-
+const GoalCard = ({ goals }: IGoalCardProps) => {
   const [selectedGoalId, setSelectedGoalId] = useState('');
-
   const { colorMode } = useColorMode();
   const { headingColor } = useColorModeStyles();
 
@@ -55,20 +52,6 @@ const GoalCard = () => {
     setSelectedGoalId(goalId);
     deleteModal.onOpen();
   };
-
-  if (isLoading) {
-    return (
-      <Box
-        display={'flex'}
-        justifyContent={'start'}
-        alignItems={'center'}
-        gap={4}
-      >
-        <Text>Loading goals...</Text>
-        <Spinner />
-      </Box>
-    );
-  }
 
   return (
     <>
