@@ -7,6 +7,10 @@ interface TransactionState {
     type: 'income' | 'expense' | '';
     accountId: string;
   };
+  editModalOpen: boolean;
+  createModalOpen: boolean;
+  deleteModalOpen: boolean;
+  viewModalOpen: boolean;
   sort: {
     sortBy: string;
     sortDirection: 'asc' | 'desc';
@@ -21,6 +25,10 @@ const initialState: TransactionState = {
     type: '',
     accountId: '',
   },
+  editModalOpen: false,
+  createModalOpen: false,
+  deleteModalOpen: false,
+  viewModalOpen: false,
   sort: {
     sortBy: 'date',
     sortDirection: 'asc',
@@ -53,6 +61,18 @@ const transactionsSlice = createSlice({
     },
     setSortDirection: (state, action) => {
       state.sort.sortDirection = action.payload;
+    },
+    setEditModalOpen: (state, action) => {
+      state.editModalOpen = action.payload;
+    },
+    setCreateModalOpen: (state, action) => {
+      state.createModalOpen = action.payload;
+    },
+    setDeleteModalOpen: (state, action) => {
+      state.deleteModalOpen = action.payload;
+    },
+    setViewModalOpen: (state, action) => {
+      state.viewModalOpen = action.payload;
     },
     updateFilteredData: (state) => {
       const { type, accountId } = state.filter;
@@ -123,6 +143,10 @@ export const {
   updateFilteredData,
   setSortBy,
   setSortDirection,
+  setEditModalOpen,
+  setCreateModalOpen,
+  setDeleteModalOpen,
+  setViewModalOpen,
 } = transactionsSlice.actions;
 
 export default transactionsSlice.reducer;

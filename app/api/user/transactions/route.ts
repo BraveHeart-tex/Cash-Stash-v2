@@ -2,6 +2,7 @@ import createTransaction from '@/app/actions/createTransaction';
 import getCurrentUser from '@/app/actions/getCurrentUser';
 import getCurrentUserTransactions from '@/app/actions/getCurrentUserTransactions';
 import { NextResponse } from 'next/server';
+import prisma from '@/app/libs/prismadb';
 
 // get all transactions
 export async function GET(request: Request) {
@@ -56,9 +57,12 @@ export async function POST(request: Request) {
     );
   }
 
-  const { amount, description, category, accountId } = await request.json();
+  const { amount, description, category, accountId, isIncome } =
+    await request.json();
 
-  if (!amount || !description || !category || !accountId) {
+  let IsIncomeParsed = isIncome === 'expense' ? false : true;
+
+  if (!amount || !description || !category || !accountId || !isIncome) {
     return NextResponse.json(
       {
         message: 'Invalid request',
@@ -74,13 +78,29 @@ export async function POST(request: Request) {
     description,
     category,
     parseInt(accountId),
+    IsIncomeParsed,
     currentUser.id
   );
+
+  // check if the transaction contains a an object with a property called message
+  // if it does, it means that the transaction failed
+  // { message: 'Insufficient balance' }
+
+  if (typeof transaction !== 'object' || 'message' in transaction) {
+    return NextResponse.json(
+      {
+        message: transaction.message,
+      },
+      {
+        status: 400,
+      }
+    );
+  }
 
   if (!transaction) {
     return NextResponse.json(
       {
-        message: 'Error creating transaction',
+        message: 'Something went wrong',
       },
       {
         status: 500,

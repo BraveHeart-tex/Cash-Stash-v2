@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { fetchTransactions } from '@/app/redux/features/transactionsSlice';
 import { useAppDispatch, useAppSelector } from '@/app/redux/hooks';
 import TransactionCard from './TransactionCard';
-import { Box, Heading, Spinner, Text } from '@chakra-ui/react';
+import { Box, Heading, SimpleGrid, Spinner, Text } from '@chakra-ui/react';
 
 const TransactionList = () => {
   const { data, filteredData, isLoading } = useAppSelector(
@@ -16,7 +16,7 @@ const TransactionList = () => {
   }, [dispatch]);
 
   return (
-    <Box>
+    <SimpleGrid columns={{ base: 1, lg: 2, xl: 3 }} gap={4}>
       {isLoading && (
         <Box
           display={'flex'}
@@ -52,7 +52,7 @@ const TransactionList = () => {
         : data?.map((transaction) => (
             <TransactionCard transaction={transaction} key={transaction.id} />
           ))}
-    </Box>
+    </SimpleGrid>
   );
 };
 
