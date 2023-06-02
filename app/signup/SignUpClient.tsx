@@ -266,7 +266,8 @@ const SignUpClient = () => {
                 })
               }
               fontSize={{ base: '15px', md: '17px', lg: '18px' }}
-              isDisabled={isLoading}
+              type='submit'
+              isDisabled={isLoading || isSubmitting}
             >
               Sign Up with Github
             </Button>

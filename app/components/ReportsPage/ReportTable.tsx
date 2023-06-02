@@ -22,7 +22,7 @@ import { fetchTopTransactionsByCategory } from '@/app/redux/features/transaction
 const ReportTable = () => {
   const dispatch = useAppDispatch();
   const {
-    data,
+    // data,
     filteredData: transactions,
     isLoading,
     topTransactionsByCategory,
