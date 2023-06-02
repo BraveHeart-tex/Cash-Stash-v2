@@ -24,15 +24,15 @@ const FinancialInsights = ({ insightsData }: IFinancialInsightsProps) => {
     <Box>
       <Stat mb={4}>
         <StatLabel>Total Income</StatLabel>
-        <StatNumber>${totalIncome}</StatNumber>
+        <StatNumber>{totalIncome}₺</StatNumber>
       </Stat>
       <Stat mb={4}>
         <StatLabel>Total Expenses</StatLabel>
-        <StatNumber>${totalExpense}</StatNumber>
+        <StatNumber>{totalExpense}₺</StatNumber>
       </Stat>
       <Stat mb={4}>
         <StatLabel>Net Income</StatLabel>
-        <StatNumber>${netIncome}</StatNumber>
+        <StatNumber>{netIncome}₺</StatNumber>
       </Stat>
       <Stat mb={4}>
         <StatLabel>Savings Rate</StatLabel>

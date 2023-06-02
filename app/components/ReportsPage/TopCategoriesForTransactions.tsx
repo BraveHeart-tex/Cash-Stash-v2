@@ -38,13 +38,17 @@ const TopCategoriesForTransactions = ({
         textDecorationColor={colorMode === 'light' ? 'gray.700' : 'white'}
         fontWeight={'bold'}
       >
-        Top categories by transaction amount
+        Top categories by transaction amount (Expense)
       </Text>
-      <VictoryChart theme={VictoryTheme.material} domainPadding={20}>
+      <VictoryChart domainPadding={20}>
         <VictoryBar
+          barWidth={({ index }) => (index === 0 ? 20 : 10)}
+          width={400}
           style={{
             data: { fill: '#c43a31' },
+            labels: { fill: colorMode === 'light' ? 'black' : 'white' },
           }}
+          labels={({ datum }) => `${datum.x}: ${datum.y}`}
           data={topCategoriesForTransactions}
           animate={{
             duration: 2000,

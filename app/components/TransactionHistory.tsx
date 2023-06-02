@@ -1,20 +1,17 @@
 'use client';
-import React from 'react';
 import { Box, Text, Stack, Badge, useColorMode } from '@chakra-ui/react';
+import { Transaction } from '@prisma/client';
 
-const TransactionHistory = () => {
+interface ITransactionHistoryProps {
+  transactions: Transaction[] | null;
+}
+
+const TransactionHistory = ({ transactions }: ITransactionHistoryProps) => {
   const { colorMode } = useColorMode();
-  const transactions = [
-    { id: 1, date: '2022-01-15', description: 'Payment received', amount: 500 },
-    {
-      id: 2,
-      date: '2022-02-05',
-      description: 'Grocery shopping',
-      amount: -100,
-    },
-    { id: 3, date: '2022-03-20', description: 'Restaurant bill', amount: -50 },
-    { id: 4, date: '2022-04-10', description: 'Salary deposit', amount: 2000 },
-  ];
+
+  if (!transactions || transactions.length === 0) {
+    return <Box>No transactions found.</Box>;
+  }
 
   return (
     <Box p={2}>
@@ -31,14 +28,20 @@ const TransactionHistory = () => {
               {transaction.description}
               <Badge
                 ml={2}
-                colorScheme={transaction.amount > 0 ? 'green' : 'red'}
+                colorScheme={transaction.isIncome ? 'green' : 'red'}
               >
-                {transaction.amount > 0 ? 'Income' : 'Expense'}
+                {transaction.isIncome ? 'Income' : 'Expense'}
               </Badge>
             </Text>
 
-            <Text>{transaction.date}</Text>
-            <Text>${transaction.amount}</Text>
+            <Text>
+              {new Date(transaction.createdAt).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })}
+            </Text>
+            <Text>{transaction.amount}₺</Text>
           </Box>
         ))}
       </Stack>

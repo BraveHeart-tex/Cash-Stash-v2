@@ -48,7 +48,7 @@ const BudgetStatus = () => {
             size='sm'
           />
           <Text mt={2} fontSize='sm'>
-            Spent: ${budget.spentAmount} / Budget: ${budget.budgetAmount}
+            Spent: {budget.spentAmount}₺ / Budget: {budget.budgetAmount}₺
           </Text>
         </Box>
       ))}

@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, useColorMode } from '@chakra-ui/react';
 import { VictoryBar, VictoryChart, VictoryGroup } from 'victory';
 import { MonthlyTransactionData } from '@/app/redux/features/transactionsSlice';
+import groupTransactionsByMonth from '@/groupTransactionsByMonth';
 
 interface IInsightGroupChartProps {
   monthlyData: MonthlyTransactionData | null;
@@ -10,15 +11,14 @@ interface IInsightGroupChartProps {
 const InsightGroupChart = ({ monthlyData }: IInsightGroupChartProps) => {
   const { colorMode } = useColorMode();
 
-  const labels = ['Income vs Expense'];
-
-  if (!monthlyData) {
+  if (!monthlyData || !monthlyData.incomes || !monthlyData.expenses) {
     return <Box>No data</Box>;
   }
 
-  monthlyData.incomes.forEach((income) => {
-    labels.push(income.month);
-  });
+  const groupedIncomes =
+    monthlyData && groupTransactionsByMonth(monthlyData.incomes);
+  const groupedExpenses =
+    monthlyData && groupTransactionsByMonth(monthlyData.expenses);
 
   return (
     <Box>
@@ -48,28 +48,26 @@ const InsightGroupChart = ({ monthlyData }: IInsightGroupChartProps) => {
           {/* Income */}
           <VictoryBar
             data={
-              monthlyData.incomes.map((income) => ({
-                x: income.month,
-                y: income.amount,
-              })) as any
+              groupedIncomes
+                ? groupedIncomes.incomes.map((income) => ({
+                    x: income.month,
+                    y: income.amount,
+                  }))
+                : []
             }
-            categories={{
-              x: monthlyData.incomes.map((income) => income.month),
-            }}
             labels={['Income']}
             barWidth={({ index }) => (index === 0 ? 20 : 10)}
           />
           {/* Expense */}
           <VictoryBar
             data={
-              monthlyData.expenses.map((expense) => ({
-                x: expense.month,
-                y: expense.amount,
-              })) as any
+              groupedExpenses
+                ? groupedExpenses.incomes.map((expense) => ({
+                    x: expense.month,
+                    y: expense.amount,
+                  }))
+                : []
             }
-            categories={{
-              x: monthlyData.expenses.map((expense) => expense.month),
-            }}
             labels={['Expense']}
             barWidth={({ index }) => (index === 0 ? 20 : 10)}
             // put space between bars

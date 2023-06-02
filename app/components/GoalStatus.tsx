@@ -53,7 +53,7 @@ const GoalStatus = () => {
             size='sm'
           />
           <Text mt={2} fontSize='sm' color={textColor}>
-            Current: ${goal.currentAmount} / Target: ${goal.goalAmount}
+            Current: {goal.currentAmount}₺ / Target: {goal.goalAmount}₺
           </Text>
         </Box>
       ))}

@@ -42,14 +42,24 @@ const PieChart = ({ incomes, expenses }: IPieChartProps) => {
           : 'No data available for this time period'}
       </Text>
       <VictoryPie
+        innerRadius={0}
+        // @ts-ignore
+        labelRadius={({ innerRadius }) => innerRadius + 10}
+        height={350}
+        width={350}
         labels={
           incomes || expenses
             ? ({ datum }) => `${datum.x}: ${datum.y}`
             : ['No data', 'No data']
         }
         style={{
+          data: {
+            stroke: colorMode === 'light' ? '#343a40' : '#f1f3f5',
+            strokeWidth: colorMode === 'light' ? 2 : 1,
+          },
           labels: {
             fill: colorMode === 'light' ? 'black' : 'white',
+            position: 'center',
           },
         }}
         colorScale={

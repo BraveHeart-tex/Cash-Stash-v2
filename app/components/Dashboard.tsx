@@ -27,9 +27,12 @@ import {
 const Dashboard = () => {
   const { colorMode } = useColorMode();
   const dispatch = useAppDispatch();
-  const { isLoading, data, monthlyData, insightsData } = useAppSelector(
-    (state) => state.transactionsReducer
-  );
+  const {
+    isLoading,
+    data: transactions,
+    monthlyData,
+    insightsData,
+  } = useAppSelector((state) => state.transactionsReducer);
 
   useEffect(() => {
     dispatch(fetchTransactions());
@@ -121,7 +124,7 @@ const Dashboard = () => {
             boxShadow='sm'
           >
             {/* Render transaction history */}
-            <TransactionHistory />
+            <TransactionHistory transactions={transactions} />
           </Box>
         </Box>
 
@@ -138,7 +141,13 @@ const Dashboard = () => {
             shadow={'xl'}
           >
             {/* Render financial insights */}
-            <Text>Income vs Expense</Text>
+            <Text
+              fontWeight={'bold'}
+              textDecoration={'underline'}
+              color={colorMode === 'light' ? 'gray.700' : 'gray.50'}
+            >
+              Income vs Expense
+            </Text>
             <InsightGroupChart monthlyData={monthlyData} />
             <FinancialInsights insightsData={insightsData} />
           </Box>

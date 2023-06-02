@@ -37,7 +37,7 @@ const AccountSummaries = () => {
             <Text fontWeight='bold' mb={2}>
               {account.name}
             </Text>
-            <Text fontSize='lg'>{account.balance}₺</Text>
+            <Text fontSize='lg'>Balance: {account.balance}₺</Text>
           </Box>
         ))}
       </SimpleGrid>
