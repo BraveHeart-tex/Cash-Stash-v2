@@ -37,8 +37,10 @@ const FinancialInsights = ({ insightsData }: IFinancialInsightsProps) => {
       <Stat mb={4}>
         <StatLabel>Savings Rate</StatLabel>
         <StatNumber>{savingsRate}%</StatNumber>
-        {/* TODO: Refactor this */}
-        <StatHelpText>
+        <StatHelpText
+          color={parseInt(savingsRate) > 0 ? 'green.500' : 'red.500'}
+          fontWeight={parseInt(savingsRate) > 0 ? 'bold' : 'bold'}
+        >
           {parseInt(savingsRate) > 0
             ? 'You are saving more than you are spending!'
             : 'You are spending more than you are saving!'}

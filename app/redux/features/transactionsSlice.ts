@@ -210,7 +210,7 @@ const transactionsSlice = createSlice({
       })
       .addCase(fetchInsightsData.fulfilled, (state, action) => {
         state.insightsData = action.payload;
-        state.isLoading = true;
+        state.isLoading = false;
       })
       .addCase(fetchInsightsData.rejected, (state) => {
         state.isLoading = false;
