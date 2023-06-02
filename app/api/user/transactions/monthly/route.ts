@@ -32,7 +32,7 @@ export async function GET(request: Request) {
     );
   }
 
-  // TODO: group user's transaction data by month and return its sum
+  // group user's transaction data by month and return its sum
   const incomes = await prisma.transaction.groupBy({
     by: ['createdAt'],
     where: {

@@ -1,7 +1,6 @@
 # Log
 
 TODO: Refactor Modal and forms to Redux Toolkit
-TODO: Fix insight chart rendering issue
 TODO: Implement creating, editing, and deleting notification functionality
 
 - User:
