@@ -49,7 +49,7 @@ const CreateTransactionForm = () => {
     setValue,
   } = useForm<FieldValues>({
     defaultValues: {
-      amount: 1,
+      amount: '',
       description: '',
       category: '',
       accountId: '',

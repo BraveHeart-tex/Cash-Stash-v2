@@ -6,7 +6,7 @@ import TransactionCard from './TransactionCard';
 import { Box, Heading, SimpleGrid, Spinner, Text } from '@chakra-ui/react';
 
 const TransactionList = () => {
-  const { data, filteredData, isLoading } = useAppSelector(
+  const { data, filteredData } = useAppSelector(
     (state) => state.transactionsReducer
   );
   const dispatch = useAppDispatch();
@@ -17,18 +17,6 @@ const TransactionList = () => {
 
   return (
     <SimpleGrid columns={{ base: 1, lg: 2, xl: 3 }} gap={4}>
-      {isLoading && (
-        <Box
-          display={'flex'}
-          justifyContent={'center'}
-          alignItems={'center'}
-          mt={4}
-          gap={4}
-        >
-          <Text>Loading transactions...</Text>
-          <Spinner />
-        </Box>
-      )}
       {filteredData?.length === 0 && (
         <Box
           display={'flex'}

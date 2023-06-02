@@ -1,7 +1,6 @@
 import { useAppDispatch, useAppSelector } from '@/app/redux/hooks';
 import {
   Box,
-  Flex,
   Heading,
   SimpleGrid,
   Table,
@@ -16,7 +15,9 @@ import { fetchCurrentUserAccounts } from '@/app/redux/features/userAccountSlice'
 import { useEffect } from 'react';
 import TransactionsFilter from '../TransactionsPage/TransactionsFilter';
 import TransactionsSort from '../TransactionsPage/TransactionsSort';
-import Chart from '../Chart';
+import PieChart from '@/app/PieChart';
+import TopCategoriesForTransactions from './TopCategoriesForTransactions';
+import { fetchTopTransactionsByCategory } from '@/app/redux/features/transactionsSlice';
 
 const ReportTable = () => {
   const dispatch = useAppDispatch();
@@ -24,6 +25,7 @@ const ReportTable = () => {
     data,
     filteredData: transactions,
     isLoading,
+    topTransactionsByCategory,
   } = useAppSelector((state) => state.transactionsReducer);
   const { currentUserAccounts } = useAppSelector(
     (state) => state.userAccountReducer
@@ -31,6 +33,10 @@ const ReportTable = () => {
 
   useEffect(() => {
     dispatch(fetchCurrentUserAccounts());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchTopTransactionsByCategory());
   }, [dispatch]);
 
   useEffect(() => {
@@ -115,30 +121,48 @@ const ReportTable = () => {
           </Tbody>
         </Table>
       </SimpleGrid>
-      {transactions && (
+      <SimpleGrid columns={{ base: 1, lg: 2 }}>
         <Box
-          width={'100%'}
           display={'flex'}
-          justifyContent={'center'}
+          justifyContent={'flex-start'}
           alignItems={'center'}
-          mt={9}
+          h={'100%'}
+          mt={{
+            base: 8,
+            lg: 6,
+          }}
+          pl={{
+            base: 0,
+            lg: 24,
+          }}
         >
-          <Chart
-            datasetToBeCompared={
+          <PieChart
+            incomes={
               transactions &&
-              transactions?.filter(
-                (transaction) => transaction.isIncome === true
+              transactions.map((transaction) =>
+                transaction.isIncome ? transaction.amount : 0
               )
             }
-            datasetToCompare={
+            expenses={
               transactions &&
-              transactions?.filter(
-                (transaction) => transaction.isIncome === false
+              transactions.map((transaction) =>
+                transaction.isIncome ? 0 : transaction.amount
               )
             }
           />
         </Box>
-      )}
+        <Box
+          display={'flex'}
+          justifyContent={'flex-start'}
+          alignItems={'center'}
+          width={'25rem'}
+          h={'100%'}
+        >
+          <TopCategoriesForTransactions
+            data={topTransactionsByCategory && topTransactionsByCategory}
+          />
+        </Box>
+      </SimpleGrid>
     </Box>
   );
 };

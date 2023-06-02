@@ -1,5 +1,5 @@
 'use client';
-import { Container, Heading } from '@chakra-ui/react';
+import { Container, Heading, Spinner } from '@chakra-ui/react';
 import Navigation from '../components/Navigation';
 import ReportTable from '../components/ReportsPage/ReportTable';
 

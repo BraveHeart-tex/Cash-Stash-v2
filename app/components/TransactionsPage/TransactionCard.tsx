@@ -22,7 +22,10 @@ import { Transaction } from '@prisma/client';
 import ActionsIcon from '../Icons/ActionsIcon';
 import DeleteIcon from '../Icons/DeleteIcon';
 import { useAppDispatch, useAppSelector } from '@/app/redux/hooks';
-import { setDeleteModalOpen } from '@/app/redux/features/transactionsSlice';
+import {
+  fetchTransactions,
+  setDeleteModalOpen,
+} from '@/app/redux/features/transactionsSlice';
 import { fetchCurrentUserAccounts } from '@/app/redux/features/userAccountSlice';
 import { useEffect } from 'react';
 interface ITransactionCardProps {
@@ -37,6 +40,12 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
 
   useEffect(() => {
     dispatch(fetchCurrentUserAccounts());
+  }, [dispatch]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(fetchTransactions());
+    };
   }, [dispatch]);
 
   const { colorMode } = useColorMode();
@@ -88,7 +97,9 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
               (account) => account.id === transaction.accountId
             )?.name}
         </Text>
-        <Text>{transaction.amount}₺</Text>
+        <Text>
+          {transaction.isIncome ? '+' : '-'}${transaction.amount}
+        </Text>
       </Stack>
       <Popover>
         <PopoverTrigger>

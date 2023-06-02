@@ -49,8 +49,8 @@ const DeleteTransactionModal = () => {
         position: 'top',
       });
       setIsLoading(false);
-      dispatch(setDeleteModalOpen(!deleteModalOpen));
       dispatch(fetchTransactions());
+      dispatch(setDeleteModalOpen(!deleteModalOpen));
     } catch (error: any) {
       setIsLoading(false);
       console.log(error);

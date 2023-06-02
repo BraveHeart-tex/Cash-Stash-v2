@@ -1,6 +1,7 @@
 # Log
 
 TODO: Refactor Modal and forms to Redux Toolkit
+TODO: Add Victory charts for the reports page
 
 - User:
 

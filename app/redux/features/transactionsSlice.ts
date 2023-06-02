@@ -2,6 +2,13 @@ import { createAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { Transaction } from '@prisma/client';
 import axios from 'axios';
 
+interface TopCategoryData {
+  category: string;
+  totalAmount: number;
+  accountId: number;
+  createdAt: string;
+}
+
 interface TransactionState {
   filter: {
     type: 'income' | 'expense' | '';
@@ -16,6 +23,7 @@ interface TransactionState {
   };
   data: Transaction[] | null;
   filteredData: Transaction[] | null;
+  topTransactionsByCategory: TopCategoryData[] | null;
   isLoading: boolean;
 }
 
@@ -33,6 +41,7 @@ const initialState: TransactionState = {
   },
   data: [],
   filteredData: null,
+  topTransactionsByCategory: null,
   isLoading: false,
 };
 
@@ -41,6 +50,14 @@ export const fetchTransactions = createAsyncThunk(
   async () => {
     const response = await axios.get(`/api/user/transactions`);
     return response.data.transactions;
+  }
+);
+
+export const fetchTopTransactionsByCategory = createAsyncThunk(
+  'transactions/fetchTopTransactionsByCategory',
+  async () => {
+    const response = await axios.get(`/api/user/transactions/mostByCategory`);
+    return response.data.topTransactionsByCategory;
   }
 );
 
@@ -103,11 +120,11 @@ const transactionsSlice = createSlice({
           const bValue = b[state.sort.sortBy as keyof Transaction];
 
           if (aValue < bValue) {
-            return state.sort.sortDirection === 'asc' ? -1 : 1;
+            return state.sort.sortDirection === 'asc' ? 1 : -1;
           }
 
           if (aValue > bValue) {
-            return state.sort.sortDirection === 'desc' ? 1 : -1;
+            return state.sort.sortDirection === 'desc' ? -1 : 1;
           }
 
           return 0;
@@ -125,6 +142,16 @@ const transactionsSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(fetchTransactions.rejected, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(fetchTopTransactionsByCategory.pending, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(fetchTopTransactionsByCategory.fulfilled, (state, action) => {
+        state.topTransactionsByCategory = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(fetchTopTransactionsByCategory.rejected, (state) => {
         state.isLoading = false;
       });
   },
