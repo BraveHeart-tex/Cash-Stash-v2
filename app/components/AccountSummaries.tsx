@@ -1,15 +1,27 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Text, SimpleGrid, useColorMode } from '@chakra-ui/react';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { fetchCurrentUserAccounts } from '../redux/features/userAccountSlice';
 
 const AccountSummaries = () => {
   const { colorMode } = useColorMode();
-  const accounts = [
-    { name: 'Savings Account', balance: '$10,000' },
-    { name: 'Checking Account', balance: '$5,000' },
-    { name: 'Credit Card', balance: '$-2,500' },
-    { name: 'Investment Account', balance: '$25,000' },
-  ];
+  const dispatch = useAppDispatch();
+  const { currentUserAccounts: accounts, isLoading } = useAppSelector(
+    (state) => state.userAccountReducer
+  );
+
+  useEffect(() => {
+    dispatch(fetchCurrentUserAccounts());
+  }, [dispatch]);
+
+  if (isLoading) {
+    <Box>Loading...</Box>;
+  }
+
+  if (!accounts || accounts.length === 0) {
+    return <Box>No accounts found. Please add an account to get started.</Box>;
+  }
 
   return (
     <Box>
@@ -25,7 +37,7 @@ const AccountSummaries = () => {
             <Text fontWeight='bold' mb={2}>
               {account.name}
             </Text>
-            <Text fontSize='lg'>{account.balance}</Text>
+            <Text fontSize='lg'>{account.balance}₺</Text>
           </Box>
         ))}
       </SimpleGrid>

@@ -13,13 +13,6 @@ const BudgetStatus = () => {
     dispatch(fetchBudgets());
   }, [dispatch]);
 
-  // const budgets = [
-  //   { category: 'Food', budget: 500, spent: 350 },
-  //   { category: 'Transportation', budget: 200, spent: 150 },
-  //   { category: 'Entertainment', budget: 300, spent: 100 },
-  //   { category: 'Utilities', budget: 250, spent: 200 },
-  // ];
-
   if (isLoading) {
     return <Box>Loading...</Box>;
   }
@@ -40,7 +33,8 @@ const BudgetStatus = () => {
           shadow={'xl'}
         >
           <Text fontWeight='bold' mb={2}>
-            {budget.category}
+            {budget.category.charAt(0).toUpperCase() +
+              budget.category.toLowerCase().slice(1)}
           </Text>
           <Progress
             value={(budget.spentAmount / budget.budgetAmount) * 100}
