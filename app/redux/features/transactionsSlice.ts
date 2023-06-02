@@ -1,6 +1,27 @@
-import { createAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { Transaction } from '@prisma/client';
 import axios from 'axios';
+
+export interface InsightsData {
+  totalIncome: number;
+  totalExpense: number;
+  netIncome: number;
+  savingsRate: string;
+}
+interface Income {
+  month: string;
+  amount: number;
+}
+
+interface Expense {
+  month: string;
+  amount: number;
+}
+
+export interface MonthlyTransactionData {
+  incomes: Income[];
+  expenses: Expense[];
+}
 
 interface TopCategoryData {
   category: string;
@@ -23,6 +44,8 @@ interface TransactionState {
   };
   data: Transaction[] | null;
   filteredData: Transaction[] | null;
+  monthlyData: MonthlyTransactionData | null;
+  insightsData: InsightsData | null;
   topTransactionsByCategory: TopCategoryData[] | null;
   isLoading: boolean;
 }
@@ -42,6 +65,8 @@ const initialState: TransactionState = {
   data: [],
   filteredData: null,
   topTransactionsByCategory: null,
+  insightsData: null,
+  monthlyData: null,
   isLoading: false,
 };
 
@@ -58,6 +83,22 @@ export const fetchTopTransactionsByCategory = createAsyncThunk(
   async () => {
     const response = await axios.get(`/api/user/transactions/mostByCategory`);
     return response.data.topTransactionsByCategory;
+  }
+);
+
+export const fetchMonthlyTransactionsData = createAsyncThunk(
+  'transactions/fetchMonthlyTransactionsData',
+  async () => {
+    const response = await axios.get(`/api/user/transactions/monthly`);
+    return response.data;
+  }
+);
+
+export const fetchInsightsData = createAsyncThunk(
+  'transactions/fetchInsightsData',
+  async () => {
+    const response = await axios.get(`/api/user/transactions/insights`);
+    return response.data;
   }
 );
 
@@ -152,6 +193,26 @@ const transactionsSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(fetchTopTransactionsByCategory.rejected, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(fetchMonthlyTransactionsData.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchMonthlyTransactionsData.fulfilled, (state, action) => {
+        state.monthlyData = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(fetchMonthlyTransactionsData.rejected, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(fetchInsightsData.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchInsightsData.fulfilled, (state, action) => {
+        state.insightsData = action.payload;
+        state.isLoading = true;
+      })
+      .addCase(fetchInsightsData.rejected, (state) => {
         state.isLoading = false;
       });
   },

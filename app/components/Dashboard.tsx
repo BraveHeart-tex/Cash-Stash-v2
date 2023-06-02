@@ -3,20 +3,65 @@ import {
   Box,
   Heading,
   SimpleGrid,
-  useColorModeValue,
   Container,
+  Text,
+  Spinner,
+  useColorMode,
 } from '@chakra-ui/react';
 import Navigation from './Navigation';
-import Chart from './Chart';
 import AccountSummaries from './AccountSummaries';
 import BudgetStatus from './BudgetStatus';
 import GoalStatus from './GoalStatus';
 import TransactionHistory from './TransactionHistory';
 import FinancialInsights from './FinancialInsights';
 import NotificationsAndReminders from './NotificationAndReminders';
+import InsightGroupChart from './DashboardPage/InsightGroupChart';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { useEffect } from 'react';
+import {
+  fetchInsightsData,
+  fetchMonthlyTransactionsData,
+  fetchTransactions,
+} from '../redux/features/transactionsSlice';
 
 const Dashboard = () => {
-  // TODO: implement loading state
+  const { colorMode } = useColorMode();
+  const dispatch = useAppDispatch();
+  const { isLoading, data, monthlyData, insightsData } = useAppSelector(
+    (state) => state.transactionsReducer
+  );
+
+  useEffect(() => {
+    dispatch(fetchTransactions());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchMonthlyTransactionsData());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchInsightsData());
+  }, [dispatch]);
+
+  if (isLoading) {
+    return (
+      <Container
+        maxW={'8xl'}
+        height={'100vh'}
+        display={'flex'}
+        justifyContent={'center'}
+        alignItems={'center'}
+        flexDirection={'column'}
+        gap={4}
+      >
+        <Heading>Loading...</Heading>
+        <Box>
+          <Spinner />
+        </Box>
+      </Container>
+    );
+  }
+
   return (
     <Container maxW={'8xl'} p={4}>
       <Navigation />
@@ -26,7 +71,7 @@ const Dashboard = () => {
             Accounts Summary
           </Heading>
           <Box
-            bg={useColorModeValue('gray.50', 'gray.700')}
+            bg={colorMode === 'light' ? 'gray.50' : 'gray.700'}
             p={4}
             borderRadius='lg'
             boxShadow='sm'
@@ -41,7 +86,7 @@ const Dashboard = () => {
             Budget Status
           </Heading>
           <Box
-            bg={useColorModeValue('gray.50', 'gray.700')}
+            bg={colorMode === 'light' ? 'gray.50' : 'gray.700'}
             p={4}
             borderRadius='lg'
             boxShadow='sm'
@@ -56,7 +101,7 @@ const Dashboard = () => {
             Goal Progress
           </Heading>
           <Box
-            bg={useColorModeValue('gray.50', 'gray.700')}
+            bg={colorMode === 'light' ? 'gray.50' : 'gray.700'}
             p={4}
             borderRadius='lg'
             boxShadow='sm'
@@ -71,7 +116,7 @@ const Dashboard = () => {
             Transaction History
           </Heading>
           <Box
-            bg={useColorModeValue('gray.50', 'gray.700')}
+            bg={colorMode === 'light' ? 'gray.50' : 'gray.700'}
             borderRadius='lg'
             boxShadow='sm'
           >
@@ -85,16 +130,17 @@ const Dashboard = () => {
             Financial Insights
           </Heading>
           <Box
-            bg={useColorModeValue('white', 'gray.700')}
+            bg={colorMode === 'light' ? 'gray.50' : 'gray.700'}
             p={4}
             borderRadius='lg'
             boxShadow='sm'
             rounded={'md'}
             shadow={'xl'}
           >
-            {/* <Chart /> TODO: Implement datasets to loop through here. */}
             {/* Render financial insights */}
-            <FinancialInsights />
+            <Text>Income vs Expense</Text>
+            <InsightGroupChart monthlyData={monthlyData} />
+            <FinancialInsights insightsData={insightsData} />
           </Box>
         </Box>
 
@@ -103,7 +149,7 @@ const Dashboard = () => {
             Notifications and Reminders
           </Heading>
           <Box
-            bg={useColorModeValue('gray.50', 'gray.700')}
+            bg={colorMode === 'light' ? 'gray.50' : 'gray.700'}
             p={4}
             borderRadius='lg'
             boxShadow='sm'

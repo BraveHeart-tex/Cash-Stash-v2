@@ -7,12 +7,18 @@ import {
   StatNumber,
   StatHelpText,
 } from '@chakra-ui/react';
+import { InsightsData } from '../redux/features/transactionsSlice';
 
-const FinancialInsights = () => {
-  const totalIncome = 5000;
-  const totalExpenses = 2500;
-  const netIncome = totalIncome - totalExpenses;
-  const savingsRate = (netIncome / totalIncome) * 100;
+interface IFinancialInsightsProps {
+  insightsData: InsightsData | null;
+}
+
+const FinancialInsights = ({ insightsData }: IFinancialInsightsProps) => {
+  if (!insightsData) {
+    return <Box>No data</Box>;
+  }
+
+  const { totalIncome, totalExpense, netIncome, savingsRate } = insightsData;
 
   return (
     <Box>
@@ -22,7 +28,7 @@ const FinancialInsights = () => {
       </Stat>
       <Stat mb={4}>
         <StatLabel>Total Expenses</StatLabel>
-        <StatNumber>${totalExpenses}</StatNumber>
+        <StatNumber>${totalExpense}</StatNumber>
       </Stat>
       <Stat mb={4}>
         <StatLabel>Net Income</StatLabel>
@@ -30,8 +36,13 @@ const FinancialInsights = () => {
       </Stat>
       <Stat mb={4}>
         <StatLabel>Savings Rate</StatLabel>
-        <StatNumber>{savingsRate.toFixed(2)}%</StatNumber>
-        <StatHelpText>Percentage of income saved</StatHelpText>
+        <StatNumber>{savingsRate}%</StatNumber>
+        {/* TODO: Refactor this */}
+        <StatHelpText>
+          {parseInt(savingsRate) > 0
+            ? 'You are saving more than you are spending!'
+            : 'You are spending more than you are saving!'}
+        </StatHelpText>
       </Stat>
     </Box>
   );
