@@ -1,15 +1,32 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Text, Progress, useColorMode } from '@chakra-ui/react';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { fetchBudgets } from '../redux/features/budgetSlice';
 
 const BudgetStatus = () => {
   const { colorMode } = useColorMode();
-  const budgets = [
-    { category: 'Food', budget: 500, spent: 350 },
-    { category: 'Transportation', budget: 200, spent: 150 },
-    { category: 'Entertainment', budget: 300, spent: 100 },
-    { category: 'Utilities', budget: 250, spent: 200 },
-  ];
+  const dispatch = useAppDispatch();
+  const { budgets, isLoading } = useAppSelector((state) => state.budgetReducer);
+
+  useEffect(() => {
+    dispatch(fetchBudgets());
+  }, [dispatch]);
+
+  // const budgets = [
+  //   { category: 'Food', budget: 500, spent: 350 },
+  //   { category: 'Transportation', budget: 200, spent: 150 },
+  //   { category: 'Entertainment', budget: 300, spent: 100 },
+  //   { category: 'Utilities', budget: 250, spent: 200 },
+  // ];
+
+  if (isLoading) {
+    return <Box>Loading...</Box>;
+  }
+
+  if (!budgets || budgets.length === 0) {
+    return <Box>No budgets found</Box>;
+  }
 
   return (
     <Box>
@@ -26,18 +43,18 @@ const BudgetStatus = () => {
             {budget.category}
           </Text>
           <Progress
-            value={(budget.spent / budget.budget) * 100}
+            value={(budget.spentAmount / budget.budgetAmount) * 100}
             colorScheme={
-              budget.spent / budget.budget > 0.7
+              budget.spentAmount / budget.budgetAmount > 0.7
                 ? 'red'
-                : budget.spent / budget.budget > 0.4
+                : budget.spentAmount / budget.budgetAmount > 0.4
                 ? 'orange'
                 : 'green'
             }
             size='sm'
           />
           <Text mt={2} fontSize='sm'>
-            Spent: ${budget.spent} / Budget: ${budget.budget}
+            Spent: ${budget.spentAmount} / Budget: ${budget.budgetAmount}
           </Text>
         </Box>
       ))}
