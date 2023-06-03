@@ -104,13 +104,15 @@ model Goal {
 }
 
 model Reminder {
-  id     Int      @id @default(autoincrement())
-  title  String
-  amount Float
-  date   DateTime
-  userId Int
-  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  isRead Boolean  @default(false)
+  id           Int      @id @default(autoincrement())
+  title        String
+  amount       Float
+  reminderDate DateTime
+  userId       Int
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  isRead       Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   @@map(name: "reminders")
 }
