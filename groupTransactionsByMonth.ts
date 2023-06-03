@@ -27,14 +27,3 @@ export default function groupTransactionsByMonth(
 
   return groupedTransactions;
 }
-
-console.log(
-  groupTransactionsByMonth([
-    { month: 'January', amount: 1000 },
-    { month: 'February', amount: 2000 },
-    { month: 'March', amount: 3000 },
-    { month: 'January', amount: 500 },
-    { month: 'February', amount: 1000 },
-    { month: 'March', amount: 1500 },
-  ])
-);
