@@ -3,10 +3,10 @@ import { useEffect } from 'react';
 import { fetchTransactions } from '@/app/redux/features/transactionsSlice';
 import { useAppDispatch, useAppSelector } from '@/app/redux/hooks';
 import TransactionCard from './TransactionCard';
-import { Box, Heading, SimpleGrid, Spinner, Text } from '@chakra-ui/react';
+import { Box, Heading, SimpleGrid, Text } from '@chakra-ui/react';
 
 const TransactionList = () => {
-  const { data, filteredData } = useAppSelector(
+  const { data, filteredData, isLoading } = useAppSelector(
     (state) => state.transactionsReducer
   );
   const dispatch = useAppDispatch();
@@ -14,6 +14,18 @@ const TransactionList = () => {
   useEffect(() => {
     dispatch(fetchTransactions());
   }, [dispatch]);
+
+  if ((!data && !isLoading) || !filteredData) {
+    return (
+      <Box p={4}>
+        <Heading>No transactions were found.</Heading>
+        <Text mt={3}>
+          Try removing any existing filters or get started by creating a
+          transaction.
+        </Text>
+      </Box>
+    );
+  }
 
   return (
     <SimpleGrid columns={{ base: 1, lg: 2, xl: 3 }} gap={4}>

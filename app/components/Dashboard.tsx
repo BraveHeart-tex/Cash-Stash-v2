@@ -122,6 +122,7 @@ const Dashboard = () => {
             bg={colorMode === 'light' ? 'gray.50' : 'gray.700'}
             borderRadius='lg'
             boxShadow='sm'
+            p={4}
           >
             {/* Render transaction history */}
             <TransactionHistory transactions={transactions} />

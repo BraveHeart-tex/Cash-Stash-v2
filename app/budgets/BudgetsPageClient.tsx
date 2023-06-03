@@ -28,7 +28,7 @@ const BudgetsPageClient = () => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  if (budgets?.length === 0) {
+  if ((!budgets && !isLoading) || budgets?.length === 0) {
     return (
       <Container maxW={'8xl'} p={4}>
         <Navigation />
@@ -46,12 +46,16 @@ const BudgetsPageClient = () => {
             display='inline-block'
             as='h2'
             size='2xl'
-            bgGradient='linear(to-r, gray.600, gray.800)'
+            bgGradient={
+              colorMode === 'light'
+                ? 'linear(to-r, gray.600, gray.800)'
+                : 'linear(to-r, gray.200, gray.400)'
+            }
             backgroundClip='text'
           >
-            404
+            No budgets were found.
           </Heading>
-          <Text>No budgets found. Add a budget to get started!</Text>
+          <Text>Add a budget to get started!</Text>
           <Button
             bg={colorMode === 'light' ? 'gray.200' : 'gray.700'}
             _hover={{

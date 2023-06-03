@@ -1,8 +1,9 @@
 'use client';
 import React, { useEffect } from 'react';
-import { Box, Text, SimpleGrid, useColorMode } from '@chakra-ui/react';
+import { Box, Text, SimpleGrid, useColorMode, Button } from '@chakra-ui/react';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { fetchCurrentUserAccounts } from '../redux/features/userAccountSlice';
+import { Link } from '@chakra-ui/next-js';
 
 const AccountSummaries = () => {
   const { colorMode } = useColorMode();
@@ -20,7 +21,23 @@ const AccountSummaries = () => {
   }
 
   if (!accounts || accounts.length === 0) {
-    return <Box>No accounts found. Please add an account to get started.</Box>;
+    return (
+      <Box>
+        <Text color={colorMode === 'light' ? 'gray.600' : 'gray.300'}>
+          No accounts found.
+        </Text>
+        <Button mt={3}>
+          <Link
+            href={'/accounts'}
+            _hover={{
+              textDecoration: 'none',
+            }}
+          >
+            Get started by creating an account
+          </Link>
+        </Button>
+      </Box>
+    );
   }
 
   return (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, useColorMode } from '@chakra-ui/react';
+import { Box, useColorMode, Text } from '@chakra-ui/react';
 import { VictoryBar, VictoryChart, VictoryGroup } from 'victory';
 import { MonthlyTransactionData } from '@/app/redux/features/transactionsSlice';
 import groupTransactionsByMonth from '@/groupTransactionsByMonth';
@@ -12,7 +12,13 @@ const InsightGroupChart = ({ monthlyData }: IInsightGroupChartProps) => {
   const { colorMode } = useColorMode();
 
   if (!monthlyData || !monthlyData.incomes || !monthlyData.expenses) {
-    return <Box>No data</Box>;
+    return (
+      <Box mt={3}>
+        <Text color={colorMode === 'light' ? 'gray.600' : 'gray.300'}>
+          No data was found to generate the financial insights chart.
+        </Text>
+      </Box>
+    );
   }
 
   const groupedIncomes =

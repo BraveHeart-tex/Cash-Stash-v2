@@ -27,7 +27,7 @@ const GoalsPageClient = () => {
     dispatch(fetchGoals());
   }, [dispatch]);
 
-  if (goals?.length === 0) {
+  if ((!goals && !isLoading) || goals?.length === 0) {
     return (
       <Container maxW={'8xl'} p={4}>
         <Navigation />
@@ -43,12 +43,16 @@ const GoalsPageClient = () => {
             display='inline-block'
             as='h2'
             size='2xl'
-            bgGradient='linear(to-r, gray.600, gray.800)'
+            bgGradient={
+              colorMode === 'light'
+                ? 'linear(to-r, gray.600, gray.800)'
+                : 'linear(to-r, gray.200, gray.400)'
+            }
             backgroundClip='text'
           >
-            404
+            No goals were found.
           </Heading>
-          <Text>No goals found. Add a goal to get started!</Text>
+          <Text>Add a goal to get started!</Text>
           <Button
             bg={colorMode === 'light' ? 'gray.200' : 'gray.700'}
             _hover={{

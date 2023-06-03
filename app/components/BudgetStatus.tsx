@@ -1,8 +1,9 @@
 'use client';
 import React, { useEffect } from 'react';
-import { Box, Text, Progress, useColorMode } from '@chakra-ui/react';
+import { Box, Text, Progress, useColorMode, Button } from '@chakra-ui/react';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { fetchBudgets } from '../redux/features/budgetSlice';
+import { Link } from '@chakra-ui/next-js';
 
 const BudgetStatus = () => {
   const { colorMode } = useColorMode();
@@ -18,7 +19,16 @@ const BudgetStatus = () => {
   }
 
   if (!budgets || budgets.length === 0) {
-    return <Box>No budgets found</Box>;
+    return (
+      <Box>
+        <Text color={colorMode === 'light' ? 'gray.600' : 'gray.300'}>
+          No budgets found.
+        </Text>
+        <Link href={'/budgets'}>
+          <Button mt={3}>Get started by creating a budget</Button>
+        </Link>
+      </Box>
+    );
   }
 
   return (

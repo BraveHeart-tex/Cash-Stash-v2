@@ -1,5 +1,13 @@
 'use client';
-import { Box, Text, Stack, Badge, useColorMode } from '@chakra-ui/react';
+import { Link } from '@chakra-ui/next-js';
+import {
+  Box,
+  Text,
+  Stack,
+  Badge,
+  useColorMode,
+  Button,
+} from '@chakra-ui/react';
 import { Transaction } from '@prisma/client';
 
 interface ITransactionHistoryProps {
@@ -10,7 +18,23 @@ const TransactionHistory = ({ transactions }: ITransactionHistoryProps) => {
   const { colorMode } = useColorMode();
 
   if (!transactions || transactions.length === 0) {
-    return <Box>No transactions found.</Box>;
+    return (
+      <Box>
+        <Text color={colorMode === 'light' ? 'gray.600' : 'gray.300'}>
+          No transactions found.
+        </Text>
+        <Button mt={3}>
+          <Link
+            href={'/transactions'}
+            _hover={{
+              textDecoration: 'none',
+            }}
+          >
+            Get started by creating a transaction.
+          </Link>
+        </Button>
+      </Box>
+    );
   }
 
   return (

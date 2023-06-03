@@ -1,8 +1,16 @@
 'use client';
 import React, { useEffect } from 'react';
-import { Box, Text, Progress, useColorMode, Badge } from '@chakra-ui/react';
+import {
+  Box,
+  Text,
+  Progress,
+  useColorMode,
+  Badge,
+  Button,
+} from '@chakra-ui/react';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { fetchGoals } from '../redux/features/goalSlice';
+import { Link } from '@chakra-ui/next-js';
 
 const GoalStatus = () => {
   const dispatch = useAppDispatch();
@@ -22,7 +30,21 @@ const GoalStatus = () => {
 
   if (!goals || goals.length === 0) {
     return (
-      <Box>No goals found. Get started by creating a goal in Goals page</Box>
+      <Box>
+        <Text color={colorMode === 'light' ? 'gray.600' : 'gray.300'}>
+          No goals found.
+        </Text>
+        <Button mt={3}>
+          <Link
+            href={'/goals'}
+            _hover={{
+              textDecoration: 'none',
+            }}
+          >
+            Get started by creating a goal
+          </Link>
+        </Button>
+      </Box>
     );
   }
 
