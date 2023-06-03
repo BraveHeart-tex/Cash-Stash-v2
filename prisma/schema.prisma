@@ -106,6 +106,7 @@ model Goal {
 model Reminder {
   id           Int      @id @default(autoincrement())
   title        String
+  description  String
   amount       Float
   reminderDate DateTime
   userId       Int
