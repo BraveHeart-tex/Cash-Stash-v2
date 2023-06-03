@@ -15,6 +15,7 @@ import AccountsFilter from '../components/AccountsPage/AccountFilter';
 export default function AccountsPageClient() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { headingColor } = useColorModeStyles();
+
   return (
     <Container maxW={'8xl'} p={4}>
       <Navigation />
@@ -34,7 +35,6 @@ export default function AccountsPageClient() {
         <Button
           mt={4}
           onClick={onOpen}
-          fontWeight={500}
           bg={useColorModeValue('gray.300', 'gray.700')}
         >
           Create Account

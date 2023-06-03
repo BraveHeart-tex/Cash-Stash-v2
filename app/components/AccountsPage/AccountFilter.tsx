@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { Select, Box, Flex, Spinner, Text } from '@chakra-ui/react';
+import { Select, Box, Flex, Spinner, Text, Heading } from '@chakra-ui/react';
 import CreateUserAccountOptions from '../../utils/CreateUserAccountOptions';
 import AccountInformation from './AccountInformation';
 import { useAppSelector } from '../../redux/hooks';
@@ -34,11 +34,16 @@ const AccountsFilter = () => {
     );
   }
 
-  if (accounts?.length === 0 || !accounts) {
-    return null;
+  if (!accounts && !isLoading) {
+    return (
+      <Box textAlign={'center'}>
+        <Heading>You don&apos;t have any accounts yet.</Heading>
+        <Text mt={3}>Create one by clicking the Create Account button.</Text>
+      </Box>
+    );
   }
 
-  const filteredAccounts = accounts.filter((account) =>
+  const filteredAccounts = accounts?.filter((account) =>
     selectedAccountType ? account.category === selectedAccountType : true
   );
 
@@ -47,15 +52,6 @@ const AccountsFilter = () => {
   ) => {
     setSelectedAccountType(event.target.value);
   };
-
-  if (!accounts || accounts.length === 0) {
-    return (
-      <Text>
-        You don&apos;t have any accounts yet. Create one by clicking the Create
-        Account button.
-      </Text>
-    );
-  }
 
   return (
     <Box>
