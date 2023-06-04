@@ -5,7 +5,6 @@ Cash Stash is a personal finance application that offers various functionalities
 ## Live Demo
 
 You can check out the live of of this application from this [link](https://cash-stash.vercel.app)
-You can check out the live of of this application from this <a href="https://cash-stash.vercel.app" target="_blank">link</a>
 
 - You can use the following credentials to sign in to the application
   > Email: testUser@gmail.com
