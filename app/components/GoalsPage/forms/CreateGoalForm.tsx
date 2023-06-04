@@ -1,3 +1,4 @@
+'use client';
 import {
   Stack,
   FormLabel,
@@ -11,7 +12,10 @@ import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import useColorModeStyles from '../../../hooks/useColorModeStyles';
 import axios from 'axios';
 import { useAppDispatch } from '../../../redux/hooks';
-import { fetchGoals } from '../../../redux/features/goalSlice';
+import {
+  fetchGoals,
+  setCreateGoalModalOpen,
+} from '../../../redux/features/goalSlice';
 
 const CreateUserGoalForm = () => {
   const dispatch = useAppDispatch();
@@ -22,7 +26,6 @@ const CreateUserGoalForm = () => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    reset,
   } = useForm<FieldValues>({
     defaultValues: {
       goalName: '',
@@ -44,7 +47,7 @@ const CreateUserGoalForm = () => {
         position: 'top',
       });
       dispatch(fetchGoals());
-      reset();
+      dispatch(setCreateGoalModalOpen(false));
     } catch (error: any) {
       toast({
         title: 'An error occurred.',
@@ -140,6 +143,7 @@ const CreateUserGoalForm = () => {
             }}
             type='submit'
             isDisabled={isSubmitting}
+            isLoading={isSubmitting}
           >
             Create
           </Button>

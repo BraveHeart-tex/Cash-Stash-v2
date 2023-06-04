@@ -5,7 +5,6 @@ import {
   Container,
   Heading,
   SimpleGrid,
-  useDisclosure,
   Spinner,
   Text,
   useColorMode,
@@ -16,9 +15,9 @@ import CreateUserGoalModal from '../components/GoalsPage/modals/CreateGoalModal'
 import { useEffect } from 'react';
 import { fetchGoals } from '../redux/features/goalSlice';
 import { useAppSelector, useAppDispatch } from '../redux/hooks';
+import { setCreateGoalModalOpen } from '../redux/features/goalSlice';
 
 const GoalsPageClient = () => {
-  const createGoalModal = useDisclosure();
   const { colorMode } = useColorMode();
   const { goals, isLoading } = useAppSelector((state) => state.goalReducer);
   const dispatch = useAppDispatch();
@@ -27,7 +26,7 @@ const GoalsPageClient = () => {
     dispatch(fetchGoals());
   }, [dispatch]);
 
-  if ((!goals && !isLoading) || goals?.length === 0) {
+  if ((!isLoading && !goals) || goals?.length === 0) {
     return (
       <Container maxW={'8xl'} p={4}>
         <Navigation />
@@ -59,15 +58,12 @@ const GoalsPageClient = () => {
               bg: colorMode === 'light' ? 'gray.300' : 'gray.600',
             }}
             color={colorMode === 'light' ? 'gray.800' : 'gray.50'}
-            onClick={createGoalModal.onOpen}
+            onClick={() => dispatch(setCreateGoalModalOpen(true))}
           >
             Create Goal
           </Button>
         </Box>
-        <CreateUserGoalModal
-          isOpen={createGoalModal.isOpen}
-          onClose={createGoalModal.onClose}
-        />
+        <CreateUserGoalModal />
       </Container>
     );
   }
@@ -103,7 +99,7 @@ const GoalsPageClient = () => {
         )}
         <Button
           mt={4}
-          onClick={createGoalModal.onOpen}
+          onClick={() => dispatch(setCreateGoalModalOpen(true))}
           bg={colorMode === 'light' ? 'gray.200' : 'gray.700'}
           _hover={{
             bg: colorMode === 'light' ? 'gray.300' : 'gray.600',
@@ -113,10 +109,7 @@ const GoalsPageClient = () => {
           Create Goal
         </Button>
       </Box>
-      <CreateUserGoalModal
-        isOpen={createGoalModal.isOpen}
-        onClose={createGoalModal.onClose}
-      />
+      <CreateUserGoalModal />
     </Container>
   );
 };

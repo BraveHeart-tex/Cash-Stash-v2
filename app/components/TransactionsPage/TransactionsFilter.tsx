@@ -13,15 +13,12 @@ import { fetchCurrentUserAccounts } from '@/app/redux/features/userAccountSlice'
 
 const TransactionsFilter = () => {
   const dispatch = useAppDispatch();
-  const { currentUserAccounts, isLoading } = useAppSelector(
+  const { currentUserAccounts } = useAppSelector(
     (state) => state.userAccountReducer
   );
 
   useEffect(() => {
     dispatch(fetchCurrentUserAccounts());
-  }, [dispatch]);
-
-  useEffect(() => {
     dispatch(fetchTransactions());
   }, [dispatch]);
 
@@ -62,11 +59,7 @@ const TransactionsFilter = () => {
       <Stack direction='column' spacing={4}>
         <Box>
           <Text mb={2}>By Transaction Type</Text>
-          <Select
-            placeholder='Transaction Type'
-            defaultValue={''}
-            onChange={handleTypeChange}
-          >
+          <Select defaultValue={''} onChange={handleTypeChange}>
             <option value=''>All</option>
             <option value='income'>Income</option>
             <option value='expense'>Expense</option>
@@ -74,11 +67,7 @@ const TransactionsFilter = () => {
         </Box>
         <Box>
           <Text mb={2}>By Account</Text>
-          <Select
-            placeholder='Select account'
-            onChange={handleAccountChange}
-            defaultValue={''}
-          >
+          <Select onChange={handleAccountChange} defaultValue={''}>
             <option value=''>All</option>
             {currentUserAccounts &&
               currentUserAccounts.map((account) => (

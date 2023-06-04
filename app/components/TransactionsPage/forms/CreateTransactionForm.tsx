@@ -45,7 +45,6 @@ const CreateTransactionForm = () => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    reset,
     setValue,
   } = useForm<FieldValues>({
     defaultValues: {

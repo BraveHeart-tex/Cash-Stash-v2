@@ -11,17 +11,18 @@ import {
 } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import useColorModeStyles from '../../../hooks/useColorModeStyles';
-import { useForm, FieldValues, SubmitHandler } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import CreateUserAccountOptions, {
   getOptionLabel,
 } from '../../../utils/CreateUserAccountOptions';
 import FormLoadingSpinner from '../../FormLoadingSpinner';
 import axios from 'axios';
-import { useAppSelector } from '../../../redux/hooks';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../../redux/store';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { fetchCurrentAccount } from '../../../redux/features/currentAccountSlice';
-import { fetchCurrentUserAccounts } from '../../../redux/features/userAccountSlice';
+import {
+  fetchCurrentUserAccounts,
+  setIsEditAccountModalOpen,
+} from '../../../redux/features/userAccountSlice';
 
 interface IEditUserAccountFormProps {
   selectedAccountId: number | null;
@@ -40,7 +41,7 @@ const EditUserAccountForm = ({
     (state) => state.currentAccountReducer
   );
 
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   const accountOptions = Object.values(CreateUserAccountOptions);
 
@@ -97,6 +98,7 @@ const EditUserAccountForm = ({
           isClosable: true,
           position: 'top',
         });
+        dispatch(setIsEditAccountModalOpen(false));
       }
     } catch (error: any) {
       toast({

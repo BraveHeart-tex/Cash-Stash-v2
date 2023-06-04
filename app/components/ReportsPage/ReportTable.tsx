@@ -1,3 +1,4 @@
+'use client';
 import { useAppDispatch, useAppSelector } from '@/app/redux/hooks';
 import {
   Box,

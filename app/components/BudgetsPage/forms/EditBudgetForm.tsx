@@ -1,3 +1,4 @@
+'use client';
 import {
   Stack,
   FormLabel,
@@ -15,14 +16,17 @@ import { fetchBudgetById } from '../../../redux/features/currentBudgetSlice';
 import CreateBudgetOptions from '../../../utils/CreateBudgetOptions';
 import { getOptionLabel } from '../../../utils/CreateUserAccountOptions';
 import axios from 'axios';
-import { fetchBudgets } from '../../../redux/features/budgetSlice';
+import {
+  fetchBudgets,
+  setEditBudgetModalOpen,
+} from '../../../redux/features/budgetSlice';
 import FormLoadingSpinner from '../../FormLoadingSpinner';
 
-interface IEditUserBudgetFormProps {
-  selectedBudgetId: string | null;
+interface IEditBudgetFormProps {
+  selectedBudgetId: number;
 }
 
-const EditUserBudgetForm = ({ selectedBudgetId }: IEditUserBudgetFormProps) => {
+const EditUserBudgetForm = ({ selectedBudgetId }: IEditBudgetFormProps) => {
   const toast = useToast();
   const budgetOptions = Object.values(CreateBudgetOptions);
   const { currentBudget, isLoading: isCurrentBudgetLoading } = useAppSelector(
@@ -80,6 +84,7 @@ const EditUserBudgetForm = ({ selectedBudgetId }: IEditUserBudgetFormProps) => {
           isClosable: true,
           position: 'top',
         });
+        dispatch(setEditBudgetModalOpen(false));
       }
     } catch (error: any) {
       toast({

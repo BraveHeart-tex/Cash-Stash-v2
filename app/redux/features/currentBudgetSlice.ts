@@ -18,7 +18,7 @@ interface FetchCurrentBudgetResponse {
 
 export const fetchBudgetById = createAsyncThunk(
   'budgets/fetchBudgetById',
-  async (budgetId: string) => {
+  async (budgetId: number) => {
     try {
       const response = await axios.get<FetchCurrentBudgetResponse>(
         `/api/user/budgets/${budgetId}`

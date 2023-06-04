@@ -7,7 +7,6 @@ import {
   Heading,
   SimpleGrid,
   Spinner,
-  useDisclosure,
   useColorMode,
   Text,
 } from '@chakra-ui/react';
@@ -16,6 +15,7 @@ import CreateBudgetModal from '../components/BudgetsPage/modals/CreateBudgetModa
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { useEffect } from 'react';
 import { fetchBudgets } from '../redux/features/budgetSlice';
+import { setCreateBudgetModalOpen } from '../redux/features/budgetSlice';
 
 const BudgetsPageClient = () => {
   const { budgets, isLoading } = useAppSelector((state) => state.budgetReducer);
@@ -26,9 +26,7 @@ const BudgetsPageClient = () => {
     dispatch(fetchBudgets());
   }, [dispatch]);
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
-  if ((!budgets && !isLoading) || budgets?.length === 0) {
+  if (!isLoading && !budgets) {
     return (
       <Container maxW={'8xl'} p={4}>
         <Navigation />
@@ -62,12 +60,12 @@ const BudgetsPageClient = () => {
               bg: colorMode === 'light' ? 'gray.300' : 'gray.600',
             }}
             color={colorMode === 'light' ? 'gray.800' : 'gray.50'}
-            onClick={onOpen}
+            onClick={() => dispatch(setCreateBudgetModalOpen(true))}
           >
             Create Budget
           </Button>
         </Box>
-        <CreateBudgetModal isOpen={isOpen} onClose={onClose} />
+        <CreateBudgetModal />
       </Container>
     );
   }
@@ -115,12 +113,12 @@ const BudgetsPageClient = () => {
             bg: colorMode === 'light' ? 'gray.300' : 'gray.600',
           }}
           color={colorMode === 'light' ? 'gray.800' : 'gray.50'}
-          onClick={onOpen}
+          onClick={() => dispatch(setCreateBudgetModalOpen(true))}
         >
           Create Budget
         </Button>
       </Box>
-      <CreateBudgetModal isOpen={isOpen} onClose={onClose} />
+      <CreateBudgetModal />
     </Container>
   );
 };

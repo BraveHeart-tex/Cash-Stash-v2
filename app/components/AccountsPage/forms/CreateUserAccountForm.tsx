@@ -15,7 +15,10 @@ import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import axios from 'axios';
 import useColorModeStyles from '../../../hooks/useColorModeStyles';
 import { useAppDispatch } from '../../../redux/hooks';
-import { fetchCurrentUserAccounts } from '../../../redux/features/userAccountSlice';
+import {
+  fetchCurrentUserAccounts,
+  setIsCreateAccountModalOpen,
+} from '../../../redux/features/userAccountSlice';
 
 const CreateUserAccountForm = () => {
   const dispatch = useAppDispatch();
@@ -54,6 +57,7 @@ const CreateUserAccountForm = () => {
           isClosable: true,
           position: 'top',
         });
+        dispatch(setIsCreateAccountModalOpen(false));
       })
       .catch(() => {
         setIsLoading(false);

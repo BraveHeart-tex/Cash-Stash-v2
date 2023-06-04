@@ -1,10 +1,10 @@
+'use client';
 import {
   Stack,
   FormLabel,
   Input,
   FormErrorMessage,
   FormControl,
-  Select,
   Button,
   useToast,
 } from '@chakra-ui/react';
@@ -13,21 +13,21 @@ import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import useColorModeStyles from '../../../hooks/useColorModeStyles';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { fetchGoalById } from '../../../redux/features/currentGoalSlice';
-import { fetchGoals } from '../../../redux/features/goalSlice';
+import {
+  fetchGoals,
+  setEditGoalModalOpen,
+} from '../../../redux/features/goalSlice';
 import axios from 'axios';
 import FormLoadingSpinner from '../../FormLoadingSpinner';
 
 interface IEditUserGoalFormProps {
-  selectedGoalId: string | null | undefined;
+  selectedGoalId: number;
 }
 
 const EditUserGoalForm = ({ selectedGoalId }: IEditUserGoalFormProps) => {
-  const { currentGoal, isLoading: isCurrentGoalLoading } = useAppSelector(
-    (state) => state.currentGoalReducer
-  );
+  const { currentGoal } = useAppSelector((state) => state.currentGoalReducer);
   const dispatch = useAppDispatch();
-  const { headingColor, btnColor, btnBgColor, btnHoverBgColor } =
-    useColorModeStyles();
+  const { btnColor, btnBgColor, btnHoverBgColor } = useColorModeStyles();
   const toast = useToast();
 
   const {
@@ -73,8 +73,8 @@ const EditUserGoalForm = ({ selectedGoalId }: IEditUserGoalFormProps) => {
         position: 'top',
       });
       dispatch(fetchGoals());
+      dispatch(setEditGoalModalOpen(false));
     } catch (error: any) {
-      console.log(error);
       toast({
         title: 'An error occurred.',
         description: `Unable to update the selected goal.`,

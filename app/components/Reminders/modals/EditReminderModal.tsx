@@ -1,4 +1,5 @@
 'use client';
+import { setIsEditReminderModalOpen } from '@/app/redux/features/remindersSlice';
 import {
   Modal,
   ModalOverlay,
@@ -10,34 +11,37 @@ import {
   Button,
 } from '@chakra-ui/react';
 import React from 'react';
-import CreateUserGoalForm from '../forms/CreateGoalForm';
+import EditReminderForm from '../forms/EditReminderForm';
 import { useAppDispatch, useAppSelector } from '@/app/redux/hooks';
-import { setCreateGoalModalOpen } from '@/app/redux/features/goalSlice';
 
-const CreateUserGoalModal = () => {
-  const { isCreateGoalModalOpen } = useAppSelector(
-    (state) => state.goalReducer
+const EditReminderModal = () => {
+  const { isEditReminderModalOpen, selectedReminderId } = useAppSelector(
+    (state) => state.remindersReducer
   );
   const dispatch = useAppDispatch();
 
   return (
     <Modal
-      isOpen={isCreateGoalModalOpen}
-      onClose={() => dispatch(setCreateGoalModalOpen(false))}
+      isOpen={isEditReminderModalOpen}
+      onClose={() =>
+        dispatch(setIsEditReminderModalOpen(!isEditReminderModalOpen))
+      }
       isCentered
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Create Goal</ModalHeader>
+        <ModalHeader>Edit Reminder</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <CreateUserGoalForm />
+          <EditReminderForm />
         </ModalBody>
         <ModalFooter>
           <Button
             variant='ghost'
             mr={3}
-            onClick={() => dispatch(setCreateGoalModalOpen(false))}
+            onClick={() =>
+              dispatch(setIsEditReminderModalOpen(!isEditReminderModalOpen))
+            }
           >
             Cancel
           </Button>
@@ -47,4 +51,4 @@ const CreateUserGoalModal = () => {
   );
 };
 
-export default CreateUserGoalModal;
+export default EditReminderModal;

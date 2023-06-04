@@ -5,11 +5,19 @@ import axios from 'axios';
 interface UserAccountsState {
   currentUserAccounts: UserAccount[] | null;
   isLoading: boolean;
+  isCreateAccountModalOpen: boolean;
+  isEditAccountModalOpen: boolean;
+  isDeleteAccountModalOpen: boolean;
+  selectedUserAccountId: number;
 }
 
 const initialState: UserAccountsState = {
   currentUserAccounts: null,
   isLoading: false,
+  isCreateAccountModalOpen: false,
+  isEditAccountModalOpen: false,
+  isDeleteAccountModalOpen: false,
+  selectedUserAccountId: 0,
 };
 
 export const fetchCurrentUserAccounts = createAsyncThunk(
@@ -23,7 +31,19 @@ export const fetchCurrentUserAccounts = createAsyncThunk(
 const accountSlice = createSlice({
   name: 'accounts',
   initialState,
-  reducers: {},
+  reducers: {
+    setIsCreateAccountModalOpen(state, action) {
+      state.isCreateAccountModalOpen = action.payload;
+    },
+    setIsEditAccountModalOpen(state, action) {
+      state.isEditAccountModalOpen = action.payload.isEditAccountModalOpen;
+      state.selectedUserAccountId = action.payload.selectedUserAccountId;
+    },
+    setIsDeleteAccountModalOpen(state, action) {
+      state.isDeleteAccountModalOpen = action.payload.isDeleteAccountModalOpen;
+      state.selectedUserAccountId = action.payload.selectedUserAccountId;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchCurrentUserAccounts.pending, (state) => {
@@ -39,4 +59,9 @@ const accountSlice = createSlice({
   },
 });
 
+export const {
+  setIsCreateAccountModalOpen,
+  setIsEditAccountModalOpen,
+  setIsDeleteAccountModalOpen,
+} = accountSlice.actions;
 export default accountSlice.reducer;

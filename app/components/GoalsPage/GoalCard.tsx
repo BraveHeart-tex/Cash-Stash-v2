@@ -18,17 +18,19 @@ import {
   StatLabel,
   StatNumber,
   Text,
-  useDisclosure,
   useColorMode,
-  Spinner,
 } from '@chakra-ui/react';
 import ActionsIcon from '../Icons/ActionsIcon';
 import useColorModeStyles from '../../hooks/useColorModeStyles';
 import DeleteGoalModal from './modals/DeleteGoalModal';
 import EditGoalModal from './modals/EditGoalModal';
-import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { fetchGoals } from '../../redux/features/goalSlice';
+import {
+  setCreateGoalModalOpen,
+  setDeleteGoalModalOpen,
+  setEditGoalModalOpen,
+} from '@/app/redux/features/goalSlice';
+
 import { Goal } from '@prisma/client';
 
 interface IGoalCardProps {
@@ -36,22 +38,12 @@ interface IGoalCardProps {
 }
 
 const GoalCard = ({ goals }: IGoalCardProps) => {
-  const [selectedGoalId, setSelectedGoalId] = useState('');
+  const dispatch = useAppDispatch();
+  const { isEditGoalModalOpen, isCreateGoalModalOpen } = useAppSelector(
+    (state) => state.goalReducer
+  );
   const { colorMode } = useColorMode();
   const { headingColor } = useColorModeStyles();
-
-  const deleteModal = useDisclosure();
-  const editModal = useDisclosure();
-
-  const handleEditGoal = (goalId: string) => {
-    setSelectedGoalId(goalId);
-    editModal.onOpen();
-  };
-
-  const handleDeleteGoal = (goalId: string) => {
-    setSelectedGoalId(goalId);
-    deleteModal.onOpen();
-  };
 
   return (
     <>
@@ -137,8 +129,15 @@ const GoalCard = ({ goals }: IGoalCardProps) => {
                   <SimpleGrid columns={1} gap={4}>
                     <Flex justifyContent={'center'} alignItems={'center'}>
                       <IconButton
-                        aria-label={'Edit user account'}
-                        onClick={() => handleEditGoal(goal.id)}
+                        aria-label={'Edit user goal'}
+                        onClick={() =>
+                          dispatch(
+                            setEditGoalModalOpen({
+                              isEditGoalModalOpen: true,
+                              selectedGoalId: goal.id,
+                            })
+                          )
+                        }
                         icon={<EditIcon />}
                         width={5}
                         height={5}
@@ -149,8 +148,15 @@ const GoalCard = ({ goals }: IGoalCardProps) => {
                     </Flex>
                     <Flex justifyContent={'center'} alignItems={'center'}>
                       <IconButton
-                        aria-label={'Delete user account'}
-                        onClick={() => handleDeleteGoal(goal.id)}
+                        aria-label={'Delete user goal'}
+                        onClick={() =>
+                          dispatch(
+                            setDeleteGoalModalOpen({
+                              isDeleteGoalModalOpen: true,
+                              selectedGoalId: goal.id,
+                            })
+                          )
+                        }
                         icon={<DeleteIcon />}
                         width={5}
                         height={5}
@@ -166,16 +172,8 @@ const GoalCard = ({ goals }: IGoalCardProps) => {
           </Popover>
         </Box>
       ))}
-      <DeleteGoalModal
-        isOpen={deleteModal.isOpen}
-        onClose={deleteModal.onClose}
-        selectedGoalId={selectedGoalId}
-      />
-      <EditGoalModal
-        isOpen={editModal.isOpen}
-        onClose={editModal.onClose}
-        selectedGoalId={selectedGoalId}
-      />
+      <DeleteGoalModal />
+      <EditGoalModal />
     </>
   );
 };

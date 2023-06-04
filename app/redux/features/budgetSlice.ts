@@ -5,11 +5,19 @@ import axios from 'axios';
 interface BudgetsState {
   budgets: Budget[] | null;
   isLoading: boolean;
+  isCreateBudgetModalOpen: boolean;
+  isDeleteBudgetModalOpen: boolean;
+  isEditBudgetModalOpen: boolean;
+  selectedBudgetId: number;
 }
 
 const initialState: BudgetsState = {
   budgets: null,
   isLoading: false,
+  isCreateBudgetModalOpen: false,
+  isDeleteBudgetModalOpen: false,
+  isEditBudgetModalOpen: false,
+  selectedBudgetId: 0,
 };
 
 export const fetchBudgets = createAsyncThunk(
@@ -23,7 +31,19 @@ export const fetchBudgets = createAsyncThunk(
 const budgetSlice = createSlice({
   name: 'budgets',
   initialState,
-  reducers: {},
+  reducers: {
+    setCreateBudgetModalOpen: (state, action) => {
+      state.isCreateBudgetModalOpen = action.payload;
+    },
+    setDeleteBudgetModalOpen: (state, action) => {
+      state.isDeleteBudgetModalOpen = action.payload.isDeleteBudgetModalOpen;
+      state.selectedBudgetId = action.payload.selectedBudgetId;
+    },
+    setEditBudgetModalOpen: (state, action) => {
+      state.isEditBudgetModalOpen = action.payload.isEditBudgetModalOpen;
+      state.selectedBudgetId = action.payload.selectedBudgetId;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchBudgets.pending, (state) => {
@@ -39,4 +59,9 @@ const budgetSlice = createSlice({
   },
 });
 
+export const {
+  setCreateBudgetModalOpen,
+  setDeleteBudgetModalOpen,
+  setEditBudgetModalOpen,
+} = budgetSlice.actions;
 export default budgetSlice.reducer;

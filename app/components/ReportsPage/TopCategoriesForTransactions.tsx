@@ -1,6 +1,7 @@
+'use client';
 import React from 'react';
 import { Box, Text, useColorMode } from '@chakra-ui/react';
-import { VictoryBar, VictoryChart, VictoryTheme } from 'victory';
+import { VictoryBar, VictoryChart } from 'victory';
 
 interface TopCategoryData {
   category: string;

@@ -3,7 +3,6 @@ import {
   Box,
   Heading,
   Button,
-  useDisclosure,
   Container,
   useColorModeValue,
 } from '@chakra-ui/react';
@@ -11,9 +10,11 @@ import Navigation from '../components/Navigation';
 import useColorModeStyles from '../hooks/useColorModeStyles';
 import CreateUserAccountModal from '../components/AccountsPage/modals/CreateUserAccountModal';
 import AccountsFilter from '../components/AccountsPage/AccountFilter';
+import { useAppDispatch } from '../redux/hooks';
+import { setIsCreateAccountModalOpen } from '../redux/features/userAccountSlice';
 
 export default function AccountsPageClient() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const dispatch = useAppDispatch();
   const { headingColor } = useColorModeStyles();
 
   return (
@@ -34,12 +35,12 @@ export default function AccountsPageClient() {
         </Box>
         <Button
           mt={4}
-          onClick={onOpen}
+          onClick={() => dispatch(setIsCreateAccountModalOpen(true))}
           bg={useColorModeValue('gray.300', 'gray.700')}
         >
           Create Account
         </Button>
-        <CreateUserAccountModal isOpen={isOpen} onClose={onClose} />
+        <CreateUserAccountModal />
       </Box>
     </Container>
   );

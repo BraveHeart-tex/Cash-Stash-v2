@@ -18,7 +18,7 @@ interface FetchCurrentGoalResponse {
 
 export const fetchGoalById = createAsyncThunk(
   'goals/fetchGoalById',
-  async (goalId: string) => {
+  async (goalId: number) => {
     try {
       const response = await axios.get<FetchCurrentGoalResponse>(
         `/api/user/goals/${goalId}`

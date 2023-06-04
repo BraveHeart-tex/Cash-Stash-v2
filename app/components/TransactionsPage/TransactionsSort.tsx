@@ -6,7 +6,7 @@ import {
 } from '@/app/redux/features/transactionsSlice';
 import { useAppDispatch } from '@/app/redux/hooks';
 import { Box, Stack, Select, Heading, useColorMode } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 interface ITransactionsSortProps {}
 
@@ -14,6 +14,11 @@ const TransactionsSort = ({}: ITransactionsSortProps) => {
   const dispatch = useAppDispatch();
 
   const { colorMode } = useColorMode();
+
+  useEffect(() => {
+    dispatch(setSortBy(''));
+    dispatch(setSortDirection(''));
+  }, [dispatch]);
 
   const handleSortByChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     dispatch(setSortBy(event.target.value as 'amount' | 'date'));
@@ -44,15 +49,12 @@ const TransactionsSort = ({}: ITransactionsSortProps) => {
         Sort
       </Heading>
       <Stack>
-        <Select placeholder='Sort by' onChange={handleSortByChange}>
+        <Select defaultValue={''} onChange={handleSortByChange}>
           <option value=''>None</option>
           <option value='amount'>Amount</option>
           <option value='date'>Date</option>
         </Select>
-        <Select
-          placeholder='Sort direction'
-          onChange={handleSortDirectionChange}
-        >
+        <Select defaultValue={''} onChange={handleSortDirectionChange}>
           <option value='asc'>Ascending</option>
           <option value='desc'>Descending</option>
         </Select>

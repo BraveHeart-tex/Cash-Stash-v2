@@ -39,13 +39,11 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fetchCurrentUserAccounts());
+    dispatch(fetchTransactions());
   }, [dispatch]);
 
   useEffect(() => {
-    return () => {
-      dispatch(fetchTransactions());
-    };
+    dispatch(fetchCurrentUserAccounts());
   }, [dispatch]);
 
   const { colorMode } = useColorMode();

@@ -1,3 +1,4 @@
+'use client';
 import {
   Modal,
   ModalOverlay,
@@ -15,32 +16,26 @@ import {
 import useColorModeStyles from '../../../hooks/useColorModeStyles';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
-import { useAppDispatch } from '../../../redux/hooks';
-import { fetchGoals } from '../../../redux/features/goalSlice';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import {
+  fetchGoals,
+  setDeleteGoalModalOpen,
+} from '../../../redux/features/goalSlice';
 import { useState } from 'react';
 
-interface IDeleteGoalModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  selectedGoalId: string | null | undefined;
-}
-
-const DeleteGoalModal = ({
-  isOpen,
-  onClose,
-  selectedGoalId,
-}: IDeleteGoalModalProps) => {
+const DeleteGoalModal = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const { headingColor } = useColorModeStyles();
   const dispatch = useAppDispatch();
+  const { isDeleteGoalModalOpen, selectedGoalId } = useAppSelector(
+    (state) => state.goalReducer
+  );
+
   const toast = useToast();
+  const { headingColor } = useColorModeStyles();
 
-  const {
-    handleSubmit,
-    formState: { isSubmitting },
-  } = useForm();
+  const { handleSubmit } = useForm();
 
-  const onSubmit = async (id: string) => {
+  const onSubmit = async (id: number) => {
     setIsLoading(true);
     try {
       await axios.delete(`/api/user/goals/${id}`);
@@ -53,8 +48,8 @@ const DeleteGoalModal = ({
         position: 'top',
       });
       setIsLoading(false);
-      onClose();
       dispatch(fetchGoals());
+      dispatch(setDeleteGoalModalOpen(false));
     } catch (error: any) {
       toast({
         title: 'An error occurred.',
@@ -65,12 +60,15 @@ const DeleteGoalModal = ({
         position: 'top',
       });
       setIsLoading(false);
-      console.log(error);
     }
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered>
+    <Modal
+      isOpen={isDeleteGoalModalOpen}
+      onClose={() => dispatch(setDeleteGoalModalOpen(false))}
+      isCentered
+    >
       <ModalOverlay bg={'rgba(0, 0, 0, 0.25)'} />
       <ModalContent>
         <ModalHeader color={headingColor}>Delete Goal:</ModalHeader>
@@ -97,7 +95,7 @@ const DeleteGoalModal = ({
                 isLoading={isLoading}
                 type='submit'
                 onClick={handleSubmit(() => {
-                  onSubmit(selectedGoalId as string);
+                  onSubmit(selectedGoalId);
                 })}
               >
                 Delete
@@ -106,7 +104,10 @@ const DeleteGoalModal = ({
           </Flex>
         </ModalBody>
         <ModalFooter>
-          <Button variant='ghost' onClick={onClose}>
+          <Button
+            variant='ghost'
+            onClick={() => dispatch(setDeleteGoalModalOpen(false))}
+          >
             Cancel
           </Button>
         </ModalFooter>

@@ -16,22 +16,18 @@ import React from 'react';
 import useColorModeStyles from '../../../hooks/useColorModeStyles';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
-import { useAppDispatch } from '../../../redux/hooks';
-import { fetchCurrentUserAccounts } from '../../../redux/features/userAccountSlice';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import {
+  fetchCurrentUserAccounts,
+  setIsDeleteAccountModalOpen,
+} from '../../../redux/features/userAccountSlice';
 
-interface IDeleteUserAccountModalProps {
-  selectedAccountId: number | null;
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-const DeleteUserAccountModal = ({
-  selectedAccountId,
-  isOpen,
-  onClose,
-}: IDeleteUserAccountModalProps) => {
+const DeleteUserAccountModal = () => {
   const { headingColor } = useColorModeStyles();
   const dispatch = useAppDispatch();
+  const { isDeleteAccountModalOpen, selectedUserAccountId } = useAppSelector(
+    (state) => state.userAccountReducer
+  );
   const toast = useToast();
 
   const {
@@ -51,7 +47,7 @@ const DeleteUserAccountModal = ({
         isClosable: true,
         position: 'top',
       });
-      onClose();
+      dispatch(setIsDeleteAccountModalOpen(false));
     } catch (error) {
       toast({
         title: 'An error occurred.',
@@ -66,7 +62,11 @@ const DeleteUserAccountModal = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered>
+    <Modal
+      isOpen={isDeleteAccountModalOpen}
+      onClose={() => dispatch(setIsDeleteAccountModalOpen(false))}
+      isCentered
+    >
       <ModalOverlay bg={'rgba(0, 0, 0, 0.25)'} />
       <ModalContent>
         <ModalHeader color={headingColor}>Delete Account:</ModalHeader>
@@ -90,7 +90,7 @@ const DeleteUserAccountModal = ({
               isLoading={isLoading || isSubmitting}
               type='submit'
               onClick={handleSubmit(() =>
-                onSubmit(selectedAccountId as number)
+                onSubmit(selectedUserAccountId as number)
               )}
             >
               Delete
@@ -98,7 +98,10 @@ const DeleteUserAccountModal = ({
           </Flex>
         </ModalBody>
         <ModalFooter>
-          <Button variant='ghost' onClick={onClose}>
+          <Button
+            variant='ghost'
+            onClick={() => dispatch(setIsDeleteAccountModalOpen(false))}
+          >
             Cancel
           </Button>
         </ModalFooter>

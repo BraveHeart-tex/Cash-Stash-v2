@@ -7,7 +7,6 @@ import {
   CardHeader,
   SimpleGrid,
   IconButton,
-  useDisclosure,
   Popover,
   PopoverTrigger,
   PopoverContent,
@@ -26,11 +25,15 @@ import CreateUserAccountOptions, {
 } from '../../utils/CreateUserAccountOptions';
 import EditUserAccountModal from './modals/EditUserAccountModal';
 import { EditIcon } from '@chakra-ui/icons';
-import { useState } from 'react';
 import ActionsIcon from '../Icons/ActionsIcon';
 import DeleteIcon from '../Icons/DeleteIcon';
 import DeleteUserAccountModal from './modals/DeleteUserAccountModal';
 import useColorModeStyles from '../../hooks/useColorModeStyles';
+import { useAppDispatch, useAppSelector } from '@/app/redux/hooks';
+import {
+  setIsEditAccountModalOpen,
+  setIsDeleteAccountModalOpen,
+} from '@/app/redux/features/userAccountSlice';
 
 interface IAccountInformationProps {
   userAccounts: UserAccount[] | undefined | null;
@@ -38,28 +41,11 @@ interface IAccountInformationProps {
 
 const AccountInformation = ({ userAccounts }: IAccountInformationProps) => {
   const { colorMode } = useColorMode();
-  const [selectedAccountId, setSelectedAccountId] = useState<number | null>(
-    null
-  );
-  const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] =
-    useState(false);
-  const { isOpen, onClose, onOpen } = useDisclosure();
   const { headingColor, textColor } = useColorModeStyles();
-
-  const handleEditAccount = (accountId: number) => {
-    setSelectedAccountId(accountId);
-    onOpen();
-  };
-
-  const handleDeleteAccount = (accountId: number) => {
-    setSelectedAccountId(accountId);
-    setIsDeleteAccountModalOpen(true);
-  };
-
-  const onDeleteAccountModalClose = () => {
-    setSelectedAccountId(null);
-    setIsDeleteAccountModalOpen(false);
-  };
+  const dispatch = useAppDispatch();
+  const { isEditAccountModalOpen, isDeleteAccountModalOpen } = useAppSelector(
+    (state) => state.userAccountReducer
+  );
 
   return (
     <Container maxW={'8xl'}>
@@ -102,7 +88,15 @@ const AccountInformation = ({ userAccounts }: IAccountInformationProps) => {
                         <Flex justifyContent={'center'} alignItems={'center'}>
                           <IconButton
                             aria-label={'Edit user account'}
-                            onClick={() => handleEditAccount(userAccount.id)}
+                            onClick={() =>
+                              dispatch(
+                                setIsEditAccountModalOpen({
+                                  isEditAccountModalOpen:
+                                    !isEditAccountModalOpen,
+                                  selectedUserAccountId: userAccount.id,
+                                })
+                              )
+                            }
                             icon={<EditIcon />}
                             width={4}
                             height={4}
@@ -116,7 +110,15 @@ const AccountInformation = ({ userAccounts }: IAccountInformationProps) => {
                         <Flex justifyContent={'center'} alignItems={'center'}>
                           <IconButton
                             aria-label={'Delete user account'}
-                            onClick={() => handleDeleteAccount(userAccount.id)}
+                            onClick={() =>
+                              dispatch(
+                                setIsDeleteAccountModalOpen({
+                                  isDeleteAccountModalOpen:
+                                    !isDeleteAccountModalOpen,
+                                  selectedUserAccountId: userAccount.id,
+                                })
+                              )
+                            }
                             icon={<DeleteIcon />}
                             width={4}
                             height={4}
@@ -161,16 +163,8 @@ const AccountInformation = ({ userAccounts }: IAccountInformationProps) => {
           </Box>
         )}
       </SimpleGrid>
-      <EditUserAccountModal
-        selectedAccountId={selectedAccountId}
-        isOpen={isOpen}
-        onClose={onClose}
-      />
-      <DeleteUserAccountModal
-        selectedAccountId={selectedAccountId}
-        isOpen={isDeleteAccountModalOpen}
-        onClose={onDeleteAccountModalClose}
-      />
+      <EditUserAccountModal />
+      <DeleteUserAccountModal />
     </Container>
   );
 };

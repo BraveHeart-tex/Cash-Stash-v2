@@ -56,9 +56,15 @@ export async function POST(request: Request) {
     );
   }
 
-  const { title, description, amount, reminderDate } = await request.json();
+  const {
+    title,
+    description,
+    amount,
+    reminderDate,
+    isIncome: isIncomeInput,
+  } = await request.json();
 
-  if (!title || !description || !amount || !reminderDate) {
+  if (!title || !description || !amount || !reminderDate || !isIncomeInput) {
     return NextResponse.json(
       {
         error: 'Bad Request. Please provide all the required fields.',
@@ -69,6 +75,7 @@ export async function POST(request: Request) {
     );
   }
 
+  let mappedIsIncome = isIncomeInput === 'income' ? true : false;
   let mappedReminderDate = new Date(reminderDate);
 
   const reminder = await prisma.reminder.create({
@@ -78,6 +85,7 @@ export async function POST(request: Request) {
       description,
       amount: parseInt(amount),
       reminderDate: mappedReminderDate,
+      isIncome: mappedIsIncome,
     },
   });
 

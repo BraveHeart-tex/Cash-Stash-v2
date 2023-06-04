@@ -11,15 +11,21 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import CreateBudgetForm from '../forms/CreateBudgetForm';
+import { useAppDispatch, useAppSelector } from '@/app/redux/hooks';
+import { setCreateBudgetModalOpen } from '@/app/redux/features/budgetSlice';
 
-interface ICreateBudgetModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+const CreateBudgetModal = () => {
+  const dispatch = useAppDispatch();
+  const { isCreateBudgetModalOpen } = useAppSelector(
+    (state) => state.budgetReducer
+  );
 
-const CreateBudgetModal = ({ isOpen, onClose }: ICreateBudgetModalProps) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered>
+    <Modal
+      isOpen={isCreateBudgetModalOpen}
+      onClose={() => dispatch(setCreateBudgetModalOpen(false))}
+      isCentered
+    >
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Create Budget</ModalHeader>
@@ -28,7 +34,11 @@ const CreateBudgetModal = ({ isOpen, onClose }: ICreateBudgetModalProps) => {
           <CreateBudgetForm />
         </ModalBody>
         <ModalFooter>
-          <Button variant='ghost' mr={3} onClick={onClose}>
+          <Button
+            variant='ghost'
+            mr={3}
+            onClick={() => dispatch(setCreateBudgetModalOpen(false))}
+          >
             Cancel
           </Button>
         </ModalFooter>

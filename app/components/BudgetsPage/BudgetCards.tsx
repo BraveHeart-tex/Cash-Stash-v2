@@ -15,7 +15,6 @@ import {
   PopoverHeader,
   PopoverBody,
   Flex,
-  useDisclosure,
   Progress,
   useColorMode,
   Badge,
@@ -25,31 +24,22 @@ import EditIcon from '../Icons/EditIcon';
 import DeleteIcon from '../Icons/DeleteIcon';
 import EditBudgetModal from './modals/EditBudgetModal';
 import DeleteBudgetModal from './modals/DeleteBudgetModal';
-import { useState } from 'react';
 import useColorModeStyles from '../../hooks/useColorModeStyles';
 import { Budget } from '@prisma/client';
+import { useAppDispatch } from '@/app/redux/hooks';
+import {
+  setDeleteBudgetModalOpen,
+  setEditBudgetModalOpen,
+} from '@/app/redux/features/budgetSlice';
 
 interface IBudgetCardsProps {
   budgets: Budget[] | null;
 }
 
 const BudgetCards = ({ budgets }: IBudgetCardsProps) => {
-  const [selectedBudgetId, setSelectedBudgetId] = useState<string>('');
-
+  const dispatch = useAppDispatch();
   const { textColor, headingColor } = useColorModeStyles();
   const { colorMode } = useColorMode();
-  const editModal = useDisclosure();
-  const deleteModal = useDisclosure();
-
-  const handleEditBudget = (budgetId: string) => {
-    setSelectedBudgetId(budgetId);
-    editModal.onOpen();
-  };
-
-  const handleDeleteBudget = (budgetId: string) => {
-    setSelectedBudgetId(budgetId);
-    deleteModal.onOpen();
-  };
 
   return (
     <>
@@ -136,7 +126,14 @@ const BudgetCards = ({ budgets }: IBudgetCardsProps) => {
                       <Flex justifyContent={'center'} alignItems={'center'}>
                         <IconButton
                           aria-label={'Edit user account'}
-                          onClick={() => handleEditBudget(budget.id)}
+                          onClick={() =>
+                            dispatch(
+                              setEditBudgetModalOpen({
+                                isEditBudgetModalOpen: true,
+                                selectedBudgetId: budget.id,
+                              })
+                            )
+                          }
                           icon={<EditIcon />}
                           width={5}
                           height={5}
@@ -148,7 +145,14 @@ const BudgetCards = ({ budgets }: IBudgetCardsProps) => {
                       <Flex justifyContent={'center'} alignItems={'center'}>
                         <IconButton
                           aria-label={'Delete user account'}
-                          onClick={() => handleDeleteBudget(budget.id)}
+                          onClick={() =>
+                            dispatch(
+                              setDeleteBudgetModalOpen({
+                                isDeleteBudgetModalOpen: true,
+                                selectedBudgetId: budget.id,
+                              })
+                            )
+                          }
                           icon={<DeleteIcon />}
                           width={5}
                           height={5}
@@ -164,16 +168,8 @@ const BudgetCards = ({ budgets }: IBudgetCardsProps) => {
             </Popover>
           </Box>
         ))}
-      <EditBudgetModal
-        isOpen={editModal.isOpen}
-        onClose={editModal.onClose}
-        selectedBudgetId={selectedBudgetId}
-      />
-      <DeleteBudgetModal
-        isOpen={deleteModal.isOpen}
-        onClose={deleteModal.onClose}
-        selectedBudgetId={selectedBudgetId}
-      />
+      <EditBudgetModal />
+      <DeleteBudgetModal />
     </>
   );
 };

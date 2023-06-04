@@ -23,6 +23,8 @@ import {
   fetchMonthlyTransactionsData,
   fetchTransactions,
 } from '../redux/features/transactionsSlice';
+import CreateReminderModal from './Reminders/modals/CreateReminderModal';
+import EditReminderModal from './Reminders/modals/EditReminderModal';
 
 const Dashboard = () => {
   const { colorMode } = useColorMode();
@@ -166,6 +168,8 @@ const Dashboard = () => {
           >
             {/* Render notifications and reminders */}
             <NotificationsAndReminders />
+            <CreateReminderModal />
+            <EditReminderModal />
           </Box>
         </Box>
         <Box w={'100%'} height={'100%'}></Box>

@@ -1,6 +1,14 @@
 'use client';
 import React, { useEffect } from 'react';
-import { Box, Text, Progress, useColorMode, Button } from '@chakra-ui/react';
+import {
+  Box,
+  Text,
+  Progress,
+  useColorMode,
+  Button,
+  Spinner,
+  Flex,
+} from '@chakra-ui/react';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { fetchBudgets } from '../redux/features/budgetSlice';
 import { Link } from '@chakra-ui/next-js';
@@ -15,7 +23,12 @@ const BudgetStatus = () => {
   }, [dispatch]);
 
   if (isLoading) {
-    return <Box>Loading...</Box>;
+    return (
+      <Flex gap={4}>
+        <Text>Loading budgets...</Text>
+        <Spinner />
+      </Flex>
+    );
   }
 
   if (!budgets || budgets.length === 0) {

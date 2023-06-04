@@ -34,7 +34,7 @@ const AccountsFilter = () => {
     );
   }
 
-  if (!accounts && !isLoading) {
+  if (!isLoading && !accounts) {
     return (
       <Box textAlign={'center'}>
         <Heading>You don&apos;t have any accounts yet.</Heading>

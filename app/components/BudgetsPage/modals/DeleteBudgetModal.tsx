@@ -14,25 +14,19 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import useColorModeStyles from '../../../hooks/useColorModeStyles';
-import { useAppDispatch } from '../../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { fetchBudgets } from '../../../redux/features/budgetSlice';
+import { setDeleteBudgetModalOpen } from '../../../redux/features/budgetSlice';
 
-interface IDeleteBudgetModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  selectedBudgetId: string;
-}
-
-const DeleteBudgetModal = ({
-  isOpen,
-  onClose,
-  selectedBudgetId,
-}: IDeleteBudgetModalProps) => {
-  const { headingColor } = useColorModeStyles();
-
+const DeleteBudgetModal = () => {
   const dispatch = useAppDispatch();
+  const { selectedBudgetId, isDeleteBudgetModalOpen } = useAppSelector(
+    (state) => state.budgetReducer
+  );
+
+  const { headingColor } = useColorModeStyles();
   const toast = useToast();
 
   const {
@@ -40,7 +34,7 @@ const DeleteBudgetModal = ({
     formState: { isLoading, isSubmitting },
   } = useForm();
 
-  const onSubmit = async (id: string) => {
+  const onSubmit = async (id: number) => {
     try {
       await axios.delete(`/api/user/budgets/${id}`);
       dispatch(fetchBudgets());
@@ -52,7 +46,7 @@ const DeleteBudgetModal = ({
         isClosable: true,
         position: 'top',
       });
-      onClose();
+      dispatch(setDeleteBudgetModalOpen(false));
     } catch (error) {
       toast({
         title: 'An error occurred.',
@@ -66,7 +60,11 @@ const DeleteBudgetModal = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered>
+    <Modal
+      isOpen={isDeleteBudgetModalOpen}
+      onClose={() => dispatch(setDeleteBudgetModalOpen(false))}
+      isCentered
+    >
       <ModalOverlay bg={'rgba(0, 0, 0, 0.25)'} />
       <ModalContent>
         <ModalHeader color={headingColor}>Delete Budget:</ModalHeader>
@@ -89,14 +87,17 @@ const DeleteBudgetModal = ({
               isDisabled={isLoading || isSubmitting}
               isLoading={isLoading || isSubmitting}
               type='submit'
-              onClick={handleSubmit(() => onSubmit(selectedBudgetId as string))}
+              onClick={handleSubmit(() => onSubmit(selectedBudgetId))}
             >
               Delete
             </Button>
           </Flex>
         </ModalBody>
         <ModalFooter>
-          <Button variant='ghost' onClick={onClose}>
+          <Button
+            variant='ghost'
+            onClick={() => dispatch(setDeleteBudgetModalOpen(false))}
+          >
             Cancel
           </Button>
         </ModalFooter>

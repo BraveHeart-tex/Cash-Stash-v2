@@ -8,7 +8,7 @@ interface IParams {
 
 // FIXME: TEST this
 // update a reminder
-export async function PUT(request: Request, params: IParams) {
+export async function PUT(request: Request, { params }: { params: IParams }) {
   const { reminderId } = params;
 
   if (!reminderId || typeof reminderId !== 'string') {
@@ -52,10 +52,10 @@ export async function PUT(request: Request, params: IParams) {
     );
   }
 
-  const { title, description, amount, reminderDate, isRead } =
+  const { title, description, amount, reminderDate, isRead, isIncome } =
     await request.json();
 
-  if (!title || !description || !amount || !reminderDate) {
+  if (!title || !description || !amount || !reminderDate || !isIncome) {
     return NextResponse.json(
       {
         error: 'Bad Request. Please provide all the required fields.',
@@ -66,7 +66,8 @@ export async function PUT(request: Request, params: IParams) {
     );
   }
 
-  let mappedIsRead = isRead === 'IsRead' ? true : false;
+  let mappedIsRead = isRead === 'isRead' ? true : false;
+  let mappedIsIncome = isIncome === 'income' ? true : false;
   let mappedReminderDate = new Date(reminderDate);
 
   const updatedReminder = await prisma.reminder.update({
@@ -76,6 +77,7 @@ export async function PUT(request: Request, params: IParams) {
       amount: parseInt(amount),
       reminderDate: mappedReminderDate,
       isRead: mappedIsRead,
+      isIncome: mappedIsIncome,
     },
     where: {
       id: parseInt(reminderId),
@@ -105,7 +107,10 @@ export async function PUT(request: Request, params: IParams) {
 
 // FIXME: TEST this
 // delete a reminder
-export async function DELETE(request: Request, params: IParams) {
+export async function DELETE(
+  request: Request,
+  { params }: { params: IParams }
+) {
   const { reminderId } = params;
 
   if (!reminderId || typeof reminderId !== 'string') {
@@ -167,8 +172,7 @@ export async function DELETE(request: Request, params: IParams) {
 
 // FIXME: TEST this
 // get a reminder by id
-
-export async function GET(request: Request, params: IParams) {
+export async function GET(request: Request, { params }: { params: IParams }) {
   const { reminderId } = params;
 
   if (!reminderId || typeof reminderId !== 'string') {

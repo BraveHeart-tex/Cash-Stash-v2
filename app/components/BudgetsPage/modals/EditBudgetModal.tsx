@@ -12,21 +12,22 @@ import {
 import React from 'react';
 import useColorModeStyles from '../../../hooks/useColorModeStyles';
 import EditUserBudgetForm from '../forms/EditBudgetForm';
+import { useAppDispatch, useAppSelector } from '@/app/redux/hooks';
+import { setEditBudgetModalOpen } from '@/app/redux/features/budgetSlice';
 
-interface IEditBudgetModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  selectedBudgetId: string | null;
-}
-
-const EditBudgetModal = ({
-  isOpen,
-  onClose,
-  selectedBudgetId,
-}: IEditBudgetModalProps) => {
+const EditBudgetModal = () => {
   const { headingColor } = useColorModeStyles();
+  const dispatch = useAppDispatch();
+  const { isEditBudgetModalOpen, selectedBudgetId } = useAppSelector(
+    (state) => state.budgetReducer
+  );
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered>
+    <Modal
+      isOpen={isEditBudgetModalOpen}
+      onClose={() => dispatch(setEditBudgetModalOpen(false))}
+      isCentered
+    >
       <ModalOverlay bg={'rgba(0, 0, 0, 0.25)'} />
       <ModalContent>
         <ModalHeader color={headingColor}>Edit Budget:</ModalHeader>
@@ -35,7 +36,11 @@ const EditBudgetModal = ({
           <EditUserBudgetForm selectedBudgetId={selectedBudgetId} />
         </ModalBody>
         <ModalFooter>
-          <Button variant='ghost' mr={3} onClick={onClose}>
+          <Button
+            variant='ghost'
+            mr={3}
+            onClick={() => dispatch(setEditBudgetModalOpen(false))}
+          >
             Cancel
           </Button>
         </ModalFooter>

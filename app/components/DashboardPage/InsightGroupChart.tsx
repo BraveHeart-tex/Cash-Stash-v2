@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import { Box, useColorMode, Text } from '@chakra-ui/react';
 import { VictoryBar, VictoryChart, VictoryGroup } from 'victory';
@@ -11,7 +12,7 @@ interface IInsightGroupChartProps {
 const InsightGroupChart = ({ monthlyData }: IInsightGroupChartProps) => {
   const { colorMode } = useColorMode();
 
-  if (!monthlyData || !monthlyData.incomes || !monthlyData.expenses) {
+  if (!monthlyData) {
     return (
       <Box mt={3}>
         <Text color={colorMode === 'light' ? 'gray.600' : 'gray.300'}>
@@ -25,6 +26,20 @@ const InsightGroupChart = ({ monthlyData }: IInsightGroupChartProps) => {
     monthlyData && groupTransactionsByMonth(monthlyData.incomes);
   const groupedExpenses =
     monthlyData && groupTransactionsByMonth(monthlyData.expenses);
+
+  if (!groupedIncomes.incomes.length || !groupedExpenses.incomes.length) {
+    return (
+      <Box mt={3}>
+        <Text color={colorMode === 'light' ? 'gray.600' : 'gray.300'}>
+          No data was found to generate the financial insights chart.
+        </Text>
+        <Text mt={3} color={colorMode === 'light' ? 'gray.600' : 'gray.300'}>
+          Check to see if you have at least <b>1 transaction of type income</b>{' '}
+          and <b>1 transaction of type expense</b>.
+        </Text>
+      </Box>
+    );
+  }
 
   return (
     <Box>
@@ -40,7 +55,6 @@ const InsightGroupChart = ({ monthlyData }: IInsightGroupChartProps) => {
               stroke: colorMode === 'light' ? '#343a40' : '#f1f3f5',
               strokeWidth: colorMode === 'light' ? 2 : 1,
             },
-
             labels: {
               fill: colorMode === 'light' ? 'black' : 'white',
             },
