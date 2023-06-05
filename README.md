@@ -1,4 +1,8 @@
+<link rel="stylesheet" href="./markdown.css">
+
 # Cash Stash | Personal Finance Application
+
+<img src='./showcase_imgs/cashstash_desktop_dasboard.png' width='1000'/>
 
 Cash Stash is a personal finance application that offers various functionalities. Users can create account with different account types, create transactions related to their accounts, create goals, budgets and reminders. The UI of the application is built with Chakra UI and Next.js to offer the best user experience on all screen sizes.
 
@@ -25,7 +29,50 @@ You can check out the live of of this application from this [link](https://cash-
 
 - Below, you can find the screenshots of the application in various screen sizes.
 
-- TBU
+### Mobile View
+
+- Dashboard
+    <div class="img-gallery">
+      <img src="./showcase_imgs/cashstash_mobile_dashboard.png" width="300" />
+      <img src="./showcase_imgs/cashstash_darkmode_mobile.png" width="340" />
+      <img src='./showcase_imgs/cashstash_dashboard_mobile_2.png' width='340'/>
+    </div>
+
+- Accounts Page
+    <div class="img-gallery">
+      <img src="./showcase_imgs/cashstash_accounts_mobile.png" width="300" />
+      <img src="./showcase_imgs/cashstash_mobile_account_2.png" width="290" />
+    </div>
+
+- Goals Page
+    <div class="img-gallery">
+      <img src="./showcase_imgs/cashstash_goal_mobile.png" width="300" />
+    </div>
+
+- Budgets Page
+
+    <div class="img-gallery">
+      <img src="./showcase_imgs/cashstash_mobile_budgets1.png" width="300" />
+      <img src="./showcase_imgs/cashstash_mobile_budget2.png" width="300" />
+    </div>
+
+- Transactions Page
+    <div class="img-gallery">
+      <img src="./showcase_imgs/cashstash_mobile_transactions.png" width="300" />
+      <img src="./showcase_imgs/cashstash_transactions_desktop.png" width="300" />
+    </div>
+
+- Reports Page
+    <div class="img-gallery">
+      <img src="./showcase_imgs/cashstash_reports_mobile.png" width="300" />
+      <img src="./showcase_imgs/cashstash_reports_desktop.png" width="300" />
+    </div>
+
+- Authentication Pages
+    <div class="img-gallery">
+      <img src="./showcase_imgs/cashstash_signin.png" width="300" />
+      <img src="./showcase_imgs/cashstash_signup.png" width="300" />
+    </div>
 
 ## Tech Stack
 
