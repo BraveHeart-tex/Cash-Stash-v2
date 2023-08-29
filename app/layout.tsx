@@ -4,7 +4,6 @@ import { Providers as ChakraUIProviders } from "./providers";
 import { Providers as ReduxProviders } from "@/app/redux/provider";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
-import { ModeToggle } from "@/components/ModeToggle";
 
 const RobotoFont = Roboto({
   weight: ["300", "400", "700"],
@@ -27,10 +26,7 @@ export default function RootLayout({ children }: ILayoutProps) {
       <body className={RobotoFont.className}>
         <ReduxProviders>
           <ChakraUIProviders>
-            <ThemeProvider enableSystem>
-              <ModeToggle />
-              {children}
-            </ThemeProvider>
+            <ThemeProvider enableSystem>{children}</ThemeProvider>
           </ChakraUIProviders>
           <Toaster />
         </ReduxProviders>

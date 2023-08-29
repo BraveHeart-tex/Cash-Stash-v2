@@ -1,33 +1,24 @@
-'use client';
-import {
-  Box,
-  Heading,
-  SimpleGrid,
-  Container,
-  Text,
-  Spinner,
-  useColorMode,
-} from '@chakra-ui/react';
-import Navigation from './Navigation';
-import AccountSummaries from './AccountSummaries';
-import BudgetStatus from './BudgetStatus';
-import GoalStatus from './GoalStatus';
-import TransactionHistory from './TransactionHistory';
-import FinancialInsights from './FinancialInsights';
-import NotificationsAndReminders from './NotificationAndReminders';
-import InsightGroupChart from './DashboardPage/InsightGroupChart';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { useEffect } from 'react';
+"use client";
+import AccountSummaries from "./AccountSummaries";
+import BudgetStatus from "./BudgetStatus";
+import GoalStatus from "./GoalStatus";
+import TransactionHistory from "./TransactionHistory";
+import FinancialInsights from "./FinancialInsights";
+import NotificationsAndReminders from "./NotificationAndReminders";
+import InsightGroupChart from "./DashboardPage/InsightGroupChart";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { useEffect } from "react";
 import {
   fetchInsightsData,
   fetchMonthlyTransactionsData,
   fetchTransactions,
-} from '../redux/features/transactionsSlice';
-import CreateReminderModal from './Reminders/modals/CreateReminderModal';
-import EditReminderModal from './Reminders/modals/EditReminderModal';
+} from "../redux/features/transactionsSlice";
+import CreateReminderModal from "./Reminders/modals/CreateReminderModal";
+import EditReminderModal from "./Reminders/modals/EditReminderModal";
+import Navigation from "./Navigation";
+import Spinner from "@/components/Spinner";
 
 const Dashboard = () => {
-  const { colorMode } = useColorMode();
   const dispatch = useAppDispatch();
   const {
     isLoading,
@@ -50,131 +41,70 @@ const Dashboard = () => {
 
   if (isLoading) {
     return (
-      <Container
-        maxW={'8xl'}
-        height={'100vh'}
-        display={'flex'}
-        justifyContent={'center'}
-        alignItems={'center'}
-        flexDirection={'column'}
-        gap={4}
-      >
-        <Heading>Loading...</Heading>
-        <Box>
+      <div className="bg-background min-h-screen flex justify-center items-center flex-col gap-4">
+        <h2 className="font-bold text-foreground text-4xl">Loading...</h2>
+        <div>
           <Spinner />
-        </Box>
-      </Container>
+        </div>
+      </div>
     );
   }
 
+  const sectionData = [
+    {
+      title: "Accounts Summary",
+      data: <AccountSummaries />,
+    },
+    {
+      title: "Budget Status",
+      data: <BudgetStatus />,
+    },
+    {
+      title: "Goal Progress",
+      data: <GoalStatus />,
+    },
+    {
+      title: "Transaction History",
+      data: <TransactionHistory transactions={transactions} />,
+    },
+    {
+      title: "Financial Insights",
+      data: (
+        <div>
+          <p className="font-bold underline text-foreground">
+            Income vs Expense
+          </p>
+          <InsightGroupChart monthlyData={monthlyData} />
+          <FinancialInsights insightsData={insightsData} />
+        </div>
+      ),
+    },
+    {
+      title: "Notifications and Reminders",
+      data: (
+        <div>
+          <NotificationsAndReminders />
+          <CreateReminderModal />
+          <EditReminderModal />
+        </div>
+      ),
+    },
+  ];
+
   return (
-    <Container maxW={'8xl'} p={4}>
+    <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
       <Navigation />
-      <SimpleGrid columns={{ base: 1, md: 2, xl: 3 }} spacing={4} mt={8}>
-        <Box>
-          <Heading size='md' mb={2}>
-            Accounts Summary
-          </Heading>
-          <Box
-            bg={colorMode === 'light' ? 'gray.50' : 'gray.700'}
-            p={4}
-            borderRadius='lg'
-            boxShadow='sm'
-          >
-            {/* Render other account summaries */}
-            <AccountSummaries />
-          </Box>
-        </Box>
-
-        <Box>
-          <Heading size='md' mb={2}>
-            Budget Status
-          </Heading>
-          <Box
-            bg={colorMode === 'light' ? 'gray.50' : 'gray.700'}
-            p={4}
-            borderRadius='lg'
-            boxShadow='sm'
-          >
-            {/* Render budget status */}
-            <BudgetStatus />
-          </Box>
-        </Box>
-
-        <Box>
-          <Heading size='md' mb={2}>
-            Goal Progress
-          </Heading>
-          <Box
-            bg={colorMode === 'light' ? 'gray.50' : 'gray.700'}
-            p={4}
-            borderRadius='lg'
-            boxShadow='sm'
-          >
-            {/* Render goal progress */}
-            <GoalStatus />
-          </Box>
-        </Box>
-
-        <Box>
-          <Heading size='md' mb={2}>
-            Transaction History
-          </Heading>
-          <Box
-            bg={colorMode === 'light' ? 'gray.50' : 'gray.700'}
-            borderRadius='lg'
-            boxShadow='sm'
-            p={4}
-          >
-            {/* Render transaction history */}
-            <TransactionHistory transactions={transactions} />
-          </Box>
-        </Box>
-
-        <Box>
-          <Heading size='md' mb={2}>
-            Financial Insights
-          </Heading>
-          <Box
-            bg={colorMode === 'light' ? 'gray.50' : 'gray.700'}
-            p={4}
-            borderRadius='lg'
-            boxShadow='sm'
-            rounded={'md'}
-            shadow={'xl'}
-          >
-            {/* Render financial insights */}
-            <Text
-              fontWeight={'bold'}
-              textDecoration={'underline'}
-              color={colorMode === 'light' ? 'gray.700' : 'gray.50'}
-            >
-              Income vs Expense
-            </Text>
-            <InsightGroupChart monthlyData={monthlyData} />
-            <FinancialInsights insightsData={insightsData} />
-          </Box>
-        </Box>
-
-        <Box>
-          <Heading size='md' mb={2}>
-            Notifications and Reminders
-          </Heading>
-          <Box
-            bg={colorMode === 'light' ? 'gray.50' : 'gray.700'}
-            p={4}
-            borderRadius='lg'
-            boxShadow='sm'
-          >
-            {/* Render notifications and reminders */}
-            <NotificationsAndReminders />
-            <CreateReminderModal />
-            <EditReminderModal />
-          </Box>
-        </Box>
-        <Box w={'100%'} height={'100%'}></Box>
-      </SimpleGrid>
-    </Container>
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mt-8">
+        {sectionData.map((section) => (
+          <div key={section.title}>
+            <h3 className="text-xl mb-2 font-bold">{section.title}</h3>
+            <div className="p-4 rounded-lg shadow-sm bg-secondary">
+              {section.data}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 };
 
