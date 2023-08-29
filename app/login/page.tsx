@@ -1,4 +1,5 @@
-import LoginClient from './LoginClient';
+import LoginClient from "./LoginClient";
+
 const LoginPage = () => {
   return <LoginClient />;
 };

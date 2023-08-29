@@ -11,40 +11,19 @@ datasource db {
 
 model User {
   id             Int           @id @default(autoincrement())
-  name           String?
-  email          String?       @unique
-  hashedPassword String?
+  name           String
+  email          String        @unique
+  hashedPassword String
   image          String?
-  emailVerified  Boolean?      @default(false)
   userAccounts   UserAccount[]
   transactions   Transaction[]
   budgets        Budget[]
   goals          Goal[]
   reminders      Reminder[]
-  accounts       Account[]
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
 
   @@map(name: "users")
-}
-
-model Account {
-  id                Int     @id @default(autoincrement())
-  userId            Int
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String?
-  access_token      String?
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-  session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
 }
 
 model UserAccount {

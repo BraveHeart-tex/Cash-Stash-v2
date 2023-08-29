@@ -10,7 +10,7 @@ import {
   MenuItem,
   useColorMode,
 } from '@chakra-ui/react';
-import { signOut } from 'next-auth/react';
+// import { signOut } from 'next-auth/react';
 import { useAppSelector } from '../redux/hooks';
 import { useDispatch } from 'react-redux';
 import { fetchCurrentUser } from '../redux/features/userSlice';
@@ -63,10 +63,7 @@ const UserMenu = () => {
         <MenuDivider />
         <MenuItem
           onClick={() =>
-            signOut({
-              callbackUrl: '/login',
-              redirect: true,
-            })
+            alert("sign out")
           }
         >
           Logout
