@@ -7,6 +7,7 @@ import { LoginSchemaType } from "@/schemas/LoginSchema";
 import RegisterSchema, { RegisterSchemaType } from "@/schemas/RegisterSchema";
 import { cookies } from "next/headers";
 import bcrypt from "bcrypt";
+import { redirect } from "next/navigation";
 
 export const loginAction = async ({ email, password }: LoginSchemaType) => {
   const result = LoginSchema.safeParse({ email, password });
@@ -114,4 +115,10 @@ export const registerAction = async ({
   return {
     user,
   };
+};
+
+export const logoutAction = async () => {
+  cookies().set("token", "");
+
+  redirect("/login");
 };

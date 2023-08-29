@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import {
   Menu,
   MenuButton,
@@ -9,13 +9,14 @@ import {
   MenuDivider,
   MenuItem,
   useColorMode,
-} from '@chakra-ui/react';
+} from "@chakra-ui/react";
 // import { signOut } from 'next-auth/react';
-import { useAppSelector } from '../redux/hooks';
-import { useDispatch } from 'react-redux';
-import { fetchCurrentUser } from '../redux/features/userSlice';
-import { useEffect } from 'react';
-import { AppDispatch } from '../redux/store';
+import { useAppSelector } from "../redux/hooks";
+import { useDispatch } from "react-redux";
+import { fetchCurrentUser } from "../redux/features/userSlice";
+import { useEffect } from "react";
+import { AppDispatch } from "../redux/store";
+import { logoutAction } from "@/actions";
 
 const UserMenu = () => {
   const user = useAppSelector((state) => state.userReducer.currentUser);
@@ -31,28 +32,28 @@ const UserMenu = () => {
     <Menu>
       <MenuButton
         as={Button}
-        rounded={'full'}
-        variant={'link'}
-        cursor={'pointer'}
+        rounded={"full"}
+        variant={"link"}
+        cursor={"pointer"}
         minW={0}
-        bg={'transparent'}
+        bg={"transparent"}
       >
         <Avatar
           src={user?.image as string}
           name={user?.name as string}
-          bg={colorMode === 'light' ? 'gray.200' : 'gray.700'}
-          color={colorMode === 'light' ? 'gray.600' : 'gray.200'}
+          bg={colorMode === "light" ? "gray.200" : "gray.700"}
+          color={colorMode === "light" ? "gray.600" : "gray.200"}
         />
       </MenuButton>
-      <MenuList alignItems={'center'}>
+      <MenuList alignItems={"center"}>
         <br />
         <Center>
           <Avatar
             src={user?.image as string}
             name={user?.name as string}
-            bg={colorMode === 'light' ? 'gray.200' : 'gray.700'}
-            color={colorMode === 'light' ? 'gray.600' : 'gray.200'}
-            size={'xl'}
+            bg={colorMode === "light" ? "gray.200" : "gray.700"}
+            color={colorMode === "light" ? "gray.600" : "gray.200"}
+            size={"xl"}
           />
         </Center>
         <br />
@@ -61,13 +62,9 @@ const UserMenu = () => {
         </Center>
         <br />
         <MenuDivider />
-        <MenuItem
-          onClick={() =>
-            alert("sign out")
-          }
-        >
-          Logout
-        </MenuItem>
+        <form action={logoutAction}>
+          <MenuItem type="submit">Logout</MenuItem>
+        </form>
       </MenuList>
     </Menu>
   );
