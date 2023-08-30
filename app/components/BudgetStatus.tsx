@@ -32,7 +32,7 @@ const BudgetStatus = () => {
             className="font-bold text-md mt-3 hover:bg-foreground hover:text-muted"
             variant="secondary"
           >
-            <Link href="/budgets">Get started by creating a budget</Link>
+            Get started by creating a budget
           </Button>
         </Link>
       </div>

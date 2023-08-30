@@ -1,7 +1,8 @@
-import createGoal from '@/app/actions/createGoal';
-import getCurrentUser from '@/app/actions/getCurrentUser';
-import getCurrentUserGoals from '@/app/actions/getCurrentUserGoals';
-import { NextResponse } from 'next/server';
+import { getCurrentUserAction } from "@/actions";
+import createGoal from "@/app/actions/createGoal";
+import getCurrentUser from "@/app/actions/getCurrentUser";
+import getCurrentUserGoals from "@/app/actions/getCurrentUserGoals";
+import { NextResponse } from "next/server";
 
 // get all goals
 export async function GET(request: Request) {
@@ -10,7 +11,7 @@ export async function GET(request: Request) {
   if (!currentUser) {
     return NextResponse.json(
       {
-        error: 'Unauthorized. You must be logged in to do that',
+        error: "Unauthorized. You must be logged in to do that",
       },
       {
         status: 401,
@@ -23,7 +24,7 @@ export async function GET(request: Request) {
   if (!goals || goals.length === 0) {
     return NextResponse.json(
       {
-        error: 'No goals found',
+        error: "No goals found",
       },
       {
         status: 404,
@@ -43,12 +44,12 @@ export async function GET(request: Request) {
 
 // create a goal
 export async function POST(request: Request) {
-  const currentUser = await getCurrentUser();
+  const { user: currentUser } = await getCurrentUserAction();
 
   if (!currentUser) {
     return NextResponse.json(
       {
-        error: 'Unauthorized. You must be logged in to do that',
+        error: "Unauthorized. You must be logged in to do that",
       },
       {
         status: 401,
@@ -61,7 +62,7 @@ export async function POST(request: Request) {
   if (!goalName || !goalAmount || !currentAmount) {
     return NextResponse.json(
       {
-        error: 'Missing required fields',
+        error: "Missing required fields",
       },
       {
         status: 400,
@@ -76,7 +77,7 @@ export async function POST(request: Request) {
     currentUser.id
   );
 
-  if (typeof createdGoal !== 'object' || 'error' in createdGoal) {
+  if (typeof createdGoal !== "object" || "error" in createdGoal) {
     // The createdBudget is not of type Budget or it contains an error property
     return NextResponse.json(
       {
@@ -90,7 +91,7 @@ export async function POST(request: Request) {
 
   if (!createdGoal) {
     return NextResponse.json(
-      { error: 'Could not create budget for current user.' },
+      { error: "Could not create budget for current user." },
       { status: 500 }
     );
   }

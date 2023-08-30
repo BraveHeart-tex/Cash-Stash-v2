@@ -188,3 +188,27 @@ export const getBudgetsByCurrentUserAction = async () => {
     budgets,
   };
 };
+
+export const getGoalsByCurrentUserAction = async () => {
+  const currentUser = await getCurrentUser(cookies().get("token")?.value!);
+
+  if (!currentUser) {
+    return { error: "No user found." };
+  }
+
+  const goals = await db.goal.findMany({
+    where: {
+      userId: currentUser.id,
+    },
+  });
+
+  console.log(goals);
+
+  if (!goals) {
+    return { error: "No goals found." };
+  }
+
+  return {
+    goals,
+  };
+};

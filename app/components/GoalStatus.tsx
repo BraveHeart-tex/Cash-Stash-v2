@@ -1,85 +1,77 @@
-'use client';
-import React, { useEffect } from 'react';
-import {
-  Box,
-  Text,
-  Progress,
-  useColorMode,
-  Badge,
-  Button,
-} from '@chakra-ui/react';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { fetchGoals } from '../redux/features/goalSlice';
-import { Link } from '@chakra-ui/next-js';
+"use client";
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
+import { fetchGoals } from "@/app/redux/features/goalSlice";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 
 const GoalStatus = () => {
   const dispatch = useAppDispatch();
   const { goals, isLoading } = useAppSelector((state) => state.goalReducer);
-  const { colorMode } = useColorMode();
 
   useEffect(() => {
     dispatch(fetchGoals());
   }, [dispatch]);
 
   if (isLoading) {
-    return <Box>Loading...</Box>;
+    return (
+      <div>
+        <Skeleton className="h-[120px]" />
+      </div>
+    );
   }
-
-  const progressBarColor = colorMode === 'dark' ? 'teal' : 'purple';
-  const textColor = colorMode === 'dark' ? 'white' : 'black';
 
   if (!goals || goals.length === 0) {
     return (
-      <Box>
-        <Text color={colorMode === 'light' ? 'gray.600' : 'gray.300'}>
-          No goals found.
-        </Text>
-        <Button mt={3}>
-          <Link
-            href={'/goals'}
-            _hover={{
-              textDecoration: 'none',
-            }}
+      <div>
+        <p className="text-primary">No goals found.</p>
+        <Link className="mt-3" href="/goals">
+          <Button
+            className="font-bold text-md mt-3 hover:bg-foreground hover:text-muted"
+            variant="secondary"
           >
             Get started by creating a goal
-          </Link>
-        </Button>
-      </Box>
+          </Button>
+        </Link>
+      </div>
     );
   }
 
   return (
-    <Box>
+    <div>
       {goals.map((goal) => (
-        <Box
-          key={goal.name}
-          mb={4}
-          bg={colorMode === 'light' ? 'white' : 'gray.700'}
-          rounded={'md'}
-          p={2}
-          shadow={'xl'}
-        >
-          <Badge>
+        <div className="mb-4 rounded-md p-2 shadow-xl bg-card" key={goal.name}>
+          <Badge className="ml-auto">
             {goal.currentAmount / goal.goalAmount >= 1
-              ? 'Completed!'
+              ? "Completed!"
               : `In Progress ${Math.round(
                   (goal.currentAmount / goal.goalAmount) * 100
                 )}%`}
           </Badge>
-          <Text fontWeight='bold' mb={2} color={textColor}>
-            {goal.name}
-          </Text>
-          <Progress
-            value={(goal.currentAmount / goal.goalAmount) * 100}
-            colorScheme={progressBarColor}
-            size='sm'
-          />
-          <Text mt={2} fontSize='sm' color={textColor}>
-            Current: {goal.currentAmount}₺ / Target: {goal.goalAmount}₺
-          </Text>
-        </Box>
+          <div className="mt-2">
+            <p className="font-bold mb-2 text-primary">{goal.name}</p>
+            <Progress
+              value={(goal.currentAmount / goal.goalAmount) * 100}
+              indicatorClassName={
+                goal.currentAmount / goal.goalAmount > 0.7
+                  ? "bg-green-200"
+                  : goal.currentAmount / goal.goalAmount > 0.4
+                  ? "bg-orange-300"
+                  : "bg-red-300"
+              }
+            />
+            <p className="mt-2 text-md text-primary">
+              <span className="font-semibold">Current</span>:{" "}
+              {goal.currentAmount}₺ / <span className="font-bold">Target</span>:{" "}
+              {goal.goalAmount}₺
+            </p>
+          </div>
+        </div>
       ))}
-    </Box>
+    </div>
   );
 };
 
