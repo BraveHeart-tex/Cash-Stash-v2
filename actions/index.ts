@@ -1,7 +1,7 @@
 "use server";
 
 import db from "@/app/libs/prismadb";
-import { signToken } from "@/lib/session";
+import { getCurrentUser, signToken } from "@/lib/session";
 import { LoginSchema } from "@/schemas";
 import { LoginSchemaType } from "@/schemas/LoginSchema";
 import RegisterSchema, { RegisterSchemaType } from "@/schemas/RegisterSchema";
@@ -121,4 +121,22 @@ export const logoutAction = async () => {
   cookies().set("token", "");
 
   redirect("/login");
+};
+
+export const getCurrentUserAction = async () => {
+  const token = cookies().get("token")?.value;
+
+  if (!token) {
+    return { error: "No token found." };
+  }
+
+  const user = await getCurrentUser(cookies().get("token")?.value!);
+
+  if (!user) {
+    return { error: "No user found." };
+  }
+
+  return {
+    user,
+  };
 };

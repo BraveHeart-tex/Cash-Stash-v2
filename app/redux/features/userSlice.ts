@@ -1,9 +1,9 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { User } from '@prisma/client';
-import axios from 'axios';
+import { getCurrentUserAction } from "@/actions/index";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { User } from "@prisma/client";
 
 interface UserState {
-  currentUser: User | null;
+  currentUser: User | null | undefined;
   isLoading: boolean;
 }
 
@@ -13,15 +13,16 @@ const initialState: UserState = {
 };
 
 export const fetchCurrentUser = createAsyncThunk(
-  'user/fetchCurrentUser',
+  "user/fetchCurrentUser",
   async () => {
-    const response = await axios.get(`/api/user`);
-    return response.data.user;
+    const { user } = await getCurrentUserAction();
+    console.log(user);
+    return user;
   }
 );
 
 const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
   reducers: {},
   extraReducers: (builder) => {

@@ -1,10 +1,5 @@
 "use client";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import Logo from "./Logo.svg";
 import Image from "next/image";
@@ -14,6 +9,7 @@ import { ModeToggle } from "@/components/ModeToggle";
 import Link from "next/link";
 import { ModeSwitch } from "@/components/ModeSwitch";
 import { useState } from "react";
+import { useAppSelector } from "../redux/hooks";
 
 const NAV_LINKS = [
   { name: "Dashboard", href: "/" },
@@ -25,6 +21,7 @@ const NAV_LINKS = [
 ];
 
 const Navigation = () => {
+  const currentUser = useAppSelector((state) => state.userReducer.currentUser);
   const [isOpen, setIsOpen] = useState(false);
   const onOpen = () => setIsOpen(true);
   const onClose = () => setIsOpen(false);
@@ -77,17 +74,23 @@ const Navigation = () => {
         }}
       >
         <SheetContent side="left" className="w-[300px] md:[540px]">
-          <SheetHeader>
-            <SheetTitle>Menu</SheetTitle>
-          </SheetHeader>
-
-          <div className="grid grid-cols-1 gap-4 mt-4">
+          <div className="flex flex-col justify-between items h-[100%]">
+            <div className="flex flex-col gap-2">
+              <span className="font-bold text-lg">
+                {" "}
+                Welcome! {currentUser?.name}
+              </span>
+              {NAV_LINKS.map((link) => (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className="hover:underline"
+                >
+                  {link.name}
+                </Link>
+              ))}
+            </div>
             <ModeSwitch />
-            {NAV_LINKS.map((link) => (
-              <Link key={link.name} href={link.href}>
-                {link.name}
-              </Link>
-            ))}
           </div>
         </SheetContent>
       </Sheet>

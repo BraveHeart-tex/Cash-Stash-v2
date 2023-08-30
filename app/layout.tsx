@@ -4,6 +4,7 @@ import { Providers as ChakraUIProviders } from "./providers";
 import { Providers as ReduxProviders } from "@/app/redux/provider";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
+import { getCurrentUserAction } from "@/actions";
 
 const RobotoFont = Roboto({
   weight: ["300", "400", "700"],
@@ -20,7 +21,7 @@ interface ILayoutProps {
   children: React.ReactNode;
 }
 
-export default function RootLayout({ children }: ILayoutProps) {
+export default async function RootLayout({ children }: ILayoutProps) {
   return (
     <html lang="en">
       <body className={RobotoFont.className}>
