@@ -1,55 +1,52 @@
-'use client';
+"use client";
+import EditUserAccountForm from "../forms/EditUserAccountForm";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
+import { setIsEditAccountModalOpen } from "@/app/redux/features/userAccountSlice";
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  Button,
-} from '@chakra-ui/react';
-import React from 'react';
-import useColorModeStyles from '../../../hooks/useColorModeStyles';
-import EditUserAccountForm from '../forms/EditUserAccountForm';
-import { useAppDispatch, useAppSelector } from '@/app/redux/hooks';
-import { setIsEditAccountModalOpen } from '@/app/redux/features/userAccountSlice';
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 const EditUserAccountModal = () => {
   const { isEditAccountModalOpen, selectedUserAccountId } = useAppSelector(
     (state) => state.userAccountReducer
   );
   const dispatch = useAppDispatch();
-  const { headingColor } = useColorModeStyles();
 
   return (
-    <Modal
-      isOpen={isEditAccountModalOpen}
-      onClose={() =>
-        dispatch(setIsEditAccountModalOpen(!isEditAccountModalOpen))
-      }
-      isCentered
+    <Dialog
+      open={isEditAccountModalOpen}
+      onOpenChange={(isOpen) => {
+        if (!isOpen) {
+          dispatch(setIsEditAccountModalOpen(!isEditAccountModalOpen));
+        }
+      }}
     >
-      <ModalOverlay bg={'rgba(0, 0, 0, 0.25)'} />
-      <ModalContent>
-        <ModalHeader color={headingColor}>Edit Account:</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
-          <EditUserAccountForm selectedAccountId={selectedUserAccountId} />
-        </ModalBody>
-        <ModalFooter>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Edit Account</DialogTitle>
+          <DialogDescription>
+            Edit your existing acconut by using the form below.
+          </DialogDescription>
+        </DialogHeader>
+        <EditUserAccountForm selectedAccountId={selectedUserAccountId} />
+        <DialogFooter>
           <Button
-            variant='ghost'
-            mr={3}
+            variant="secondary"
             onClick={() =>
               dispatch(setIsEditAccountModalOpen(!isEditAccountModalOpen))
             }
           >
             Cancel
           </Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 

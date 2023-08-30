@@ -1,6 +1,6 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { UserAccount } from '@prisma/client';
-import axios from 'axios';
+import { getAccountByIdAction } from "@/actions/index";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { UserAccount } from "@prisma/client";
 
 interface UserAccountsState {
   currentAccount: UserAccount | null;
@@ -12,27 +12,19 @@ const initialState: UserAccountsState = {
   isLoading: false,
 };
 
-interface FetchCurrentAccountResponse {
-  account: UserAccount;
-}
-
 export const fetchCurrentAccount = createAsyncThunk(
-  'currentAccount/fetchCurrentAccount',
+  "currentAccount/fetchCurrentAccount",
   async (id: number | null) => {
-    try {
-      const response = await axios.get<FetchCurrentAccountResponse>(
-        `/api/user/accounts/${id}`
-      );
-      return response.data.account;
-    } catch (error) {
-      console.log(error);
-      throw error;
+    if (!id) {
+      return null;
     }
+    const { account } = await getAccountByIdAction(id);
+    return account;
   }
 );
 
 const accountSlice = createSlice({
-  name: 'currentAccount',
+  name: "currentAccount",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -41,6 +33,11 @@ const accountSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(fetchCurrentAccount.fulfilled, (state, action) => {
+        if (!action.payload) {
+          state.currentAccount = null;
+          state.isLoading = false;
+          return;
+        }
         state.currentAccount = action.payload;
         state.isLoading = false;
       })

@@ -12,7 +12,9 @@ import { MONTHS_OF_THE_YEAR } from "@/lib/utils";
 import CreateUserAccountSchema, {
   CreateUserAccountSchemaType,
 } from "@/schemas/CreateUserAccountSchema";
-import CreateUserAccountOptions from "@/lib/CreateUserAccountOptions";
+import CreateUserAccountOptions, {
+  getKeyByValue,
+} from "@/lib/CreateUserAccountOptions";
 import { UserAccountCategory } from "@prisma/client";
 
 export const loginAction = async ({ email, password }: LoginSchemaType) => {
@@ -422,5 +424,92 @@ export const registerBankAccountAction = async ({
 
   return {
     account: createdAccount,
+  };
+};
+
+export const getAccountByIdAction = async (accountId: number) => {
+  if (!accountId) {
+    return { error: "Account ID not found." };
+  }
+
+  const currentAccount = await db.userAccount.findUnique({
+    where: {
+      id: accountId,
+    },
+  });
+
+  if (!currentAccount) {
+    return { error: "Account not found." };
+  }
+
+  return {
+    account: currentAccount,
+  };
+};
+
+export const updateAccountByIdAction = async ({
+  accountId,
+  balance,
+  category,
+  name,
+}: CreateUserAccountSchemaType & { accountId: number | null }) => {
+  if (!accountId) {
+    return { error: "Account ID not found." };
+  }
+
+  let result = CreateUserAccountSchema.safeParse({ balance, category, name });
+
+  if (!result.success) {
+    return { error: "Unprocessable entity." };
+  }
+
+  const {
+    balance: balanceResult,
+    category: categoryResult,
+    name: nameResult,
+  } = result.data;
+
+  const mappedCategory = getKeyByValue(
+    CreateUserAccountOptions,
+    categoryResult
+  );
+
+  const updatedAccount = await db.userAccount.update({
+    where: {
+      id: accountId,
+    },
+    data: {
+      balance: balanceResult,
+      category: mappedCategory as UserAccountCategory,
+      name: nameResult,
+    },
+  });
+
+  if (!updatedAccount) {
+    return { error: "Error updating account." };
+  }
+
+  return {
+    account: updatedAccount,
+  };
+};
+
+export const deleteAccountByIdAction = async (accountId: number) => {
+  if (!accountId) {
+    return { error: "Account ID not found." };
+  }
+
+  const deletedAccount = await db.userAccount.delete({
+    where: {
+      id: accountId,
+    },
+  });
+
+  if (!deletedAccount) {
+    return { error: "Error deleting account." };
+  }
+
+  return {
+    account: deletedAccount,
   };
 };

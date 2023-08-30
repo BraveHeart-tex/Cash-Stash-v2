@@ -1,6 +1,5 @@
 import {
   SelectTrigger,
-  SelectValue,
   SelectContent,
   SelectGroup,
   SelectLabel,
@@ -15,7 +14,7 @@ interface IFromSelectProps {
   defaultValue: string;
   onChange?: (value: string) => void;
   selectOptions: string[];
-  defaultLabel: string;
+  defaultLabel?: string;
   name: string;
   label: string;
   placeholder: string;
@@ -26,6 +25,7 @@ interface IFromSelectProps {
     };
   };
   className?: string;
+  value?: string;
 }
 
 const FormSelect = ({
@@ -35,6 +35,7 @@ const FormSelect = ({
   errors,
   className,
   defaultValue,
+  value,
   onChange,
   selectOptions,
 }: IFromSelectProps) => {
@@ -43,15 +44,15 @@ const FormSelect = ({
       <div className="flex flex-col gap-1">
         <Label>{label}</Label>
         <Select
-          defaultValue={defaultValue}
+          id={name}
+          value={value}
           onValueChange={(value: string) => {
             onChange && onChange(value);
+            register(name);
           }}
           {...register(name)}
         >
-          <SelectTrigger className={className}>
-            <SelectValue placeholder="All Accounts" />
-          </SelectTrigger>
+          <SelectTrigger className={className}>{value}</SelectTrigger>
           <SelectContent>
             <SelectGroup>
               <SelectLabel>{label}</SelectLabel>

@@ -1,37 +1,28 @@
 "use client";
-import {
-  Button,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Input,
-  Select,
-  Stack,
-  useToast,
-} from "@chakra-ui/react";
-import React, { useEffect } from "react";
-import useColorModeStyles from "../../../hooks/useColorModeStyles";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useEffect, useTransition } from "react";
+import { useForm } from "react-hook-form";
 import CreateUserAccountOptions, {
   getOptionLabel,
 } from "@/lib/CreateUserAccountOptions";
 import FormLoadingSpinner from "../../FormLoadingSpinner";
-import axios from "axios";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import { fetchCurrentAccount } from "../../../redux/features/currentAccountSlice";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
+import { fetchCurrentAccount } from "@/app/redux/features/currentAccountSlice";
 import {
   fetchCurrentUserAccounts,
   setIsEditAccountModalOpen,
-} from "../../../redux/features/userAccountSlice";
+} from "@/app/redux/features/userAccountSlice";
+import FormInput from "@/components/FormInput";
+import FormSelect from "@/components/FormSelect";
+import { useToast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { updateAccountByIdAction } from "@/actions";
+import CreateUserAccountSchema, {
+  CreateUserAccountSchemaType,
+} from "@/schemas/CreateUserAccountSchema";
 
 interface IEditUserAccountFormProps {
   selectedAccountId: number | null;
-}
-
-interface FormValues {
-  name: string;
-  category: string;
-  balance: number;
 }
 
 const EditUserAccountForm = ({
@@ -45,21 +36,25 @@ const EditUserAccountForm = ({
 
   const accountOptions = Object.values(CreateUserAccountOptions);
 
-  const { btnColor, btnBgColor, btnHoverBgColor } = useColorModeStyles();
-  const toast = useToast();
+  const { toast } = useToast();
 
   const {
     register,
     handleSubmit,
     formState: { errors, isLoading, isSubmitting },
     setValue,
-  } = useForm<FormValues>({
+    getValues,
+  } = useForm<CreateUserAccountSchemaType>({
     defaultValues: {
       balance: 10,
       category: "",
       name: "",
     },
+    // @ts-ignore
+    resolver: zodResolver(CreateUserAccountSchema),
   });
+
+  let [isPending, startTransition] = useTransition();
 
   const loading = isCurrentAccountLoading || isLoading;
 
@@ -78,118 +73,112 @@ const EditUserAccountForm = ({
       );
       setValue("balance", currentAccount.balance);
     }
+
+    return () => {
+      setValue("name", "");
+      setValue("category", "");
+      setValue("balance", 0);
+    };
   }, [currentAccount, setValue]);
 
-  const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    try {
-      const response = await axios.put(
-        `/api/user/accounts/${selectedAccountId}`,
-        data
-      );
+  const onSubmit = async (data: CreateUserAccountSchemaType) => {
+    if (hasMadeNoChanges()) {
+      toast({
+        title: "No changes made.",
+        description: "You have not made any changes.",
+        variant: "default",
+        duration: 5000,
+      });
+      return;
+    }
 
-      if (response.status === 200) {
+    startTransition(async () => {
+      const result = await updateAccountByIdAction({
+        accountId: selectedAccountId,
+        ...data,
+      });
+
+      if (result.error) {
+        toast({
+          title: "There was an error while updating your account.",
+          description: result.error,
+          variant: "destructive",
+          duration: 5000,
+        });
+      } else {
         dispatch(fetchCurrentUserAccounts());
         toast({
           title: "Account updated.",
-          description:
-            "Account has been updated successfully. You can close this window now.",
-          status: "success",
+          description: "Account has been updated successfully.",
+          variant: "default",
           duration: 5000,
-          isClosable: true,
-          position: "top",
         });
         dispatch(setIsEditAccountModalOpen(false));
       }
-    } catch (error: any) {
-      toast({
-        title: "An error occurred.",
-        description: error.response?.data.error,
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "top",
-      });
-    }
+    });
   };
 
   if (loading) {
     return <FormLoadingSpinner />;
   }
 
+  const hasMadeNoChanges = () => {
+    const { name, category, balance } = getValues();
+    if (!currentAccount) {
+      return true;
+    }
+
+    return (
+      name === currentAccount?.name &&
+      category ===
+        getOptionLabel(CreateUserAccountOptions, currentAccount?.category!) &&
+      balance === currentAccount?.balance
+    );
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Stack spacing={4}>
-        {/* @ts-ignore */}
-        <FormControl isRequired isInvalid={errors.name}>
-          <FormLabel>Account Name</FormLabel>
-          <Input
-            type="text"
-            id="name"
-            {...register("name", {
-              required: "Account name is required.",
-            })}
-          />
-          <FormErrorMessage>
-            {/* @ts-ignore */}
-            {errors.name && errors.name.message}
-          </FormErrorMessage>
-        </FormControl>
-        <FormControl isRequired>
-          <FormLabel>Account Type</FormLabel>
-          <Select
-            id="category"
-            placeholder="Select your account type"
-            {...register("category", {
-              required: "Category is required.",
-            })}
-          >
-            {accountOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </Select>
-          <FormErrorMessage>
-            {/* @ts-ignore */}
-            {errors.category && errors.category.message}
-          </FormErrorMessage>
-        </FormControl>
-        {/* @ts-ignore */}
-        <FormControl isRequired isInvalid={errors.balance}>
-          <FormLabel>Balance (₺)</FormLabel>
-          <Input
-            type="number"
-            id="balance"
-            {...register("balance", {
-              required: "Balance is required.",
-              min: {
-                value: 10,
-                message: "Balance must be at least $10.",
-              },
-              max: {
-                value: 1000000,
-                message: "Balance cannot exceed $1,000,000.",
-              },
-            })}
-          />
-          <FormErrorMessage>
-            {/* @ts-ignore */}
-            {errors.balance && errors.balance.message}
-          </FormErrorMessage>
-        </FormControl>
-        <Button
-          color={btnColor}
-          bg={btnBgColor}
-          _hover={{
-            bg: btnHoverBgColor,
+      <div className="grid grid-cols-1 gap-4">
+        <FormInput
+          name={"name"}
+          label={"Account Name"}
+          placeholder={"Account name"}
+          type={"text"}
+          register={register}
+          errors={errors}
+        />
+        <FormSelect
+          defaultValue={currentAccount?.category!}
+          value={getOptionLabel(
+            CreateUserAccountOptions,
+            currentAccount?.category!
+          )}
+          selectOptions={accountOptions}
+          name={"category"}
+          label={"Account Type"}
+          placeholder={"Select your account type"}
+          register={register}
+          errors={errors}
+          onChange={(value) => {
+            setValue("category", value);
           }}
-          type="submit"
-          isLoading={isSubmitting}
-          isDisabled={isLoading}
-        >
-          Update
-        </Button>
-      </Stack>
+        />
+        <FormInput
+          name={"balance"}
+          label={"Account Balance ₺"}
+          placeholder={"Balance (₺)"}
+          type={"number"}
+          register={register}
+          errors={errors}
+        />
+        {isPending ? (
+          <Button disabled={isPending}>Loading...</Button>
+        ) : (
+          <Button type="submit" disabled={isSubmitting || isPending}>
+            Update Account
+          </Button>
+        )}
+      </div>
     </form>
   );
 };

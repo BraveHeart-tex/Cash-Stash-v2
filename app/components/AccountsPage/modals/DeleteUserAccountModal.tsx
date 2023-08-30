@@ -1,112 +1,94 @@
-'use client';
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  Button,
-  Heading,
-  Flex,
-  useToast,
-} from '@chakra-ui/react';
-import React from 'react';
-import useColorModeStyles from '../../../hooks/useColorModeStyles';
-import axios from 'axios';
-import { useForm } from 'react-hook-form';
-import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+"use client";
+
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import {
   fetchCurrentUserAccounts,
   setIsDeleteAccountModalOpen,
-} from '../../../redux/features/userAccountSlice';
+} from "@/app/redux/features/userAccountSlice";
+import { useToast } from "@/components/ui/use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { useTransition } from "react";
+import { deleteAccountByIdAction } from "@/actions";
 
 const DeleteUserAccountModal = () => {
-  const { headingColor } = useColorModeStyles();
+  let [isPending, startTransition] = useTransition();
   const dispatch = useAppDispatch();
   const { isDeleteAccountModalOpen, selectedUserAccountId } = useAppSelector(
     (state) => state.userAccountReducer
   );
-  const toast = useToast();
-
-  const {
-    handleSubmit,
-    formState: { isLoading, isSubmitting },
-  } = useForm();
+  const { toast } = useToast();
 
   const onSubmit = async (id: number) => {
-    try {
-      await axios.delete(`/api/user/accounts/${id}`);
-      dispatch(fetchCurrentUserAccounts());
-      toast({
-        title: 'Account deleted.',
-        description: 'The account has been deleted.',
-        status: 'success',
-        duration: 5000,
-        isClosable: true,
-        position: 'top',
-      });
-      dispatch(setIsDeleteAccountModalOpen(false));
-    } catch (error) {
-      toast({
-        title: 'An error occurred.',
-        description: 'Unable to delete account. Please try again later.',
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-        position: 'top',
-      });
-      console.log(error);
-    }
+    startTransition(async () => {
+      const result = await deleteAccountByIdAction(id);
+
+      if (result.error) {
+        console.log(result.error);
+        toast({
+          title: "An error occurred.",
+          description: result.error,
+          variant: "destructive",
+          duration: 5000,
+        });
+      } else {
+        dispatch(fetchCurrentUserAccounts());
+        toast({
+          title: "Account deleted.",
+          description: "The account has been deleted.",
+          variant: "default",
+          duration: 5000,
+        });
+        dispatch(setIsDeleteAccountModalOpen(false));
+      }
+    });
   };
 
   return (
-    <Modal
-      isOpen={isDeleteAccountModalOpen}
-      onClose={() => dispatch(setIsDeleteAccountModalOpen(false))}
-      isCentered
+    <Dialog
+      open={isDeleteAccountModalOpen}
+      onOpenChange={(isOpen) => {
+        if (!isOpen) {
+          dispatch(setIsDeleteAccountModalOpen(false));
+        }
+      }}
     >
-      <ModalOverlay bg={'rgba(0, 0, 0, 0.25)'} />
-      <ModalContent>
-        <ModalHeader color={headingColor}>Delete Account:</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
-          <Flex
-            justifyContent={'center'}
-            alignItems={'center'}
-            flexDirection={'column'}
-            gap={4}
-          >
-            <Heading as={'h1'} fontSize={'xl'}>
-              Are you sure you want to delete this account?
-            </Heading>
-            <Heading as={'h2'} fontSize={'md'}>
-              This action cannot be undone.
-            </Heading>
-            <Button
-              colorScheme='red'
-              isDisabled={isLoading || isSubmitting}
-              isLoading={isLoading || isSubmitting}
-              type='submit'
-              onClick={handleSubmit(() =>
-                onSubmit(selectedUserAccountId as number)
-              )}
-            >
-              Delete
-            </Button>
-          </Flex>
-        </ModalBody>
-        <ModalFooter>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Delete Account</DialogTitle>
+          <DialogDescription>
+            <p>Are you sure you want to delete this account?</p>
+            <p className="mt-2 font-semibold underline">
+              Please note that this action cannot be undone.
+            </p>
+          </DialogDescription>
+        </DialogHeader>
+
+        <DialogFooter>
           <Button
-            variant='ghost'
+            disabled={isPending}
+            variant="destructive"
+            type="submit"
+            onClick={() => onSubmit(selectedUserAccountId as number)}
+          >
+            Delete
+          </Button>
+          <Button
+            variant="ghost"
             onClick={() => dispatch(setIsDeleteAccountModalOpen(false))}
           >
             Cancel
           </Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 
