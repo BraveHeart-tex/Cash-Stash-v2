@@ -148,13 +148,12 @@ const EditUserAccountForm = ({
           errors={errors}
         />
         <FormSelect
-          defaultValue={currentAccount?.category!}
-          value={getOptionLabel(
+          defaultValue={getOptionLabel(
             CreateUserAccountOptions,
             currentAccount?.category!
           )}
           selectOptions={accountOptions}
-          name={"category"}
+          nameParam={"category"}
           label={"Account Type"}
           placeholder={"Select your account type"}
           register={register}

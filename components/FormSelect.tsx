@@ -5,6 +5,7 @@ import {
   SelectLabel,
   SelectItem,
   Select,
+  SelectValue,
 } from "@/components/ui/select";
 import { UseFormRegister } from "react-hook-form";
 import FormError from "./FormError";
@@ -15,7 +16,7 @@ interface IFromSelectProps {
   onChange?: (value: string) => void;
   selectOptions: string[];
   defaultLabel?: string;
-  name: string;
+  nameParam: string;
   label: string;
   placeholder: string;
   register: UseFormRegister<any>;
@@ -29,7 +30,7 @@ interface IFromSelectProps {
 }
 
 const FormSelect = ({
-  name,
+  nameParam,
   label,
   register,
   errors,
@@ -40,35 +41,35 @@ const FormSelect = ({
   selectOptions,
 }: IFromSelectProps) => {
   return (
-    <>
-      <div className="flex flex-col gap-1">
-        <Label>{label}</Label>
-        <Select
-          id={name}
-          value={value}
-          onValueChange={(value: string) => {
-            onChange && onChange(value);
-            register(name);
-          }}
-          {...register(name)}
-        >
-          <SelectTrigger className={className}>{value}</SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>{label}</SelectLabel>
-              {selectOptions.map((option) => (
-                <SelectItem key={option} value={option}>
-                  {option}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-        {errors[name] && errors[name].message && (
-          <FormError errorMessage={errors[name].message} />
-        )}
-      </div>
-    </>
+    <div className="flex flex-col gap-1">
+      <Label>{label}</Label>
+      <Select
+        value={value}
+        onValueChange={(value: string) => {
+          onChange && onChange(value);
+        }}
+        {...register(nameParam)}
+        name={nameParam}
+        defaultValue={defaultValue}
+      >
+        <SelectTrigger className={className}>
+          <SelectValue placeholder="Account Type" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>{label}</SelectLabel>
+            {selectOptions.map((option) => (
+              <SelectItem key={option} value={option}>
+                {option}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+      {errors[nameParam] && errors[nameParam].message && (
+        <FormError errorMessage={errors[nameParam].message} />
+      )}
+    </div>
   );
 };
 export default FormSelect;

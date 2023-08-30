@@ -7,8 +7,8 @@ import DeleteUserAccountModal from "./modals/DeleteUserAccountModal";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import {
   setIsEditAccountModalOpen,
-  setIsDeleteAccountModalOpen,
   SerializedUserAccount,
+  fetchCurrentUserAccounts,
 } from "@/app/redux/features/userAccountSlice";
 import {
   Card,
@@ -27,6 +27,9 @@ import {
   DotsHorizontalIcon,
   Pencil1Icon,
 } from "@radix-ui/react-icons";
+import { showGenericConfirm } from "@/app/redux/features/genericConfirmSlice";
+import { deleteAccountByIdAction } from "@/actions";
+import { useToast } from "@/components/ui/use-toast";
 
 interface IAccountInformationProps {
   userAccounts: SerializedUserAccount[] | undefined | null;
@@ -34,9 +37,44 @@ interface IAccountInformationProps {
 
 const AccountInformation = ({ userAccounts }: IAccountInformationProps) => {
   const dispatch = useAppDispatch();
+  const { toast } = useToast();
   const { isEditAccountModalOpen, isDeleteAccountModalOpen } = useAppSelector(
     (state) => state.userAccountReducer
   );
+
+  const handleDeleteAccount = (id: number) => {
+    dispatch(
+      showGenericConfirm({
+        title: "Delete Account",
+        message: "Are you sure you want to delete this account?",
+        primaryActionLabel: "Delete",
+        primaryAction: async () => deleteAccountByIdAction(id),
+        resolveCallback(
+          result: Awaited<ReturnType<typeof deleteAccountByIdAction>>,
+          cleanUp
+        ) {
+          if (result.error) {
+            console.log(result.error);
+            toast({
+              title: "An error occurred.",
+              description: result.error,
+              variant: "destructive",
+              duration: 5000,
+            });
+          } else {
+            dispatch(fetchCurrentUserAccounts());
+            toast({
+              title: "Account deleted.",
+              description: "The account has been deleted.",
+              variant: "default",
+              duration: 5000,
+            });
+          }
+          dispatch(cleanUp());
+        },
+      })
+    );
+  };
 
   return (
     <>
@@ -86,15 +124,7 @@ const AccountInformation = ({ userAccounts }: IAccountInformationProps) => {
                           variant={"ghost"}
                           size={"icon"}
                           aria-label="Delete user account"
-                          onClick={() =>
-                            dispatch(
-                              setIsDeleteAccountModalOpen({
-                                isDeleteAccountModalOpen:
-                                  !isDeleteAccountModalOpen,
-                                selectedUserAccountId: userAccount.id,
-                              })
-                            )
-                          }
+                          onClick={() => handleDeleteAccount(userAccount.id)}
                           className="mr-2 flex items-center gap-2 w-full justify-start"
                         >
                           <Cross1Icon />

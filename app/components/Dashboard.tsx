@@ -17,6 +17,9 @@ import NotificationsAndReminders from "./NotificationAndReminders";
 import CreateReminderModal from "./Reminders/modals/CreateReminderModal";
 import EditReminderModal from "./Reminders/modals/EditReminderModal";
 import TransactionHistory from "./TransactionHistory";
+import { Button } from "@/components/ui/button";
+import { showGenericConfirm } from "../redux/features/genericConfirmSlice";
+import { getCurrentUserAction } from "@/actions";
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();
@@ -29,13 +32,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     dispatch(fetchTransactions());
-  }, [dispatch]);
-
-  useEffect(() => {
     dispatch(fetchMonthlyTransactionsData());
-  }, [dispatch]);
-
-  useEffect(() => {
     dispatch(fetchInsightsData());
   }, [dispatch]);
 
@@ -91,6 +88,20 @@ const Dashboard = () => {
     },
   ];
 
+  const handleShowGenericConfirm = () => {
+    dispatch(
+      showGenericConfirm({
+        title: "Test",
+        message: "Test",
+        primaryActionLabel: "Test",
+        primaryAction: async () => await getCurrentUserAction(),
+        resolveCallback(result) {
+          console.log(result);
+        },
+      })
+    );
+  };
+
   return (
     <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
       <Navigation />
@@ -104,6 +115,9 @@ const Dashboard = () => {
           </div>
         ))}
       </div>
+      <Button onClick={() => handleShowGenericConfirm()}>
+        Generic Confirm Test
+      </Button>
     </div>
   );
 };

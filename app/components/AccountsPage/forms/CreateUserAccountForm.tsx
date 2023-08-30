@@ -76,7 +76,7 @@ const CreateUserAccountForm = () => {
           defaultValue={"Checking Account"}
           selectOptions={accountOptions}
           defaultLabel={"Account Type"}
-          name={"category"}
+          nameParam={"category"}
           label={"Account Type"}
           placeholder={"Select your account type"}
           register={register}

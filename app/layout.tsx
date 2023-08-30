@@ -5,6 +5,7 @@ import { Providers as ReduxProviders } from "@/app/redux/provider";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
 import { getCurrentUserAction } from "@/actions";
+import GenericConfirmDialog from "@/components/GenericConfirmDialog";
 
 const RobotoFont = Roboto({
   weight: ["300", "400", "700"],
@@ -30,6 +31,7 @@ export default async function RootLayout({ children }: ILayoutProps) {
             <ThemeProvider enableSystem>{children}</ThemeProvider>
           </ChakraUIProviders>
           <Toaster />
+          <GenericConfirmDialog />
         </ReduxProviders>
       </body>
     </html>
