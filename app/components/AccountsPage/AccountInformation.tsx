@@ -3,7 +3,6 @@ import CreateUserAccountOptions, {
   getOptionLabel,
 } from "@/lib/CreateUserAccountOptions";
 import EditUserAccountModal from "./modals/EditUserAccountModal";
-import DeleteUserAccountModal from "./modals/DeleteUserAccountModal";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import {
   setIsEditAccountModalOpen,
@@ -16,20 +15,11 @@ import {
   CardDescription,
   CardHeader,
 } from "@/components/ui/card";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import {
-  Cross1Icon,
-  DotsHorizontalIcon,
-  Pencil1Icon,
-} from "@radix-ui/react-icons";
 import { showGenericConfirm } from "@/app/redux/features/genericConfirmSlice";
 import { deleteAccountByIdAction } from "@/actions";
 import { useToast } from "@/components/ui/use-toast";
+import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
+import ActionPopover from "@/components/ActionPopover";
 
 interface IAccountInformationProps {
   userAccounts: SerializedUserAccount[] | undefined | null;
@@ -38,9 +28,33 @@ interface IAccountInformationProps {
 const AccountInformation = ({ userAccounts }: IAccountInformationProps) => {
   const dispatch = useAppDispatch();
   const { toast } = useToast();
-  const { isEditAccountModalOpen, isDeleteAccountModalOpen } = useAppSelector(
+  const { isEditAccountModalOpen } = useAppSelector(
     (state) => state.userAccountReducer
   );
+
+  const handleActionCallback = (
+    result: Awaited<ReturnType<typeof deleteAccountByIdAction>>,
+    cleanUp: ActionCreatorWithoutPayload<"genericConfirm/cleanUp">
+  ) => {
+    if (result.error) {
+      console.log(result.error);
+      toast({
+        title: "An error occurred.",
+        description: result.error,
+        variant: "destructive",
+        duration: 5000,
+      });
+    } else {
+      dispatch(fetchCurrentUserAccounts());
+      toast({
+        title: "Account deleted.",
+        description: "The account has been deleted.",
+        variant: "default",
+        duration: 5000,
+      });
+      dispatch(cleanUp());
+    }
+  };
 
   const handleDeleteAccount = (id: number) => {
     dispatch(
@@ -49,29 +63,7 @@ const AccountInformation = ({ userAccounts }: IAccountInformationProps) => {
         message: "Are you sure you want to delete this account?",
         primaryActionLabel: "Delete",
         primaryAction: async () => deleteAccountByIdAction(id),
-        resolveCallback(
-          result: Awaited<ReturnType<typeof deleteAccountByIdAction>>,
-          cleanUp
-        ) {
-          if (result.error) {
-            console.log(result.error);
-            toast({
-              title: "An error occurred.",
-              description: result.error,
-              variant: "destructive",
-              duration: 5000,
-            });
-          } else {
-            dispatch(fetchCurrentUserAccounts());
-            toast({
-              title: "Account deleted.",
-              description: "The account has been deleted.",
-              variant: "default",
-              duration: 5000,
-            });
-          }
-          dispatch(cleanUp());
-        },
+        resolveCallback: handleActionCallback,
       })
     );
   };
@@ -84,56 +76,20 @@ const AccountInformation = ({ userAccounts }: IAccountInformationProps) => {
             .sort((a, b) => a.id - b.id)
             .map((userAccount) => (
               <Card key={userAccount.id} className="relative">
-                <Popover>
-                  <PopoverTrigger className="absolute top-2 right-2 mb-2">
-                    <Button
-                      variant={"ghost"}
-                      size={"icon"}
-                      aria-label="Account actions"
-                      className="focus:outline-none outline-none"
-                    >
-                      <DotsHorizontalIcon />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent align="start">
-                    <h3 className="text-center font-bold text-primary">
-                      Account Actions
-                    </h3>
-                    <div className="grid grid-cols-1 gap-1">
-                      <div className="flex items-center">
-                        <Button
-                          variant={"ghost"}
-                          size={"icon"}
-                          aria-label="Edit user account"
-                          onClick={() =>
-                            dispatch(
-                              setIsEditAccountModalOpen({
-                                isEditAccountModalOpen: !isEditAccountModalOpen,
-                                selectedUserAccountId: userAccount.id,
-                              })
-                            )
-                          }
-                          className="mr-2 flex items-center gap-2 w-full justify-start"
-                        >
-                          <Pencil1Icon className="h-5 w-5" />
-                          <span className="text-[16px]">Edit</span>
-                        </Button>
-                      </div>
-                      <div className="flex items-center">
-                        <Button
-                          variant={"ghost"}
-                          size={"icon"}
-                          aria-label="Delete user account"
-                          onClick={() => handleDeleteAccount(userAccount.id)}
-                          className="mr-2 flex items-center gap-2 w-full justify-start"
-                        >
-                          <Cross1Icon />
-                          <span className="text-[16px]">Delete</span>
-                        </Button>
-                      </div>
-                    </div>
-                  </PopoverContent>
-                </Popover>
+                <ActionPopover
+                  popoverHeading={"Account Actions"}
+                  onEditActionClick={() => {
+                    dispatch(
+                      setIsEditAccountModalOpen({
+                        isEditAccountModalOpen: !isEditAccountModalOpen,
+                        selectedUserAccountId: userAccount.id,
+                      })
+                    );
+                  }}
+                  onDeleteActionClick={() =>
+                    handleDeleteAccount(userAccount.id)
+                  }
+                />
                 <CardHeader className="text-primary">
                   <h2 className="text-lg font-bold">{userAccount.name}</h2>
                   <CardDescription>
@@ -164,7 +120,6 @@ const AccountInformation = ({ userAccounts }: IAccountInformationProps) => {
         )}
       </div>
       <EditUserAccountModal />
-      <DeleteUserAccountModal />
     </>
   );
 };

@@ -513,3 +513,64 @@ export const deleteAccountByIdAction = async (accountId: number) => {
     account: deletedAccount,
   };
 };
+
+export const getBudgetByIdAction = async (budgetId: number) => {
+  if (!budgetId) {
+    return { error: "Budget ID not found." };
+  }
+
+  const currentBudget = await db.budget.findUnique({
+    where: {
+      id: budgetId,
+    },
+  });
+
+  if (!currentBudget) {
+    return { error: "Budget not found." };
+  }
+
+  return {
+    budget: currentBudget,
+  };
+};
+
+export const deleteBudgetByIdAction = async (budgetId: number) => {
+  if (!budgetId) {
+    return { error: "Budget ID not found." };
+  }
+
+  const deletedBudget = await db.budget.delete({
+    where: {
+      id: budgetId,
+    },
+  });
+
+  if (!deletedBudget) {
+    return { error: "Error deleting budget." };
+  }
+
+  return {
+    budget: deletedBudget,
+  };
+};
+
+// export const updateBudgetByIdAction = async (budgetId: number) => {
+//   if (!budgetId) {
+//     return { error: "Budget ID not found." };
+//   }
+
+//   const updatedBudget = await db.budget.update({
+//     where: {
+//       id: budgetId,
+//     },
+//     data: {},
+//   });
+
+//   if (!updatedBudget) {
+//     return { error: "Error updating budget." };
+//   }
+
+//   return {
+//     budget: updatedBudget,
+//   };
+// };

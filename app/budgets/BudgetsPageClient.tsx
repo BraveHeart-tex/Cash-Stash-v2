@@ -1,125 +1,50 @@
-'use client';
-import Navigation from '../components/Navigation';
-import {
-  Box,
-  Button,
-  Container,
-  Heading,
-  SimpleGrid,
-  Spinner,
-  useColorMode,
-  Text,
-} from '@chakra-ui/react';
-import BudgetCards from '../components/BudgetsPage/BudgetCards';
-import CreateBudgetModal from '../components/BudgetsPage/modals/CreateBudgetModal';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { useEffect } from 'react';
-import { fetchBudgets } from '../redux/features/budgetSlice';
-import { setCreateBudgetModalOpen } from '../redux/features/budgetSlice';
+"use client";
+import Navigation from "@/app/components/Navigation";
+import BudgetCards from "@/app/components/BudgetsPage/BudgetCards";
+import CreateBudgetModal from "@/app/components/BudgetsPage/modals/CreateBudgetModal";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
+import { useEffect } from "react";
+import { fetchBudgets } from "@/app/redux/features/budgetSlice";
+import { setCreateBudgetModalOpen } from "@/app/redux/features/budgetSlice";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const BudgetsPageClient = () => {
   const { budgets, isLoading } = useAppSelector((state) => state.budgetReducer);
   const dispatch = useAppDispatch();
-  const { colorMode } = useColorMode();
 
   useEffect(() => {
     dispatch(fetchBudgets());
   }, [dispatch]);
 
-  if (!isLoading && !budgets) {
-    return (
-      <Container maxW={'8xl'} p={4}>
-        <Navigation />
-        <Heading as='h1' mb={4}>
-          Budgets
-        </Heading>
-        <Box
-          display={'flex'}
-          justifyContent={'center'}
-          alignItems={'center'}
-          flexDirection={'column'}
-          gap={4}
-        >
-          <Heading
-            display='inline-block'
-            as='h2'
-            size='2xl'
-            bgGradient={
-              colorMode === 'light'
-                ? 'linear(to-r, gray.600, gray.800)'
-                : 'linear(to-r, gray.200, gray.400)'
-            }
-            backgroundClip='text'
-          >
-            No budgets were found.
-          </Heading>
-          <Text>Add a budget to get started!</Text>
-          <Button
-            bg={colorMode === 'light' ? 'gray.200' : 'gray.700'}
-            _hover={{
-              bg: colorMode === 'light' ? 'gray.300' : 'gray.600',
-            }}
-            color={colorMode === 'light' ? 'gray.800' : 'gray.50'}
-            onClick={() => dispatch(setCreateBudgetModalOpen(true))}
-          >
-            Create Budget
-          </Button>
-        </Box>
-        <CreateBudgetModal />
-      </Container>
-    );
-  }
-
   return (
-    <Container maxW={'8xl'} p={4}>
+    <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
       <Navigation />
-      <Heading as='h1' mb={4}>
-        Budgets
-      </Heading>
-      <Box
-        display={'flex'}
-        justifyContent={'center'}
-        alignItems={'center'}
-        flexDirection={'column'}
-        gap={4}
-      >
-        {budgets && budgets.length === 0 && (
-          <Box>
-            <Text>No budgets found. Add a budget to get started!</Text>
-          </Box>
-        )}
+      <h3 className="text-4xl mb-4 text-primary">Budgets</h3>
+      {!isLoading && budgets?.length === 0 && (
+        <div className="flex flex-col items-center justify-center gap-4">
+          <h2 className="inline-block text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-600 to-gray-800">
+            No budgets were found.
+          </h2>
+          <p>Add a budget to get started!</p>
+        </div>
+      )}
+      <div className="flex flex-col gap-4 items-center justify-center">
         {isLoading ? (
-          <Box
-            height={'50vh'}
-            display={'flex'}
-            justifyContent={'center'}
-            alignItems={'center'}
-            flexDirection={'column'}
-            gap={4}
-          >
-            <Text>Loading budgets...</Text>
-            <Spinner />
-          </Box>
+          <Skeleton className="h-[200px] w-full" />
         ) : (
-          <Box width={'100%'}>
-            <SimpleGrid columns={{ base: 1, md: 2, xl: 3 }} spacing={4}>
+          <div className="w-full">
+            <div className="grid grid-cols md:grid-cols-2 xl:grid-cols-3 gap-4">
               <BudgetCards budgets={budgets} />
-            </SimpleGrid>
-          </Box>
+            </div>
+          </div>
         )}
-        <Button
-          bg={colorMode === 'light' ? 'gray.200' : 'gray.700'}
-          _hover={{
-            bg: colorMode === 'light' ? 'gray.300' : 'gray.600',
-          }}
-          color={colorMode === 'light' ? 'gray.800' : 'gray.50'}
-          onClick={() => dispatch(setCreateBudgetModalOpen(true))}
-        >
+        <Button onClick={() => dispatch(setCreateBudgetModalOpen(true))}>
           Create Budget
         </Button>
-      </Box>
+      </div>
       <CreateBudgetModal />
-    </Container>
+    </div>
   );
 };
 

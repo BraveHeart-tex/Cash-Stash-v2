@@ -2,7 +2,7 @@ import { getBudgetsByCurrentUserAction } from "@/actions/index";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { Budget } from "@prisma/client";
 
-type SerializedBudget = Omit<Budget, "createdAt" | "updatedAt"> & {
+export type SerializedBudget = Omit<Budget, "createdAt" | "updatedAt"> & {
   createdAt: string;
   updatedAt: string;
 };
