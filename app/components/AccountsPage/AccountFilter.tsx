@@ -15,6 +15,7 @@ import {
   SelectLabel,
   SelectItem,
 } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const AccountsFilter = () => {
   const { currentUserAccounts: accounts, isLoading } = useAppSelector(
@@ -28,12 +29,8 @@ const AccountsFilter = () => {
 
   const [selectedAccountType, setSelectedAccountType] = useState("");
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center gap-4">
-        <p>Loading accounts... </p>
-      </div>
-    );
+  if (isLoading && !accounts) {
+    return <Skeleton className="w-full h-20" />;
   }
 
   if (!isLoading && !accounts) {

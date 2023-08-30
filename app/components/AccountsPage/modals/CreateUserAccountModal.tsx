@@ -1,52 +1,37 @@
-'use client';
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  Button,
-} from '@chakra-ui/react';
-import React from 'react';
-import useColorModeStyles from '../../../hooks/useColorModeStyles';
-import CreateUserAccountForm from '../forms/CreateUserAccountForm';
-import { useAppDispatch, useAppSelector } from '@/app/redux/hooks';
-import { setIsCreateAccountModalOpen } from '@/app/redux/features/userAccountSlice';
+"use client";
+import CreateUserAccountForm from "../forms/CreateUserAccountForm";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
+import { setIsCreateAccountModalOpen } from "@/app/redux/features/userAccountSlice";
+import { Dialog, DialogContent, DialogFooter } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 const CreateUserAccountModal = () => {
-  const { headingColor } = useColorModeStyles();
-
   const dispatch = useAppDispatch();
   const { isCreateAccountModalOpen } = useAppSelector(
     (state) => state.userAccountReducer
   );
 
   return (
-    <Modal
-      isOpen={isCreateAccountModalOpen}
-      onClose={() => dispatch(setIsCreateAccountModalOpen(false))}
-      isCentered
+    <Dialog
+      open={isCreateAccountModalOpen}
+      onOpenChange={(isOpen) => {
+        if (!isOpen) {
+          dispatch(setIsCreateAccountModalOpen(false));
+        }
+      }}
     >
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader color={headingColor}>Create Account</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
-          <CreateUserAccountForm />
-        </ModalBody>
-        <ModalFooter>
+      <DialogContent>
+        <CreateUserAccountForm />
+        <DialogFooter>
           <Button
-            variant='ghost'
-            mr={3}
+            variant="secondary"
             onClick={() => dispatch(setIsCreateAccountModalOpen(false))}
           >
             Cancel
           </Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 
