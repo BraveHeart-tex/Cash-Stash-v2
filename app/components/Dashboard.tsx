@@ -65,7 +65,9 @@ const Dashboard = () => {
     },
     {
       title: "Transaction History",
-      data: <TransactionHistory transactions={transactions} />,
+      data: (
+        <TransactionHistory transactions={transactions} isLoading={isLoading} />
+      ),
     },
     {
       title: "Financial Insights",

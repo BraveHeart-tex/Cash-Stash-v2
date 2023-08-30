@@ -1,7 +1,8 @@
-import createTransaction from '@/app/actions/createTransaction';
-import getCurrentUser from '@/app/actions/getCurrentUser';
-import getCurrentUserTransactions from '@/app/actions/getCurrentUserTransactions';
-import { NextResponse } from 'next/server';
+import { getCurrentUserAction } from "@/actions";
+import createTransaction from "@/app/actions/createTransaction";
+import getCurrentUser from "@/app/actions/getCurrentUser";
+import getCurrentUserTransactions from "@/app/actions/getCurrentUserTransactions";
+import { NextResponse } from "next/server";
 
 // get all transactions
 export async function GET(request: Request) {
@@ -10,7 +11,7 @@ export async function GET(request: Request) {
   if (!currentUser) {
     return NextResponse.json(
       {
-        message: 'Unauthorized',
+        message: "Unauthorized",
       },
       {
         status: 401,
@@ -23,7 +24,7 @@ export async function GET(request: Request) {
   if (!transactions || transactions.length === 0) {
     return NextResponse.json(
       {
-        message: 'No transactions found',
+        message: "No transactions found",
       },
       {
         status: 404,
@@ -43,12 +44,12 @@ export async function GET(request: Request) {
 
 // create transaction
 export async function POST(request: Request) {
-  const currentUser = await getCurrentUser();
+  const { user: currentUser } = await getCurrentUserAction();
 
   if (!currentUser) {
     return NextResponse.json(
       {
-        message: 'Unauthorized',
+        message: "Unauthorized",
       },
       {
         status: 401,
@@ -59,12 +60,12 @@ export async function POST(request: Request) {
   const { amount, description, category, accountId, isIncome } =
     await request.json();
 
-  let IsIncomeParsed = isIncome === 'expense' ? false : true;
+  let IsIncomeParsed = isIncome === "expense" ? false : true;
 
   if (!amount || !description || !category || !accountId || !isIncome) {
     return NextResponse.json(
       {
-        message: 'Invalid request',
+        message: "Invalid request",
       },
       {
         status: 400,
@@ -85,7 +86,7 @@ export async function POST(request: Request) {
   // if it does, it means that the transaction failed
   // { message: 'Insufficient balance' }
 
-  if (typeof transaction !== 'object' || 'message' in transaction) {
+  if (typeof transaction !== "object" || "message" in transaction) {
     return NextResponse.json(
       {
         message: transaction.message,
@@ -99,7 +100,7 @@ export async function POST(request: Request) {
   if (!transaction) {
     return NextResponse.json(
       {
-        message: 'Something went wrong',
+        message: "Something went wrong",
       },
       {
         status: 500,
