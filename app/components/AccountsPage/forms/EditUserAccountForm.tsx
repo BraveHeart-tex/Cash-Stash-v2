@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import {
   Button,
   FormControl,
@@ -8,21 +8,21 @@ import {
   Select,
   Stack,
   useToast,
-} from '@chakra-ui/react';
-import React, { useEffect } from 'react';
-import useColorModeStyles from '../../../hooks/useColorModeStyles';
-import { useForm, SubmitHandler } from 'react-hook-form';
+} from "@chakra-ui/react";
+import React, { useEffect } from "react";
+import useColorModeStyles from "../../../hooks/useColorModeStyles";
+import { useForm, SubmitHandler } from "react-hook-form";
 import CreateUserAccountOptions, {
   getOptionLabel,
-} from '../../../utils/CreateUserAccountOptions';
-import FormLoadingSpinner from '../../FormLoadingSpinner';
-import axios from 'axios';
-import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { fetchCurrentAccount } from '../../../redux/features/currentAccountSlice';
+} from "@/lib/CreateUserAccountOptions";
+import FormLoadingSpinner from "../../FormLoadingSpinner";
+import axios from "axios";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { fetchCurrentAccount } from "../../../redux/features/currentAccountSlice";
 import {
   fetchCurrentUserAccounts,
   setIsEditAccountModalOpen,
-} from '../../../redux/features/userAccountSlice';
+} from "../../../redux/features/userAccountSlice";
 
 interface IEditUserAccountFormProps {
   selectedAccountId: number | null;
@@ -56,8 +56,8 @@ const EditUserAccountForm = ({
   } = useForm<FormValues>({
     defaultValues: {
       balance: 10,
-      category: '',
-      name: '',
+      category: "",
+      name: "",
     },
   });
 
@@ -71,12 +71,12 @@ const EditUserAccountForm = ({
 
   useEffect(() => {
     if (currentAccount) {
-      setValue('name', currentAccount.name);
+      setValue("name", currentAccount.name);
       setValue(
-        'category',
+        "category",
         getOptionLabel(CreateUserAccountOptions, currentAccount.category)
       );
-      setValue('balance', currentAccount.balance);
+      setValue("balance", currentAccount.balance);
     }
   }, [currentAccount, setValue]);
 
@@ -90,24 +90,24 @@ const EditUserAccountForm = ({
       if (response.status === 200) {
         dispatch(fetchCurrentUserAccounts());
         toast({
-          title: 'Account updated.',
+          title: "Account updated.",
           description:
-            'Account has been updated successfully. You can close this window now.',
-          status: 'success',
+            "Account has been updated successfully. You can close this window now.",
+          status: "success",
           duration: 5000,
           isClosable: true,
-          position: 'top',
+          position: "top",
         });
         dispatch(setIsEditAccountModalOpen(false));
       }
     } catch (error: any) {
       toast({
-        title: 'An error occurred.',
+        title: "An error occurred.",
         description: error.response?.data.error,
-        status: 'error',
+        status: "error",
         duration: 5000,
         isClosable: true,
-        position: 'top',
+        position: "top",
       });
     }
   };
@@ -123,10 +123,10 @@ const EditUserAccountForm = ({
         <FormControl isRequired isInvalid={errors.name}>
           <FormLabel>Account Name</FormLabel>
           <Input
-            type='text'
-            id='name'
-            {...register('name', {
-              required: 'Account name is required.',
+            type="text"
+            id="name"
+            {...register("name", {
+              required: "Account name is required.",
             })}
           />
           <FormErrorMessage>
@@ -137,10 +137,10 @@ const EditUserAccountForm = ({
         <FormControl isRequired>
           <FormLabel>Account Type</FormLabel>
           <Select
-            id='category'
-            placeholder='Select your account type'
-            {...register('category', {
-              required: 'Category is required.',
+            id="category"
+            placeholder="Select your account type"
+            {...register("category", {
+              required: "Category is required.",
             })}
           >
             {accountOptions.map((option) => (
@@ -158,17 +158,17 @@ const EditUserAccountForm = ({
         <FormControl isRequired isInvalid={errors.balance}>
           <FormLabel>Balance (₺)</FormLabel>
           <Input
-            type='number'
-            id='balance'
-            {...register('balance', {
-              required: 'Balance is required.',
+            type="number"
+            id="balance"
+            {...register("balance", {
+              required: "Balance is required.",
               min: {
                 value: 10,
-                message: 'Balance must be at least $10.',
+                message: "Balance must be at least $10.",
               },
               max: {
                 value: 1000000,
-                message: 'Balance cannot exceed $1,000,000.',
+                message: "Balance cannot exceed $1,000,000.",
               },
             })}
           />
@@ -183,7 +183,7 @@ const EditUserAccountForm = ({
           _hover={{
             bg: btnHoverBgColor,
           }}
-          type='submit'
+          type="submit"
           isLoading={isSubmitting}
           isDisabled={isLoading}
         >

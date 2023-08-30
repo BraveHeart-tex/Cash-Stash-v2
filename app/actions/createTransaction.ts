@@ -1,6 +1,6 @@
-import prisma from '@/app/libs/prismadb';
-import CreateBudgetOptions from '../utils/CreateBudgetOptions';
-import { NotificationCategory } from '@prisma/client';
+import prisma from "@/app/libs/prismadb";
+import CreateBudgetOptions from "../../lib/CreateBudgetOptions";
+import { NotificationCategory } from "@prisma/client";
 
 const createTransaction = async (
   amount: number,
@@ -23,7 +23,7 @@ const createTransaction = async (
 
   if (!usersAccount) {
     return {
-      message: 'Bank account not found',
+      message: "Bank account not found",
     };
   }
 
@@ -31,7 +31,7 @@ const createTransaction = async (
 
   if (!isIncome && usersBalance < amount) {
     return {
-      message: 'Insufficient balance',
+      message: "Insufficient balance",
     };
   }
 
@@ -51,7 +51,7 @@ const createTransaction = async (
 
   if (!updatedAccount) {
     return {
-      message: 'Failed to update balance',
+      message: "Failed to update balance",
     };
   }
 
@@ -69,7 +69,7 @@ const createTransaction = async (
 
   if (!createdTransaction) {
     return {
-      message: 'Failed to create transaction',
+      message: "Failed to create transaction",
     };
   }
 

@@ -1,10 +1,10 @@
-import getUserAccountById from '@/app/actions/getUserAccountById';
-import prisma from '@/app/libs/prismadb';
+import getUserAccountById from "@/app/actions/getUserAccountById";
+import prisma from "@/app/libs/prismadb";
 import CreateUserAccountOptions, {
   getKeyByValue,
-} from '@/app/utils/CreateUserAccountOptions';
-import { UserAccountCategory } from '@prisma/client';
-import { NextResponse } from 'next/server';
+} from "@/lib/CreateUserAccountOptions";
+import { UserAccountCategory } from "@prisma/client";
+import { NextResponse } from "next/server";
 
 interface IParams {
   accountId?: string;
@@ -17,7 +17,7 @@ export async function GET(request: Request, { params }: { params: IParams }) {
   if (!accountId) {
     return NextResponse.json(
       {
-        error: 'Account ID not found',
+        error: "Account ID not found",
       },
       {
         status: 404,
@@ -30,7 +30,7 @@ export async function GET(request: Request, { params }: { params: IParams }) {
   if (!currentAccount) {
     return NextResponse.json(
       {
-        error: 'Account not found',
+        error: "Account not found",
       },
       {
         status: 404,
@@ -55,7 +55,7 @@ export async function PUT(request: Request, { params }: { params: IParams }) {
   if (!accountId) {
     return NextResponse.json(
       {
-        error: 'Account ID not found',
+        error: "Account ID not found",
       },
       {
         status: 404,
@@ -67,7 +67,7 @@ export async function PUT(request: Request, { params }: { params: IParams }) {
   if (!currentAccount) {
     return NextResponse.json(
       {
-        error: 'Account not found',
+        error: "Account not found",
       },
       {
         status: 404,
@@ -110,7 +110,7 @@ export async function DELETE(
   if (!accountId) {
     return NextResponse.json(
       {
-        error: 'Account ID not found',
+        error: "Account ID not found",
       },
       {
         status: 404,
@@ -123,7 +123,7 @@ export async function DELETE(
   if (!currentAccount) {
     return NextResponse.json(
       {
-        error: 'Account not found',
+        error: "Account not found",
       },
       {
         status: 404,
@@ -139,7 +139,7 @@ export async function DELETE(
 
   return NextResponse.json(
     {
-      message: 'Account deleted',
+      message: "Account deleted",
     },
     {
       status: 200,

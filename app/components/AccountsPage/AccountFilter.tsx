@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import CreateUserAccountOptions from "@/app/utils/CreateUserAccountOptions";
+import CreateUserAccountOptions from "@/lib/CreateUserAccountOptions";
 import AccountInformation from "./AccountInformation";
 import { useAppSelector } from "@/app/redux/hooks";
 import { AppDispatch } from "@/app/redux/store";

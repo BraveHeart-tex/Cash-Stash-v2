@@ -1,8 +1,8 @@
-import getCurrentUser from '@/app/actions/getCurrentUser';
-import { NextResponse } from 'next/server';
-import prisma from '@/app/libs/prismadb';
-import CreateBudgetOptions from '@/app/utils/CreateBudgetOptions';
-import { NotificationCategory } from '@prisma/client';
+import getCurrentUser from "@/app/actions/getCurrentUser";
+import { NextResponse } from "next/server";
+import prisma from "@/app/libs/prismadb";
+import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
+import { NotificationCategory } from "@prisma/client";
 interface IParams {
   transactionId: string;
 }
@@ -13,7 +13,7 @@ export async function GET(request: Request, { params }: { params: IParams }) {
   if (!transactionId) {
     return NextResponse.json(
       {
-        message: 'No transaction id provided',
+        message: "No transaction id provided",
       },
       {
         status: 400,
@@ -25,7 +25,7 @@ export async function GET(request: Request, { params }: { params: IParams }) {
   if (!currentUser) {
     return NextResponse.json(
       {
-        message: 'Unauthorized',
+        message: "Unauthorized",
       },
       {
         status: 401,
@@ -42,7 +42,7 @@ export async function GET(request: Request, { params }: { params: IParams }) {
   if (!transaction) {
     return NextResponse.json(
       {
-        message: 'Transaction not found',
+        message: "Transaction not found",
       },
       {
         status: 404,
@@ -69,7 +69,7 @@ export async function DELETE(
   if (!transactionId) {
     return NextResponse.json(
       {
-        message: 'No transaction id provided',
+        message: "No transaction id provided",
       },
       {
         status: 400,
@@ -81,7 +81,7 @@ export async function DELETE(
   if (!currentUser) {
     return NextResponse.json(
       {
-        message: 'Unauthorized',
+        message: "Unauthorized",
       },
       {
         status: 401,
@@ -98,7 +98,7 @@ export async function DELETE(
   if (!transaction) {
     return NextResponse.json(
       {
-        message: 'Transaction not found',
+        message: "Transaction not found",
       },
       {
         status: 404,
@@ -143,7 +143,7 @@ export async function DELETE(
 
   return NextResponse.json(
     {
-      message: 'Transaction deleted',
+      message: "Transaction deleted",
     },
     {
       status: 200,
@@ -157,7 +157,7 @@ export async function PUT(request: Request, { params }: { params: IParams }) {
   if (!transactionId) {
     return NextResponse.json(
       {
-        message: 'No transaction id provided',
+        message: "No transaction id provided",
       },
       {
         status: 400,
@@ -169,7 +169,7 @@ export async function PUT(request: Request, { params }: { params: IParams }) {
   if (!currentUser) {
     return NextResponse.json(
       {
-        message: 'Unauthorized',
+        message: "Unauthorized",
       },
       {
         status: 401,
@@ -186,7 +186,7 @@ export async function PUT(request: Request, { params }: { params: IParams }) {
   if (!transaction) {
     return NextResponse.json(
       {
-        message: 'Transaction not found',
+        message: "Transaction not found",
       },
       {
         status: 404,
@@ -199,7 +199,7 @@ export async function PUT(request: Request, { params }: { params: IParams }) {
   if (!amount || !description || !category || !accountId) {
     return NextResponse.json(
       {
-        message: 'Missing required fields',
+        message: "Missing required fields",
       },
       {
         status: 400,

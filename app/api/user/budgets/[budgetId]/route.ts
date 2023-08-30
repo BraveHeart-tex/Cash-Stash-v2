@@ -1,9 +1,9 @@
-import getBudgetById from '@/app/actions/getBudgetById';
-import getCurrentUser from '@/app/actions/getCurrentUser';
-import prisma from '@/app/libs/prismadb';
-import CreateBudgetOptions from '@/app/utils/CreateBudgetOptions';
-import { NotificationCategory } from '@prisma/client';
-import { NextResponse } from 'next/server';
+import getBudgetById from "@/app/actions/getBudgetById";
+import getCurrentUser from "@/app/actions/getCurrentUser";
+import prisma from "@/app/libs/prismadb";
+import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
+import { NotificationCategory } from "@prisma/client";
+import { NextResponse } from "next/server";
 
 interface IParams {
   budgetId?: string;
@@ -12,10 +12,10 @@ interface IParams {
 // get budget by id
 export async function GET(request: Request, { params }: { params: IParams }) {
   const { budgetId } = params;
-  if (!budgetId || typeof budgetId !== 'string') {
+  if (!budgetId || typeof budgetId !== "string") {
     return NextResponse.json(
       {
-        message: 'Invalid budgetId',
+        message: "Invalid budgetId",
       },
       {
         status: 400,
@@ -28,7 +28,7 @@ export async function GET(request: Request, { params }: { params: IParams }) {
   if (!currentUser) {
     return NextResponse.json(
       {
-        message: 'Unauthorized',
+        message: "Unauthorized",
       },
       {
         status: 401,
@@ -41,7 +41,7 @@ export async function GET(request: Request, { params }: { params: IParams }) {
   if (!budget) {
     return NextResponse.json(
       {
-        message: 'Budget not found',
+        message: "Budget not found",
       },
       {
         status: 404,
@@ -58,7 +58,7 @@ export async function PUT(request: Request, { params }: { params: IParams }) {
   if (!currentUser) {
     return NextResponse.json(
       {
-        message: 'Unauthorized',
+        message: "Unauthorized",
       },
       {
         status: 401,
@@ -67,10 +67,10 @@ export async function PUT(request: Request, { params }: { params: IParams }) {
   }
 
   const { budgetId } = params;
-  if (!budgetId || typeof budgetId !== 'string') {
+  if (!budgetId || typeof budgetId !== "string") {
     return NextResponse.json(
       {
-        message: 'Invalid budgetId',
+        message: "Invalid budgetId",
       },
       {
         status: 400,
@@ -83,7 +83,7 @@ export async function PUT(request: Request, { params }: { params: IParams }) {
   if (!budget) {
     return NextResponse.json(
       {
-        message: 'Budget not found',
+        message: "Budget not found",
       },
       {
         status: 404,
@@ -120,7 +120,7 @@ export async function DELETE(
   if (!currentUser) {
     return NextResponse.json(
       {
-        message: 'Unauthorized',
+        message: "Unauthorized",
       },
       {
         status: 401,
@@ -129,10 +129,10 @@ export async function DELETE(
   }
 
   const { budgetId } = params;
-  if (!budgetId || typeof budgetId !== 'string') {
+  if (!budgetId || typeof budgetId !== "string") {
     return NextResponse.json(
       {
-        message: 'Invalid budgetId',
+        message: "Invalid budgetId",
       },
       {
         status: 400,
@@ -145,7 +145,7 @@ export async function DELETE(
   if (!budget) {
     return NextResponse.json(
       {
-        message: 'Budget not found',
+        message: "Budget not found",
       },
       {
         status: 404,
@@ -159,5 +159,5 @@ export async function DELETE(
     },
   });
 
-  return NextResponse.json({ message: 'Budget deleted' }, { status: 200 });
+  return NextResponse.json({ message: "Budget deleted" }, { status: 200 });
 }

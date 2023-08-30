@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import useColorModeStyles from '@/app/hooks/useColorModeStyles';
-import { useAppDispatch, useAppSelector } from '@/app/redux/hooks';
+import useColorModeStyles from "@/app/hooks/useColorModeStyles";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import {
   Stack,
   FormLabel,
@@ -12,17 +12,17 @@ import {
   Select,
   useToast,
   Spinner,
-} from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
-import { useForm, FieldValues, SubmitHandler } from 'react-hook-form';
-import { fetchCurrentUserAccounts } from '@/app/redux/features/userAccountSlice';
-import FormLoadingSpinner from '../../FormLoadingSpinner';
-import CreateBudgetOptions from '@/app/utils/CreateBudgetOptions';
-import axios from 'axios';
+} from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
+import { fetchCurrentUserAccounts } from "@/app/redux/features/userAccountSlice";
+import FormLoadingSpinner from "../../FormLoadingSpinner";
+import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
+import axios from "axios";
 import {
   fetchTransactions,
   setCreateModalOpen,
-} from '@/app/redux/features/transactionsSlice';
+} from "@/app/redux/features/transactionsSlice";
 
 const CreateTransactionForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -48,10 +48,10 @@ const CreateTransactionForm = () => {
     setValue,
   } = useForm<FieldValues>({
     defaultValues: {
-      amount: '',
-      description: '',
-      category: '',
-      accountId: '',
+      amount: "",
+      description: "",
+      category: "",
+      accountId: "",
       isIncome: false,
     },
   });
@@ -63,14 +63,14 @@ const CreateTransactionForm = () => {
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     setIsLoading(true);
     try {
-      const response = await axios.post('/api/user/transactions', data);
+      const response = await axios.post("/api/user/transactions", data);
       toast({
-        title: 'Transaction created.',
+        title: "Transaction created.",
         description: `Transaction for ${response.data.transaction.amount}₺ created.`,
-        status: 'success',
+        status: "success",
         duration: 5000,
         isClosable: true,
-        position: 'top',
+        position: "top",
       });
       setIsLoading(false);
       dispatch(fetchTransactions());
@@ -78,12 +78,12 @@ const CreateTransactionForm = () => {
     } catch (error) {
       setIsLoading(false);
       toast({
-        title: 'An error occurred.',
-        description: 'Unable to create transaction.',
-        status: 'error',
+        title: "An error occurred.",
+        description: "Unable to create transaction.",
+        status: "error",
         duration: 5000,
         isClosable: true,
-        position: 'top',
+        position: "top",
       });
       console.log(error);
     }
@@ -96,17 +96,17 @@ const CreateTransactionForm = () => {
         <FormControl isRequired isInvalid={errors.amount}>
           <FormLabel>Amount (₺)</FormLabel>
           <Input
-            type='number'
-            id='amount'
-            {...register('amount', {
-              required: 'Amount is required.',
+            type="number"
+            id="amount"
+            {...register("amount", {
+              required: "Amount is required.",
               min: {
                 value: 1,
-                message: 'Amount must be at least $1.',
+                message: "Amount must be at least $1.",
               },
               max: {
                 value: 1000000,
-                message: 'Amount cannot exceed $1,000,000.',
+                message: "Amount cannot exceed $1,000,000.",
               },
             })}
           />
@@ -119,17 +119,17 @@ const CreateTransactionForm = () => {
         <FormControl isRequired isInvalid={errors.description}>
           <FormLabel>Description</FormLabel>
           <Input
-            type='text'
-            id='description'
-            {...register('description', {
-              required: 'Description is required.',
+            type="text"
+            id="description"
+            {...register("description", {
+              required: "Description is required.",
               minLength: {
                 value: 3,
-                message: 'Description must be at least 3 characters.',
+                message: "Description must be at least 3 characters.",
               },
               maxLength: {
                 value: 50,
-                message: 'Description cannot exceed 50 characters.',
+                message: "Description cannot exceed 50 characters.",
               },
             })}
           />
@@ -142,9 +142,9 @@ const CreateTransactionForm = () => {
         <FormControl isRequired isInvalid={errors.category}>
           <FormLabel>Category</FormLabel>
           <Select
-            id='category'
-            {...register('category', {
-              required: 'Please select a category.',
+            id="category"
+            {...register("category", {
+              required: "Please select a category.",
             })}
           >
             {categories.map((category) => (
@@ -162,10 +162,10 @@ const CreateTransactionForm = () => {
         <FormControl isRequired isInvalid={errors.accountId}>
           <FormLabel>Account</FormLabel>
           <Select
-            placeholder='Select an account'
-            id='accountId'
-            {...register('accountId', {
-              required: 'Please select an account.',
+            placeholder="Select an account"
+            id="accountId"
+            {...register("accountId", {
+              required: "Please select an account.",
             })}
           >
             {currentUserAccounts &&
@@ -184,21 +184,21 @@ const CreateTransactionForm = () => {
         <FormControl isRequired isInvalid={errors.isExpense}>
           <FormLabel>Type</FormLabel>
           <Select
-            placeholder='Transaction Type'
-            id='isIncome'
-            {...register('isIncome', {
-              required: 'Please select a transaction type.',
+            placeholder="Transaction Type"
+            id="isIncome"
+            {...register("isIncome", {
+              required: "Please select a transaction type.",
             })}
           >
             <option
-              value={'expense'}
-              onSelect={() => setValue('isIncome', false)}
+              value={"expense"}
+              onSelect={() => setValue("isIncome", false)}
             >
               Expense
             </option>
             <option
-              value={'income'}
-              onSelect={() => setValue('isIncome', true)}
+              value={"income"}
+              onSelect={() => setValue("isIncome", true)}
             >
               Income
             </option>
@@ -219,7 +219,7 @@ const CreateTransactionForm = () => {
             _hover={{
               bg: btnHoverBgColor,
             }}
-            type='submit'
+            type="submit"
             isDisabled={isLoading}
           >
             Create

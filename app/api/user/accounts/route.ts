@@ -1,7 +1,7 @@
 import createUserAccount from "@/app/actions/createUserAccount";
 import getUserAccounts from "@/app/actions/getUserAccounts";
 import { NextResponse } from "next/server";
-import CreateUserAccountOptions from "@/app/utils/CreateUserAccountOptions";
+import CreateUserAccountOptions from "@/lib/CreateUserAccountOptions";
 import { UserAccountCategory } from "@prisma/client";
 import { getCurrentUserAction } from "@/actions";
 

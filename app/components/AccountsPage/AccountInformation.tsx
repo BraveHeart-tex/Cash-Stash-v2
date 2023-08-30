@@ -1,7 +1,7 @@
 "use client";
 import CreateUserAccountOptions, {
   getOptionLabel,
-} from "@/app/utils/CreateUserAccountOptions";
+} from "@/lib/CreateUserAccountOptions";
 import EditUserAccountModal from "./modals/EditUserAccountModal";
 import DeleteUserAccountModal from "./modals/DeleteUserAccountModal";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";

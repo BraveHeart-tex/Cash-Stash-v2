@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import {
   Button,
   FormControl,
@@ -9,16 +9,16 @@ import {
   Spinner,
   Stack,
   useToast,
-} from '@chakra-ui/react';
-import CreateBudgetOptions from '../../../utils/CreateBudgetOptions';
-import { FieldValues, useForm } from 'react-hook-form';
-import useColorModeStyles from '../../../hooks/useColorModeStyles';
-import axios from 'axios';
-import { useAppDispatch } from '../../../redux/hooks';
+} from "@chakra-ui/react";
+import CreateBudgetOptions from "../../../../lib/CreateBudgetOptions";
+import { FieldValues, useForm } from "react-hook-form";
+import useColorModeStyles from "../../../hooks/useColorModeStyles";
+import axios from "axios";
+import { useAppDispatch } from "../../../redux/hooks";
 import {
   fetchBudgets,
   setCreateBudgetModalOpen,
-} from '../../../redux/features/budgetSlice';
+} from "../../../redux/features/budgetSlice";
 
 interface ICreateBudgetFormProps {}
 
@@ -35,33 +35,33 @@ const CreateBudgetForm = ({}: ICreateBudgetFormProps) => {
   } = useForm<FieldValues>({
     defaultValues: {
       budgetAmount: 10,
-      category: '',
+      category: "",
       spentAmount: 0,
     },
   });
 
   const onSubmit = async (data: FieldValues) => {
     try {
-      const response = await axios.post('/api/user/budgets', data);
+      const response = await axios.post("/api/user/budgets", data);
       const budget = response.data.budget;
       toast({
-        title: 'Budget created.',
+        title: "Budget created.",
         description: `Budget for ${budget.category} has been created. You can close this window now.`,
-        status: 'success',
+        status: "success",
         duration: 4000,
         isClosable: true,
-        position: 'top',
+        position: "top",
       });
       dispatch(fetchBudgets());
       dispatch(setCreateBudgetModalOpen(false));
     } catch (error: any) {
       toast({
-        title: 'An error occurred.',
+        title: "An error occurred.",
         description: error.response.data.error,
-        status: 'error',
+        status: "error",
         duration: 4000,
         isClosable: true,
-        position: 'top',
+        position: "top",
       });
     }
   };
@@ -73,17 +73,17 @@ const CreateBudgetForm = ({}: ICreateBudgetFormProps) => {
         <FormControl isRequired isInvalid={errors.budgetAmount}>
           <FormLabel>Budget Amount (₺)</FormLabel>
           <Input
-            type='number'
-            id='budgetAmount'
-            {...register('budgetAmount', {
-              required: 'Budget amount is required.',
+            type="number"
+            id="budgetAmount"
+            {...register("budgetAmount", {
+              required: "Budget amount is required.",
               min: {
                 value: 10,
-                message: 'Budget amount must be at least $10.',
+                message: "Budget amount must be at least $10.",
               },
               max: {
                 value: 1000000,
-                message: 'Budget amount cannot exceed $1,000,000.',
+                message: "Budget amount cannot exceed $1,000,000.",
               },
             })}
           />
@@ -96,10 +96,10 @@ const CreateBudgetForm = ({}: ICreateBudgetFormProps) => {
         <FormControl isRequired isInvalid={errors.category}>
           <FormLabel>Budget Category</FormLabel>
           <Select
-            id='category'
-            placeholder='Select your budget category'
-            {...register('category', {
-              required: 'Category is required.',
+            id="category"
+            placeholder="Select your budget category"
+            {...register("category", {
+              required: "Category is required.",
             })}
           >
             {budgetOptions.map((option) => (
@@ -117,11 +117,11 @@ const CreateBudgetForm = ({}: ICreateBudgetFormProps) => {
         <FormControl isRequired isInvalid={errors.spentAmount}>
           <FormLabel>Budget Spent (₺)</FormLabel>
           <Input
-            type='number'
-            id='spentAmount'
-            {...register('spentAmount', {
+            type="number"
+            id="spentAmount"
+            {...register("spentAmount", {
               required:
-                'Spent Amount is required. You can leave it at 0 if you have not spent any money yet.',
+                "Spent Amount is required. You can leave it at 0 if you have not spent any money yet.",
               min: {
                 value: 0,
                 message:
@@ -129,7 +129,7 @@ const CreateBudgetForm = ({}: ICreateBudgetFormProps) => {
               },
               max: {
                 value: 1000000,
-                message: 'Spent budget amount cannot exceed $1,000,000.',
+                message: "Spent budget amount cannot exceed $1,000,000.",
               },
             })}
           />
@@ -147,7 +147,7 @@ const CreateBudgetForm = ({}: ICreateBudgetFormProps) => {
             color={btnColor}
             bg={btnBgColor}
             _hover={{ bg: btnHoverBgColor }}
-            type='submit'
+            type="submit"
           >
             Create
           </Button>

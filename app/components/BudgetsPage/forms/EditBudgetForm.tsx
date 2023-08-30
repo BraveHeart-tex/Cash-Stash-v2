@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import {
   Stack,
   FormLabel,
@@ -8,19 +8,19 @@ import {
   Select,
   Button,
   useToast,
-} from '@chakra-ui/react';
-import { useEffect } from 'react';
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
-import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { fetchBudgetById } from '../../../redux/features/currentBudgetSlice';
-import CreateBudgetOptions from '../../../utils/CreateBudgetOptions';
-import { getOptionLabel } from '../../../utils/CreateUserAccountOptions';
-import axios from 'axios';
+} from "@chakra-ui/react";
+import { useEffect } from "react";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { fetchBudgetById } from "../../../redux/features/currentBudgetSlice";
+import CreateBudgetOptions from "../../../../lib/CreateBudgetOptions";
+import { getOptionLabel } from "@/lib/CreateUserAccountOptions";
+import axios from "axios";
 import {
   fetchBudgets,
   setEditBudgetModalOpen,
-} from '../../../redux/features/budgetSlice';
-import FormLoadingSpinner from '../../FormLoadingSpinner';
+} from "../../../redux/features/budgetSlice";
+import FormLoadingSpinner from "../../FormLoadingSpinner";
 
 interface IEditBudgetFormProps {
   selectedBudgetId: number;
@@ -42,7 +42,7 @@ const EditUserBudgetForm = ({ selectedBudgetId }: IEditBudgetFormProps) => {
   } = useForm<FieldValues>({
     defaultValues: {
       budgetAmount: 0,
-      category: '',
+      category: "",
       spentAmount: 0,
     },
   });
@@ -57,12 +57,12 @@ const EditUserBudgetForm = ({ selectedBudgetId }: IEditBudgetFormProps) => {
 
   useEffect(() => {
     if (currentBudget) {
-      setValue('budgetAmount', currentBudget.budgetAmount);
+      setValue("budgetAmount", currentBudget.budgetAmount);
       setValue(
-        'category',
+        "category",
         getOptionLabel(CreateBudgetOptions, currentBudget.category)
       );
-      setValue('spentAmount', currentBudget.spentAmount);
+      setValue("spentAmount", currentBudget.spentAmount);
     }
   }, [currentBudget, setValue]);
 
@@ -76,24 +76,24 @@ const EditUserBudgetForm = ({ selectedBudgetId }: IEditBudgetFormProps) => {
       if (response.status === 200) {
         dispatch(fetchBudgets());
         toast({
-          title: 'Budget updated.',
+          title: "Budget updated.",
           description:
-            'Budget updated successfully. You can close this window now.',
-          status: 'success',
+            "Budget updated successfully. You can close this window now.",
+          status: "success",
           duration: 5000,
           isClosable: true,
-          position: 'top',
+          position: "top",
         });
         dispatch(setEditBudgetModalOpen(false));
       }
     } catch (error: any) {
       toast({
-        title: 'An error occurred.',
+        title: "An error occurred.",
         description: error.response?.data.error,
-        status: 'error',
+        status: "error",
         duration: 5000,
         isClosable: true,
-        position: 'top',
+        position: "top",
       });
     }
   };
@@ -109,17 +109,17 @@ const EditUserBudgetForm = ({ selectedBudgetId }: IEditBudgetFormProps) => {
         <FormControl isRequired isInvalid={errors.budgetAmount}>
           <FormLabel>Budget Amount</FormLabel>
           <Input
-            type='number'
-            id='budgetAmount'
-            {...register('budgetAmount', {
-              required: 'Budget amount is required.',
+            type="number"
+            id="budgetAmount"
+            {...register("budgetAmount", {
+              required: "Budget amount is required.",
               min: {
                 value: 10,
-                message: 'Budget amount must be at least 10₺',
+                message: "Budget amount must be at least 10₺",
               },
               max: {
                 value: 1000000,
-                message: 'Budget amount must be at most 1.000.000₺',
+                message: "Budget amount must be at most 1.000.000₺",
               },
             })}
           />
@@ -132,10 +132,10 @@ const EditUserBudgetForm = ({ selectedBudgetId }: IEditBudgetFormProps) => {
         <FormControl isRequired isInvalid={errors.category}>
           <FormLabel>Budget Category</FormLabel>
           <Select
-            id='category'
-            placeholder='Select budget category'
-            {...register('category', {
-              required: 'Category is required.',
+            id="category"
+            placeholder="Select budget category"
+            {...register("category", {
+              required: "Category is required.",
             })}
           >
             {budgetOptions.map((option) => (
@@ -153,17 +153,17 @@ const EditUserBudgetForm = ({ selectedBudgetId }: IEditBudgetFormProps) => {
         <FormControl isRequired isInvalid={errors.spentAmount}>
           <FormLabel>Budget Spent (₺)</FormLabel>
           <Input
-            type='number'
-            id='spentAmount'
-            {...register('spentAmount', {
-              required: 'Budget spent is required.',
+            type="number"
+            id="spentAmount"
+            {...register("spentAmount", {
+              required: "Budget spent is required.",
               min: {
                 value: 0,
-                message: 'Budget spent must be at least 0₺',
+                message: "Budget spent must be at least 0₺",
               },
               max: {
                 value: 1000000,
-                message: 'Budget spent must be at most 1.000.000₺',
+                message: "Budget spent must be at most 1.000.000₺",
               },
             })}
           />
@@ -172,7 +172,7 @@ const EditUserBudgetForm = ({ selectedBudgetId }: IEditBudgetFormProps) => {
             {errors.spentAmount && errors.spentAmount.message}
           </FormErrorMessage>
         </FormControl>
-        <Button type='submit' isLoading={isSubmitting} isDisabled={isLoading}>
+        <Button type="submit" isLoading={isSubmitting} isDisabled={isLoading}>
           Update
         </Button>
       </Stack>

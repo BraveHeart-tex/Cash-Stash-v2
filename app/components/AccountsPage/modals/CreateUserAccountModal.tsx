@@ -2,7 +2,14 @@
 import CreateUserAccountForm from "../forms/CreateUserAccountForm";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { setIsCreateAccountModalOpen } from "@/app/redux/features/userAccountSlice";
-import { Dialog, DialogContent, DialogFooter } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
 const CreateUserAccountModal = () => {
@@ -21,6 +28,12 @@ const CreateUserAccountModal = () => {
       }}
     >
       <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Create Account</DialogTitle>
+          <DialogDescription>
+            Create a new account to track your expenses.
+          </DialogDescription>
+        </DialogHeader>
         <CreateUserAccountForm />
         <DialogFooter>
           <Button

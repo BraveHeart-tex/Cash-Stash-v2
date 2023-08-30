@@ -3,7 +3,7 @@ import getCurrentUserBudgets from "@/app/actions/getCurrentUserBudgets";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import createBudget from "@/app/actions/createBudget";
 import { NotificationCategory, Budget } from "@prisma/client";
-import CreateBudgetOptions from "@/app/utils/CreateBudgetOptions";
+import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
 import { getCurrentUserAction } from "@/actions";
 
 // @desc GET all budgets

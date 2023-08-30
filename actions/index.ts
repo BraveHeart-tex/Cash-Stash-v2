@@ -9,6 +9,11 @@ import { cookies } from "next/headers";
 import bcrypt from "bcrypt";
 import { redirect } from "next/navigation";
 import { MONTHS_OF_THE_YEAR } from "@/lib/utils";
+import CreateUserAccountSchema, {
+  CreateUserAccountSchemaType,
+} from "@/schemas/CreateUserAccountSchema";
+import CreateUserAccountOptions from "@/lib/CreateUserAccountOptions";
+import { UserAccountCategory } from "@prisma/client";
 
 export const loginAction = async ({ email, password }: LoginSchemaType) => {
   const result = LoginSchema.safeParse({ email, password });
@@ -368,5 +373,54 @@ export const fetchInsightsDataAction = async () => {
     totalExpense: totalExpense._sum.amount ?? 0,
     netIncome,
     savingsRate,
+  };
+};
+
+export const registerBankAccountAction = async ({
+  balance,
+  category,
+  name,
+}: CreateUserAccountSchemaType) => {
+  const currentUser = await getCurrentUser(cookies().get("token")?.value!);
+
+  if (!currentUser) {
+    return { error: "You are not authorized to perform this action." };
+  }
+
+  let result = CreateUserAccountSchema.safeParse({ balance, category, name });
+
+  if (!result.success) {
+    return { error: "Unprocessable entity." };
+  }
+
+  const {
+    balance: balanceResult,
+    category: categoryResult,
+    name: nameResult,
+  } = result.data;
+
+  const mappedCategory = Object.entries(CreateUserAccountOptions).find(
+    ([key, value]) => value === categoryResult
+  )?.[0];
+
+  if (!mappedCategory) {
+    return { error: "Invalid category." };
+  }
+
+  const createdAccount = await db.userAccount.create({
+    data: {
+      balance: balanceResult,
+      category: mappedCategory as UserAccountCategory,
+      name: nameResult,
+      userId: currentUser.id,
+    },
+  });
+
+  if (!createdAccount) {
+    return { error: "Error creating account." };
+  }
+
+  return {
+    account: createdAccount,
   };
 };
