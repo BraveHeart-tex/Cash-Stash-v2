@@ -34,36 +34,7 @@ const TransactionHistory = ({ transactions }: ITransactionHistoryProps) => {
             className="p-4 rounded-md shadow-xl bg-card"
             key={transaction.id}
           >
-            <div className="flex items-center gap-2">
-              <p className="font-bold text-xl">{transaction.description}</p>
-              <Badge
-                className={cn(
-                  "cursor-pointer select-none",
-                  transaction.isIncome
-                    ? "bg-green-500 hover:bg-green-400"
-                    : "bg-red-400 hover:bg-red-500"
-                )}
-              >
-                {transaction.isIncome ? "Income" : "Expense"}
-              </Badge>
-            </div>
-
-            <p>
-              {new Date(transaction.createdAt).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </p>
-            <p>{transaction.amount}₺</p>
-          </div>
-        ))}
-        {transactions.map((transaction) => (
-          <div
-            className="p-4 rounded-md shadow-xl bg-card"
-            key={transaction.id}
-          >
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 w-full justify-between">
               <p className="font-bold text-xl">{transaction.description}</p>
               <Badge
                 className={cn(
