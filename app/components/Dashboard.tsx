@@ -65,14 +65,12 @@ const Dashboard = () => {
     },
     {
       title: "Transaction History",
-      data: (
-        <TransactionHistory transactions={transactions} isLoading={isLoading} />
-      ),
+      data: <TransactionHistory transactions={transactions} />,
     },
     {
       title: "Financial Insights",
       data: (
-        <div>
+        <div className="p-2 h-[700px] overflow-y-scroll scrollbar-hide">
           <p className="font-bold underline text-foreground">
             Income vs Expense
           </p>

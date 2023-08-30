@@ -1,6 +1,6 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { Transaction } from '@prisma/client';
-import axios from 'axios';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { Transaction } from "@prisma/client";
+import axios from "axios";
 
 export interface InsightsData {
   totalIncome: number;
@@ -8,6 +8,7 @@ export interface InsightsData {
   netIncome: number;
   savingsRate: string;
 }
+
 interface Income {
   month: string;
   amount: number;
@@ -32,7 +33,7 @@ interface TopCategoryData {
 
 interface TransactionState {
   filter: {
-    type: 'income' | 'expense' | '';
+    type: "income" | "expense" | "";
     accountId: string;
   };
   createModalOpen: boolean;
@@ -40,7 +41,7 @@ interface TransactionState {
   transactionId: number;
   sort: {
     sortBy: string;
-    sortDirection: 'asc' | 'desc';
+    sortDirection: "asc" | "desc";
   };
   data: Transaction[] | null;
   filteredData: Transaction[] | null;
@@ -52,15 +53,15 @@ interface TransactionState {
 
 const initialState: TransactionState = {
   filter: {
-    type: '',
-    accountId: '',
+    type: "",
+    accountId: "",
   },
   createModalOpen: false,
   deleteModalOpen: false,
   transactionId: 0,
   sort: {
-    sortBy: 'date',
-    sortDirection: 'asc',
+    sortBy: "date",
+    sortDirection: "asc",
   },
   data: [],
   filteredData: null,
@@ -71,7 +72,7 @@ const initialState: TransactionState = {
 };
 
 export const fetchTransactions = createAsyncThunk(
-  'transactions/fetchTransactions',
+  "transactions/fetchTransactions",
   async () => {
     const response = await axios.get(`/api/user/transactions`);
     return response.data.transactions;
@@ -79,7 +80,7 @@ export const fetchTransactions = createAsyncThunk(
 );
 
 export const fetchTopTransactionsByCategory = createAsyncThunk(
-  'transactions/fetchTopTransactionsByCategory',
+  "transactions/fetchTopTransactionsByCategory",
   async () => {
     const response = await axios.get(`/api/user/transactions/mostByCategory`);
     return response.data.topTransactionsByCategory;
@@ -87,7 +88,7 @@ export const fetchTopTransactionsByCategory = createAsyncThunk(
 );
 
 export const fetchMonthlyTransactionsData = createAsyncThunk(
-  'transactions/fetchMonthlyTransactionsData',
+  "transactions/fetchMonthlyTransactionsData",
   async () => {
     const response = await axios.get(`/api/user/transactions/monthly`);
     return response.data;
@@ -95,7 +96,7 @@ export const fetchMonthlyTransactionsData = createAsyncThunk(
 );
 
 export const fetchInsightsData = createAsyncThunk(
-  'transactions/fetchInsightsData',
+  "transactions/fetchInsightsData",
   async () => {
     const response = await axios.get(`/api/user/transactions/insights`);
     return response.data;
@@ -103,7 +104,7 @@ export const fetchInsightsData = createAsyncThunk(
 );
 
 const transactionsSlice = createSlice({
-  name: 'filteredTransactions',
+  name: "filteredTransactions",
   initialState,
   reducers: {
     setFilterType: (state, action) => {
@@ -128,21 +129,21 @@ const transactionsSlice = createSlice({
     updateFilteredData: (state) => {
       const { type, accountId } = state.filter;
 
-      if (type === '' && accountId === '') {
+      if (type === "" && accountId === "") {
         state.filteredData = state.data;
       } else {
         state.filteredData =
           state.data?.filter((transaction) => {
-            if (type !== '') {
+            if (type !== "") {
               if (
-                (type === 'income' && !transaction.isIncome) ||
-                (type === 'expense' && transaction.isIncome)
+                (type === "income" && !transaction.isIncome) ||
+                (type === "expense" && transaction.isIncome)
               ) {
                 return false;
               }
             }
             if (
-              accountId !== '' &&
+              accountId !== "" &&
               transaction.accountId !== parseInt(accountId)
             ) {
               return false;
@@ -161,11 +162,11 @@ const transactionsSlice = createSlice({
           const bValue = b[state.sort.sortBy as keyof Transaction];
 
           if (aValue < bValue) {
-            return state.sort.sortDirection === 'asc' ? 1 : -1;
+            return state.sort.sortDirection === "asc" ? 1 : -1;
           }
 
           if (aValue > bValue) {
-            return state.sort.sortDirection === 'desc' ? -1 : 1;
+            return state.sort.sortDirection === "desc" ? -1 : 1;
           }
 
           return 0;

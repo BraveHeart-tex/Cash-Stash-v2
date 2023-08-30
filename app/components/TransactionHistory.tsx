@@ -27,7 +27,7 @@ const TransactionHistory = ({ transactions }: ITransactionHistoryProps) => {
   }
 
   return (
-    <div className="p-2 max-h-[500px] overflow-y-scroll scrollbar-hide">
+    <div className="p-2 h-[700px] overflow-y-scroll scrollbar-hide">
       <div className="grid grid-cols-1 gap-4">
         {transactions.map((transaction) => (
           <div
