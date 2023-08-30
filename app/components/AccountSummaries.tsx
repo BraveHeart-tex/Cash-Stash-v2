@@ -29,7 +29,6 @@ const AccountSummaries = () => {
     return (
       <div>
         <p className="text-foreground">No accounts found.</p>
-
         <Button
           className="font-bold text-md mt-3 hover:bg-foreground hover:text-muted"
           variant={"secondary"}

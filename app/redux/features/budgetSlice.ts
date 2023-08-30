@@ -1,6 +1,6 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { Budget } from '@prisma/client';
-import axios from 'axios';
+import { getBudgetsByCurrentUserAction } from "@/actions/index";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { Budget } from "@prisma/client";
 
 interface BudgetsState {
   budgets: Budget[] | null;
@@ -21,15 +21,15 @@ const initialState: BudgetsState = {
 };
 
 export const fetchBudgets = createAsyncThunk(
-  'budgets/fetchBudgets',
+  "budgets/fetchBudgets",
   async () => {
-    const response = await axios.get(`/api/user/budgets`);
-    return response.data.budgets;
+    const { budgets } = await getBudgetsByCurrentUserAction();
+    return budgets;
   }
 );
 
 const budgetSlice = createSlice({
-  name: 'budgets',
+  name: "budgets",
   initialState,
   reducers: {
     setCreateBudgetModalOpen: (state, action) => {
@@ -50,6 +50,11 @@ const budgetSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(fetchBudgets.fulfilled, (state, action) => {
+        if (action.payload === undefined) {
+          state.isLoading = false;
+          return;
+        }
+
         state.budgets = action.payload;
         state.isLoading = false;
       })

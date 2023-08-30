@@ -1,20 +1,13 @@
-'use client';
-import React, { useEffect } from 'react';
-import {
-  Box,
-  Text,
-  Progress,
-  useColorMode,
-  Button,
-  Spinner,
-  Flex,
-} from '@chakra-ui/react';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { fetchBudgets } from '../redux/features/budgetSlice';
-import { Link } from '@chakra-ui/next-js';
+"use client";
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
+import { fetchBudgets } from "@/app/redux/features/budgetSlice";
+import { Skeleton } from "@/components/ui/skeleton";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 
 const BudgetStatus = () => {
-  const { colorMode } = useColorMode();
   const dispatch = useAppDispatch();
   const { budgets, isLoading } = useAppSelector((state) => state.budgetReducer);
 
@@ -24,58 +17,55 @@ const BudgetStatus = () => {
 
   if (isLoading) {
     return (
-      <Flex gap={4}>
-        <Text>Loading budgets...</Text>
-        <Spinner />
-      </Flex>
+      <div>
+        <Skeleton className="h-[120px]" />
+      </div>
     );
   }
 
   if (!budgets || budgets.length === 0) {
     return (
-      <Box>
-        <Text color={colorMode === 'light' ? 'gray.600' : 'gray.300'}>
-          No budgets found.
-        </Text>
-        <Link href={'/budgets'}>
-          <Button mt={3}>Get started by creating a budget</Button>
+      <div>
+        <p className="text-primary">No budgets found.</p>
+        <Link href="/budgets">
+          <Button
+            className="font-bold text-md mt-3 hover:bg-foreground hover:text-muted"
+            variant="secondary"
+          >
+            <Link href="/budgets">Get started by creating a budget</Link>
+          </Button>
         </Link>
-      </Box>
+      </div>
     );
   }
 
   return (
-    <Box>
+    <div>
       {budgets.map((budget) => (
-        <Box
+        <div
           key={budget.category}
-          mb={4}
-          bg={colorMode === 'light' ? 'white' : 'gray.700'}
-          rounded={'md'}
-          p={2}
-          shadow={'xl'}
+          className="mb-4 rounded-md p-2 shadow-xl bg-card"
         >
-          <Text fontWeight='bold' mb={2}>
+          <p className="font-bold mb-2">
             {budget.category.charAt(0).toUpperCase() +
               budget.category.toLowerCase().slice(1)}
-          </Text>
+          </p>
           <Progress
             value={(budget.spentAmount / budget.budgetAmount) * 100}
-            colorScheme={
+            indicatorClassName={
               budget.spentAmount / budget.budgetAmount > 0.7
-                ? 'red'
+                ? "bg-red-300"
                 : budget.spentAmount / budget.budgetAmount > 0.4
-                ? 'orange'
-                : 'green'
+                ? "bg-orange-300"
+                : "bg-green-300"
             }
-            size='sm'
           />
-          <Text mt={2} fontSize='sm'>
+          <p className="mt-2 text-md">
             Spent: {budget.spentAmount}₺ / Budget: {budget.budgetAmount}₺
-          </Text>
-        </Box>
+          </p>
+        </div>
       ))}
-    </Box>
+    </div>
   );
 };
 

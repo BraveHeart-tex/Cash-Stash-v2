@@ -1,9 +1,10 @@
-import { NextResponse } from 'next/server';
-import getCurrentUserBudgets from '@/app/actions/getCurrentUserBudgets';
-import getCurrentUser from '@/app/actions/getCurrentUser';
-import createBudget from '@/app/actions/createBudget';
-import { NotificationCategory, Budget } from '@prisma/client';
-import CreateBudgetOptions from '@/app/utils/CreateBudgetOptions';
+import { NextResponse } from "next/server";
+import getCurrentUserBudgets from "@/app/actions/getCurrentUserBudgets";
+import getCurrentUser from "@/app/actions/getCurrentUser";
+import createBudget from "@/app/actions/createBudget";
+import { NotificationCategory, Budget } from "@prisma/client";
+import CreateBudgetOptions from "@/app/utils/CreateBudgetOptions";
+import { getCurrentUserAction } from "@/actions";
 
 // @desc GET all budgets
 // @route GET /api/user/budgets
@@ -14,7 +15,7 @@ export async function GET(request: Request) {
   if (!currentUser) {
     return NextResponse.json(
       {
-        error: 'Unauthorized',
+        error: "Unauthorized",
       },
       { status: 401 }
     );
@@ -24,7 +25,7 @@ export async function GET(request: Request) {
 
   if (!budgets || budgets.length === 0) {
     return NextResponse.json(
-      { error: 'No budgets found for current user.' },
+      { error: "No budgets found for current user." },
       { status: 404 }
     );
   }
@@ -36,13 +37,13 @@ export async function GET(request: Request) {
 // @route POST /api/user/budgets
 // @access Private
 export async function POST(request: Request) {
-  const currentUser = await getCurrentUser();
+  const { user: currentUser } = await getCurrentUserAction();
   const { budgetAmount, spentAmount, category } = await request.json();
 
   if (!currentUser) {
     return NextResponse.json(
       {
-        error: 'Unauthorized',
+        error: "Unauthorized",
       },
       { status: 401 }
     );
@@ -59,7 +60,7 @@ export async function POST(request: Request) {
     currentUser.id
   );
 
-  if (typeof createdBudget !== 'object' || 'error' in createdBudget) {
+  if (typeof createdBudget !== "object" || "error" in createdBudget) {
     // The createdBudget is not of type Budget or it contains an error property
     return NextResponse.json(
       {
@@ -73,7 +74,7 @@ export async function POST(request: Request) {
 
   if (!createdBudget) {
     return NextResponse.json(
-      { error: 'Could not create budget for current user.' },
+      { error: "Could not create budget for current user." },
       { status: 500 }
     );
   }
