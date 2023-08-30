@@ -140,3 +140,27 @@ export const getCurrentUserAction = async () => {
     user,
   };
 };
+
+export const getAccountsByCurrentUserAction = async () => {
+  const currentUser = await getCurrentUser(cookies().get("token")?.value!);
+
+  if (!currentUser) {
+    return { error: "No user found." };
+  }
+
+  const accounts = await db.userAccount.findMany({
+    where: {
+      userId: currentUser.id,
+    },
+  });
+
+  console.log(accounts);
+
+  if (!accounts) {
+    return { error: "No accounts found." };
+  }
+
+  return {
+    accounts,
+  };
+};

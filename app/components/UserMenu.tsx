@@ -35,7 +35,7 @@ const UserMenu = () => {
         className="p-4 grid grid-cols-1 gap-4 w-[300px]"
         align="end"
       >
-        <p>{user?.name}</p>
+        <p className="text-lg font-bold">{user?.name}</p>
         <hr />
         <p className="text-accent-foreground">{user?.email}</p>
 
