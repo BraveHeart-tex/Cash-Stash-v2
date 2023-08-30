@@ -1,6 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Transaction } from "@prisma/client";
-import axios from "axios";
+import {
+  fetchInsightsDataAction,
+  fetchMonthlyTransactionsDataAction,
+  getTopTransactionsByCategoryAction,
+  getTransactionsByCurrentUserAction,
+} from "@/actions";
+
+type SerializedTransaction = Omit<Transaction, "createdAt" | "updatedAt"> & {
+  createdAt: string;
+  updatedAt: string;
+};
 
 export interface InsightsData {
   totalIncome: number;
@@ -43,8 +53,8 @@ interface TransactionState {
     sortBy: string;
     sortDirection: "asc" | "desc";
   };
-  data: Transaction[] | null;
-  filteredData: Transaction[] | null;
+  data: SerializedTransaction[] | null;
+  filteredData: SerializedTransaction[] | null;
   monthlyData: MonthlyTransactionData | null;
   insightsData: InsightsData | null;
   topTransactionsByCategory: TopCategoryData[] | null;
@@ -74,32 +84,64 @@ const initialState: TransactionState = {
 export const fetchTransactions = createAsyncThunk(
   "transactions/fetchTransactions",
   async () => {
-    const response = await axios.get(`/api/user/transactions`);
-    return response.data.transactions;
+    const { transactions } = await getTransactionsByCurrentUserAction();
+    if (!transactions) {
+      return undefined;
+    }
+
+    const mappedTransactions = transactions.map((data) => ({
+      ...data,
+      createdAt: new Date(data.createdAt).toLocaleDateString(),
+      updatedAt: new Date(data.updatedAt).toLocaleDateString(),
+    }));
+
+    return mappedTransactions;
   }
 );
 
 export const fetchTopTransactionsByCategory = createAsyncThunk(
   "transactions/fetchTopTransactionsByCategory",
   async () => {
-    const response = await axios.get(`/api/user/transactions/mostByCategory`);
-    return response.data.topTransactionsByCategory;
+    const { topTransactionsByCategory } =
+      await getTopTransactionsByCategoryAction();
+    return topTransactionsByCategory;
   }
 );
 
 export const fetchMonthlyTransactionsData = createAsyncThunk(
   "transactions/fetchMonthlyTransactionsData",
   async () => {
-    const response = await axios.get(`/api/user/transactions/monthly`);
-    return response.data;
+    const { incomes, expenses } = await fetchMonthlyTransactionsDataAction();
+    if (!incomes?.length || !expenses?.length) {
+      return {
+        error: "No data found.",
+      };
+    }
+    return { incomes, expenses };
   }
 );
 
 export const fetchInsightsData = createAsyncThunk(
   "transactions/fetchInsightsData",
   async () => {
-    const response = await axios.get(`/api/user/transactions/insights`);
-    return response.data;
+    const { totalIncome, totalExpense, netIncome, savingsRate } =
+      await fetchInsightsDataAction();
+
+    if (!totalIncome || !totalExpense || !netIncome || !savingsRate) {
+      return {
+        totalIncome: 0,
+        totalExpense: 0,
+        netIncome: 0,
+        savingsRate: "0",
+      };
+    }
+
+    return {
+      totalIncome,
+      totalExpense,
+      netIncome,
+      savingsRate,
+    };
   }
 );
 
@@ -180,6 +222,10 @@ const transactionsSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(fetchTransactions.fulfilled, (state, action) => {
+        if (action.payload === undefined) {
+          state.isLoading = false;
+          return;
+        }
         state.data = action.payload;
         state.isLoading = false;
       })
@@ -190,7 +236,17 @@ const transactionsSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(fetchTopTransactionsByCategory.fulfilled, (state, action) => {
-        state.topTransactionsByCategory = action.payload;
+        if (action.payload === undefined) {
+          state.isLoading = false;
+          return;
+        }
+
+        const mappedPayload = action.payload.map((data) => ({
+          ...data,
+          createdAt: new Date(data.createdAt).toLocaleDateString(),
+        }));
+
+        state.topTransactionsByCategory = mappedPayload;
         state.isLoading = false;
       })
       .addCase(fetchTopTransactionsByCategory.rejected, (state) => {
@@ -200,6 +256,18 @@ const transactionsSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(fetchMonthlyTransactionsData.fulfilled, (state, action) => {
+        if (action.payload === undefined) {
+          state.isLoading = false;
+          return;
+        }
+
+        const { incomes, expenses } = action.payload;
+
+        if (!incomes?.length || !expenses?.length) {
+          state.isLoading = false;
+          return;
+        }
+
         state.monthlyData = action.payload;
         state.isLoading = false;
       })
@@ -210,6 +278,10 @@ const transactionsSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(fetchInsightsData.fulfilled, (state, action) => {
+        if (action.payload === undefined) {
+          state.isLoading = false;
+          return;
+        }
         state.insightsData = action.payload;
         state.isLoading = false;
       })

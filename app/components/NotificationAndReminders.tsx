@@ -1,26 +1,17 @@
 "use client";
-import React, { useEffect } from "react";
-import {
-  Box,
-  Stack,
-  Badge,
-  Divider,
-  useColorMode,
-  Text,
-  IconButton,
-} from "@chakra-ui/react";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import {
   setIsCreateReminderModalOpen,
   setIsEditReminderModalOpen,
-} from "../redux/features/remindersSlice";
-import { fetchReminders } from "../redux/features/remindersSlice";
-import EditIcon from "./Icons/EditIcon";
+} from "@/app/redux/features/remindersSlice";
+import { fetchReminders } from "@/app/redux/features/remindersSlice";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+import { Pencil1Icon } from "@radix-ui/react-icons";
 
 const NotificationsAndReminders = () => {
-  const { colorMode } = useColorMode();
-
   const {
     isCreateReminderModalOpen,
     isEditReminderModalOpen,
@@ -35,64 +26,71 @@ const NotificationsAndReminders = () => {
 
   if (!isLoading && !reminders) {
     return (
-      <Box>
-        <Text>No reminders were found.</Text>
+      <div className="p-2 h-[700px] overflow-y-scroll scrollbar-hide">
+        <p>No reminders were found.</p>
         <Button
           variant="secondary"
-          className="mt-3 dark:border dark:border-blue-600 bg-secondary hover:bg-secondary-foreground font-bold hover:text-secondary"
+          className="mt-3 dark:border text-md dark:border-blue-600 bg-secondary hover:bg-secondary-foreground font-bold hover:text-secondary"
           onClick={() => {
             dispatch(setIsCreateReminderModalOpen(!isCreateReminderModalOpen));
           }}
         >
           Create a reminder
         </Button>
-      </Box>
+      </div>
     );
   }
 
   let today = new Date();
 
   return (
-    <Box>
-      <Stack spacing={4}>
+    <div className="p-2 h-[700px] overflow-y-scroll scrollbar-hide">
+      <div className="grid grid-cols-1 gap-4">
         {reminders &&
           reminders.map((reminder) => (
-            <Box
-              display={"flex"}
-              justifyContent={"center"}
-              alignItems={"flex-start"}
-              flexDirection={"column"}
+            <div
+              className="flex items-center flex-col gap-1 gp-4 rounded-md bg-card p-4 shadow-xl relative"
               key={reminder.id}
-              gap={1}
-              p={4}
-              bg={colorMode === "light" ? "white" : "gray.700"}
-              rounded={"md"}
-              shadow={"xl"}
-              position={"relative"}
             >
-              <Text fontWeight="bold">
-                {reminder.title}
-                <Badge ml={2} colorScheme="blue">
+              <div className="w-full flex items-center justify-between">
+                <p className="font-bold">{reminder.title}</p>
+                <Badge className="ml-2 bg-orange-400 cursor-pointer select-none hover:bg-orange-500">
                   Reminder
                 </Badge>
-              </Text>
+              </div>
               {today < new Date(reminder.reminderDate) ? null : (
-                <Badge
-                  position={"absolute"}
-                  bottom={1}
-                  right={1}
-                  colorScheme="red"
-                >
+                <Badge className="absolute bottom-1 right-1 bg-red-500 cursor-pointer hover:bg-red-600 select-none">
                   PAST REMINDER DATE
                 </Badge>
               )}
-              <IconButton
-                icon={<EditIcon />}
-                aria-label="edit notification"
-                bg={"transparent"}
-                position={"absolute"}
-                top={0}
-                right={0}
+              <div className="w-full flex items-center gap-1 my-2">
+                <span>Notes:</span>
+                <p className="text-primary">{reminder.description}</p>
+              </div>
+              <div className="w-full flex items-center justify-between gap-1">
+                <p className="text-md">
+                  Date:{" "}
+                  {new Date(reminder.reminderDate).toLocaleDateString("tr-TR", {
+                    year: "numeric",
+                    month: "numeric",
+                    day: "numeric",
+                  })}
+                </p>
+                <p
+                  className={cn(
+                    "text-md font-semibold",
+                    reminder.isIncome ? "text-green-500" : "text-red-500"
+                  )}
+                >
+                  {reminder.isIncome ? "Income" : "Expense"}: ${reminder.amount}
+                </p>
+              </div>
+              <div className="my-2 h-1 bg-card" />
+              <Button
+                variant="ghost"
+                size="icon"
+                className="absolute bottom-0 right-1 hover:bg-transparent focus:outline-none outline-none"
+                aria-label="Edit notification"
                 onClick={() => {
                   dispatch(
                     setIsEditReminderModalOpen({
@@ -101,25 +99,12 @@ const NotificationsAndReminders = () => {
                     })
                   );
                 }}
-              />
-              <Text fontSize="sm">
-                Date:{" "}
-                {new Date(reminder.reminderDate).toLocaleDateString("tr-TR", {
-                  year: "numeric",
-                  month: "numeric",
-                  day: "numeric",
-                })}
-              </Text>
-              <Text
-                fontSize={"md"}
-                color={reminder.isIncome ? "green.500" : "red.500"}
               >
-                {reminder.isIncome ? "Income" : "Expense"}: ${reminder.amount}
-              </Text>
-              <Divider my={2} />
-            </Box>
+                <Pencil1Icon />
+              </Button>
+            </div>
           ))}
-      </Stack>
+      </div>
       <Button
         className="mt-3 dark:border dark:border-blue-600"
         onClick={() =>
@@ -128,7 +113,7 @@ const NotificationsAndReminders = () => {
       >
         Create a reminder
       </Button>
-    </Box>
+    </div>
   );
 };
 

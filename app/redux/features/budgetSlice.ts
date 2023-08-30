@@ -2,8 +2,13 @@ import { getBudgetsByCurrentUserAction } from "@/actions/index";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { Budget } from "@prisma/client";
 
+type SerializedBudget = Omit<Budget, "createdAt" | "updatedAt"> & {
+  createdAt: string;
+  updatedAt: string;
+};
+
 interface BudgetsState {
-  budgets: Budget[] | null;
+  budgets: SerializedBudget[] | null;
   isLoading: boolean;
   isCreateBudgetModalOpen: boolean;
   isDeleteBudgetModalOpen: boolean;
@@ -24,7 +29,16 @@ export const fetchBudgets = createAsyncThunk(
   "budgets/fetchBudgets",
   async () => {
     const { budgets } = await getBudgetsByCurrentUserAction();
-    return budgets;
+    if (!budgets) {
+      return undefined;
+    }
+    const mappedBudgets = budgets.map((data) => ({
+      ...data,
+      createdAt: new Date(data.createdAt).toLocaleDateString(),
+      updatedAt: new Date(data.updatedAt).toLocaleDateString(),
+    }));
+
+    return mappedBudgets;
   }
 );
 

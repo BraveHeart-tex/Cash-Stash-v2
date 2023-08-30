@@ -8,6 +8,7 @@ import RegisterSchema, { RegisterSchemaType } from "@/schemas/RegisterSchema";
 import { cookies } from "next/headers";
 import bcrypt from "bcrypt";
 import { redirect } from "next/navigation";
+import { MONTHS_OF_THE_YEAR } from "@/lib/utils";
 
 export const loginAction = async ({ email, password }: LoginSchemaType) => {
   const result = LoginSchema.safeParse({ email, password });
@@ -210,5 +211,162 @@ export const getGoalsByCurrentUserAction = async () => {
 
   return {
     goals,
+  };
+};
+
+export const getTransactionsByCurrentUserAction = async () => {
+  const currentUser = await getCurrentUser(cookies().get("token")?.value!);
+
+  if (!currentUser) {
+    return { error: "No user found." };
+  }
+
+  const transactions = await db.transaction.findMany({
+    where: {
+      userId: currentUser.id,
+    },
+  });
+
+  console.log(transactions);
+
+  if (!transactions) {
+    return { error: "No transactions found." };
+  }
+
+  return {
+    transactions,
+  };
+};
+
+export const getTopTransactionsByCategoryAction = async () => {
+  const currentUser = await getCurrentUser(cookies().get("token")?.value!);
+
+  if (!currentUser) {
+    return { error: "No user found." };
+  }
+
+  const categories = await db.transaction.groupBy({
+    by: ["category", "accountId", "createdAt"],
+    where: {
+      userId: currentUser.id,
+      isIncome: false,
+    },
+    _sum: {
+      amount: true,
+    },
+    orderBy: {
+      _sum: {
+        amount: "desc",
+      },
+    },
+  });
+
+  const data = categories.map((category) => ({
+    category: category.category,
+    totalAmount: category._sum.amount || 0,
+    accountId: category.accountId,
+    createdAt: category.createdAt,
+  }));
+
+  return {
+    topTransactionsByCategory: data,
+  };
+};
+
+export const fetchMonthlyTransactionsDataAction = async () => {
+  const currentUser = await getCurrentUser(cookies().get("token")?.value!);
+
+  if (!currentUser) {
+    return { error: "No user found." };
+  }
+
+  const incomes = await db.transaction.groupBy({
+    by: ["createdAt"],
+    where: {
+      userId: currentUser.id,
+      isIncome: true,
+    },
+    _sum: {
+      amount: true,
+    },
+  });
+
+  const expenses = await db.transaction.groupBy({
+    by: ["createdAt"],
+    where: {
+      userId: currentUser.id,
+      isIncome: false,
+    },
+    _sum: {
+      amount: true,
+    },
+  });
+
+  const formattedIncomes = incomes.map((income) => {
+    return {
+      month: MONTHS_OF_THE_YEAR[new Date(income.createdAt).getMonth()],
+      amount: income._sum.amount ?? 0,
+    };
+  });
+
+  const formattedExpenses = expenses.map((expense) => {
+    return {
+      month: MONTHS_OF_THE_YEAR[new Date(expense.createdAt).getMonth()],
+      amount: expense._sum.amount ?? 0,
+    };
+  });
+
+  return {
+    incomes: formattedIncomes,
+    expenses: formattedExpenses,
+  };
+};
+
+export const fetchInsightsDataAction = async () => {
+  const currentUser = await getCurrentUser(cookies().get("token")?.value!);
+
+  if (!currentUser) {
+    return { error: "No user found." };
+  }
+
+  // get total amount of income of the user
+  const totalIncome = await db.transaction.aggregate({
+    where: {
+      userId: currentUser.id,
+      isIncome: true,
+    },
+    _sum: {
+      amount: true,
+    },
+  });
+
+  //  get total expenses of the user
+  const totalExpense = await db.transaction.aggregate({
+    where: {
+      userId: currentUser.id,
+      isIncome: false,
+    },
+    _sum: {
+      amount: true,
+    },
+  });
+
+  // calculate net income
+  if (!totalIncome._sum.amount || !totalExpense._sum.amount) {
+    return {
+      error: "Error calculating net income",
+    };
+  }
+
+  const netIncome = totalIncome._sum.amount - totalExpense._sum.amount;
+
+  //  calculate savings are percentage of net income in a readable format
+  const savingsRate = ((netIncome / totalIncome._sum.amount) * 100).toFixed(0);
+
+  return {
+    totalIncome: totalIncome._sum.amount ?? 0,
+    totalExpense: totalExpense._sum.amount ?? 0,
+    netIncome,
+    savingsRate,
   };
 };

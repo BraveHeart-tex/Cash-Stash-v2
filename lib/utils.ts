@@ -12,6 +12,21 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export const MONTHS_OF_THE_YEAR = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "July",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+
 const errorMap = (issue: ZodIssueOptionalMessage, _ctx: ErrorMapCtx) => {
   let message;
   switch (issue.code) {

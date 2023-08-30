@@ -2,8 +2,13 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { Goal } from "@prisma/client";
 import { getGoalsByCurrentUserAction } from "@/actions";
 
+type SerializedGoal = Omit<Goal, "createdAt" | "updatedAt"> & {
+  createdAt: string;
+  updatedAt: string;
+};
+
 interface GoalsState {
-  goals: Goal[] | null;
+  goals: SerializedGoal[] | null;
   isLoading: boolean;
   isEditGoalModalOpen: boolean;
   isCreateGoalModalOpen: boolean;
@@ -22,7 +27,16 @@ const initialState: GoalsState = {
 
 export const fetchGoals = createAsyncThunk("goals/fetchGoals", async () => {
   const { goals } = await getGoalsByCurrentUserAction();
-  return goals;
+  if (!goals) {
+    return undefined;
+  }
+  const mappedGoals = goals.map((data) => ({
+    ...data,
+    createdAt: new Date(data.createdAt).toLocaleDateString(),
+    updatedAt: new Date(data.updatedAt).toLocaleDateString(),
+  }));
+
+  return mappedGoals;
 });
 
 const goalsSlice = createSlice({

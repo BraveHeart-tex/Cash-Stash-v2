@@ -11,7 +11,7 @@ interface IFinancialInsightsProps {
 const FinancialInsights = ({ insightsData }: IFinancialInsightsProps) => {
   if (!insightsData) {
     return (
-      <div className="my-3" my>
+      <div className="my-3">
         <div className="grid grid-cols-1 gap-4 text-primary">
           <p>No data was found to generate financial insights from.</p>
           <p>

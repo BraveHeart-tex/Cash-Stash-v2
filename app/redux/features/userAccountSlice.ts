@@ -2,8 +2,12 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { UserAccount } from "@prisma/client";
 import { getAccountsByCurrentUserAction } from "@/actions";
 
+type SerializedUserAccount = Omit<UserAccount, "createdAt" | "updatedAt"> & {
+  createdAt: string;
+};
+
 interface UserAccountsState {
-  currentUserAccounts: UserAccount[] | null;
+  currentUserAccounts: SerializedUserAccount[] | null;
   isLoading: boolean;
   isCreateAccountModalOpen: boolean;
   isEditAccountModalOpen: boolean;
@@ -24,7 +28,18 @@ export const fetchCurrentUserAccounts = createAsyncThunk(
   "accounts/fetchCurrentUserAccounts",
   async () => {
     const { accounts } = await getAccountsByCurrentUserAction();
-    return accounts;
+
+    if (!accounts) {
+      return undefined;
+    }
+
+    const mappedAccounts = accounts.map((data) => ({
+      ...data,
+      createdAt: new Date(data.createdAt).toLocaleDateString(),
+      updatedAt: new Date(data.updatedAt).toLocaleDateString(),
+    }));
+
+    return mappedAccounts;
   }
 );
 

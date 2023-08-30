@@ -1,14 +1,15 @@
-import getCurrentUser from '@/app/actions/getCurrentUser';
-import prisma from '@/app/libs/prismadb';
-import { NextResponse } from 'next/server';
+import { getCurrentUserAction } from "@/actions";
+import getCurrentUser from "@/app/actions/getCurrentUser";
+import prisma from "@/app/libs/prismadb";
+import { NextResponse } from "next/server";
 
 // get all reminders
 export async function GET(request: Request) {
-  const currentUser = await getCurrentUser();
+  const { user: currentUser } = await getCurrentUserAction();
 
   if (!currentUser) {
     return NextResponse.json(
-      { error: 'Unauthorized' },
+      { error: "Unauthorized" },
       {
         status: 401,
       }
@@ -25,7 +26,7 @@ export async function GET(request: Request) {
   if (!reminders || reminders.length === 0) {
     return NextResponse.json(
       {
-        error: 'No reminders were found for the current user.',
+        error: "No reminders were found for the current user.",
       },
       {
         status: 404,
@@ -45,11 +46,11 @@ export async function GET(request: Request) {
 
 // create a reminder
 export async function POST(request: Request) {
-  const currentUser = await getCurrentUser();
+  const { user: currentUser } = await getCurrentUserAction();
 
   if (!currentUser) {
     return NextResponse.json(
-      { error: 'Unauthorized' },
+      { error: "Unauthorized" },
       {
         status: 401,
       }
@@ -67,7 +68,7 @@ export async function POST(request: Request) {
   if (!title || !description || !amount || !reminderDate || !isIncomeInput) {
     return NextResponse.json(
       {
-        error: 'Bad Request. Please provide all the required fields.',
+        error: "Bad Request. Please provide all the required fields.",
       },
       {
         status: 400,
@@ -75,7 +76,7 @@ export async function POST(request: Request) {
     );
   }
 
-  let mappedIsIncome = isIncomeInput === 'income' ? true : false;
+  let mappedIsIncome = isIncomeInput === "income" ? true : false;
   let mappedReminderDate = new Date(reminderDate);
 
   const reminder = await prisma.reminder.create({
@@ -92,7 +93,7 @@ export async function POST(request: Request) {
   if (!reminder) {
     return NextResponse.json(
       {
-        error: 'An error occurred while trying to create a reminder.',
+        error: "An error occurred while trying to create a reminder.",
       },
       {
         status: 500,
