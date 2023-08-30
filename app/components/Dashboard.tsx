@@ -1,22 +1,22 @@
 "use client";
-import AccountSummaries from "./AccountSummaries";
-import BudgetStatus from "./BudgetStatus";
-import GoalStatus from "./GoalStatus";
-import TransactionHistory from "./TransactionHistory";
-import FinancialInsights from "./FinancialInsights";
-import NotificationsAndReminders from "./NotificationAndReminders";
-import InsightGroupChart from "./DashboardPage/InsightGroupChart";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { useEffect } from "react";
 import {
   fetchInsightsData,
   fetchMonthlyTransactionsData,
   fetchTransactions,
-} from "../redux/features/transactionsSlice";
+} from "@/app/redux/features/transactionsSlice";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
+import Spinner from "@/components/Spinner";
+import { useEffect } from "react";
+import AccountSummaries from "./AccountSummaries";
+import BudgetStatus from "./BudgetStatus";
+import InsightGroupChart from "./DashboardPage/InsightGroupChart";
+import FinancialInsights from "./FinancialInsights";
+import GoalStatus from "./GoalStatus";
+import Navigation from "./Navigation";
+import NotificationsAndReminders from "./NotificationAndReminders";
 import CreateReminderModal from "./Reminders/modals/CreateReminderModal";
 import EditReminderModal from "./Reminders/modals/EditReminderModal";
-import Navigation from "./Navigation";
-import Spinner from "@/components/Spinner";
+import TransactionHistory from "./TransactionHistory";
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();

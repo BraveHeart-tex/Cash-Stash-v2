@@ -7,7 +7,10 @@ import {
   getTransactionsByCurrentUserAction,
 } from "@/actions";
 
-type SerializedTransaction = Omit<Transaction, "createdAt" | "updatedAt"> & {
+export type SerializedTransaction = Omit<
+  Transaction,
+  "createdAt" | "updatedAt"
+> & {
   createdAt: string;
   updatedAt: string;
 };

@@ -1,5 +1,4 @@
-import React from 'react';
-import AccountsPageClient from './AccountPageClient';
+import AccountsPageClient from "./AccountPageClient";
 
 const AccountPage = async () => {
   return (

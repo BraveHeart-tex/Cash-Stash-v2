@@ -2,11 +2,11 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Transaction } from "@prisma/client";
 import Link from "next/link";
+import { SerializedTransaction } from "@/app/redux/features/transactionsSlice";
 
 interface ITransactionHistoryProps {
-  transactions: Transaction[] | null;
+  transactions: SerializedTransaction[] | null;
 }
 
 const TransactionHistory = ({ transactions }: ITransactionHistoryProps) => {
@@ -48,13 +48,7 @@ const TransactionHistory = ({ transactions }: ITransactionHistoryProps) => {
               </Badge>
             </div>
 
-            <p>
-              {new Date(transaction.createdAt).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </p>
+            <p>{transaction.createdAt}</p>
             <p>{transaction.amount}₺</p>
           </div>
         ))}

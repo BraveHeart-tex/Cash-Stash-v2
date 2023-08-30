@@ -1,171 +1,139 @@
-'use client';
-import {
-  Heading,
-  Text,
-  Card,
-  CardBody,
-  CardHeader,
-  SimpleGrid,
-  IconButton,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverArrow,
-  PopoverCloseButton,
-  PopoverHeader,
-  PopoverBody,
-  Box,
-  Flex,
-  Container,
-  useColorMode,
-} from '@chakra-ui/react';
-import { UserAccount } from '@prisma/client';
+"use client";
 import CreateUserAccountOptions, {
   getOptionLabel,
-} from '../../utils/CreateUserAccountOptions';
-import EditUserAccountModal from './modals/EditUserAccountModal';
-import { EditIcon } from '@chakra-ui/icons';
-import ActionsIcon from '../Icons/ActionsIcon';
-import DeleteIcon from '../Icons/DeleteIcon';
-import DeleteUserAccountModal from './modals/DeleteUserAccountModal';
-import useColorModeStyles from '../../hooks/useColorModeStyles';
-import { useAppDispatch, useAppSelector } from '@/app/redux/hooks';
+} from "@/app/utils/CreateUserAccountOptions";
+import EditUserAccountModal from "./modals/EditUserAccountModal";
+import DeleteUserAccountModal from "./modals/DeleteUserAccountModal";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import {
   setIsEditAccountModalOpen,
   setIsDeleteAccountModalOpen,
-} from '@/app/redux/features/userAccountSlice';
+  SerializedUserAccount,
+} from "@/app/redux/features/userAccountSlice";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+} from "@/components/ui/card";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import {
+  Cross1Icon,
+  DotsHorizontalIcon,
+  Pencil1Icon,
+} from "@radix-ui/react-icons";
 
 interface IAccountInformationProps {
-  userAccounts: UserAccount[] | undefined | null;
+  userAccounts: SerializedUserAccount[] | undefined | null;
 }
 
 const AccountInformation = ({ userAccounts }: IAccountInformationProps) => {
-  const { colorMode } = useColorMode();
-  const { headingColor, textColor } = useColorModeStyles();
   const dispatch = useAppDispatch();
   const { isEditAccountModalOpen, isDeleteAccountModalOpen } = useAppSelector(
     (state) => state.userAccountReducer
   );
 
   return (
-    <Container maxW={'8xl'}>
-      <SimpleGrid columns={{ base: 1, md: 2, xl: 3 }} gap={8}>
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
         {userAccounts && userAccounts?.length > 0 ? (
           userAccounts.map((userAccount) => (
-            <Card
-              key={userAccount.id}
-              bg={'transparent'}
-              borderWidth={1}
-              borderColor={colorMode === 'light' ? 'gray.200' : 'gray.700'}
-            >
+            <Card key={userAccount.id} className="relative">
               <Popover>
-                <PopoverTrigger>
-                  <IconButton
-                    icon={<ActionsIcon />}
-                    aria-label='account actions'
-                    bg={'transparent'}
-                    width={5}
-                    height={5}
-                    position={'absolute'}
-                    top={2}
-                    right={2}
-                    mb={2}
-                  />
-                </PopoverTrigger>
-                <PopoverContent>
-                  <PopoverArrow />
-                  <PopoverCloseButton />
-                  <PopoverHeader
-                    textAlign={'center'}
-                    fontWeight={'bold'}
-                    color={headingColor}
+                <PopoverTrigger className="absolute top-2 right-2 mb-2">
+                  <Button
+                    variant={"ghost"}
+                    size={"icon"}
+                    aria-label="Account actions"
+                    className="focus:outline-none outline-none"
                   >
+                    <DotsHorizontalIcon />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent align="start">
+                  <h3 className="text-center font-bold text-primary">
                     Account Actions
-                  </PopoverHeader>
-                  <PopoverBody>
-                    <Flex justifyContent={'center'} alignItems={'center'}>
-                      <SimpleGrid columns={1} gap={4}>
-                        <Flex justifyContent={'center'} alignItems={'center'}>
-                          <IconButton
-                            aria-label={'Edit user account'}
-                            onClick={() =>
-                              dispatch(
-                                setIsEditAccountModalOpen({
-                                  isEditAccountModalOpen:
-                                    !isEditAccountModalOpen,
-                                  selectedUserAccountId: userAccount.id,
-                                })
-                              )
-                            }
-                            icon={<EditIcon />}
-                            width={4}
-                            height={4}
-                            bg={'transparent'}
-                            mr={2}
-                          />
-                          <Text width={'50%'} fontSize={'md'} color={textColor}>
-                            Edit{' '}
-                          </Text>
-                        </Flex>
-                        <Flex justifyContent={'center'} alignItems={'center'}>
-                          <IconButton
-                            aria-label={'Delete user account'}
-                            onClick={() =>
-                              dispatch(
-                                setIsDeleteAccountModalOpen({
-                                  isDeleteAccountModalOpen:
-                                    !isDeleteAccountModalOpen,
-                                  selectedUserAccountId: userAccount.id,
-                                })
-                              )
-                            }
-                            icon={<DeleteIcon />}
-                            width={4}
-                            height={4}
-                            bg={'transparent'}
-                            mr={2}
-                          />
-                          <Text width={'50%'} color={textColor}>
-                            Delete
-                          </Text>
-                        </Flex>
-                      </SimpleGrid>
-                    </Flex>
-                  </PopoverBody>
+                  </h3>
+                  <div className="grid grid-cols-1 gap-1">
+                    <div className="flex items-center">
+                      <Button
+                        variant={"ghost"}
+                        size={"icon"}
+                        aria-label="Edit user account"
+                        onClick={() =>
+                          dispatch(
+                            setIsEditAccountModalOpen({
+                              isEditAccountModalOpen: !isEditAccountModalOpen,
+                              selectedUserAccountId: userAccount.id,
+                            })
+                          )
+                        }
+                        className="mr-2 flex items-center gap-2 w-full justify-start"
+                      >
+                        <Pencil1Icon className="h-5 w-5" />
+                        <span className="text-[16px]">Edit</span>
+                      </Button>
+                    </div>
+                    <div className="flex items-center">
+                      <Button
+                        variant={"ghost"}
+                        size={"icon"}
+                        aria-label="Delete user account"
+                        onClick={() =>
+                          dispatch(
+                            setIsDeleteAccountModalOpen({
+                              isDeleteAccountModalOpen:
+                                !isDeleteAccountModalOpen,
+                              selectedUserAccountId: userAccount.id,
+                            })
+                          )
+                        }
+                        className="mr-2 flex items-center gap-2 w-full justify-start"
+                      >
+                        <Cross1Icon />
+                        <span className="text-[16px]">Delete</span>
+                      </Button>
+                    </div>
+                  </div>
                 </PopoverContent>
               </Popover>
-              <CardHeader
-                color={colorMode === 'light' ? 'gray.600' : 'gray.300'}
-              >
-                <Heading size='md'>{userAccount.name}</Heading>
-                <Text fontSize={'md'} textTransform={'capitalize'}>
-                  Account type:{' '}
-                  {getOptionLabel(
-                    CreateUserAccountOptions,
-                    userAccount.category
-                  )}
-                </Text>
+              <CardHeader className="text-primary">
+                <h2 className="text-lg font-bold">{userAccount.name}</h2>
+                <CardDescription>
+                  <p className="text-lg capitalize">
+                    Account type:{" "}
+                    {getOptionLabel(
+                      CreateUserAccountOptions,
+                      userAccount.category
+                    )}
+                  </p>
+                </CardDescription>
               </CardHeader>
-              <CardBody color={colorMode === 'light' ? 'gray.600' : 'gray.300'}>
-                <Text fontWeight={'600'}>
+              <CardContent className="text-primary">
+                <p className="font-bold">
                   Account Balance: ${userAccount.balance}
-                </Text>
-              </CardBody>
+                </p>
+              </CardContent>
             </Card>
           ))
         ) : (
-          <Box my={4}>
-            <Heading size={'md'}>No accounts found</Heading>
-            <Text>
+          <div className="my-4">
+            <h3 className="text-lg text-primary">No accounts found</h3>
+            <p>
               You can remove the filter to see all accounts or create a new one
               with this category.
-            </Text>
-          </Box>
+            </p>
+          </div>
         )}
-      </SimpleGrid>
+      </div>
       <EditUserAccountModal />
       <DeleteUserAccountModal />
-    </Container>
+    </>
   );
 };
 
