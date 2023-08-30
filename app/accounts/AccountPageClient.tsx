@@ -1,9 +1,9 @@
 "use client";
-import Navigation from "../components/Navigation";
-import CreateUserAccountModal from "../components/AccountsPage/modals/CreateUserAccountModal";
-import AccountsFilter from "../components/AccountsPage/AccountFilter";
-import { useAppDispatch } from "../redux/hooks";
-import { setIsCreateAccountModalOpen } from "../redux/features/userAccountSlice";
+import Navigation from "@/app/components/Navigation";
+import CreateUserAccountModal from "@/app/components/AccountsPage/modals/CreateUserAccountModal";
+import AccountsFilter from "@/app/components/AccountsPage/AccountFilter";
+import { useAppDispatch } from "@/app/redux/hooks";
+import { setIsCreateAccountModalOpen } from "@/app/redux/features/userAccountSlice";
 import { Button } from "@/components/ui/button";
 
 export default function AccountsPageClient() {
@@ -18,7 +18,7 @@ export default function AccountsPageClient() {
           <AccountsFilter />
         </div>
         <Button
-          className="mt-4 font-semibold"
+          className="mt-4 font-semibold self-start"
           onClick={() => dispatch(setIsCreateAccountModalOpen(true))}
         >
           Create Account

@@ -58,8 +58,8 @@ const AccountsFilter = () => {
   };
 
   return (
-    <div>
-      <div className="flex items-center mb-2">
+    <div className="grid grid-cols-1 lg:grid-cols-12 ">
+      <div className="flex justify-start mb-2 col-span-2 w-full">
         <Select
           defaultValue={
             selectedAccountType ? selectedAccountType : "All Accounts"
@@ -83,7 +83,9 @@ const AccountsFilter = () => {
           </SelectContent>
         </Select>
       </div>
-      <AccountInformation userAccounts={filteredAccounts} />
+      <div className="col-span-10">
+        <AccountInformation userAccounts={filteredAccounts} />
+      </div>
     </div>
   );
 };
