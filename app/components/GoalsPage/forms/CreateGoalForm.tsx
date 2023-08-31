@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import {
   Stack,
   FormLabel,
@@ -7,15 +7,13 @@ import {
   FormControl,
   Button,
   useToast,
-} from '@chakra-ui/react';
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
-import useColorModeStyles from '../../../hooks/useColorModeStyles';
-import axios from 'axios';
-import { useAppDispatch } from '../../../redux/hooks';
-import {
-  fetchGoals,
-  setCreateGoalModalOpen,
-} from '../../../redux/features/goalSlice';
+} from "@chakra-ui/react";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import useColorModeStyles from "../../../hooks/useColorModeStyles";
+import axios from "axios";
+import { useAppDispatch } from "../../../redux/hooks";
+import { fetchGoals } from "../../../redux/features/goalSlice";
+import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 
 const CreateUserGoalForm = () => {
   const dispatch = useAppDispatch();
@@ -28,34 +26,34 @@ const CreateUserGoalForm = () => {
     formState: { errors, isSubmitting },
   } = useForm<FieldValues>({
     defaultValues: {
-      goalName: '',
+      goalName: "",
       goalAmount: 10,
-      currentAmount: '0',
+      currentAmount: "0",
     },
   });
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
-      const response = await axios.post('/api/user/goals', data);
+      const response = await axios.post("/api/user/goals", data);
       toast({
-        title: 'Goal created.',
+        title: "Goal created.",
         description:
-          'Your goal has been created. You can close this window now.',
-        status: 'success',
+          "Your goal has been created. You can close this window now.",
+        status: "success",
         duration: 4000,
         isClosable: true,
-        position: 'top',
+        position: "top",
       });
       dispatch(fetchGoals());
-      dispatch(setCreateGoalModalOpen(false));
+      dispatch(closeGenericModal());
     } catch (error: any) {
       toast({
-        title: 'An error occurred.',
+        title: "An error occurred.",
         description: error.response.data.error,
-        status: 'error',
+        status: "error",
         duration: 4000,
         isClosable: true,
-        position: 'top',
+        position: "top",
       });
     }
   };
@@ -67,17 +65,17 @@ const CreateUserGoalForm = () => {
         <FormControl isRequired isInvalid={errors.goalName}>
           <FormLabel>Goal Name</FormLabel>
           <Input
-            type='text'
-            id='goalName'
-            {...register('goalName', {
-              required: 'Goal name is required.',
+            type="text"
+            id="goalName"
+            {...register("goalName", {
+              required: "Goal name is required.",
               minLength: {
                 value: 3,
-                message: 'Goal name must be at least 3 characters long.',
+                message: "Goal name must be at least 3 characters long.",
               },
               maxLength: {
                 value: 50,
-                message: 'Goal name cannot exceed 50 characters.',
+                message: "Goal name cannot exceed 50 characters.",
               },
             })}
           />
@@ -90,17 +88,17 @@ const CreateUserGoalForm = () => {
         <FormControl isRequired isInvalid={errors.goalAmount}>
           <FormLabel>Goal Amount (₺)</FormLabel>
           <Input
-            type='number'
-            id='goalAmount'
-            {...register('goalAmount', {
-              required: 'Goal amount is required.',
+            type="number"
+            id="goalAmount"
+            {...register("goalAmount", {
+              required: "Goal amount is required.",
               min: {
                 value: 10,
-                message: 'Goal amount must be at least $10.',
+                message: "Goal amount must be at least $10.",
               },
               max: {
                 value: 1000000,
-                message: 'Goal amount cannot exceed $1,000,000.',
+                message: "Goal amount cannot exceed $1,000,000.",
               },
             })}
           />
@@ -113,17 +111,17 @@ const CreateUserGoalForm = () => {
         <FormControl isRequired isInvalid={errors.currentAmount}>
           <FormLabel>Current Amount (₺)</FormLabel>
           <Input
-            type='number'
-            id='currentAmount'
-            {...register('currentAmount', {
-              required: 'Current amount is required.',
+            type="number"
+            id="currentAmount"
+            {...register("currentAmount", {
+              required: "Current amount is required.",
               min: {
                 value: 0,
-                message: 'Current amount must be at least $0.',
+                message: "Current amount must be at least $0.",
               },
               max: {
                 value: 1000000,
-                message: 'Current amount cannot exceed $1,000,000.',
+                message: "Current amount cannot exceed $1,000,000.",
               },
             })}
           />
@@ -141,7 +139,7 @@ const CreateUserGoalForm = () => {
             _hover={{
               bg: btnHoverBgColor,
             }}
-            type='submit'
+            type="submit"
             isDisabled={isSubmitting}
             isLoading={isSubmitting}
           >

@@ -19,19 +19,14 @@ import { fetchCurrentUserAccounts } from "@/app/redux/features/userAccountSlice"
 import FormLoadingSpinner from "../../FormLoadingSpinner";
 import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
 import axios from "axios";
-import {
-  fetchTransactions,
-  setCreateModalOpen,
-} from "@/app/redux/features/transactionsSlice";
+import { fetchTransactions } from "@/app/redux/features/transactionsSlice";
+import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 
 const CreateTransactionForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useAppDispatch();
   const { currentUserAccounts, isLoading: userAccountsLoading } =
     useAppSelector((state) => state.userAccountReducer);
-  const { createModalOpen } = useAppSelector(
-    (state) => state.transactionsReducer
-  );
   const categories = Object.values(CreateBudgetOptions);
 
   useEffect(() => {
@@ -74,7 +69,7 @@ const CreateTransactionForm = () => {
       });
       setIsLoading(false);
       dispatch(fetchTransactions());
-      dispatch(setCreateModalOpen(!createModalOpen));
+      dispatch(closeGenericModal());
     } catch (error) {
       setIsLoading(false);
       toast({

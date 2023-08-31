@@ -20,14 +20,13 @@ import { updateAccountByIdAction } from "@/actions";
 import CreateUserAccountSchema, {
   CreateUserAccountSchemaType,
 } from "@/schemas/CreateUserAccountSchema";
+import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 
 interface IEditUserAccountFormProps {
-  selectedAccountId: number | null;
+  entityId: number | null;
 }
 
-const EditUserAccountForm = ({
-  selectedAccountId,
-}: IEditUserAccountFormProps) => {
+const EditUserAccountForm = ({ entityId }: IEditUserAccountFormProps) => {
   const { currentAccount, isLoading: isCurrentAccountLoading } = useAppSelector(
     (state) => state.currentAccountReducer
   );
@@ -59,10 +58,10 @@ const EditUserAccountForm = ({
   const loading = isCurrentAccountLoading || isLoading;
 
   useEffect(() => {
-    if (selectedAccountId) {
-      dispatch(fetchCurrentAccount(selectedAccountId));
+    if (entityId) {
+      dispatch(fetchCurrentAccount(entityId));
     }
-  }, [dispatch, selectedAccountId]);
+  }, [dispatch, entityId]);
 
   useEffect(() => {
     if (currentAccount) {
@@ -94,7 +93,7 @@ const EditUserAccountForm = ({
 
     startTransition(async () => {
       const result = await updateAccountByIdAction({
-        accountId: selectedAccountId,
+        accountId: entityId,
         ...data,
       });
 
@@ -113,7 +112,7 @@ const EditUserAccountForm = ({
           variant: "default",
           duration: 5000,
         });
-        dispatch(setIsEditAccountModalOpen(false));
+        dispatch(closeGenericModal());
       }
     });
   };

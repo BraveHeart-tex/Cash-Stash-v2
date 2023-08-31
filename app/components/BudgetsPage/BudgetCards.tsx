@@ -1,12 +1,8 @@
 "use client";
-import EditBudgetModal from "./modals/EditBudgetModal";
-import DeleteBudgetModal from "./modals/DeleteBudgetModal";
 import { useAppDispatch } from "@/app/redux/hooks";
 import {
   SerializedBudget,
   fetchBudgets,
-  setDeleteBudgetModalOpen,
-  setEditBudgetModalOpen,
 } from "@/app/redux/features/budgetSlice";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -16,6 +12,7 @@ import { showGenericConfirm } from "@/app/redux/features/genericConfirmSlice";
 import { deleteBudgetByIdAction } from "@/actions";
 import { useToast } from "@/components/ui/use-toast";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
+import { openGenericModal } from "@/app/redux/features/genericModalSlice";
 
 interface IBudgetCardsProps {
   budgets: SerializedBudget[] | null;
@@ -45,7 +42,6 @@ const BudgetCards = ({ budgets }: IBudgetCardsProps) => {
         variant: "default",
         duration: 5000,
       });
-      dispatch(setDeleteBudgetModalOpen(false));
     }
   };
 
@@ -64,9 +60,13 @@ const BudgetCards = ({ budgets }: IBudgetCardsProps) => {
                     popoverHeading={"Budget Actions"}
                     onEditActionClick={() =>
                       dispatch(
-                        setEditBudgetModalOpen({
-                          isEditBudgetModalOpen: true,
-                          selectedBudgetId: budget.id,
+                        openGenericModal({
+                          dialogTitle: "Edit Budget",
+                          dialogDescription:
+                            "Edit your budget information by using the form below.",
+                          entityId: budget.id,
+                          mode: "edit",
+                          key: "budget",
                         })
                       )
                     }
@@ -129,8 +129,6 @@ const BudgetCards = ({ budgets }: IBudgetCardsProps) => {
             </div>
           ))
         : null}
-      <EditBudgetModal />
-      <DeleteBudgetModal />
     </>
   );
 };

@@ -1,13 +1,12 @@
 "use client";
-import Navigation from "@/app/components/Navigation";
 import BudgetCards from "@/app/components/BudgetsPage/BudgetCards";
-import CreateBudgetModal from "@/app/components/BudgetsPage/modals/CreateBudgetModal";
-import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
-import { useEffect } from "react";
+import Navigation from "@/app/components/Navigation";
 import { fetchBudgets } from "@/app/redux/features/budgetSlice";
-import { setCreateBudgetModalOpen } from "@/app/redux/features/budgetSlice";
+import { openGenericModal } from "@/app/redux/features/genericModalSlice";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useEffect } from "react";
 
 const BudgetsPageClient = () => {
   const { budgets, isLoading } = useAppSelector((state) => state.budgetReducer);
@@ -39,11 +38,23 @@ const BudgetsPageClient = () => {
             </div>
           </div>
         )}
-        <Button onClick={() => dispatch(setCreateBudgetModalOpen(true))}>
+        <Button
+          onClick={() =>
+            dispatch(
+              openGenericModal({
+                mode: "create",
+                key: "budget",
+                dialogTitle: "Create a budget",
+                dialogDescription:
+                  "Fill out the form below to create a budget.",
+                entityId: 0,
+              })
+            )
+          }
+        >
           Create Budget
         </Button>
       </div>
-      <CreateBudgetModal />
     </div>
   );
 };

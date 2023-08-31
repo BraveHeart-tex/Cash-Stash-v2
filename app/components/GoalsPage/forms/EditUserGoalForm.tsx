@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import {
   Stack,
   FormLabel,
@@ -7,24 +7,22 @@ import {
   FormControl,
   Button,
   useToast,
-} from '@chakra-ui/react';
-import React, { useEffect } from 'react';
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
-import useColorModeStyles from '../../../hooks/useColorModeStyles';
-import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { fetchGoalById } from '../../../redux/features/currentGoalSlice';
-import {
-  fetchGoals,
-  setEditGoalModalOpen,
-} from '../../../redux/features/goalSlice';
-import axios from 'axios';
-import FormLoadingSpinner from '../../FormLoadingSpinner';
+} from "@chakra-ui/react";
+import React, { useEffect } from "react";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import useColorModeStyles from "../../../hooks/useColorModeStyles";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { fetchGoalById } from "../../../redux/features/currentGoalSlice";
+import { fetchGoals } from "../../../redux/features/goalSlice";
+import axios from "axios";
+import FormLoadingSpinner from "../../FormLoadingSpinner";
+import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 
 interface IEditUserGoalFormProps {
-  selectedGoalId: number;
+  entityId: number;
 }
 
-const EditUserGoalForm = ({ selectedGoalId }: IEditUserGoalFormProps) => {
+const EditUserGoalForm = ({ entityId }: IEditUserGoalFormProps) => {
   const { currentGoal } = useAppSelector((state) => state.currentGoalReducer);
   const dispatch = useAppDispatch();
   const { btnColor, btnBgColor, btnHoverBgColor } = useColorModeStyles();
@@ -37,51 +35,48 @@ const EditUserGoalForm = ({ selectedGoalId }: IEditUserGoalFormProps) => {
     setValue,
   } = useForm<FieldValues>({
     defaultValues: {
-      goalName: '',
+      goalName: "",
       goalAmount: 10,
       currentAmount: 0,
     },
   });
 
   useEffect(() => {
-    if (selectedGoalId) {
-      dispatch(fetchGoalById(selectedGoalId));
+    if (entityId) {
+      dispatch(fetchGoalById(entityId));
     }
-  }, [dispatch, selectedGoalId]);
+  }, [dispatch, entityId]);
 
   useEffect(() => {
     if (currentGoal) {
-      setValue('goalName', currentGoal.name);
-      setValue('goalAmount', currentGoal.goalAmount);
-      setValue('currentAmount', currentGoal.currentAmount);
+      setValue("goalName", currentGoal.name);
+      setValue("goalAmount", currentGoal.goalAmount);
+      setValue("currentAmount", currentGoal.currentAmount);
     }
   }, [currentGoal, setValue]);
 
   const onSubmit: SubmitHandler<FieldValues> = async (data: FieldValues) => {
     try {
-      const response = await axios.put(
-        `api/user/goals/${selectedGoalId}`,
-        data
-      );
+      const response = await axios.put(`api/user/goals/${entityId}`, data);
       toast({
-        title: 'Goal updated.',
+        title: "Goal updated.",
         description:
-          'Your goal has been updated. You can close this window now.',
-        status: 'success',
+          "Your goal has been updated. You can close this window now.",
+        status: "success",
         duration: 4000,
         isClosable: true,
-        position: 'top',
+        position: "top",
       });
       dispatch(fetchGoals());
-      dispatch(setEditGoalModalOpen(false));
+      dispatch(closeGenericModal());
     } catch (error: any) {
       toast({
-        title: 'An error occurred.',
+        title: "An error occurred.",
         description: `Unable to update the selected goal.`,
-        status: 'error',
+        status: "error",
         duration: 4000,
         isClosable: true,
-        position: 'top',
+        position: "top",
       });
     }
   };
@@ -97,17 +92,17 @@ const EditUserGoalForm = ({ selectedGoalId }: IEditUserGoalFormProps) => {
         <FormControl isRequired isInvalid={errors.goalName}>
           <FormLabel>Goal Name</FormLabel>
           <Input
-            type='text'
-            id='goalName'
-            {...register('goalName', {
-              required: 'Goal name is required.',
+            type="text"
+            id="goalName"
+            {...register("goalName", {
+              required: "Goal name is required.",
               minLength: {
                 value: 3,
-                message: 'Goal name must be at least 3 characters long.',
+                message: "Goal name must be at least 3 characters long.",
               },
               maxLength: {
                 value: 50,
-                message: 'Goal name cannot exceed 50 characters.',
+                message: "Goal name cannot exceed 50 characters.",
               },
             })}
           />
@@ -120,17 +115,17 @@ const EditUserGoalForm = ({ selectedGoalId }: IEditUserGoalFormProps) => {
         <FormControl isRequired isInvalid={errors.goalAmount}>
           <FormLabel>Goal Amount (₺)</FormLabel>
           <Input
-            type='number'
-            id='goalAmount'
-            {...register('goalAmount', {
-              required: 'Goal Amount is required.',
+            type="number"
+            id="goalAmount"
+            {...register("goalAmount", {
+              required: "Goal Amount is required.",
               min: {
                 value: 10,
-                message: 'Goal Amount must be at least $10.',
+                message: "Goal Amount must be at least $10.",
               },
               max: {
                 value: 1000000,
-                message: 'Goal Amount cannot exceed $1,000,000.',
+                message: "Goal Amount cannot exceed $1,000,000.",
               },
             })}
           />
@@ -143,17 +138,17 @@ const EditUserGoalForm = ({ selectedGoalId }: IEditUserGoalFormProps) => {
         <FormControl isRequired isInvalid={errors.currentAmount}>
           <FormLabel>Current Amount (₺)</FormLabel>
           <Input
-            type='number'
-            id='currentAmount'
-            {...register('currentAmount', {
-              required: 'Current Amount is required.',
+            type="number"
+            id="currentAmount"
+            {...register("currentAmount", {
+              required: "Current Amount is required.",
               min: {
                 value: 0,
-                message: 'Current Amount must be at least $0.',
+                message: "Current Amount must be at least $0.",
               },
               max: {
                 value: 1000000,
-                message: 'Current Amount cannot exceed $1,000,000.',
+                message: "Current Amount cannot exceed $1,000,000.",
               },
             })}
           />
@@ -168,7 +163,7 @@ const EditUserGoalForm = ({ selectedGoalId }: IEditUserGoalFormProps) => {
           _hover={{
             bg: btnHoverBgColor,
           }}
-          type='submit'
+          type="submit"
           isLoading={isSubmitting}
           isDisabled={isLoading}
         >

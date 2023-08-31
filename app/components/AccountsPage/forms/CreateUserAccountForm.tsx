@@ -3,10 +3,7 @@ import CreateUserAccountOptions from "@/lib/CreateUserAccountOptions";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { useAppDispatch } from "@/app/redux/hooks";
-import {
-  fetchCurrentUserAccounts,
-  setIsCreateAccountModalOpen,
-} from "@/app/redux/features/userAccountSlice";
+import { fetchCurrentUserAccounts } from "@/app/redux/features/userAccountSlice";
 import { useToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CreateUserAccountSchema, {
@@ -16,6 +13,7 @@ import FormInput from "@/components/FormInput";
 import FormSelect from "@/components/FormSelect";
 import { Button } from "@/components/ui/button";
 import { registerBankAccountAction } from "@/actions";
+import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 
 const CreateUserAccountForm = () => {
   const { toast } = useToast();
@@ -56,7 +54,7 @@ const CreateUserAccountForm = () => {
           variant: "default",
           duration: 4000,
         });
-        dispatch(setIsCreateAccountModalOpen(false));
+        dispatch(closeGenericModal());
       }
     });
   };

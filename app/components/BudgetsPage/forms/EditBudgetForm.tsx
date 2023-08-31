@@ -21,12 +21,13 @@ import {
   setEditBudgetModalOpen,
 } from "../../../redux/features/budgetSlice";
 import FormLoadingSpinner from "../../FormLoadingSpinner";
+import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 
 interface IEditBudgetFormProps {
-  selectedBudgetId: number;
+  entityId: number;
 }
 
-const EditUserBudgetForm = ({ selectedBudgetId }: IEditBudgetFormProps) => {
+const EditUserBudgetForm = ({ entityId }: IEditBudgetFormProps) => {
   const toast = useToast();
   const budgetOptions = Object.values(CreateBudgetOptions);
   const { currentBudget, isLoading: isCurrentBudgetLoading } = useAppSelector(
@@ -50,10 +51,10 @@ const EditUserBudgetForm = ({ selectedBudgetId }: IEditBudgetFormProps) => {
   const loading = isCurrentBudgetLoading || isLoading;
 
   useEffect(() => {
-    if (selectedBudgetId) {
-      dispatch(fetchBudgetById(selectedBudgetId));
+    if (entityId) {
+      dispatch(fetchBudgetById(entityId));
     }
-  }, [dispatch, selectedBudgetId]);
+  }, [dispatch, entityId]);
 
   useEffect(() => {
     if (currentBudget) {
@@ -68,10 +69,7 @@ const EditUserBudgetForm = ({ selectedBudgetId }: IEditBudgetFormProps) => {
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
-      const response = await axios.put(
-        `/api/user/budgets/${selectedBudgetId}`,
-        data
-      );
+      const response = await axios.put(`/api/user/budgets/${entityId}`, data);
 
       if (response.status === 200) {
         dispatch(fetchBudgets());
@@ -84,7 +82,7 @@ const EditUserBudgetForm = ({ selectedBudgetId }: IEditBudgetFormProps) => {
           isClosable: true,
           position: "top",
         });
-        dispatch(setEditBudgetModalOpen(false));
+        dispatch(closeGenericModal());
       }
     } catch (error: any) {
       toast({

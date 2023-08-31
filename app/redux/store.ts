@@ -9,6 +9,7 @@ import goalReducer from "./features/goalSlice";
 import transactionsReducer from "./features/transactionsSlice";
 import remindersReducer from "./features/remindersSlice";
 import genericConfirmReducer from "./features/genericConfirmSlice";
+import genericModalReducer from "./features/genericModalSlice";
 
 export const store = configureStore({
   reducer: {
@@ -22,6 +23,7 @@ export const store = configureStore({
     transactionsReducer,
     remindersReducer,
     genericConfirmReducer,
+    genericModalReducer,
   },
   devTools: process.env.NODE_ENV !== "production",
 });

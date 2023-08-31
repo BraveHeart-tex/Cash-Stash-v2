@@ -3,9 +3,8 @@ import CreateUserAccountOptions, {
   getOptionLabel,
 } from "@/lib/CreateUserAccountOptions";
 import EditUserAccountModal from "./modals/EditUserAccountModal";
-import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
+import { useAppDispatch } from "@/app/redux/hooks";
 import {
-  setIsEditAccountModalOpen,
   SerializedUserAccount,
   fetchCurrentUserAccounts,
 } from "@/app/redux/features/userAccountSlice";
@@ -20,6 +19,7 @@ import { deleteAccountByIdAction } from "@/actions";
 import { useToast } from "@/components/ui/use-toast";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 import ActionPopover from "@/components/ActionPopover";
+import { openGenericModal } from "@/app/redux/features/genericModalSlice";
 
 interface IAccountInformationProps {
   userAccounts: SerializedUserAccount[] | undefined | null;
@@ -28,9 +28,6 @@ interface IAccountInformationProps {
 const AccountInformation = ({ userAccounts }: IAccountInformationProps) => {
   const dispatch = useAppDispatch();
   const { toast } = useToast();
-  const { isEditAccountModalOpen } = useAppSelector(
-    (state) => state.userAccountReducer
-  );
 
   const handleActionCallback = (
     result: Awaited<ReturnType<typeof deleteAccountByIdAction>>,
@@ -80,9 +77,13 @@ const AccountInformation = ({ userAccounts }: IAccountInformationProps) => {
                   popoverHeading={"Account Actions"}
                   onEditActionClick={() => {
                     dispatch(
-                      setIsEditAccountModalOpen({
-                        isEditAccountModalOpen: !isEditAccountModalOpen,
-                        selectedUserAccountId: userAccount.id,
+                      openGenericModal({
+                        mode: "edit",
+                        key: "account",
+                        dialogTitle: "Edit an account",
+                        dialogDescription:
+                          "Fill out the form below to edit an account.",
+                        entityId: userAccount.id,
                       })
                     );
                   }}

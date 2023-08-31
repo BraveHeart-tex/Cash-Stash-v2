@@ -15,14 +15,10 @@ import { FieldValues, useForm } from "react-hook-form";
 import useColorModeStyles from "../../../hooks/useColorModeStyles";
 import axios from "axios";
 import { useAppDispatch } from "../../../redux/hooks";
-import {
-  fetchBudgets,
-  setCreateBudgetModalOpen,
-} from "../../../redux/features/budgetSlice";
+import { fetchBudgets } from "../../../redux/features/budgetSlice";
+import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 
-interface ICreateBudgetFormProps {}
-
-const CreateBudgetForm = ({}: ICreateBudgetFormProps) => {
+const CreateBudgetForm = () => {
   const toast = useToast();
   const budgetOptions = Object.values(CreateBudgetOptions);
   const dispatch = useAppDispatch();
@@ -53,7 +49,7 @@ const CreateBudgetForm = ({}: ICreateBudgetFormProps) => {
         position: "top",
       });
       dispatch(fetchBudgets());
-      dispatch(setCreateBudgetModalOpen(false));
+      dispatch(closeGenericModal());
     } catch (error: any) {
       toast({
         title: "An error occurred.",
