@@ -5,6 +5,8 @@ import EditUserBudgetForm from "@/app/components/BudgetsPage/forms/EditBudgetFor
 import CreateUserGoalForm from "@/app/components/GoalsPage/forms/CreateGoalForm";
 import EditUserGoalForm from "@/app/components/GoalsPage/forms/EditUserGoalForm";
 import CreateTransactionForm from "@/app/components/TransactionsPage/forms/CreateTransactionForm";
+import CreateReminderForm from "@/app/components/Reminders/forms/CreateReminderForm";
+import EditReminderForm from "@/app/components/Reminders/forms/EditReminderForm";
 import { createElement } from "react";
 
 interface IGetGenericDialogContentParams {
@@ -38,8 +40,8 @@ const ContentMap: ContentMap = {
     edit: CreateTransactionForm,
   },
   reminder: {
-    create: CreateTransactionForm,
-    edit: CreateTransactionForm,
+    create: CreateReminderForm,
+    edit: EditReminderForm,
   },
   account: {
     create: CreateUserAccountForm,

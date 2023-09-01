@@ -2,7 +2,7 @@
 
 import db from "@/app/libs/prismadb";
 import { getCurrentUser, signToken } from "@/lib/session";
-import { LoginSchema } from "@/schemas";
+import { EditReminderSchema, LoginSchema } from "@/schemas";
 import { LoginSchemaType } from "@/schemas/LoginSchema";
 import RegisterSchema, { RegisterSchemaType } from "@/schemas/RegisterSchema";
 import { cookies } from "next/headers";
@@ -16,6 +16,7 @@ import CreateUserAccountOptions, {
   getKeyByValue,
 } from "@/lib/CreateUserAccountOptions";
 import { UserAccountCategory } from "@prisma/client";
+import { EditReminderSchemaType } from "@/schemas/EditReminderSchema";
 
 export const loginAction = async ({ email, password }: LoginSchemaType) => {
   const result = LoginSchema.safeParse({ email, password });
@@ -574,3 +575,74 @@ export const deleteBudgetByIdAction = async (budgetId: number) => {
 //     budget: updatedBudget,
 //   };
 // };
+
+export const updateReminderAction = async ({
+  reminderId,
+  title,
+  description,
+  amount,
+  reminderDate,
+  isRead,
+  isIncome,
+}: EditReminderSchemaType & { reminderId: number }) => {
+  if (!reminderId) {
+    return {
+      error: "Reminder ID not found.",
+    };
+  }
+
+  let result = EditReminderSchema.safeParse({
+    title,
+    description,
+    amount,
+    reminderDate,
+    isRead,
+    isIncome,
+  });
+
+  if (!result.success) {
+    return {
+      error: "Unprocessable entity.",
+    };
+  }
+
+  const reminderToBeUpdated = await db.reminder.findUnique({
+    where: {
+      id: reminderId,
+    },
+  });
+
+  if (!reminderToBeUpdated) {
+    return {
+      error: "No reminder with the given reminder id was found.",
+    };
+  }
+
+  let mappedIsRead = isRead === "isRead" ? true : false;
+  let mappedIsIncome = isIncome === "income" ? true : false;
+  let mappedReminderDate = new Date(reminderDate);
+
+  const updatedReminder = await db.reminder.update({
+    data: {
+      title,
+      description,
+      amount: amount,
+      reminderDate: mappedReminderDate,
+      isRead: mappedIsRead,
+      isIncome: mappedIsIncome,
+    },
+    where: {
+      id: reminderId,
+    },
+  });
+
+  if (!updatedReminder) {
+    return {
+      error: "Error updating reminder.",
+    };
+  }
+
+  return {
+    reminder: updatedReminder,
+  };
+};

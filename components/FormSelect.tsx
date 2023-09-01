@@ -11,10 +11,15 @@ import { UseFormRegister } from "react-hook-form";
 import FormError from "./FormError";
 import { Label } from "./ui/label";
 
+interface SelectOption {
+  value: string;
+  label: string;
+}
+
 interface IFromSelectProps {
   defaultValue: string;
   onChange?: (value: string) => void;
-  selectOptions: string[];
+  selectOptions: SelectOption[];
   defaultLabel?: string;
   nameParam: string;
   label: string;
@@ -59,8 +64,8 @@ const FormSelect = ({
           <SelectGroup>
             <SelectLabel>{label}</SelectLabel>
             {selectOptions.map((option) => (
-              <SelectItem key={option} value={option}>
-                {option}
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
               </SelectItem>
             ))}
           </SelectGroup>

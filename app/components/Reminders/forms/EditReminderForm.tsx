@@ -1,239 +1,209 @@
-'use client';
-import useColorModeStyles from '@/app/hooks/useColorModeStyles';
+"use client";
 import {
   fetchReminderById,
   fetchReminders,
-  setIsEditReminderModalOpen,
-} from '@/app/redux/features/remindersSlice';
-import { useAppDispatch, useAppSelector } from '@/app/redux/hooks';
-import {
-  Stack,
-  FormLabel,
-  Input,
-  FormErrorMessage,
-  FormControl,
-  Button,
-  useToast,
-  Select,
-  Checkbox,
-} from '@chakra-ui/react';
-import React, { useEffect } from 'react';
-import { useForm, FieldValues, SubmitHandler } from 'react-hook-form';
-import FormLoadingSpinner from '../../FormLoadingSpinner';
-import axios from 'axios';
+} from "@/app/redux/features/remindersSlice";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
+import { useEffect, useTransition } from "react";
+import { useForm } from "react-hook-form";
+import FormLoadingSpinner from "../../FormLoadingSpinner";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { EditReminderSchema } from "@/schemas";
+import { EditReminderSchemaType } from "@/schemas/EditReminderSchema";
+import FormInput from "@/components/FormInput";
+import { Button } from "@/components/ui/button";
+import FormSelect from "@/components/FormSelect";
+import { useToast } from "@/components/ui/use-toast";
+import FormCheckbox from "@/components/FormCheckbox";
+import { updateReminderAction } from "@/actions";
+import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 
-const EditReminderForm = () => {
-  const { btnColor, btnBgColor, btnHoverBgColor } = useColorModeStyles();
-  const toast = useToast();
+interface IEditReminderFormProps {
+  entityId: number;
+}
 
-  const {
-    selectedReminderId,
-    currentReminder,
-    isLoading,
-    isEditReminderModalOpen,
-  } = useAppSelector((state) => state.remindersReducer);
+const EditReminderForm = ({ entityId }: IEditReminderFormProps) => {
+  const { toast } = useToast();
+  let [isPending, startTransition] = useTransition();
+
+  const { currentReminder, isLoading } = useAppSelector(
+    (state) => state.remindersReducer
+  );
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (selectedReminderId) {
-      dispatch(fetchReminderById(selectedReminderId));
+    if (entityId) {
+      dispatch(fetchReminderById(entityId));
     }
-  }, [dispatch, selectedReminderId]);
+  }, [dispatch, entityId]);
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     setValue,
-  } = useForm<FieldValues>({
+    getValues,
+  } = useForm<EditReminderSchemaType>({
     defaultValues: {
-      title: '',
-      description: '',
-      amount: '',
-      reminderDate: '',
-      isIncome: '',
-      isRead: 'isNotRead',
+      title: "",
+      description: "",
+      amount: 0,
+      reminderDate: "",
+      isIncome: "income",
+      isRead: "isNotRead",
     },
+    // @ts-ignore
+    resolver: zodResolver(EditReminderSchema),
   });
 
   useEffect(() => {
     if (currentReminder) {
-      setValue('title', currentReminder.title);
-      setValue('description', currentReminder.description);
-      setValue('amount', currentReminder.amount);
-      setValue('isIncome', currentReminder.isIncome ? 'income' : 'expense');
+      setValue("title", currentReminder.title);
+      setValue("description", currentReminder.description);
+      setValue("amount", currentReminder.amount);
+      setValue("isIncome", currentReminder.isIncome ? "income" : "expense");
       setValue(
-        'reminderDate',
-        new Date(currentReminder.reminderDate).toLocaleDateString('en-CA')
+        "reminderDate",
+        new Date(currentReminder.reminderDate).toLocaleDateString("en-CA")
       );
     }
   }, [currentReminder, setValue]);
 
-  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    try {
-      const response = await axios.put(
-        `/api/user/reminders/${selectedReminderId}`,
-        data
-      );
+  const onSubmit = async (data: EditReminderSchemaType) => {
+    if (hasMadeNoChanges()) {
       toast({
-        title: 'Reminder updated.',
-        description: 'Reminder updated successfully.',
-        status: 'success',
+        title: "No changes made.",
+        description: "You have not made any changes.",
+        variant: "default",
         duration: 5000,
-        isClosable: true,
-        position: 'top',
       });
-      dispatch(fetchReminders());
-      dispatch(setIsEditReminderModalOpen(!isEditReminderModalOpen));
-    } catch (error) {
-      toast({
-        title: 'An error occurred while updating the reminder.',
-        description: 'Please try again later.',
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-        position: 'top',
-      });
+      return;
     }
-  };
 
-  const today = new Date().toISOString().split('T')[0];
+    let payload = {
+      reminderId: entityId,
+      ...data,
+    };
+
+    startTransition(async () => {
+      const result = await updateReminderAction(payload);
+      if (result.error) {
+        console.error(result.error);
+        toast({
+          title: "An error occurred while updating the reminder.",
+          description: result.error,
+          variant: "destructive",
+          duration: 5000,
+        });
+      } else {
+        toast({
+          title: "Reminder updated.",
+          description: "Reminder updated successfully.",
+          variant: "default",
+          duration: 5000,
+        });
+        dispatch(fetchReminders());
+        dispatch(closeGenericModal());
+      }
+    });
+  };
 
   if (isLoading) {
     return <FormLoadingSpinner />;
   }
 
+  const hasMadeNoChanges = () => {
+    let isIncome = getValues("isIncome") === "income" ? true : false;
+    return (
+      getValues("title") === currentReminder?.title &&
+      getValues("description") === currentReminder?.description &&
+      getValues("amount") === currentReminder?.amount &&
+      isIncome === currentReminder?.isIncome &&
+      getValues("reminderDate") ===
+        new Date(currentReminder?.reminderDate).toLocaleDateString("en-CA") &&
+      getValues("isRead") === (currentReminder?.isRead ? "isRead" : "isNotRead")
+    );
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Stack spacing={4}>
-        {/* @ts-ignore */}
-        <FormControl isRequired isInvalid={errors.title}>
-          <FormLabel>Title</FormLabel>
-          <Input
-            type='text'
-            id='title'
-            {...register('title', {
-              required: 'Title is required.',
-              minLength: {
-                value: 3,
-                message: 'Title must be at least 3 characters long',
-              },
-              maxLength: {
-                value: 20,
-                message: 'Title must be at most 20 characters long',
-              },
-            })}
-          />
-          <FormErrorMessage>
-            {/* @ts-ignore */}
-            {errors.title && errors.title.message}
-          </FormErrorMessage>
-        </FormControl>
-        {/* @ts-ignore */}
-        <FormControl isRequired isInvalid={errors.description}>
-          <FormLabel>Description</FormLabel>
-          <Input
-            type='text'
-            id='description'
-            {...register('description', {
-              required: 'Description is required.',
-              minLength: {
-                value: 3,
-                message: 'Description must be at least 3 characters long',
-              },
-              maxLength: {
-                value: 50,
-                message: 'Description must be at most 50 characters long',
-              },
-            })}
-          />
-          <FormErrorMessage>
-            {/* @ts-ignore */}
-            {errors.amount && errors.amount.message}
-          </FormErrorMessage>
-        </FormControl>
-        {/* @ts-ignore */}
-        <FormControl isRequired isInvalid={errors.amount}>
-          <FormLabel>Amount (₺)</FormLabel>
-          <Input
-            type='number'
-            id='amount'
-            {...register('amount', {
-              required: 'Amount is required.',
-              min: {
-                value: 1,
-                message: 'Amount must at least be 1₺',
-              },
-              max: {
-                value: 1000000,
-                message: 'Amount cannot exceed 1.000.000₺',
-              },
-            })}
-          />
-          <FormErrorMessage>
-            {/* @ts-ignore */}
-            {errors.amount && errors.amount.message}
-          </FormErrorMessage>
-        </FormControl>
-        {/* @ts-ignore */}
-        <FormControl isRequired isInvalid={errors.reminderDate}>
-          <FormLabel>Reminder Date</FormLabel>
-          <Input
-            min={today}
-            type='date'
-            id='reminderDate'
-            {...register('reminderDate', {
-              required: 'Reminder Date is required.',
-            })}
-          />
-          <FormErrorMessage>
-            {/* @ts-ignore */}
-            {errors.amount && errors.amount.message}
-          </FormErrorMessage>
-        </FormControl>
-        {/* @ts-ignore */}
-        <FormControl isRequired isInvalid={errors.isIncome}>
-          <FormLabel>Type</FormLabel>
-          <Select
-            id='isIncome'
-            {...register('isIncome', {
-              required: 'Transaction type for reminder is required.',
-            })}
-          >
-            <option value='income'>Income</option>
-            <option value='expense'>Expense</option>
-          </Select>
-          <FormErrorMessage>
-            {/* @ts-ignore */}
-            {errors.isIncome && errors.isIncome.message}
-          </FormErrorMessage>
-        </FormControl>
-        {/* is read */}
-        {/* @ts-ignore */}
-        <FormControl isInvalid={errors.isRead}>
-          <FormLabel>Mark as read</FormLabel>
-          <Checkbox id='isRead' onChange={() => setValue('isRead', 'isRead')} />
-          <FormErrorMessage>
-            {/* @ts-ignore */}
-            {errors.isRead && errors.isRead.message}
-          </FormErrorMessage>
-        </FormControl>
+      <div className="grid grid-cols-1 gap-4">
+        <FormInput
+          name={"title"}
+          label={"Title"}
+          placeholder={"Notification title"}
+          type={"text"}
+          register={register}
+          errors={errors}
+        />
+        <FormInput
+          name={"description"}
+          label={"Description"}
+          placeholder={"Notification description"}
+          type={"text"}
+          register={register}
+          errors={errors}
+        />
+        <FormInput
+          name={"amount"}
+          label={"Amount"}
+          placeholder={"Notification amount"}
+          type={"number"}
+          register={register}
+          errors={errors}
+        />
+        <FormInput
+          name={"reminderDate"}
+          label={"Date"}
+          placeholder={"Notification date"}
+          type={"date"}
+          register={register}
+          errors={errors}
+        />
+        <FormSelect
+          defaultValue={currentReminder?.isIncome ? "income" : "expense"}
+          selectOptions={[
+            { label: "Income", value: "income" },
+            { label: "Expense", value: "expense" },
+          ]}
+          nameParam={"isIncome"}
+          label={"Transaction type"}
+          placeholder={""}
+          register={register}
+          errors={errors}
+          onChange={(value) => {
+            let valueToSet: "income" | "expense" = "income";
+            if (value === "expense") {
+              valueToSet = "expense";
+            }
+            setValue("isIncome", valueToSet);
+          }}
+        />
+        <FormCheckbox
+          name={"isRead"}
+          label={"Mark as read"}
+          register={register}
+          errors={errors}
+          defaultChecked={currentReminder?.isRead}
+          onChange={(value) => {
+            let valueToSet: "isNotRead" | "isRead" = "isNotRead";
+            if (value) {
+              valueToSet = "isRead";
+            }
+            setValue("isRead", valueToSet);
+          }}
+        />
         {isLoading ? (
           <Button>Loading...</Button>
         ) : (
           <Button
-            color={btnColor}
-            bg={btnBgColor}
-            _hover={{
-              bg: btnHoverBgColor,
-            }}
-            type='submit'
-            isDisabled={isSubmitting || isLoading}
+            type="submit"
+            disabled={isPending || isLoading || isSubmitting}
           >
             Update
           </Button>
         )}
-      </Stack>
+      </div>
     </form>
   );
 };

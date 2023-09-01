@@ -1,20 +1,19 @@
-import getCurrentUser from '@/app/actions/getCurrentUser';
-import { NextResponse } from 'next/server';
-import prisma from '@/app/libs/prismadb';
+import getCurrentUser from "@/app/actions/getCurrentUser";
+import { NextResponse } from "next/server";
+import prisma from "@/app/libs/prismadb";
 
 interface IParams {
   reminderId?: string;
 }
 
-// FIXME: TEST this
 // update a reminder
 export async function PUT(request: Request, { params }: { params: IParams }) {
   const { reminderId } = params;
 
-  if (!reminderId || typeof reminderId !== 'string') {
+  if (!reminderId || typeof reminderId !== "string") {
     return NextResponse.json(
       {
-        error: 'Bad request. No reminder id was found in params.',
+        error: "Bad request. No reminder id was found in params.",
       },
       {
         status: 400,
@@ -27,7 +26,7 @@ export async function PUT(request: Request, { params }: { params: IParams }) {
   if (!currentUser) {
     return NextResponse.json(
       {
-        error: 'Unauthorized',
+        error: "Unauthorized",
       },
       {
         status: 401,
@@ -44,7 +43,7 @@ export async function PUT(request: Request, { params }: { params: IParams }) {
   if (!reminderToBeUpdated) {
     return NextResponse.json(
       {
-        error: 'No reminder with the given reminder id was found.',
+        error: "No reminder with the given reminder id was found.",
       },
       {
         status: 404,
@@ -58,7 +57,7 @@ export async function PUT(request: Request, { params }: { params: IParams }) {
   if (!title || !description || !amount || !reminderDate || !isIncome) {
     return NextResponse.json(
       {
-        error: 'Bad Request. Please provide all the required fields.',
+        error: "Bad Request. Please provide all the required fields.",
       },
       {
         status: 400,
@@ -66,8 +65,8 @@ export async function PUT(request: Request, { params }: { params: IParams }) {
     );
   }
 
-  let mappedIsRead = isRead === 'isRead' ? true : false;
-  let mappedIsIncome = isIncome === 'income' ? true : false;
+  let mappedIsRead = isRead === "isRead" ? true : false;
+  let mappedIsIncome = isIncome === "income" ? true : false;
   let mappedReminderDate = new Date(reminderDate);
 
   const updatedReminder = await prisma.reminder.update({
@@ -87,7 +86,7 @@ export async function PUT(request: Request, { params }: { params: IParams }) {
   if (!updatedReminder) {
     return NextResponse.json(
       {
-        error: 'An error occurred while trying to update the reminder.',
+        error: "An error occurred while trying to update the reminder.",
       },
       {
         status: 500,
@@ -113,10 +112,10 @@ export async function DELETE(
 ) {
   const { reminderId } = params;
 
-  if (!reminderId || typeof reminderId !== 'string') {
+  if (!reminderId || typeof reminderId !== "string") {
     return NextResponse.json(
       {
-        error: 'Bad request. No reminder id was found in params.',
+        error: "Bad request. No reminder id was found in params.",
       },
       {
         status: 400,
@@ -129,7 +128,7 @@ export async function DELETE(
   if (!currentUser) {
     return NextResponse.json(
       {
-        error: 'Unauthorized',
+        error: "Unauthorized",
       },
       {
         status: 401,
@@ -146,7 +145,7 @@ export async function DELETE(
   if (!reminderToBeDeleted) {
     return NextResponse.json(
       {
-        error: 'Reminder with the given id was not found.',
+        error: "Reminder with the given id was not found.",
       },
       {
         status: 404,
@@ -162,7 +161,7 @@ export async function DELETE(
 
   return NextResponse.json(
     {
-      message: 'Reminder deleted successfully',
+      message: "Reminder deleted successfully",
     },
     {
       status: 200,
@@ -175,10 +174,10 @@ export async function DELETE(
 export async function GET(request: Request, { params }: { params: IParams }) {
   const { reminderId } = params;
 
-  if (!reminderId || typeof reminderId !== 'string') {
+  if (!reminderId || typeof reminderId !== "string") {
     return NextResponse.json(
       {
-        error: 'Bad request. No reminder id was found in params.',
+        error: "Bad request. No reminder id was found in params.",
       },
       {
         status: 400,
@@ -191,7 +190,7 @@ export async function GET(request: Request, { params }: { params: IParams }) {
   if (!currentUser) {
     return NextResponse.json(
       {
-        error: 'Unauthorized',
+        error: "Unauthorized",
       },
       {
         status: 401,
@@ -208,7 +207,7 @@ export async function GET(request: Request, { params }: { params: IParams }) {
   if (!reminder) {
     return NextResponse.json(
       {
-        error: 'Reminder with the given id was not found.',
+        error: "Reminder with the given id was not found.",
       },
       {
         status: 404,

@@ -59,6 +59,11 @@ const CreateUserAccountForm = () => {
     });
   };
 
+  const selectOptions = accountOptions.map((option) => ({
+    label: option,
+    value: option,
+  }));
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="grid grid-cols-1 gap-4">
@@ -72,7 +77,7 @@ const CreateUserAccountForm = () => {
         />
         <FormSelect
           defaultValue={"Checking Account"}
-          selectOptions={accountOptions}
+          selectOptions={selectOptions}
           defaultLabel={"Account Type"}
           nameParam={"category"}
           label={"Account Type"}

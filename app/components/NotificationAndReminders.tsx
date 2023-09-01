@@ -1,23 +1,18 @@
 "use client";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
-import {
-  setIsCreateReminderModalOpen,
-  setIsEditReminderModalOpen,
-} from "@/app/redux/features/remindersSlice";
+import { setIsCreateReminderModalOpen } from "@/app/redux/features/remindersSlice";
 import { fetchReminders } from "@/app/redux/features/remindersSlice";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Pencil1Icon } from "@radix-ui/react-icons";
+import { openGenericModal } from "../redux/features/genericModalSlice";
 
 const NotificationsAndReminders = () => {
-  const {
-    isCreateReminderModalOpen,
-    isEditReminderModalOpen,
-    reminders,
-    isLoading,
-  } = useAppSelector((state) => state.remindersReducer);
+  const { isCreateReminderModalOpen, reminders, isLoading } = useAppSelector(
+    (state) => state.remindersReducer
+  );
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -93,9 +88,13 @@ const NotificationsAndReminders = () => {
                 aria-label="Edit notification"
                 onClick={() => {
                   dispatch(
-                    setIsEditReminderModalOpen({
-                      isEditReminderModalOpen: !isEditReminderModalOpen,
-                      selectedReminderId: reminder.id,
+                    openGenericModal({
+                      key: "reminder",
+                      mode: "edit",
+                      entityId: reminder.id,
+                      dialogTitle: "Edit Reminder",
+                      dialogDescription:
+                        "You can edit your reminder by using the form below.",
                     })
                   );
                 }}

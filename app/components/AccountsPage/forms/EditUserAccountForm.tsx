@@ -7,10 +7,7 @@ import CreateUserAccountOptions, {
 import FormLoadingSpinner from "../../FormLoadingSpinner";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { fetchCurrentAccount } from "@/app/redux/features/currentAccountSlice";
-import {
-  fetchCurrentUserAccounts,
-  setIsEditAccountModalOpen,
-} from "@/app/redux/features/userAccountSlice";
+import { fetchCurrentUserAccounts } from "@/app/redux/features/userAccountSlice";
 import FormInput from "@/components/FormInput";
 import FormSelect from "@/components/FormSelect";
 import { useToast } from "@/components/ui/use-toast";
@@ -135,6 +132,11 @@ const EditUserAccountForm = ({ entityId }: IEditUserAccountFormProps) => {
     );
   };
 
+  const selectOptions = accountOptions.map((option) => ({
+    label: option,
+    value: option,
+  }));
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="grid grid-cols-1 gap-4">
@@ -151,7 +153,7 @@ const EditUserAccountForm = ({ entityId }: IEditUserAccountFormProps) => {
             CreateUserAccountOptions,
             currentAccount?.category!
           )}
-          selectOptions={accountOptions}
+          selectOptions={selectOptions}
           nameParam={"category"}
           label={"Account Type"}
           placeholder={"Select your account type"}
