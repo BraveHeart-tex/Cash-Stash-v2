@@ -15,8 +15,12 @@ import CreateUserAccountSchema, {
 import CreateUserAccountOptions, {
   getKeyByValue,
 } from "@/lib/CreateUserAccountOptions";
-import { UserAccountCategory } from "@prisma/client";
+import { NotificationCategory, UserAccountCategory } from "@prisma/client";
 import { EditReminderSchemaType } from "@/schemas/EditReminderSchema";
+import EditBudgetSchema, {
+  EditBudgetSchemaType,
+} from "@/schemas/EditBudgetSchema";
+import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
 
 export const loginAction = async ({ email, password }: LoginSchemaType) => {
   const result = LoginSchema.safeParse({ email, password });
@@ -555,26 +559,67 @@ export const deleteBudgetByIdAction = async (budgetId: number) => {
   };
 };
 
-// export const updateBudgetByIdAction = async (budgetId: number) => {
-//   if (!budgetId) {
-//     return { error: "Budget ID not found." };
-//   }
+export const updateBudgetByIdAction = async ({
+  budgetId,
+  budgetAmount,
+  spentAmount,
+  category,
+}: EditBudgetSchemaType & {
+  budgetId: number;
+}) => {
+  if (!budgetId) {
+    return { error: "Budget ID not found." };
+  }
 
-//   const updatedBudget = await db.budget.update({
-//     where: {
-//       id: budgetId,
-//     },
-//     data: {},
-//   });
+  const budgetToBeUpdated = await db.budget.findUnique({
+    where: {
+      id: budgetId,
+    },
+  });
 
-//   if (!updatedBudget) {
-//     return { error: "Error updating budget." };
-//   }
+  if (!budgetToBeUpdated) {
+    return { error: `Budget not found with the given id ${budgetId}` };
+  }
 
-//   return {
-//     budget: updatedBudget,
-//   };
-// };
+  let result = EditBudgetSchema.safeParse({
+    budgetAmount,
+    spentAmount,
+    category,
+  });
+
+  if (!result.success) {
+    return { error: "Unprocessable entity." };
+  }
+
+  const {
+    budgetAmount: budgetAmountResult,
+    spentAmount: spentAmountResult,
+    category: categoryResult,
+  } = result.data;
+
+  const mappedCategory = Object.entries(CreateBudgetOptions).find(
+    ([key, value]) => value === categoryResult
+  )?.[0];
+
+  const updatedBudget = await db.budget.update({
+    where: {
+      id: budgetId,
+    },
+    data: {
+      budgetAmount: budgetAmountResult,
+      spentAmount: spentAmountResult,
+      category: mappedCategory as NotificationCategory,
+    },
+  });
+
+  if (!updatedBudget) {
+    return { error: "Error updating budget." };
+  }
+
+  return {
+    budget: updatedBudget,
+  };
+};
 
 export const updateReminderAction = async ({
   reminderId,

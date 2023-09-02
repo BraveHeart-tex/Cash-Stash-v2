@@ -1,51 +1,50 @@
 "use client";
-import {
-  Stack,
-  FormLabel,
-  Input,
-  FormErrorMessage,
-  FormControl,
-  Select,
-  Button,
-  useToast,
-} from "@chakra-ui/react";
-import { useEffect } from "react";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import { fetchBudgetById } from "../../../redux/features/currentBudgetSlice";
-import CreateBudgetOptions from "../../../../lib/CreateBudgetOptions";
+
+import { useEffect, useTransition } from "react";
+import { useForm } from "react-hook-form";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
+import { fetchBudgetById } from "@/app/redux/features/currentBudgetSlice";
+import CreateBudgetOptions from "@/app/../lib/CreateBudgetOptions";
 import { getOptionLabel } from "@/lib/CreateUserAccountOptions";
-import axios from "axios";
-import {
-  fetchBudgets,
-  setEditBudgetModalOpen,
-} from "../../../redux/features/budgetSlice";
+import { fetchBudgets } from "@/app/redux/features/budgetSlice";
 import FormLoadingSpinner from "../../FormLoadingSpinner";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
+import { useToast } from "@/components/ui/use-toast";
+import EditBudgetSchema, {
+  EditBudgetSchemaType,
+} from "@/schemas/EditBudgetSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import FormInput from "@/components/FormInput";
+import FormSelect from "@/components/FormSelect";
+import { Button } from "@/components/ui/button";
+import { updateBudgetByIdAction } from "@/actions";
 
 interface IEditBudgetFormProps {
   entityId: number;
 }
 
 const EditUserBudgetForm = ({ entityId }: IEditBudgetFormProps) => {
-  const toast = useToast();
+  let [isPending, startTransition] = useTransition();
+  const dispatch = useAppDispatch();
+  const { toast } = useToast();
   const budgetOptions = Object.values(CreateBudgetOptions);
   const { currentBudget, isLoading: isCurrentBudgetLoading } = useAppSelector(
     (state) => state.currentBudgetReducer
   );
-  const dispatch = useAppDispatch();
 
   const {
     register,
     handleSubmit,
     formState: { errors, isLoading, isSubmitting },
     setValue,
-  } = useForm<FieldValues>({
+  } = useForm<EditBudgetSchemaType>({
     defaultValues: {
       budgetAmount: 0,
       category: "",
       spentAmount: 0,
     },
+    // @ts-ignore
+    resolver: zodResolver(EditBudgetSchema),
   });
 
   const loading = isCurrentBudgetLoading || isLoading;
@@ -67,113 +66,75 @@ const EditUserBudgetForm = ({ entityId }: IEditBudgetFormProps) => {
     }
   }, [currentBudget, setValue]);
 
-  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    try {
-      const response = await axios.put(`/api/user/budgets/${entityId}`, data);
-
-      if (response.status === 200) {
+  const onSubmit = async (data: EditBudgetSchemaType) => {
+    let payload = {
+      budgetId: entityId,
+      ...data,
+    };
+    startTransition(async () => {
+      const result = await updateBudgetByIdAction(payload);
+      if (result.error) {
+        toast({
+          title: "An error occurred.",
+          description: result.error,
+          variant: "destructive",
+        });
+      } else {
         dispatch(fetchBudgets());
         toast({
           title: "Budget updated.",
           description:
             "Budget updated successfully. You can close this window now.",
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-          position: "top",
+          variant: "default",
         });
         dispatch(closeGenericModal());
       }
-    } catch (error: any) {
-      toast({
-        title: "An error occurred.",
-        description: error.response?.data.error,
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "top",
-      });
-    }
+    });
   };
 
   if (loading) {
     return <FormLoadingSpinner />;
   }
 
+  const BudgetCategorySelectOptions = budgetOptions.map((option) => {
+    return {
+      label: option,
+      value: option,
+    };
+  });
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Stack spacing={4}>
-        {/* @ts-ignore */}
-        <FormControl isRequired isInvalid={errors.budgetAmount}>
-          <FormLabel>Budget Amount</FormLabel>
-          <Input
-            type="number"
-            id="budgetAmount"
-            {...register("budgetAmount", {
-              required: "Budget amount is required.",
-              min: {
-                value: 10,
-                message: "Budget amount must be at least 10₺",
-              },
-              max: {
-                value: 1000000,
-                message: "Budget amount must be at most 1.000.000₺",
-              },
-            })}
-          />
-          <FormErrorMessage>
-            {/* @ts-ignore */}
-            {errors.budgetAmount && errors.budgetAmount.message}
-          </FormErrorMessage>
-        </FormControl>
-        {/* @ts-ignore */}
-        <FormControl isRequired isInvalid={errors.category}>
-          <FormLabel>Budget Category</FormLabel>
-          <Select
-            id="category"
-            placeholder="Select budget category"
-            {...register("category", {
-              required: "Category is required.",
-            })}
-          >
-            {budgetOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </Select>
-          <FormErrorMessage>
-            {/* @ts-ignore */}
-            {errors.category && errors.category.message}
-          </FormErrorMessage>
-        </FormControl>
-        {/* @ts-ignore */}
-        <FormControl isRequired isInvalid={errors.spentAmount}>
-          <FormLabel>Budget Spent (₺)</FormLabel>
-          <Input
-            type="number"
-            id="spentAmount"
-            {...register("spentAmount", {
-              required: "Budget spent is required.",
-              min: {
-                value: 0,
-                message: "Budget spent must be at least 0₺",
-              },
-              max: {
-                value: 1000000,
-                message: "Budget spent must be at most 1.000.000₺",
-              },
-            })}
-          />
-          <FormErrorMessage>
-            {/* @ts-ignore */}
-            {errors.spentAmount && errors.spentAmount.message}
-          </FormErrorMessage>
-        </FormControl>
-        <Button type="submit" isLoading={isSubmitting} isDisabled={isLoading}>
+      <div className="grid grid-cols-1 gap-4">
+        <FormInput
+          name={"budgetAmount"}
+          label={"Budget Amount"}
+          placeholder={"Budget Amount"}
+          type={"number"}
+          register={register}
+          errors={errors}
+        />
+        <FormSelect
+          defaultValue={""}
+          selectOptions={BudgetCategorySelectOptions}
+          nameParam={"category"}
+          label={"Budget Category"}
+          placeholder={""}
+          register={register}
+          errors={errors}
+        />
+        <FormInput
+          name={"spentAmount"}
+          label={"Budget Spent (₺)"}
+          placeholder={"Budget Spent (₺)"}
+          type={"number"}
+          register={register}
+          errors={errors}
+        />
+        <Button type="submit" disabled={isLoading || isSubmitting || isPending}>
           Update
         </Button>
-      </Stack>
+      </div>
     </form>
   );
 };
