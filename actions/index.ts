@@ -21,6 +21,9 @@ import EditBudgetSchema, {
   EditBudgetSchemaType,
 } from "@/schemas/EditBudgetSchema";
 import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
+import CreateBudgetSchema, {
+  CreateBudgetSchemaType,
+} from "@/schemas/CreateBudgetSchema";
 
 export const loginAction = async ({ email, password }: LoginSchemaType) => {
   const result = LoginSchema.safeParse({ email, password });
@@ -556,6 +559,55 @@ export const deleteBudgetByIdAction = async (budgetId: number) => {
 
   return {
     budget: deletedBudget,
+  };
+};
+
+export const createBudgetAction = async ({
+  budgetAmount,
+  spentAmount,
+  category,
+}: CreateBudgetSchemaType) => {
+  let result = CreateBudgetSchema.safeParse({
+    budgetAmount,
+    spentAmount,
+    category,
+  });
+
+  if (!result.success) {
+    return { error: "Unprocessable entity." };
+  }
+
+  const {
+    budgetAmount: budgetAmountResult,
+    spentAmount: spentAmountResult,
+    category: categoryResult,
+  } = result.data;
+
+  const mappedCategory = Object.entries(CreateBudgetOptions).find(
+    ([key, value]) => value === categoryResult
+  )?.[0];
+
+  const currentUser = await getCurrentUser(cookies().get("token")?.value!);
+
+  if (!currentUser) {
+    return { error: "You are not authorized to perform this action." };
+  }
+
+  const createdBudget = await db.budget.create({
+    data: {
+      budgetAmount: budgetAmountResult,
+      spentAmount: spentAmountResult,
+      category: mappedCategory as NotificationCategory,
+      userId: currentUser.id,
+    },
+  });
+
+  if (!createdBudget) {
+    return { error: "Error creating budget." };
+  }
+
+  return {
+    budget: createdBudget,
   };
 };
 

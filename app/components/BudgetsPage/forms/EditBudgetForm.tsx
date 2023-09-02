@@ -71,6 +71,7 @@ const EditUserBudgetForm = ({ entityId }: IEditBudgetFormProps) => {
       budgetId: entityId,
       ...data,
     };
+
     startTransition(async () => {
       const result = await updateBudgetByIdAction(payload);
       if (result.error) {
@@ -115,13 +116,19 @@ const EditUserBudgetForm = ({ entityId }: IEditBudgetFormProps) => {
           errors={errors}
         />
         <FormSelect
-          defaultValue={""}
+          defaultValue={getOptionLabel(
+            CreateBudgetOptions,
+            currentBudget?.category!
+          )}
           selectOptions={BudgetCategorySelectOptions}
           nameParam={"category"}
           label={"Budget Category"}
           placeholder={""}
           register={register}
           errors={errors}
+          onChange={(value) => {
+            setValue("category", value);
+          }}
         />
         <FormInput
           name={"spentAmount"}

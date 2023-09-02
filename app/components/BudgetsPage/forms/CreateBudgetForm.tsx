@@ -1,154 +1,108 @@
 "use client";
-import {
-  Button,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Input,
-  Select,
-  Spinner,
-  Stack,
-  useToast,
-} from "@chakra-ui/react";
-import CreateBudgetOptions from "../../../../lib/CreateBudgetOptions";
-import { FieldValues, useForm } from "react-hook-form";
-import useColorModeStyles from "../../../hooks/useColorModeStyles";
-import axios from "axios";
-import { useAppDispatch } from "../../../redux/hooks";
-import { fetchBudgets } from "../../../redux/features/budgetSlice";
+import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
+import { useForm } from "react-hook-form";
+import { useAppDispatch } from "@/app/redux/hooks";
+import { fetchBudgets } from "@/app/redux/features/budgetSlice";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
+import { useToast } from "@/components/ui/use-toast";
+import FormInput from "@/components/FormInput";
+import FormSelect from "@/components/FormSelect";
+import { Button } from "@/components/ui/button";
+import { useTransition } from "react";
+import CreateBudgetSchema, {
+  CreateBudgetSchemaType,
+} from "@/schemas/CreateBudgetSchema";
+import { createBudgetAction } from "@/actions";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const CreateBudgetForm = () => {
-  const toast = useToast();
+  let [isPending, startTransition] = useTransition();
+  const { toast } = useToast();
   const budgetOptions = Object.values(CreateBudgetOptions);
   const dispatch = useAppDispatch();
-  const { btnColor, btnBgColor, btnHoverBgColor } = useColorModeStyles();
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<FieldValues>({
+    setValue,
+  } = useForm<CreateBudgetSchemaType>({
     defaultValues: {
       budgetAmount: 10,
       category: "",
       spentAmount: 0,
     },
+    // @ts-ignore
+    resolver: zodResolver(CreateBudgetSchema),
   });
 
-  const onSubmit = async (data: FieldValues) => {
-    try {
-      const response = await axios.post("/api/user/budgets", data);
-      const budget = response.data.budget;
-      toast({
-        title: "Budget created.",
-        description: `Budget for ${budget.category} has been created. You can close this window now.`,
-        status: "success",
-        duration: 4000,
-        isClosable: true,
-        position: "top",
-      });
-      dispatch(fetchBudgets());
-      dispatch(closeGenericModal());
-    } catch (error: any) {
-      toast({
-        title: "An error occurred.",
-        description: error.response.data.error,
-        status: "error",
-        duration: 4000,
-        isClosable: true,
-        position: "top",
-      });
-    }
+  const onSubmit = async (data: CreateBudgetSchemaType) => {
+    startTransition(async () => {
+      const result = await createBudgetAction(data);
+      if (result.error) {
+        toast({
+          title: "An error occurred.",
+          description: result.error,
+          variant: "destructive",
+          duration: 4000,
+        });
+      } else {
+        dispatch(fetchBudgets());
+        const category =
+          result.budget && result.budget.category
+            ? CreateBudgetOptions[result.budget.category]
+            : "";
+        toast({
+          title: "Budget created.",
+          description: `Budget for ${category} has been created. You can close this window now.`,
+          variant: "default",
+          duration: 4000,
+        });
+        dispatch(closeGenericModal());
+      }
+    });
   };
+
+  const BudgetSelectOptions = budgetOptions.map((option) => ({
+    label: option,
+    value: option,
+  }));
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Stack spacing={4}>
-        {/* @ts-ignore */}
-        <FormControl isRequired isInvalid={errors.budgetAmount}>
-          <FormLabel>Budget Amount (₺)</FormLabel>
-          <Input
-            type="number"
-            id="budgetAmount"
-            {...register("budgetAmount", {
-              required: "Budget amount is required.",
-              min: {
-                value: 10,
-                message: "Budget amount must be at least $10.",
-              },
-              max: {
-                value: 1000000,
-                message: "Budget amount cannot exceed $1,000,000.",
-              },
-            })}
-          />
-          <FormErrorMessage>
-            {/* @ts-ignore */}
-            {errors.budgetAmount && errors.budgetAmount.message}
-          </FormErrorMessage>
-        </FormControl>
-        {/* @ts-ignore */}
-        <FormControl isRequired isInvalid={errors.category}>
-          <FormLabel>Budget Category</FormLabel>
-          <Select
-            id="category"
-            placeholder="Select your budget category"
-            {...register("category", {
-              required: "Category is required.",
-            })}
-          >
-            {budgetOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </Select>
-          <FormErrorMessage>
-            {/* @ts-ignore */}
-            {errors.category && errors.category.message}
-          </FormErrorMessage>
-        </FormControl>
-        {/* @ts-ignore */}
-        <FormControl isRequired isInvalid={errors.spentAmount}>
-          <FormLabel>Budget Spent (₺)</FormLabel>
-          <Input
-            type="number"
-            id="spentAmount"
-            {...register("spentAmount", {
-              required:
-                "Spent Amount is required. You can leave it at 0 if you have not spent any money yet.",
-              min: {
-                value: 0,
-                message:
-                  "Spent budget amount must be at least $0. You can leave it at 0 if you have'nt spent any money yet.",
-              },
-              max: {
-                value: 1000000,
-                message: "Spent budget amount cannot exceed $1,000,000.",
-              },
-            })}
-          />
-          <FormErrorMessage>
-            {/* @ts-ignore */}
-            {errors.spentAmount && errors.spentAmount.message}
-          </FormErrorMessage>
-        </FormControl>
-        {isSubmitting ? (
-          <Button isDisabled={isSubmitting}>
-            <Spinner />
-          </Button>
-        ) : (
-          <Button
-            color={btnColor}
-            bg={btnBgColor}
-            _hover={{ bg: btnHoverBgColor }}
-            type="submit"
-          >
-            Create
-          </Button>
-        )}
-      </Stack>
+      <div className="grid grid-cols-1 gap-4">
+        <FormInput
+          name={"budgetAmount"}
+          label={"Budget Amount"}
+          placeholder={"Budget Amount"}
+          type={"number"}
+          register={register}
+          errors={errors}
+        />
+        <FormSelect
+          defaultValue={BudgetSelectOptions[0].value}
+          selectOptions={BudgetSelectOptions}
+          nameParam={"category"}
+          label={"Budget Category"}
+          placeholder={""}
+          register={register}
+          errors={errors}
+          onChange={(value) => {
+            setValue("category", value);
+          }}
+        />
+        <FormInput
+          name={"spentAmount"}
+          label={"Budget Spent (₺)"}
+          placeholder={"Budget Spent (₺)"}
+          type={"number"}
+          register={register}
+          errors={errors}
+        />
+        <Button type="submit" disabled={isSubmitting || isPending}>
+          Update
+        </Button>
+      </div>
     </form>
   );
 };
