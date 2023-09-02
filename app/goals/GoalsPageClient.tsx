@@ -39,11 +39,11 @@ const GoalsPageClient = () => {
     <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
       <Navigation />
       <h2 className="text-4xl mb-4 text-primary">Goals</h2>
-      <div className="flex justify-center items-center flex-col">
+      <div className="flex justify-center items-center flex-col gap-2">
         {isLoading ? renderLoadingState() : renderGoals()}
         {!isLoading && goals?.length === 0 ? renderNoGoalsState() : null}
         <Button
-          className="mt-4"
+          className="mt-4 self-start"
           onClick={() =>
             dispatch(
               openGenericModal({

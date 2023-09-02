@@ -25,6 +25,9 @@ import CreateBudgetSchema, {
   CreateBudgetSchemaType,
 } from "@/schemas/CreateBudgetSchema";
 import EditGoalSchema, { EditGoalSchemaType } from "@/schemas/EditGoalSchema";
+import CreateGoalSchema, {
+  CreateGoalSchemaType,
+} from "@/schemas/CreateGoalSchema";
 
 export const loginAction = async ({ email, password }: LoginSchemaType) => {
   const result = LoginSchema.safeParse({ email, password });
@@ -816,5 +819,50 @@ export const deleteGoalByIdAction = async (goalId: number) => {
 
   return {
     goal: deletedGoal,
+  };
+};
+
+export const createGoalAction = async ({
+  goalAmount,
+  goalName,
+  currentAmount,
+}: CreateGoalSchemaType) => {
+  let result = CreateGoalSchema.safeParse({
+    goalAmount,
+    goalName,
+    currentAmount,
+  });
+
+  if (!result.success) {
+    return { error: "Unprocessable entity." };
+  }
+
+  const {
+    goalAmount: goalAmountResult,
+    goalName: goalNameResult,
+    currentAmount: currentAmountResult,
+  } = result.data;
+
+  const currentUser = await getCurrentUser(cookies().get("token")?.value!);
+
+  if (!currentUser) {
+    return { error: "You are not authorized to perform this action." };
+  }
+
+  const createdGoal = await db.goal.create({
+    data: {
+      goalAmount: goalAmountResult,
+      name: goalNameResult,
+      currentAmount: currentAmountResult,
+      userId: currentUser.id,
+    },
+  });
+
+  if (!createdGoal) {
+    return { error: "Error creating goal." };
+  }
+
+  return {
+    goal: createdGoal,
   };
 };

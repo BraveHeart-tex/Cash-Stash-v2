@@ -1,152 +1,94 @@
 "use client";
-import {
-  Stack,
-  FormLabel,
-  Input,
-  FormErrorMessage,
-  FormControl,
-  Button,
-  useToast,
-} from "@chakra-ui/react";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import useColorModeStyles from "../../../hooks/useColorModeStyles";
-import axios from "axios";
-import { useAppDispatch } from "../../../redux/hooks";
-import { fetchGoals } from "../../../redux/features/goalSlice";
+
+import { useForm } from "react-hook-form";
+import { useAppDispatch } from "@/app/redux/hooks";
+import { fetchGoals } from "@/app/redux/features/goalSlice";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
+import { useToast } from "@/components/ui/use-toast";
+import { zodResolver } from "@hookform/resolvers/zod";
+import CreateGoalSchema, {
+  CreateGoalSchemaType,
+} from "@/schemas/CreateGoalSchema";
+import FormInput from "@/components/FormInput";
+import { Button } from "@/components/ui/button";
+import { useTransition } from "react";
+import { createGoalAction } from "@/actions";
 
 const CreateUserGoalForm = () => {
+  let [isPending, startTransition] = useTransition();
   const dispatch = useAppDispatch();
-  const { btnColor, btnBgColor, btnHoverBgColor } = useColorModeStyles();
-  const toast = useToast();
+  const { toast } = useToast();
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<FieldValues>({
+  } = useForm<CreateGoalSchemaType>({
     defaultValues: {
       goalName: "",
       goalAmount: 10,
-      currentAmount: "0",
+      currentAmount: 0,
     },
+    // @ts-ignore
+    resolver: zodResolver(CreateGoalSchema),
   });
 
-  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    try {
-      const response = await axios.post("/api/user/goals", data);
-      toast({
-        title: "Goal created.",
-        description:
-          "Your goal has been created. You can close this window now.",
-        status: "success",
-        duration: 4000,
-        isClosable: true,
-        position: "top",
-      });
-      dispatch(fetchGoals());
-      dispatch(closeGenericModal());
-    } catch (error: any) {
-      toast({
-        title: "An error occurred.",
-        description: error.response.data.error,
-        status: "error",
-        duration: 4000,
-        isClosable: true,
-        position: "top",
-      });
-    }
+  const onSubmit = async (data: CreateGoalSchemaType) => {
+    startTransition(async () => {
+      const result = await createGoalAction(data);
+      if (result.error) {
+        toast({
+          title: "An error occurred.",
+          description: result.error,
+          variant: "destructive",
+          duration: 4000,
+        });
+      } else {
+        dispatch(fetchGoals());
+        toast({
+          title: "Goal created.",
+          description:
+            "Your goal has been created. You can close this window now.",
+          variant: "default",
+          duration: 4000,
+        });
+        dispatch(closeGenericModal());
+      }
+    });
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Stack spacing={4}>
-        {/* @ts-ignore */}
-        <FormControl isRequired isInvalid={errors.goalName}>
-          <FormLabel>Goal Name</FormLabel>
-          <Input
-            type="text"
-            id="goalName"
-            {...register("goalName", {
-              required: "Goal name is required.",
-              minLength: {
-                value: 3,
-                message: "Goal name must be at least 3 characters long.",
-              },
-              maxLength: {
-                value: 50,
-                message: "Goal name cannot exceed 50 characters.",
-              },
-            })}
-          />
-          <FormErrorMessage>
-            {/* @ts-ignore */}
-            {errors.goalName && errors.goalName.message}
-          </FormErrorMessage>
-        </FormControl>
-        {/* @ts-ignore */}
-        <FormControl isRequired isInvalid={errors.goalAmount}>
-          <FormLabel>Goal Amount (₺)</FormLabel>
-          <Input
-            type="number"
-            id="goalAmount"
-            {...register("goalAmount", {
-              required: "Goal amount is required.",
-              min: {
-                value: 10,
-                message: "Goal amount must be at least $10.",
-              },
-              max: {
-                value: 1000000,
-                message: "Goal amount cannot exceed $1,000,000.",
-              },
-            })}
-          />
-          <FormErrorMessage>
-            {/* @ts-ignore */}
-            {errors.goalAmount && errors.goalAmount.message}
-          </FormErrorMessage>
-        </FormControl>
-        {/* @ts-ignore */}
-        <FormControl isRequired isInvalid={errors.currentAmount}>
-          <FormLabel>Current Amount (₺)</FormLabel>
-          <Input
-            type="number"
-            id="currentAmount"
-            {...register("currentAmount", {
-              required: "Current amount is required.",
-              min: {
-                value: 0,
-                message: "Current amount must be at least $0.",
-              },
-              max: {
-                value: 1000000,
-                message: "Current amount cannot exceed $1,000,000.",
-              },
-            })}
-          />
-          <FormErrorMessage>
-            {/* @ts-ignore */}
-            {errors.currentAmount && errors.currentAmount.message}
-          </FormErrorMessage>
-        </FormControl>
-        {isSubmitting ? (
-          <Button>Loading...</Button>
-        ) : (
-          <Button
-            color={btnColor}
-            bg={btnBgColor}
-            _hover={{
-              bg: btnHoverBgColor,
-            }}
-            type="submit"
-            isDisabled={isSubmitting}
-            isLoading={isSubmitting}
-          >
-            Create
-          </Button>
-        )}
-      </Stack>
+      <div className="grid grid-cols-1 gap-4">
+        <FormInput
+          name={"goalName"}
+          label={"Goal Name"}
+          placeholder={"Goal name"}
+          type={"text"}
+          register={register}
+          errors={errors}
+        />
+        <FormInput
+          name={"goalAmount"}
+          label={"Goal Amount"}
+          placeholder={"Goal amount"}
+          type={"number"}
+          register={register}
+          errors={errors}
+        />
+        <FormInput
+          name={"currentAmount"}
+          label={"Current Amount"}
+          placeholder={"Current amount"}
+          type={"number"}
+          register={register}
+          errors={errors}
+        />
+
+        <Button type="submit" disabled={isSubmitting || isPending}>
+          Create
+        </Button>
+      </div>
     </form>
   );
 };
