@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { Goal } from "@prisma/client";
 import { getGoalsByCurrentUserAction } from "@/actions";
 
-type SerializedGoal = Omit<Goal, "createdAt" | "updatedAt"> & {
+export type SerializedGoal = Omit<Goal, "createdAt" | "updatedAt"> & {
   createdAt: string;
   updatedAt: string;
 };

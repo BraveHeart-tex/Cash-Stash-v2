@@ -24,6 +24,7 @@ import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
 import CreateBudgetSchema, {
   CreateBudgetSchemaType,
 } from "@/schemas/CreateBudgetSchema";
+import EditGoalSchema, { EditGoalSchemaType } from "@/schemas/EditGoalSchema";
 
 export const loginAction = async ({ email, password }: LoginSchemaType) => {
   const result = LoginSchema.safeParse({ email, password });
@@ -226,6 +227,60 @@ export const getGoalsByCurrentUserAction = async () => {
 
   return {
     goals,
+  };
+};
+
+export const updateGoalByIdAction = async ({
+  goalId,
+  goalAmount,
+  currentAmount,
+  goalName,
+}: EditGoalSchemaType & {
+  goalId: number;
+}) => {
+  const result = EditGoalSchema.safeParse({
+    goalAmount,
+    currentAmount,
+    goalName,
+  });
+
+  if (!result.success) {
+    return { error: "Unprocessable entity." };
+  }
+
+  const {
+    goalAmount: goalAmountResult,
+    currentAmount: currentAmountResult,
+    goalName: goalNameResult,
+  } = result.data;
+
+  const goalToBeUpdated = await db.goal.findUnique({
+    where: {
+      id: goalId,
+    },
+  });
+
+  if (!goalToBeUpdated) {
+    return { error: `Goal not found with the given id ${goalId}` };
+  }
+
+  const updatedGoal = await db.goal.update({
+    where: {
+      id: goalId,
+    },
+    data: {
+      goalAmount: goalAmountResult,
+      currentAmount: currentAmountResult,
+      name: goalNameResult,
+    },
+  });
+
+  if (!updatedGoal) {
+    return { error: "Error updating goal." };
+  }
+
+  return {
+    goal: updatedGoal,
   };
 };
 
@@ -741,5 +796,25 @@ export const updateReminderAction = async ({
 
   return {
     reminder: updatedReminder,
+  };
+};
+
+export const deleteGoalByIdAction = async (goalId: number) => {
+  if (!goalId) {
+    return { error: "Goal ID not found." };
+  }
+
+  const deletedGoal = await db.goal.delete({
+    where: {
+      id: goalId,
+    },
+  });
+
+  if (!deletedGoal) {
+    return { error: "Error deleting goal." };
+  }
+
+  return {
+    goal: deletedGoal,
   };
 };

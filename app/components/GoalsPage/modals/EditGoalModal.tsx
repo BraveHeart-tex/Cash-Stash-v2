@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import {
   Modal,
   ModalOverlay,
@@ -8,11 +8,11 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-} from '@chakra-ui/react';
-import useColorModeStyles from '../../../hooks/useColorModeStyles';
-import EditUserGoalForm from '../forms/EditUserGoalForm';
-import { useAppDispatch, useAppSelector } from '@/app/redux/hooks';
-import { setEditGoalModalOpen } from '@/app/redux/features/goalSlice';
+} from "@chakra-ui/react";
+import useColorModeStyles from "../../../hooks/useColorModeStyles";
+import EditUserGoalForm from "../forms/EditUserGoalForm";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
+import { setEditGoalModalOpen } from "@/app/redux/features/goalSlice";
 
 const EditGoalModal = () => {
   const { headingColor } = useColorModeStyles();
@@ -27,16 +27,16 @@ const EditGoalModal = () => {
       onClose={() => dispatch(setEditGoalModalOpen(false))}
       isCentered
     >
-      <ModalOverlay bg={'rgba(0, 0, 0, 0.25)'} />
+      <ModalOverlay bg={"rgba(0, 0, 0, 0.25)"} />
       <ModalContent>
         <ModalHeader color={headingColor}>Edit Goal</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <EditUserGoalForm selectedGoalId={selectedGoalId} />
+          <EditUserGoalForm entityId={selectedGoalId} />
         </ModalBody>
         <ModalFooter>
           <Button
-            variant='ghost'
+            variant="ghost"
             mr={3}
             onClick={() => dispatch(setEditGoalModalOpen(false))}
           >
