@@ -10,7 +10,7 @@ export function ModeSwitch() {
       <Switch
         id="color-mode"
         checked={useTheme().theme === "dark"}
-        onCheckedChange={(value: string) => {
+        onCheckedChange={(value: boolean) => {
           if (value) {
             setTheme("dark");
           } else {

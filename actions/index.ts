@@ -28,6 +28,9 @@ import EditGoalSchema, { EditGoalSchemaType } from "@/schemas/EditGoalSchema";
 import CreateGoalSchema, {
   CreateGoalSchemaType,
 } from "@/schemas/CreateGoalSchema";
+import CreateTransactionSchema, {
+  CreateTransactionSchemaType,
+} from "@/schemas/CreateTransactionSchema";
 
 export const loginAction = async ({ email, password }: LoginSchemaType) => {
   const result = LoginSchema.safeParse({ email, password });
@@ -864,5 +867,100 @@ export const createGoalAction = async ({
 
   return {
     goal: createdGoal,
+  };
+};
+
+export const createTransactionAction = async ({
+  amount,
+  description,
+  category,
+  accountId,
+  isIncome,
+}: CreateTransactionSchemaType) => {
+  let result = CreateTransactionSchema.safeParse({
+    amount,
+    description,
+    category,
+    accountId,
+    isIncome,
+  });
+
+  if (!result.success) {
+    return { error: "Unprocessable entity." };
+  }
+
+  const currentUser = await getCurrentUser(cookies().get("token")?.value!);
+
+  // check if the user's balance is enough for the transaction
+  const usersAccount = await db.userAccount.findFirst({
+    where: {
+      id: accountId,
+    },
+  });
+
+  if (!usersAccount) {
+    return {
+      message: "Bank account not found",
+    };
+  }
+
+  const usersBalance = usersAccount.balance;
+
+  if (!isIncome && usersBalance < amount) {
+    return {
+      message: "Insufficient balance",
+    };
+  }
+
+  const updatedBalance = !isIncome
+    ? usersBalance - amount
+    : usersBalance + amount;
+
+  const {
+    amount: amountResult,
+    description: descriptionResult,
+    category: categoryResult,
+    accountId: accountIdResult,
+    isIncome: isIncomeResult,
+  } = result.data;
+
+  const mappedCategory = Object.entries(CreateBudgetOptions).find(
+    ([key, value]) => value === categoryResult
+  )?.[0];
+
+  const transaction = await db.transaction.create({
+    data: {
+      amount: amountResult,
+      description: descriptionResult,
+      category: mappedCategory as NotificationCategory,
+      accountId: accountIdResult,
+      isIncome: isIncomeResult,
+      userId: currentUser?.id,
+    },
+  });
+
+  if (!transaction) {
+    return {
+      message: "Error creating transaction",
+    };
+  }
+
+  const updatedAccount = await db.userAccount.update({
+    where: {
+      id: accountId,
+    },
+    data: {
+      balance: updatedBalance,
+    },
+  });
+
+  if (!updatedAccount) {
+    return {
+      message: "Failed to update balance",
+    };
+  }
+
+  return {
+    transaction,
   };
 };

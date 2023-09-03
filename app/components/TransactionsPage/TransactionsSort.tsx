@@ -1,65 +1,80 @@
-'use client';
+"use client";
 import {
   updateFilteredData,
   setSortBy,
   setSortDirection,
-} from '@/app/redux/features/transactionsSlice';
-import { useAppDispatch } from '@/app/redux/hooks';
-import { Box, Stack, Select, Heading, useColorMode } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
+} from "@/app/redux/features/transactionsSlice";
+import { useAppDispatch } from "@/app/redux/hooks";
+import { useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import GenericSelect from "@/components/GenericSelect";
+import { Label } from "@/components/ui/label";
 
 interface ITransactionsSortProps {}
 
 const TransactionsSort = ({}: ITransactionsSortProps) => {
   const dispatch = useAppDispatch();
 
-  const { colorMode } = useColorMode();
-
   useEffect(() => {
-    dispatch(setSortBy(''));
-    dispatch(setSortDirection(''));
+    dispatch(setSortBy(""));
+    dispatch(setSortDirection(""));
   }, [dispatch]);
 
-  const handleSortByChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch(setSortBy(event.target.value as 'amount' | 'date'));
+  const handleSortByChange = (value: string) => {
+    dispatch(setSortBy(value as "amount" | "date"));
     dispatch(updateFilteredData());
   };
 
-  const handleSortDirectionChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    dispatch(setSortDirection(event.target.value as 'asc' | 'desc'));
+  const handleSortDirectionChange = (value: string) => {
+    dispatch(setSortDirection(value as "asc" | "desc"));
     dispatch(updateFilteredData());
   };
+
+  const sortByOptions = [
+    { value: "amount", label: "Amount" },
+    { value: "date", label: "Date" },
+  ];
+
+  const sortDirectionOptions = [
+    { value: "asc", label: "Ascending" },
+    { value: "desc", label: "Descending" },
+  ];
 
   return (
-    <Box
-      p={4}
-      width={{
-        base: '100%',
-        lg: '75%',
-      }}
-      mt={4}
-      borderColor={colorMode === 'light' ? 'gray.200' : 'gray.700'}
-      borderWidth={1}
-      borderRadius={4}
-      boxShadow={'md'}
-    >
-      <Heading as={'h2'} fontSize={'xl'} mb={4}>
-        Sort
-      </Heading>
-      <Stack>
-        <Select defaultValue={''} onChange={handleSortByChange}>
-          <option value=''>None</option>
-          <option value='amount'>Amount</option>
-          <option value='date'>Date</option>
-        </Select>
-        <Select defaultValue={''} onChange={handleSortDirectionChange}>
-          <option value='asc'>Ascending</option>
-          <option value='desc'>Descending</option>
-        </Select>
-      </Stack>
-    </Box>
+    <Card className={"w-full lg:w-3/4 mt-4"}>
+      <CardHeader>
+        <CardTitle>Sort</CardTitle>{" "}
+        <CardDescription>Sort transactions by amount or date.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <h2 className={"font-xl mb-4"}>Sort</h2>
+      </CardContent>
+
+      <div className={"grid grid-cols-1 gap-2"}>
+        <div>
+          <Label>Sort By</Label>
+          <GenericSelect
+            placeholder={"Sort By"}
+            options={sortByOptions}
+            onChange={(value) => handleSortByChange(value)}
+          />
+        </div>
+        <div>
+          <Label>Sort Direction</Label>
+          <GenericSelect
+            placeholder={"Sort Direction"}
+            options={sortDirectionOptions}
+            onChange={(value) => handleSortDirectionChange(value)}
+          />
+        </div>
+      </div>
+    </Card>
   );
 };
 

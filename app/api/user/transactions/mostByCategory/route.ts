@@ -1,15 +1,16 @@
-import prisma from '@/app/libs/prismadb';
-import getCurrentUser from '@/app/actions/getCurrentUser';
-import { NextResponse } from 'next/server';
+import prisma from "@/app/libs/prismadb";
+import getCurrentUser from "@/app/actions/getCurrentUser";
+import { NextResponse } from "next/server";
+import { getCurrentUserAction } from "@/actions";
 
 // get the list of top transactions by category
 export async function GET(request: Request) {
-  const currentUser = await getCurrentUser();
+  const { user: currentUser } = await getCurrentUserAction();
 
   if (!currentUser) {
     return NextResponse.json(
       {
-        message: 'You must be logged in to do that',
+        message: "You must be logged in to do that",
       },
       {
         status: 401,
@@ -18,7 +19,7 @@ export async function GET(request: Request) {
   }
 
   const categories = await prisma.transaction.groupBy({
-    by: ['category', 'accountId', 'createdAt'],
+    by: ["category", "accountId", "createdAt"],
     where: {
       userId: currentUser.id,
       isIncome: false,
@@ -28,7 +29,7 @@ export async function GET(request: Request) {
     },
     orderBy: {
       _sum: {
-        amount: 'desc',
+        amount: "desc",
       },
     },
   });

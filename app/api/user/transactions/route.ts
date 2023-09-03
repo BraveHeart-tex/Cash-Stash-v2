@@ -1,12 +1,11 @@
 import { getCurrentUserAction } from "@/actions";
 import createTransaction from "@/app/actions/createTransaction";
-import getCurrentUser from "@/app/actions/getCurrentUser";
 import getCurrentUserTransactions from "@/app/actions/getCurrentUserTransactions";
 import { NextResponse } from "next/server";
 
 // get all transactions
 export async function GET(request: Request) {
-  const currentUser = await getCurrentUser();
+  const { user: currentUser } = await getCurrentUserAction();
 
   if (!currentUser) {
     return NextResponse.json(

@@ -1,30 +1,30 @@
-import prisma from '@/app/libs/prismadb';
-import getCurrentUser from '@/app/actions/getCurrentUser';
-import { NextResponse } from 'next/server';
+import prisma from "@/app/libs/prismadb";
+import { NextResponse } from "next/server";
+import { getCurrentUserAction } from "@/actions";
 
 const MONTHS_OF_THE_YEAR = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'July',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec',
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "July",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
 ];
 
 // get transaction data by grouping them by month
 export async function GET(request: Request) {
-  const currentUser = await getCurrentUser();
+  const { user: currentUser } = await getCurrentUserAction();
 
   if (!currentUser) {
     return NextResponse.json(
       {
-        message: 'Unauthorized',
+        message: "Unauthorized",
       },
       {
         status: 401,
@@ -34,7 +34,7 @@ export async function GET(request: Request) {
 
   // group user's transaction data by month and return its sum
   const incomes = await prisma.transaction.groupBy({
-    by: ['createdAt'],
+    by: ["createdAt"],
     where: {
       userId: currentUser.id,
       isIncome: true,
@@ -45,7 +45,7 @@ export async function GET(request: Request) {
   });
 
   const expenses = await prisma.transaction.groupBy({
-    by: ['createdAt'],
+    by: ["createdAt"],
     where: {
       userId: currentUser.id,
       isIncome: false,

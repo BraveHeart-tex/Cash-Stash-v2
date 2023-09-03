@@ -1,5 +1,5 @@
-'use client';
-import { setIsEditReminderModalOpen } from '@/app/redux/features/remindersSlice';
+"use client";
+import { setIsEditReminderModalOpen } from "@/app/redux/features/remindersSlice";
 import {
   Modal,
   ModalOverlay,
@@ -9,10 +9,10 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-} from '@chakra-ui/react';
-import React from 'react';
-import EditReminderForm from '../forms/EditReminderForm';
-import { useAppDispatch, useAppSelector } from '@/app/redux/hooks';
+} from "@chakra-ui/react";
+import React from "react";
+import EditReminderForm from "../forms/EditReminderForm";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 
 const EditReminderModal = () => {
   const { isEditReminderModalOpen, selectedReminderId } = useAppSelector(
@@ -33,11 +33,11 @@ const EditReminderModal = () => {
         <ModalHeader>Edit Reminder</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <EditReminderForm />
+          <EditReminderForm e />
         </ModalBody>
         <ModalFooter>
           <Button
-            variant='ghost'
+            variant="ghost"
             mr={3}
             onClick={() =>
               dispatch(setIsEditReminderModalOpen(!isEditReminderModalOpen))

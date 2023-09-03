@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import getCurrentUserBudgets from "@/app/actions/getCurrentUserBudgets";
-import getCurrentUser from "@/app/actions/getCurrentUser";
 import createBudget from "@/app/actions/createBudget";
 import { NotificationCategory, Budget } from "@prisma/client";
 import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
@@ -10,7 +9,7 @@ import { getCurrentUserAction } from "@/actions";
 // @route GET /api/user/budgets
 // @access Private
 export async function GET(request: Request) {
-  const currentUser = await getCurrentUser();
+  const { user: currentUser } = await getCurrentUserAction();
 
   if (!currentUser) {
     return NextResponse.json(

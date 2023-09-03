@@ -2,7 +2,6 @@
 import CreateUserAccountOptions, {
   getOptionLabel,
 } from "@/lib/CreateUserAccountOptions";
-import EditUserAccountModal from "./modals/EditUserAccountModal";
 import { useAppDispatch } from "@/app/redux/hooks";
 import {
   SerializedUserAccount,
@@ -120,7 +119,6 @@ const AccountInformation = ({ userAccounts }: IAccountInformationProps) => {
           </div>
         )}
       </div>
-      <EditUserAccountModal />
     </>
   );
 };

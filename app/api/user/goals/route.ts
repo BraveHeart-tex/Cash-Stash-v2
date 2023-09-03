@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 
 // get all goals
 export async function GET(request: Request) {
-  const currentUser = await getCurrentUser();
+  const { user: currentUser } = await getCurrentUserAction();
 
   if (!currentUser) {
     return NextResponse.json(

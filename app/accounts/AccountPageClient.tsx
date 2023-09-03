@@ -1,6 +1,5 @@
 "use client";
 import Navigation from "@/app/components/Navigation";
-import CreateUserAccountModal from "@/app/components/AccountsPage/modals/CreateUserAccountModal";
 import AccountsFilter from "@/app/components/AccountsPage/AccountFilter";
 import { useAppDispatch } from "@/app/redux/hooks";
 import { Button } from "@/components/ui/button";
@@ -34,7 +33,6 @@ export default function AccountsPageClient() {
         >
           Create Account
         </Button>
-        <CreateUserAccountModal />
       </div>
     </div>
   );

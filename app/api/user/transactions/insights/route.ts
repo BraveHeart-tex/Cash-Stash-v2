@@ -1,15 +1,15 @@
-import getCurrentUser from '@/app/actions/getCurrentUser';
-import prisma from '@/app/libs/prismadb';
-import { NextResponse } from 'next/server';
+import prisma from "@/app/libs/prismadb";
+import { NextResponse } from "next/server";
+import { getCurrentUserAction } from "@/actions";
 
 // get insights for user transactions
 export async function GET(request: Request) {
-  const currentUser = await getCurrentUser();
+  const { user: currentUser } = await getCurrentUserAction();
 
   if (!currentUser) {
     return NextResponse.json(
       {
-        message: 'Unauthorized',
+        message: "Unauthorized",
       },
       {
         status: 401,
@@ -43,7 +43,7 @@ export async function GET(request: Request) {
   if (!totalIncome._sum.amount || !totalExpense._sum.amount) {
     return NextResponse.json(
       {
-        message: 'Error calculating net income',
+        message: "Error calculating net income",
       },
       {
         status: 500,
