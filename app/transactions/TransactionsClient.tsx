@@ -14,7 +14,7 @@ const TransactionsClient = () => {
     <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
       <Navigation />
       <h3 className="text-4xl mb-4 text-primary">Transactions</h3>
-      <div className="grid h-[50vh] grid-cols-3 grid-rows-1">
+      <div className="grid h-[50vh] grid-cols-1 lg:grid-cols-3 lg:grid-rows-1 ">
         <div className="col-span-3 lg:col-span-1">
           <div className="flex justify-center items-start gap-1 flex-col">
             <TransactionsFilter />
@@ -39,7 +39,6 @@ const TransactionsClient = () => {
           </div>
         </div>
         <div className="col-span-3 lg:col-span-2">
-          <h3 className="block lg:hidden mt-4">Transactions List</h3>
           <div>
             <TransactionList />
           </div>

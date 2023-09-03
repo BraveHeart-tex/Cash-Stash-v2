@@ -49,31 +49,35 @@ const TransactionsSort = ({}: ITransactionsSortProps) => {
   return (
     <Card className={"w-full lg:w-3/4 mt-4"}>
       <CardHeader>
-        <CardTitle>Sort</CardTitle>{" "}
+        <CardTitle className={"text-lg"}>Sort</CardTitle>{" "}
         <CardDescription>Sort transactions by amount or date.</CardDescription>
       </CardHeader>
       <CardContent>
-        <h2 className={"font-xl mb-4"}>Sort</h2>
+        <div className={"grid grid-cols-1 gap-2"}>
+          <div>
+            <Label className="text-[14px] xl:text-md font-semibold">
+              Sort By
+            </Label>
+            <GenericSelect
+              placeholder={"Sort By"}
+              options={sortByOptions}
+              onChange={(value) => handleSortByChange(value)}
+              selectLabel={"Sort By"}
+            />
+          </div>
+          <div>
+            <Label className="text-[14px] xl:text-md font-semibold">
+              Sort Direction
+            </Label>
+            <GenericSelect
+              placeholder={"Sort Direction"}
+              options={sortDirectionOptions}
+              onChange={(value) => handleSortDirectionChange(value)}
+              selectLabel={"Sort Direction"}
+            />
+          </div>
+        </div>
       </CardContent>
-
-      <div className={"grid grid-cols-1 gap-2"}>
-        <div>
-          <Label>Sort By</Label>
-          <GenericSelect
-            placeholder={"Sort By"}
-            options={sortByOptions}
-            onChange={(value) => handleSortByChange(value)}
-          />
-        </div>
-        <div>
-          <Label>Sort Direction</Label>
-          <GenericSelect
-            placeholder={"Sort Direction"}
-            options={sortDirectionOptions}
-            onChange={(value) => handleSortDirectionChange(value)}
-          />
-        </div>
-      </div>
     </Card>
   );
 };

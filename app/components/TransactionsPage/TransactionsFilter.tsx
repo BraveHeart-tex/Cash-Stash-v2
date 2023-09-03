@@ -16,6 +16,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
 
 const TransactionsFilter = () => {
   const dispatch = useAppDispatch();
@@ -68,9 +69,9 @@ const TransactionsFilter = () => {
       <CardContent>
         <div className="grid grid-cols-1 gap-2">
           <div>
-            <p className="text-[14px] xl:text-md font-semibold">
+            <Label className="text-[14px] xl:text-md font-semibold">
               By Transaction Type
-            </p>
+            </Label>
             <GenericSelect
               placeholder={"Transaction Type"}
               options={TransactionTypeOptions}
@@ -79,7 +80,9 @@ const TransactionsFilter = () => {
             />
           </div>
           <div>
-            <p className="text-[14px] xl:text-md font-semibold">By Account</p>
+            <Label className="text-[14px] xl:text-md font-semibold">
+              By Account
+            </Label>
             <GenericSelect
               placeholder={"Account"}
               options={AccountOptions}
