@@ -1,15 +1,21 @@
-'use client';
+"use client";
 import {
   setFilterType,
   setFilterAccount,
   updateFilteredData,
-} from '../../redux/features/transactionsSlice';
-import { Heading, Select, Stack, Text, useColorMode } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '@/app/redux/hooks';
-import { Box } from '@chakra-ui/react';
-import { fetchTransactions } from '../../redux/features/transactionsSlice';
-import { fetchCurrentUserAccounts } from '@/app/redux/features/userAccountSlice';
+} from "@/app/redux/features/transactionsSlice";
+import React, { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
+import { fetchTransactions } from "@/app/redux/features/transactionsSlice";
+import { fetchCurrentUserAccounts } from "@/app/redux/features/userAccountSlice";
+import GenericSelect from "@/components/GenericSelect";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 const TransactionsFilter = () => {
   const dispatch = useAppDispatch();
@@ -23,62 +29,67 @@ const TransactionsFilter = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(setFilterType(''));
-    dispatch(setFilterAccount(''));
+    dispatch(setFilterType(""));
+    dispatch(setFilterAccount(""));
   }, [dispatch]);
 
-  const handleTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch(setFilterType(event.target.value));
+  const handleTypeChange = (value: string) => {
+    dispatch(setFilterType(value));
     dispatch(updateFilteredData());
   };
 
-  const handleAccountChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch(setFilterAccount(event.target.value));
+  const handleAccountChange = (value: string) => {
+    dispatch(setFilterAccount(value));
     dispatch(updateFilteredData());
   };
 
-  const { colorMode } = useColorMode();
+  const TransactionTypeOptions = [
+    { value: "", label: "All" },
+    { value: "income", label: "Income" },
+    { value: "expense", label: "Expense" },
+  ];
+
+  const AccountOptions = [
+    { value: "", label: "All" },
+    ...(currentUserAccounts?.map((account) => ({
+      value: account.id.toString(),
+      label: account.name,
+    })) ?? []),
+  ];
 
   return (
-    <Box
-      minHeight={'10rem'}
-      width={{
-        base: '100%',
-        lg: '75%',
-      }}
-      p={4}
-      mt={4}
-      borderColor={colorMode === 'light' ? 'gray.200' : 'gray.700'}
-      borderWidth={1}
-      borderRadius={4}
-      boxShadow={'md'}
-    >
-      <Heading as={'h2'} fontSize={'xl'} mb={4}>
-        Filter
-      </Heading>
-      <Stack direction='column' spacing={4}>
-        <Box>
-          <Text mb={2}>By Transaction Type</Text>
-          <Select defaultValue={''} onChange={handleTypeChange}>
-            <option value=''>All</option>
-            <option value='income'>Income</option>
-            <option value='expense'>Expense</option>
-          </Select>
-        </Box>
-        <Box>
-          <Text mb={2}>By Account</Text>
-          <Select onChange={handleAccountChange} defaultValue={''}>
-            <option value=''>All</option>
-            {currentUserAccounts &&
-              currentUserAccounts.map((account) => (
-                <option key={account.id} value={account.id}>
-                  {account.name}
-                </option>
-              ))}
-          </Select>
-        </Box>
-      </Stack>
-    </Box>
+    <Card className="min-h-[10rem] w-full lg:w-[75%] mt-4">
+      <CardHeader>
+        <CardTitle className="text-lg">Filter Transactions</CardTitle>
+        <CardDescription>
+          Filter transactions by transaction type and account.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="grid grid-cols-1 gap-2">
+          <div>
+            <p className="text-[14px] xl:text-md font-semibold">
+              By Transaction Type
+            </p>
+            <GenericSelect
+              placeholder={"Transaction Type"}
+              options={TransactionTypeOptions}
+              onChange={handleTypeChange}
+              selectLabel={"Transaction Type"}
+            />
+          </div>
+          <div>
+            <p className="text-[14px] xl:text-md font-semibold">By Account</p>
+            <GenericSelect
+              placeholder={"Account"}
+              options={AccountOptions}
+              onChange={handleAccountChange}
+              selectLabel={"Account"}
+            />
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 

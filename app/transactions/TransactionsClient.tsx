@@ -1,77 +1,51 @@
-'use client';
-import {
-  Container,
-  Heading,
-  SimpleGrid,
-  Box,
-  Grid,
-  GridItem,
-  Button,
-  useColorMode,
-} from '@chakra-ui/react';
-import Navigation from '../components/Navigation';
-import TransactionsFilter from '@/app/components/TransactionsPage/TransactionsFilter';
-import TransactionsSort from '../components/TransactionsPage/TransactionsSort';
-import TransactionList from '../components/TransactionsPage/TransactionList';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { setCreateModalOpen } from '../redux/features/transactionsSlice';
-import CreateTransactionModal from '../components/TransactionsPage/modals/CreateTransactionModal';
-import DeleteTransactionModal from '../components/TransactionsPage/modals/DeleteTransactionModal';
+"use client";
+import Navigation from "@/app/components/Navigation";
+import TransactionsFilter from "@/app/components/TransactionsPage/TransactionsFilter";
+import TransactionsSort from "@/app/components/TransactionsPage/TransactionsSort";
+import TransactionList from "@/app/components/TransactionsPage/TransactionList";
+import { useAppDispatch } from "@/app/redux/hooks";
+import { Button } from "@/components/ui/button";
+import { openGenericModal } from "@/app/redux/features/genericModalSlice";
 
 const TransactionsClient = () => {
-  const { colorMode } = useColorMode();
   const dispatch = useAppDispatch();
-  const { createModalOpen } = useAppSelector(
-    (state) => state.transactionsReducer
-  );
 
   return (
-    <Container maxW={'8xl'} p={4}>
+    <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
       <Navigation />
-      <Heading>Transactions</Heading>
-      <Grid h='50vh' templateRows={'1fr'} templateColumns={'repeat(3,1fr)'}>
-        <GridItem
-          colSpan={{
-            base: 3,
-            lg: 1,
-          }}
-        >
-          <Box
-            display={'flex'}
-            justifyContent={'center'}
-            alignItems={'flex-start'}
-            gap={1}
-            flexDirection={'column'}
-          >
+      <h3 className="text-4xl mb-4 text-primary">Transactions</h3>
+      <div className="grid h-[50vh] grid-cols-3 grid-rows-1">
+        <div className="col-span-3 lg:col-span-1">
+          <div className="flex justify-center items-start gap-1 flex-col">
             <TransactionsFilter />
             <TransactionsSort />
             <Button
-              mt={4}
-              bg={colorMode === 'light' ? 'gray.300' : 'gray.700'}
-              color={colorMode === 'light' ? 'gray.700' : 'gray.300'}
-              onClick={() => dispatch(setCreateModalOpen(!createModalOpen))}
+              className="mt-4 font-semibold self-start"
+              onClick={() =>
+                dispatch(
+                  openGenericModal({
+                    mode: "create",
+                    key: "transaction",
+                    dialogTitle: "Create a transaction",
+                    dialogDescription:
+                      "Fill out the form below to create a transaction.",
+                    entityId: 0,
+                  })
+                )
+              }
             >
               Create Transaction
             </Button>
-          </Box>
-        </GridItem>
-        <GridItem
-          colSpan={{
-            base: 3,
-            lg: 2,
-          }}
-        >
-          <Heading display={{ base: 'block', lg: 'none' }} mt={4}>
-            Transactions List
-          </Heading>
-          <Box>
+          </div>
+        </div>
+        <div className="col-span-3 lg:col-span-2">
+          <h3 className="block lg:hidden mt-4">Transactions List</h3>
+          <div>
             <TransactionList />
-          </Box>
-        </GridItem>
-      </Grid>
-      <CreateTransactionModal />
-      <DeleteTransactionModal />
-    </Container>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

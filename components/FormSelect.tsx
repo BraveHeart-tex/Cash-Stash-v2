@@ -11,7 +11,7 @@ import { UseFormRegister } from "react-hook-form";
 import FormError from "./FormError";
 import { Label } from "./ui/label";
 
-interface SelectOption {
+export interface SelectOption {
   value: string;
   label: string;
 }

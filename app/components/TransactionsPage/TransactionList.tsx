@@ -1,9 +1,8 @@
-'use client';
-import { useEffect } from 'react';
-import { fetchTransactions } from '@/app/redux/features/transactionsSlice';
-import { useAppDispatch, useAppSelector } from '@/app/redux/hooks';
-import TransactionCard from './TransactionCard';
-import { Box, Heading, SimpleGrid, Text } from '@chakra-ui/react';
+"use client";
+import { useEffect } from "react";
+import { fetchTransactions } from "@/app/redux/features/transactionsSlice";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
+import TransactionCard from "./TransactionCard";
 
 const TransactionList = () => {
   const { data, filteredData, isLoading } = useAppSelector(
@@ -15,46 +14,26 @@ const TransactionList = () => {
     dispatch(fetchTransactions());
   }, [dispatch]);
 
+  const renderNoTransactionsState = () => (
+    <div className="flex justify-center items-start flex-col gap-4 mt-4 lg:mt-0">
+      <h2 className="text-2xl">No transactions found.</h2>
+      <p>
+        You can try again by removing any existing filters or creating a new
+        transaction below.
+      </p>
+    </div>
+  );
+
   if (!isLoading && data && data?.length === 0) {
-    return (
-      <Box
-        display={'flex'}
-        justifyContent={'center'}
-        alignItems={'flex-start'}
-        flexDirection={'column'}
-        gap={4}
-        mt={{ base: 4, lg: 0 }}
-      >
-        <Heading fontSize={'2xl'}>No transactions found.</Heading>
-        <Text>
-          You can try again by removing any existing filters or creating a new
-          transaction below.
-        </Text>
-      </Box>
-    );
+    return renderNoTransactionsState();
   }
 
   if (filteredData && filteredData.length === 0) {
-    return (
-      <Box
-        display={'flex'}
-        justifyContent={'center'}
-        alignItems={'flex-start'}
-        flexDirection={'column'}
-        gap={4}
-        mt={{ base: 4, lg: 0 }}
-      >
-        <Heading fontSize={'2xl'}>No transactions found.</Heading>
-        <Text>
-          You can try again by removing any existing filters or creating a new
-          transaction below.
-        </Text>
-      </Box>
-    );
+    return renderNoTransactionsState();
   }
 
   return (
-    <SimpleGrid columns={{ base: 1, lg: 2, xl: 3 }} gap={4}>
+    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
       {filteredData && filteredData?.length > 0
         ? filteredData?.map((transaction) => (
             <TransactionCard transaction={transaction} key={transaction.id} />
@@ -62,7 +41,7 @@ const TransactionList = () => {
         : data?.map((transaction) => (
             <TransactionCard transaction={transaction} key={transaction.id} />
           ))}
-    </SimpleGrid>
+    </div>
   );
 };
 
