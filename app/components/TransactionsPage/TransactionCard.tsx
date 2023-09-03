@@ -1,33 +1,20 @@
 "use client";
-import {
-  Box,
-  Flex,
-  IconButton,
-  Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverCloseButton,
-  PopoverContent,
-  PopoverHeader,
-  PopoverTrigger,
-  SimpleGrid,
-  useColorMode,
-  Text,
-  Stack,
-  Heading,
-  Badge,
-  Skeleton,
-} from "@chakra-ui/react";
-import ActionsIcon from "../Icons/ActionsIcon";
-import DeleteIcon from "../Icons/DeleteIcon";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import {
   fetchTransactions,
   SerializedTransaction,
-  setDeleteModalOpen,
 } from "@/app/redux/features/transactionsSlice";
 import { fetchCurrentUserAccounts } from "@/app/redux/features/userAccountSlice";
 import { useEffect } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+import ActionPopover from "@/components/ActionPopover";
+import { useToast } from "@/components/ui/use-toast";
+import { showGenericConfirm } from "@/app/redux/features/genericConfirmSlice";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { deleteTransactionByIdAction } from "@/actions";
+import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 interface ITransactionCardProps {
   transaction: SerializedTransaction;
 }
@@ -36,6 +23,7 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
   const { currentUserAccounts, isLoading } = useAppSelector(
     (state) => state.userAccountReducer
   );
+  const { toast } = useToast();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -46,100 +34,100 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
     dispatch(fetchCurrentUserAccounts());
   }, [dispatch]);
 
-  const { colorMode } = useColorMode();
-
-  const handleDeleteTransaction = (id: number) => {
-    dispatch(
-      setDeleteModalOpen({ isDeleteModalOpen: true, transactionId: id })
-    );
-  };
-
   if (isLoading) {
-    return <Skeleton height={"11.25rem"} isLoaded={!isLoading} />;
+    return <Skeleton className={"h-[11.25rem]"} />;
   }
 
+  const handleDeleteCallback = (
+    result: Awaited<ReturnType<typeof deleteTransactionByIdAction>>,
+    cleanUp: ActionCreatorWithoutPayload<"genericConfirm/cleanUp">
+  ) => {
+    if (result.error) {
+      toast({
+        title: "Error",
+        description: result.error,
+        variant: "destructive",
+        duration: 5000,
+      });
+    } else {
+      toast({
+        title: "Success",
+        description: "Transaction deleted successfully.",
+        variant: "default",
+        duration: 5000,
+      });
+      dispatch(fetchTransactions());
+      dispatch(cleanUp());
+    }
+  };
+
   return (
-    <Box
-      mt={4}
-      p={4}
-      borderWidth={1}
-      borderRadius="md"
-      borderColor={colorMode === "light" ? "gray.200" : "gray.700"}
-      key={transaction.id}
-      boxShadow={"md"}
-      position={"relative"}
-    >
-      <Badge
-        variant={"solid"}
-        colorScheme={transaction.isIncome ? "green" : "red"}
-        mb={2}
-      >
-        {transaction.isIncome ? "Income" : "Expense"}
-      </Badge>
-      <Stack>
-        <Heading as={"h3"} fontSize={"lg"}>
-          {transaction.description}
-        </Heading>
-        <Text>
-          {new Date(transaction.createdAt).toLocaleDateString("en-US", {
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })}
-        </Text>
-        <Text>
-          Account Name:{" "}
-          {currentUserAccounts &&
-            currentUserAccounts.find(
-              (account) => account.id === transaction.accountId
-            )?.name}
-        </Text>
-        <Text>
-          {transaction.isIncome ? "+" : "-"}${transaction.amount}
-        </Text>
-      </Stack>
-      <Popover>
-        <PopoverTrigger>
-          <IconButton
-            icon={<ActionsIcon />}
-            aria-label="Budger actions"
-            bg={"transparent"}
-            width={5}
-            height={5}
-            position={"absolute"}
-            top={2}
-            right={2}
-            mb={2}
+    <Card className={"mt-4"}>
+      <CardHeader className={"flex items-center flex-row justify-between pt-1"}>
+        <CardTitle>
+          {transaction.description || "No description provided."}
+        </CardTitle>
+        <div className={"flex flex-row items-center gap-1"}>
+          <Badge
+            className={cn(transaction.isIncome ? "bg-green-500" : "bg-red-500")}
+          >
+            {transaction.isIncome ? "Income" : "Expense"}
+          </Badge>
+          <ActionPopover
+            popoverHeading={"Transaction Actions"}
+            onEditActionClick={() => {
+              toast({
+                title: "Error",
+                description: "You cannot edit transactions at this time.",
+                variant: "destructive",
+                duration: 5000,
+              });
+            }}
+            onDeleteActionClick={() => {
+              dispatch(
+                showGenericConfirm({
+                  title: "Delete Transaction",
+                  message: "Are you sure you want to delete this transaction?",
+                  primaryActionLabel: "Delete",
+                  primaryAction: async () =>
+                    deleteTransactionByIdAction(transaction.id),
+                  resolveCallback: handleDeleteCallback,
+                })
+              );
+            }}
+            placementClasses={"mb-0"}
+            isAbsolute={false}
           />
-        </PopoverTrigger>
-        <PopoverContent bg={colorMode === "light" ? "gray.50" : "gray.700"}>
-          <PopoverArrow />
-          <PopoverCloseButton />
-          <PopoverHeader fontWeight={"bold"} textAlign={"center"}>
-            Transaction Actions
-          </PopoverHeader>
-          <PopoverBody>
-            <Flex justifyContent={"center"} alignItems={"center"}>
-              <SimpleGrid columns={1} gap={4}>
-                <Flex justifyContent={"center"} alignItems={"center"}>
-                  <IconButton
-                    aria-label={"Delete transaction"}
-                    onClick={() => handleDeleteTransaction(transaction.id)}
-                    icon={<DeleteIcon />}
-                    width={5}
-                    height={5}
-                    bg={"transparent"}
-                    mr={2}
-                  />
-                  <Text width={"50%"}>Delete </Text>
-                </Flex>
-              </SimpleGrid>
-            </Flex>
-          </PopoverBody>
-        </PopoverContent>
-      </Popover>
-    </Box>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <div className="grid grid-cols-1 gap-1">
+          <div className={"flex items-center gap-1"}>
+            <p className={"font-semibold"}>Transaction Date: </p>
+            <p>{transaction.createdAt}</p>
+          </div>
+          <div className={"flex items-center gap-1"}>
+            <p className={"font-semibold"}>Account Name: </p>
+            <p>
+              {currentUserAccounts &&
+                currentUserAccounts.find(
+                  (account) => account.id === transaction.accountId
+                )?.name}
+            </p>
+          </div>
+          <div className={"flex items-center gap-1"}>
+            <p className={"font-semibold"}>Amount: </p>
+            <p
+              className={cn(
+                transaction.isIncome ? "text-green-500" : "text-red-500"
+              )}
+            >
+              {transaction.isIncome ? "+" : "-"}${transaction.amount}
+            </p>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 

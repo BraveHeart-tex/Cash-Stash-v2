@@ -964,3 +964,47 @@ export const createTransactionAction = async ({
     transaction,
   };
 };
+
+export const deleteTransactionByIdAction = async (transactionId: number) => {
+  if (!transactionId) {
+    return { error: "Transaction ID not found." };
+  }
+
+  const deletedTransaction = await db.transaction.delete({
+    where: {
+      id: transactionId,
+    },
+  });
+
+  if (!deletedTransaction) {
+    return { error: "Error deleting transaction." };
+  }
+
+  if (deletedTransaction.isIncome) {
+    await db.userAccount.update({
+      where: {
+        id: deletedTransaction.accountId,
+      },
+      data: {
+        balance: {
+          decrement: deletedTransaction.amount,
+        },
+      },
+    });
+  } else {
+    await db.userAccount.update({
+      where: {
+        id: deletedTransaction.accountId,
+      },
+      data: {
+        balance: {
+          increment: deletedTransaction.amount,
+        },
+      },
+    });
+  }
+
+  return {
+    transaction: deletedTransaction,
+  };
+};
