@@ -1,9 +1,12 @@
-import ReportsPageClient from './ReportsPageClient';
+import ReportsPageClient from "./ReportsPageClient";
+import { getChartDataAction } from "@/actions";
 
-const ReportsPage = () => {
+const ReportsPage = async () => {
+  const { data } = await getChartDataAction();
+
   return (
     <main>
-      <ReportsPageClient />
+      <ReportsPageClient monthlyTransactionsData={data ?? []} />
     </main>
   );
 };

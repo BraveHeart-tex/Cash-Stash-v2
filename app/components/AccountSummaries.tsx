@@ -20,7 +20,7 @@ const AccountSummaries = () => {
   if (isLoading) {
     return (
       <div>
-        <Skeleton className="h-[130px]" />
+        <Skeleton className="h-[300px] lg:h-[350px]" />
       </div>
     );
   }

@@ -5,9 +5,6 @@ import { fetchCurrentUserAccounts } from "@/app/redux/features/userAccountSlice"
 import { useEffect } from "react";
 import TransactionsFilter from "../TransactionsPage/TransactionsFilter";
 import TransactionsSort from "../TransactionsPage/TransactionsSort";
-import PieChart from "@/app/PieChart";
-import TopCategoriesForTransactions from "./TopCategoriesForTransactions";
-import { fetchTopTransactionsByCategory } from "@/app/redux/features/transactionsSlice";
 import {
   Table,
   TableBody,
@@ -18,14 +15,22 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
+import ResponsiveChartContainer from "@/app/ResponsiveChartContainer";
 
-const ReportTable = () => {
+export interface MonthlyData {
+  monthlyTransactionsData: {
+    date: string;
+    income: number;
+    expense: number;
+  }[];
+}
+
+const ReportTable = ({ monthlyTransactionsData }: MonthlyData) => {
   const dispatch = useAppDispatch();
   const {
     // data,
     filteredData: transactions,
     isLoading,
-    topTransactionsByCategory,
   } = useAppSelector((state) => state.transactionsReducer);
   const { currentUserAccounts } = useAppSelector(
     (state) => state.userAccountReducer
@@ -33,7 +38,6 @@ const ReportTable = () => {
 
   useEffect(() => {
     dispatch(fetchCurrentUserAccounts());
-    dispatch(fetchTopTransactionsByCategory());
     dispatch(fetchTransactions());
   }, [dispatch]);
 
@@ -113,28 +117,10 @@ const ReportTable = () => {
           {renderTableBody()}
         </Table>
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2">
-        <div className="flex justify-start items-center h-full mt-8 lg:mt-6">
-          <PieChart
-            incomes={
-              transactions &&
-              transactions.map((transaction) =>
-                transaction.isIncome ? transaction.amount : 0
-              )
-            }
-            expenses={
-              transactions &&
-              transactions.map((transaction) =>
-                transaction.isIncome ? 0 : transaction.amount
-              )
-            }
-          />
-        </div>
-        <div className="flex justify-start items-center h-full w-[25rem]">
-          <TopCategoriesForTransactions
-            data={topTransactionsByCategory && topTransactionsByCategory}
-          />
-        </div>
+      <div className="mt-4">
+        <ResponsiveChartContainer
+          monthlyTransactionsData={monthlyTransactionsData}
+        />
       </div>
     </div>
   );

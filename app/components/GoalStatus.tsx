@@ -19,7 +19,7 @@ const GoalStatus = () => {
   if (isLoading) {
     return (
       <div>
-        <Skeleton className="h-[120px]" />
+        <Skeleton className="h-[300px] lg:h-[350px]" />
       </div>
     );
   }

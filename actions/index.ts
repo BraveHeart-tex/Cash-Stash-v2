@@ -31,6 +31,7 @@ import CreateGoalSchema, {
 import CreateTransactionSchema, {
   CreateTransactionSchemaType,
 } from "@/schemas/CreateTransactionSchema";
+import { MonthlyData } from "@/app/components/ReportsPage/ReportTable";
 
 export const loginAction = async ({ email, password }: LoginSchemaType) => {
   const result = LoginSchema.safeParse({ email, password });
@@ -1007,4 +1008,67 @@ export const deleteTransactionByIdAction = async (transactionId: number) => {
   return {
     transaction: deletedTransaction,
   };
+};
+
+// export interface MonthlyData {
+//   monthlyTransactionsData: {
+//     date: string;
+//     income: number;
+//     expense: number;
+//   }[];
+// }
+
+export const getChartDataAction = async () => {
+  try {
+    const currentUserPromise = getCurrentUser(cookies().get("token")?.value!);
+    const transactionsPromise = db.transaction.findMany({
+      where: {
+        userId: (await currentUserPromise).id, // Wait for currentUserPromise to resolve
+      },
+    });
+
+    const [currentUser, transactions] = await Promise.all([
+      currentUserPromise,
+      transactionsPromise,
+    ]);
+
+    if (!currentUser) {
+      return { error: "No user found." };
+    }
+
+    const monthlyTransactionsData = transactions.map((transaction) => {
+      return {
+        date: transaction.createdAt.toISOString(),
+        income: transaction.isIncome ? transaction.amount : 0,
+        expense: !transaction.isIncome ? transaction.amount : 0,
+      };
+    });
+
+    const dataMap = new Map();
+
+    monthlyTransactionsData.forEach((transaction) => {
+      const date = new Date(transaction.date);
+      const month = date.getMonth();
+      const year = date.getFullYear();
+
+      const key = `${MONTHS_OF_THE_YEAR[month]} ${year}`;
+
+      if (!dataMap.has(key)) {
+        dataMap.set(key, { date: key, income: 0, expense: 0 });
+      }
+
+      const entry = dataMap.get(key);
+      entry.income += transaction.income;
+      entry.expense += transaction.expense;
+    });
+
+    // Convert the Map to an array of objects
+    const data = Array.from(dataMap.values());
+    console.log("mapped data", data);
+    return {
+      data,
+    };
+  } catch (error) {
+    return { error: "An error occurred." };
+  }
 };

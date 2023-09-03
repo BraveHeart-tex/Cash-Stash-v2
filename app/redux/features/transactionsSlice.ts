@@ -3,9 +3,11 @@ import { Transaction } from "@prisma/client";
 import {
   fetchInsightsDataAction,
   fetchMonthlyTransactionsDataAction,
+  getChartDataAction,
   getTopTransactionsByCategoryAction,
   getTransactionsByCurrentUserAction,
 } from "@/actions";
+import { MonthlyData } from "@/app/components/ReportsPage/ReportTable";
 
 export type SerializedTransaction = Omit<
   Transaction,
@@ -60,7 +62,7 @@ interface TransactionState {
   filteredData: SerializedTransaction[] | null;
   monthlyData: MonthlyTransactionData | null;
   insightsData: InsightsData | null;
-  topTransactionsByCategory: TopCategoryData[] | null;
+  topTransactionsByCategory: MonthlyData["monthlyTransactionsData"] | null;
   isLoading: boolean;
 }
 
@@ -92,22 +94,23 @@ export const fetchTransactions = createAsyncThunk(
       return undefined;
     }
 
-    const mappedTransactions = transactions.map((data) => ({
+    return transactions.map((data) => ({
       ...data,
       createdAt: new Date(data.createdAt).toLocaleDateString(),
       updatedAt: new Date(data.updatedAt).toLocaleDateString(),
     }));
-
-    return mappedTransactions;
   }
 );
 
-export const fetchTopTransactionsByCategory = createAsyncThunk(
-  "transactions/fetchTopTransactionsByCategory",
+export const getChartData = createAsyncThunk(
+  "transactions/getChartData",
   async () => {
-    const { topTransactionsByCategory } =
-      await getTopTransactionsByCategoryAction();
-    return topTransactionsByCategory;
+    const chartData = await getChartDataAction();
+    if (chartData.error) {
+      return null;
+    } else {
+      return chartData.data;
+    }
   }
 );
 
@@ -235,26 +238,6 @@ const transactionsSlice = createSlice({
       .addCase(fetchTransactions.rejected, (state) => {
         state.isLoading = false;
       })
-      .addCase(fetchTopTransactionsByCategory.pending, (state) => {
-        state.isLoading = false;
-      })
-      .addCase(fetchTopTransactionsByCategory.fulfilled, (state, action) => {
-        if (action.payload === undefined) {
-          state.isLoading = false;
-          return;
-        }
-
-        const mappedPayload = action.payload.map((data) => ({
-          ...data,
-          createdAt: new Date(data.createdAt).toLocaleDateString(),
-        }));
-
-        state.topTransactionsByCategory = mappedPayload;
-        state.isLoading = false;
-      })
-      .addCase(fetchTopTransactionsByCategory.rejected, (state) => {
-        state.isLoading = false;
-      })
       .addCase(fetchMonthlyTransactionsData.pending, (state) => {
         state.isLoading = true;
       })
@@ -275,6 +258,20 @@ const transactionsSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(fetchMonthlyTransactionsData.rejected, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(getChartData.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getChartData.fulfilled, (state, action) => {
+        if (!action.payload) {
+          state.isLoading = false;
+          return;
+        }
+        state.topTransactionsByCategory = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(getChartData.rejected, (state) => {
         state.isLoading = false;
       })
       .addCase(fetchInsightsData.pending, (state) => {

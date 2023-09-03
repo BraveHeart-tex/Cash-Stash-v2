@@ -45,15 +45,27 @@ const Dashboard = () => {
   const sectionData = [
     {
       title: "Accounts Summary",
-      data: <AccountSummaries />,
+      data: (
+        <div className="min-h-[300px] lg:min-h-[350px] overflow-y-scroll scrollbar-hide">
+          <AccountSummaries />
+        </div>
+      ),
     },
     {
       title: "Budget Status",
-      data: <BudgetStatus />,
+      data: (
+        <div className="min-h-[300px] lg:min-h-[350px] overflow-y-scroll scrollbar-hide">
+          <BudgetStatus />
+        </div>
+      ),
     },
     {
       title: "Goal Progress",
-      data: <GoalStatus />,
+      data: (
+        <div className="min-h-[300px] lg:min-h-[350px] overflow-y-scroll scrollbar-hide">
+          <GoalStatus />
+        </div>
+      ),
     },
     {
       title: "Transaction History",
@@ -62,7 +74,7 @@ const Dashboard = () => {
     {
       title: "Financial Insights",
       data: (
-        <div className="p-2 h-[700px] overflow-y-scroll scrollbar-hide">
+        <div className="p-2 min-h-[500px] max-h-[500px] overflow-y-scroll scrollbar-hide">
           <p className="font-bold underline text-foreground">
             Income vs Expense
           </p>
@@ -73,11 +85,7 @@ const Dashboard = () => {
     },
     {
       title: "Notifications and Reminders",
-      data: (
-        <div>
-          <NotificationsAndReminders />
-        </div>
-      ),
+      data: <NotificationsAndReminders />,
     },
   ];
 
