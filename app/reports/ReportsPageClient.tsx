@@ -1,15 +1,14 @@
-'use client';
-import { Container, Heading, Spinner } from '@chakra-ui/react';
-import Navigation from '../components/Navigation';
-import ReportTable from '../components/ReportsPage/ReportTable';
+"use client";
+import Navigation from "../components/Navigation";
+import ReportTable from "../components/ReportsPage/ReportTable";
 
 const ReportsPageClient = () => {
   return (
-    <Container maxW={'8xl'} p={4}>
+    <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
       <Navigation />
-      <Heading>Reports</Heading>
+      <h3 className="text-4xl mb-4 text-primary">Reports</h3>
       <ReportTable />
-    </Container>
+    </div>
   );
 };
 

@@ -1,24 +1,23 @@
-'use client';
-import { useAppDispatch, useAppSelector } from '@/app/redux/hooks';
+"use client";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
+import { fetchTransactions } from "@/app/redux/features/transactionsSlice";
+import { fetchCurrentUserAccounts } from "@/app/redux/features/userAccountSlice";
+import { useEffect } from "react";
+import TransactionsFilter from "../TransactionsPage/TransactionsFilter";
+import TransactionsSort from "../TransactionsPage/TransactionsSort";
+import PieChart from "@/app/PieChart";
+import TopCategoriesForTransactions from "./TopCategoriesForTransactions";
+import { fetchTopTransactionsByCategory } from "@/app/redux/features/transactionsSlice";
 import {
-  Box,
-  Heading,
-  SimpleGrid,
   Table,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-} from '@chakra-ui/react';
-import { fetchTransactions } from '@/app/redux/features/transactionsSlice';
-import { fetchCurrentUserAccounts } from '@/app/redux/features/userAccountSlice';
-import { useEffect } from 'react';
-import TransactionsFilter from '../TransactionsPage/TransactionsFilter';
-import TransactionsSort from '../TransactionsPage/TransactionsSort';
-import PieChart from '@/app/PieChart';
-import TopCategoriesForTransactions from './TopCategoriesForTransactions';
-import { fetchTopTransactionsByCategory } from '@/app/redux/features/transactionsSlice';
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { cn } from "@/lib/utils";
 
 const ReportTable = () => {
   const dispatch = useAppDispatch();
@@ -34,109 +33,88 @@ const ReportTable = () => {
 
   useEffect(() => {
     dispatch(fetchCurrentUserAccounts());
-  }, [dispatch]);
-
-  useEffect(() => {
     dispatch(fetchTopTransactionsByCategory());
-  }, [dispatch]);
-
-  useEffect(() => {
     dispatch(fetchTransactions());
   }, [dispatch]);
 
-  return (
-    <Box>
-      <Heading size='md' my={4}>
-        Transaction History Report
-      </Heading>
+  const renderTableBody = () => {
+    return (
+      <TableBody className={"overflow-y-scroll"}>
+        {transactions && transactions.length > 0 ? (
+          <>
+            {transactions.map((transaction) => (
+              <TableRow
+                key={transaction.id}
+                className="even:bg-gray-100 hover:bg-gray-200 cursor-pointer"
+              >
+                <TableCell>{transaction.createdAt}</TableCell>
+                <TableCell
+                  className={cn(
+                    transaction.isIncome ? "text-green-500" : "text-red-500"
+                  )}
+                >
+                  {transaction.amount}₺
+                </TableCell>
+                <TableCell>
+                  {currentUserAccounts &&
+                    currentUserAccounts.map((account) =>
+                      account.id === transaction.accountId ? account.name : ""
+                    )}
+                </TableCell>
+                <TableCell>{transaction.description}</TableCell>
+                <TableCell>
+                  {" "}
+                  {transaction.isIncome ? "Income" : "Expense"}
+                </TableCell>
+                <TableCell>{transaction.category}</TableCell>
+                <TableRow />
+              </TableRow>
+            ))}
+          </>
+        ) : null}
+      </TableBody>
+    );
+  };
 
-      <SimpleGrid
-        columns={{ base: 1, lg: 2 }}
-        gap={{
-          base: 8,
-          lg: 4,
-        }}
-      >
-        <Box
-          display={'flex'}
-          justifyContent={'center'}
-          alignItems={'center'}
-          flexDirection={'column'}
-        >
+  return (
+    <div>
+      <h3 className="my-4 text-lg">Transaction History Report</h3>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-4">
+        <div className="flex justify-center flex-col">
           <TransactionsFilter />
           <TransactionsSort />
-        </Box>
-        <Table
-          colorScheme={'blackAlpha'}
-          size={{
-            base: 'sm',
-            md: 'md',
-          }}
-        >
-          <Thead>
-            <Tr>
-              <Th>Date</Th>
-              <Th>Amount</Th>
-              <Th>Account</Th>
-              <Th>Description</Th>
-              <Th>Category</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {transactions?.length === 0 && !isLoading && (
-              <Tr>
-                <Td colSpan={5}>
-                  No transactions found. You can try again by removing any
-                  existing filters...
-                </Td>
-              </Tr>
-            )}
-            {transactions &&
-              !isLoading &&
-              transactions.map((transaction) => (
-                <Tr key={transaction.id}>
-                  <Td>
-                    {new Date(transaction.createdAt).toLocaleDateString(
-                      'en-US',
-                      {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                      }
-                    )}
-                  </Td>
-                  <Td>
-                    {transaction.isIncome ? '+' : '-'}
-                    {transaction.amount}₺
-                  </Td>
-                  <Td>
-                    {currentUserAccounts &&
-                      currentUserAccounts.find(
-                        (account) => account.id === transaction.accountId
-                      )?.name}
-                  </Td>
-                  <Td>{transaction.description}</Td>
-                  <Td>{transaction.category}</Td>
-                </Tr>
-              ))}
-          </Tbody>
+        </div>
+        <Table>
+          <TableCaption>List of your Transactions</TableCaption>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Date</TableHead>
+              <TableHead>Amount</TableHead>
+              <TableHead>Account</TableHead>
+              <TableHead>Description</TableHead>
+              <TableHead>Type</TableHead>
+              <TableHead>Category</TableHead>
+            </TableRow>
+          </TableHeader>
+          {isLoading && (
+            <TableBody>
+              <TableRow>
+                <TableCell>Loading...</TableCell>
+              </TableRow>
+            </TableBody>
+          )}
+          {!isLoading && transactions && transactions.length === 0 && (
+            <TableBody>
+              <TableRow>
+                <TableCell>No transactions found.</TableCell>
+              </TableRow>
+            </TableBody>
+          )}
+          {renderTableBody()}
         </Table>
-      </SimpleGrid>
-      <SimpleGrid columns={{ base: 1, lg: 2 }}>
-        <Box
-          display={'flex'}
-          justifyContent={'flex-start'}
-          alignItems={'center'}
-          h={'100%'}
-          mt={{
-            base: 8,
-            lg: 6,
-          }}
-          pl={{
-            base: 0,
-            lg: 24,
-          }}
-        >
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2">
+        <div className="flex justify-start items-center h-full mt-8 lg:mt-6">
           <PieChart
             incomes={
               transactions &&
@@ -151,20 +129,14 @@ const ReportTable = () => {
               )
             }
           />
-        </Box>
-        <Box
-          display={'flex'}
-          justifyContent={'flex-start'}
-          alignItems={'center'}
-          width={'25rem'}
-          h={'100%'}
-        >
+        </div>
+        <div className="flex justify-start items-center h-full w-[25rem]">
           <TopCategoriesForTransactions
             data={topTransactionsByCategory && topTransactionsByCategory}
           />
-        </Box>
-      </SimpleGrid>
-    </Box>
+        </div>
+      </div>
+    </div>
   );
 };
 
