@@ -14,8 +14,6 @@ import FinancialInsights from "./FinancialInsights";
 import GoalStatus from "./GoalStatus";
 import Navigation from "./Navigation";
 import NotificationsAndReminders from "./NotificationAndReminders";
-import CreateReminderModal from "./Reminders/modals/CreateReminderModal";
-import EditReminderModal from "./Reminders/modals/EditReminderModal";
 import TransactionHistory from "./TransactionHistory";
 
 const Dashboard = () => {
@@ -78,8 +76,6 @@ const Dashboard = () => {
       data: (
         <div>
           <NotificationsAndReminders />
-          <CreateReminderModal />
-          <EditReminderModal />
         </div>
       ),
     },
