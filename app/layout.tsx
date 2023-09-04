@@ -1,6 +1,5 @@
 import "./globals.css";
 import { Roboto } from "next/font/google";
-import { Providers as ChakraUIProviders } from "./providers";
 import { Providers as ReduxProviders } from "@/app/redux/provider";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -27,13 +26,11 @@ export default async function RootLayout({ children }: ILayoutProps) {
     <html lang="en">
       <body className={RobotoFont.className}>
         <ReduxProviders>
-          <ChakraUIProviders>
-            <ThemeProvider enableSystem>
-              {children}
-              <GenericModal />
-              <GenericConfirmDialog />
-            </ThemeProvider>
-          </ChakraUIProviders>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            {children}
+            <GenericModal />
+            <GenericConfirmDialog />
+          </ThemeProvider>
           <Toaster />
         </ReduxProviders>
       </body>

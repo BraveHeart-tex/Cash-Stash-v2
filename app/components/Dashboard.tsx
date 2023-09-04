@@ -5,42 +5,32 @@ import {
   fetchTransactions,
 } from "@/app/redux/features/transactionsSlice";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
-import Spinner from "@/components/Spinner";
 import { useEffect } from "react";
 import AccountSummaries from "./AccountSummaries";
 import BudgetStatus from "./BudgetStatus";
-import InsightGroupChart from "./DashboardPage/InsightGroupChart";
 import FinancialInsights from "./FinancialInsights";
 import GoalStatus from "./GoalStatus";
 import Navigation from "./Navigation";
 import NotificationsAndReminders from "./NotificationAndReminders";
 import TransactionHistory from "./TransactionHistory";
+import BarChartComponent from "@/components/charts/BarChartComponent";
+import { MonthlyData } from "./ReportsPage/ReportTable";
 
-const Dashboard = () => {
+interface IDashboardProps {
+  monthlyTransactionData: MonthlyData["monthlyTransactionsData"];
+}
+
+const Dashboard = ({ monthlyTransactionData }: IDashboardProps) => {
   const dispatch = useAppDispatch();
-  const {
-    isLoading,
-    data: transactions,
-    monthlyData,
-    insightsData,
-  } = useAppSelector((state) => state.transactionsReducer);
+  const { data: transactions, insightsData } = useAppSelector(
+    (state) => state.transactionsReducer
+  );
 
   useEffect(() => {
     dispatch(fetchTransactions());
     dispatch(fetchMonthlyTransactionsData());
     dispatch(fetchInsightsData());
   }, [dispatch]);
-
-  if (isLoading) {
-    return (
-      <div className="bg-background min-h-screen flex justify-center items-center flex-col gap-4">
-        <h2 className="font-bold text-foreground text-4xl">Loading...</h2>
-        <div>
-          <Spinner />
-        </div>
-      </div>
-    );
-  }
 
   const sectionData = [
     {
@@ -78,7 +68,8 @@ const Dashboard = () => {
           <p className="font-bold underline text-foreground">
             Income vs Expense
           </p>
-          <InsightGroupChart monthlyData={monthlyData} />
+
+          <BarChartComponent monthlyTransactionsData={monthlyTransactionData} />
           <FinancialInsights insightsData={insightsData} />
         </div>
       ),

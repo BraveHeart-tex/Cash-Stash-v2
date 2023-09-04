@@ -1,16 +1,12 @@
-'use client';
-import { Container, Spinner, useColorModeValue } from '@chakra-ui/react';
+"use client";
+
+import { Skeleton } from "@/components/ui/skeleton";
 
 const FormLoadingSpinner = () => {
   return (
-    <Container
-      height={'30vh'}
-      display={'flex'}
-      justifyContent={'center'}
-      alignItems={'center'}
-    >
-      <Spinner color={useColorModeValue('gray.800', 'gray.400')} />
-    </Container>
+    <div className="h-[20vh] flex items-center justify-center">
+      <Skeleton className="w-full h-full" />
+    </div>
   );
 };
 

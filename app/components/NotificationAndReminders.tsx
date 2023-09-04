@@ -1,7 +1,6 @@
 "use client";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
-import { setIsCreateReminderModalOpen } from "@/app/redux/features/remindersSlice";
 import { fetchReminders } from "@/app/redux/features/remindersSlice";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -10,7 +9,7 @@ import { Pencil1Icon } from "@radix-ui/react-icons";
 import { openGenericModal } from "../redux/features/genericModalSlice";
 
 const NotificationsAndReminders = () => {
-  const { isCreateReminderModalOpen, reminders, isLoading } = useAppSelector(
+  const { reminders, isLoading } = useAppSelector(
     (state) => state.remindersReducer
   );
   const dispatch = useAppDispatch();
@@ -21,7 +20,7 @@ const NotificationsAndReminders = () => {
 
   if (!isLoading && !reminders) {
     return (
-      <div className="p-2 min-h-[500px] overflow-y-scroll scrollbar-hide">
+      <div className="p-2 min-h-[500px] max-h-[500px] overflow-y-scroll scrollbar-hide">
         <p>No reminders were found.</p>
         <Button
           variant="secondary"
@@ -48,7 +47,7 @@ const NotificationsAndReminders = () => {
   let today = new Date();
 
   return (
-    <div className="p-2 min-h-[700px] overflow-y-scroll scrollbar-hide">
+    <div className="p-2 min-h-[500px] max-h-[500px] overflow-y-scroll scrollbar-hide">
       <div className="grid grid-cols-1 gap-4">
         {reminders &&
           reminders.map((reminder) => (
@@ -116,7 +115,16 @@ const NotificationsAndReminders = () => {
       <Button
         className="mt-3 dark:border dark:border-blue-600"
         onClick={() =>
-          dispatch(setIsCreateReminderModalOpen(!isCreateReminderModalOpen))
+          dispatch(
+            openGenericModal({
+              key: "reminder",
+              mode: "create",
+              dialogTitle: "Create Reminder",
+              dialogDescription:
+                "You can create a reminder by using the form below.",
+              entityId: 0,
+            })
+          )
         }
       >
         Create a reminder

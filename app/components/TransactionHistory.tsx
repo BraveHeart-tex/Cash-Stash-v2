@@ -12,7 +12,7 @@ interface ITransactionHistoryProps {
 const TransactionHistory = ({ transactions }: ITransactionHistoryProps) => {
   if (!transactions || transactions.length === 0) {
     return (
-      <div>
+      <div className="p-2 min-h-[500px] max-h-[500px] overflow-y-scroll scrollbar-hide">
         <p className="text-primary">No transactions found.</p>
         <Link className="mt-3" href="/transactions">
           <Button
@@ -27,7 +27,7 @@ const TransactionHistory = ({ transactions }: ITransactionHistoryProps) => {
   }
 
   return (
-    <div className="p-2 min-h-[500px] overflow-y-scroll scrollbar-hide">
+    <div className="p-2 min-h-[500px] max-h-[500px] overflow-y-scroll scrollbar-hide">
       <div className="grid grid-cols-1 gap-4">
         {transactions.map((transaction) => (
           <div
