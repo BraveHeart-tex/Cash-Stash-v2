@@ -31,7 +31,9 @@ import CreateGoalSchema, {
 import CreateTransactionSchema, {
   CreateTransactionSchemaType,
 } from "@/schemas/CreateTransactionSchema";
-import { MonthlyData } from "@/app/components/ReportsPage/ReportTable";
+import CreateReminderSchema, {
+  CreateReminderSchemaType,
+} from "@/schemas/CreateReminderSchema";
 
 export const loginAction = async ({ email, password }: LoginSchemaType) => {
   const result = LoginSchema.safeParse({ email, password });
@@ -1071,4 +1073,64 @@ export const getChartDataAction = async () => {
   } catch (error) {
     return { error: "An error occurred." };
   }
+};
+
+export const createReminderAction = async ({
+  amount,
+  description,
+  isIncome,
+  reminderDate,
+  title,
+  isRead,
+}: CreateReminderSchemaType) => {
+  let result = CreateReminderSchema.safeParse({
+    amount,
+    description,
+    isIncome,
+    reminderDate,
+    title,
+    isRead,
+  });
+
+  if (!result.success) {
+    console.log("create reminder error", result.error);
+    return { error: "Unprocessable entity." };
+  }
+
+  const {
+    amount: amountResult,
+    description: descriptionResult,
+    isIncome: isIncomeResult,
+    reminderDate: reminderDateResult,
+    title: titleResult,
+    isRead: isReadResult,
+  } = result.data;
+
+  const mappedIsIncome = isIncomeResult === "income" ? true : false;
+  const mappedIsRead = isReadResult === "isRead" ? true : false;
+  const currentUser = await getCurrentUser(cookies().get("token")?.value!);
+
+  if (!currentUser) {
+    return { error: "You are not authorized to perform this action." };
+  }
+
+  const createdReminder = await db.reminder.create({
+    data: {
+      amount: amountResult,
+      description: descriptionResult,
+      isIncome: mappedIsIncome,
+      reminderDate: reminderDateResult,
+      title: titleResult,
+      userId: currentUser.id,
+      isRead: mappedIsRead,
+    },
+  });
+
+  if (!createdReminder) {
+    return { error: "Error creating reminder." };
+  }
+
+  return {
+    reminder: createdReminder,
+  };
 };
