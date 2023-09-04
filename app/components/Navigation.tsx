@@ -1,6 +1,6 @@
 "use client";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
-import { HamburgerIcon } from "@chakra-ui/icons";
+import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 import Logo from "./Logo.svg";
 import Image from "next/image";
 import UserMenu from "./UserMenu";
@@ -36,7 +36,7 @@ const Navigation = () => {
           onClick={onOpen}
           className="block lg:hidden"
         >
-          <HamburgerIcon />
+          <HamburgerMenuIcon />
         </Button>
         <Link href={"/"}>
           <Image
