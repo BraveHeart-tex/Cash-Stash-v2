@@ -39,7 +39,6 @@ const LoginForm = () => {
   });
 
   const handleLoginFormSubmit = (data: LoginSchemaType) => {
-    console.log(data);
     startTransition(async () => {
       const result = await loginAction(data);
       if (result.error) {

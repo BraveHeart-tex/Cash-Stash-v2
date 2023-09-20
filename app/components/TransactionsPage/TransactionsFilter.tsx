@@ -77,6 +77,7 @@ const TransactionsFilter = () => {
               options={TransactionTypeOptions}
               onChange={handleTypeChange}
               selectLabel={"Transaction Type"}
+              defaultValue=""
             />
           </div>
           <div>

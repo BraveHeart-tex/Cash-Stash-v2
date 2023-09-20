@@ -87,7 +87,7 @@ const Dashboard = ({ monthlyTransactionData }: IDashboardProps) => {
         {sectionData.map((section) => (
           <div key={section.title}>
             <h3 className="text-xl mb-2 font-bold">{section.title}</h3>
-            <div className="p-4 rounded-lg shadow-sm bg-secondary">
+            <div className="p-4 rounded-lg shadow-sm bg-secondary dark:bg-gray-900">
               {section.data}
             </div>
           </div>

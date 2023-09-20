@@ -43,7 +43,7 @@ const Navigation = () => {
             src={Logo}
             alt="Cash Stash"
             width={185}
-            className="dark:brightness-0 md:mx-auto"
+            className="dark:invert md:mx-auto"
           />
         </Link>
         <div className="hidden lg:flex">

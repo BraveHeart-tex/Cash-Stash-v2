@@ -49,7 +49,7 @@ const ReportTable = ({ monthlyTransactionsData }: MonthlyData) => {
             {transactions.map((transaction) => (
               <TableRow
                 key={transaction.id}
-                className="even:bg-gray-100 hover:bg-gray-200 cursor-pointer"
+                className="even:bg-secondary hover:bg-muted cursor-pointer"
               >
                 <TableCell>{transaction.createdAt}</TableCell>
                 <TableCell

@@ -17,6 +17,7 @@ interface GenericSelectProps {
   onChange: (value: string) => void;
   selectLabel?: string;
   className?: string;
+  defaultValue?: string;
 }
 
 const GenericSelect = ({
@@ -25,9 +26,10 @@ const GenericSelect = ({
   onChange,
   selectLabel,
   className,
+  defaultValue,
 }: GenericSelectProps) => {
   return (
-    <Select onValueChange={onChange}>
+    <Select onValueChange={onChange} defaultValue={defaultValue ?? ""}>
       <SelectTrigger className={cn("w-full", className)}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
