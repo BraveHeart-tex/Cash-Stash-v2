@@ -16,10 +16,10 @@ import BarChartComponent from "@/components/charts/BarChartComponent";
 import { MonthlyData } from "./ReportsPage/ReportTable";
 
 interface IDashboardProps {
-  monthlyTransactionData: MonthlyData["monthlyTransactionsData"];
+  monthlyTransactionsData: MonthlyData["monthlyTransactionsData"];
 }
 
-const Dashboard = ({ monthlyTransactionData }: IDashboardProps) => {
+const Dashboard = ({ monthlyTransactionsData }: IDashboardProps) => {
   const dispatch = useAppDispatch();
   const { data: transactions, insightsData } = useAppSelector(
     (state) => state.transactionsReducer
@@ -68,7 +68,9 @@ const Dashboard = ({ monthlyTransactionData }: IDashboardProps) => {
             Income vs Expense
           </p>
 
-          <BarChartComponent monthlyTransactionsData={monthlyTransactionData} />
+          <BarChartComponent
+            monthlyTransactionsData={monthlyTransactionsData}
+          />
           <FinancialInsights insightsData={insightsData} />
         </div>
       ),

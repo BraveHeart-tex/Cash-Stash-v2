@@ -1,3 +1,9 @@
+import AccountsPageClient from "@/app/accounts/AccountPageClient";
+import BudgetsPageClient from "@/app/budgets/BudgetsPageClient";
+import Dashboard from "@/app/components/Dashboard";
+import GoalsPageClient from "@/app/goals/GoalsPageClient";
+import ReportsPageClient from "@/app/reports/ReportsPageClient";
+import TransactionsClient from "@/app/transactions/TransactionsClient";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import {
@@ -30,27 +36,27 @@ export const MONTHS_OF_THE_YEAR = [
 export const PAGES = [
   {
     label: "Dashboard",
-    content: "321312",
+    content: Dashboard,
   },
   {
     label: "Accounts",
-    content: "",
+    content: AccountsPageClient,
   },
   {
     label: "Budgets",
-    content: "",
+    content: BudgetsPageClient,
   },
   {
     label: "Goals",
-    content: "",
+    content: GoalsPageClient,
   },
   {
     label: "Transactions",
-    content: "",
+    content: TransactionsClient,
   },
   {
     label: "Reports",
-    content: "",
+    content: ReportsPageClient,
   },
 ];
 
@@ -71,7 +77,7 @@ const errorMap = (issue: ZodIssueOptionalMessage, _ctx: ErrorMapCtx) => {
       )}`;
       break;
     case ZodIssueCode.unrecognized_keys:
-      message = `Unrecognized key(s) in object: ${util.joinValues(
+      message = `Object içerisinde tanınmayan anahtar(lar): ${util.joinValues(
         issue.keys,
         ", "
       )}`;
@@ -85,15 +91,15 @@ const errorMap = (issue: ZodIssueOptionalMessage, _ctx: ErrorMapCtx) => {
       )}`;
       break;
     case ZodIssueCode.invalid_enum_value:
-      message = `Invalid enum value. Expected ${util.joinValues(
+      message = `Geçersiz enum değeri. Beklenen ${util.joinValues(
         issue.options
-      )}, received '${issue.received}'`;
+      )}, verilen '${issue.received}'`;
       break;
     case ZodIssueCode.invalid_arguments:
-      message = `Invalid function arguments`;
+      message = `Geçersiz fonksiyon argüman(lar)ı`;
       break;
     case ZodIssueCode.invalid_return_type:
-      message = `Invalid function return type`;
+      message = `Geçersiz fonksiyon dönüş tipi`;
       break;
     case ZodIssueCode.invalid_date:
       message = `Geçersiz tarih`;
