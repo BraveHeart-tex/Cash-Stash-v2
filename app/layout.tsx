@@ -28,6 +28,7 @@ export default async function RootLayout({ children }: ILayoutProps) {
       <body className={RobotoFont.className}>
         <ReduxProviders>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            {/* @ts-expect-error React server component */}
             <NavigationTabs />
             {children}
             <GenericModal />
