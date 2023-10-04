@@ -16,7 +16,7 @@ export const fetchCurrentUser = createAsyncThunk(
   "user/fetchCurrentUser",
   async () => {
     const { user } = await getCurrentUserAction();
-    console.log(user);
+
     return user;
   }
 );

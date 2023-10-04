@@ -1,6 +1,6 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { Goal } from '@prisma/client';
-import axios from 'axios';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { Goal } from "@prisma/client";
+import axios from "axios";
 
 interface CurrentGoalState {
   currentGoal: Goal | null;
@@ -17,7 +17,7 @@ interface FetchCurrentGoalResponse {
 }
 
 export const fetchGoalById = createAsyncThunk(
-  'goals/fetchGoalById',
+  "goals/fetchGoalById",
   async (goalId: number) => {
     try {
       const response = await axios.get<FetchCurrentGoalResponse>(
@@ -25,14 +25,13 @@ export const fetchGoalById = createAsyncThunk(
       );
       return response.data.goal;
     } catch (error) {
-      console.log(error);
       throw error;
     }
   }
 );
 
 const currentGoalSlice = createSlice({
-  name: 'currentGoal',
+  name: "currentGoal",
   initialState,
   reducers: {},
   extraReducers: (builder) => {

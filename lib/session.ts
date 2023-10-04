@@ -31,7 +31,6 @@ export async function verifyJWTToken(token: string) {
 
     return payload.id !== undefined;
   } catch (error) {
-    console.log("verifyJWTToken", error);
     return false;
   }
 }

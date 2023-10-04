@@ -25,7 +25,6 @@ const GoalCard = ({ goals }: IGoalCardProps) => {
     cleanUp: ActionCreatorWithoutPayload<"genericConfirm/cleanUp">
   ) => {
     if (result.error) {
-      console.log(result.error);
       toast({
         title: "An error occurred.",
         description: result.error,

@@ -49,8 +49,6 @@ const AccountsFilter = () => {
   );
 
   const handleAccountTypeChange = (value: string) => {
-    console.log(value);
-
     setSelectedAccountType(value);
   };
 

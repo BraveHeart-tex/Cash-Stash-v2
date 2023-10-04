@@ -42,7 +42,6 @@ const LoginForm = () => {
     startTransition(async () => {
       const result = await loginAction(data);
       if (result.error) {
-        console.log(result.error);
         toast({
           title: "Error",
           description: result.error,

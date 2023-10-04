@@ -52,11 +52,9 @@ const CreateTransactionForm = () => {
   }
 
   const onSubmit = async (data: CreateTransactionSchemaType) => {
-    console.log(data);
     startTransition(async () => {
       const result = await createTransactionAction(data);
       if (result.error) {
-        console.log(result.error);
         toast({
           title: "An error occurred.",
           description: `Unable to create transaction. ${result.error}`,
@@ -64,7 +62,6 @@ const CreateTransactionForm = () => {
           duration: 5000,
         });
       } else {
-        console.log(result.transaction);
         toast({
           title: "Transaction created.",
           description: `Transaction for ${

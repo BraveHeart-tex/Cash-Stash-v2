@@ -10,8 +10,6 @@ import {
 } from "recharts";
 
 const BarChartComponent = ({ monthlyTransactionsData }: MonthlyData) => {
-  console.log(monthlyTransactionsData);
-
   if (monthlyTransactionsData.length === 0) {
     return <div>No data to display.</div>;
   }

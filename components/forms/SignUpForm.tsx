@@ -42,7 +42,6 @@ const SignUpForm = () => {
     startTransition(async () => {
       const result = await registerAction(data);
       if (result.error) {
-        console.log(result.error);
         toast({
           title: "Error",
           description: result.error,

@@ -180,8 +180,6 @@ export const getAccountsByCurrentUserAction = async () => {
     },
   });
 
-  console.log(accounts);
-
   if (!accounts) {
     return { error: "No accounts found." };
   }
@@ -204,8 +202,6 @@ export const getBudgetsByCurrentUserAction = async () => {
     },
   });
 
-  console.log(budgets);
-
   if (!budgets) {
     return { error: "No budgets found." };
   }
@@ -227,8 +223,6 @@ export const getGoalsByCurrentUserAction = async () => {
       userId: currentUser.id,
     },
   });
-
-  console.log(goals);
 
   if (!goals) {
     return { error: "No goals found." };
@@ -305,8 +299,6 @@ export const getTransactionsByCurrentUserAction = async () => {
       userId: currentUser.id,
     },
   });
-
-  console.log(transactions);
 
   if (!transactions) {
     return { error: "No transactions found." };
@@ -1066,7 +1058,6 @@ export const getChartDataAction = async () => {
 
     // Convert the Map to an array of objects
     const data = Array.from(dataMap.values());
-    console.log("mapped data", data);
     return {
       data,
     };
