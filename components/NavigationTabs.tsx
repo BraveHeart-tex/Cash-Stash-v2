@@ -7,7 +7,7 @@ const NavigationTabs = async () => {
   return (
     <div className="p-8">
       <Tabs defaultValue={PAGES[0].label}>
-        <TabsList className="mr-12 w-full md:w-auto justify-start overflow-x-auto overflow-y-hidden scrollbar-hide">
+        <TabsList className="mr-4 w-full md:w-auto justify-start overflow-x-auto overflow-y-hidden scrollbar-hide">
           {PAGES.map((page) => (
             <TabsTrigger key={page.label} value={page.label}>
               {page.label}

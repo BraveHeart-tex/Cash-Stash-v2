@@ -82,7 +82,7 @@ const Dashboard = ({ monthlyTransactionsData }: IDashboardProps) => {
   ];
 
   return (
-    <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
+    <div className="p-4 pt-0 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mt-8">
         {sectionData.map((section) => (
           <div key={section.title}>
