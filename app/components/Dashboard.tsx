@@ -10,7 +10,6 @@ import AccountSummaries from "./AccountSummaries";
 import BudgetStatus from "./BudgetStatus";
 import FinancialInsights from "./FinancialInsights";
 import GoalStatus from "./GoalStatus";
-import Navigation from "./Navigation";
 import NotificationsAndReminders from "./NotificationAndReminders";
 import TransactionHistory from "./TransactionHistory";
 import BarChartComponent from "@/components/charts/BarChartComponent";
@@ -82,7 +81,6 @@ const Dashboard = ({ monthlyTransactionData }: IDashboardProps) => {
 
   return (
     <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
-      <Navigation />
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mt-8">
         {sectionData.map((section) => (
           <div key={section.title}>

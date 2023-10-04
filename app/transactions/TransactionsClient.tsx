@@ -1,5 +1,4 @@
 "use client";
-import Navigation from "@/app/components/Navigation";
 import TransactionsFilter from "@/app/components/TransactionsPage/TransactionsFilter";
 import TransactionsSort from "@/app/components/TransactionsPage/TransactionsSort";
 import TransactionList from "@/app/components/TransactionsPage/TransactionList";
@@ -12,7 +11,6 @@ const TransactionsClient = () => {
 
   return (
     <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
-      <Navigation />
       <h3 className="text-4xl mb-4 text-primary">Transactions</h3>
       <div className="grid h-[50vh] grid-cols-1 lg:grid-cols-3 lg:grid-rows-1 ">
         <div className="col-span-3 lg:col-span-1">

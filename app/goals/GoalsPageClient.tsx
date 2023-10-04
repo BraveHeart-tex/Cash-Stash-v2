@@ -1,5 +1,4 @@
 "use client";
-import Navigation from "@/app/components/Navigation";
 import GoalCard from "@/app/components/GoalsPage/GoalCard";
 import { useEffect } from "react";
 import { SerializedGoal, fetchGoals } from "@/app/redux/features/goalSlice";
@@ -37,7 +36,6 @@ const GoalsPageClient = () => {
 
   return (
     <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
-      <Navigation />
       <h2 className="text-4xl mb-4 text-primary">Goals</h2>
       <div className="flex justify-center items-center flex-col gap-2">
         {isLoading ? renderLoadingState() : renderGoals()}

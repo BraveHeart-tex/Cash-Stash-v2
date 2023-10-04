@@ -1,6 +1,5 @@
 "use client";
 import BudgetCards from "@/app/components/BudgetsPage/BudgetCards";
-import Navigation from "@/app/components/Navigation";
 import { fetchBudgets } from "@/app/redux/features/budgetSlice";
 import { openGenericModal } from "@/app/redux/features/genericModalSlice";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
@@ -18,7 +17,6 @@ const BudgetsPageClient = () => {
 
   return (
     <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
-      <Navigation />
       <h3 className="text-4xl mb-4 text-primary">Budgets</h3>
       {!isLoading && budgets?.length === 0 && (
         <div className="flex flex-col items-center justify-center gap-4">

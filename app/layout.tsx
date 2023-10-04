@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
 import GenericConfirmDialog from "@/components/GenericConfirmDialog";
 import GenericModal from "@/components/GenericModal";
+import NavigationTabs from "@/components/NavigationTabs";
 
 const RobotoFont = Roboto({
   weight: ["300", "400", "700"],
@@ -27,6 +28,7 @@ export default async function RootLayout({ children }: ILayoutProps) {
       <body className={RobotoFont.className}>
         <ReduxProviders>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <NavigationTabs />
             {children}
             <GenericModal />
             <GenericConfirmDialog />

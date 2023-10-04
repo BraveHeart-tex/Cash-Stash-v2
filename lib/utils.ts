@@ -27,6 +27,33 @@ export const MONTHS_OF_THE_YEAR = [
   "Dec",
 ];
 
+export const PAGES = [
+  {
+    label: "Dashboard",
+    content: "321312",
+  },
+  {
+    label: "Accounts",
+    content: "",
+  },
+  {
+    label: "Budgets",
+    content: "",
+  },
+  {
+    label: "Goals",
+    content: "",
+  },
+  {
+    label: "Transactions",
+    content: "",
+  },
+  {
+    label: "Reports",
+    content: "",
+  },
+];
+
 const errorMap = (issue: ZodIssueOptionalMessage, _ctx: ErrorMapCtx) => {
   let message;
   switch (issue.code) {
