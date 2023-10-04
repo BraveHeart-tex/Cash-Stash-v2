@@ -35,7 +35,7 @@ const Dashboard = ({ monthlyTransactionsData }: IDashboardProps) => {
     {
       title: "Accounts Summary",
       data: (
-        <div className="min-h-[300px] lg:min-h-[350px] overflow-y-scroll scrollbar-hide">
+        <div className="max-h-[330px] min-h-[330px] lg:max-h-[350px] lg:min-h-[350px] overflow-y-scroll scrollbar-hide">
           <AccountSummaries />
         </div>
       ),
@@ -43,7 +43,7 @@ const Dashboard = ({ monthlyTransactionsData }: IDashboardProps) => {
     {
       title: "Budget Status",
       data: (
-        <div className="min-h-[300px] lg:min-h-[350px] overflow-y-scroll scrollbar-hide">
+        <div className="max-h-[300px] min-h-[300px] lg:max-h-[350px] lg:min-h-[350px] overflow-y-scroll scrollbar-hide">
           <BudgetStatus />
         </div>
       ),
@@ -51,7 +51,7 @@ const Dashboard = ({ monthlyTransactionsData }: IDashboardProps) => {
     {
       title: "Goal Progress",
       data: (
-        <div className="min-h-[300px] lg:min-h-[350px] overflow-y-scroll scrollbar-hide">
+        <div className="max-h-[300px] min-h-[300px] lg:max-h-[350px] lg:min-h-[350px] overflow-y-scroll scrollbar-hide">
           <GoalStatus />
         </div>
       ),
@@ -63,7 +63,7 @@ const Dashboard = ({ monthlyTransactionsData }: IDashboardProps) => {
     {
       title: "Financial Insights",
       data: (
-        <div className="p-2 min-h-[500px] max-h-[500px] overflow-y-scroll scrollbar-hide">
+        <div className="p-2 max-h-[500px] min-h-[500px] overflow-y-scroll scrollbar-hide">
           <p className="font-bold underline text-foreground">
             Income vs Expense
           </p>

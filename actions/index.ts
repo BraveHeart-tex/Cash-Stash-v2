@@ -447,6 +447,8 @@ export const registerBankAccountAction = async ({
   category,
   name,
 }: CreateUserAccountSchemaType) => {
+  console.log(balance, category, name);
+
   const currentUser = await getCurrentUser(cookies().get("token")?.value!);
 
   if (!currentUser) {
