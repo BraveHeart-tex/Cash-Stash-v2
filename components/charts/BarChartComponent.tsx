@@ -10,6 +10,12 @@ import {
 } from "recharts";
 
 const BarChartComponent = ({ monthlyTransactionsData }: MonthlyData) => {
+  console.log(monthlyTransactionsData);
+
+  if (monthlyTransactionsData.length === 0) {
+    return <div>No data to display.</div>;
+  }
+
   return (
     <ResponsiveContainer width="100%" height={300}>
       <BarChart data={monthlyTransactionsData} margin={{ top: 50 }}>

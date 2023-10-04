@@ -14,18 +14,17 @@ import FormInput from "@/components/FormInput";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import errorMap from "@/lib/utils";
-import { useCallback, useState, useTransition } from "react";
+import { useTransition } from "react";
 import { registerAction } from "@/actions";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import RegisterSchema, { RegisterSchemaType } from "@/schemas/RegisterSchema";
-import { CldUploadWidget } from "next-cloudinary";
 
 const SignUpForm = () => {
   const { toast } = useToast();
   let [isPending, startTransition] = useTransition();
-  const [imgInputValue, setImgInputValue] = useState("");
+
   const router = useRouter();
 
   const {
@@ -40,12 +39,6 @@ const SignUpForm = () => {
   });
 
   const handleRegisterFormSubmit = (data: RegisterSchemaType) => {
-    data = {
-      ...data,
-      img: imgInputValue,
-    };
-
-    console.log(data);
     startTransition(async () => {
       const result = await registerAction(data);
       if (result.error) {
@@ -67,10 +60,6 @@ const SignUpForm = () => {
       }
     });
   };
-
-  const handleImgUpload = useCallback((result: any) => {
-    setImgInputValue(result.info.secure_url);
-  }, []);
 
   return (
     <Card className="w-full">
@@ -114,24 +103,6 @@ const SignUpForm = () => {
               register={register}
               errors={errors}
             />
-            <CldUploadWidget uploadPreset="bk912k47" onUpload={handleImgUpload}>
-              {({ open }) => {
-                function handleOnClick(e: any) {
-                  e.preventDefault();
-                  open();
-                }
-                return (
-                  <Button
-                    variant="secondary"
-                    type="button"
-                    onClick={handleOnClick}
-                    disabled={isPending || imgInputValue !== ""}
-                  >
-                    Upload an Image
-                  </Button>
-                );
-              }}
-            </CldUploadWidget>
           </div>
           <Button type="submit" className="font-semibold" disabled={isPending}>
             Sign in
