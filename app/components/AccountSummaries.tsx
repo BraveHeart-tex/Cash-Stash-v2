@@ -6,6 +6,7 @@ import { fetchCurrentUserAccounts } from "@/app/redux/features/userAccountSlice"
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
+import { setSelectedTab } from "../redux/features/navigationTabsSlice";
 
 const AccountSummaries = () => {
   const dispatch = useAppDispatch();
@@ -32,8 +33,9 @@ const AccountSummaries = () => {
         <Button
           className="font-bold text-md mt-3 hover:bg-foreground hover:text-muted"
           variant={"secondary"}
+          onClick={() => dispatch(setSelectedTab("Accounts"))}
         >
-          <Link href="/accounts">Get started by creating an account</Link>
+          Get started by creating an account
         </Button>
       </div>
     );

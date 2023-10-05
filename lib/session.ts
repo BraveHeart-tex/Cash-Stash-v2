@@ -36,11 +36,15 @@ export async function verifyJWTToken(token: string) {
 }
 
 export async function getCurrentUser(token: string) {
-  const { payload } = (await jwtVerify(
-    token,
-    getJwtSecretKey()
-  )) as JWTVerifyResultWithUser;
-  return payload;
+  try {
+    const { payload } = (await jwtVerify(
+      token,
+      getJwtSecretKey()
+    )) as JWTVerifyResultWithUser;
+    return payload;
+  } catch (error) {
+    return null;
+  }
 }
 
 export async function signToken(payload: Partial<User>) {

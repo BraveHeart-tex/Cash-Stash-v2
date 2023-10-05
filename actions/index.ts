@@ -888,6 +888,10 @@ export const createTransactionAction = async ({
 
   const currentUser = await getCurrentUser(cookies().get("token")?.value!);
 
+  if (!currentUser) {
+    return { error: "You are not authorized to perform this action." };
+  }
+
   // check if the user's balance is enough for the transaction
   const usersAccount = await db.userAccount.findFirst({
     where: {
@@ -1006,20 +1010,12 @@ export const deleteTransactionByIdAction = async (transactionId: number) => {
   };
 };
 
-// export interface MonthlyData {
-//   monthlyTransactionsData: {
-//     date: string;
-//     income: number;
-//     expense: number;
-//   }[];
-// }
-
 export const getChartDataAction = async () => {
   try {
     const currentUserPromise = getCurrentUser(cookies().get("token")?.value!);
     const transactionsPromise = db.transaction.findMany({
       where: {
-        userId: (await currentUserPromise).id, // Wait for currentUserPromise to resolve
+        userId: (await currentUserPromise)!.id, // Wait for currentUserPromise to resolve
       },
     });
 
@@ -1060,6 +1056,8 @@ export const getChartDataAction = async () => {
 
     // Convert the Map to an array of objects
     const data = Array.from(dataMap.values());
+    console.log(data);
+
     return {
       data,
     };

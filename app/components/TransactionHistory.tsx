@@ -2,26 +2,28 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
 import { SerializedTransaction } from "@/app/redux/features/transactionsSlice";
+import { useAppDispatch } from "../redux/hooks";
+import { setSelectedTab } from "../redux/features/navigationTabsSlice";
 
 interface ITransactionHistoryProps {
   transactions: SerializedTransaction[] | null;
 }
 
 const TransactionHistory = ({ transactions }: ITransactionHistoryProps) => {
+  const dispatch = useAppDispatch();
+
   if (!transactions || transactions.length === 0) {
     return (
       <div className="p-2 min-h-[500px] max-h-[500px] overflow-y-scroll scrollbar-hide">
         <p className="text-primary">No transactions found.</p>
-        <Link className="mt-3" href="/transactions">
-          <Button
-            className="font-bold text-md mt-3 hover:bg-foreground hover:text-muted"
-            variant="secondary"
-          >
-            Get started by creating a transaction
-          </Button>
-        </Link>
+        <Button
+          className="font-bold text-md mt-3 hover:bg-foreground hover:text-muted"
+          variant="secondary"
+          onClick={() => dispatch(setSelectedTab("Transactions"))}
+        >
+          Get started by creating a transaction
+        </Button>
       </div>
     );
   }

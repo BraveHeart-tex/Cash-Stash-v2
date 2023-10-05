@@ -1,27 +1,15 @@
-import { PAGES } from "@/lib/utils";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { getChartDataAction } from "@/actions";
+import NavigationTabsList from "./NavigationTabsList";
+import { MonthlyData } from "@/app/components/ReportsPage/ReportTable";
 
 const NavigationTabs = async () => {
   const { data: dashboardData } = await getChartDataAction();
+
   return (
-    <div className="p-8">
-      <Tabs defaultValue={PAGES[0].label}>
-        <TabsList className="mr-4 w-full md:w-auto justify-start overflow-x-auto overflow-y-hidden scrollbar-hide">
-          {PAGES.map((page) => (
-            <TabsTrigger key={page.label} value={page.label}>
-              {page.label}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-        {PAGES.map((page) => {
-          return (
-            <TabsContent key={page.label} value={page.label}>
-              <page.content monthlyTransactionsData={dashboardData ?? []} />
-            </TabsContent>
-          );
-        })}
-      </Tabs>
+    <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
+      <NavigationTabsList
+        dashboardData={dashboardData as MonthlyData["monthlyTransactionsData"]}
+      />
     </div>
   );
 };

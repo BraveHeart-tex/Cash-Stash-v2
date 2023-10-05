@@ -6,6 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { setSelectedTab } from "../redux/features/navigationTabsSlice";
 
 const BudgetStatus = () => {
   const dispatch = useAppDispatch();
@@ -27,14 +28,13 @@ const BudgetStatus = () => {
     return (
       <div>
         <p className="text-primary">No budgets found.</p>
-        <Link href="/budgets">
-          <Button
-            className="font-bold text-md mt-3 hover:bg-foreground hover:text-muted"
-            variant="secondary"
-          >
-            Get started by creating a budget
-          </Button>
-        </Link>
+        <Button
+          className="font-bold text-md mt-3 hover:bg-foreground hover:text-muted"
+          variant="secondary"
+          onClick={() => dispatch(setSelectedTab("Budgets"))}
+        >
+          Get started by creating a budget
+        </Button>
       </div>
     );
   }

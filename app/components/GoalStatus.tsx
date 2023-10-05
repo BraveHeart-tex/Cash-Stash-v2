@@ -2,11 +2,11 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { fetchGoals } from "@/app/redux/features/goalSlice";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { setSelectedTab } from "../redux/features/navigationTabsSlice";
 
 const GoalStatus = () => {
   const dispatch = useAppDispatch();
@@ -28,14 +28,13 @@ const GoalStatus = () => {
     return (
       <div>
         <p className="text-primary">No goals found.</p>
-        <Link className="mt-3" href="/goals">
-          <Button
-            className="font-bold text-md mt-3 hover:bg-foreground hover:text-muted"
-            variant="secondary"
-          >
-            Get started by creating a goal
-          </Button>
-        </Link>
+        <Button
+          className="font-bold text-md mt-3 hover:bg-foreground hover:text-muted"
+          variant="secondary"
+          onClick={() => dispatch(setSelectedTab("Goals"))}
+        >
+          Get started by creating a goal
+        </Button>
       </div>
     );
   }

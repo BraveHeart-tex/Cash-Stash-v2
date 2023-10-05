@@ -33,7 +33,20 @@ export const MONTHS_OF_THE_YEAR = [
   "Dec",
 ];
 
-export const PAGES = [
+export type Page =
+  | "Dashboard"
+  | "Accounts"
+  | "Budgets"
+  | "Goals"
+  | "Transactions"
+  | "Reports";
+
+export interface IPage {
+  label: Page;
+  content: any;
+}
+
+export const PAGES: IPage[] = [
   {
     label: "Dashboard",
     content: Dashboard,
