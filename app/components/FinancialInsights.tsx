@@ -34,17 +34,16 @@ const SavingsRate = ({ value }: { value: number }) => (
 const FinancialInsights = ({ insightsData }: IFinancialInsightsProps) => {
   if (!insightsData || (insightsData && !insightsData.totalIncome)) {
     return (
-      <div className="my-3">
-        <NoDataMessage />
-        <Link className="mt-3" href="/transactions">
-          <Button
-            className="font-bold text-md mt-3 hover:bg-foreground hover:text-muted"
-            variant="secondary"
-          >
-            Transactions
-          </Button>
-        </Link>
-      </div>
+      <article className="flex h-[300px] items-center justify-center">
+        <div className="my-3">
+          <NoDataMessage />
+          <Link className="mt-3" href="/transactions">
+            <Button className="font-bold text-md mt-3 hover:bg-foreground hover:text-muted">
+              Transactions
+            </Button>
+          </Link>
+        </div>
+      </article>
     );
   }
 
@@ -75,17 +74,16 @@ const FinancialInsights = ({ insightsData }: IFinancialInsightsProps) => {
 
   if (isAllZero) {
     return (
-      <div className="my-3">
-        <NoDataMessage />
-        <Link className="mt-3" href="/transactions">
-          <Button
-            className="font-bold text-md mt-3 hover:bg-foreground hover:text-muted"
-            variant="secondary"
-          >
-            Transactions
-          </Button>
-        </Link>
-      </div>
+      <article className="flex h-[300px] items-center justify-center">
+        <div className="my-3">
+          <NoDataMessage />
+          <Link className="mt-3" href="/transactions">
+            <Button className="font-semibold text-md mt-3 hover:bg-foreground hover:text-muted">
+              Transactions
+            </Button>
+          </Link>
+        </div>
+      </article>
     );
   }
 

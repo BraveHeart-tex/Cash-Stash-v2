@@ -26,16 +26,17 @@ const BudgetStatus = () => {
 
   if (!budgets || budgets.length === 0) {
     return (
-      <div>
-        <p className="text-primary">No budgets found.</p>
-        <Button
-          className="font-bold text-md mt-3 hover:bg-foreground hover:text-muted"
-          variant="secondary"
-          onClick={() => dispatch(setSelectedTab("Budgets"))}
-        >
-          Get started by creating a budget
-        </Button>
-      </div>
+      <article className="flex h-[300px] items-center justify-center">
+        <div>
+          <p className="text-primary">No budgets found.</p>
+          <Button
+            className="font-semibold text-md mt-3 hover:bg-foreground hover:text-muted"
+            onClick={() => dispatch(setSelectedTab("Budgets"))}
+          >
+            Get started by creating a budget
+          </Button>
+        </div>
+      </article>
     );
   }
 

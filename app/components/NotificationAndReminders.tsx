@@ -20,27 +20,29 @@ const NotificationsAndReminders = () => {
 
   if (!isLoading && !reminders) {
     return (
-      <div className="p-2 min-h-[500px] max-h-[500px] overflow-y-scroll scrollbar-hide">
-        <p>No reminders were found.</p>
-        <Button
-          variant="secondary"
-          className="mt-3 dark:border text-md dark:border-blue-600 bg-secondary hover:bg-secondary-foreground font-bold hover:text-secondary"
-          onClick={() => {
-            dispatch(
-              openGenericModal({
-                key: "reminder",
-                mode: "create",
-                dialogTitle: "Create Reminder",
-                dialogDescription:
-                  "You can create a reminder by using the form below.",
-                entityId: 0,
-              })
-            );
-          }}
-        >
-          Create a reminder
-        </Button>
-      </div>
+      <article className="flex h-[500px] items-center justify-center">
+        <div>
+          <p>No reminders were found.</p>
+          <Button
+            variant="secondary"
+            className="mt-3 dark:border text-md dark:border-blue-600 bg-secondary hover:bg-secondary-foreground font-bold hover:text-secondary"
+            onClick={() => {
+              dispatch(
+                openGenericModal({
+                  key: "reminder",
+                  mode: "create",
+                  dialogTitle: "Create Reminder",
+                  dialogDescription:
+                    "You can create a reminder by using the form below.",
+                  entityId: 0,
+                })
+              );
+            }}
+          >
+            Create a reminder
+          </Button>
+        </div>
+      </article>
     );
   }
 

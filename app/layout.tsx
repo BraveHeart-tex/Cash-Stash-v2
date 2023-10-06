@@ -1,13 +1,13 @@
 import "./globals.css";
-import { Roboto } from "next/font/google";
+import { Inter } from "next/font/google";
 import { Providers as ReduxProviders } from "@/app/redux/provider";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
 import GenericConfirmDialog from "@/components/GenericConfirmDialog";
 import GenericModal from "@/components/GenericModal";
 
-const RobotoFont = Roboto({
-  weight: ["300", "400", "700"],
+const InterFont = Inter({
+  weight: ["300", "400", "500", "600", "700"],
   subsets: ["latin"],
 });
 
@@ -24,7 +24,7 @@ interface ILayoutProps {
 export default async function RootLayout({ children }: ILayoutProps) {
   return (
     <html lang="en">
-      <body className={RobotoFont.className}>
+      <body className={InterFont.className}>
         <ReduxProviders>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             {children}

@@ -6,11 +6,7 @@ const NotFound = () => {
   return (
     <div className="max-w-7xl flex justify-center items-center h-screen">
       <div className="grid grid-cols-1 gap-4">
-        <h1
-          className={
-            "text-6xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-gray-700 to-gray-900"
-          }
-        >
+        <h1 className="text-6xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/50">
           404 Page Not Found...
         </h1>
         <p>

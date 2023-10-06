@@ -14,6 +14,7 @@ import NotificationsAndReminders from "./NotificationAndReminders";
 import TransactionHistory from "./TransactionHistory";
 import BarChartComponent from "@/components/charts/BarChartComponent";
 import { MonthlyData } from "./ReportsPage/ReportTable";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 interface IDashboardProps {
   monthlyTransactionsData: MonthlyData["monthlyTransactionsData"];
@@ -85,12 +86,12 @@ const Dashboard = ({ monthlyTransactionsData }: IDashboardProps) => {
     <div className="p-4 pt-0 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mt-8">
         {sectionData.map((section) => (
-          <div key={section.title}>
-            <h3 className="text-xl mb-2 font-bold">{section.title}</h3>
-            <div className="p-4 rounded-lg shadow-sm bg-secondary dark:bg-gray-900">
-              {section.data}
-            </div>
-          </div>
+          <Card key={section.title}>
+            <CardHeader className="font-[500] text-xl text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/40">
+              {section.title}
+            </CardHeader>
+            <CardContent>{section.data}</CardContent>
+          </Card>
         ))}
       </div>
     </div>

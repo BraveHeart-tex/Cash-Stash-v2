@@ -15,16 +15,17 @@ const TransactionHistory = ({ transactions }: ITransactionHistoryProps) => {
 
   if (!transactions || transactions.length === 0) {
     return (
-      <div className="p-2 min-h-[500px] max-h-[500px] overflow-y-scroll scrollbar-hide">
-        <p className="text-primary">No transactions found.</p>
-        <Button
-          className="font-bold text-md mt-3 hover:bg-foreground hover:text-muted"
-          variant="secondary"
-          onClick={() => dispatch(setSelectedTab("Transactions"))}
-        >
-          Get started by creating a transaction
-        </Button>
-      </div>
+      <article className="flex h-[500px] items-center justify-center">
+        <div>
+          <p className="text-primary">No transactions found.</p>
+          <Button
+            className="font-semibold text-md mt-3 hover:bg-foreground hover:text-muted"
+            onClick={() => dispatch(setSelectedTab("Transactions"))}
+          >
+            Get started by creating a transaction
+          </Button>
+        </div>
+      </article>
     );
   }
 
