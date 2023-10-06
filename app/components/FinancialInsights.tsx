@@ -1,8 +1,9 @@
 "use client";
 import { InsightsData } from "@/app/redux/features/transactionsSlice";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useAppDispatch } from "../redux/hooks";
+import { setSelectedTab } from "../redux/features/navigationTabsSlice";
 
 interface IFinancialInsightsProps {
   insightsData: InsightsData | null;
@@ -11,9 +12,6 @@ interface IFinancialInsightsProps {
 const NoDataMessage = () => (
   <div className="grid grid-cols-1 gap-4 text-primary">
     <p>No data was found to generate financial insights from.</p>
-    <p>
-      Please make sure you have transactions to generate the necessary data.
-    </p>
   </div>
 );
 
@@ -32,16 +30,21 @@ const SavingsRate = ({ value }: { value: number }) => (
 );
 
 const FinancialInsights = ({ insightsData }: IFinancialInsightsProps) => {
+  const dispatch = useAppDispatch();
+
   if (!insightsData || (insightsData && !insightsData.totalIncome)) {
     return (
       <article className="flex h-[300px] items-center justify-center">
         <div className="my-3">
           <NoDataMessage />
-          <Link className="mt-3" href="/transactions">
-            <Button className="font-bold text-md mt-3 hover:bg-foreground hover:text-muted">
-              Transactions
-            </Button>
-          </Link>
+          <Button
+            className="font-semibold text-md mt-3"
+            onClick={() =>
+              dispatch(setSelectedTab({ selectedTab: "Transactions" }))
+            }
+          >
+            Transactions
+          </Button>
         </div>
       </article>
     );
@@ -77,11 +80,14 @@ const FinancialInsights = ({ insightsData }: IFinancialInsightsProps) => {
       <article className="flex h-[300px] items-center justify-center">
         <div className="my-3">
           <NoDataMessage />
-          <Link className="mt-3" href="/transactions">
-            <Button className="font-semibold text-md mt-3 hover:bg-foreground hover:text-muted">
-              Transactions
-            </Button>
-          </Link>
+          <Button
+            className="font-semibold text-md mt-3 hover:bg-foreground hover:text-muted"
+            onClick={() =>
+              dispatch(setSelectedTab({ selectedTab: "Transactions" }))
+            }
+          >
+            Transactions
+          </Button>
         </div>
       </article>
     );

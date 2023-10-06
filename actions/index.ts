@@ -59,7 +59,7 @@ export const loginAction = async ({ email, password }: LoginSchemaType) => {
   });
 
   if (!user) {
-    return { error: `User not found with the given email: ${emailResult}` };
+    return { error: "Invalid email or password" };
   }
 
   const hashedPassword = user.hashedPassword;
@@ -67,7 +67,7 @@ export const loginAction = async ({ email, password }: LoginSchemaType) => {
   const isPasswordValid = await bcrypt.compare(passwordResult, hashedPassword!);
 
   if (!isPasswordValid) {
-    return { error: "Password is not valid." };
+    return { error: "Invalid email or password." };
   }
 
   const jwt = await signToken(user);

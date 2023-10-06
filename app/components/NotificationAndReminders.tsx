@@ -22,10 +22,9 @@ const NotificationsAndReminders = () => {
     return (
       <article className="flex h-[500px] items-center justify-center">
         <div>
-          <p>No reminders were found.</p>
+          <p className="text-primary">No reminders were found.</p>
           <Button
-            variant="secondary"
-            className="mt-3 dark:border text-md dark:border-blue-600 bg-secondary hover:bg-secondary-foreground font-bold hover:text-secondary"
+            className="mt-3 text-md font-semibold hover:text-secondary"
             onClick={() => {
               dispatch(
                 openGenericModal({

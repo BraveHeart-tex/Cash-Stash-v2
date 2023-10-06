@@ -1,5 +1,5 @@
 import { Page } from "@/lib/utils";
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 interface NavigationTabsState {
   selectedTab: Page;
@@ -13,8 +13,8 @@ const NavigationTabsSlice = createSlice({
   name: "navigationTabs",
   initialState,
   reducers: {
-    setSelectedTab: (state, action) => {
-      state.selectedTab = action.payload;
+    setSelectedTab: (state, action: PayloadAction<{ selectedTab: Page }>) => {
+      state.selectedTab = action.payload.selectedTab;
     },
   },
 });

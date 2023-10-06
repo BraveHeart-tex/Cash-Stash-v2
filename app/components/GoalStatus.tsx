@@ -31,7 +31,7 @@ const GoalStatus = () => {
           <p className="text-primary">No goals found.</p>
           <Button
             className="font-semibold text-md mt-3 hover:bg-foreground hover:text-muted"
-            onClick={() => dispatch(setSelectedTab("Goals"))}
+            onClick={() => dispatch(setSelectedTab({ selectedTab: "Goals" }))}
           >
             Get started by creating a goal
           </Button>

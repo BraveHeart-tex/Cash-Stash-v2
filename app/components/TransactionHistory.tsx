@@ -20,7 +20,9 @@ const TransactionHistory = ({ transactions }: ITransactionHistoryProps) => {
           <p className="text-primary">No transactions found.</p>
           <Button
             className="font-semibold text-md mt-3 hover:bg-foreground hover:text-muted"
-            onClick={() => dispatch(setSelectedTab("Transactions"))}
+            onClick={() =>
+              dispatch(setSelectedTab({ selectedTab: "Transactions" }))
+            }
           >
             Get started by creating a transaction
           </Button>

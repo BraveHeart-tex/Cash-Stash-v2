@@ -18,7 +18,9 @@ const NavigationTabsList = ({ dashboardData }: INavigationTabsListProps) => {
   return (
     <Tabs
       value={selectedTab}
-      onValueChange={(value) => dispatch(setSelectedTab(value as Page))}
+      onValueChange={(value) =>
+        dispatch(setSelectedTab({ selectedTab: value as Page }))
+      }
       defaultValue={"Dashboard"}
     >
       <TabsList className="w-full md:w-auto overflow-x-auto overflow-y-hidden scrollbar-hide">

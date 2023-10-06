@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { fetchBudgets } from "@/app/redux/features/budgetSlice";
 import { Skeleton } from "@/components/ui/skeleton";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { setSelectedTab } from "../redux/features/navigationTabsSlice";
@@ -31,7 +30,7 @@ const BudgetStatus = () => {
           <p className="text-primary">No budgets found.</p>
           <Button
             className="font-semibold text-md mt-3 hover:bg-foreground hover:text-muted"
-            onClick={() => dispatch(setSelectedTab("Budgets"))}
+            onClick={() => dispatch(setSelectedTab({ selectedTab: "Budgets" }))}
           >
             Get started by creating a budget
           </Button>

@@ -11,7 +11,7 @@ import {
 
 const BarChartComponent = ({ monthlyTransactionsData }: MonthlyData) => {
   if (monthlyTransactionsData.length === 0) {
-    return <div>No data to display.</div>;
+    return null;
   }
 
   return (
