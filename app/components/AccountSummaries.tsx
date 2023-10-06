@@ -29,7 +29,7 @@ const AccountSummaries = () => {
     return (
       <article className="flex h-[300px] items-center justify-center">
         <div>
-          <p className="text-foreground">No accounts found.</p>
+          <p className="text-primary">No accounts found.</p>
           <Button
             className="font-semibold text-md mt-3"
             onClick={() =>

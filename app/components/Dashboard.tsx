@@ -46,7 +46,7 @@ const Dashboard = ({ monthlyTransactionsData }: IDashboardProps) => {
     {
       title: "Budget Status",
       description:
-        "You can view your budget status here. Click on the budget card to view the budget details or create a new one by clicking the menu button above.",
+        "You can check your budgets here. Click on the budget card to see details or create a new one using the menu button above.",
       data: (
         <div className="max-h-[300px] min-h-[300px] lg:max-h-[350px] lg:min-h-[350px] overflow-y-scroll scrollbar-hide">
           <BudgetStatus />
@@ -56,7 +56,7 @@ const Dashboard = ({ monthlyTransactionsData }: IDashboardProps) => {
     {
       title: "Goal Progress",
       description:
-        "You can check out your financial goal progress here. Click on the individual goal card to view or edit the goal details. Create a new goal by clicking the menu button above.",
+        "Check your goals here. Click on a goal card to view or edit its details or create a new one by clicking the menu button above.",
       data: (
         <div className="max-h-[300px] min-h-[300px] lg:max-h-[350px] lg:min-h-[350px] overflow-y-scroll scrollbar-hide">
           <GoalStatus />
@@ -74,7 +74,7 @@ const Dashboard = ({ monthlyTransactionsData }: IDashboardProps) => {
       description:
         "Get a comparison of your expenses vs income and other financial insights here.",
       data: (
-        <div className="p-2 max-h-[500px] min-h-[500px] overflow-y-scroll scrollbar-hide">
+        <div className="p-2 max-h-[500px] min-h-[500px] overflow-y-scroll scrollbar-hide flex items-center justify-center">
           <BarChartComponent
             monthlyTransactionsData={monthlyTransactionsData}
           />
@@ -84,14 +84,13 @@ const Dashboard = ({ monthlyTransactionsData }: IDashboardProps) => {
     },
     {
       title: "Notifications and Reminders",
-      description:
-        "View your notifications below. Set up reminders for your bills and other payments here. To get notified about your reminders, you can enable notifications from the settings page.",
+      description: "View your notifications, set bill reminders here.",
       data: <NotificationsAndReminders />,
     },
   ];
 
   return (
-    <div className="p-4 pt-0 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
+    <div className="p-1 pt-0 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mt-8">
         {sectionData.map((section) => (
           <Card key={section.title}>

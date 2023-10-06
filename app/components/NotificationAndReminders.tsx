@@ -21,10 +21,10 @@ const NotificationsAndReminders = () => {
   if (!isLoading && !reminders) {
     return (
       <article className="flex h-[500px] items-center justify-center">
-        <div>
+        <div className="mt-[30px]">
           <p className="text-primary">No reminders were found.</p>
           <Button
-            className="mt-3 text-md font-semibold hover:text-secondary"
+            className="mt-3 text-md font-semibold"
             onClick={() => {
               dispatch(
                 openGenericModal({

@@ -29,7 +29,7 @@ const BudgetStatus = () => {
         <div>
           <p className="text-primary">No budgets found.</p>
           <Button
-            className="font-semibold text-md mt-3 hover:bg-foreground hover:text-muted"
+            className="font-semibold text-md mt-3"
             onClick={() => dispatch(setSelectedTab({ selectedTab: "Budgets" }))}
           >
             Get started by creating a budget

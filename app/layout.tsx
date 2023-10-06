@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
 import GenericConfirmDialog from "@/components/GenericConfirmDialog";
 import GenericModal from "@/components/GenericModal";
+import Navigation from "./components/Navigation";
 
 const InterFont = Inter({
   weight: ["300", "400", "500", "600", "700"],
@@ -27,6 +28,7 @@ export default async function RootLayout({ children }: ILayoutProps) {
       <body className={InterFont.className}>
         <ReduxProviders>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <Navigation />
             {children}
             <GenericModal />
             <GenericConfirmDialog />

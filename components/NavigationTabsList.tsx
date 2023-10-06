@@ -23,13 +23,15 @@ const NavigationTabsList = ({ dashboardData }: INavigationTabsListProps) => {
       }
       defaultValue={"Dashboard"}
     >
-      <TabsList className="w-full md:w-auto overflow-x-auto overflow-y-hidden scrollbar-hide">
-        {PAGES.map((page) => (
-          <TabsTrigger key={page.label} value={page.label}>
-            {page.label}
-          </TabsTrigger>
-        ))}
-      </TabsList>
+      <div className="overflow-scroll scrollbar-hide">
+        <TabsList className="lg:w-auto">
+          {PAGES.map((page) => (
+            <TabsTrigger key={page.label} value={page.label}>
+              {page.label}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </div>
       {PAGES.map((page) => {
         return (
           <TabsContent key={page.label} value={page.label}>
