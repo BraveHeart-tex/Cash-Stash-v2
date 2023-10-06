@@ -10,6 +10,7 @@ import {
 import { UseFormRegister } from "react-hook-form";
 import FormError from "./FormError";
 import { Label } from "./ui/label";
+import { useEffect } from "react";
 
 export interface SelectOption {
   value: string;
@@ -45,6 +46,12 @@ const FormSelect = ({
   onChange,
   selectOptions,
 }: IFromSelectProps) => {
+  useEffect(() => {
+    if (defaultValue && onChange) {
+      onChange(defaultValue);
+    }
+  }, []);
+
   return (
     <div className="flex flex-col gap-1">
       <Label>{label}</Label>

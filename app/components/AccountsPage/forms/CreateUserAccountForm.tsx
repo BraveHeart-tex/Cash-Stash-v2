@@ -39,6 +39,7 @@ const CreateUserAccountForm = () => {
   const onSubmit = async (data: CreateUserAccountSchemaType) => {
     startTransition(async () => {
       const result = await registerBankAccountAction(data);
+
       if (result.error) {
         toast({
           title: "Error creating account.",

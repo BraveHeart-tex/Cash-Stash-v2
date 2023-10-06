@@ -1,6 +1,6 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { Budget } from '@prisma/client';
-import axios from 'axios';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { Budget } from "@prisma/client";
+import { getBudgetByIdAction } from "@/actions";
 
 interface CurrentBudgetState {
   currentBudget: Budget | null;
@@ -12,18 +12,16 @@ const initialState: CurrentBudgetState = {
   isLoading: false,
 };
 
-interface FetchCurrentBudgetResponse {
-  budget: Budget;
-}
-
 export const fetchBudgetById = createAsyncThunk(
-  'budgets/fetchBudgetById',
+  "budgets/fetchBudgetById",
   async (budgetId: number) => {
     try {
-      const response = await axios.get<FetchCurrentBudgetResponse>(
-        `/api/user/budgets/${budgetId}`
-      );
-      return response.data.budget;
+      const { budget, error } = await getBudgetByIdAction(budgetId);
+      if (error || !budget) {
+        return null;
+      }
+
+      return budget;
     } catch (error) {
       console.log(error);
       throw error;
@@ -32,7 +30,7 @@ export const fetchBudgetById = createAsyncThunk(
 );
 
 const currentBudgetSlice = createSlice({
-  name: 'currentBudget',
+  name: "currentBudget",
   initialState,
   reducers: {},
   extraReducers: (builder) => {

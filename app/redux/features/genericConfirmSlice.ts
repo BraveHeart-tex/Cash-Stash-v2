@@ -45,7 +45,6 @@ const genericConfirmSlice = createSlice({
       state.message = message;
       state.primaryActionLabel = primaryActionLabel;
       state.primaryAction = primaryAction;
-      state.primaryActionResult = null;
 
       const primaryActionWithCallback = async () => {
         const result = await primaryAction();

@@ -5,7 +5,6 @@ import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
 import GenericConfirmDialog from "@/components/GenericConfirmDialog";
 import GenericModal from "@/components/GenericModal";
-import { getCurrentUserAction } from "@/actions";
 
 const RobotoFont = Roboto({
   weight: ["300", "400", "700"],
@@ -23,8 +22,6 @@ interface ILayoutProps {
 }
 
 export default async function RootLayout({ children }: ILayoutProps) {
-  const { user } = await getCurrentUserAction();
-
   return (
     <html lang="en">
       <body className={RobotoFont.className}>

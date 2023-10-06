@@ -1,5 +1,4 @@
 "use server";
-
 import db from "@/app/libs/prismadb";
 import { getCurrentUser, signToken } from "@/lib/session";
 import { EditReminderSchema, LoginSchema } from "@/schemas";
@@ -470,6 +469,7 @@ export const registerBankAccountAction = async ({
   const mappedCategory = Object.entries(CreateUserAccountOptions).find(
     ([key, value]) => value === categoryResult
   )?.[0];
+  console.log(mappedCategory);
 
   if (!mappedCategory) {
     return { error: "Invalid category." };
@@ -1123,5 +1123,29 @@ export const createReminderAction = async ({
 
   return {
     reminder: createdReminder,
+  };
+};
+
+export const getGoalByIdAction = async (goalId: number) => {
+  if (!goalId) {
+    return {
+      error: "Goal ID not found.",
+    };
+  }
+
+  const goal = await db.goal.findUnique({
+    where: {
+      id: goalId,
+    },
+  });
+
+  if (!goal) {
+    return {
+      error: "No goal with the given goal id was found.",
+    };
+  }
+
+  return {
+    goal,
   };
 };
