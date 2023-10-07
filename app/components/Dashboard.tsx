@@ -15,6 +15,12 @@ import TransactionHistory from "./TransactionHistory";
 import BarChartComponent from "@/components/charts/BarChartComponent";
 import { MonthlyData } from "./ReportsPage/ReportTable";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+  showDefaultToast,
+  showErrorToast,
+  showSuccessToast,
+} from "@/components/ui/use-toast";
 
 interface IDashboardProps {
   monthlyTransactionsData: MonthlyData["monthlyTransactionsData"];
@@ -103,6 +109,25 @@ const Dashboard = ({ monthlyTransactionsData }: IDashboardProps) => {
             <CardContent>{section.data}</CardContent>
           </Card>
         ))}
+        <Button
+          onClick={() =>
+            showDefaultToast("default toast", "default toast message")
+          }
+        >
+          Default
+        </Button>
+        <Button
+          onClick={() => showErrorToast("error toast", "show error toast")}
+        >
+          Error
+        </Button>
+        <Button
+          onClick={() =>
+            showSuccessToast("success toast", "show success toast")
+          }
+        >
+          Success
+        </Button>
       </div>
     </div>
   );

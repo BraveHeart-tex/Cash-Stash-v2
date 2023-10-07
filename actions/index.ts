@@ -143,9 +143,7 @@ export const registerAction = async ({
 };
 
 export const logoutAction = async () => {
-  cookies().set("token", "");
-
-  redirect("/login");
+  cookies().delete("token");
 };
 
 export const getCurrentUserAction = async () => {

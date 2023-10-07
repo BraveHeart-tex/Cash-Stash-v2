@@ -2,7 +2,7 @@
 import { useAppSelector } from "../redux/hooks";
 import { useDispatch } from "react-redux";
 import { fetchCurrentUser } from "../redux/features/userSlice";
-import { useEffect } from "react";
+import { useEffect, useTransition } from "react";
 import { AppDispatch } from "../redux/store";
 import { logoutAction } from "@/actions";
 import {
@@ -12,16 +12,26 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 const UserMenu = () => {
+  let [isPending, startTransition] = useTransition();
   const user = useAppSelector((state) => state.userReducer.currentUser);
   const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
 
   useEffect(() => {
     dispatch(fetchCurrentUser());
   }, [dispatch]);
 
   const avatarPlaceholder = user?.name ? user.name[0] : "";
+
+  const handleLogout = () => {
+    startTransition(async () => {
+      await logoutAction();
+      router.push("/login");
+    });
+  };
 
   return (
     <DropdownMenu>
@@ -32,16 +42,16 @@ const UserMenu = () => {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className="p-4 grid grid-cols-1 gap-4 w-[300px]"
+        className="p-4 grid grid-cols-1 gap-[12px] w-[300px]"
         align="end"
       >
-        <p className="text-lg font-bold">{user?.name}</p>
+        <p className="text-lg font-semibold">{user?.name}</p>
         <hr />
         <p className="text-accent-foreground">{user?.email}</p>
 
-        <form action={logoutAction}>
-          <Button type="submit">Logout</Button>
-        </form>
+        <Button type="button" onClick={() => handleLogout()}>
+          Logout
+        </Button>
       </DropdownMenuContent>
     </DropdownMenu>
   );

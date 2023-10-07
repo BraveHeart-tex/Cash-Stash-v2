@@ -27,14 +27,15 @@ const Navigation = () => {
   const onClose = () => setIsOpen(false);
 
   return (
-    <div className="mb-6 shadow-lg rounded-md p-4">
+    <div className="mb-6 shadow-lg p-4 bg-primary dark:bg-card">
       <div className="flex justify-between items-center">
+        <div className="hidden md:block" />
         <Button
           variant="ghost"
           size="icon"
           aria-label="Menu"
           onClick={onOpen}
-          className="block lg:hidden"
+          className="lg:hidden flex items-center justify-center text-white hover:bg-secondary"
         >
           <HamburgerMenuIcon />
         </Button>
@@ -42,29 +43,20 @@ const Navigation = () => {
           <Image
             src={Logo}
             alt="Cash Stash"
-            width={185}
-            className="dark:invert md:mx-auto"
+            width={200}
+            className="md:mx-auto"
+            style={{
+              filter: "grayscale(1) invert(1)",
+            }}
           />
         </Link>
-        <div className="hidden lg:flex">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              className="hover:underline mr-4"
-            >
-              {link.name}
-            </Link>
-          ))}
-        </div>
         <div className="flex justify-center items-center gap-4">
           <div className="lg:flex items-center hidden gap-1">
-            <ModeToggle showOutline={false} />
-            <UserMenu />
+            <ModeToggle />
           </div>
+          <UserMenu />
         </div>
       </div>
-
       <Sheet
         open={isOpen}
         onOpenChange={(isOpen) => {

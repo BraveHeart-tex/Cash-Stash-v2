@@ -6,6 +6,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import GenericConfirmDialog from "@/components/GenericConfirmDialog";
 import GenericModal from "@/components/GenericModal";
 import Navigation from "./components/Navigation";
+import { getCurrentUser } from "@/lib/session";
+import { getCurrentUserAction } from "@/actions";
 
 const InterFont = Inter({
   weight: ["300", "400", "500", "600", "700"],
@@ -23,12 +25,14 @@ interface ILayoutProps {
 }
 
 export default async function RootLayout({ children }: ILayoutProps) {
+  const { user } = await getCurrentUserAction();
+
   return (
     <html lang="en">
       <body className={InterFont.className}>
         <ReduxProviders>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <Navigation />
+            {user ? <Navigation /> : null}
             {children}
             <GenericModal />
             <GenericConfirmDialog />
