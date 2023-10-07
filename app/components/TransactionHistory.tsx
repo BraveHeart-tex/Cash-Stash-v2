@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { SerializedTransaction } from "@/app/redux/features/transactionsSlice";
 import { useAppDispatch } from "../redux/hooks";
 import { setSelectedTab } from "../redux/features/navigationTabsSlice";
+import { FaExchangeAlt } from "react-icons/fa";
 
 interface ITransactionHistoryProps {
   transactions: SerializedTransaction[] | null;
@@ -19,12 +20,12 @@ const TransactionHistory = ({ transactions }: ITransactionHistoryProps) => {
         <div>
           <p className="text-primary">No transactions found.</p>
           <Button
-            className="font-semibold text-md mt-3"
+            className="font-semibold text-md mt-3 flex items-center gap-[14px]"
             onClick={() =>
               dispatch(setSelectedTab({ selectedTab: "Transactions" }))
             }
           >
-            Get started by creating a transaction
+            <FaExchangeAlt size={18} /> Create a transaction
           </Button>
         </div>
       </article>

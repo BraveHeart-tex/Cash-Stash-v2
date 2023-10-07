@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { fetchTransactions } from "@/app/redux/features/transactionsSlice";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import TransactionCard from "./TransactionCard";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const TransactionList = () => {
   const { data, filteredData, isLoading } = useAppSelector(
@@ -15,8 +16,10 @@ const TransactionList = () => {
   }, [dispatch]);
 
   const renderNoTransactionsState = () => (
-    <div className="flex justify-center items-start flex-col gap-4 mt-4 lg:mt-0">
-      <h2 className="text-2xl">No transactions found.</h2>
+    <div className="flex justify-center items-start flex-col gap-4 my-4 lg:mt-0">
+      <h2 className="inline-block text-2xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
+        No transactions found.
+      </h2>
       <p>
         You can try again by removing any existing filters or creating a new
         transaction below.
@@ -24,11 +27,15 @@ const TransactionList = () => {
     </div>
   );
 
-  if (!isLoading && data && data?.length === 0) {
+  if (isLoading) {
+    return <Skeleton className="h-20 w-full" />;
+  }
+
+  if (!isLoading && data?.length === 0) {
     return renderNoTransactionsState();
   }
 
-  if (filteredData && filteredData.length === 0) {
+  if (filteredData?.length === 0) {
     return renderNoTransactionsState();
   }
 

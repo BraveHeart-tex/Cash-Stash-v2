@@ -6,6 +6,7 @@ import { fetchCurrentUserAccounts } from "@/app/redux/features/userAccountSlice"
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { setSelectedTab } from "../redux/features/navigationTabsSlice";
+import { FaPiggyBank } from "react-icons/fa";
 
 const AccountSummaries = () => {
   const dispatch = useAppDispatch();
@@ -31,12 +32,12 @@ const AccountSummaries = () => {
         <div>
           <p className="text-primary">No accounts found.</p>
           <Button
-            className="font-semibold text-md mt-3"
+            className="font-semibold text-md mt-3 flex items-center gap-[14px]"
             onClick={() =>
               dispatch(setSelectedTab({ selectedTab: "Accounts" }))
             }
           >
-            Get started by creating an account
+            <FaPiggyBank size={18} /> Create an account
           </Button>
         </div>
       </article>

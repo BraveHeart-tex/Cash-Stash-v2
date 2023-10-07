@@ -6,6 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { setSelectedTab } from "../redux/features/navigationTabsSlice";
+import { FaMoneyBillAlt } from "react-icons/fa";
 
 const BudgetStatus = () => {
   const dispatch = useAppDispatch();
@@ -29,10 +30,10 @@ const BudgetStatus = () => {
         <div>
           <p className="text-primary">No budgets found.</p>
           <Button
-            className="font-semibold text-md mt-3"
+            className="font-semibold text-md mt-3 flex items-center gap-[14px]"
             onClick={() => dispatch(setSelectedTab({ selectedTab: "Budgets" }))}
           >
-            Get started by creating a budget
+            <FaMoneyBillAlt size={18} /> Create a budget
           </Button>
         </div>
       </article>

@@ -27,7 +27,7 @@ const Navigation = () => {
   const onClose = () => setIsOpen(false);
 
   return (
-    <div className="mb-6 shadow-lg p-4 bg-primary dark:bg-card">
+    <div className="mb-6 shadow-lg p-4 bg-primary dark:bg-background dark:border-b">
       <div className="flex justify-between items-center">
         <div className="hidden md:block" />
         <Button

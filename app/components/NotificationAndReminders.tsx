@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Pencil1Icon } from "@radix-ui/react-icons";
 import { openGenericModal } from "../redux/features/genericModalSlice";
+import { FaRegClock } from "react-icons/fa";
 
 const NotificationsAndReminders = () => {
   const { reminders, isLoading } = useAppSelector(
@@ -24,7 +25,7 @@ const NotificationsAndReminders = () => {
         <div className="mt-[30px]">
           <p className="text-primary">No reminders were found.</p>
           <Button
-            className="mt-3 text-md font-semibold"
+            className="mt-3 text-md font-semibold flex items-center gap-[14px]"
             onClick={() => {
               dispatch(
                 openGenericModal({
@@ -38,6 +39,7 @@ const NotificationsAndReminders = () => {
               );
             }}
           >
+            <FaRegClock size={18} />
             Create a reminder
           </Button>
         </div>

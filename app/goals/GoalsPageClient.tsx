@@ -16,10 +16,10 @@ const GoalsPageClient = () => {
   }, [dispatch]);
 
   const renderNoGoalsState = () => (
-    <div className="FLEX justify-center items-center flex-col gap-4">
-      <h2 className="inline-block text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-600 to-gray-800">
+    <div className="flex justify-center items-center flex-col gap-4">
+      <h3 className="inline-block text-3xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
         No goals were found.
-      </h2>
+      </h3>
       <p>Add a goal to get started!</p>
     </div>
   );

@@ -7,6 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { setSelectedTab } from "../redux/features/navigationTabsSlice";
+import { FaBullseye } from "react-icons/fa";
 
 const GoalStatus = () => {
   const dispatch = useAppDispatch();
@@ -30,10 +31,11 @@ const GoalStatus = () => {
         <div>
           <p className="text-primary">No goals found.</p>
           <Button
-            className="font-semibold text-md mt-3"
+            className="font-semibold text-md mt-3 flex items-center gap-[14px]"
             onClick={() => dispatch(setSelectedTab({ selectedTab: "Goals" }))}
           >
-            Get started by creating a goal
+            <FaBullseye size={18} />
+            Create a goal
           </Button>
         </div>
       </article>
