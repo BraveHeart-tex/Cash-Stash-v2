@@ -4,7 +4,6 @@ import {
   fetchInsightsDataAction,
   fetchMonthlyTransactionsDataAction,
   getChartDataAction,
-  getTopTransactionsByCategoryAction,
   getTransactionsByCurrentUserAction,
 } from "@/actions";
 import { MonthlyData } from "@/app/components/ReportsPage/ReportTable";
@@ -37,13 +36,6 @@ interface Expense {
 export interface MonthlyTransactionData {
   incomes: Income[];
   expenses: Expense[];
-}
-
-interface TopCategoryData {
-  category: string;
-  totalAmount: number;
-  accountId: number;
-  createdAt: string;
 }
 
 interface TransactionState {
@@ -132,6 +124,8 @@ export const fetchInsightsData = createAsyncThunk(
   async () => {
     const { totalIncome, totalExpense, netIncome, savingsRate } =
       await fetchInsightsDataAction();
+
+    console.log(totalIncome, totalExpense, netIncome, savingsRate);
 
     if (!totalIncome || !totalExpense || !netIncome || !savingsRate) {
       return {

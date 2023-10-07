@@ -27,10 +27,6 @@ const TransactionList = () => {
     </div>
   );
 
-  if (isLoading) {
-    return <Skeleton className="h-20 w-full" />;
-  }
-
   if (!isLoading && data?.length === 0) {
     return renderNoTransactionsState();
   }

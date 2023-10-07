@@ -33,6 +33,8 @@ const SavingsRate = ({ value }: { value: number }) => (
 const FinancialInsights = ({ insightsData }: IFinancialInsightsProps) => {
   const dispatch = useAppDispatch();
 
+  console.log(insightsData);
+
   if (!insightsData || (insightsData && !insightsData.totalIncome)) {
     return (
       <article className="flex h-[300px] items-center justify-center">
