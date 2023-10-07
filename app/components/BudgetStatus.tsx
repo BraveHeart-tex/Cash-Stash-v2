@@ -4,9 +4,9 @@ import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { fetchBudgets } from "@/app/redux/features/budgetSlice";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
 import { setSelectedTab } from "../redux/features/navigationTabsSlice";
 import { FaMoneyBillAlt } from "react-icons/fa";
+import BudgetCardf from "./BudgetCard";
 
 const BudgetStatus = () => {
   const dispatch = useAppDispatch();
@@ -43,28 +43,7 @@ const BudgetStatus = () => {
   return (
     <div>
       {budgets.map((budget) => (
-        <div
-          key={budget.category}
-          className="mb-4 rounded-md p-2 shadow-xl bg-card"
-        >
-          <p className="font-bold mb-2">
-            {budget.category.charAt(0).toUpperCase() +
-              budget.category.toLowerCase().slice(1)}
-          </p>
-          <Progress
-            value={(budget.spentAmount / budget.budgetAmount) * 100}
-            indicatorClassName={
-              budget.spentAmount / budget.budgetAmount > 0.7
-                ? "bg-red-300"
-                : budget.spentAmount / budget.budgetAmount > 0.4
-                ? "bg-orange-300"
-                : "bg-green-300"
-            }
-          />
-          <p className="mt-2 text-md">
-            Spent: {budget.spentAmount}₺ / Budget: {budget.budgetAmount}₺
-          </p>
-        </div>
+        <BudgetCardf key={budget.id} budget={budget} />
       ))}
     </div>
   );

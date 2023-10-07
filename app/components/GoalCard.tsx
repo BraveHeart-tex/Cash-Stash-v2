@@ -1,8 +1,6 @@
-"use client";
-
+import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { useAppDispatch } from "@/app/redux/hooks";
-import { cn } from "@/lib/utils";
 import ActionPopover from "@/components/ActionPopover";
 import { openGenericModal } from "@/app/redux/features/genericModalSlice";
 import { showGenericConfirm } from "@/app/redux/features/genericConfirmSlice";
@@ -12,10 +10,10 @@ import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { SerializedGoal, fetchGoals } from "@/app/redux/features/goalSlice";
 
 interface IGoalCardProps {
-  goals: SerializedGoal[] | null;
+  goal: SerializedGoal;
 }
 
-const GoalCard = ({ goals }: IGoalCardProps) => {
+const GoalCard = ({ goal }: IGoalCardProps) => {
   const dispatch = useAppDispatch();
 
   const handleActionCallback = (
@@ -44,36 +42,16 @@ const GoalCard = ({ goals }: IGoalCardProps) => {
   };
 
   return (
-    <>
-      {goals?.map((goal) => (
-        <div
-          className="flex flex-col gap-2 p-4 pt-6 border-1 shadow-xl rounded-md relative bg-card"
-          key={goal.id}
-        >
-          <span>{goal.name}</span>
-          <p className="text-primary mt-2">
-            Current Progress: ${goal.currentAmount} / ${goal.goalAmount}
-          </p>
-          <Progress
-            value={(goal.currentAmount / goal.goalAmount) * 100}
-            className="mt-4"
-            indicatorClassName={cn(
-              goal.currentAmount / goal.goalAmount >= 1
-                ? "bg-green-400"
-                : "bg-blue-400"
-            )}
-          />
-          <p className="mt-2 font-[300]">
-            {goal.currentAmount / goal.goalAmount >= 1
-              ? "Congrats! You have reached your goal!"
-              : "Goal in progress... You've reached " +
-                `${((goal.currentAmount / goal.goalAmount) * 100).toFixed(
-                  0
-                )}%` +
-                " of your goal."}
-          </p>
+    <div
+      className="flex flex-col gap-2 p-4 pt-6 border-1 shadow-xl rounded-md relative bg-card border cursor-pointer"
+      key={goal.name}
+    >
+      <p className="font-semibold">{goal.name}</p>
+      <div className="absolute top-3 right-1 mb-2">
+        <div className="flex items-center">
           <ActionPopover
             popoverHeading={"Goal Actions"}
+            isAbsolute={false}
             onEditActionClick={() =>
               dispatch(
                 openGenericModal({
@@ -86,11 +64,34 @@ const GoalCard = ({ goals }: IGoalCardProps) => {
                 })
               )
             }
+            placementClasses="top-0 right-0 mb-0"
             onDeleteActionClick={() => handleDeleteGoal(goal.id)}
           />
+          <Badge className="ml-auto">
+            {goal.currentAmount / goal.goalAmount >= 1
+              ? "Completed!"
+              : `In Progress ${Math.round(
+                  (goal.currentAmount / goal.goalAmount) * 100
+                )}%`}
+          </Badge>
         </div>
-      ))}
-    </>
+      </div>
+      <div className="mt-2">
+        <Progress
+          value={(goal.currentAmount / goal.goalAmount) * 100}
+          indicatorClassName={
+            goal.currentAmount / goal.goalAmount > 0.7
+              ? "bg-green-200"
+              : goal.currentAmount / goal.goalAmount > 0.4
+              ? "bg-orange-300"
+              : "bg-red-300"
+          }
+        />
+        <p className="mt-4 text-md">
+          Current: {goal.currentAmount}₺ / Target: {goal.goalAmount}₺
+        </p>
+      </div>
+    </div>
   );
 };
 

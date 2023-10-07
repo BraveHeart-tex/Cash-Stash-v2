@@ -1,11 +1,11 @@
 "use client";
-import GoalCard from "@/app/components/GoalsPage/GoalCard";
 import { useEffect } from "react";
-import { SerializedGoal, fetchGoals } from "@/app/redux/features/goalSlice";
+import { fetchGoals } from "@/app/redux/features/goalSlice";
 import { useAppSelector, useAppDispatch } from "@/app/redux/hooks";
 import { Button } from "@/components/ui/button";
 import { openGenericModal } from "@/app/redux/features/genericModalSlice";
 import { Skeleton } from "@/components/ui/skeleton";
+import GoalCard from "../components/GoalCard";
 
 const GoalsPageClient = () => {
   const { goals, isLoading } = useAppSelector((state) => state.goalReducer);
@@ -29,7 +29,9 @@ const GoalsPageClient = () => {
   const renderGoals = () => (
     <div className="w-full">
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 mt-4">
-        <GoalCard goals={goals as SerializedGoal[]} />
+        {goals?.map((goal) => (
+          <GoalCard goal={goal} key={goal.id} />
+        ))}
       </div>
     </div>
   );

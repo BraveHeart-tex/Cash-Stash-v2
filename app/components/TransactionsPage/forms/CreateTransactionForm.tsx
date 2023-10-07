@@ -1,5 +1,4 @@
 "use client";
-
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
@@ -12,11 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import CreateTransactionSchema, {
   CreateTransactionSchemaType,
 } from "@/schemas/CreateTransactionSchema";
-import {
-  showErrorToast,
-  showSuccessToast,
-  useToast,
-} from "@/components/ui/use-toast";
+import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import FormInput from "@/components/FormInput";
 import FormSelect, { SelectOption } from "@/components/FormSelect";
 import { Button } from "@/components/ui/button";
@@ -32,8 +27,6 @@ const CreateTransactionForm = () => {
     dispatch(fetchCurrentUserAccounts());
   }, [dispatch]);
 
-  const { toast } = useToast();
-
   const {
     register,
     handleSubmit,
@@ -47,7 +40,6 @@ const CreateTransactionForm = () => {
       accountId: 0,
       isIncome: true,
     },
-    // @ts-ignore
     resolver: zodResolver(CreateTransactionSchema),
   });
 
@@ -63,7 +55,7 @@ const CreateTransactionForm = () => {
       } else {
         showSuccessToast(
           "Transaction created.",
-          `Transaction for ${result!.transaction!.amount}₺ created.`
+          `Transaction for ${result?.transaction?.amount}₺ created.`
         );
         dispatch(fetchTransactions());
         dispatch(closeGenericModal());
@@ -117,7 +109,7 @@ const CreateTransactionForm = () => {
           }}
         />
         <FormSelect
-          defaultValue={""}
+          defaultValue={userAccountSelectOptions[0].value}
           selectOptions={userAccountSelectOptions}
           nameParam={"accountId"}
           label={"Account"}

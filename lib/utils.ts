@@ -39,7 +39,8 @@ export type Page =
   | "Budgets"
   | "Goals"
   | "Transactions"
-  | "Reports";
+  | "Reports"
+  | "Settings";
 
 export interface IPage {
   label: Page;
@@ -70,6 +71,10 @@ export const PAGES: IPage[] = [
   {
     label: "Reports",
     content: ReportsPageClient,
+  },
+  {
+    label: "Settings",
+    content: Dashboard,
   },
 ];
 

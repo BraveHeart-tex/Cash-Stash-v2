@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { setSelectedTab } from "../redux/features/navigationTabsSlice";
 import { FaPiggyBank } from "react-icons/fa";
+import AccountCard from "./AccountCard";
 
 const AccountSummaries = () => {
   const dispatch = useAppDispatch();
@@ -48,14 +49,7 @@ const AccountSummaries = () => {
     <div>
       <div className="grid grid-cols-1 gap-4">
         {accounts.map((account) => (
-          <div
-            className="p-4 rounded-md shadow-lg bg-card border w-full"
-            key={account.name}
-          >
-            <p className="font-semibold mb-2">{account.name}</p>
-
-            <p className="text-md">Balance: {account.balance}₺</p>
-          </div>
+          <AccountCard account={account} key={account.id} />
         ))}
       </div>
     </div>
