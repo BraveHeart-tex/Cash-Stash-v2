@@ -26,7 +26,11 @@ const NavigationTabsList = ({ dashboardData }: INavigationTabsListProps) => {
       <div className="overflow-scroll scrollbar-hide">
         <TabsList className="lg:w-auto">
           {PAGES.map((page) => (
-            <TabsTrigger key={page.label} value={page.label}>
+            <TabsTrigger
+              key={page.label}
+              value={page.label}
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-primary/70 data-[state=active]:text-white"
+            >
               {page.label}
             </TabsTrigger>
           ))}
