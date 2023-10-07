@@ -13,7 +13,11 @@ import { EditReminderSchemaType } from "@/schemas/EditReminderSchema";
 import FormInput from "@/components/FormInput";
 import { Button } from "@/components/ui/button";
 import FormSelect from "@/components/FormSelect";
-import { useToast } from "@/components/ui/use-toast";
+import {
+  showDefaultToast,
+  showErrorToast,
+  showSuccessToast,
+} from "@/components/ui/use-toast";
 import FormCheckbox from "@/components/FormCheckbox";
 import { updateReminderAction } from "@/actions";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
@@ -23,7 +27,6 @@ interface IEditReminderFormProps {
 }
 
 const EditReminderForm = ({ entityId }: IEditReminderFormProps) => {
-  const { toast } = useToast();
   let [isPending, startTransition] = useTransition();
 
   const { currentReminder, isLoading } = useAppSelector(
@@ -71,13 +74,10 @@ const EditReminderForm = ({ entityId }: IEditReminderFormProps) => {
 
   const onSubmit = async (data: EditReminderSchemaType) => {
     if (hasMadeNoChanges()) {
-      toast({
-        title: "No changes made.",
-        description: "You have not made any changes.",
-        variant: "default",
-        duration: 5000,
-      });
-      return;
+      return showDefaultToast(
+        "No changes made.",
+        "You have not made any changes."
+      );
     }
 
     let payload = {
@@ -87,21 +87,10 @@ const EditReminderForm = ({ entityId }: IEditReminderFormProps) => {
 
     startTransition(async () => {
       const result = await updateReminderAction(payload);
-      if (result.error) {
-        console.error(result.error);
-        toast({
-          title: "An error occurred while updating the reminder.",
-          description: result.error,
-          variant: "destructive",
-          duration: 5000,
-        });
+      if (result?.error) {
+        showErrorToast("An error occurred.", result.error);
       } else {
-        toast({
-          title: "Reminder updated.",
-          description: "Reminder updated successfully.",
-          variant: "default",
-          duration: 5000,
-        });
+        showSuccessToast("Reminder updated.", "Reminder updated successfully.");
         dispatch(fetchReminders());
         dispatch(closeGenericModal());
       }

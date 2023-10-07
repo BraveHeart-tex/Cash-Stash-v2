@@ -10,7 +10,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import ActionPopover from "@/components/ActionPopover";
-import { useToast } from "@/components/ui/use-toast";
+import {
+  showErrorToast,
+  showSuccessToast,
+  useToast,
+} from "@/components/ui/use-toast";
 import { showGenericConfirm } from "@/app/redux/features/genericConfirmSlice";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { deleteTransactionByIdAction } from "@/actions";
@@ -42,20 +46,13 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
     result: Awaited<ReturnType<typeof deleteTransactionByIdAction>>,
     cleanUp: ActionCreatorWithoutPayload<"genericConfirm/cleanUp">
   ) => {
-    if (result.error) {
-      toast({
-        title: "Error",
-        description: result.error,
-        variant: "destructive",
-        duration: 5000,
-      });
+    if (result?.error) {
+      showErrorToast("An error occurred.", result.error);
     } else {
-      toast({
-        title: "Success",
-        description: "Transaction deleted successfully.",
-        variant: "default",
-        duration: 5000,
-      });
+      showSuccessToast(
+        "Transaction deleted.",
+        "Selected transaction has been deleted."
+      );
       dispatch(fetchTransactions());
       dispatch(cleanUp());
     }
@@ -76,12 +73,10 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
           <ActionPopover
             popoverHeading={"Transaction Actions"}
             onEditActionClick={() => {
-              toast({
-                title: "Error",
-                description: "You cannot edit transactions at this time.",
-                variant: "destructive",
-                duration: 5000,
-              });
+              showErrorToast(
+                "Error",
+                "You cannot edit transactions at this time."
+              );
             }}
             onDeleteActionClick={() => {
               dispatch(

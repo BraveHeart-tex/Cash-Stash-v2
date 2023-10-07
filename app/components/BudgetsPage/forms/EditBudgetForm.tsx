@@ -9,7 +9,7 @@ import { getOptionLabel } from "@/lib/CreateUserAccountOptions";
 import { fetchBudgets } from "@/app/redux/features/budgetSlice";
 import FormLoadingSpinner from "../../FormLoadingSpinner";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
-import { useToast } from "@/components/ui/use-toast";
+import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import EditBudgetSchema, {
   EditBudgetSchemaType,
 } from "@/schemas/EditBudgetSchema";
@@ -26,7 +26,6 @@ interface IEditBudgetFormProps {
 const EditUserBudgetForm = ({ entityId }: IEditBudgetFormProps) => {
   let [isPending, startTransition] = useTransition();
   const dispatch = useAppDispatch();
-  const { toast } = useToast();
   const budgetOptions = Object.values(CreateBudgetOptions);
   const { currentBudget, isLoading: isCurrentBudgetLoading } = useAppSelector(
     (state) => state.currentBudgetReducer
@@ -43,7 +42,6 @@ const EditUserBudgetForm = ({ entityId }: IEditBudgetFormProps) => {
       category: "",
       spentAmount: 0,
     },
-    // @ts-ignore
     resolver: zodResolver(EditBudgetSchema),
   });
 
@@ -75,19 +73,10 @@ const EditUserBudgetForm = ({ entityId }: IEditBudgetFormProps) => {
     startTransition(async () => {
       const result = await updateBudgetByIdAction(payload);
       if (result.error) {
-        toast({
-          title: "An error occurred.",
-          description: result.error,
-          variant: "destructive",
-        });
+        showErrorToast("An error occurred.", result.error);
       } else {
         dispatch(fetchBudgets());
-        toast({
-          title: "Budget updated.",
-          description:
-            "Budget updated successfully. You can close this window now.",
-          variant: "default",
-        });
+        showSuccessToast("Budget updated", "Budget updated successfully.");
         dispatch(closeGenericModal());
       }
     });

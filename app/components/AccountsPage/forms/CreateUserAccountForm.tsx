@@ -4,7 +4,7 @@ import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { useAppDispatch } from "@/app/redux/hooks";
 import { fetchCurrentUserAccounts } from "@/app/redux/features/userAccountSlice";
-import { useToast } from "@/components/ui/use-toast";
+import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CreateUserAccountSchema, {
   CreateUserAccountSchemaType,
@@ -16,7 +16,6 @@ import { registerBankAccountAction } from "@/actions";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 
 const CreateUserAccountForm = () => {
-  const { toast } = useToast();
   const dispatch = useAppDispatch();
   let [isPending, startTransition] = useTransition();
   const accountOptions = Object.values(CreateUserAccountOptions);
@@ -40,21 +39,11 @@ const CreateUserAccountForm = () => {
     startTransition(async () => {
       const result = await registerBankAccountAction(data);
 
-      if (result.error) {
-        toast({
-          title: "Error creating account.",
-          description: "There was an error creating your account.",
-          variant: "destructive",
-          duration: 4000,
-        });
+      if (result?.error) {
+        showErrorToast("An error occurred.", result.error);
       } else {
         dispatch(fetchCurrentUserAccounts());
-        toast({
-          title: "Account created.",
-          description: "Your account has been created",
-          variant: "default",
-          duration: 4000,
-        });
+        showSuccessToast("Account created.", "Your account has been created.");
         dispatch(closeGenericModal());
       }
     });

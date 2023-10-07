@@ -6,7 +6,7 @@ import { fetchGoalById } from "@/app/redux/features/currentGoalSlice";
 import { fetchGoals } from "@/app/redux/features/goalSlice";
 import FormLoadingSpinner from "../../FormLoadingSpinner";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
-import { useToast } from "@/components/ui/use-toast";
+import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import EditGoalSchema, { EditGoalSchemaType } from "@/schemas/EditGoalSchema";
 import FormInput from "@/components/FormInput";
@@ -21,7 +21,6 @@ const EditUserGoalForm = ({ entityId }: IEditUserGoalFormProps) => {
   let [isPending, startTransition] = useTransition();
   const { currentGoal } = useAppSelector((state) => state.currentGoalReducer);
   const dispatch = useAppDispatch();
-  const { toast } = useToast();
 
   const {
     register,
@@ -60,22 +59,11 @@ const EditUserGoalForm = ({ entityId }: IEditUserGoalFormProps) => {
 
     startTransition(async () => {
       const result = await updateGoalByIdAction(payload);
-      if (result.error) {
-        toast({
-          title: "An error occurred.",
-          description: `Unable to update the selected goal.`,
-          variant: "destructive",
-          duration: 4000,
-        });
+      if (result?.error) {
+        showErrorToast("An error occurred.", result.error);
       } else {
         dispatch(fetchGoals());
-        toast({
-          title: "Goal updated.",
-          description:
-            "Your goal has been updated. You can close this window now.",
-          variant: "default",
-          duration: 4000,
-        });
+        showSuccessToast("Goal updated.", "Your goal has been updated.");
         dispatch(closeGenericModal());
       }
     });

@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useAppDispatch } from "@/app/redux/hooks";
 import { fetchBudgets } from "@/app/redux/features/budgetSlice";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
-import { useToast } from "@/components/ui/use-toast";
+import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import FormInput from "@/components/FormInput";
 import FormSelect from "@/components/FormSelect";
 import { Button } from "@/components/ui/button";
@@ -17,7 +17,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 const CreateBudgetForm = () => {
   let [isPending, startTransition] = useTransition();
-  const { toast } = useToast();
   const budgetOptions = Object.values(CreateBudgetOptions);
   const dispatch = useAppDispatch();
 
@@ -39,25 +38,18 @@ const CreateBudgetForm = () => {
   const onSubmit = async (data: CreateBudgetSchemaType) => {
     startTransition(async () => {
       const result = await createBudgetAction(data);
-      if (result.error) {
-        toast({
-          title: "An error occurred.",
-          description: result.error,
-          variant: "destructive",
-          duration: 4000,
-        });
+      if (result?.error) {
+        showErrorToast("An error occurred.", result.error);
       } else {
         dispatch(fetchBudgets());
         const category =
           result.budget && result.budget.category
             ? CreateBudgetOptions[result.budget.category]
             : "";
-        toast({
-          title: "Budget created.",
-          description: `Budget for ${category} has been created. You can close this window now.`,
-          variant: "default",
-          duration: 4000,
-        });
+        showSuccessToast(
+          "Budget created.",
+          `Budget for ${category} has been created.`
+        );
         dispatch(closeGenericModal());
       }
     });

@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/card";
 import { showGenericConfirm } from "@/app/redux/features/genericConfirmSlice";
 import { deleteAccountByIdAction } from "@/actions";
-import { useToast } from "@/components/ui/use-toast";
+import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 import ActionPopover from "@/components/ActionPopover";
 import { openGenericModal } from "@/app/redux/features/genericModalSlice";
@@ -26,28 +26,19 @@ interface IAccountInformationProps {
 
 const AccountInformation = ({ userAccounts }: IAccountInformationProps) => {
   const dispatch = useAppDispatch();
-  const { toast } = useToast();
 
   const handleActionCallback = (
     result: Awaited<ReturnType<typeof deleteAccountByIdAction>>,
     cleanUp: ActionCreatorWithoutPayload<"genericConfirm/cleanUp">
   ) => {
-    if (result.error) {
-      console.log(result.error);
-      toast({
-        title: "An error occurred.",
-        description: result.error,
-        variant: "destructive",
-        duration: 5000,
-      });
+    if (result?.error) {
+      showErrorToast("An error occurred.", result.error);
     } else {
       dispatch(fetchCurrentUserAccounts());
-      toast({
-        title: "Account deleted.",
-        description: "The account has been deleted.",
-        variant: "default",
-        duration: 5000,
-      });
+      showSuccessToast(
+        "Account deleted.",
+        "Selected account has been deleted."
+      );
       dispatch(cleanUp());
     }
   };

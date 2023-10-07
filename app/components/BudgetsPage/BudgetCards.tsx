@@ -10,7 +10,7 @@ import { Progress } from "@/components/ui/progress";
 import ActionPopover from "@/components/ActionPopover";
 import { showGenericConfirm } from "@/app/redux/features/genericConfirmSlice";
 import { deleteBudgetByIdAction } from "@/actions";
-import { useToast } from "@/components/ui/use-toast";
+import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 import { openGenericModal } from "@/app/redux/features/genericModalSlice";
 
@@ -20,28 +20,17 @@ interface IBudgetCardsProps {
 
 const BudgetCards = ({ budgets }: IBudgetCardsProps) => {
   const dispatch = useAppDispatch();
-  const { toast } = useToast();
 
   const handleActionCallback = (
     result: Awaited<ReturnType<typeof deleteBudgetByIdAction>>,
     cleanUp: ActionCreatorWithoutPayload<"genericConfirm/cleanUp">
   ) => {
-    if (result.error) {
-      toast({
-        title: "An error occurred.",
-        description: result.error,
-        variant: "destructive",
-        duration: 5000,
-      });
+    if (result?.error) {
+      showErrorToast("An error occurred.", result.error);
     } else {
+      showSuccessToast("Budget deleted.", "Selected budget has been deleted.");
       dispatch(cleanUp());
       dispatch(fetchBudgets());
-      toast({
-        title: "Budget deleted.",
-        description: "The budget has been deleted.",
-        variant: "default",
-        duration: 5000,
-      });
     }
   };
 

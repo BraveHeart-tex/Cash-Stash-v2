@@ -16,13 +16,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import errorMap from "@/lib/utils";
 import { useTransition } from "react";
 import { registerAction } from "@/actions";
-import { useToast } from "@/components/ui/use-toast";
+import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import RegisterSchema, { RegisterSchemaType } from "@/schemas/RegisterSchema";
 
 const SignUpForm = () => {
-  const { toast } = useToast();
   let [isPending, startTransition] = useTransition();
 
   const router = useRouter();
@@ -41,20 +40,10 @@ const SignUpForm = () => {
   const handleRegisterFormSubmit = (data: RegisterSchemaType) => {
     startTransition(async () => {
       const result = await registerAction(data);
-      if (result.error) {
-        toast({
-          title: "Error",
-          description: result.error,
-          variant: "destructive",
-          duration: 5000,
-        });
+      if (result?.error) {
+        showErrorToast("An error occurred.", result.error);
       } else {
-        toast({
-          title: "Successfully signed up.",
-          description: "We have created your account for you.",
-          variant: "default",
-          duration: 5000,
-        });
+        showSuccessToast("Signed up.", "You have been signed up.");
         router.push("/");
       }
     });

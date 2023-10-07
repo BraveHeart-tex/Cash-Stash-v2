@@ -12,7 +12,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import CreateTransactionSchema, {
   CreateTransactionSchemaType,
 } from "@/schemas/CreateTransactionSchema";
-import { useToast } from "@/components/ui/use-toast";
+import {
+  showErrorToast,
+  showSuccessToast,
+  useToast,
+} from "@/components/ui/use-toast";
 import FormInput from "@/components/FormInput";
 import FormSelect, { SelectOption } from "@/components/FormSelect";
 import { Button } from "@/components/ui/button";
@@ -54,22 +58,13 @@ const CreateTransactionForm = () => {
   const onSubmit = async (data: CreateTransactionSchemaType) => {
     startTransition(async () => {
       const result = await createTransactionAction(data);
-      if (result.error) {
-        toast({
-          title: "An error occurred.",
-          description: `Unable to create transaction. ${result.error}`,
-          variant: "destructive",
-          duration: 5000,
-        });
+      if (result?.error) {
+        showErrorToast("An error occurred.", result.error);
       } else {
-        toast({
-          title: "Transaction created.",
-          description: `Transaction for ${
-            result!.transaction!.amount
-          }₺ created.`,
-          variant: "default",
-          duration: 5000,
-        });
+        showSuccessToast(
+          "Transaction created.",
+          `Transaction for ${result!.transaction!.amount}₺ created.`
+        );
         dispatch(fetchTransactions());
         dispatch(closeGenericModal());
       }

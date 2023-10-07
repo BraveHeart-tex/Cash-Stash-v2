@@ -10,7 +10,12 @@ import { fetchCurrentAccount } from "@/app/redux/features/currentAccountSlice";
 import { fetchCurrentUserAccounts } from "@/app/redux/features/userAccountSlice";
 import FormInput from "@/components/FormInput";
 import FormSelect from "@/components/FormSelect";
-import { useToast } from "@/components/ui/use-toast";
+import {
+  showDefaultToast,
+  showErrorToast,
+  showSuccessToast,
+  useToast,
+} from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateAccountByIdAction } from "@/actions";
@@ -79,13 +84,10 @@ const EditUserAccountForm = ({ entityId }: IEditUserAccountFormProps) => {
 
   const onSubmit = async (data: CreateUserAccountSchemaType) => {
     if (hasMadeNoChanges()) {
-      toast({
-        title: "No changes made.",
-        description: "You have not made any changes.",
-        variant: "default",
-        duration: 5000,
-      });
-      return;
+      return showDefaultToast(
+        "No changes made.",
+        "You haven't made any changes."
+      );
     }
 
     startTransition(async () => {
@@ -94,21 +96,11 @@ const EditUserAccountForm = ({ entityId }: IEditUserAccountFormProps) => {
         ...data,
       });
 
-      if (result.error) {
-        toast({
-          title: "There was an error while updating your account.",
-          description: result.error,
-          variant: "destructive",
-          duration: 5000,
-        });
+      if (result?.error) {
+        showErrorToast("An error occurred.", result.error);
       } else {
         dispatch(fetchCurrentUserAccounts());
-        toast({
-          title: "Account updated.",
-          description: "Account has been updated successfully.",
-          variant: "default",
-          duration: 5000,
-        });
+        showSuccessToast("Account updated.", "Your account has been updated.");
         dispatch(closeGenericModal());
       }
     });

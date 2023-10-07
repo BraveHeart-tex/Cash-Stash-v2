@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useAppDispatch } from "@/app/redux/hooks";
 import { fetchGoals } from "@/app/redux/features/goalSlice";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
-import { useToast } from "@/components/ui/use-toast";
+import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CreateGoalSchema, {
   CreateGoalSchemaType,
@@ -17,7 +17,6 @@ import { createGoalAction } from "@/actions";
 const CreateUserGoalForm = () => {
   let [isPending, startTransition] = useTransition();
   const dispatch = useAppDispatch();
-  const { toast } = useToast();
 
   const {
     register,
@@ -36,22 +35,11 @@ const CreateUserGoalForm = () => {
   const onSubmit = async (data: CreateGoalSchemaType) => {
     startTransition(async () => {
       const result = await createGoalAction(data);
-      if (result.error) {
-        toast({
-          title: "An error occurred.",
-          description: result.error,
-          variant: "destructive",
-          duration: 4000,
-        });
+      if (result?.error) {
+        showErrorToast("An error occurred.", result.error);
       } else {
         dispatch(fetchGoals());
-        toast({
-          title: "Goal created.",
-          description:
-            "Your goal has been created. You can close this window now.",
-          variant: "default",
-          duration: 4000,
-        });
+        showSuccessToast("Goal created.", "Your goal has been created.");
         dispatch(closeGenericModal());
       }
     });

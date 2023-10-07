@@ -8,7 +8,7 @@ import FormCheckbox from "@/components/FormCheckbox";
 import FormInput from "@/components/FormInput";
 import FormSelect from "@/components/FormSelect";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
+import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import CreateReminderSchema, {
   CreateReminderSchemaType,
 } from "@/schemas/CreateReminderSchema";
@@ -19,7 +19,6 @@ import { useForm } from "react-hook-form";
 const CreateReminderForm = () => {
   let [isPending, startTransition] = useTransition();
   const dispatch = useAppDispatch();
-  const { toast } = useToast();
 
   const {
     register,
@@ -35,29 +34,20 @@ const CreateReminderForm = () => {
       isIncome: "income",
       isRead: "isNotRead",
     },
-    // @ts-ignore
     resolver: zodResolver(CreateReminderSchema),
   });
 
   const onSubmit = async (data: CreateReminderSchemaType) => {
     startTransition(async () => {
       const result = await createReminderAction(data);
-      if (result.error) {
-        toast({
-          title: "There was an error trying to create a reminder.",
-          description: result.error,
-          variant: "destructive",
-          duration: 4000,
-        });
-        return;
+      if (result?.error) {
+        return showErrorToast("An error occurred.", result.error);
       } else {
         dispatch(fetchReminders());
-        toast({
-          title: "Successfully created a reminder.",
-          description: `You have created a reminder successfully`,
-          variant: "default",
-          duration: 4000,
-        });
+        showSuccessToast(
+          "Reminder created.",
+          "Your reminder has been created."
+        );
         dispatch(closeGenericModal());
       }
     });

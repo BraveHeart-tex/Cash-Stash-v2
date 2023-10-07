@@ -18,12 +18,11 @@ import { LoginSchemaType } from "@/schemas/LoginSchema";
 import errorMap from "@/lib/utils";
 import { useTransition } from "react";
 import { loginAction } from "@/actions";
-import { useToast } from "@/components/ui/use-toast";
+import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 const LoginForm = () => {
-  const { toast } = useToast();
   let [isPending, startTransition] = useTransition();
   const router = useRouter();
 
@@ -41,15 +40,11 @@ const LoginForm = () => {
   const handleLoginFormSubmit = (data: LoginSchemaType) => {
     startTransition(async () => {
       const result = await loginAction(data);
-      if (result.error) {
-        toast({
-          title: "Error",
-          description: result.error,
-          variant: "destructive",
-          duration: 5000,
-        });
+      if (result?.error) {
+        showErrorToast("An error occurred.", result.error);
       } else {
         router.push("/");
+        showSuccessToast("Logged in.", "You have been logged in.");
       }
     });
   };
