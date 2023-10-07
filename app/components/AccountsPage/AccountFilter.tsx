@@ -29,14 +29,16 @@ const AccountsFilter = () => {
 
   const [selectedAccountType, setSelectedAccountType] = useState("");
 
-  if (isLoading && !accounts) {
+  if (isLoading && !accounts?.length) {
     return <Skeleton className="w-full h-20" />;
   }
 
-  if (!isLoading && !accounts) {
+  if (!isLoading && !accounts?.length) {
     return (
       <div className="text-center">
-        <h3 className="text-3xl">You don&apos;t have any accounts yet.</h3>
+        <h3 className="inline-block text-3xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
+          You don&apos;t have any accounts yet.
+        </h3>
         <p className="mt-3">
           Create one by clicking the Create Account button.
         </p>

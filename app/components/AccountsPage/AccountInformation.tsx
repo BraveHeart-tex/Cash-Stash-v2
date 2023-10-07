@@ -113,8 +113,8 @@ const AccountInformation = ({ userAccounts }: IAccountInformationProps) => {
           <div className="my-4">
             <h3 className="text-lg text-primary">No accounts found</h3>
             <p>
-              You can remove the filter to see all accounts or create a new one
-              with this category.
+              You can remove existing filters to see all accounts or create a
+              new one with this category.
             </p>
           </div>
         )}
