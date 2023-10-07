@@ -1,6 +1,10 @@
-import { Reminder } from '@prisma/client';
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import {
+  getReminderByIdAction,
+  getRemindersByCurrentUserAction,
+} from "@/actions";
+import { Reminder } from "@prisma/client";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 
 interface RemindersState {
   reminders: Reminder[] | null;
@@ -25,23 +29,27 @@ const initialState: RemindersState = {
 };
 
 export const fetchReminders = createAsyncThunk(
-  'reminders/fetchReminders',
+  "reminders/fetchReminders",
   async () => {
-    const response = await axios.get('/api/user/reminders');
-    return response.data.reminders;
+    const result = await getRemindersByCurrentUserAction();
+    if (result?.error) return null;
+
+    return result.reminders;
   }
 );
 
 export const fetchReminderById = createAsyncThunk(
-  'reminders/fetchReminderById',
+  "reminders/fetchReminderById",
   async (reminderId: number) => {
-    const response = await axios.get(`/api/user/reminders/${reminderId}`);
-    return response.data.reminder;
+    const result = await getReminderByIdAction(reminderId);
+    if (result?.error) return null;
+
+    return result.reminder;
   }
 );
 
 const remindersSlice = createSlice({
-  name: 'remindersSlice',
+  name: "remindersSlice",
   initialState,
   reducers: {
     setIsCreateReminderModalOpen: (state, action) => {
@@ -63,6 +71,11 @@ const remindersSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(fetchReminders.fulfilled, (state, action) => {
+        if (!action.payload) {
+          state.reminders = [];
+          return;
+        }
+
         state.reminders = action.payload;
         state.isLoading = false;
       })
@@ -73,6 +86,10 @@ const remindersSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(fetchReminderById.fulfilled, (state, action) => {
+        if (!action.payload) {
+          state.currentReminder = null;
+          return;
+        }
         state.currentReminder = action.payload;
         state.isLoading = false;
       })

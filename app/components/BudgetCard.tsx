@@ -9,6 +9,7 @@ import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { openGenericModal } from "../redux/features/genericModalSlice";
 import { showGenericConfirm } from "../redux/features/genericConfirmSlice";
 import { cn } from "@/lib/utils";
+import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
 
 interface IBudgetCardProps {
   budget: SerializedBudget;
@@ -35,7 +36,9 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
       key={budget.id}
       className="flex flex-col gap-2 p-4 pt-6 border-1 shadow-xl rounded-md relative bg-card border cursor-pointer"
     >
-      <span className="font-semibold">{budget.category}</span>
+      <span className="font-semibold dark:text-white/60 text-foreground text-lg">
+        {CreateBudgetOptions[budget.category]}
+      </span>
       <div className="absolute top-3 right-1 mb-2">
         <div className="flex items-center gap-1">
           <ActionPopover
@@ -90,7 +93,7 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
         )}
       />
       <div className="w-full flex flex-col lg:flex-row lg:items-center justify-between mt-2">
-        <span>
+        <span className="dark:text-white/60 text-foreground">
           Budget: ${budget.budgetAmount} / Spent: ${budget.spentAmount}
         </span>
       </div>

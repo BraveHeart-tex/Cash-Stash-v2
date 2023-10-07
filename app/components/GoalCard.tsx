@@ -46,7 +46,9 @@ const GoalCard = ({ goal }: IGoalCardProps) => {
       className="flex flex-col gap-2 p-4 pt-6 border-1 shadow-xl rounded-md relative bg-card border cursor-pointer"
       key={goal.name}
     >
-      <p className="font-semibold">{goal.name}</p>
+      <p className="font-semibold dark:text-white/60 text-foreground">
+        {goal.name}
+      </p>
       <div className="absolute top-3 right-1 mb-2">
         <div className="flex items-center">
           <ActionPopover
@@ -87,7 +89,7 @@ const GoalCard = ({ goal }: IGoalCardProps) => {
               : "bg-red-300"
           }
         />
-        <p className="mt-4 text-md">
+        <p className="mt-4 text-md dark:text-white/60 text-foreground">
           Current: {goal.currentAmount}₺ / Target: {goal.goalAmount}₺
         </p>
       </div>

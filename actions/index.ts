@@ -899,7 +899,7 @@ export const createTransactionAction = async ({
 
   if (!usersAccount) {
     return {
-      message: "Bank account not found",
+      error: "Bank account not found",
     };
   }
 
@@ -907,7 +907,7 @@ export const createTransactionAction = async ({
 
   if (!isIncome && usersBalance < amount) {
     return {
-      message: "Insufficient balance",
+      error: "Insufficient balance",
     };
   }
 
@@ -940,7 +940,7 @@ export const createTransactionAction = async ({
 
   if (!transaction) {
     return {
-      message: "Error creating transaction",
+      error: "Error creating transaction",
     };
   }
 
@@ -955,7 +955,7 @@ export const createTransactionAction = async ({
 
   if (!updatedAccount) {
     return {
-      message: "Failed to update balance",
+      error: "Failed to update balance",
     };
   }
 
@@ -1145,5 +1145,56 @@ export const getGoalByIdAction = async (goalId: number) => {
 
   return {
     goal,
+  };
+};
+
+export const getReminderByIdAction = async (reminderId: number) => {
+  if (!reminderId) {
+    return {
+      error: "Reminder ID not found.",
+    };
+  }
+
+  const reminder = await db.reminder.findUnique({
+    where: {
+      id: reminderId,
+    },
+  });
+
+  if (!reminder) {
+    return {
+      error: "No reminder with the given reminder id was found.",
+    };
+  }
+
+  return {
+    reminder,
+  };
+};
+
+export const getRemindersByCurrentUserAction = async () => {
+  const currentUser = await getCurrentUser(cookies().get("token")?.value!);
+
+  if (!currentUser) {
+    return {
+      error: "No user found.",
+    };
+  }
+
+  const reminders = await db.reminder.findMany({
+    where: {
+      userId: currentUser.id,
+      isRead: false,
+    },
+  });
+
+  if (!reminders) {
+    return {
+      error: "No reminders found.",
+    };
+  }
+
+  return {
+    reminders,
   };
 };

@@ -6,7 +6,7 @@ const NavigationTabs = async () => {
   const { data: dashboardData } = await getChartDataAction();
 
   return (
-    <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
+    <div className="p-1 lg:p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
       <NavigationTabsList
         dashboardData={dashboardData as MonthlyData["monthlyTransactionsData"]}
       />

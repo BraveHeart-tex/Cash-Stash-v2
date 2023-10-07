@@ -74,7 +74,7 @@ const Dashboard = ({ monthlyTransactionsData }: IDashboardProps) => {
       description:
         "Get a comparison of your expenses vs income and other financial insights here.",
       data: (
-        <div className="p-2 max-h-[500px] min-h-[500px] overflow-y-scroll scrollbar-hide flex items-center justify-center">
+        <div className="p-2 max-h-[500px] min-h-[500px] overflow-y-scroll scrollbar-hide flex flex-col gap-4 items-center justify-center">
           <BarChartComponent
             monthlyTransactionsData={monthlyTransactionsData}
           />
@@ -90,7 +90,7 @@ const Dashboard = ({ monthlyTransactionsData }: IDashboardProps) => {
   ];
 
   return (
-    <div className="p-1 pt-0 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
+    <div className="p-0 lg:p-1 lg.pt-0 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mt-8">
         {sectionData.map((section) => (
           <Card key={section.title}>

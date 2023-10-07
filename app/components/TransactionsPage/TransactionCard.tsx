@@ -10,15 +10,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import ActionPopover from "@/components/ActionPopover";
-import {
-  showErrorToast,
-  showSuccessToast,
-  useToast,
-} from "@/components/ui/use-toast";
+import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { showGenericConfirm } from "@/app/redux/features/genericConfirmSlice";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { deleteTransactionByIdAction } from "@/actions";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
+
 interface ITransactionCardProps {
   transaction: SerializedTransaction;
 }
@@ -27,7 +24,6 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
   const { currentUserAccounts, isLoading } = useAppSelector(
     (state) => state.userAccountReducer
   );
-  const { toast } = useToast();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -59,14 +55,18 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
   };
 
   return (
-    <Card className={"mt-4"}>
+    <Card className={"mt-4 cursor-pointer"}>
       <CardHeader className={"flex items-center flex-row justify-between pt-1"}>
         <CardTitle>
           {transaction.description || "No description provided."}
         </CardTitle>
         <div className={"flex flex-row items-center gap-1"}>
           <Badge
-            className={cn(transaction.isIncome ? "bg-green-500" : "bg-red-500")}
+            className={cn(
+              transaction.isIncome
+                ? "bg-success dark:bg-green-700"
+                : "bg-destructive"
+            )}
           >
             {transaction.isIncome ? "Income" : "Expense"}
           </Badge>
@@ -98,7 +98,7 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
       <CardContent>
         <div className="grid grid-cols-1 gap-1">
           <div className={"flex items-center gap-1"}>
-            <p className={"font-semibold"}>Transaction Date: </p>
+            <p className={"font-semibold"}>Date: </p>
             <p>{transaction.createdAt}</p>
           </div>
           <div className={"flex items-center gap-1"}>

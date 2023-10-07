@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { fetchTransactions } from "@/app/redux/features/transactionsSlice";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import TransactionCard from "./TransactionCard";
-import { Skeleton } from "@/components/ui/skeleton";
 
 const TransactionList = () => {
   const { data, filteredData, isLoading } = useAppSelector(
