@@ -16,15 +16,15 @@ const GoalsPageClient = () => {
   }, [dispatch]);
 
   const renderNoGoalsState = () => (
-    <div className="flex justify-center items-center flex-col gap-4">
-      <h3 className="inline-block text-3xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
+    <div className="flex justify-center items-start lg:items-center flex-col gap-4">
+      <h3 className="inline-block text-lg lg:text-3xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
         No goals were found.
       </h3>
       <p>Add a goal to get started!</p>
     </div>
   );
 
-  const renderLoadingState = () => <Skeleton className="h-[200px] w-full" />;
+  const renderLoadingState = () => <Skeleton className="h-20 w-full" />;
 
   const renderGoals = () => (
     <div className="w-full">
@@ -36,8 +36,8 @@ const GoalsPageClient = () => {
 
   return (
     <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
-      <h2 className="text-4xl mb-4 text-primary">Goals</h2>
-      <div className="flex justify-center items-center flex-col gap-2">
+      <h2 className="text-4xl lg:mb-4 text-primary">Goals</h2>
+      <div className="flex justify-center lg:items-center flex-col gap-2">
         {isLoading ? renderLoadingState() : renderGoals()}
         {!isLoading && goals?.length === 0 ? renderNoGoalsState() : null}
         <Button

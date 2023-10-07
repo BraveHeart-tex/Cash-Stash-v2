@@ -35,8 +35,8 @@ const AccountsFilter = () => {
 
   if (!isLoading && !accounts?.length) {
     return (
-      <div className="text-center">
-        <h3 className="inline-block text-3xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
+      <div className="lg:text-center">
+        <h3 className="inline-block text-lg lg:text-3xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
           You don&apos;t have any accounts yet.
         </h3>
         <p className="mt-3">

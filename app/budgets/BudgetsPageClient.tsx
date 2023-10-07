@@ -8,11 +8,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect } from "react";
 
 const BudgetsNotFoundMessage = () => (
-  <div className="flex flex-col items-center justify-center gap-4">
-    <h2 className="inline-block text-3xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
+  <div className="flex flex-col items-start lg:items-center justify-center gap-4">
+    <h2 className="inline-block text-lg lg:text-3xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
       No budgets were found.
     </h2>
-    <p>Add a budget to get started!</p>
+    <p className="text-sm lg:text-lg">Add a budget to get started!</p>
   </div>
 );
 
