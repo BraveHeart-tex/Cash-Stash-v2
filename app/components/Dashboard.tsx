@@ -5,7 +5,7 @@ import {
   fetchTransactions,
 } from "@/app/redux/features/transactionsSlice";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
-import { useEffect, useTransition } from "react";
+import { useEffect } from "react";
 import AccountSummaries from "./AccountSummaries";
 import BudgetStatus from "./BudgetStatus";
 import FinancialInsights from "./FinancialInsights";
@@ -15,14 +15,12 @@ import TransactionHistory from "./TransactionHistory";
 import BarChartComponent from "@/components/charts/BarChartComponent";
 import { MonthlyData } from "./ReportsPage/ReportTable";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { getGeneric } from "@/actions/generic";
 
 interface IDashboardProps {
   monthlyTransactionsData: MonthlyData["monthlyTransactionsData"];
 }
 
 const Dashboard = ({ monthlyTransactionsData }: IDashboardProps) => {
-  let [isPending, startTransition] = useTransition();
   const dispatch = useAppDispatch();
   const { data: transactions, insightsData } = useAppSelector(
     (state) => state.transactionsReducer
@@ -32,10 +30,6 @@ const Dashboard = ({ monthlyTransactionsData }: IDashboardProps) => {
     dispatch(fetchTransactions());
     dispatch(fetchMonthlyTransactionsData());
     dispatch(fetchInsightsData());
-
-    startTransition(async () => {
-      const result = await getGeneric({ tableName: "budget" });
-    });
   }, [dispatch]);
 
   const sectionData = [

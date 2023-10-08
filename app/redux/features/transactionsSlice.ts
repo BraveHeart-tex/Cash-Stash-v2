@@ -4,9 +4,9 @@ import {
   fetchInsightsDataAction,
   fetchMonthlyTransactionsDataAction,
   getChartDataAction,
-  getTransactionsByCurrentUserAction,
 } from "@/actions";
 import { MonthlyData } from "@/app/components/ReportsPage/ReportTable";
+import { getGenericListByCurrentUser } from "@/actions/generic";
 
 export type SerializedTransaction = Omit<
   Transaction,
@@ -43,9 +43,6 @@ interface TransactionState {
     type: "income" | "expense" | "";
     accountId: string;
   };
-  createModalOpen: boolean;
-  deleteModalOpen: boolean;
-  transactionId: number;
   sort: {
     sortBy: string;
     sortDirection: "asc" | "desc";
@@ -63,9 +60,6 @@ const initialState: TransactionState = {
     type: "",
     accountId: "",
   },
-  createModalOpen: false,
-  deleteModalOpen: false,
-  transactionId: 0,
   sort: {
     sortBy: "date",
     sortDirection: "asc",
@@ -81,10 +75,15 @@ const initialState: TransactionState = {
 export const fetchTransactions = createAsyncThunk(
   "transactions/fetchTransactions",
   async () => {
-    const { transactions } = await getTransactionsByCurrentUserAction();
-    if (!transactions) {
-      return undefined;
+    const result = await getGenericListByCurrentUser<Transaction>({
+      tableName: "transaction",
+    });
+
+    if (result?.error || !result || !result.data) {
+      return null;
     }
+
+    const transactions = result.data;
 
     return transactions.map((data) => ({
       ...data,
@@ -125,8 +124,6 @@ export const fetchInsightsData = createAsyncThunk(
     const { totalIncome, totalExpense, netIncome, savingsRate } =
       await fetchInsightsDataAction();
 
-    console.log(totalIncome, totalExpense, netIncome, savingsRate);
-
     if (!totalIncome || !totalExpense || !netIncome || !savingsRate) {
       return {
         totalIncome: 0,
@@ -160,13 +157,6 @@ const transactionsSlice = createSlice({
     },
     setSortDirection: (state, action) => {
       state.sort.sortDirection = action.payload;
-    },
-    setCreateModalOpen: (state, action) => {
-      state.createModalOpen = action.payload;
-    },
-    setDeleteModalOpen: (state, action) => {
-      state.deleteModalOpen = action.payload.isDeleteModalOpen;
-      state.transactionId = action.payload.transactionId;
     },
     updateFilteredData: (state) => {
       const { type, accountId } = state.filter;
@@ -291,8 +281,6 @@ export const {
   updateFilteredData,
   setSortBy,
   setSortDirection,
-  setCreateModalOpen,
-  setDeleteModalOpen,
 } = transactionsSlice.actions;
 
 export default transactionsSlice.reducer;

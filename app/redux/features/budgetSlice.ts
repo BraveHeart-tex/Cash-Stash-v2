@@ -1,6 +1,6 @@
-import { getBudgetsByCurrentUserAction } from "@/actions/index";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { Budget } from "@prisma/client";
+import { getGenericListByCurrentUser } from "@/actions/generic";
 
 export type SerializedBudget = Omit<Budget, "createdAt" | "updatedAt"> & {
   createdAt: string;
@@ -10,28 +10,26 @@ export type SerializedBudget = Omit<Budget, "createdAt" | "updatedAt"> & {
 interface BudgetsState {
   budgets: SerializedBudget[] | null;
   isLoading: boolean;
-  isCreateBudgetModalOpen: boolean;
-  isDeleteBudgetModalOpen: boolean;
-  isEditBudgetModalOpen: boolean;
-  selectedBudgetId: number;
 }
 
 const initialState: BudgetsState = {
   budgets: null,
   isLoading: false,
-  isCreateBudgetModalOpen: false,
-  isDeleteBudgetModalOpen: false,
-  isEditBudgetModalOpen: false,
-  selectedBudgetId: 0,
 };
 
 export const fetchBudgets = createAsyncThunk(
   "budgets/fetchBudgets",
   async () => {
-    const { budgets } = await getBudgetsByCurrentUserAction();
-    if (!budgets) {
-      return undefined;
+    const result = await getGenericListByCurrentUser<Budget>({
+      tableName: "budget",
+    });
+
+    if (result?.error || !result || !result.data) {
+      return null;
     }
+
+    const budgets = result.data;
+
     const mappedBudgets = budgets.map((data) => ({
       ...data,
       createdAt: new Date(data.createdAt).toLocaleDateString(),
@@ -45,19 +43,7 @@ export const fetchBudgets = createAsyncThunk(
 const budgetSlice = createSlice({
   name: "budgets",
   initialState,
-  reducers: {
-    setCreateBudgetModalOpen: (state, action) => {
-      state.isCreateBudgetModalOpen = action.payload;
-    },
-    setDeleteBudgetModalOpen: (state, action) => {
-      state.isDeleteBudgetModalOpen = action.payload.isDeleteBudgetModalOpen;
-      state.selectedBudgetId = action.payload.selectedBudgetId;
-    },
-    setEditBudgetModalOpen: (state, action) => {
-      state.isEditBudgetModalOpen = action.payload.isEditBudgetModalOpen;
-      state.selectedBudgetId = action.payload.selectedBudgetId;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchBudgets.pending, (state) => {
@@ -78,9 +64,4 @@ const budgetSlice = createSlice({
   },
 });
 
-export const {
-  setCreateBudgetModalOpen,
-  setDeleteBudgetModalOpen,
-  setEditBudgetModalOpen,
-} = budgetSlice.actions;
 export default budgetSlice.reducer;

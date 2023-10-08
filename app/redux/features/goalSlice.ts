@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { Goal } from "@prisma/client";
-import { getGoalsByCurrentUserAction } from "@/actions";
+import { getGenericListByCurrentUser } from "@/actions/generic";
 
 export type SerializedGoal = Omit<Goal, "createdAt" | "updatedAt"> & {
   createdAt: string;
@@ -10,26 +10,24 @@ export type SerializedGoal = Omit<Goal, "createdAt" | "updatedAt"> & {
 interface GoalsState {
   goals: SerializedGoal[] | null;
   isLoading: boolean;
-  isEditGoalModalOpen: boolean;
-  isCreateGoalModalOpen: boolean;
-  isDeleteGoalModalOpen: boolean;
-  selectedGoalId: number;
 }
 
 const initialState: GoalsState = {
   goals: null,
   isLoading: false,
-  isEditGoalModalOpen: false,
-  isCreateGoalModalOpen: false,
-  isDeleteGoalModalOpen: false,
-  selectedGoalId: 0,
 };
 
 export const fetchGoals = createAsyncThunk("goals/fetchGoals", async () => {
-  const { goals } = await getGoalsByCurrentUserAction();
-  if (!goals) {
-    return undefined;
+  const result = await getGenericListByCurrentUser<Goal>({
+    tableName: "goal",
+  });
+
+  if (result?.error || !result || !result.data) {
+    return null;
   }
+
+  const goals = result.data;
+
   const mappedGoals = goals.map((data) => ({
     ...data,
     createdAt: new Date(data.createdAt).toLocaleDateString(),
@@ -42,19 +40,7 @@ export const fetchGoals = createAsyncThunk("goals/fetchGoals", async () => {
 const goalsSlice = createSlice({
   name: "goals",
   initialState,
-  reducers: {
-    setEditGoalModalOpen: (state, action) => {
-      state.isEditGoalModalOpen = action.payload.isEditGoalModalOpen;
-      state.selectedGoalId = action.payload.selectedGoalId;
-    },
-    setCreateGoalModalOpen: (state, action) => {
-      state.isCreateGoalModalOpen = action.payload;
-    },
-    setDeleteGoalModalOpen: (state, action) => {
-      state.isDeleteGoalModalOpen = action.payload.isDeleteGoalModalOpen;
-      state.selectedGoalId = action.payload.selectedGoalId;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchGoals.pending, (state) => {
@@ -74,9 +60,4 @@ const goalsSlice = createSlice({
   },
 });
 
-export const {
-  setEditGoalModalOpen,
-  setCreateGoalModalOpen,
-  setDeleteGoalModalOpen,
-} = goalsSlice.actions;
 export default goalsSlice.reducer;

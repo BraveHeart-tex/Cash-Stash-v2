@@ -19,6 +19,7 @@
         "name": "next"
       }
     ],
+    "types": ["jest", "@quramy/jest-prisma-node"],
     "paths": {
       "@/*": ["./*"]
     }

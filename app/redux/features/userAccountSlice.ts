@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { UserAccount } from "@prisma/client";
-import { getAccountsByCurrentUserAction } from "@/actions";
+import { getGenericListByCurrentUser } from "@/actions/generic";
 
 export type SerializedUserAccount = Omit<
   UserAccount,
@@ -12,29 +12,25 @@ export type SerializedUserAccount = Omit<
 interface UserAccountsState {
   currentUserAccounts: SerializedUserAccount[] | null;
   isLoading: boolean;
-  isCreateAccountModalOpen: boolean;
-  isEditAccountModalOpen: boolean;
-  isDeleteAccountModalOpen: boolean;
-  selectedUserAccountId: number;
 }
 
 const initialState: UserAccountsState = {
   currentUserAccounts: null,
   isLoading: false,
-  isCreateAccountModalOpen: false,
-  isEditAccountModalOpen: false,
-  isDeleteAccountModalOpen: false,
-  selectedUserAccountId: 0,
 };
 
 export const fetchCurrentUserAccounts = createAsyncThunk(
   "accounts/fetchCurrentUserAccounts",
   async () => {
-    const { accounts } = await getAccountsByCurrentUserAction();
+    const result = await getGenericListByCurrentUser<UserAccount>({
+      tableName: "userAccount",
+    });
 
-    if (!accounts) {
-      return undefined;
+    if (result?.error || !result || !result.data) {
+      return null;
     }
+
+    const accounts = result.data;
 
     const mappedAccounts = accounts.map((data) => ({
       ...data,
@@ -49,19 +45,7 @@ export const fetchCurrentUserAccounts = createAsyncThunk(
 const accountSlice = createSlice({
   name: "accounts",
   initialState,
-  reducers: {
-    setIsCreateAccountModalOpen(state, action) {
-      state.isCreateAccountModalOpen = action.payload;
-    },
-    setIsEditAccountModalOpen(state, action) {
-      state.isEditAccountModalOpen = action.payload.isEditAccountModalOpen;
-      state.selectedUserAccountId = action.payload.selectedUserAccountId;
-    },
-    setIsDeleteAccountModalOpen(state, action) {
-      state.isDeleteAccountModalOpen = action.payload.isDeleteAccountModalOpen;
-      state.selectedUserAccountId = action.payload.selectedUserAccountId;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchCurrentUserAccounts.pending, (state) => {
@@ -82,9 +66,4 @@ const accountSlice = createSlice({
   },
 });
 
-export const {
-  setIsCreateAccountModalOpen,
-  setIsEditAccountModalOpen,
-  setIsDeleteAccountModalOpen,
-} = accountSlice.actions;
 export default accountSlice.reducer;

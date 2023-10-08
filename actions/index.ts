@@ -13,7 +13,15 @@ import CreateUserAccountSchema, {
 import CreateUserAccountOptions, {
   getKeyByValue,
 } from "@/lib/CreateUserAccountOptions";
-import { NotificationCategory, UserAccountCategory } from "@prisma/client";
+import {
+  Budget,
+  Goal,
+  NotificationCategory,
+  Reminder,
+  Transaction,
+  UserAccount,
+  UserAccountCategory,
+} from "@prisma/client";
 import { EditReminderSchemaType } from "@/schemas/EditReminderSchema";
 import EditBudgetSchema, {
   EditBudgetSchemaType,
@@ -32,6 +40,7 @@ import CreateTransactionSchema, {
 import CreateReminderSchema, {
   CreateReminderSchemaType,
 } from "@/schemas/CreateReminderSchema";
+import { getGenericList } from "./generic";
 
 export const loginAction = async ({ email, password }: LoginSchemaType) => {
   const result = LoginSchema.safeParse({ email, password });
@@ -170,18 +179,17 @@ export const getAccountsByCurrentUserAction = async () => {
     return { error: "No user found." };
   }
 
-  const accounts = await db.userAccount.findMany({
-    where: {
-      userId: currentUser.id,
-    },
+  const result = await getGenericList<UserAccount>({
+    tableName: "userAccount",
+    whereCondition: { userId: currentUser.id },
   });
 
-  if (!accounts) {
-    return { error: "No accounts found." };
+  if (result?.error) {
+    return { error: result.error as string };
   }
 
   return {
-    accounts,
+    accounts: result?.data,
   };
 };
 
@@ -192,18 +200,21 @@ export const getBudgetsByCurrentUserAction = async () => {
     return { error: "No user found." };
   }
 
-  const budgets = await db.budget.findMany({
-    where: {
+  const result = await getGenericList<Budget>({
+    tableName: "budget",
+    whereCondition: {
       userId: currentUser.id,
     },
   });
 
-  if (!budgets) {
-    return { error: "No budgets found." };
+  if (result?.error) {
+    return {
+      error: result.error as string,
+    };
   }
 
   return {
-    budgets,
+    budgets: result?.data,
   };
 };
 
@@ -214,18 +225,21 @@ export const getGoalsByCurrentUserAction = async () => {
     return { error: "No user found." };
   }
 
-  const goals = await db.goal.findMany({
-    where: {
+  const result = await getGenericList<Goal>({
+    tableName: "goal",
+    whereCondition: {
       userId: currentUser.id,
     },
   });
 
-  if (!goals) {
-    return { error: "No goals found." };
+  if (result?.error) {
+    return {
+      error: result.error as string,
+    };
   }
 
   return {
-    goals,
+    goals: result?.data,
   };
 };
 
@@ -290,18 +304,21 @@ export const getTransactionsByCurrentUserAction = async () => {
     return { error: "No user found." };
   }
 
-  const transactions = await db.transaction.findMany({
-    where: {
+  const result = await getGenericList<Transaction>({
+    tableName: "transaction",
+    whereCondition: {
       userId: currentUser.id,
     },
   });
 
-  if (!transactions) {
-    return { error: "No transactions found." };
+  if (result?.error) {
+    return {
+      error: result.error as string,
+    };
   }
 
   return {
-    transactions,
+    transactions: result?.data,
   };
 };
 
@@ -1180,20 +1197,21 @@ export const getRemindersByCurrentUserAction = async () => {
     };
   }
 
-  const reminders = await db.reminder.findMany({
-    where: {
+  const result = await getGenericList<Reminder>({
+    tableName: "reminder",
+    whereCondition: {
       userId: currentUser.id,
       isRead: false,
     },
   });
 
-  if (!reminders) {
+  if (result?.error) {
     return {
-      error: "No reminders found.",
+      error: result.error as string,
     };
   }
 
   return {
-    reminders,
+    reminders: result?.data,
   };
 };

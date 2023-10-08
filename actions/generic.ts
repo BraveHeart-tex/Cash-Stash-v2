@@ -12,6 +12,7 @@ import {
 import prisma from "@/app/libs/prismadb";
 import { Prisma } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
+import { getCurrentUserAction } from ".";
 
 const TABLE_MAP: TableMap = {
   userAccount: prisma.userAccount,
@@ -21,8 +22,9 @@ const TABLE_MAP: TableMap = {
   reminder: prisma.reminder,
 };
 
-const getTable = (tableName: TableName) => {
+export const getTable = async (tableName: TableName) => {
   const table = TABLE_MAP[tableName];
+
   if (!table) {
     throw new Error("Table not found");
   }
@@ -40,7 +42,7 @@ export const getGeneric = async <T>({
   selectCondition,
 }: IGenericParams<T>) => {
   try {
-    const table = getTable(tableName);
+    const table = await getTable(tableName);
 
     const queryOptions = {
       where: whereCondition,
@@ -62,7 +64,7 @@ export const getGenericList = async <T>({
   selectCondition,
 }: IGenericParams<T>) => {
   try {
-    const table = getTable(tableName);
+    const table = await getTable(tableName);
 
     const queryOptions = {
       where: whereCondition,
@@ -71,7 +73,7 @@ export const getGenericList = async <T>({
 
     const result = await table.findMany(queryOptions);
 
-    return result ? (result as T[]) : null;
+    return result ? { data: result as T[] } : null;
   } catch (error) {
     console.error(error);
     return { error: error instanceof Error ? error.message : error };
@@ -84,7 +86,7 @@ export const deleteGeneric = async <T>(
   whereCondition?: WhereCondition<T>
 ) => {
   try {
-    const table = getTable(tableName);
+    const table = await getTable(tableName);
     const result = whereCondition
       ? // @ts-ignore
         await table.delete({ where: whereCondition })
@@ -107,7 +109,7 @@ export const updateGeneric = async <T>({
   data: UpdateGenericInput<T>;
 }) => {
   try {
-    const table = getTable(tableName);
+    const table = await getTable(tableName);
 
     const result = await table.update({
       data,
@@ -130,7 +132,7 @@ export const createGeneric = async <T>({
   data: CreateGenericInput<T>;
 }) => {
   try {
-    const table = getTable(tableName);
+    const table = await getTable(tableName);
 
     const result = await table.create({
       // @ts-ignore
@@ -142,5 +144,39 @@ export const createGeneric = async <T>({
   } catch (error) {
     console.log(error);
     return { error };
+  }
+};
+
+export const getGenericListByCurrentUser = async <T>({
+  tableName,
+  whereCondition,
+  selectCondition,
+}: IGenericParams<T>) => {
+  try {
+    const table = await getTable(tableName);
+    const currentUserResult = await getCurrentUserAction();
+
+    if (currentUserResult.error || !currentUserResult.user) {
+      throw new Error("User not found");
+    }
+
+    const queryOptions = {
+      where: {
+        ...whereCondition,
+        userId: currentUserResult.user.id,
+      },
+      select: selectCondition,
+    };
+
+    const result = await table.findMany(queryOptions);
+
+    return result.length
+      ? {
+          data: result as T[],
+        }
+      : null;
+  } catch (error) {
+    console.error(error);
+    return { error: error instanceof Error ? error.message : error };
   }
 };

@@ -1,40 +1,31 @@
-import {
-  getReminderByIdAction,
-  getRemindersByCurrentUserAction,
-} from "@/actions";
+import { getReminderByIdAction } from "@/actions";
+import { getGenericListByCurrentUser } from "@/actions/generic";
 import { Reminder } from "@prisma/client";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 
 interface RemindersState {
   reminders: Reminder[] | null;
   currentReminder: Reminder | null;
   isLoading: boolean;
-  // modals
-  isCreateReminderModalOpen: boolean;
-  isDeleteReminderModalOpen: boolean;
-  isEditReminderModalOpen: boolean;
-  selectedReminderId: number;
 }
 
 const initialState: RemindersState = {
   reminders: null,
   currentReminder: null,
   isLoading: false,
-  // modals
-  isCreateReminderModalOpen: false,
-  isDeleteReminderModalOpen: false,
-  isEditReminderModalOpen: false,
-  selectedReminderId: 0,
 };
 
 export const fetchReminders = createAsyncThunk(
   "reminders/fetchReminders",
   async () => {
-    const result = await getRemindersByCurrentUserAction();
-    if (result?.error) return null;
+    const result = await getGenericListByCurrentUser<Reminder>({
+      tableName: "reminder",
+    });
+    if (result?.error || !result?.data || !result?.data?.length) {
+      return null;
+    }
 
-    return result.reminders;
+    return result.data;
   }
 );
 
@@ -51,20 +42,7 @@ export const fetchReminderById = createAsyncThunk(
 const remindersSlice = createSlice({
   name: "remindersSlice",
   initialState,
-  reducers: {
-    setIsCreateReminderModalOpen: (state, action) => {
-      state.isCreateReminderModalOpen = action.payload;
-    },
-    setIsEditReminderModalOpen: (state, action) => {
-      state.isEditReminderModalOpen = action.payload.isEditReminderModalOpen;
-      state.selectedReminderId = action.payload.selectedReminderId;
-    },
-    setIsDeleteReminderModalOpen: (state, action) => {
-      state.isDeleteReminderModalOpen =
-        action.payload.isDeleteReminderModalOpen;
-      state.selectedReminderId = action.payload.selectedReminderId;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchReminders.pending, (state) => {
@@ -98,11 +76,5 @@ const remindersSlice = createSlice({
       });
   },
 });
-
-export const {
-  setIsCreateReminderModalOpen,
-  setIsDeleteReminderModalOpen,
-  setIsEditReminderModalOpen,
-} = remindersSlice.actions;
 
 export default remindersSlice.reducer;
