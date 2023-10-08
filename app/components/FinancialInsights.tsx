@@ -18,10 +18,13 @@ const NoDataMessage = () => (
 
 const SavingsRate = ({ value }: { value: number }) => (
   <div className="mb-4 flex flex-col">
-    <h3 className="font-bold text-lg">Savings Rate</h3>
+    <h3 className="font-semibold text-lg">Savings Rate</h3>
     <p>{value}%</p>
     <p
-      className={cn("font-bold", value > 0 ? "text-green-500" : "text-red-500")}
+      className={cn(
+        "font-semibold",
+        value > 0 ? "text-green-500" : "text-red-500"
+      )}
     >
       {value > 0
         ? "You are saving more than you are spending!"
@@ -32,8 +35,6 @@ const SavingsRate = ({ value }: { value: number }) => (
 
 const FinancialInsights = ({ insightsData }: IFinancialInsightsProps) => {
   const dispatch = useAppDispatch();
-
-  console.log(insightsData);
 
   if (!insightsData || (insightsData && !insightsData.totalIncome)) {
     return (

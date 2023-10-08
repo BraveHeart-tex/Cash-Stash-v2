@@ -21,7 +21,7 @@ const ReminderCard = ({ reminder }: IReminderCardProps) => {
       key={reminder.id}
     >
       <div className="w-full flex flex-col md:flex-row md:items-center justify-between">
-        <p className="font-bold">{reminder.title}</p>
+        <p className="font-semibold">{reminder.title}</p>
 
         {isPastReminderDate ? (
           <Badge className="w-max mb-2 bg-destructive cursor-pointer select-none">

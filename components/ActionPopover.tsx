@@ -43,7 +43,9 @@ const ActionPopover = ({
         </div>
       </PopoverTrigger>
       <PopoverContent align={align}>
-        <h3 className="text-center font-bold text-primary">{popoverHeading}</h3>
+        <h3 className="text-center font-semibold text-primary">
+          {popoverHeading}
+        </h3>
         <hr className="my-2" />
         <div className="grid grid-cols-1 gap-1">
           <div className="flex items-center">
