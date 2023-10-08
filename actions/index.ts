@@ -6,7 +6,6 @@ import { LoginSchemaType } from "@/schemas/LoginSchema";
 import RegisterSchema, { RegisterSchemaType } from "@/schemas/RegisterSchema";
 import { cookies } from "next/headers";
 import bcrypt from "bcrypt";
-import { redirect } from "next/navigation";
 import { MONTHS_OF_THE_YEAR } from "@/lib/utils";
 import CreateUserAccountSchema, {
   CreateUserAccountSchemaType,

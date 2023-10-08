@@ -4,6 +4,7 @@ import Dashboard from "@/app/components/Dashboard";
 import GoalsPageClient from "@/app/goals/GoalsPageClient";
 import ReportsPageClient from "@/app/reports/ReportsPageClient";
 import TransactionsClient from "@/app/transactions/TransactionsClient";
+import prisma from "@/app/libs/prismadb";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import {
@@ -13,6 +14,7 @@ import {
   ErrorMapCtx,
   ZodIssueOptionalMessage,
 } from "zod";
+import { Prisma } from "@prisma/client";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -32,6 +34,30 @@ export const MONTHS_OF_THE_YEAR = [
   "Nov",
   "Dec",
 ];
+
+export type TableMap = {
+  [key in TableName]: (typeof prisma)[key];
+};
+
+export type WhereCondition = Prisma.UserAccountWhereInput &
+  Prisma.GoalWhereInput &
+  Prisma.BudgetWhereInput &
+  Prisma.ReminderWhereInput &
+  Prisma.TransactionWhereInput;
+
+export type SelectCondition =
+  | Prisma.UserSelect
+  | Prisma.GoalSelect
+  | Prisma.BudgetSelect
+  | Prisma.ReminderSelect
+  | Prisma.TransactionSelect;
+
+export type TableName =
+  | "userAccount"
+  | "transaction"
+  | "budget"
+  | "goal"
+  | "reminder";
 
 export type Page =
   | "Dashboard"

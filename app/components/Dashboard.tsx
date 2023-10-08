@@ -5,7 +5,7 @@ import {
   fetchTransactions,
 } from "@/app/redux/features/transactionsSlice";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
-import { useEffect } from "react";
+import { useEffect, useTransition } from "react";
 import AccountSummaries from "./AccountSummaries";
 import BudgetStatus from "./BudgetStatus";
 import FinancialInsights from "./FinancialInsights";
@@ -21,6 +21,7 @@ interface IDashboardProps {
 }
 
 const Dashboard = ({ monthlyTransactionsData }: IDashboardProps) => {
+  let [isPending, startTransition] = useTransition();
   const dispatch = useAppDispatch();
   const { data: transactions, insightsData } = useAppSelector(
     (state) => state.transactionsReducer
@@ -30,6 +31,8 @@ const Dashboard = ({ monthlyTransactionsData }: IDashboardProps) => {
     dispatch(fetchTransactions());
     dispatch(fetchMonthlyTransactionsData());
     dispatch(fetchInsightsData());
+
+    startTransition(async () => {});
   }, [dispatch]);
 
   const sectionData = [
