@@ -57,6 +57,10 @@ export type CreateGenericInput<T> = {
   [key in keyof Omit<T, "id" | "createdAt" | "updatedAt">]: T[key];
 };
 
+export type CreateGenericWithCurrentUserInput<T> = {
+  [key in keyof Omit<T, "id" | "createdAt" | "updatedAt" | "userId">]: T[key];
+};
+
 export type UpdateGenericInput<T> = {
   [key in keyof Partial<T>]: T[key];
 };

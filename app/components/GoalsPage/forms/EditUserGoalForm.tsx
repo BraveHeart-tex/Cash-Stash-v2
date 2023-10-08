@@ -6,7 +6,11 @@ import { fetchGoalById } from "@/app/redux/features/currentGoalSlice";
 import { fetchGoals } from "@/app/redux/features/goalSlice";
 import FormLoadingSpinner from "../../FormLoadingSpinner";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
-import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
+import {
+  showDefaultToast,
+  showErrorToast,
+  showSuccessToast,
+} from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import EditGoalSchema, { EditGoalSchemaType } from "@/schemas/EditGoalSchema";
 import FormInput from "@/components/FormInput";
@@ -28,15 +32,24 @@ const EditUserGoalForm = ({ entityId }: IEditUserGoalFormProps) => {
     handleSubmit,
     formState: { errors, isLoading, isSubmitting },
     setValue,
+    getValues,
   } = useForm<EditGoalSchemaType>({
     defaultValues: {
-      goalName: "",
+      name: "",
       goalAmount: 10,
       currentAmount: 0,
     },
-    // @ts-ignore
     resolver: zodResolver(EditGoalSchema),
   });
+
+  const hasMadeNoChanges = () => {
+    const { name, goalAmount, currentAmount } = getValues();
+    return (
+      name === currentGoal?.name &&
+      goalAmount === currentGoal?.goalAmount &&
+      currentAmount === currentGoal?.currentAmount
+    );
+  };
 
   useEffect(() => {
     if (entityId) {
@@ -46,13 +59,20 @@ const EditUserGoalForm = ({ entityId }: IEditUserGoalFormProps) => {
 
   useEffect(() => {
     if (currentGoal) {
-      setValue("goalName", currentGoal.name);
+      setValue("name", currentGoal.name);
       setValue("goalAmount", currentGoal.goalAmount);
       setValue("currentAmount", currentGoal.currentAmount);
     }
   }, [currentGoal, setValue]);
 
   const onSubmit = async (data: EditGoalSchemaType) => {
+    if (hasMadeNoChanges()) {
+      return showDefaultToast(
+        "No changes made.",
+        "You haven't made any changes."
+      );
+    }
+
     let payload = {
       goalId: entityId,
       ...data,
@@ -82,7 +102,7 @@ const EditUserGoalForm = ({ entityId }: IEditUserGoalFormProps) => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="grid grid-cols-1 gap-4">
         <FormInput
-          name={"goalName"}
+          name={"name"}
           label={"Goal Name"}
           placeholder={"Goal name"}
           type={"text"}

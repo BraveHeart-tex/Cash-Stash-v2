@@ -43,8 +43,8 @@ const SignUpForm = () => {
       if (result?.error) {
         showErrorToast("An error occurred.", result.error);
       } else {
-        showSuccessToast("Signed up.", "You have been signed up.");
         router.push("/");
+        showSuccessToast("Signed up.", "You have been signed up.");
       }
     });
   };

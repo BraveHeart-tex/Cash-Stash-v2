@@ -92,7 +92,7 @@ const CreateBudgetForm = () => {
           errors={errors}
         />
         <Button type="submit" disabled={isSubmitting || isPending}>
-          Update
+          Create
         </Button>
       </div>
     </form>

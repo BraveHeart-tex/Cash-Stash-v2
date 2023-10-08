@@ -41,7 +41,7 @@ const GoalsPageClient = () => {
       <h2 className="text-4xl lg:mb-4 text-primary">Goals</h2>
       <div className="flex justify-center lg:items-center flex-col gap-2">
         {isLoading ? renderLoadingState() : renderGoals()}
-        {!isLoading && goals?.length === 0 ? renderNoGoalsState() : null}
+        {!isLoading && !goals ? renderNoGoalsState() : null}
         <Button
           className="mt-4 self-start"
           onClick={() =>

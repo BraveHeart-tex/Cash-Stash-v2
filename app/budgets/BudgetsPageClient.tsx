@@ -27,7 +27,7 @@ const BudgetsPageClient = () => {
   return (
     <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
       <h3 className="text-4xl mb-4 text-primary">Budgets</h3>
-      {!isLoading && budgets?.length === 0 && <BudgetsNotFoundMessage />}
+      {!isLoading && !budgets && <BudgetsNotFoundMessage />}
       <div className="flex flex-col gap-4 items-center justify-center">
         {isLoading ? (
           <Skeleton className="h-20 w-full" />

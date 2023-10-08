@@ -1,5 +1,4 @@
 "use client";
-
 import { useForm } from "react-hook-form";
 import { useAppDispatch } from "@/app/redux/hooks";
 import { fetchGoals } from "@/app/redux/features/goalSlice";
@@ -12,7 +11,8 @@ import CreateGoalSchema, {
 import FormInput from "@/components/FormInput";
 import { Button } from "@/components/ui/button";
 import { useTransition } from "react";
-import { createGeneric } from "@/actions/generic";
+import { createGenericWithCurrentUser } from "@/actions/generic";
+import { Goal } from "@prisma/client";
 
 const CreateUserGoalForm = () => {
   let [isPending, startTransition] = useTransition();
@@ -24,17 +24,19 @@ const CreateUserGoalForm = () => {
     formState: { errors, isSubmitting },
   } = useForm<CreateGoalSchemaType>({
     defaultValues: {
-      goalName: "",
+      name: "",
       goalAmount: 10,
       currentAmount: 0,
     },
-    // @ts-ignore
     resolver: zodResolver(CreateGoalSchema),
   });
 
   const onSubmit = async (data: CreateGoalSchemaType) => {
     startTransition(async () => {
-      const result = await createGeneric({ tableName: "goal", data });
+      const result = await createGenericWithCurrentUser<Goal>({
+        tableName: "goal",
+        data,
+      });
 
       if (result?.error) {
         showErrorToast("An error occurred.", result.error as string);
@@ -50,7 +52,7 @@ const CreateUserGoalForm = () => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="grid grid-cols-1 gap-4">
         <FormInput
-          name={"goalName"}
+          name={"name"}
           label={"Goal Name"}
           placeholder={"Goal name"}
           type={"text"}

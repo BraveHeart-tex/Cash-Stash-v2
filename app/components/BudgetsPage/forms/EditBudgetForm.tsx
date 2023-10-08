@@ -9,7 +9,11 @@ import { getOptionLabel } from "@/lib/CreateUserAccountOptions";
 import { fetchBudgets } from "@/app/redux/features/budgetSlice";
 import FormLoadingSpinner from "../../FormLoadingSpinner";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
-import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
+import {
+  showDefaultToast,
+  showErrorToast,
+  showSuccessToast,
+} from "@/components/ui/use-toast";
 import EditBudgetSchema, {
   EditBudgetSchemaType,
 } from "@/schemas/EditBudgetSchema";
@@ -36,6 +40,7 @@ const EditUserBudgetForm = ({ entityId }: IEditBudgetFormProps) => {
     handleSubmit,
     formState: { errors, isLoading, isSubmitting },
     setValue,
+    getValues,
   } = useForm<EditBudgetSchemaType>({
     defaultValues: {
       budgetAmount: 0,
@@ -44,6 +49,15 @@ const EditUserBudgetForm = ({ entityId }: IEditBudgetFormProps) => {
     },
     resolver: zodResolver(EditBudgetSchema),
   });
+
+  const hasMadeNoChanges = () => {
+    const { budgetAmount, category, spentAmount } = getValues();
+    return (
+      budgetAmount === currentBudget?.budgetAmount &&
+      category === CreateBudgetOptions[currentBudget?.category] &&
+      spentAmount === currentBudget?.spentAmount
+    );
+  };
 
   const loading = isCurrentBudgetLoading || isLoading;
 
@@ -65,6 +79,13 @@ const EditUserBudgetForm = ({ entityId }: IEditBudgetFormProps) => {
   }, [currentBudget, setValue]);
 
   const onSubmit = async (data: EditBudgetSchemaType) => {
+    if (hasMadeNoChanges()) {
+      return showDefaultToast(
+        "No changes made.",
+        "You haven't made any changes."
+      );
+    }
+
     let payload = {
       budgetId: entityId,
       ...data,

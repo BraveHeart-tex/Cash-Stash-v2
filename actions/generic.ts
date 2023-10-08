@@ -2,6 +2,7 @@
 
 import {
   CreateGenericInput,
+  CreateGenericWithCurrentUserInput,
   IGenericParams,
   TableMap,
   TableName,
@@ -94,6 +95,33 @@ export const deleteGeneric = async <T>({
       : isMany
       ? await table.deleteMany()
       : null;
+
+    return result ? { data: result as T } : null;
+  } catch (error) {
+    console.error(error);
+    return { error: error instanceof Error ? error.message : error };
+  }
+};
+
+export const createGenericWithCurrentUser = async <T>({
+  tableName,
+  data,
+}: IGenericParams<T> & { data: CreateGenericWithCurrentUserInput<T> }) => {
+  try {
+    const table = await getTable(tableName);
+    const currentUser = await getCurrentUserAction();
+
+    if (currentUser.error || !currentUser.user) {
+      throw new Error("User not found");
+    }
+
+    const result = await table.create({
+      // @ts-ignore
+      data: {
+        ...data,
+        userId: currentUser.user.id,
+      },
+    });
 
     return result ? { data: result as T } : null;
   } catch (error) {

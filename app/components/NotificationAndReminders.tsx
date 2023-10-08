@@ -18,41 +18,42 @@ const NotificationsAndReminders = () => {
     dispatch(fetchReminders());
   }, [dispatch]);
 
-  if (!isLoading && !reminders?.length) {
-    return (
-      <article className="flex h-[500px] items-center justify-center">
-        <div className="mt-[30px]">
-          <p className="text-primary">No reminders were found.</p>
-          <Button
-            className="mt-3 text-md font-semibold flex items-center gap-[14px]"
-            onClick={() => {
-              dispatch(
-                openGenericModal({
-                  key: "reminder",
-                  mode: "create",
-                  dialogTitle: "Create Reminder",
-                  dialogDescription:
-                    "You can create a reminder by using the form below.",
-                  entityId: 0,
-                })
-              );
-            }}
-          >
-            <FaRegClock size={18} />
-            Create a reminder
-          </Button>
-        </div>
-      </article>
-    );
-  }
+  const noRemindersState = () => (
+    <article className="flex h-[500px] items-center justify-center">
+      <div className="mt-[30px]">
+        <p className="text-primary">No reminders were found.</p>
+        <Button
+          className="mt-3 text-md font-semibold flex items-center gap-[14px]"
+          onClick={() => {
+            dispatch(
+              openGenericModal({
+                key: "reminder",
+                mode: "create",
+                dialogTitle: "Create Reminder",
+                dialogDescription:
+                  "You can create a reminder by using the form below.",
+                entityId: 0,
+              })
+            );
+          }}
+        >
+          <FaRegClock size={18} />
+          Create a reminder
+        </Button>
+      </div>
+    </article>
+  );
+
+  if (!reminders || !reminders.length) return noRemindersState();
 
   return (
     <div className="p-2 min-h-[500px] max-h-[500px] overflow-y-scroll scrollbar-hide">
       <div className="grid grid-cols-1 gap-4">
-        {reminders &&
-          reminders.map((reminder) => (
-            <ReminderCard key={reminder.id} reminder={reminder} />
-          ))}
+        {reminders.length > 0
+          ? reminders.map((reminder) => (
+              <ReminderCard key={reminder.id} reminder={reminder} />
+            ))
+          : noRemindersState()}
       </div>
       <Button
         className="mt-3"
