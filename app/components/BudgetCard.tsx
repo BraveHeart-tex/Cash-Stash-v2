@@ -3,13 +3,14 @@ import { SerializedBudget, fetchBudgets } from "../redux/features/budgetSlice";
 import ActionPopover from "@/components/ActionPopover";
 import { Badge } from "@/components/ui/badge";
 import { useAppDispatch } from "../redux/hooks";
-import { deleteBudgetByIdAction } from "@/actions";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { openGenericModal } from "../redux/features/genericModalSlice";
 import { showGenericConfirm } from "../redux/features/genericConfirmSlice";
 import { cn } from "@/lib/utils";
 import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
+import { deleteGeneric } from "@/actions/generic";
+import { Budget } from "@prisma/client";
 
 interface IBudgetCardProps {
   budget: SerializedBudget;
@@ -19,11 +20,11 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
   const dispatch = useAppDispatch();
 
   const handleActionCallback = (
-    result: Awaited<ReturnType<typeof deleteBudgetByIdAction>>,
+    result: Awaited<ReturnType<typeof deleteGeneric>>,
     cleanUp: ActionCreatorWithoutPayload<"genericConfirm/cleanUp">
   ) => {
     if (result?.error) {
-      showErrorToast("An error occurred.", result.error);
+      showErrorToast("An error occurred.", result.error as string);
     } else {
       showSuccessToast("Budget deleted.", "Selected budget has been deleted.");
       dispatch(cleanUp());
@@ -61,7 +62,11 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
                   title: "Delete Budget",
                   message: "Are you sure you want to delete this budget?",
                   primaryActionLabel: "Delete",
-                  primaryAction: () => deleteBudgetByIdAction(budget.id),
+                  primaryAction: async () =>
+                    await deleteGeneric<Budget>({
+                      tableName: "budget",
+                      whereCondition: { id: budget.id },
+                    }),
                   resolveCallback: handleActionCallback,
                 })
               )

@@ -7,10 +7,11 @@ import ActionPopover from "@/components/ActionPopover";
 import { useAppDispatch } from "../redux/hooks";
 import { openGenericModal } from "../redux/features/genericModalSlice";
 import { showGenericConfirm } from "@/app/redux/features/genericConfirmSlice";
-import { deleteAccountByIdAction } from "@/actions";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 import { cn } from "@/lib/utils";
+import { deleteGeneric } from "@/actions/generic";
+import { UserAccount } from "@prisma/client";
 
 interface IAccountCardProps {
   account: SerializedUserAccount;
@@ -23,11 +24,11 @@ const AccountCard = ({ account, className }: IAccountCardProps) => {
   const accountCategory = CreateUserAccountOptions[account.category];
 
   const handleActionCallback = (
-    result: Awaited<ReturnType<typeof deleteAccountByIdAction>>,
+    result: Awaited<ReturnType<typeof deleteGeneric>>,
     cleanUp: ActionCreatorWithoutPayload<"genericConfirm/cleanUp">
   ) => {
     if (result?.error) {
-      showErrorToast("An error occurred.", result.error);
+      showErrorToast("An error occurred.", result.error as string);
     } else {
       dispatch(fetchCurrentUserAccounts());
       showSuccessToast(
@@ -44,7 +45,11 @@ const AccountCard = ({ account, className }: IAccountCardProps) => {
         title: "Delete Account",
         message: "Are you sure you want to delete this account?",
         primaryActionLabel: "Delete",
-        primaryAction: async () => deleteAccountByIdAction(id),
+        primaryAction: async () =>
+          await deleteGeneric<UserAccount>({
+            tableName: "userAccount",
+            whereCondition: { id },
+          }),
         resolveCallback: handleActionCallback,
       })
     );

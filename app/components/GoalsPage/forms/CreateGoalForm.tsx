@@ -12,7 +12,7 @@ import CreateGoalSchema, {
 import FormInput from "@/components/FormInput";
 import { Button } from "@/components/ui/button";
 import { useTransition } from "react";
-import { createGoalAction } from "@/actions";
+import { createGeneric } from "@/actions/generic";
 
 const CreateUserGoalForm = () => {
   let [isPending, startTransition] = useTransition();
@@ -34,9 +34,10 @@ const CreateUserGoalForm = () => {
 
   const onSubmit = async (data: CreateGoalSchemaType) => {
     startTransition(async () => {
-      const result = await createGoalAction(data);
+      const result = await createGeneric({ tableName: "goal", data });
+
       if (result?.error) {
-        showErrorToast("An error occurred.", result.error);
+        showErrorToast("An error occurred.", result.error as string);
       } else {
         dispatch(fetchGoals());
         showSuccessToast("Goal created.", "Your goal has been created.");

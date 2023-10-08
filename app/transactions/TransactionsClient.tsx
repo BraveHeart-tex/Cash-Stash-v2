@@ -5,9 +5,9 @@ import TransactionList from "@/app/components/TransactionsPage/TransactionList";
 import { useAppDispatch } from "@/app/redux/hooks";
 import { Button } from "@/components/ui/button";
 import { openGenericModal } from "@/app/redux/features/genericModalSlice";
-import { getAccountsByCurrentUserAction } from "@/actions";
 import { useTransition } from "react";
 import { showErrorToast } from "@/components/ui/use-toast";
+import { getGenericListByCurrentUser } from "@/actions/generic";
 
 const TransactionsClient = () => {
   let [isPending, startTransition] = useTransition();
@@ -15,10 +15,14 @@ const TransactionsClient = () => {
 
   const handleCreateTransactionClick = async () => {
     startTransition(async () => {
-      const { accounts, error } = await getAccountsByCurrentUserAction();
-      if (error) showErrorToast("An error occurred.", error);
+      const result = await getGenericListByCurrentUser({
+        tableName: "userAccount",
+      });
 
-      if (accounts?.length === 0) {
+      if (result?.error)
+        showErrorToast("An error occurred.", result?.error as string);
+
+      if (result?.data?.length === 0) {
         showErrorToast(
           "No accounts found.",
           "You need to create an account before you can create a transaction."

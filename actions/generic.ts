@@ -6,7 +6,6 @@ import {
   TableMap,
   TableName,
   UpdateGenericInput,
-  WhereCondition,
 } from "@/lib/utils";
 
 import prisma from "@/app/libs/prismadb";
@@ -80,11 +79,13 @@ export const getGenericList = async <T>({
   }
 };
 
-export const deleteGeneric = async <T>(
-  tableName: TableName,
-  isMany: boolean,
-  whereCondition?: WhereCondition<T>
-) => {
+export const deleteGeneric = async <T>({
+  tableName,
+  isMany,
+  whereCondition,
+}: IGenericParams<T> & {
+  isMany?: boolean;
+}) => {
   try {
     const table = await getTable(tableName);
     const result = whereCondition
@@ -94,7 +95,7 @@ export const deleteGeneric = async <T>(
       ? await table.deleteMany()
       : null;
 
-    return result || null;
+    return result ? { data: result as T } : null;
   } catch (error) {
     console.error(error);
     return { error: error instanceof Error ? error.message : error };
@@ -117,7 +118,7 @@ export const updateGeneric = async <T>({
       where: whereCondition,
     });
 
-    return result || null;
+    return result ? { data: result as T } : null;
   } catch (error) {
     console.error(error);
     return { error: error instanceof Error ? error.message : error };
@@ -140,10 +141,10 @@ export const createGeneric = async <T>({
       select: selectCondition,
     });
 
-    return result || null;
+    return result ? { data: result as T } : null;
   } catch (error) {
     console.log(error);
-    return { error };
+    return { error: error instanceof Error ? error.message : error };
   }
 };
 

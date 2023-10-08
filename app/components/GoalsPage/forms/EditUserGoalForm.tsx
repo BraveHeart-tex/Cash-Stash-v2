@@ -11,7 +11,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import EditGoalSchema, { EditGoalSchemaType } from "@/schemas/EditGoalSchema";
 import FormInput from "@/components/FormInput";
 import { Button } from "@/components/ui/button";
-import { updateGoalByIdAction } from "@/actions";
+import { updateGeneric } from "@/actions/generic";
+import { Goal } from "@prisma/client";
 
 interface IEditUserGoalFormProps {
   entityId: number;
@@ -58,9 +59,13 @@ const EditUserGoalForm = ({ entityId }: IEditUserGoalFormProps) => {
     };
 
     startTransition(async () => {
-      const result = await updateGoalByIdAction(payload);
+      const result = await updateGeneric<Goal>({
+        tableName: "goal",
+        data: payload,
+      });
+
       if (result?.error) {
-        showErrorToast("An error occurred.", result.error);
+        showErrorToast("An error occurred.", result.error as string);
       } else {
         dispatch(fetchGoals());
         showSuccessToast("Goal updated.", "Your goal has been updated.");

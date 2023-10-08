@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { Goal } from "@prisma/client";
-import { getGoalByIdAction } from "@/actions";
+import { getGeneric } from "@/actions/generic";
 
 interface CurrentGoalState {
   currentGoal: Goal | null;
@@ -16,10 +16,14 @@ export const fetchGoalById = createAsyncThunk(
   "goals/fetchGoalById",
   async (goalId: number) => {
     try {
-      const { goal, error } = await getGoalByIdAction(goalId);
-      if (error || !goal) return null;
+      const result = await getGeneric<Goal>({
+        tableName: "goal",
+        whereCondition: { id: goalId },
+      });
 
-      return goal;
+      if (result?.error || !result?.data) return null;
+
+      return result.data;
     } catch (error) {
       throw error;
     }

@@ -4,10 +4,11 @@ import { useAppDispatch } from "@/app/redux/hooks";
 import ActionPopover from "@/components/ActionPopover";
 import { openGenericModal } from "@/app/redux/features/genericModalSlice";
 import { showGenericConfirm } from "@/app/redux/features/genericConfirmSlice";
-import { deleteGoalByIdAction } from "@/actions";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { SerializedGoal, fetchGoals } from "@/app/redux/features/goalSlice";
+import { deleteGeneric } from "@/actions/generic";
+import { Goal } from "@prisma/client";
 
 interface IGoalCardProps {
   goal: SerializedGoal;
@@ -16,26 +17,30 @@ interface IGoalCardProps {
 const GoalCard = ({ goal }: IGoalCardProps) => {
   const dispatch = useAppDispatch();
 
-  const handleActionCallback = (
-    result: Awaited<ReturnType<typeof deleteGoalByIdAction>>,
-    cleanUp: ActionCreatorWithoutPayload<"genericConfirm/cleanUp">
-  ) => {
-    if (result?.error) {
-      showErrorToast("An error occurred.", result.error);
-    } else {
-      dispatch(fetchGoals());
-      showSuccessToast("Goal deleted.", "Selected goal has been deleted.");
-      dispatch(cleanUp());
-    }
-  };
-
   const handleDeleteGoal = (id: number) => {
+    const handleActionCallback = (
+      result: Awaited<ReturnType<typeof deleteGeneric>>,
+      cleanUp: ActionCreatorWithoutPayload<"genericConfirm/cleanUp">
+    ) => {
+      if (result?.error) {
+        showErrorToast("An error occurred.", result.error as string);
+      } else {
+        dispatch(fetchGoals());
+        showSuccessToast("Goal deleted.", "Selected goal has been deleted.");
+        dispatch(cleanUp());
+      }
+    };
+
     dispatch(
       showGenericConfirm({
         title: "Delete Goal",
         message: "Are you sure you want to delete this goal?",
         primaryActionLabel: "Delete",
-        primaryAction: async () => deleteGoalByIdAction(id),
+        primaryAction: async () =>
+          await deleteGeneric<Goal>({
+            tableName: "goal",
+            whereCondition: { id },
+          }),
         resolveCallback: handleActionCallback,
       })
     );

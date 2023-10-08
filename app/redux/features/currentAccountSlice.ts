@@ -1,6 +1,6 @@
-import { getAccountByIdAction } from "@/actions/index";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { UserAccount } from "@prisma/client";
+import { getGeneric } from "@/actions/generic";
 
 interface UserAccountsState {
   currentAccount: UserAccount | null;
@@ -18,8 +18,14 @@ export const fetchCurrentAccount = createAsyncThunk(
     if (!id) {
       return null;
     }
-    const { account } = await getAccountByIdAction(id);
-    return account;
+    const result = await getGeneric<UserAccount>({
+      tableName: "userAccount",
+      whereCondition: { id },
+    });
+    if (result?.error || !result?.data) {
+      return null;
+    }
+    return result.data;
   }
 );
 

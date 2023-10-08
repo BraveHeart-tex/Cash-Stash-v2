@@ -1,5 +1,4 @@
-import { getReminderByIdAction } from "@/actions";
-import { getGenericListByCurrentUser } from "@/actions/generic";
+import { getGeneric, getGenericListByCurrentUser } from "@/actions/generic";
 import { Reminder } from "@prisma/client";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -20,6 +19,7 @@ export const fetchReminders = createAsyncThunk(
   async () => {
     const result = await getGenericListByCurrentUser<Reminder>({
       tableName: "reminder",
+      whereCondition: { isRead: false },
     });
     if (result?.error || !result?.data || !result?.data?.length) {
       return null;
@@ -32,10 +32,14 @@ export const fetchReminders = createAsyncThunk(
 export const fetchReminderById = createAsyncThunk(
   "reminders/fetchReminderById",
   async (reminderId: number) => {
-    const result = await getReminderByIdAction(reminderId);
+    const result = await getGeneric<Reminder>({
+      tableName: "reminder",
+      whereCondition: { id: reminderId },
+    });
+
     if (result?.error) return null;
 
-    return result.reminder;
+    return result.data;
   }
 );
 
