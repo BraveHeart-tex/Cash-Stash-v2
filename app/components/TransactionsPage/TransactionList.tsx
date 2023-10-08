@@ -26,7 +26,7 @@ const TransactionList = () => {
     </div>
   );
 
-  if (!isLoading && data?.length === 0) {
+  if (!isLoading && !data) {
     return renderNoTransactionsState();
   }
 

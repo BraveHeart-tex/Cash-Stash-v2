@@ -41,6 +41,8 @@ const ReportTable = ({ monthlyTransactionsData }: MonthlyData) => {
     dispatch(fetchTransactions());
   }, [dispatch]);
 
+  console.log(transactions);
+
   const renderTableBody = () => {
     return (
       <TableBody className={"overflow-y-scroll"}>
@@ -107,10 +109,12 @@ const ReportTable = ({ monthlyTransactionsData }: MonthlyData) => {
               </TableRow>
             </TableBody>
           )}
-          {!isLoading && transactions && transactions.length === 0 && (
+          {!isLoading && !transactions && (
             <TableBody>
               <TableRow>
-                <TableCell>No transactions found.</TableCell>
+                <TableCell colSpan={6} className="text-center">
+                  No transactions found to display.
+                </TableCell>
               </TableRow>
             </TableBody>
           )}

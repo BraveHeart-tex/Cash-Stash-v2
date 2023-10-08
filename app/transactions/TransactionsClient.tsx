@@ -20,10 +20,10 @@ const TransactionsClient = () => {
       });
 
       if (result?.error)
-        showErrorToast("An error occurred.", result?.error as string);
+        return showErrorToast("An error occurred.", result?.error as string);
 
-      if (result?.data?.length === 0) {
-        showErrorToast(
+      if (!result) {
+        return showErrorToast(
           "No accounts found.",
           "You need to create an account before you can create a transaction."
         );
