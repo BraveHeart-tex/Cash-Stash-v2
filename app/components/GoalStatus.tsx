@@ -42,7 +42,7 @@ const GoalStatus = () => {
   }
 
   return (
-    <div>
+    <div className="flex flex-col gap-2">
       {goals.map((goal) => (
         <GoalCard key={goal.id} goal={goal} />
       ))}

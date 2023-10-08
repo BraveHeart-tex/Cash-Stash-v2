@@ -15,6 +15,7 @@ import TransactionHistory from "./TransactionHistory";
 import BarChartComponent from "@/components/charts/BarChartComponent";
 import { MonthlyData } from "./ReportsPage/ReportTable";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { getGeneric } from "@/actions/generic";
 
 interface IDashboardProps {
   monthlyTransactionsData: MonthlyData["monthlyTransactionsData"];
@@ -32,7 +33,9 @@ const Dashboard = ({ monthlyTransactionsData }: IDashboardProps) => {
     dispatch(fetchMonthlyTransactionsData());
     dispatch(fetchInsightsData());
 
-    startTransition(async () => {});
+    startTransition(async () => {
+      const result = await getGeneric({ tableName: "budget" });
+    });
   }, [dispatch]);
 
   const sectionData = [

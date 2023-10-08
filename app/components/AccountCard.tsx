@@ -53,7 +53,7 @@ const AccountCard = ({ account, className }: IAccountCardProps) => {
   return (
     <div
       className={cn(
-        "p-4 rounded-md shadow-lg border w-full cursor-pointer hover:shadow-xl transition duration-300 ease-in-out relative",
+        "p-4 rounded-md shadow-lg border w-full cursor-pointer hover-scale relative",
         className
       )}
       key={account.name}

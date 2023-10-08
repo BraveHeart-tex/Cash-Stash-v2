@@ -1,9 +1,11 @@
 "use server";
 
 import {
-  SelectCondition,
+  CreateGenericInput,
+  IGenericParams,
   TableMap,
   TableName,
+  UpdateGenericInput,
   WhereCondition,
 } from "@/lib/utils";
 
@@ -32,190 +34,113 @@ const getTable = (tableName: TableName) => {
     Prisma.TransactionDelegate<DefaultArgs>;
 };
 
-export const getGeneric = async <T>(
-  tableName: TableName,
-  whereCondition?: WhereCondition,
-  selectCondition?: SelectCondition
-) => {
+export const getGeneric = async <T>({
+  tableName,
+  whereCondition,
+  selectCondition,
+}: IGenericParams<T>) => {
   try {
     const table = getTable(tableName);
 
-    const queryOptions: {
-      where?: WhereCondition;
-      select?: SelectCondition;
-    } = {};
-
-    if (whereCondition) {
-      queryOptions.where = whereCondition;
-    }
-
-    if (selectCondition) {
-      queryOptions.select = selectCondition;
-    }
+    const queryOptions = {
+      where: whereCondition,
+      select: selectCondition,
+    };
 
     const result = await table.findFirst(queryOptions);
 
-    if (!result) {
-      return {
-        error: "Not found",
-      };
-    }
-
-    return {
-      data: result as T,
-    };
+    return result ? { data: result as T } : { error: "Not found" };
   } catch (error) {
-    console.error(error instanceof Error ? error : error);
-    return {
-      error: error instanceof Error ? error.message : error,
-    };
+    console.error(error);
+    return { error: error instanceof Error ? error.message : error };
   }
 };
 
-export const getgenericList = async <T>(
-  tableName: TableName,
-  whereCondition?: WhereCondition,
-  selectCondition?: SelectCondition
-) => {
+export const getGenericList = async <T>({
+  tableName,
+  whereCondition,
+  selectCondition,
+}: IGenericParams<T>) => {
   try {
     const table = getTable(tableName);
 
-    if (whereCondition) {
-      const result = await table.findMany({
-        where: whereCondition,
-      });
-
-      if (!result || result.length === 0) {
-        return null;
-      }
-
-      return result as T[];
-    } else if (selectCondition) {
-      const result = await table.findMany({
-        select: selectCondition,
-      });
-
-      if (!result || result.length === 0) {
-        return null;
-      }
-
-      return result as T[];
-    } else if (whereCondition && selectCondition) {
-      const result = await table.findMany({
-        where: whereCondition,
-        select: selectCondition,
-      });
-
-      if (!result || result.length === 0) {
-        return null;
-      }
-
-      return result as T[];
-    } else {
-      const result = await table.findMany();
-
-      if (!result || result.length === 0) {
-        return null;
-      }
-
-      return result as T[];
-    }
-  } catch (error) {
-    console.log(error);
-    return {
-      error,
+    const queryOptions = {
+      where: whereCondition,
+      select: selectCondition,
     };
+
+    const result = await table.findMany(queryOptions);
+
+    return result ? (result as T[]) : null;
+  } catch (error) {
+    console.error(error);
+    return { error: error instanceof Error ? error.message : error };
   }
 };
 
 export const deleteGeneric = async <T>(
   tableName: TableName,
   isMany: boolean,
-  whereCondition?: WhereCondition
+  whereCondition?: WhereCondition<T>
 ) => {
   try {
     const table = getTable(tableName);
+    const result = whereCondition
+      ? // @ts-ignore
+        await table.delete({ where: whereCondition })
+      : isMany
+      ? await table.deleteMany()
+      : null;
 
-    if (whereCondition) {
-      const result = await table.delete({
-        // @ts-ignore
-        where: whereCondition,
-      });
-
-      if (!result) {
-        return null;
-      }
-
-      return result as T;
-    } else if (isMany) {
-      const result = await table.deleteMany();
-
-      if (!result) {
-        return null;
-      }
-
-      return result as T;
-    } else {
-      return null;
-    }
+    return result || null;
   } catch (error) {
-    console.log(error);
-    return {
-      error,
-    };
+    console.error(error);
+    return { error: error instanceof Error ? error.message : error };
   }
 };
 
-export const updateGeneric = async <T>(
-  tableName: TableName,
-  whereCondition: WhereCondition
-) => {
+export const updateGeneric = async <T>({
+  tableName,
+  whereCondition,
+  data,
+}: IGenericParams<T> & {
+  data: UpdateGenericInput<T>;
+}) => {
   try {
     const table = getTable(tableName);
 
     const result = await table.update({
+      data,
       // @ts-ignore
       where: whereCondition,
     });
 
-    if (!result) {
-      return null;
-    }
-
-    return result as T;
+    return result || null;
   } catch (error) {
-    console.log(error);
-    return {
-      error,
-    };
+    console.error(error);
+    return { error: error instanceof Error ? error.message : error };
   }
 };
 
-export const createGeneric = async <T>(
-  tableName: TableName,
-  data: {
-    [key in keyof Omit<T, "id" | "createdAt" | "updatedAt">]: T[key];
-  },
-  selectOptions?: SelectCondition
-) => {
+export const createGeneric = async <T>({
+  tableName,
+  data,
+  selectCondition,
+}: IGenericParams<T> & {
+  data: CreateGenericInput<T>;
+}) => {
   try {
     const table = getTable(tableName);
 
     const result = await table.create({
       // @ts-ignore
       data,
-      select: selectOptions,
+      select: selectCondition,
     });
 
-    if (!result) {
-      return null;
-    }
-
-    return result as T;
+    return result || null;
   } catch (error) {
     console.log(error);
-    return {
-      error,
-    };
+    return { error };
   }
 };
