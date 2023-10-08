@@ -43,7 +43,7 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
     cleanUp: ActionCreatorWithoutPayload<"genericConfirm/cleanUp">
   ) => {
     if (result?.error) {
-      showErrorToast("An error occurred.", result.error);
+      showErrorToast("An error occurred.", result.error as string);
     } else {
       showSuccessToast(
         "Transaction deleted.",

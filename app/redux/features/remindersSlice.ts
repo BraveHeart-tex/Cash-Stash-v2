@@ -2,9 +2,18 @@ import { getGeneric, getGenericListByCurrentUser } from "@/actions/generic";
 import { Reminder } from "@prisma/client";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
+export type SerializedReminder = Omit<
+  Reminder,
+  "createdAt" | "updatedAt" | "reminderDate"
+> & {
+  createdAt: string;
+  updatedAt: string;
+  reminderDate: string;
+};
+
 interface RemindersState {
-  reminders: Reminder[] | null;
-  currentReminder: Reminder | null;
+  reminders: SerializedReminder[] | null;
+  currentReminder: SerializedReminder | null;
   isLoading: boolean;
 }
 
@@ -25,7 +34,14 @@ export const fetchReminders = createAsyncThunk(
       return null;
     }
 
-    return result.data;
+    const serializedReminders = result.data.map((reminder) => ({
+      ...reminder,
+      createdAt: new Date(reminder.createdAt).toLocaleDateString(),
+      updatedAt: new Date(reminder.updatedAt).toLocaleDateString(),
+      reminderDate: new Date(reminder.reminderDate).toLocaleDateString(),
+    }));
+
+    return serializedReminders;
   }
 );
 
@@ -37,9 +53,16 @@ export const fetchReminderById = createAsyncThunk(
       whereCondition: { id: reminderId },
     });
 
-    if (result?.error) return null;
+    if (result?.error || !result?.data) return null;
 
-    return result.data;
+    const serializedReminder = {
+      ...result.data,
+      createdAt: new Date(result.data.createdAt).toLocaleDateString(),
+      updatedAt: new Date(result.data.updatedAt).toLocaleDateString(),
+      reminderDate: new Date(result.data.reminderDate).toLocaleDateString(),
+    };
+
+    return serializedReminder;
   }
 );
 

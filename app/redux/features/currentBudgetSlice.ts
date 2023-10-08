@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { Budget } from "@prisma/client";
-import { getBudgetByIdAction } from "@/actions";
+import { getGeneric } from "@/actions/generic";
 
 interface CurrentBudgetState {
   currentBudget: Budget | null;
@@ -16,12 +16,16 @@ export const fetchBudgetById = createAsyncThunk(
   "budgets/fetchBudgetById",
   async (budgetId: number) => {
     try {
-      const { budget, error } = await getBudgetByIdAction(budgetId);
-      if (error || !budget) {
+      const result = await getGeneric<Budget>({
+        tableName: "budget",
+        whereCondition: { id: budgetId },
+      });
+
+      if (result?.error || !result?.data) {
         return null;
       }
 
-      return budget;
+      return result.data;
     } catch (error) {
       console.log(error);
       throw error;

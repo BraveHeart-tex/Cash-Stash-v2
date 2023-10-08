@@ -1,14 +1,15 @@
-import { Reminder } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Pencil1Icon } from "@radix-ui/react-icons";
 import { openGenericModal } from "@/app/redux/features/genericModalSlice";
 import { useAppDispatch } from "@/app/redux/hooks";
+import { SerializedReminder } from "@/app/redux/features/remindersSlice";
 
 interface IReminderCardProps {
-  reminder: Reminder;
+  reminder: SerializedReminder;
 }
+
 const ReminderCard = ({ reminder }: IReminderCardProps) => {
   const dispatch = useAppDispatch();
   const today = new Date();
