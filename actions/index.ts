@@ -42,24 +42,16 @@ export const loginAction = async ({ email, password }: LoginSchemaType) => {
     where: {
       email: emailResult,
     },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      image: true,
-      hashedPassword: true,
-      createdAt: true,
-      updatedAt: true,
-    },
   });
 
   if (!user) {
     return { error: "Invalid email or password" };
   }
 
-  const hashedPassword = user.hashedPassword;
-
-  const isPasswordValid = await bcrypt.compare(passwordResult, hashedPassword!);
+  const isPasswordValid = await bcrypt.compare(
+    passwordResult,
+    user.hashedPassword!
+  );
 
   if (!isPasswordValid) {
     return { error: "Invalid email or password." };
@@ -69,9 +61,7 @@ export const loginAction = async ({ email, password }: LoginSchemaType) => {
 
   cookies().set("token", jwt);
 
-  return {
-    user,
-  };
+  return { user };
 };
 
 export const registerAction = async ({
@@ -110,17 +100,8 @@ export const registerAction = async ({
     data: {
       name: nameResult,
       email: emailResult,
-      hashedPassword: hashedPassword,
-      image: image,
-    },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      image: true,
-      hashedPassword: true,
-      createdAt: true,
-      updatedAt: true,
+      hashedPassword,
+      image,
     },
   });
 
