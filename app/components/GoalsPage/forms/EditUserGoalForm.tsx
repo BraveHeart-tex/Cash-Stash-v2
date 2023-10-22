@@ -74,7 +74,7 @@ const EditUserGoalForm = ({ entityId }: IEditUserGoalFormProps) => {
     }
 
     let payload = {
-      goalId: entityId,
+      id: entityId,
       ...data,
     };
 
@@ -82,6 +82,9 @@ const EditUserGoalForm = ({ entityId }: IEditUserGoalFormProps) => {
       const result = await updateGeneric<Goal>({
         tableName: "goal",
         data: payload,
+        whereCondition: {
+          id: entityId,
+        },
       });
 
       if (result?.error) {

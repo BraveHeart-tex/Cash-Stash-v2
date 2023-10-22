@@ -13,7 +13,7 @@ import Image from "next/image";
 import FormInput from "@/components/FormInput";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import errorMap, { generateFormFields } from "@/lib/utils";
+import { generateFormFields } from "@/lib/utils";
 import { useTransition } from "react";
 import { registerAction } from "@/actions";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
@@ -32,9 +32,7 @@ const SignUpForm = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterSchemaType>({
-    resolver: zodResolver(RegisterSchema, {
-      errorMap: errorMap,
-    }),
+    resolver: zodResolver(RegisterSchema),
   });
 
   const handleRegisterFormSubmit = (data: RegisterSchemaType) => {

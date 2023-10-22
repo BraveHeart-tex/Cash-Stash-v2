@@ -2,7 +2,7 @@
 import AccountsFilter from "@/app/components/AccountsPage/AccountFilter";
 import { useAppDispatch } from "@/app/redux/hooks";
 import { Button } from "@/components/ui/button";
-import { openGenericModal } from "../redux/features/genericModalSlice";
+import { openGenericModal } from "@/lib/genericModalUtils";
 
 export default function AccountsPageClient() {
   const dispatch = useAppDispatch();
@@ -16,18 +16,7 @@ export default function AccountsPageClient() {
         </div>
         <Button
           className="mt-4 font-semibold self-start"
-          onClick={() =>
-            dispatch(
-              openGenericModal({
-                mode: "create",
-                key: "account",
-                dialogTitle: "Create an account",
-                dialogDescription:
-                  "Fill out the form below to create an account.",
-                entityId: "",
-              })
-            )
-          }
+          onClick={() => openGenericModal("Accounts", dispatch)}
         >
           Create Account
         </Button>

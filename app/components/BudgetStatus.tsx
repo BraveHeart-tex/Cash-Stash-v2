@@ -4,9 +4,9 @@ import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { fetchBudgets } from "@/app/redux/features/budgetSlice";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { setSelectedTab } from "../redux/features/navigationTabsSlice";
 import { FaMoneyBillAlt } from "react-icons/fa";
 import BudgetCardf from "./BudgetCard";
+import { openGenericModal } from "@/lib/genericModalUtils";
 
 const BudgetStatus = () => {
   const dispatch = useAppDispatch();
@@ -31,7 +31,7 @@ const BudgetStatus = () => {
           <p className="text-primary">No budgets found.</p>
           <Button
             className="font-semibold text-md mt-3 flex items-center gap-[14px]"
-            onClick={() => dispatch(setSelectedTab({ selectedTab: "Budgets" }))}
+            onClick={() => openGenericModal("Budgets", dispatch)}
           >
             <FaMoneyBillAlt size={18} /> Create a budget
           </Button>

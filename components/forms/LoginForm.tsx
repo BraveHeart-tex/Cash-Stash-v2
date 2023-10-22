@@ -15,7 +15,7 @@ import { useForm } from "react-hook-form";
 import { LoginSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchemaType } from "@/schemas/LoginSchema";
-import errorMap, { generateFormFields } from "@/lib/utils";
+import { generateFormFields } from "@/lib/utils";
 import { useTransition } from "react";
 import { loginAction } from "@/actions";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
@@ -32,9 +32,7 @@ const LoginForm = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginSchemaType>({
-    resolver: zodResolver(LoginSchema, {
-      errorMap: errorMap,
-    }),
+    resolver: zodResolver(LoginSchema, {}),
   });
 
   const handleLoginFormSubmit = (data: LoginSchemaType) => {

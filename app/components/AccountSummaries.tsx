@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { setSelectedTab } from "../redux/features/navigationTabsSlice";
 import { FaPiggyBank } from "react-icons/fa";
 import AccountCard from "./AccountCard";
+import { openGenericModal } from "@/lib/genericModalUtils";
 
 const AccountSummaries = () => {
   const dispatch = useAppDispatch();
@@ -34,9 +35,7 @@ const AccountSummaries = () => {
           <p className="text-primary">No accounts found.</p>
           <Button
             className="font-semibold text-md mt-3 flex items-center gap-[14px]"
-            onClick={() =>
-              dispatch(setSelectedTab({ selectedTab: "Accounts" }))
-            }
+            onClick={() => openGenericModal("Accounts", dispatch)}
           >
             <FaPiggyBank size={18} /> Create an account
           </Button>

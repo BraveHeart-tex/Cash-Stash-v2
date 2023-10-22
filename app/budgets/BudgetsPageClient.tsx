@@ -1,10 +1,10 @@
 "use client";
 import BudgetCards from "@/app/components/BudgetsPage/BudgetCards";
 import { fetchBudgets } from "@/app/redux/features/budgetSlice";
-import { openGenericModal } from "@/app/redux/features/genericModalSlice";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { openGenericModal } from "@/lib/genericModalUtils";
 import { useEffect } from "react";
 
 const BudgetsNotFoundMessage = () => (
@@ -40,20 +40,9 @@ const BudgetsPageClient = () => {
         )}
         <Button
           className="self-start mt-4"
-          onClick={() =>
-            dispatch(
-              openGenericModal({
-                mode: "create",
-                key: "budget",
-                dialogTitle: "Create a budget",
-                dialogDescription:
-                  "Fill out the form below to create a budget.",
-                entityId: "",
-              })
-            )
-          }
+          onClick={() => openGenericModal("Budgets", dispatch)}
         >
-          Create Budget
+          Create a Budget
         </Button>
       </div>
     </div>
