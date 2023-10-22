@@ -2,10 +2,9 @@
 import BudgetCards from "@/app/components/BudgetsPage/BudgetCards";
 import { fetchBudgets } from "@/app/redux/features/budgetSlice";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { openGenericModal } from "@/lib/genericModalUtils";
 import { useEffect } from "react";
+import CreateBudgetButton from "../components/CreateButtons/CreateBudgetButton";
 
 const BudgetsNotFoundMessage = () => (
   <div className="flex flex-col items-start lg:items-center justify-center gap-4">
@@ -38,12 +37,7 @@ const BudgetsPageClient = () => {
             </div>
           </div>
         )}
-        <Button
-          className="self-start mt-4"
-          onClick={() => openGenericModal("Budgets", dispatch)}
-        >
-          Create a Budget
-        </Button>
+        <CreateBudgetButton className="mt-4 self-start" />
       </div>
     </div>
   );

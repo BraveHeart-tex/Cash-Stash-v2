@@ -26,4 +26,28 @@ export const openGenericModal = (page: Page, dispatch: AppDispatch) => {
       })
     );
   }
+
+  if (page === "Goals") {
+    dispatch(
+      openGenericModalAction({
+        mode: "create",
+        dialogTitle: "Create Goal",
+        dialogDescription: "Create a new goal by filling out the form below.",
+        entityId: "",
+        key: "goal",
+      })
+    );
+  }
+
+  if (page === "Transactions") {
+    dispatch(
+      openGenericModalAction({
+        mode: "create",
+        key: "transaction",
+        dialogTitle: "Create a transaction",
+        dialogDescription: "Fill out the form below to create a transaction.",
+        entityId: "",
+      })
+    );
+  }
 };

@@ -2,10 +2,9 @@
 import { useEffect } from "react";
 import { fetchGoals } from "@/app/redux/features/goalSlice";
 import { useAppSelector, useAppDispatch } from "@/app/redux/hooks";
-import { Button } from "@/components/ui/button";
-import { openGenericModal } from "@/app/redux/features/genericModalSlice";
 import { Skeleton } from "@/components/ui/skeleton";
 import GoalCard from "../components/GoalCard";
+import CreateGoalButton from "../components/CreateButtons/CreateGoalButton";
 
 const GoalsPageClient = () => {
   const { goals, isLoading } = useAppSelector((state) => state.goalReducer);
@@ -42,23 +41,7 @@ const GoalsPageClient = () => {
       <div className="flex justify-center lg:items-center flex-col gap-2">
         {isLoading ? renderLoadingState() : renderGoals()}
         {!isLoading && !goals ? renderNoGoalsState() : null}
-        <Button
-          className="mt-4 self-start"
-          onClick={() =>
-            dispatch(
-              openGenericModal({
-                mode: "create",
-                dialogTitle: "Create Goal",
-                dialogDescription:
-                  "Create a new goal by filling out the form below.",
-                entityId: "",
-                key: "goal",
-              })
-            )
-          }
-        >
-          Create Goal
-        </Button>
+        <CreateGoalButton className="mt-4 self-start" />
       </div>
     </div>
   );

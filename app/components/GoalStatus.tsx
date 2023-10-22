@@ -1,12 +1,9 @@
-"use client";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { fetchGoals } from "@/app/redux/features/goalSlice";
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { setSelectedTab } from "../redux/features/navigationTabsSlice";
-import { FaBullseye } from "react-icons/fa";
 import GoalCard from "./GoalCard";
+import CreateGoalButton from "./CreateButtons/CreateGoalButton";
 
 const GoalStatus = () => {
   const dispatch = useAppDispatch();
@@ -29,13 +26,7 @@ const GoalStatus = () => {
       <article className="flex h-[300px] items-center justify-center">
         <div>
           <p className="text-primary">No goals found.</p>
-          <Button
-            className="font-semibold text-md mt-3 flex items-center gap-[14px]"
-            onClick={() => dispatch(setSelectedTab({ selectedTab: "Goals" }))}
-          >
-            <FaBullseye size={18} />
-            Create a goal
-          </Button>
+          <CreateGoalButton />
         </div>
       </article>
     );
