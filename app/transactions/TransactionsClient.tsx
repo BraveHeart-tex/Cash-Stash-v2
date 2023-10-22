@@ -35,7 +35,7 @@ const TransactionsClient = () => {
             dialogTitle: "Create a transaction",
             dialogDescription:
               "Fill out the form below to create a transaction.",
-            entityId: 0,
+            entityId: "",
           })
         );
       }

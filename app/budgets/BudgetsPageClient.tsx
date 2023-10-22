@@ -48,7 +48,7 @@ const BudgetsPageClient = () => {
                 dialogTitle: "Create a budget",
                 dialogDescription:
                   "Fill out the form below to create a budget.",
-                entityId: 0,
+                entityId: "",
               })
             )
           }

@@ -24,7 +24,7 @@ export default function AccountsPageClient() {
                 dialogTitle: "Create an account",
                 dialogDescription:
                   "Fill out the form below to create an account.",
-                entityId: 0,
+                entityId: "",
               })
             )
           }

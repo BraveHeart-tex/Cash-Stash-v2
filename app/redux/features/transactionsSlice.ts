@@ -174,10 +174,7 @@ const transactionsSlice = createSlice({
                 return false;
               }
             }
-            if (
-              accountId !== "" &&
-              transaction.accountId !== parseInt(accountId)
-            ) {
+            if (accountId !== "" && transaction.accountId !== accountId) {
               return false;
             }
             return true;

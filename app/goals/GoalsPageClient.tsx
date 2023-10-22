@@ -51,7 +51,7 @@ const GoalsPageClient = () => {
                 dialogTitle: "Create Goal",
                 dialogDescription:
                   "Create a new goal by filling out the form below.",
-                entityId: 0,
+                entityId: "",
                 key: "goal",
               })
             )

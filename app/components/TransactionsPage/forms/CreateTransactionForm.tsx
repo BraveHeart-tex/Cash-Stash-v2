@@ -37,7 +37,7 @@ const CreateTransactionForm = () => {
       amount: 0,
       description: "",
       category: "Food",
-      accountId: 0,
+      accountId: "",
       isIncome: true,
     },
     resolver: zodResolver(CreateTransactionSchema),
@@ -116,7 +116,7 @@ const CreateTransactionForm = () => {
           placeholder={"Account"}
           register={register}
           errors={errors}
-          onChange={(value) => setValue("accountId", parseInt(value))}
+          onChange={(value) => setValue("accountId", value)}
         />
         <FormSelect
           defaultValue={"income"}
