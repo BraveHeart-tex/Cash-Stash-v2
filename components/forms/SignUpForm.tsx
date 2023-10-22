@@ -13,7 +13,7 @@ import Image from "next/image";
 import FormInput from "@/components/FormInput";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import errorMap from "@/lib/utils";
+import errorMap, { generateFormFields } from "@/lib/utils";
 import { useTransition } from "react";
 import { registerAction } from "@/actions";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
@@ -23,6 +23,7 @@ import RegisterSchema, { RegisterSchemaType } from "@/schemas/RegisterSchema";
 
 const SignUpForm = () => {
   let [isPending, startTransition] = useTransition();
+  const registerFormFields = generateFormFields(RegisterSchema);
 
   const router = useRouter();
 
@@ -31,7 +32,6 @@ const SignUpForm = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterSchemaType>({
-    // @ts-ignore
     resolver: zodResolver(RegisterSchema, {
       errorMap: errorMap,
     }),
@@ -39,13 +39,12 @@ const SignUpForm = () => {
 
   const handleRegisterFormSubmit = (data: RegisterSchemaType) => {
     startTransition(async () => {
-      const result = await registerAction(data);
-      if (result?.error) {
-        showErrorToast("An error occurred.", result.error);
-      } else {
+      registerAction(data).then((result) => {
+        if (result?.error)
+          return showErrorToast("An error occurred.", result.error);
         router.push("/");
         showSuccessToast("Signed up.", "You have been signed up.");
-      }
+      });
     });
   };
 
@@ -56,7 +55,10 @@ const SignUpForm = () => {
           src={logo}
           alt="Cash Stash"
           width={200}
-          className="mb-4 dark:brightness-0 md:mx-auto"
+          className="mb-4 md:mx-auto"
+          style={{
+            filter: "grayscale(1) invert(1)",
+          }}
         />
         <CardTitle>Welcome!</CardTitle>
         <CardDescription>Get started by creating your account.</CardDescription>
@@ -67,33 +69,20 @@ const SignUpForm = () => {
           onSubmit={handleSubmit(handleRegisterFormSubmit)}
         >
           <div className="grid grid-cols-1 gap-4">
-            <FormInput
-              name={"name"}
-              label={"Full Name"}
-              placeholder={"Full Name"}
-              type={"text"}
-              register={register}
-              errors={errors}
-            />
-            <FormInput
-              name={"email"}
-              label={"Email"}
-              placeholder={"Email address"}
-              type={"email"}
-              register={register}
-              errors={errors}
-            />
-            <FormInput
-              name={"password"}
-              label={"Password"}
-              placeholder={"Password"}
-              type={"password"}
-              register={register}
-              errors={errors}
-            />
+            {registerFormFields.map((field) => (
+              <FormInput
+                key={field.name}
+                name={field.name}
+                label={field.label}
+                placeholder={field.label}
+                type={field.type}
+                register={register}
+                errors={errors}
+              />
+            ))}
           </div>
           <Button type="submit" className="font-semibold" disabled={isPending}>
-            Sign in
+            Sign up
           </Button>
         </form>
       </CardContent>

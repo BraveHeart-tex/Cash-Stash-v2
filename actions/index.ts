@@ -68,9 +68,8 @@ export const registerAction = async ({
   name,
   email,
   password,
-  img: image,
 }: RegisterSchemaType) => {
-  const result = RegisterSchema.safeParse({ name, email, password, image });
+  const result = RegisterSchema.safeParse({ name, email, password });
 
   if (!result.success) {
     return { error: "Unprocessable entitiy." };
@@ -101,7 +100,6 @@ export const registerAction = async ({
       name: nameResult,
       email: emailResult,
       hashedPassword,
-      image,
     },
   });
 

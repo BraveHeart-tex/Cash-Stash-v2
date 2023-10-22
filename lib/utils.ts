@@ -13,6 +13,7 @@ import {
   ZodIssueCode,
   ErrorMapCtx,
   ZodIssueOptionalMessage,
+  ZodObject,
 } from "zod";
 
 export function cn(...inputs: ClassValue[]) {
@@ -257,3 +258,54 @@ const errorMap = (issue: ZodIssueOptionalMessage, _ctx: ErrorMapCtx) => {
 };
 
 export default errorMap;
+
+export function generateFormFields(schema: ZodObject<any>) {
+  const formFields = [];
+
+  for (const key of Object.keys(schema.shape)) {
+    const fieldSchema = schema.shape[key];
+    const description = fieldSchema._def.description;
+
+    const parsedDescription = description
+      .split(",")
+      .map((item: string) => item.trim());
+
+    const fieldType = parsedDescription
+      .find((item: string) => item.startsWith("type:"))
+      .split(":")[1]
+      .trim();
+
+    const fieldLabel = parsedDescription
+      .find((item: string) => item.startsWith("label:"))
+      .split(":")[1]
+      .trim();
+
+    const fieldObject: {
+      name: string;
+      type: string;
+      label: string;
+      options?: string[];
+    } = {
+      name: key,
+      type: fieldType,
+      label: fieldLabel,
+    };
+
+    if (fieldType === "combobox") {
+      console.log(parsedDescription);
+      const fieldOptions = parsedDescription
+        .find((item: string) => item.startsWith("options:"))
+        .split(":")[1]
+        .trim()
+        .split("-");
+
+      console.log(fieldOptions);
+
+      fieldObject["options"] = fieldOptions;
+    }
+
+    formFields.push(fieldObject);
+  }
+
+  return formFields;
+}

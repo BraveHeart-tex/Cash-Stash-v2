@@ -15,7 +15,7 @@ import { useForm } from "react-hook-form";
 import { LoginSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchemaType } from "@/schemas/LoginSchema";
-import errorMap from "@/lib/utils";
+import errorMap, { generateFormFields } from "@/lib/utils";
 import { useTransition } from "react";
 import { loginAction } from "@/actions";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
@@ -25,13 +25,13 @@ import Link from "next/link";
 const LoginForm = () => {
   let [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const loginFormFields = generateFormFields(LoginSchema);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginSchemaType>({
-    // @ts-ignore
     resolver: zodResolver(LoginSchema, {
       errorMap: errorMap,
     }),
@@ -56,7 +56,10 @@ const LoginForm = () => {
           src={logo}
           alt="Cash Stash"
           width={200}
-          className="mb-4 dark:brightness-0 md:mx-auto"
+          className="mb-4 md:mx-auto"
+          style={{
+            filter: "grayscale(1) invert(1)",
+          }}
         />
         <CardTitle>Welcome!</CardTitle>
         <CardDescription>Sign in to access your account.</CardDescription>
@@ -67,22 +70,17 @@ const LoginForm = () => {
           onSubmit={handleSubmit(handleLoginFormSubmit)}
         >
           <div className="grid grid-cols-1 gap-4">
-            <FormInput
-              name={"email"}
-              label={"Email"}
-              placeholder={"Email address"}
-              type={"email"}
-              register={register}
-              errors={errors}
-            />
-            <FormInput
-              name={"password"}
-              label={"Password"}
-              placeholder={"Password"}
-              type={"password"}
-              register={register}
-              errors={errors}
-            />
+            {loginFormFields.map((field) => (
+              <FormInput
+                key={field.name}
+                name={field.name}
+                label={field.label}
+                placeholder={field.label}
+                type={field.type}
+                register={register}
+                errors={errors}
+              />
+            ))}
           </div>
           <Button type="submit" className="font-semibold" disabled={isPending}>
             Sign in
