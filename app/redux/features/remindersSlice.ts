@@ -47,7 +47,7 @@ export const fetchReminders = createAsyncThunk(
 
 export const fetchReminderById = createAsyncThunk(
   "reminders/fetchReminderById",
-  async (reminderId: number) => {
+  async (reminderId: string) => {
     const result = await getGeneric<Reminder>({
       tableName: "reminder",
       whereCondition: { id: reminderId },

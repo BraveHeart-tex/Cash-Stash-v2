@@ -14,7 +14,7 @@ const initialState: CurrentBudgetState = {
 
 export const fetchBudgetById = createAsyncThunk(
   "budgets/fetchBudgetById",
-  async (budgetId: number) => {
+  async (budgetId: string) => {
     try {
       const result = await getGeneric<Budget>({
         tableName: "budget",

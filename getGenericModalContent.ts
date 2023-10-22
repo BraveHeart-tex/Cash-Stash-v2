@@ -12,11 +12,11 @@ import { createElement } from "react";
 interface IGetGenericDialogContentParams {
   mode: "create" | "edit";
   key: "budget" | "goal" | "transaction" | "reminder" | "account" | "";
-  entityId: number;
+  entityId: string;
 }
 
 interface EditFormProps {
-  entityId: number;
+  entityId: string;
 }
 
 interface ContentMap {

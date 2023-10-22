@@ -14,7 +14,7 @@ const initialState: CurrentGoalState = {
 
 export const fetchGoalById = createAsyncThunk(
   "goals/fetchGoalById",
-  async (goalId: number) => {
+  async (goalId: string) => {
     try {
       const result = await getGeneric<Goal>({
         tableName: "goal",

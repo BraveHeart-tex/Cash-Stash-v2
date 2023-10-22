@@ -19,7 +19,7 @@ import { updateGeneric } from "@/actions/generic";
 import { Goal } from "@prisma/client";
 
 interface IEditUserGoalFormProps {
-  entityId: number;
+  entityId: string;
 }
 
 const EditUserGoalForm = ({ entityId }: IEditUserGoalFormProps) => {

@@ -24,7 +24,7 @@ import { Button } from "@/components/ui/button";
 import { updateBudgetByIdAction } from "@/actions";
 
 interface IEditBudgetFormProps {
-  entityId: number;
+  entityId: string;
 }
 
 const EditUserBudgetForm = ({ entityId }: IEditBudgetFormProps) => {

@@ -23,7 +23,7 @@ import { updateReminderAction } from "@/actions";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 
 interface IEditReminderFormProps {
-  entityId: number;
+  entityId: string;
 }
 
 const EditReminderForm = ({ entityId }: IEditReminderFormProps) => {
