@@ -4,7 +4,7 @@ const CreateTransactionSchema = z.object({
   amount: z.coerce.number().positive("Amount must be positive"),
   description: z.string().min(1, "Description cannot be empty"),
   category: z.string().min(1, "Category cannot be empty"),
-  accountId: z.number().positive("Please select an account"),
+  accountId: z.string().min(1, "Please select an account"),
   isIncome: z.boolean(),
 });
 

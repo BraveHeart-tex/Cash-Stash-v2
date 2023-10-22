@@ -25,7 +25,7 @@ import CreateUserAccountSchema, {
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 
 interface IEditUserAccountFormProps {
-  entityId: number | null;
+  entityId: string | null;
 }
 
 const EditUserAccountForm = ({ entityId }: IEditUserAccountFormProps) => {

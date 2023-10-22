@@ -17,7 +17,7 @@ interface IGoalCardProps {
 const GoalCard = ({ goal }: IGoalCardProps) => {
   const dispatch = useAppDispatch();
 
-  const handleDeleteGoal = (id: number) => {
+  const handleDeleteGoal = (id: string) => {
     const handleActionCallback = (
       result: Awaited<ReturnType<typeof deleteGeneric>>,
       cleanUp: ActionCreatorWithoutPayload<"genericConfirm/cleanUp">

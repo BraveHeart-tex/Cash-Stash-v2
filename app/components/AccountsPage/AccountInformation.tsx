@@ -10,11 +10,9 @@ const AccountInformation = ({ userAccounts }: IAccountInformationProps) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
       {userAccounts && userAccounts?.length > 0 ? (
-        userAccounts
-          .sort((a, b) => a.id - b.id)
-          .map((userAccount) => (
-            <AccountCard key={userAccount.id} account={userAccount} />
-          ))
+        userAccounts.map((userAccount) => (
+          <AccountCard key={userAccount.id} account={userAccount} />
+        ))
       ) : (
         <div className="my-4">
           <h3 className="text-lg text-primary">No accounts found</h3>

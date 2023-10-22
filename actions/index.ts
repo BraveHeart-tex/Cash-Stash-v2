@@ -286,7 +286,7 @@ export const updateAccountByIdAction = async ({
   balance,
   category,
   name,
-}: CreateUserAccountSchemaType & { accountId: number | null }) => {
+}: CreateUserAccountSchemaType & { accountId: string | null }) => {
   if (!accountId) {
     return { error: "Account ID not found." };
   }
@@ -382,7 +382,7 @@ export const updateBudgetByIdAction = async ({
   budgetAmount,
   spentAmount,
   category,
-}: EditBudgetSchemaType & { budgetId: number }) => {
+}: EditBudgetSchemaType & { budgetId: string }) => {
   if (!budgetId) return { error: "Budget ID not found." };
 
   const budgetToBeUpdated = await db.budget.findUnique({
@@ -428,7 +428,7 @@ export const updateReminderAction = async ({
   reminderDate,
   isRead,
   isIncome,
-}: EditReminderSchemaType & { reminderId: number }) => {
+}: EditReminderSchemaType & { reminderId: string }) => {
   if (!reminderId) return { error: "Reminder ID not found." };
 
   const result = EditReminderSchema.safeParse({
@@ -555,7 +555,7 @@ export const createTransactionAction = async ({
   };
 };
 
-export const deleteTransactionByIdAction = async (transactionId: number) => {
+export const deleteTransactionByIdAction = async (transactionId: string) => {
   try {
     if (!transactionId) {
       throw new Error("Transaction ID not found.");

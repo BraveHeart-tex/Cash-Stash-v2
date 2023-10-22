@@ -8,9 +8,7 @@ import { FaRegClock } from "react-icons/fa";
 import ReminderCard from "@/components/ReminderCard";
 
 const NotificationsAndReminders = () => {
-  const { reminders, isLoading } = useAppSelector(
-    (state) => state.remindersReducer
-  );
+  const { reminders } = useAppSelector((state) => state.remindersReducer);
 
   const dispatch = useAppDispatch();
 
@@ -32,7 +30,7 @@ const NotificationsAndReminders = () => {
                 dialogTitle: "Create Reminder",
                 dialogDescription:
                   "You can create a reminder by using the form below.",
-                entityId: 0,
+                entityId: "",
               })
             );
           }}
@@ -65,7 +63,7 @@ const NotificationsAndReminders = () => {
               dialogTitle: "Create Reminder",
               dialogDescription:
                 "You can create a reminder by using the form below.",
-              entityId: 0,
+              entityId: "",
             })
           )
         }

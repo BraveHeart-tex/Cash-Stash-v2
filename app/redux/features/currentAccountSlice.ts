@@ -14,7 +14,7 @@ const initialState: UserAccountsState = {
 
 export const fetchCurrentAccount = createAsyncThunk(
   "currentAccount/fetchCurrentAccount",
-  async (id: number | null) => {
+  async (id: string | null) => {
     if (!id) {
       return null;
     }

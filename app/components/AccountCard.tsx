@@ -39,7 +39,7 @@ const AccountCard = ({ account, className }: IAccountCardProps) => {
     }
   };
 
-  const handleDeleteAccount = (id: number) => {
+  const handleDeleteAccount = (id: string) => {
     dispatch(
       showGenericConfirm({
         title: "Delete Account",

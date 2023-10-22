@@ -14,7 +14,6 @@ import {
   ErrorMapCtx,
   ZodIssueOptionalMessage,
 } from "zod";
-import { Prisma } from "@prisma/client";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

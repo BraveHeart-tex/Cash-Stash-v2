@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 interface GenericModalState {
-  entityId: number;
+  entityId: string;
   isGenericModalOpen: boolean;
   dialogTitle?: string;
   dialogDescription?: string;
@@ -10,7 +10,7 @@ interface GenericModalState {
 }
 
 const initialState: GenericModalState = {
-  entityId: 0,
+  entityId: "",
   isGenericModalOpen: false,
   mode: "create",
   dialogTitle: "",
@@ -26,7 +26,7 @@ export const genericModalSlice = createSlice({
       state,
       action: PayloadAction<{
         mode: "edit" | "create";
-        entityId: number;
+        entityId: string;
         dialogTitle: string;
         dialogDescription: string;
         key: "budget" | "goal" | "transaction" | "reminder" | "account" | "";
@@ -44,7 +44,7 @@ export const genericModalSlice = createSlice({
     },
 
     closeGenericModal: (state) => {
-      state.entityId = 0;
+      state.entityId = "",
       state.isGenericModalOpen = false;
       state.mode = "create";
       state.dialogTitle = "";
