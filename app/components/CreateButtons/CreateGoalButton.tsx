@@ -16,6 +16,7 @@ const CreateGoalButton = ({ className }: ICreateGoalButtonProps) => {
         "font-semibold text-md mt-3 flex items-center gap-[14px]",
         className
       )}
+      data-testid="create-goal-button"
       onClick={() => openGenericModal("Goals", dispatch)}
     >
       <FaBullseye size={18} />

@@ -31,7 +31,6 @@ const CreateUserAccountForm = () => {
       category: "checking",
       name: "",
     },
-    // @ts-ignore
     resolver: zodResolver(CreateUserAccountSchema),
   });
 
@@ -55,7 +54,10 @@ const CreateUserAccountForm = () => {
   }));
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      data-testid="create-user-account-form"
+    >
       <div className="grid grid-cols-1 gap-4">
         <FormInput
           name={"name"}

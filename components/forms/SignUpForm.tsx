@@ -20,8 +20,11 @@ import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import RegisterSchema, { RegisterSchemaType } from "@/schemas/RegisterSchema";
+import { useTheme } from "next-themes";
 
 const SignUpForm = () => {
+  const { theme, systemTheme } = useTheme();
+  const hasDarkTheme = theme === "dark" || systemTheme === "dark";
   let [isPending, startTransition] = useTransition();
   const registerFormFields = generateFormFields(RegisterSchema);
 
@@ -55,7 +58,7 @@ const SignUpForm = () => {
           width={200}
           className="mb-4 md:mx-auto"
           style={{
-            filter: "grayscale(1) invert(1)",
+            filter: hasDarkTheme ? "grayscale(1) invert(1)" : "none",
           }}
         />
         <CardTitle>Welcome!</CardTitle>

@@ -16,6 +16,7 @@ const CreateBudgetButton = ({ className }: ICreateBudgetButtonProps) => {
         "font-semibold text-md mt-3 flex items-center gap-[14px]",
         className
       )}
+      data-testid="create-budget-button"
       onClick={() => openGenericModal("Budgets", dispatch)}
     >
       <FaMoneyBillAlt size={18} /> Create a budget

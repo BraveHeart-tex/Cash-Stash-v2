@@ -21,8 +21,11 @@ import { loginAction } from "@/actions";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useTheme } from "next-themes";
 
 const LoginForm = () => {
+  const { theme, systemTheme } = useTheme();
+  const hasDarkTheme = theme === "dark" || systemTheme === "dark";
   let [isPending, startTransition] = useTransition();
   const router = useRouter();
   const loginFormFields = generateFormFields(LoginSchema);
@@ -56,7 +59,7 @@ const LoginForm = () => {
           width={200}
           className="mb-4 md:mx-auto"
           style={{
-            filter: "grayscale(1) invert(1)",
+            filter: hasDarkTheme ? "grayscale(1) invert(1)" : "none",
           }}
         />
         <CardTitle>Welcome!</CardTitle>
@@ -66,6 +69,7 @@ const LoginForm = () => {
         <form
           className="flex flex-col gap-4"
           onSubmit={handleSubmit(handleLoginFormSubmit)}
+          data-testid="login-form"
         >
           <div className="grid grid-cols-1 gap-4">
             {loginFormFields.map((field) => (
@@ -80,7 +84,12 @@ const LoginForm = () => {
               />
             ))}
           </div>
-          <Button type="submit" className="font-semibold" disabled={isPending}>
+          <Button
+            type="submit"
+            className="font-semibold"
+            disabled={isPending}
+            data-testid="login-button"
+          >
             Sign in
           </Button>
         </form>
@@ -88,7 +97,11 @@ const LoginForm = () => {
       <CardFooter>
         <p className="text-sm text-center">
           Don't have an account?{" "}
-          <Link href="/signup" className="text-blue-500 hover:underline">
+          <Link
+            href="/signup"
+            className="text-blue-500 hover:underline"
+            data-testid="signup-link"
+          >
             Sign up
           </Link>
         </p>

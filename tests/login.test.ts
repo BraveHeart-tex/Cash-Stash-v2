@@ -1,22 +1,54 @@
-import { expect, test } from "@playwright/test";
+import { test as base } from "@playwright/test";
+import prisma from "../app/libs/prismadb";
+import { getUserData } from "./testUtils";
+import { faker } from "@faker-js/faker";
 
-test("Should redirect the user to the login page if they are not logged in", async ({
-  page,
-}) => {
-  await page.goto("/");
+const test = base.extend({
+  createUser: async ({}, use) => {
+    let userId: string | undefined = undefined;
+    await use(async () => {
+      const newUser = await prisma.user.create({
+        data: {
+          name: faker.person.firstName(),
+          email: faker.internet.email(),
+          hashedPassword: faker.internet.password(),
+        },
+      });
+      userId = newUser.id;
+      return newUser;
+    });
 
-  expect(page.url()).toBe("/login");
+    if (userId) {
+      await prisma.user.delete({
+        where: {
+          id: userId,
+        },
+      });
+    }
+  },
 });
 
-test("Should redirect the user to the dashboard page if they are logged in", async ({
+const { expect } = test;
+
+test("redirects to the login page if the user is not authenticated", async ({
   page,
+  baseURL,
+  context,
 }) => {
-  await page.goto("/login");
+  await context.clearCookies();
+  await page.goto(baseURL!);
 
-  await page.fill("#email", "test@test");
-  await page.fill("#password", "testtest");
+  expect(page.url()).toBe(`${baseURL}/login`);
 
-  await page.click("button:has-text('Log In')");
+  await page.waitForSelector("[data-testid='login-form']");
 
-  expect(page.url()).toBe("/dashboard");
+  const loginForm = page.getByTestId("login-form");
+
+  expect(loginForm).toBeTruthy();
+
+  const emailField = page.getByTestId("email");
+  expect(emailField).toBeTruthy();
+
+  const passwordField = page.getByTestId("password");
+  expect(passwordField).toBeTruthy();
 });

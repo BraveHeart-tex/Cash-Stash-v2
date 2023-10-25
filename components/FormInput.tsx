@@ -35,6 +35,7 @@ const FormInput = ({
         type={type}
         {...register(name)}
         className={className}
+        data-testid={name}
       />
       {errors[name] && errors[name].message && (
         <FormError errorMessage={errors[name].message} />
