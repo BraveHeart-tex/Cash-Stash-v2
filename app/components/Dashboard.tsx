@@ -22,9 +22,11 @@ interface IDashboardProps {
 
 const Dashboard = ({ monthlyTransactionsData }: IDashboardProps) => {
   const dispatch = useAppDispatch();
-  const { data: transactions, insightsData } = useAppSelector(
-    (state) => state.transactionsReducer
-  );
+  const {
+    data: transactions,
+    insightsData,
+    isLoading,
+  } = useAppSelector((state) => state.transactionsReducer);
 
   useEffect(() => {
     dispatch(fetchTransactions());
@@ -78,7 +80,7 @@ const Dashboard = ({ monthlyTransactionsData }: IDashboardProps) => {
           <BarChartComponent
             monthlyTransactionsData={monthlyTransactionsData}
           />
-          <FinancialInsights insightsData={insightsData} />
+          <FinancialInsights insightsData={insightsData} loading={isLoading} />
         </div>
       ),
     },

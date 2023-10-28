@@ -16,7 +16,7 @@ import { LoginSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchemaType } from "@/schemas/LoginSchema";
 import { generateFormFields } from "@/lib/utils";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { loginAction } from "@/actions";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
@@ -28,6 +28,7 @@ const LoginForm = () => {
   const hasDarkTheme = theme === "dark" || systemTheme === "dark";
   let [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const [loggedIn, setLoggedIn] = useState(false);
   const loginFormFields = generateFormFields(LoginSchema);
 
   const {
@@ -52,18 +53,31 @@ const LoginForm = () => {
 
   const handleTestUserLogin = () => {
     startTransition(async () => {
-      const result = await loginAction({
+      loginAction({
         email: "testUser@email.com",
         password: "testUser123!",
+      }).then((result) => {
+        if (result?.error) {
+          showErrorToast("An error occurred.", result.error);
+        } else {
+          setLoggedIn(true);
+          router.push("/");
+          showSuccessToast("Logged in.", "You have been logged in.");
+        }
       });
-      if (result?.error) {
-        showErrorToast("An error occurred.", result.error);
-      } else {
-        router.push("/");
-        showSuccessToast("Logged in.", "You have been logged in.");
-      }
     });
   };
+
+  if (loggedIn) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen gap-2">
+        <h1 className="text-2xl font-semibold text-foreground ">
+          Logged in successfully.
+        </h1>
+        <span className="animate-bounce">You are being redirected...</span>
+      </div>
+    );
+  }
 
   return (
     <Card className="w-full">
