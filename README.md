@@ -2,7 +2,7 @@
 
 # Cash Stash | Personal Finance Application
 
-<img src='./showcase_imgs/cashstash_desktop_dasboard.png' width='1000'/>
+<img src='https://res.cloudinary.com/dmwafn98h/image/upload/v1698497726/rafs6puj7vrr2zpw4n0p.jpg' width='1000'/>
 
 Cash Stash is a personal finance application that offers various functionalities. Users can create account with different account types, create transactions related to their accounts, create goals, budgets and reminders. The UI of the application is built with Chakra UI and Next.js to offer the best user experience on all screen sizes.
 
