@@ -50,6 +50,21 @@ const LoginForm = () => {
     });
   };
 
+  const handleTestUserLogin = () => {
+    startTransition(async () => {
+      const result = await loginAction({
+        email: "testUser@email.com",
+        password: "testUser123!",
+      });
+      if (result?.error) {
+        showErrorToast("An error occurred.", result.error);
+      } else {
+        router.push("/");
+        showSuccessToast("Logged in.", "You have been logged in.");
+      }
+    });
+  };
+
   return (
     <Card className="w-full">
       <CardHeader>
@@ -94,17 +109,26 @@ const LoginForm = () => {
           </Button>
         </form>
       </CardContent>
-      <CardFooter>
-        <p className="text-sm text-center">
-          Don't have an account?{" "}
-          <Link
-            href="/signup"
-            className="text-blue-500 hover:underline"
-            data-testid="signup-link"
-          >
-            Sign up
-          </Link>
-        </p>
+      <CardFooter className="justify-between">
+        <div>
+          <p className="text-sm text-center">
+            Don't have an account?{" "}
+            <Link
+              href="/signup"
+              className="text-blue-500 hover:underline"
+              data-testid="signup-link"
+            >
+              Sign up
+            </Link>
+          </p>
+        </div>
+        <Button
+          variant="ghost"
+          className="font-normal text-sm"
+          onClick={() => handleTestUserLogin()}
+        >
+          Login as a test user
+        </Button>
       </CardFooter>
     </Card>
   );

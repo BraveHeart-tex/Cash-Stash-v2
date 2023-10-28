@@ -35,7 +35,7 @@ const Navigation = () => {
           size="icon"
           aria-label="Menu"
           onClick={onOpen}
-          className="lg:hidden flex items-center justify-center text-white hover:bg-secondary"
+          className="lg:hidden justify-center mr-auto flex items-center text-white hover:bg-secondary"
         >
           <HamburgerMenuIcon />
         </Button>
@@ -44,13 +44,13 @@ const Navigation = () => {
             src={Logo}
             alt="Cash Stash"
             width={200}
-            className="md:mx-auto"
+            className="mx-auto lg:mx-0"
             style={{
               filter: "grayscale(1) invert(1)",
             }}
           />
         </Link>
-        <div className="flex justify-center items-center gap-4">
+        <div className="flex justify-center items-center gap-4 ml-auto lg:ml-0">
           <div className="lg:flex items-center hidden gap-1">
             <ModeToggle />
           </div>

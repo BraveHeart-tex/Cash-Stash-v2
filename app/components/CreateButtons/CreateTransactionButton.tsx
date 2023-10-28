@@ -6,6 +6,7 @@ import { showErrorToast } from "@/components/ui/use-toast";
 import { getGenericListByCurrentUser } from "@/actions/generic";
 import { openGenericModal } from "@/lib/genericModalUtils";
 import { FaExchangeAlt } from "react-icons/fa";
+import { cn } from "@/lib/utils";
 
 const CreateTransactionButton = () => {
   let [isPending, startTransition] = useTransition();
@@ -31,10 +32,20 @@ const CreateTransactionButton = () => {
   };
   return (
     <Button
-      className="font-semibold text-md mt-3 flex items-center gap-[14px]"
+      className={cn(
+        "font-semibold text-md mt-3 flex items-center gap-[14px]",
+        isPending && "opacity-50 cursor-not-allowed"
+      )}
       onClick={handleCreateTransactionClick}
     >
-      <FaExchangeAlt size={18} /> Create a transaction
+      {isPending ? (
+        "Loading..."
+      ) : (
+        <>
+          <FaExchangeAlt className="text-xl" />
+          Create Transaction
+        </>
+      )}
     </Button>
   );
 };

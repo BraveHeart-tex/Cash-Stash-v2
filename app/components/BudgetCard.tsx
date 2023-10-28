@@ -32,6 +32,7 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
     }
   };
 
+
   return (
     <div
       key={budget.id}

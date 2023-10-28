@@ -21,7 +21,7 @@ const ReminderCard = ({ reminder }: IReminderCardProps) => {
       className="flex items-center flex-col gap-1 rounded-md bg-card p-4 shadow-xl relative border"
       key={reminder.id}
     >
-      <div className="w-full flex flex-col md:flex-row md:items-center justify-between">
+      <div className="w-full flex flex-row md:items-center justify-between">
         <p className="font-semibold">{reminder.title}</p>
 
         {isPastReminderDate ? (

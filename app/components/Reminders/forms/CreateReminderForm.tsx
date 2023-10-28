@@ -110,12 +110,6 @@ const CreateReminderForm = () => {
             setValue("isIncome", valueToSet);
           }}
         />
-        <FormCheckbox
-          name={"isRead"}
-          label={"Mark as read"}
-          register={register}
-          errors={errors}
-        />
         <Button type="submit" disabled={isSubmitting || isPending}>
           Create
         </Button>
