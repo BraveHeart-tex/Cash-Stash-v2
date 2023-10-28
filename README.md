@@ -10,10 +10,8 @@ Cash Stash is a personal finance application that offers various functionalities
 
 You can check out the live of of this application from this [link](https://cash-stash.vercel.app)
 
-- You can use the following credentials to sign in to the application
-  > Email: testUser@gmail.com
-  > Password: testuser123
-
+- You can click on the 'Login as a test user' to test the application.
+  
 ## Key Features
 
 1. Create an account by signing up. You can use your Google or Github account to sign in.
