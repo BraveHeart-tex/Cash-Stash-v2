@@ -23,7 +23,7 @@ const NavigationTabsList = ({ dashboardData }: INavigationTabsListProps) => {
       }
       defaultValue={"Dashboard"}
     >
-      <div className="overflow-scroll scrollbar-hide">
+      <div className="overflow-scroll scrollbar-hide hidden lg:block">
         <TabsList className="lg:w-auto">
           {PAGES.map((page) => (
             <TabsTrigger

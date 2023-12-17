@@ -1,6 +1,7 @@
 import { getChartDataAction } from "@/actions";
 import NavigationTabsList from "./NavigationTabsList";
 import { MonthlyData } from "@/app/components/ReportsPage/ReportTable";
+import MobileTabsList from "./MobileTabsList";
 
 const NavigationTabs = async () => {
   const { data: dashboardData } = await getChartDataAction();
@@ -10,6 +11,7 @@ const NavigationTabs = async () => {
       <NavigationTabsList
         dashboardData={dashboardData as MonthlyData["monthlyTransactionsData"]}
       />
+      <MobileTabsList />
     </div>
   );
 };
