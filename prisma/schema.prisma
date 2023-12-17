@@ -3,14 +3,12 @@ generator client {
 }
 
 datasource db {
-  provider          = "postgresql"
-  url               = env("POSTGRES_PRISMA_URL")
-  directUrl         = env("POSTGRES_URL_NON_POOLING")
-  shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING")
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-  id             String           @id @default(cuid())
+  id             String        @id @default(cuid())
   name           String
   email          String        @unique
   hashedPassword String
@@ -27,7 +25,7 @@ model User {
 }
 
 model UserAccount {
-  id           String                 @id @default(cuid())
+  id           String              @id @default(cuid())
   name         String
   balance      Float
   userId       String
@@ -41,7 +39,7 @@ model UserAccount {
 }
 
 model Transaction {
-  id          String                  @id @default(cuid())
+  id          String               @id @default(cuid())
   amount      Float
   createdAt   DateTime             @default(now())
   updatedAt   DateTime             @updatedAt
@@ -57,7 +55,7 @@ model Transaction {
 }
 
 model Budget {
-  id           String                  @id @default(cuid())
+  id           String               @id @default(cuid())
   budgetAmount Float
   spentAmount  Float
   userId       String
@@ -70,7 +68,7 @@ model Budget {
 }
 
 model Goal {
-  id            String      @id @default(cuid())
+  id            String   @id @default(cuid())
   name          String
   goalAmount    Float
   currentAmount Float
@@ -83,7 +81,7 @@ model Goal {
 }
 
 model Reminder {
-  id           String      @id @default(cuid())
+  id           String   @id @default(cuid())
   title        String
   description  String
   amount       Float
