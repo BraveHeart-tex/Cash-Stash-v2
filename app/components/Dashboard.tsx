@@ -1,11 +1,8 @@
 "use client";
 import {
-  fetchInsightsData,
-  fetchMonthlyTransactionsData,
-  fetchTransactions,
+  InsightsData,
+  SerializedTransaction,
 } from "@/app/redux/features/transactionsSlice";
-import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
-import { useEffect } from "react";
 import AccountSummaries from "./AccountSummaries";
 import BudgetStatus from "./BudgetStatus";
 import FinancialInsights from "./FinancialInsights";
@@ -18,22 +15,15 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 interface IDashboardProps {
   monthlyTransactionsData: MonthlyData["monthlyTransactionsData"];
+  insightsData: InsightsData;
+  transactions: SerializedTransaction[];
 }
 
-const Dashboard = ({ monthlyTransactionsData }: IDashboardProps) => {
-  const dispatch = useAppDispatch();
-  const {
-    data: transactions,
-    insightsData,
-    isLoading,
-  } = useAppSelector((state) => state.transactionsReducer);
-
-  useEffect(() => {
-    dispatch(fetchTransactions());
-    dispatch(fetchMonthlyTransactionsData());
-    dispatch(fetchInsightsData());
-  }, [dispatch]);
-
+const Dashboard = ({
+  monthlyTransactionsData,
+  transactions,
+  insightsData,
+}: IDashboardProps) => {
   const sectionData = [
     {
       title: "Accounts Summary",
@@ -80,7 +70,7 @@ const Dashboard = ({ monthlyTransactionsData }: IDashboardProps) => {
           <BarChartComponent
             monthlyTransactionsData={monthlyTransactionsData}
           />
-          <FinancialInsights insightsData={insightsData} loading={isLoading} />
+          <FinancialInsights insightsData={insightsData} />
         </div>
       ),
     },

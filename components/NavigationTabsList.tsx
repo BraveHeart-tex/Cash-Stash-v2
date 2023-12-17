@@ -1,19 +1,16 @@
 "use client";
-import { MonthlyData } from "@/app/components/ReportsPage/ReportTable";
 import { setSelectedTab } from "@/app/redux/features/navigationTabsSlice";
 import { useAppSelector, useAppDispatch } from "@/app/redux/hooks";
 import { PAGES, Page } from "@/lib/utils";
-import { TabsList, TabsTrigger, TabsContent, Tabs } from "./ui/tabs";
+import { TabsList, TabsTrigger, Tabs } from "./ui/tabs";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-interface INavigationTabsListProps {
-  dashboardData: MonthlyData["monthlyTransactionsData"];
-}
-
-const NavigationTabsList = ({ dashboardData }: INavigationTabsListProps) => {
+const NavigationTabsList = () => {
   const { selectedTab } = useAppSelector(
     (state) => state.navigationTabsReducer
   );
+  const pathName = usePathname();
   const dispatch = useAppDispatch();
 
   return (
@@ -34,6 +31,7 @@ const NavigationTabsList = ({ dashboardData }: INavigationTabsListProps) => {
               className={
                 "data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-primary/70 data-[state=active]:text-white transition-all"
               }
+              data-state={pathName === page.link ? "active" : "inactive"}
               onClick={(e) => {
                 e.currentTarget.scrollIntoView({
                   behavior: "smooth",
@@ -49,13 +47,6 @@ const NavigationTabsList = ({ dashboardData }: INavigationTabsListProps) => {
           ))}
         </TabsList>
       </div>
-      {PAGES.map((page) => {
-        return (
-          <TabsContent key={page.label} value={page.label}>
-            <page.content monthlyTransactionsData={dashboardData ?? []} />
-          </TabsContent>
-        );
-      })}
     </Tabs>
   );
 };

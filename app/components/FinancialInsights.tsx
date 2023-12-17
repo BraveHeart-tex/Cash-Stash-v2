@@ -5,11 +5,9 @@ import { cn } from "@/lib/utils";
 import { useAppDispatch } from "../redux/hooks";
 import { setSelectedTab } from "../redux/features/navigationTabsSlice";
 import { FaMoneyBill } from "react-icons/fa";
-import { Skeleton } from "@/components/ui/skeleton";
 
 interface IFinancialInsightsProps {
   insightsData: InsightsData | null;
-  loading: boolean;
 }
 
 const NoDataMessage = () => (
@@ -35,24 +33,13 @@ const SavingsRate = ({ value }: { value: number }) => (
   </div>
 );
 
-const FinancialInsights = ({
-  insightsData,
-  loading,
-}: IFinancialInsightsProps) => {
+const FinancialInsights = ({ insightsData }: IFinancialInsightsProps) => {
   const dispatch = useAppDispatch();
   const noInsightsData = Object.keys(insightsData || {}).length === 0;
 
-  if (!insightsData && loading)
-    return <Skeleton className="h-[300px] w-full" />;
+  if (!insightsData) return <NoDataMessage />;
 
-  if (!insightsData && !loading) return <NoDataMessage />;
-
-  if (!insightsData) return null;
-
-  if (
-    (!loading && noInsightsData) ||
-    (insightsData && !loading && !insightsData.totalIncome)
-  ) {
+  if (noInsightsData || (insightsData && !insightsData.totalIncome)) {
     return (
       <article className="flex h-[300px] items-center justify-center">
         <div className="my-3">
@@ -114,6 +101,10 @@ const FinancialInsights = ({
     );
   }
 
+  const thousandSeparator = (value: number) => {
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  };
+
   return (
     <div className="grid grid-cols-2">
       {mappedData.map((data) =>
@@ -122,7 +113,7 @@ const FinancialInsights = ({
         ) : (
           <div className="mb-4 flex flex-col" key={data.name}>
             <h3 className="font-bold text-lg">{data.name}</h3>
-            <p>{data.value}₺</p>
+            <p>{thousandSeparator(data.value as number)}₺</p>
           </div>
         )
       )}
