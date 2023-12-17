@@ -1,12 +1,11 @@
+import { SearchParams } from "../transactions/page";
 import ReportsPageClient from "./ReportsPageClient";
-import { getChartDataAction } from "@/actions";
 
-const ReportsPage = async () => {
-  const { data } = await getChartDataAction();
-
+const ReportsPage = ({ searchParams }: { searchParams: SearchParams }) => {
   return (
     <main>
-      <ReportsPageClient monthlyTransactionsData={data ?? []} />
+      {/* @ts-expect-error React Server Component */}
+      <ReportsPageClient searchParams={searchParams} />
     </main>
   );
 };

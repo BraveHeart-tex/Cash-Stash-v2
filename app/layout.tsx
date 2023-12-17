@@ -6,7 +6,6 @@ import { ThemeProvider } from "@/components/theme-provider";
 import GenericConfirmDialog from "@/components/GenericConfirmDialog";
 import GenericModal from "@/components/GenericModal";
 import Navigation from "./components/Navigation";
-import { getCurrentUser } from "@/lib/session";
 import { getCurrentUserAction } from "@/actions";
 
 const InterFont = Inter({

@@ -1,13 +1,13 @@
 import { MonthlyData } from "@/app/components/ReportsPage/ReportTable";
 import BarChartComponent from "@/components/charts/BarChartComponent";
 
-const ResponsiveChartContainer = ({ monthlyTransactionsData }: MonthlyData) => {
-  const thereIsNoData = monthlyTransactionsData.length === 0;
-
+const ResponsiveChartContainer = ({
+  monthlyTransactionsData,
+}: Pick<MonthlyData, "monthlyTransactionsData">) => {
   return (
     <div className="flex justify-center items-start flex-col gap-4 mt-10">
       <h3 className="text-4xl mb-4 text-primary">Income vs Expenses</h3>
-      {thereIsNoData ? (
+      {monthlyTransactionsData.length === 0 ? (
         <h2>No data was found to generate the chart</h2>
       ) : (
         <>

@@ -30,7 +30,9 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
-const BarChartComponent = ({ monthlyTransactionsData }: MonthlyData) => {
+const BarChartComponent = ({
+  monthlyTransactionsData,
+}: Pick<MonthlyData, "monthlyTransactionsData">) => {
   if (monthlyTransactionsData.length === 0) {
     return null;
   }
