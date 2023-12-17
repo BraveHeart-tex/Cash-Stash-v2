@@ -27,11 +27,9 @@ export interface MonthlyData {
 
 const ReportTable = ({ monthlyTransactionsData }: MonthlyData) => {
   const dispatch = useAppDispatch();
-  const {
-    // data,
-    filteredData: transactions,
-    isLoading,
-  } = useAppSelector((state) => state.transactionsReducer);
+  const { filteredData: transactions, isLoading } = useAppSelector(
+    (state) => state.transactionsReducer
+  );
   const { currentUserAccounts } = useAppSelector(
     (state) => state.userAccountReducer
   );
@@ -41,7 +39,6 @@ const ReportTable = ({ monthlyTransactionsData }: MonthlyData) => {
     dispatch(fetchTransactions());
   }, [dispatch]);
 
-  console.log(transactions);
 
   const renderTableBody = () => {
     return (

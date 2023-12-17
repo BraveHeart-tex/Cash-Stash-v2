@@ -1,3 +1,4 @@
+"use client";
 import { MonthlyData } from "@/app/components/ReportsPage/ReportTable";
 import {
   BarChart,

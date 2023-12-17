@@ -1,4 +1,3 @@
-"use client";
 import ReportTable, {
   MonthlyData,
 } from "../components/ReportsPage/ReportTable";
