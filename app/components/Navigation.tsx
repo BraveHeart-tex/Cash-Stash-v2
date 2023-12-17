@@ -7,9 +7,9 @@ import UserMenu from "./UserMenu";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/ModeToggle";
 import Link from "next/link";
-import { ModeSwitch } from "@/components/ModeSwitch";
 import { useState } from "react";
 import { useAppSelector } from "../redux/hooks";
+import { Label } from "@/components/ui/label";
 
 const NAV_LINKS = [
   { name: "Dashboard", href: "/" },
@@ -82,7 +82,10 @@ const Navigation = () => {
                 </Link>
               ))}
             </div>
-            <ModeSwitch />
+            <div>
+              <Label>Change Color Mode</Label>
+              <ModeToggle />
+            </div>
           </div>
         </SheetContent>
       </Sheet>
