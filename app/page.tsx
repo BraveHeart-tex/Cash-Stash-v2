@@ -5,15 +5,24 @@ import {
   getChartDataAction,
   searchTransactions,
 } from "@/actions";
+import { getGenericListByCurrentUser } from "@/actions/generic";
+import { SerializedUserAccount } from "./redux/features/userAccountSlice";
 
 export default async function Home() {
-  const result = await searchTransactions({
-    transactionType: "all",
-    sortBy: "createdAt",
-    sortDirection: "desc",
-  });
-  let insightsDataResult = await fetchInsightsDataAction();
-  let monthlyTransactions = await getChartDataAction();
+  let [result, accountsResult, insightsDataResult, monthlyTransactions] =
+    await Promise.all([
+      searchTransactions({
+        transactionType: "all",
+        sortBy: "createdAt",
+        sortDirection: "desc",
+      }),
+      getGenericListByCurrentUser<SerializedUserAccount>({
+        tableName: "userAccount",
+        serialize: true,
+      }),
+      fetchInsightsDataAction(),
+      getChartDataAction(),
+    ]);
 
   const { totalIncome, totalExpense, netIncome, savingsRate } =
     insightsDataResult;
@@ -32,6 +41,7 @@ export default async function Home() {
       {/* @ts-expect-error */}
       <NavigationTabs />
       <Dashboard
+        accounts={accountsResult?.data || []}
         monthlyTransactionsData={monthlyTransactions.data || []}
         insightsData={insightsDataResult}
         transactions={result?.transactions || []}

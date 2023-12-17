@@ -1,29 +1,13 @@
-import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
-import { fetchCurrentUserAccounts } from "@/app/redux/features/userAccountSlice";
-import { Skeleton } from "@/components/ui/skeleton";
+import { SerializedUserAccount } from "@/app/redux/features/userAccountSlice";
 import AccountCard from "./AccountCard";
 import CreateAccountButton from "./CreateButtons/CreateAccountButton";
 
-const AccountSummaries = () => {
-  const dispatch = useAppDispatch();
-  const { currentUserAccounts: accounts, isLoading } = useAppSelector(
-    (state) => state.userAccountReducer
-  );
-
-  useEffect(() => {
-    dispatch(fetchCurrentUserAccounts());
-  }, [dispatch]);
-
-  if (isLoading) {
-    return (
-      <div>
-        <Skeleton className="h-[300px] lg:h-[350px]" />
-      </div>
-    );
-  }
-
-  if (!accounts || accounts.length === 0) {
+const AccountSummaries = ({
+  accounts,
+}: {
+  accounts: SerializedUserAccount[];
+}) => {
+  if (accounts.length === 0) {
     return (
       <article className="flex h-[300px] items-center justify-center">
         <div>

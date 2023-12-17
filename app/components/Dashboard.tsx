@@ -12,17 +12,20 @@ import TransactionHistory from "./TransactionHistory";
 import BarChartComponent from "@/components/charts/BarChartComponent";
 import { MonthlyData } from "./ReportsPage/ReportTable";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { SerializedUserAccount } from "../redux/features/userAccountSlice";
 
 interface IDashboardProps {
   monthlyTransactionsData: MonthlyData["monthlyTransactionsData"];
   insightsData: InsightsData;
   transactions: SerializedTransaction[];
+  accounts: SerializedUserAccount[];
 }
 
 const Dashboard = ({
   monthlyTransactionsData,
   transactions,
   insightsData,
+  accounts,
 }: IDashboardProps) => {
   const sectionData = [
     {
@@ -31,7 +34,7 @@ const Dashboard = ({
         "You can view your accounts here. Click on the account card to view the account details.",
       data: (
         <div className="max-h-[330px] min-h-[330px] lg:max-h-[350px] lg:min-h-[350px] overflow-y-scroll scrollbar-hide">
-          <AccountSummaries />
+          <AccountSummaries accounts={accounts} />
         </div>
       ),
     },
