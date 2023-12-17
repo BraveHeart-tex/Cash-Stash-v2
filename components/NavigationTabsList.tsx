@@ -1,9 +1,9 @@
 "use client";
-import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
-import { PAGES, Page } from "@/lib/utils";
 import { MonthlyData } from "@/app/components/ReportsPage/ReportTable";
 import { setSelectedTab } from "@/app/redux/features/navigationTabsSlice";
+import { useAppSelector, useAppDispatch } from "@/app/redux/hooks";
+import { PAGES, Page } from "@/lib/utils";
+import { TabsList, TabsTrigger, TabsContent, Tabs } from "./ui/tabs";
 
 interface INavigationTabsListProps {
   dashboardData: MonthlyData["monthlyTransactionsData"];

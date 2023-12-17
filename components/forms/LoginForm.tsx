@@ -53,18 +53,18 @@ const LoginForm = () => {
 
   const handleTestUserLogin = () => {
     startTransition(async () => {
-      loginAction({
+      const result = await loginAction({
         email: "testUser@email.com",
         password: "testUser123!",
-      }).then((result) => {
-        if (result?.error) {
-          showErrorToast("An error occurred.", result.error);
-        } else {
-          setLoggedIn(true);
-          router.push("/");
-          showSuccessToast("Logged in.", "You have been logged in.");
-        }
       });
+
+      if (result?.error) {
+        showErrorToast("An error occurred.", result.error);
+      } else {
+        setLoggedIn(true);
+        router.push("/");
+        showSuccessToast("Logged in.", "You have been logged in.");
+      }
     });
   };
 
@@ -114,6 +114,7 @@ const LoginForm = () => {
             ))}
           </div>
           <Button
+            loading={isPending}
             type="submit"
             className="font-semibold"
             disabled={isPending}
@@ -137,6 +138,8 @@ const LoginForm = () => {
           </p>
         </div>
         <Button
+          loading={isPending}
+          disabled={isPending}
           variant="ghost"
           className="font-normal text-sm"
           onClick={() => handleTestUserLogin()}

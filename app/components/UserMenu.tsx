@@ -28,9 +28,8 @@ const UserMenu = () => {
 
   const handleLogout = () => {
     startTransition(async () => {
-      logoutAction().then(() => {
-        router.push("/login");
-      });
+      await logoutAction();
+      router.push("/login");
     });
   };
 
@@ -50,7 +49,11 @@ const UserMenu = () => {
         <hr />
         <p className="text-accent-foreground">{user?.email}</p>
 
-        <Button type="button" onClick={() => handleLogout()}>
+        <Button
+          type="button"
+          onClick={() => handleLogout()}
+          disabled={isPending}
+        >
           Logout
         </Button>
       </DropdownMenuContent>

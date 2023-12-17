@@ -2,6 +2,7 @@ import FormError from "@/components/FormError";
 import { UseFormRegister } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 
 interface IFormInputProps {
   name: string;
@@ -26,9 +27,12 @@ const FormInput = ({
   label,
   className,
 }: IFormInputProps) => {
+  const isError = errors[name] && errors[name].message;
   return (
     <div className="flex flex-col gap-1">
-      <Label htmlFor={name}>{label}</Label>
+      <Label className={cn(isError && "text-red-500")} htmlFor={name}>
+        {label}
+      </Label>
       <Input
         id={name}
         placeholder={placeholder}
@@ -37,9 +41,7 @@ const FormInput = ({
         className={className}
         data-testid={name}
       />
-      {errors[name] && errors[name].message && (
-        <FormError errorMessage={errors[name].message} />
-      )}
+      {isError && <FormError errorMessage={errors[name].message} />}
     </div>
   );
 };
