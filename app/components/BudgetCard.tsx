@@ -1,6 +1,6 @@
 "use client";
 import { Progress } from "@/components/ui/progress";
-import { SerializedBudget, fetchBudgets } from "../redux/features/budgetSlice";
+import { SerializedBudget } from "../redux/features/budgetSlice";
 import ActionPopover from "@/components/ActionPopover";
 import { Badge } from "@/components/ui/badge";
 import { useAppDispatch } from "../redux/hooks";

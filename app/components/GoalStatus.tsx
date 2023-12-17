@@ -1,27 +1,9 @@
-import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
-import { fetchGoals } from "@/app/redux/features/goalSlice";
-import { Skeleton } from "@/components/ui/skeleton";
+import { SerializedGoal } from "@/app/redux/features/goalSlice";
 import GoalCard from "./GoalCard";
 import CreateGoalButton from "./CreateButtons/CreateGoalButton";
 
-const GoalStatus = () => {
-  const dispatch = useAppDispatch();
-  const { goals, isLoading } = useAppSelector((state) => state.goalReducer);
-
-  useEffect(() => {
-    dispatch(fetchGoals());
-  }, [dispatch]);
-
-  if (isLoading) {
-    return (
-      <div>
-        <Skeleton className="h-[300px] lg:h-[350px]" />
-      </div>
-    );
-  }
-
-  if (!goals || goals.length === 0) {
+const GoalStatus = ({ goals }: { goals: SerializedGoal[] }) => {
+  if (goals.length === 0) {
     return (
       <article className="flex h-[300px] items-center justify-center">
         <div>

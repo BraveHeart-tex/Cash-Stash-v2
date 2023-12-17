@@ -13,12 +13,16 @@ import BarChartComponent from "@/components/charts/BarChartComponent";
 import { MonthlyData } from "./ReportsPage/ReportTable";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { SerializedUserAccount } from "../redux/features/userAccountSlice";
+import { SerializedBudget } from "../redux/features/budgetSlice";
+import { SerializedGoal } from "../redux/features/goalSlice";
 
 interface IDashboardProps {
   monthlyTransactionsData: MonthlyData["monthlyTransactionsData"];
   insightsData: InsightsData;
   transactions: SerializedTransaction[];
   accounts: SerializedUserAccount[];
+  budgets: SerializedBudget[];
+  goals: SerializedGoal[];
 }
 
 const Dashboard = ({
@@ -26,6 +30,8 @@ const Dashboard = ({
   transactions,
   insightsData,
   accounts,
+  budgets,
+  goals,
 }: IDashboardProps) => {
   const sectionData = [
     {
@@ -44,7 +50,7 @@ const Dashboard = ({
         "You can check your budgets here. Click on the budget card to see details or create a new one using the menu button above.",
       data: (
         <div className="max-h-[300px] min-h-[300px] lg:max-h-[350px] lg:min-h-[350px] overflow-y-scroll scrollbar-hide">
-          <BudgetStatus />
+          <BudgetStatus budgets={budgets} />
         </div>
       ),
     },
@@ -54,7 +60,7 @@ const Dashboard = ({
         "Check your goals here. Click on a goal card to view or edit its details or create a new one by clicking the menu button above.",
       data: (
         <div className="max-h-[300px] min-h-[300px] lg:max-h-[350px] lg:min-h-[350px] overflow-y-scroll scrollbar-hide">
-          <GoalStatus />
+          <GoalStatus goals={goals} />
         </div>
       ),
     },
