@@ -27,7 +27,7 @@ export function ModeToggle() {
   ];
 
   return (
-    <Tabs defaultValue={theme}>
+    <Tabs defaultValue={theme} value={theme} onValueChange={setTheme}>
       <TabsList className="border">
         {items.map((item) => (
           <TabsTrigger

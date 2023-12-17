@@ -1,19 +1,8 @@
-"use client";
-import { useEffect } from "react";
-import { fetchGoals } from "@/app/redux/features/goalSlice";
-import { useAppSelector, useAppDispatch } from "@/app/redux/hooks";
-import { Skeleton } from "@/components/ui/skeleton";
+import { SerializedGoal } from "@/app/redux/features/goalSlice";
 import GoalCard from "../components/GoalCard";
 import CreateGoalButton from "../components/CreateButtons/CreateGoalButton";
 
-const GoalsPageClient = () => {
-  const { goals, isLoading } = useAppSelector((state) => state.goalReducer);
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(fetchGoals());
-  }, [dispatch]);
-
+const GoalsPageClient = ({ goals }: { goals: SerializedGoal[] }) => {
   const renderNoGoalsState = () => (
     <div className="flex justify-center items-start lg:items-center flex-col gap-4">
       <h3 className="inline-block text-lg lg:text-3xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
@@ -22,8 +11,6 @@ const GoalsPageClient = () => {
       <p>Add a goal to get started!</p>
     </div>
   );
-
-  const renderLoadingState = () => <Skeleton className="h-20 w-full" />;
 
   const renderGoals = () => (
     <div className="w-full">
@@ -39,8 +26,7 @@ const GoalsPageClient = () => {
     <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
       <h2 className="text-4xl lg:mb-4 text-primary">Goals</h2>
       <div className="flex justify-center lg:items-center flex-col gap-2">
-        {isLoading ? renderLoadingState() : renderGoals()}
-        {!isLoading && !goals ? renderNoGoalsState() : null}
+        {goals.length > 0 ? renderGoals() : renderNoGoalsState()}
         <CreateGoalButton className="mt-4 self-start" />
       </div>
     </div>

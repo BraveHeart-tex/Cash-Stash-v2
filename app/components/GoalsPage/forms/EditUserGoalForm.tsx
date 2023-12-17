@@ -3,7 +3,6 @@ import { useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { fetchGoalById } from "@/app/redux/features/currentGoalSlice";
-import { fetchGoals } from "@/app/redux/features/goalSlice";
 import FormLoadingSpinner from "../../FormLoadingSpinner";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 import {
@@ -17,6 +16,7 @@ import FormInput from "@/components/FormInput";
 import { Button } from "@/components/ui/button";
 import { updateGeneric } from "@/actions/generic";
 import { Goal } from "@prisma/client";
+import { useRouter } from "next/navigation";
 
 interface IEditUserGoalFormProps {
   entityId: string;
@@ -26,6 +26,7 @@ const EditUserGoalForm = ({ entityId }: IEditUserGoalFormProps) => {
   let [isPending, startTransition] = useTransition();
   const { currentGoal } = useAppSelector((state) => state.currentGoalReducer);
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const {
     register,
@@ -90,7 +91,7 @@ const EditUserGoalForm = ({ entityId }: IEditUserGoalFormProps) => {
       if (result?.error) {
         showErrorToast("An error occurred.", result.error as string);
       } else {
-        dispatch(fetchGoals());
+        router.refresh();
         showSuccessToast("Goal updated.", "Your goal has been updated.");
         dispatch(closeGenericModal());
       }

@@ -1,9 +1,15 @@
-import GoalsPageClient from './GoalsPageClient';
+import { getGenericListByCurrentUser } from "@/actions/generic";
+import GoalsPageClient from "./GoalsPageClient";
+import { SerializedGoal } from "../redux/features/goalSlice";
 
-const GoalsPage = () => {
+const GoalsPage = async () => {
+  const result = await getGenericListByCurrentUser<SerializedGoal>({
+    tableName: "goal",
+  });
+
   return (
     <main>
-      <GoalsPageClient />
+      <GoalsPageClient goals={result?.data || []} />
     </main>
   );
 };

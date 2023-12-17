@@ -1,7 +1,6 @@
 "use client";
 import { useForm } from "react-hook-form";
 import { useAppDispatch } from "@/app/redux/hooks";
-import { fetchGoals } from "@/app/redux/features/goalSlice";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,10 +12,12 @@ import { Button } from "@/components/ui/button";
 import { useTransition } from "react";
 import { createGenericWithCurrentUser } from "@/actions/generic";
 import { Goal } from "@prisma/client";
+import { useRouter } from "next/navigation";
 
 const CreateUserGoalForm = () => {
   let [isPending, startTransition] = useTransition();
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const {
     register,
@@ -41,7 +42,7 @@ const CreateUserGoalForm = () => {
       if (result?.error) {
         showErrorToast("An error occurred.", result.error as string);
       } else {
-        dispatch(fetchGoals());
+        router.refresh();
         showSuccessToast("Goal created.", "Your goal has been created.");
         dispatch(closeGenericModal());
       }
