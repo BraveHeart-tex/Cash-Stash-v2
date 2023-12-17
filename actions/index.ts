@@ -434,12 +434,16 @@ export const updateReminderAction = async ({
     title,
     description,
     amount,
-    reminderDate: new Date(reminderDate),
-    isRead: isRead === "isRead",
-    isIncome: isIncome === "income",
+    reminderDate,
+    isRead,
+    isIncome,
   });
 
-  if (!result.success) return { error: "Unprocessable entity." };
+  if (!result.success) {
+    console.log(result.error);
+
+    return { error: "Unprocessable entity." };
+  }
 
   const reminderToBeUpdated = await db.reminder.findUnique({
     where: { id: reminderId },
@@ -649,7 +653,6 @@ export const createReminderAction = async ({
   });
 
   if (!result.success) {
-    console.log("create reminder error", result.error);
     return { error: "Unprocessable entity." };
   }
 

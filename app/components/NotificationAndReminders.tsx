@@ -1,20 +1,17 @@
 "use client";
-import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
-import { fetchReminders } from "@/app/redux/features/remindersSlice";
+import { useAppDispatch } from "@/app/redux/hooks";
+import { SerializedReminder } from "@/app/redux/features/remindersSlice";
 import { Button } from "@/components/ui/button";
 import { openGenericModal } from "../redux/features/genericModalSlice";
 import { FaRegClock } from "react-icons/fa";
 import ReminderCard from "@/components/ReminderCard";
 
-const NotificationsAndReminders = () => {
-  const { reminders } = useAppSelector((state) => state.remindersReducer);
-
+const NotificationsAndReminders = ({
+  reminders,
+}: {
+  reminders: SerializedReminder[];
+}) => {
   const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(fetchReminders());
-  }, [dispatch]);
 
   const noRemindersState = () => (
     <article className="flex h-[500px] items-center justify-center">
@@ -42,7 +39,7 @@ const NotificationsAndReminders = () => {
     </article>
   );
 
-  if (!reminders || !reminders.length) return noRemindersState();
+  if (!reminders.length) return noRemindersState();
 
   return (
     <div className="p-2 min-h-[500px] max-h-[500px] overflow-y-scroll scrollbar-hide">

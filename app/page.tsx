@@ -9,6 +9,7 @@ import { getGenericListByCurrentUser } from "@/actions/generic";
 import { SerializedUserAccount } from "./redux/features/userAccountSlice";
 import { SerializedBudget } from "./redux/features/budgetSlice";
 import { SerializedGoal } from "./redux/features/goalSlice";
+import { SerializedReminder } from "./redux/features/remindersSlice";
 
 export default async function Home() {
   let [
@@ -18,6 +19,7 @@ export default async function Home() {
     monthlyTransactions,
     budgetsResult,
     goalsResult,
+    remindersResult,
   ] = await Promise.all([
     searchTransactions({
       transactionType: "all",
@@ -38,6 +40,10 @@ export default async function Home() {
       tableName: "goal",
       serialize: true,
     }),
+    getGenericListByCurrentUser<SerializedReminder>({
+      tableName: "reminder",
+      whereCondition: { isRead: false },
+    }),
   ]);
 
   const { totalIncome, totalExpense, netIncome, savingsRate } =
@@ -54,8 +60,6 @@ export default async function Home() {
 
   return (
     <main>
-      {/* @ts-expect-error */}
-      <NavigationTabs />
       <Dashboard
         budgets={budgetsResult?.data || []}
         accounts={accountsResult?.data || []}
@@ -63,6 +67,7 @@ export default async function Home() {
         insightsData={insightsDataResult}
         transactions={result?.transactions || []}
         goals={goalsResult?.data || []}
+        reminders={remindersResult?.data || []}
       />
     </main>
   );

@@ -4,6 +4,7 @@ import * as React from "react";
 import { DesktopIcon, MoonIcon, SunIcon } from "@radix-ui/react-icons";
 import { useTheme } from "next-themes";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
+import { motion } from "framer-motion";
 
 export function ModeToggle() {
   const { theme, setTheme } = useTheme();
@@ -26,18 +27,31 @@ export function ModeToggle() {
     },
   ];
 
+  const itemVariants = {
+    active: { scale: 1.1, opacity: 1 },
+    inactive: { scale: 1, opacity: 0.8 },
+  };
+
   return (
     <Tabs defaultValue={theme} value={theme} onValueChange={setTheme}>
       <TabsList className="border">
-        {items.map((item) => (
-          <TabsTrigger
-            key={item.id}
-            value={item.value}
-            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-primary/70 data-[state=active]:text-white transition-all"
+        {items.map((item, index) => (
+          <motion.div
+            key={item.id + index}
+            variants={itemVariants}
+            initial="inactive"
+            animate={item.value === theme ? "active" : "inactive"}
             onClick={() => setTheme(item.value)}
           >
-            {item.icon}
-          </TabsTrigger>
+            <TabsTrigger
+              key={item.id}
+              value={item.value}
+              data-state={item.value === theme ? "active" : "inactive"}
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-primary/70 data-[state=active]:text-white transition-all"
+            >
+              {item.icon}
+            </TabsTrigger>
+          </motion.div>
         ))}
       </TabsList>
     </Tabs>

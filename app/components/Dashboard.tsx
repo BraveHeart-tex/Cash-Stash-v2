@@ -15,6 +15,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { SerializedUserAccount } from "../redux/features/userAccountSlice";
 import { SerializedBudget } from "../redux/features/budgetSlice";
 import { SerializedGoal } from "../redux/features/goalSlice";
+import { SerializedReminder } from "../redux/features/remindersSlice";
 
 interface IDashboardProps {
   monthlyTransactionsData: MonthlyData["monthlyTransactionsData"];
@@ -23,6 +24,7 @@ interface IDashboardProps {
   accounts: SerializedUserAccount[];
   budgets: SerializedBudget[];
   goals: SerializedGoal[];
+  reminders: SerializedReminder[];
 }
 
 const Dashboard = ({
@@ -32,6 +34,7 @@ const Dashboard = ({
   accounts,
   budgets,
   goals,
+  reminders,
 }: IDashboardProps) => {
   const sectionData = [
     {
@@ -86,7 +89,7 @@ const Dashboard = ({
     {
       title: "Notifications and Reminders",
       description: "View your notifications, set bill reminders here.",
-      data: <NotificationsAndReminders />,
+      data: <NotificationsAndReminders reminders={reminders} />,
     },
   ];
 

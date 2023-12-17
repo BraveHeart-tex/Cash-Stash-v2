@@ -7,6 +7,8 @@ import GenericConfirmDialog from "@/components/GenericConfirmDialog";
 import GenericModal from "@/components/GenericModal";
 import Navigation from "./components/Navigation";
 import { getCurrentUserAction } from "@/actions";
+import NavigationTabs from "@/components/NavigationTabs";
+import MobileTabsList from "@/components/MobileTabsList";
 
 const InterFont = Inter({
   weight: ["300", "400", "500", "600", "700"],
@@ -32,6 +34,7 @@ export default async function RootLayout({ children }: ILayoutProps) {
         <ReduxProviders>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             {user ? <Navigation /> : null}
+            <NavigationTabs />
             {children}
             <GenericModal />
             <GenericConfirmDialog />

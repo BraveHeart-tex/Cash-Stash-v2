@@ -1,10 +1,7 @@
 "use client";
-import {
-  fetchReminderById,
-  fetchReminders,
-} from "@/app/redux/features/remindersSlice";
+import { fetchReminderById } from "@/app/redux/features/remindersSlice";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
-import { useEffect, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import FormLoadingSpinner from "../../FormLoadingSpinner";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,6 +18,10 @@ import {
 import FormCheckbox from "@/components/FormCheckbox";
 import { updateReminderAction } from "@/actions";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
+import { useRouter } from "next/navigation";
+import DatePicker from "@/components/DatePicker";
+import { getGeneric } from "@/actions/generic";
+import { Reminder } from "@prisma/client";
 
 interface IEditReminderFormProps {
   entityId: string;
@@ -28,15 +29,22 @@ interface IEditReminderFormProps {
 
 const EditReminderForm = ({ entityId }: IEditReminderFormProps) => {
   let [isPending, startTransition] = useTransition();
-
-  const { currentReminder, isLoading } = useAppSelector(
-    (state) => state.remindersReducer
-  );
+  const [currentReminder, setCurrentReminder] = useState<Reminder>();
+  const router = useRouter();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (entityId) {
-      dispatch(fetchReminderById(entityId));
+      startTransition(async () => {
+        const result = await getGeneric<Reminder>({
+          tableName: "reminder",
+          whereCondition: { id: entityId },
+        });
+
+        if (result?.data) {
+          setCurrentReminder(result.data);
+        }
+      });
     }
   }, [dispatch, entityId]);
 
@@ -65,10 +73,7 @@ const EditReminderForm = ({ entityId }: IEditReminderFormProps) => {
       setValue("description", currentReminder.description);
       setValue("amount", currentReminder.amount);
       setValue("isIncome", currentReminder.isIncome ? "income" : "expense");
-      setValue(
-        "reminderDate",
-        new Date(currentReminder.reminderDate).toLocaleDateString("en-CA")
-      );
+      setValue("reminderDate", currentReminder.reminderDate.toISOString());
     }
   }, [currentReminder, setValue]);
 
@@ -91,13 +96,13 @@ const EditReminderForm = ({ entityId }: IEditReminderFormProps) => {
         showErrorToast("An error occurred.", result.error);
       } else {
         showSuccessToast("Reminder updated.", "Reminder updated successfully.");
-        dispatch(fetchReminders());
+        router.refresh();
         dispatch(closeGenericModal());
       }
     });
   };
 
-  if (isLoading) {
+  if (isPending) {
     return <FormLoadingSpinner />;
   }
 
@@ -141,13 +146,17 @@ const EditReminderForm = ({ entityId }: IEditReminderFormProps) => {
           register={register}
           errors={errors}
         />
-        <FormInput
+        <DatePicker
           name={"reminderDate"}
-          label={"Date"}
-          placeholder={"Notification date"}
-          type={"date"}
+          label={"Reminder Date"}
+          placeholder={"Select a reminder date"}
           register={register}
+          defaultValue={currentReminder?.reminderDate.toISOString()}
           errors={errors}
+          className="w-full"
+          onChange={(value) => {
+            setValue("reminderDate", value);
+          }}
         />
         <FormSelect
           defaultValue={currentReminder?.isIncome ? "income" : "expense"}
@@ -182,12 +191,13 @@ const EditReminderForm = ({ entityId }: IEditReminderFormProps) => {
             setValue("isRead", valueToSet);
           }}
         />
-        {isLoading ? (
+        {isPending ? (
           <Button>Loading...</Button>
         ) : (
           <Button
             type="submit"
-            disabled={isPending || isLoading || isSubmitting}
+            disabled={isPending || isPending || isSubmitting}
+            loading={isPending}
           >
             Update
           </Button>
