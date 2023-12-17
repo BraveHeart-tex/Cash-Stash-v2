@@ -1,13 +1,16 @@
 import NavigationTabs from "@/components/NavigationTabs";
 import Dashboard from "./components/Dashboard";
-import { getGenericListByCurrentUser } from "@/actions/generic";
-import { SerializedTransaction } from "./redux/features/transactionsSlice";
-import { fetchInsightsDataAction, getChartDataAction } from "@/actions";
+import {
+  fetchInsightsDataAction,
+  getChartDataAction,
+  searchTransactions,
+} from "@/actions";
 
 export default async function Home() {
-  const result = await getGenericListByCurrentUser<SerializedTransaction>({
-    tableName: "transaction",
-    serialize: true,
+  const result = await searchTransactions({
+    transactionType: "all",
+    sortBy: "createdAt",
+    sortDirection: "desc",
   });
   let insightsDataResult = await fetchInsightsDataAction();
   let monthlyTransactions = await getChartDataAction();
@@ -31,7 +34,7 @@ export default async function Home() {
       <Dashboard
         monthlyTransactionsData={monthlyTransactions.data || []}
         insightsData={insightsDataResult}
-        transactions={result?.data || []}
+        transactions={result?.transactions || []}
       />
     </main>
   );
