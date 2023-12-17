@@ -13,6 +13,7 @@ interface IGetGenericDialogContentParams {
   mode: "create" | "edit";
   key: "budget" | "goal" | "transaction" | "reminder" | "account" | "";
   entityId: string;
+  props?: any;
 }
 
 interface EditFormProps {
@@ -53,14 +54,13 @@ export const getGenericDialogContent = ({
   mode,
   key,
   entityId,
+  props,
 }: IGetGenericDialogContentParams) => {
-  console.log(mode, key, entityId);
-
   const Component = ContentMap[key][mode];
 
   if (mode === "edit") {
-    return createElement(Component, { entityId });
+    return createElement(Component, { entityId, ...props });
   }
 
-  return createElement(Component);
+  return createElement(Component, { ...props });
 };

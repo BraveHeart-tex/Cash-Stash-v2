@@ -1,12 +1,6 @@
 "use client";
-import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
-import {
-  fetchTransactions,
-  SerializedTransaction,
-} from "@/app/redux/features/transactionsSlice";
-import { fetchCurrentUserAccounts } from "@/app/redux/features/userAccountSlice";
-import { useEffect } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
+import { useAppDispatch } from "@/app/redux/hooks";
+import { SerializedTransaction } from "@/app/redux/features/transactionsSlice";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import ActionPopover from "@/components/ActionPopover";
@@ -15,28 +9,15 @@ import { showGenericConfirm } from "@/app/redux/features/genericConfirmSlice";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { deleteTransactionByIdAction } from "@/actions";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
+import { useRouter } from "next/navigation";
 
 interface ITransactionCardProps {
   transaction: SerializedTransaction;
 }
 
 const TransactionCard = ({ transaction }: ITransactionCardProps) => {
-  const { currentUserAccounts, isLoading } = useAppSelector(
-    (state) => state.userAccountReducer
-  );
+  const router = useRouter();
   const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(fetchTransactions());
-  }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(fetchCurrentUserAccounts());
-  }, [dispatch]);
-
-  if (isLoading) {
-    return <Skeleton className={"h-[11.25rem]"} />;
-  }
 
   const handleDeleteCallback = (
     result: Awaited<ReturnType<typeof deleteTransactionByIdAction>>,
@@ -45,11 +26,11 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
     if (result?.error) {
       showErrorToast("An error occurred.", result.error as string);
     } else {
+      router.refresh();
       showSuccessToast(
         "Transaction deleted.",
         "Selected transaction has been deleted."
       );
-      dispatch(fetchTransactions());
       dispatch(cleanUp());
     }
   };
@@ -103,12 +84,7 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
           </div>
           <div className={"flex items-center gap-1"}>
             <p className={"font-semibold"}>Account Name: </p>
-            <p>
-              {currentUserAccounts &&
-                currentUserAccounts.find(
-                  (account) => account.id === transaction.accountId
-                )?.name}
-            </p>
+            <p>{transaction.account && transaction?.account.name}</p>
           </div>
           <div className={"flex items-center gap-1"}>
             <p className={"font-semibold"}>Amount: </p>

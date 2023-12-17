@@ -1,13 +1,5 @@
 "use client";
-import {
-  setFilterType,
-  setFilterAccount,
-  updateFilteredData,
-} from "@/app/redux/features/transactionsSlice";
-import React, { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
-import { fetchTransactions } from "@/app/redux/features/transactionsSlice";
-import { fetchCurrentUserAccounts } from "@/app/redux/features/userAccountSlice";
+import { SerializedUserAccount } from "@/app/redux/features/userAccountSlice";
 import GenericSelect from "@/components/GenericSelect";
 import {
   Card,
@@ -17,35 +9,19 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-const TransactionsFilter = () => {
-  const dispatch = useAppDispatch();
-  const { currentUserAccounts } = useAppSelector(
-    (state) => state.userAccountReducer
-  );
-
-  useEffect(() => {
-    dispatch(fetchCurrentUserAccounts());
-    dispatch(fetchTransactions());
-  }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(setFilterType(""));
-    dispatch(setFilterAccount(""));
-  }, [dispatch]);
-
-  const handleTypeChange = (value: string) => {
-    dispatch(setFilterType(value));
-    dispatch(updateFilteredData());
-  };
-
-  const handleAccountChange = (value: string) => {
-    dispatch(setFilterAccount(value));
-    dispatch(updateFilteredData());
-  };
+const TransactionsFilter = ({
+  currentUserAccounts,
+}: {
+  currentUserAccounts: SerializedUserAccount[];
+}) => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const TransactionTypeOptions = [
-    { value: "", label: "All" },
+    { value: "all", label: "All" },
     { value: "income", label: "Income" },
     { value: "expense", label: "Expense" },
   ];
@@ -57,6 +33,20 @@ const TransactionsFilter = () => {
       label: account.name,
     })) ?? []),
   ];
+
+  const handleFilterChange = (
+    value: string,
+    key: "transactionType" | "accountId"
+  ) => {
+    const currentSearchParams = new URLSearchParams(
+      Array.from(searchParams.entries())
+    );
+
+    currentSearchParams.set(key, value);
+    const search = currentSearchParams.toString();
+    const query = search ? `?${search}` : "";
+    router.push(`${pathname}${query}`);
+  };
 
   return (
     <Card className="min-h-[10rem] w-full lg:w-[75%] mt-4">
@@ -75,9 +65,10 @@ const TransactionsFilter = () => {
             <GenericSelect
               placeholder={"Transaction Type"}
               options={TransactionTypeOptions}
-              onChange={handleTypeChange}
+              onChange={(value) => {
+                handleFilterChange(value, "transactionType");
+              }}
               selectLabel={"Transaction Type"}
-              defaultValue=""
             />
           </div>
           <div>
@@ -87,7 +78,9 @@ const TransactionsFilter = () => {
             <GenericSelect
               placeholder={"Account"}
               options={AccountOptions}
-              onChange={handleAccountChange}
+              onChange={(value) => {
+                handleFilterChange(value, "accountId");
+              }}
               selectLabel={"Account"}
             />
           </div>

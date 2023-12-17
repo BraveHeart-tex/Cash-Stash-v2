@@ -2,7 +2,11 @@ import { AppDispatch } from "@/app/redux/store";
 import { Page } from "./utils";
 import { openGenericModal as openGenericModalAction } from "@/app/redux/features/genericModalSlice";
 
-export const openGenericModal = (page: Page, dispatch: AppDispatch) => {
+export const openGenericModal = (
+  page: Page,
+  dispatch: AppDispatch,
+  data?: any
+) => {
   if (page === "Accounts") {
     dispatch(
       openGenericModalAction({
@@ -47,6 +51,7 @@ export const openGenericModal = (page: Page, dispatch: AppDispatch) => {
         dialogTitle: "Create a transaction",
         dialogDescription: "Fill out the form below to create a transaction.",
         entityId: "",
+        props: data,
       })
     );
   }

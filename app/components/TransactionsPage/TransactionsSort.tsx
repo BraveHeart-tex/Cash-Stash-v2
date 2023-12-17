@@ -1,12 +1,5 @@
 "use client";
 import {
-  updateFilteredData,
-  setSortBy,
-  setSortDirection,
-} from "@/app/redux/features/transactionsSlice";
-import { useAppDispatch } from "@/app/redux/hooks";
-import { useEffect } from "react";
-import {
   Card,
   CardContent,
   CardDescription,
@@ -15,36 +8,43 @@ import {
 } from "@/components/ui/card";
 import GenericSelect from "@/components/GenericSelect";
 import { Label } from "@/components/ui/label";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface ITransactionsSortProps {}
 
 const TransactionsSort = ({}: ITransactionsSortProps) => {
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(setSortBy(""));
-    dispatch(setSortDirection(""));
-  }, [dispatch]);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const handleSortByChange = (value: string) => {
-    dispatch(setSortBy(value as "amount" | "date"));
-    dispatch(updateFilteredData());
+    handleSortChange(value, "sortBy");
   };
 
   const handleSortDirectionChange = (value: string) => {
-    dispatch(setSortDirection(value as "asc" | "desc"));
-    dispatch(updateFilteredData());
+    handleSortChange(value, "sortDirection");
   };
 
   const sortByOptions = [
     { value: "amount", label: "Amount" },
-    { value: "date", label: "Date" },
+    { value: "createdAt", label: "Date" },
   ];
 
   const sortDirectionOptions = [
     { value: "asc", label: "Ascending" },
     { value: "desc", label: "Descending" },
   ];
+
+  const handleSortChange = (value: string, key: "sortBy" | "sortDirection") => {
+    const currentSearchParams = new URLSearchParams(
+      Array.from(searchParams.entries())
+    );
+
+    currentSearchParams.set(key, value);
+    const search = currentSearchParams.toString();
+    const query = search ? `?${search}` : "";
+    router.push(`${pathname}${query}`);
+  };
 
   return (
     <Card className={"w-full lg:w-3/4 mt-4"}>

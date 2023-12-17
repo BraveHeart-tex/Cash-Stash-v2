@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { Transaction } from "@prisma/client";
+import { Transaction, UserAccount } from "@prisma/client";
 import {
   fetchInsightsDataAction,
   fetchMonthlyTransactionsDataAction,
@@ -8,12 +8,10 @@ import {
 import { MonthlyData } from "@/app/components/ReportsPage/ReportTable";
 import { getGenericListByCurrentUser } from "@/actions/generic";
 
-export type SerializedTransaction = Omit<
-  Transaction,
-  "createdAt" | "updatedAt"
-> & {
+export type SerializedTransaction = Omit<Transaction, "createdAt" | "updatedAt"> & {
   createdAt: string;
   updatedAt: string;
+  account?: Partial<UserAccount>;
 };
 
 export interface InsightsData {
