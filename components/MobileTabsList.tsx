@@ -26,7 +26,6 @@ const MobileTabsList = () => {
             });
           }}
         >
-          {/* @ts-ignore */}
           {<page.icon className="w-6 h-6" />}
           {page.label}
         </button>

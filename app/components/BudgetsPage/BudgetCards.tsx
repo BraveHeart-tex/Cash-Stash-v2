@@ -1,4 +1,3 @@
-"use client";
 import { SerializedBudget } from "@/app/redux/features/budgetSlice";
 import BudgetCard from "../BudgetCard";
 

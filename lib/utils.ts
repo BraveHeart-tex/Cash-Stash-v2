@@ -82,7 +82,8 @@ export type Page =
 export interface IPage {
   label: Page;
   content: React.FC<any>;
-  icon?: IconType;
+  icon: IconType;
+  link: string;
 }
 
 export const PAGES: IPage[] = [
@@ -90,31 +91,37 @@ export const PAGES: IPage[] = [
     label: "Dashboard",
     content: Dashboard,
     icon: MdDashboard,
+    link: "/",
   },
   {
     label: "Accounts",
     content: AccountsPageClient,
     icon: MdOutlineAccountBalanceWallet,
+    link: "/accounts",
   },
   {
     label: "Budgets",
     content: BudgetsPageClient,
     icon: FaMoneyBill,
+    link: "/budgets",
   },
   {
     label: "Goals",
     content: GoalsPageClient,
     icon: FaPiggyBank,
+    link: "/goals",
   },
   {
     label: "Transactions",
     content: TransactionsClient,
     icon: AiOutlineTransaction,
+    link: "/transactions",
   },
   {
     label: "Reports",
     content: ReportsPageClient,
     icon: TbReportAnalytics,
+    link: "/reports",
   },
 ];
 

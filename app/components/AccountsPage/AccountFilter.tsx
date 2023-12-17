@@ -5,7 +5,10 @@ import AccountInformation from "./AccountInformation";
 import { useAppSelector } from "@/app/redux/hooks";
 import { AppDispatch } from "@/app/redux/store";
 import { useDispatch } from "react-redux";
-import { fetchCurrentUserAccounts } from "@/app/redux/features/userAccountSlice";
+import {
+  SerializedUserAccount,
+  fetchCurrentUserAccounts,
+} from "@/app/redux/features/userAccountSlice";
 import {
   Select,
   SelectTrigger,
@@ -17,23 +20,14 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const AccountsFilter = () => {
-  const { currentUserAccounts: accounts, isLoading } = useAppSelector(
-    (state) => state.userAccountReducer
-  );
-  const dispatch = useDispatch<AppDispatch>();
-
-  useEffect(() => {
-    dispatch(fetchCurrentUserAccounts());
-  }, [dispatch]);
-
+const AccountsFilter = ({
+  accounts,
+}: {
+  accounts: SerializedUserAccount[];
+}) => {
   const [selectedAccountType, setSelectedAccountType] = useState("");
 
-  if (isLoading && !accounts?.length) {
-    return <Skeleton className="w-full h-20" />;
-  }
-
-  if (!isLoading && !accounts?.length) {
+  if (accounts.length === 0) {
     return (
       <div className="lg:text-center">
         <h3 className="inline-block text-lg lg:text-3xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">

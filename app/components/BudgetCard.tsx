@@ -1,3 +1,4 @@
+"use client";
 import { Progress } from "@/components/ui/progress";
 import { SerializedBudget, fetchBudgets } from "../redux/features/budgetSlice";
 import ActionPopover from "@/components/ActionPopover";
@@ -31,7 +32,6 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
       dispatch(fetchBudgets());
     }
   };
-
 
   return (
     <div

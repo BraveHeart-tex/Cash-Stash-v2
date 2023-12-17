@@ -4,6 +4,7 @@ import { setSelectedTab } from "@/app/redux/features/navigationTabsSlice";
 import { useAppSelector, useAppDispatch } from "@/app/redux/hooks";
 import { PAGES, Page } from "@/lib/utils";
 import { TabsList, TabsTrigger, TabsContent, Tabs } from "./ui/tabs";
+import Link from "next/link";
 
 interface INavigationTabsListProps {
   dashboardData: MonthlyData["monthlyTransactionsData"];
@@ -28,14 +29,22 @@ const NavigationTabsList = ({ dashboardData }: INavigationTabsListProps) => {
           {PAGES.map((page) => (
             <TabsTrigger
               key={page.label}
+              asChild
               value={page.label}
               className={
                 "data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-primary/70 data-[state=active]:text-white transition-all"
               }
+              onClick={(e) => {
+                e.currentTarget.scrollIntoView({
+                  behavior: "smooth",
+                  block: "center",
+                });
+              }}
             >
-              {/* @ts-ignore */}
-              <page.icon className="w-6 h-6 mr-2" />
-              {page.label}
+              <Link href={page.link}>
+                <page.icon className="w-6 h-6 mr-2" />
+                {page.label}
+              </Link>
             </TabsTrigger>
           ))}
         </TabsList>
