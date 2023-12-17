@@ -29,8 +29,12 @@ const NavigationTabsList = ({ dashboardData }: INavigationTabsListProps) => {
             <TabsTrigger
               key={page.label}
               value={page.label}
-              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-primary/70 data-[state=active]:text-white transition-all"
+              className={
+                "data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-primary/70 data-[state=active]:text-white transition-all"
+              }
             >
+              {/* @ts-ignore */}
+              <page.icon className="w-6 h-6 mr-2" />
               {page.label}
             </TabsTrigger>
           ))}

@@ -7,7 +7,12 @@ import TransactionsClient from "@/app/transactions/TransactionsClient";
 import prisma from "@/app/libs/prismadb";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { MdDashboard, MdOutlineAccountBalanceWallet } from "react-icons/md";
 import { ZodObject } from "zod";
+import { IconType } from "react-icons/lib";
+import { FaMoneyBill, FaPiggyBank } from "react-icons/fa";
+import { TbReportAnalytics } from "react-icons/tb";
+import { AiOutlineTransaction } from "react-icons/ai";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -76,33 +81,40 @@ export type Page =
 
 export interface IPage {
   label: Page;
-  content: any;
+  content: React.FC<any>;
+  icon?: IconType;
 }
 
 export const PAGES: IPage[] = [
   {
     label: "Dashboard",
     content: Dashboard,
+    icon: MdDashboard,
   },
   {
     label: "Accounts",
     content: AccountsPageClient,
+    icon: MdOutlineAccountBalanceWallet,
   },
   {
     label: "Budgets",
     content: BudgetsPageClient,
+    icon: FaMoneyBill,
   },
   {
     label: "Goals",
     content: GoalsPageClient,
+    icon: FaPiggyBank,
   },
   {
     label: "Transactions",
     content: TransactionsClient,
+    icon: AiOutlineTransaction,
   },
   {
     label: "Reports",
     content: ReportsPageClient,
+    icon: TbReportAnalytics,
   },
 ];
 
