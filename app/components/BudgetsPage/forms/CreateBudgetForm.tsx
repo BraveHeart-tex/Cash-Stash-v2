@@ -2,7 +2,6 @@
 import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
 import { useForm } from "react-hook-form";
 import { useAppDispatch } from "@/app/redux/hooks";
-import { fetchBudgets } from "@/app/redux/features/budgetSlice";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import FormInput from "@/components/FormInput";
@@ -14,11 +13,13 @@ import CreateBudgetSchema, {
 } from "@/schemas/CreateBudgetSchema";
 import { createBudgetAction } from "@/actions";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 
 const CreateBudgetForm = () => {
   let [isPending, startTransition] = useTransition();
   const budgetOptions = Object.values(CreateBudgetOptions);
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const {
     register,
@@ -41,7 +42,7 @@ const CreateBudgetForm = () => {
       if (result?.error) {
         showErrorToast("An error occurred.", result.error);
       } else {
-        dispatch(fetchBudgets());
+        router.refresh();
         const category =
           result.budget && result.budget.category
             ? CreateBudgetOptions[result.budget.category]
