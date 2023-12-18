@@ -2,11 +2,9 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { UserAccount } from "@prisma/client";
 import { getGenericListByCurrentUser } from "@/actions/generic";
 
-export type SerializedUserAccount = Omit<
-  UserAccount,
-  "createdAt" | "updatedAt"
-> & {
+export type SerializedUserAccount = Omit<UserAccount, "createdAt" | "updatedAt"> & {
   createdAt: string;
+  updatedAt: string;
 };
 
 interface UserAccountsState {

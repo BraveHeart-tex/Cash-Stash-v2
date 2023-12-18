@@ -6,7 +6,6 @@ import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { fetchBudgetById } from "@/app/redux/features/currentBudgetSlice";
 import CreateBudgetOptions from "@/app/../lib/CreateBudgetOptions";
 import { getOptionLabel } from "@/lib/CreateUserAccountOptions";
-import { fetchBudgets } from "@/app/redux/features/budgetSlice";
 import FormLoadingSpinner from "../../FormLoadingSpinner";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 import {
@@ -22,6 +21,7 @@ import FormInput from "@/components/FormInput";
 import FormSelect from "@/components/FormSelect";
 import { Button } from "@/components/ui/button";
 import { updateBudgetByIdAction } from "@/actions";
+import { useRouter } from "next/navigation";
 
 interface IEditBudgetFormProps {
   entityId: string;
@@ -34,6 +34,7 @@ const EditUserBudgetForm = ({ entityId }: IEditBudgetFormProps) => {
   const { currentBudget, isLoading: isCurrentBudgetLoading } = useAppSelector(
     (state) => state.currentBudgetReducer
   );
+  const router = useRouter();
 
   const {
     register,
@@ -96,7 +97,7 @@ const EditUserBudgetForm = ({ entityId }: IEditBudgetFormProps) => {
       if (result.error) {
         showErrorToast("An error occurred.", result.error);
       } else {
-        dispatch(fetchBudgets());
+        router.refresh();
         showSuccessToast("Budget updated", "Budget updated successfully.");
         dispatch(closeGenericModal());
       }

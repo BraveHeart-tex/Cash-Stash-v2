@@ -11,6 +11,7 @@ import { UseFormRegister } from "react-hook-form";
 import FormError from "./FormError";
 import { Label } from "./ui/label";
 import { useEffect } from "react";
+import { cn } from "@/lib/utils";
 
 export interface SelectOption {
   value: string;
@@ -46,6 +47,8 @@ const FormSelect = ({
   onChange,
   selectOptions,
 }: IFromSelectProps) => {
+  const isError = errors[nameParam] && errors[nameParam].message;
+
   useEffect(() => {
     if (defaultValue && onChange) {
       onChange(defaultValue);
@@ -54,7 +57,7 @@ const FormSelect = ({
 
   return (
     <div className="flex flex-col gap-1">
-      <Label>{label}</Label>
+      <Label className={cn(isError && "text-red-500")}>{label}</Label>
       <Select
         value={value}
         onValueChange={(value: string) => {
@@ -78,9 +81,7 @@ const FormSelect = ({
           </SelectGroup>
         </SelectContent>
       </Select>
-      {errors[nameParam] && errors[nameParam].message && (
-        <FormError errorMessage={errors[nameParam].message} />
-      )}
+      {isError && <FormError errorMessage={errors[nameParam].message} />}
     </div>
   );
 };

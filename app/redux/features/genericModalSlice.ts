@@ -7,6 +7,7 @@ interface GenericModalState {
   dialogDescription?: string;
   mode: "edit" | "create";
   key: "budget" | "goal" | "transaction" | "reminder" | "account" | "";
+  props: any;
 }
 
 const initialState: GenericModalState = {
@@ -16,6 +17,7 @@ const initialState: GenericModalState = {
   dialogTitle: "",
   dialogDescription: "",
   key: "",
+  props: {},
 };
 
 export const genericModalSlice = createSlice({
@@ -30,9 +32,10 @@ export const genericModalSlice = createSlice({
         dialogTitle: string;
         dialogDescription: string;
         key: "budget" | "goal" | "transaction" | "reminder" | "account" | "";
+        props?: any;
       }>
     ) => {
-      const { entityId, mode, dialogTitle, dialogDescription, key } =
+      const { entityId, mode, dialogTitle, dialogDescription, key, props } =
         action.payload;
 
       state.entityId = entityId;
@@ -41,15 +44,16 @@ export const genericModalSlice = createSlice({
       state.dialogTitle = dialogTitle;
       state.dialogDescription = dialogDescription;
       state.mode = mode;
+      state.props = props;
     },
 
     closeGenericModal: (state) => {
-      state.entityId = "",
-      state.isGenericModalOpen = false;
+      (state.entityId = ""), (state.isGenericModalOpen = false);
       state.mode = "create";
       state.dialogTitle = "";
       state.dialogDescription = "";
       state.key = "";
+      state.props = {};
     },
   },
 });

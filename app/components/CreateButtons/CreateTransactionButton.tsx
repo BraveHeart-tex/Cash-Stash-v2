@@ -26,10 +26,13 @@ const CreateTransactionButton = () => {
           "You need to create an account before you can create a transaction."
         );
       } else {
-        openGenericModal("Transactions", dispatch);
+        openGenericModal("Transactions", dispatch, {
+          userAccounts: result.data,
+        });
       }
     });
   };
+
   return (
     <Button
       className={cn(
@@ -37,6 +40,7 @@ const CreateTransactionButton = () => {
         isPending && "opacity-50 cursor-not-allowed"
       )}
       onClick={handleCreateTransactionClick}
+      loading={isPending}
     >
       {isPending ? (
         "Loading..."

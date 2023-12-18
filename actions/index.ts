@@ -6,7 +6,7 @@ import { LoginSchemaType } from "@/schemas/LoginSchema";
 import RegisterSchema, { RegisterSchemaType } from "@/schemas/RegisterSchema";
 import { cookies } from "next/headers";
 import bcrypt from "bcrypt";
-import { MONTHS_OF_THE_YEAR } from "@/lib/utils";
+import { MONTHS_OF_THE_YEAR, processDate } from "@/lib/utils";
 import CreateUserAccountSchema, {
   CreateUserAccountSchemaType,
 } from "@/schemas/CreateUserAccountSchema";
@@ -28,6 +28,7 @@ import CreateTransactionSchema, {
 import CreateReminderSchema, {
   CreateReminderSchemaType,
 } from "@/schemas/CreateReminderSchema";
+import { revalidatePath } from "next/cache";
 
 export const loginAction = async ({ email, password }: LoginSchemaType) => {
   const result = LoginSchema.safeParse({ email, password });
@@ -433,12 +434,16 @@ export const updateReminderAction = async ({
     title,
     description,
     amount,
-    reminderDate: new Date(reminderDate),
-    isRead: isRead === "isRead",
-    isIncome: isIncome === "income",
+    reminderDate,
+    isRead,
+    isIncome,
   });
 
-  if (!result.success) return { error: "Unprocessable entity." };
+  if (!result.success) {
+    console.log(result.error);
+
+    return { error: "Unprocessable entity." };
+  }
 
   const reminderToBeUpdated = await db.reminder.findUnique({
     where: { id: reminderId },
@@ -648,7 +653,6 @@ export const createReminderAction = async ({
   });
 
   if (!result.success) {
-    console.log("create reminder error", result.error);
     return { error: "Unprocessable entity." };
   }
 
@@ -677,5 +681,49 @@ export const createReminderAction = async ({
 
   return {
     reminder: createdReminder,
+  };
+};
+
+export const searchTransactions = async ({
+  transactionType,
+  accountId,
+  sortBy,
+  sortDirection,
+}: {
+  transactionType: "income" | "expense" | "all";
+  accountId?: string | null;
+  sortBy: "amount" | "createdAt";
+  sortDirection: "asc" | "desc";
+}) => {
+  const currentUser = await getCurrentUser(cookies().get("token")?.value!);
+  if (!currentUser) {
+    return { error: "You are not authorized to perform this action." };
+  }
+
+  const result = await db.transaction.findMany({
+    where: {
+      isIncome:
+        transactionType === "all" ? undefined : transactionType === "income",
+      accountId: accountId ? accountId : undefined,
+      userId: currentUser.id,
+    },
+    orderBy: {
+      [sortBy]: sortDirection,
+    },
+    include: {
+      account: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
+
+  return {
+    transactions: result.map((transaction) => ({
+      ...transaction,
+      createdAt: processDate(transaction.createdAt),
+      updatedAt: processDate(transaction.updatedAt),
+    })),
   };
 };

@@ -180,7 +180,10 @@ export const getGenericListByCurrentUser = async <T>({
   tableName,
   whereCondition,
   selectCondition,
-}: IGenericParams<T>) => {
+  serialize = false,
+}: IGenericParams<T> & {
+  serialize?: boolean;
+}) => {
   try {
     const table = await getTable(tableName);
     const currentUserResult = await getCurrentUserAction();
@@ -198,6 +201,18 @@ export const getGenericListByCurrentUser = async <T>({
     };
 
     const result = await table.findMany(queryOptions);
+
+    if (serialize) {
+      return result.length
+        ? {
+            data: result.map((item) => ({
+              ...item,
+              createdAt: item.createdAt.toLocaleDateString(),
+              updatedAt: item.updatedAt.toLocaleDateString(),
+            })) as T[],
+          }
+        : null;
+    }
 
     return result.length
       ? {

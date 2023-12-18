@@ -1,19 +1,11 @@
-"use client";
-import { useEffect } from "react";
-import { fetchTransactions } from "@/app/redux/features/transactionsSlice";
-import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
+import { SerializedTransaction } from "@/app/redux/features/transactionsSlice";
 import TransactionCard from "./TransactionCard";
 
-const TransactionList = () => {
-  const { data, filteredData, isLoading } = useAppSelector(
-    (state) => state.transactionsReducer
-  );
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(fetchTransactions());
-  }, [dispatch]);
-
+const TransactionList = ({
+  transactions,
+}: {
+  transactions: SerializedTransaction[];
+}) => {
   const renderNoTransactionsState = () => (
     <div className="flex justify-center items-start flex-col gap-4 my-4 lg:mt-0">
       <h2 className="inline-block text-2xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
@@ -26,23 +18,12 @@ const TransactionList = () => {
     </div>
   );
 
-  if (!isLoading && !data) {
-    return renderNoTransactionsState();
-  }
-
-  if (filteredData?.length === 0) {
-    return renderNoTransactionsState();
-  }
-
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
-      {filteredData && filteredData?.length > 0
-        ? filteredData?.map((transaction) => (
-            <TransactionCard transaction={transaction} key={transaction.id} />
-          ))
-        : data?.map((transaction) => (
-            <TransactionCard transaction={transaction} key={transaction.id} />
-          ))}
+      {transactions.length === 0 && renderNoTransactionsState()}
+      {transactions?.map((transaction) => (
+        <TransactionCard transaction={transaction} key={transaction.id} />
+      ))}
     </div>
   );
 };

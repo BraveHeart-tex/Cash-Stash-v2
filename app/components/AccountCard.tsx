@@ -1,8 +1,5 @@
 import CreateUserAccountOptions from "@/lib/CreateUserAccountOptions";
-import {
-  SerializedUserAccount,
-  fetchCurrentUserAccounts,
-} from "../redux/features/userAccountSlice";
+import { SerializedUserAccount } from "../redux/features/userAccountSlice";
 import ActionPopover from "@/components/ActionPopover";
 import { useAppDispatch } from "../redux/hooks";
 import { openGenericModal } from "../redux/features/genericModalSlice";
@@ -12,6 +9,7 @@ import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 import { cn } from "@/lib/utils";
 import { deleteGeneric } from "@/actions/generic";
 import { UserAccount } from "@prisma/client";
+import { useRouter } from "next/navigation";
 
 interface IAccountCardProps {
   account: SerializedUserAccount;
@@ -20,6 +18,7 @@ interface IAccountCardProps {
 
 const AccountCard = ({ account, className }: IAccountCardProps) => {
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const accountCategory = CreateUserAccountOptions[account.category];
 
@@ -30,7 +29,7 @@ const AccountCard = ({ account, className }: IAccountCardProps) => {
     if (result?.error) {
       showErrorToast("An error occurred.", result.error as string);
     } else {
-      dispatch(fetchCurrentUserAccounts());
+      router.refresh();
       showSuccessToast(
         "Account deleted.",
         "Selected account has been deleted."

@@ -53,25 +53,25 @@ const LoginForm = () => {
 
   const handleTestUserLogin = () => {
     startTransition(async () => {
-      loginAction({
+      const result = await loginAction({
         email: "testUser@email.com",
         password: "testUser123!",
-      }).then((result) => {
-        if (result?.error) {
-          showErrorToast("An error occurred.", result.error);
-        } else {
-          setLoggedIn(true);
-          router.push("/");
-          showSuccessToast("Logged in.", "You have been logged in.");
-        }
       });
+
+      if (result?.error) {
+        showErrorToast("An error occurred.", result.error);
+      } else {
+        setLoggedIn(true);
+        router.push("/");
+        showSuccessToast("Logged in.", "You have been logged in.");
+      }
     });
   };
 
   if (loggedIn) {
     return (
       <div className="flex flex-col items-center justify-center h-screen gap-2">
-        <h1 className="text-2xl font-semibold text-foreground ">
+        <h1 className="text-2xl font-semibold text-primary">
           Logged in successfully.
         </h1>
         <span className="animate-bounce">You are being redirected...</span>
@@ -114,6 +114,7 @@ const LoginForm = () => {
             ))}
           </div>
           <Button
+            loading={isPending}
             type="submit"
             className="font-semibold"
             disabled={isPending}
@@ -137,6 +138,8 @@ const LoginForm = () => {
           </p>
         </div>
         <Button
+          loading={isPending}
+          disabled={isPending}
           variant="ghost"
           className="font-normal text-sm"
           onClick={() => handleTestUserLogin()}

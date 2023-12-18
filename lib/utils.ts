@@ -1,13 +1,12 @@
-import AccountsPageClient from "@/app/accounts/AccountPageClient";
-import BudgetsPageClient from "@/app/budgets/BudgetsPageClient";
-import Dashboard from "@/app/components/Dashboard";
-import GoalsPageClient from "@/app/goals/GoalsPageClient";
-import ReportsPageClient from "@/app/reports/ReportsPageClient";
-import TransactionsClient from "@/app/transactions/TransactionsClient";
 import prisma from "@/app/libs/prismadb";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { MdDashboard, MdOutlineAccountBalanceWallet } from "react-icons/md";
 import { ZodObject } from "zod";
+import { IconType } from "react-icons/lib";
+import { FaMoneyBill, FaPiggyBank } from "react-icons/fa";
+import { TbReportAnalytics } from "react-icons/tb";
+import { AiOutlineTransaction } from "react-icons/ai";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -76,33 +75,40 @@ export type Page =
 
 export interface IPage {
   label: Page;
-  content: any;
+  icon: IconType;
+  link: string;
 }
 
 export const PAGES: IPage[] = [
   {
     label: "Dashboard",
-    content: Dashboard,
+    icon: MdDashboard,
+    link: "/",
   },
   {
     label: "Accounts",
-    content: AccountsPageClient,
+    icon: MdOutlineAccountBalanceWallet,
+    link: "/accounts",
   },
   {
     label: "Budgets",
-    content: BudgetsPageClient,
+    icon: FaMoneyBill,
+    link: "/budgets",
   },
   {
     label: "Goals",
-    content: GoalsPageClient,
+    icon: FaPiggyBank,
+    link: "/goals",
   },
   {
     label: "Transactions",
-    content: TransactionsClient,
+    icon: AiOutlineTransaction,
+    link: "/transactions",
   },
   {
     label: "Reports",
-    content: ReportsPageClient,
+    icon: TbReportAnalytics,
+    link: "/reports",
   },
 ];
 
@@ -156,3 +162,18 @@ export function generateFormFields(schema: ZodObject<any>) {
 
   return formFields;
 }
+
+export const processDate = (date: Date) => {
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Months are zero-based
+  const year = date.getFullYear();
+  const hours = date.getHours().toString().padStart(2, "0");
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const seconds = date.getSeconds().toString().padStart(2, "0");
+
+  return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+};
+
+export const thousandSeparator = (value: number) => {
+  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+};

@@ -1,8 +1,6 @@
 "use client";
-import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
-import { fetchTransactions } from "@/app/redux/features/transactionsSlice";
-import { fetchCurrentUserAccounts } from "@/app/redux/features/userAccountSlice";
-import { useEffect } from "react";
+import { SerializedTransaction } from "@/app/redux/features/transactionsSlice";
+import { SerializedUserAccount } from "@/app/redux/features/userAccountSlice";
 import TransactionsFilter from "../TransactionsPage/TransactionsFilter";
 import TransactionsSort from "../TransactionsPage/TransactionsSort";
 import {
@@ -14,8 +12,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { cn } from "@/lib/utils";
+import { cn, thousandSeparator } from "@/lib/utils";
 import ResponsiveChartContainer from "@/app/ResponsiveChartContainer";
+import { useEffect, useState } from "react";
 
 export interface MonthlyData {
   monthlyTransactionsData: {
@@ -23,25 +22,21 @@ export interface MonthlyData {
     income: number;
     expense: number;
   }[];
+  transactions: SerializedTransaction[];
+  currentUserAccounts: SerializedUserAccount[];
 }
 
-const ReportTable = ({ monthlyTransactionsData }: MonthlyData) => {
-  const dispatch = useAppDispatch();
-  const {
-    // data,
-    filteredData: transactions,
-    isLoading,
-  } = useAppSelector((state) => state.transactionsReducer);
-  const { currentUserAccounts } = useAppSelector(
-    (state) => state.userAccountReducer
-  );
-
+const ReportTable = ({
+  monthlyTransactionsData,
+  transactions,
+  currentUserAccounts,
+}: MonthlyData) => {
+  const [mounted, setMounted] = useState(false);
   useEffect(() => {
-    dispatch(fetchCurrentUserAccounts());
-    dispatch(fetchTransactions());
-  }, [dispatch]);
+    setMounted(true);
+  }, []);
 
-  console.log(transactions);
+  if (!mounted) return null;
 
   const renderTableBody = () => {
     return (
@@ -59,7 +54,7 @@ const ReportTable = ({ monthlyTransactionsData }: MonthlyData) => {
                     transaction.isIncome ? "text-green-500" : "text-red-500"
                   )}
                 >
-                  {transaction.amount}₺
+                  {thousandSeparator(transaction.amount)}₺
                 </TableCell>
                 <TableCell>
                   {currentUserAccounts &&
@@ -87,7 +82,7 @@ const ReportTable = ({ monthlyTransactionsData }: MonthlyData) => {
       <h3 className="my-4 text-lg">Transaction History Report</h3>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-4">
         <div className="flex justify-center flex-col">
-          <TransactionsFilter />
+          <TransactionsFilter currentUserAccounts={currentUserAccounts} />
           <TransactionsSort />
         </div>
         <Table>
@@ -102,14 +97,7 @@ const ReportTable = ({ monthlyTransactionsData }: MonthlyData) => {
               <TableHead>Category</TableHead>
             </TableRow>
           </TableHeader>
-          {isLoading && (
-            <TableBody>
-              <TableRow>
-                <TableCell>Loading...</TableCell>
-              </TableRow>
-            </TableBody>
-          )}
-          {!isLoading && !transactions && (
+          {transactions.length === 0 && (
             <TableBody>
               <TableRow>
                 <TableCell colSpan={6} className="text-center">

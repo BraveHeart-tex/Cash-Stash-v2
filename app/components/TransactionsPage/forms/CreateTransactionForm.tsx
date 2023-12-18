@@ -1,11 +1,8 @@
 "use client";
-import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
-import { useEffect, useTransition } from "react";
+import { useAppDispatch } from "@/app/redux/hooks";
+import { useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { fetchCurrentUserAccounts } from "@/app/redux/features/userAccountSlice";
-import FormLoadingSpinner from "../../FormLoadingSpinner";
 import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
-import { fetchTransactions } from "@/app/redux/features/transactionsSlice";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CreateTransactionSchema, {
@@ -16,16 +13,17 @@ import FormInput from "@/components/FormInput";
 import FormSelect, { SelectOption } from "@/components/FormSelect";
 import { Button } from "@/components/ui/button";
 import { createTransactionAction } from "@/actions";
+import { useRouter } from "next/navigation";
+import { SerializedUserAccount } from "@/app/redux/features/userAccountSlice";
 
-const CreateTransactionForm = () => {
+const CreateTransactionForm = ({
+  userAccounts,
+}: {
+  userAccounts: SerializedUserAccount[];
+}) => {
   let [isPending, startTransition] = useTransition();
   const dispatch = useAppDispatch();
-  const { currentUserAccounts, isLoading: userAccountsLoading } =
-    useAppSelector((state) => state.userAccountReducer);
-
-  useEffect(() => {
-    dispatch(fetchCurrentUserAccounts());
-  }, [dispatch]);
+  const router = useRouter();
 
   const {
     register,
@@ -43,21 +41,17 @@ const CreateTransactionForm = () => {
     resolver: zodResolver(CreateTransactionSchema),
   });
 
-  if (userAccountsLoading) {
-    return <FormLoadingSpinner />;
-  }
-
   const onSubmit = async (data: CreateTransactionSchemaType) => {
     startTransition(async () => {
       const result = await createTransactionAction(data);
       if (result?.error) {
         showErrorToast("An error occurred.", result.error);
       } else {
+        router.refresh();
         showSuccessToast(
           "Transaction created.",
           `Transaction for ${result?.transaction?.amount}₺ created.`
         );
-        dispatch(fetchTransactions());
         dispatch(closeGenericModal());
       }
     });
@@ -70,7 +64,7 @@ const CreateTransactionForm = () => {
     })
   );
 
-  const userAccountSelectOptions = currentUserAccounts?.map((acc) => ({
+  const userAccountSelectOptions = userAccounts?.map((acc) => ({
     value: acc.id.toString(),
     label: acc.name,
   })) as SelectOption[];
@@ -96,7 +90,7 @@ const CreateTransactionForm = () => {
           errors={errors}
         />
         <FormSelect
-          defaultValue={categorySelectOptions[0].value}
+          defaultValue={categorySelectOptions[0]?.value}
           selectOptions={categorySelectOptions}
           nameParam={"category"}
           label={"Category"}
@@ -105,11 +99,10 @@ const CreateTransactionForm = () => {
           errors={errors}
           onChange={(value) => {
             setValue("category", value);
-            console.log(value);
           }}
         />
         <FormSelect
-          defaultValue={userAccountSelectOptions[0].value}
+          defaultValue={userAccountSelectOptions[0]?.value}
           selectOptions={userAccountSelectOptions}
           nameParam={"accountId"}
           label={"Account"}

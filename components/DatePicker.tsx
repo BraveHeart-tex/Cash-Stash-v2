@@ -12,7 +12,7 @@ import {
 import { UseFormRegister } from "react-hook-form";
 import FormError from "./FormError";
 import { Label } from "./ui/label";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface IDatePickerProps {
   name: string;
@@ -26,6 +26,7 @@ interface IDatePickerProps {
   };
   className?: string;
   onChange?: (value: string) => void;
+  defaultValue?: string;
 }
 
 export default function DatePicker({
@@ -35,9 +36,17 @@ export default function DatePicker({
   errors,
   label,
   className,
+  defaultValue,
   onChange,
 }: IDatePickerProps) {
   const [date, setDate] = useState<Date>();
+
+  useEffect(() => {
+    if (defaultValue) {
+      setDate(new Date(defaultValue));
+    }
+  }, [defaultValue]);
+
   return (
     <div className="flex flex-col gap-1">
       <Label htmlFor={name}>{label}</Label>
@@ -59,11 +68,13 @@ export default function DatePicker({
             mode="single"
             selected={date}
             onSelect={(date) => {
-              setDate(date);
-              onChange && onChange(date?.toISOString()!);
+              if (date) {
+                setDate(date);
+                onChange && onChange(date?.toISOString()!);
+              }
             }}
             initialFocus
-            className="w-[280px] h-[280px]"
+            className="w-full"
             {...register(name)}
           />
         </PopoverContent>

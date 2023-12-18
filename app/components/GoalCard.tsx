@@ -1,3 +1,4 @@
+"use client";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { useAppDispatch } from "@/app/redux/hooks";
@@ -6,9 +7,10 @@ import { openGenericModal } from "@/app/redux/features/genericModalSlice";
 import { showGenericConfirm } from "@/app/redux/features/genericConfirmSlice";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
-import { SerializedGoal, fetchGoals } from "@/app/redux/features/goalSlice";
+import { SerializedGoal } from "@/app/redux/features/goalSlice";
 import { deleteGeneric } from "@/actions/generic";
 import { Goal } from "@prisma/client";
+import { useRouter } from "next/navigation";
 
 interface IGoalCardProps {
   goal: SerializedGoal;
@@ -16,6 +18,7 @@ interface IGoalCardProps {
 
 const GoalCard = ({ goal }: IGoalCardProps) => {
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const handleDeleteGoal = (id: string) => {
     const handleActionCallback = (
@@ -25,7 +28,7 @@ const GoalCard = ({ goal }: IGoalCardProps) => {
       if (result?.error) {
         showErrorToast("An error occurred.", result.error as string);
       } else {
-        dispatch(fetchGoals());
+        router.refresh();
         showSuccessToast("Goal deleted.", "Selected goal has been deleted.");
         dispatch(cleanUp());
       }

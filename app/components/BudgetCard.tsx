@@ -1,5 +1,6 @@
+"use client";
 import { Progress } from "@/components/ui/progress";
-import { SerializedBudget, fetchBudgets } from "../redux/features/budgetSlice";
+import { SerializedBudget } from "../redux/features/budgetSlice";
 import ActionPopover from "@/components/ActionPopover";
 import { Badge } from "@/components/ui/badge";
 import { useAppDispatch } from "../redux/hooks";
@@ -11,6 +12,7 @@ import { cn } from "@/lib/utils";
 import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
 import { deleteGeneric } from "@/actions/generic";
 import { Budget } from "@prisma/client";
+import { useRouter } from "next/navigation";
 
 interface IBudgetCardProps {
   budget: SerializedBudget;
@@ -18,6 +20,7 @@ interface IBudgetCardProps {
 
 const BudgetCard = ({ budget }: IBudgetCardProps) => {
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const handleActionCallback = (
     result: Awaited<ReturnType<typeof deleteGeneric>>,
@@ -26,12 +29,11 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
     if (result?.error) {
       showErrorToast("An error occurred.", result.error as string);
     } else {
+      router.refresh();
       showSuccessToast("Budget deleted.", "Selected budget has been deleted.");
       dispatch(cleanUp());
-      dispatch(fetchBudgets());
     }
   };
-
 
   return (
     <div

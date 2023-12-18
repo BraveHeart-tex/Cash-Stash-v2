@@ -1,11 +1,8 @@
 "use client";
 import {
-  fetchInsightsData,
-  fetchMonthlyTransactionsData,
-  fetchTransactions,
+  InsightsData,
+  SerializedTransaction,
 } from "@/app/redux/features/transactionsSlice";
-import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
-import { useEffect } from "react";
 import AccountSummaries from "./AccountSummaries";
 import BudgetStatus from "./BudgetStatus";
 import FinancialInsights from "./FinancialInsights";
@@ -15,25 +12,30 @@ import TransactionHistory from "./TransactionHistory";
 import BarChartComponent from "@/components/charts/BarChartComponent";
 import { MonthlyData } from "./ReportsPage/ReportTable";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { SerializedUserAccount } from "../redux/features/userAccountSlice";
+import { SerializedBudget } from "../redux/features/budgetSlice";
+import { SerializedGoal } from "../redux/features/goalSlice";
+import { SerializedReminder } from "../redux/features/remindersSlice";
 
 interface IDashboardProps {
   monthlyTransactionsData: MonthlyData["monthlyTransactionsData"];
+  insightsData: InsightsData;
+  transactions: SerializedTransaction[];
+  accounts: SerializedUserAccount[];
+  budgets: SerializedBudget[];
+  goals: SerializedGoal[];
+  reminders: SerializedReminder[];
 }
 
-const Dashboard = ({ monthlyTransactionsData }: IDashboardProps) => {
-  const dispatch = useAppDispatch();
-  const {
-    data: transactions,
-    insightsData,
-    isLoading,
-  } = useAppSelector((state) => state.transactionsReducer);
-
-  useEffect(() => {
-    dispatch(fetchTransactions());
-    dispatch(fetchMonthlyTransactionsData());
-    dispatch(fetchInsightsData());
-  }, [dispatch]);
-
+const Dashboard = ({
+  monthlyTransactionsData,
+  transactions,
+  insightsData,
+  accounts,
+  budgets,
+  goals,
+  reminders,
+}: IDashboardProps) => {
   const sectionData = [
     {
       title: "Accounts Summary",
@@ -41,7 +43,7 @@ const Dashboard = ({ monthlyTransactionsData }: IDashboardProps) => {
         "You can view your accounts here. Click on the account card to view the account details.",
       data: (
         <div className="max-h-[330px] min-h-[330px] lg:max-h-[350px] lg:min-h-[350px] overflow-y-scroll scrollbar-hide">
-          <AccountSummaries />
+          <AccountSummaries accounts={accounts} />
         </div>
       ),
     },
@@ -51,7 +53,7 @@ const Dashboard = ({ monthlyTransactionsData }: IDashboardProps) => {
         "You can check your budgets here. Click on the budget card to see details or create a new one using the menu button above.",
       data: (
         <div className="max-h-[300px] min-h-[300px] lg:max-h-[350px] lg:min-h-[350px] overflow-y-scroll scrollbar-hide">
-          <BudgetStatus />
+          <BudgetStatus budgets={budgets} />
         </div>
       ),
     },
@@ -61,7 +63,7 @@ const Dashboard = ({ monthlyTransactionsData }: IDashboardProps) => {
         "Check your goals here. Click on a goal card to view or edit its details or create a new one by clicking the menu button above.",
       data: (
         <div className="max-h-[300px] min-h-[300px] lg:max-h-[350px] lg:min-h-[350px] overflow-y-scroll scrollbar-hide">
-          <GoalStatus />
+          <GoalStatus goals={goals} />
         </div>
       ),
     },
@@ -80,14 +82,14 @@ const Dashboard = ({ monthlyTransactionsData }: IDashboardProps) => {
           <BarChartComponent
             monthlyTransactionsData={monthlyTransactionsData}
           />
-          <FinancialInsights insightsData={insightsData} loading={isLoading} />
+          <FinancialInsights insightsData={insightsData} />
         </div>
       ),
     },
     {
       title: "Notifications and Reminders",
       description: "View your notifications, set bill reminders here.",
-      data: <NotificationsAndReminders />,
+      data: <NotificationsAndReminders reminders={reminders} />,
     },
   ];
 

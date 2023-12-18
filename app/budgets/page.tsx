@@ -1,9 +1,15 @@
-import BudgetsPageClient from './BudgetsPageClient';
+import { getGenericListByCurrentUser } from "@/actions/generic";
+import BudgetList from "./BudgetsPageClient";
+import { SerializedBudget } from "../redux/features/budgetSlice";
 
-const BudgetsPage = () => {
+const BudgetsPage = async () => {
+  const result = await getGenericListByCurrentUser<SerializedBudget>({
+    tableName: "budget",
+  });
+
   return (
     <main>
-      <BudgetsPageClient />
+      <BudgetList budgets={result?.data || []} />
     </main>
   );
 };

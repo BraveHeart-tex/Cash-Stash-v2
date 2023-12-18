@@ -3,7 +3,6 @@ import CreateUserAccountOptions from "@/lib/CreateUserAccountOptions";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { useAppDispatch } from "@/app/redux/hooks";
-import { fetchCurrentUserAccounts } from "@/app/redux/features/userAccountSlice";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CreateUserAccountSchema, {
@@ -14,12 +13,13 @@ import FormSelect from "@/components/FormSelect";
 import { Button } from "@/components/ui/button";
 import { registerBankAccountAction } from "@/actions";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
+import { useRouter } from "next/navigation";
 
 const CreateUserAccountForm = () => {
   const dispatch = useAppDispatch();
   let [isPending, startTransition] = useTransition();
   const accountOptions = Object.values(CreateUserAccountOptions);
-
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -41,7 +41,7 @@ const CreateUserAccountForm = () => {
       if (result?.error) {
         showErrorToast("An error occurred.", result.error);
       } else {
-        dispatch(fetchCurrentUserAccounts());
+        router.refresh();
         showSuccessToast("Account created.", "Your account has been created.");
         dispatch(closeGenericModal());
       }

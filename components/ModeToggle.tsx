@@ -1,56 +1,59 @@
 "use client";
 
 import * as React from "react";
-import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
+import { DesktopIcon, MoonIcon, SunIcon } from "@radix-ui/react-icons";
 import { useTheme } from "next-themes";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
+import { motion } from "framer-motion";
 
-interface IModeToggleProps {
-  showOutline?: boolean;
-}
+export function ModeToggle() {
+  const { theme, setTheme } = useTheme();
 
-export function ModeToggle({ showOutline }: IModeToggleProps) {
-  const { setTheme } = useTheme();
+  const items = [
+    {
+      id: 1,
+      icon: <SunIcon className="h-[1.2rem] w-[1.2rem]" />,
+      value: "light",
+    },
+    {
+      id: 2,
+      icon: <MoonIcon className="h-[1.2rem] w-[1.2rem] transition-all" />,
+      value: "dark",
+    },
+    {
+      id: 3,
+      icon: <DesktopIcon className="h-[1.2rem] w-[1.2rem]" />,
+      value: "system",
+    },
+  ];
+
+  const itemVariants = {
+    active: { scale: 1.1, opacity: 1 },
+    inactive: { scale: 1, opacity: 0.8 },
+  };
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant={showOutline ? "outline" : "ghost"}
-          size="icon"
-          className="outline-none focus:outline-none hover:bg-white hover:text-primary text-white"
-        >
-          <SunIcon className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <MoonIcon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-          <span className="sr-only">Toggle theme</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onClick={() => setTheme("light")}
-        >
-          Light
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onClick={() => setTheme("dark")}
-        >
-          Dark
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onClick={() => setTheme("system")}
-        >
-          System
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <Tabs defaultValue={theme} value={theme} onValueChange={setTheme}>
+      <TabsList className="border">
+        {items.map((item, index) => (
+          <motion.div
+            key={item.id + index}
+            variants={itemVariants}
+            initial="inactive"
+            animate={item.value === theme ? "active" : "inactive"}
+            onClick={() => setTheme(item.value)}
+          >
+            <TabsTrigger
+              key={item.id}
+              value={item.value}
+              data-state={item.value === theme ? "active" : "inactive"}
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-primary/70 data-[state=active]:text-white transition-all"
+            >
+              {item.icon}
+            </TabsTrigger>
+          </motion.div>
+        ))}
+      </TabsList>
+    </Tabs>
   );
 }

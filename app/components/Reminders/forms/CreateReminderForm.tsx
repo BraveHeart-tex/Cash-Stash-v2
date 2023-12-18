@@ -1,10 +1,8 @@
 "use client";
 import { createReminderAction } from "@/actions";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
-import { fetchReminders } from "@/app/redux/features/remindersSlice";
 import { useAppDispatch } from "@/app/redux/hooks";
 import DatePicker from "@/components/DatePicker";
-import FormCheckbox from "@/components/FormCheckbox";
 import FormInput from "@/components/FormInput";
 import FormSelect from "@/components/FormSelect";
 import { Button } from "@/components/ui/button";
@@ -13,13 +11,14 @@ import CreateReminderSchema, {
   CreateReminderSchemaType,
 } from "@/schemas/CreateReminderSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 
 const CreateReminderForm = () => {
   let [isPending, startTransition] = useTransition();
   const dispatch = useAppDispatch();
-
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -43,7 +42,7 @@ const CreateReminderForm = () => {
       if (result?.error) {
         return showErrorToast("An error occurred.", result.error);
       } else {
-        dispatch(fetchReminders());
+        router.refresh();
         showSuccessToast(
           "Reminder created.",
           "Your reminder has been created."

@@ -1,3 +1,4 @@
+"use client";
 import { useAppDispatch } from "@/app/redux/hooks";
 import { Button } from "@/components/ui/button";
 import { openGenericModal } from "@/lib/genericModalUtils";

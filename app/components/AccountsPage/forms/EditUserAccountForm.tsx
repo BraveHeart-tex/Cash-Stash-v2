@@ -7,14 +7,12 @@ import CreateUserAccountOptions, {
 import FormLoadingSpinner from "../../FormLoadingSpinner";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { fetchCurrentAccount } from "@/app/redux/features/currentAccountSlice";
-import { fetchCurrentUserAccounts } from "@/app/redux/features/userAccountSlice";
 import FormInput from "@/components/FormInput";
 import FormSelect from "@/components/FormSelect";
 import {
   showDefaultToast,
   showErrorToast,
   showSuccessToast,
-  useToast,
 } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,6 +21,7 @@ import CreateUserAccountSchema, {
   CreateUserAccountSchemaType,
 } from "@/schemas/CreateUserAccountSchema";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
+import { useRouter } from "next/navigation";
 
 interface IEditUserAccountFormProps {
   entityId: string | null;
@@ -32,12 +31,11 @@ const EditUserAccountForm = ({ entityId }: IEditUserAccountFormProps) => {
   const { currentAccount, isLoading: isCurrentAccountLoading } = useAppSelector(
     (state) => state.currentAccountReducer
   );
+  const router = useRouter();
 
   const dispatch = useAppDispatch();
 
   const accountOptions = Object.values(CreateUserAccountOptions);
-
-  const { toast } = useToast();
 
   const {
     register,
@@ -51,7 +49,6 @@ const EditUserAccountForm = ({ entityId }: IEditUserAccountFormProps) => {
       category: "",
       name: "",
     },
-    // @ts-ignore
     resolver: zodResolver(CreateUserAccountSchema),
   });
 
@@ -99,7 +96,7 @@ const EditUserAccountForm = ({ entityId }: IEditUserAccountFormProps) => {
       if (result?.error) {
         showErrorToast("An error occurred.", result.error);
       } else {
-        dispatch(fetchCurrentUserAccounts());
+        router.refresh();
         showSuccessToast("Account updated.", "Your account has been updated.");
         dispatch(closeGenericModal());
       }
