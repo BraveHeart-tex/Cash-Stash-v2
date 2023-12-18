@@ -71,7 +71,7 @@ const LoginForm = () => {
   if (loggedIn) {
     return (
       <div className="flex flex-col items-center justify-center h-screen gap-2">
-        <h1 className="text-2xl font-semibold text-foreground ">
+        <h1 className="text-2xl font-semibold text-primary">
           Logged in successfully.
         </h1>
         <span className="animate-bounce">You are being redirected...</span>

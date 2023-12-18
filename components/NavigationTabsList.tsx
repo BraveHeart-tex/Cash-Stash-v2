@@ -14,6 +14,9 @@ const NavigationTabsList = () => {
   const pathName = usePathname();
   const dispatch = useAppDispatch();
 
+  if (pathName.startsWith("/login") || pathName.startsWith("/signup"))
+    return null;
+
   const itemVariants = {
     active: {
       scale: 1.05,

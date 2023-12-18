@@ -10,6 +10,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useAppSelector } from "../redux/hooks";
 import { Label } from "@/components/ui/label";
+import { usePathname } from "next/navigation";
 
 const NAV_LINKS = [
   { name: "Dashboard", href: "/" },
@@ -21,10 +22,14 @@ const NAV_LINKS = [
 ];
 
 const Navigation = () => {
+  const pathname = usePathname();
   const currentUser = useAppSelector((state) => state.userReducer.currentUser);
   const [isOpen, setIsOpen] = useState(false);
   const onOpen = () => setIsOpen(true);
   const onClose = () => setIsOpen(false);
+
+  if (pathname.startsWith("/login") || pathname.startsWith("/signup"))
+    return null;
 
   return (
     <div className="mb-6 shadow-lg p-4 bg-primary dark:bg-background dark:border-b">
