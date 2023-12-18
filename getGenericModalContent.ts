@@ -38,6 +38,7 @@ const ContentMap: ContentMap = {
   },
   transaction: {
     create: CreateTransactionForm,
+    // @ts-ignore
     edit: CreateTransactionForm,
   },
   reminder: {
