@@ -1,9 +1,3 @@
-import AccountsPageClient from "@/app/accounts/AccountPageClient";
-import BudgetsPageClient from "@/app/budgets/BudgetsPageClient";
-import Dashboard from "@/app/components/Dashboard";
-import GoalsPageClient from "@/app/goals/GoalsPageClient";
-import ReportsPageClient from "@/app/reports/ReportsPageClient";
-import TransactionsClient from "@/app/transactions/TransactionsClient";
 import prisma from "@/app/libs/prismadb";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -81,7 +75,6 @@ export type Page =
 
 export interface IPage {
   label: Page;
-  content: React.FC<any>;
   icon: IconType;
   link: string;
 }
@@ -89,37 +82,31 @@ export interface IPage {
 export const PAGES: IPage[] = [
   {
     label: "Dashboard",
-    content: Dashboard,
     icon: MdDashboard,
     link: "/",
   },
   {
     label: "Accounts",
-    content: AccountsPageClient,
     icon: MdOutlineAccountBalanceWallet,
     link: "/accounts",
   },
   {
     label: "Budgets",
-    content: BudgetsPageClient,
     icon: FaMoneyBill,
     link: "/budgets",
   },
   {
     label: "Goals",
-    content: GoalsPageClient,
     icon: FaPiggyBank,
     link: "/goals",
   },
   {
     label: "Transactions",
-    content: TransactionsClient,
     icon: AiOutlineTransaction,
     link: "/transactions",
   },
   {
     label: "Reports",
-    content: ReportsPageClient,
     icon: TbReportAnalytics,
     link: "/reports",
   },
@@ -185,4 +172,8 @@ export const processDate = (date: Date) => {
   const seconds = date.getSeconds().toString().padStart(2, "0");
 
   return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+};
+
+export const thousandSeparator = (value: number) => {
+  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 };

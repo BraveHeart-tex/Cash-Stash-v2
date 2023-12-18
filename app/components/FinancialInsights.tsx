@@ -1,7 +1,7 @@
 "use client";
 import { InsightsData } from "@/app/redux/features/transactionsSlice";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn, thousandSeparator } from "@/lib/utils";
 import { useAppDispatch } from "../redux/hooks";
 import { setSelectedTab } from "../redux/features/navigationTabsSlice";
 import { FaMoneyBill } from "react-icons/fa";
@@ -100,10 +100,6 @@ const FinancialInsights = ({ insightsData }: IFinancialInsightsProps) => {
       </article>
     );
   }
-
-  const thousandSeparator = (value: number) => {
-    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-  };
 
   return (
     <div className="grid grid-cols-2">

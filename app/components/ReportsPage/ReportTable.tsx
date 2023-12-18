@@ -12,7 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { cn } from "@/lib/utils";
+import { cn, thousandSeparator } from "@/lib/utils";
 import ResponsiveChartContainer from "@/app/ResponsiveChartContainer";
 import { useEffect, useState } from "react";
 
@@ -54,7 +54,7 @@ const ReportTable = ({
                     transaction.isIncome ? "text-green-500" : "text-red-500"
                   )}
                 >
-                  {transaction.amount}₺
+                  {thousandSeparator(transaction.amount)}₺
                 </TableCell>
                 <TableCell>
                   {currentUserAccounts &&
