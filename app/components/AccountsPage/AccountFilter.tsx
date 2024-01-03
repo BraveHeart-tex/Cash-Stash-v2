@@ -1,14 +1,8 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import CreateUserAccountOptions from "@/lib/CreateUserAccountOptions";
 import AccountInformation from "./AccountInformation";
-import { useAppSelector } from "@/app/redux/hooks";
-import { AppDispatch } from "@/app/redux/store";
-import { useDispatch } from "react-redux";
-import {
-  SerializedUserAccount,
-  fetchCurrentUserAccounts,
-} from "@/app/redux/features/userAccountSlice";
+import { SerializedUserAccount } from "@/app/redux/features/userAccountSlice";
 import {
   Select,
   SelectTrigger,
@@ -18,7 +12,7 @@ import {
   SelectLabel,
   SelectItem,
 } from "@/components/ui/select";
-import { Skeleton } from "@/components/ui/skeleton";
+import { motion } from "framer-motion";
 
 const AccountsFilter = ({
   accounts,
@@ -29,14 +23,20 @@ const AccountsFilter = ({
 
   if (accounts.length === 0) {
     return (
-      <div className="lg:text-center">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 1 }}
+        transition={{ duration: 0.5, type: "just" }}
+        className="lg:text-center"
+      >
         <h3 className="inline-block text-lg lg:text-3xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
           You don&apos;t have any accounts yet.
         </h3>
         <p className="mt-3">
           Create one by clicking the Create Account button.
         </p>
-      </div>
+      </motion.div>
     );
   }
 

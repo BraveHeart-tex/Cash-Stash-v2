@@ -37,7 +37,7 @@ const Navigation = () => {
       <motion.div
         initial={{ x: -100, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.3, type: "just" }}
       >
         <div className="flex justify-between items-center">
           <div className="hidden md:block" />

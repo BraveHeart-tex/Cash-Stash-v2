@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { deleteGeneric } from "@/actions/generic";
 import { UserAccount } from "@prisma/client";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
 interface IAccountCardProps {
   account: SerializedUserAccount;
@@ -55,12 +56,15 @@ const AccountCard = ({ account, className }: IAccountCardProps) => {
   };
 
   return (
-    <div
+    <motion.div
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.5 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
       className={cn(
         "p-4 rounded-md shadow-lg border w-full cursor-pointer hover-scale relative",
         className
       )}
-      key={account.name}
     >
       <ActionPopover
         popoverHeading={"Account Actions"}
@@ -84,7 +88,7 @@ const AccountCard = ({ account, className }: IAccountCardProps) => {
         </span>
       </p>
       <p className="text-md">Balance: {account.balance}₺</p>
-    </div>
+    </motion.div>
   );
 };
 export default AccountCard;
