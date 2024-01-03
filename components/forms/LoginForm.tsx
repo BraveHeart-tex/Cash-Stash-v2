@@ -21,11 +21,8 @@ import { loginAction } from "@/actions";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useTheme } from "next-themes";
 
 const LoginForm = () => {
-  const { theme, systemTheme } = useTheme();
-  const hasDarkTheme = theme === "dark" || systemTheme === "dark";
   let [isPending, startTransition] = useTransition();
   const router = useRouter();
   const [loggedIn, setLoggedIn] = useState(false);
@@ -86,10 +83,7 @@ const LoginForm = () => {
           src={logo}
           alt="Cash Stash"
           width={200}
-          className="mb-4 md:mx-auto"
-          style={{
-            filter: hasDarkTheme ? "grayscale(1) invert(1)" : "none",
-          }}
+          className="mb-4 md:mx-auto dark:invert"
         />
         <CardTitle>Welcome!</CardTitle>
         <CardDescription>Sign in to access your account.</CardDescription>
@@ -138,7 +132,6 @@ const LoginForm = () => {
           </p>
         </div>
         <Button
-          loading={isPending}
           disabled={isPending}
           variant="ghost"
           className="font-normal text-sm"

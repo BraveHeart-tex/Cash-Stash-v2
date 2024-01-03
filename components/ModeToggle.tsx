@@ -49,9 +49,17 @@ export function ModeToggle() {
               data-state={
                 item.value === (theme ?? "light") ? "active" : "inactive"
               }
-              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-primary/70 data-[state=active]:text-white transition-all"
+              className="relative data-[state=active]:text-white"
             >
-              {item.icon}
+              <div>
+                {item.value === (theme ?? "light") && (
+                  <motion.div
+                    layoutId="active-colorTheme-pill"
+                    className="absolute inset-0 bg-gradient-to-r from-primary to-primary/70 rounded-full"
+                  />
+                )}
+                <span className="relative">{item.icon}</span>
+              </div>
             </TabsTrigger>
           </motion.div>
         ))}

@@ -11,6 +11,7 @@ import { useState } from "react";
 import { useAppSelector } from "../redux/hooks";
 import { Label } from "@/components/ui/label";
 import { usePathname } from "next/navigation";
+import { motion } from "framer-motion";
 
 const NAV_LINKS = [
   { name: "Dashboard", href: "/" },
@@ -33,35 +34,43 @@ const Navigation = () => {
 
   return (
     <div className="mb-6 shadow-lg p-4 bg-primary dark:bg-background dark:border-b">
-      <div className="flex justify-between items-center">
-        <div className="hidden md:block" />
-        <Button
-          variant="ghost"
-          size="icon"
-          aria-label="Menu"
-          onClick={onOpen}
-          className="lg:hidden justify-center mr-auto flex items-center text-white hover:bg-secondary"
-        >
-          <HamburgerMenuIcon />
-        </Button>
-        <Link href={"/"}>
-          <Image
-            src={Logo}
-            alt="Cash Stash"
-            width={200}
-            className="mx-auto lg:mx-0"
-            style={{
-              filter: "grayscale(1) invert(1)",
-            }}
-          />
-        </Link>
-        <div className="flex justify-center items-center gap-4 ml-auto lg:ml-0">
-          <div className="lg:flex items-center hidden gap-1">
-            <ModeToggle />
+      <motion.div
+        initial={{ x: -100, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="flex justify-between items-center">
+          <div className="hidden md:block" />
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label="Menu"
+            onClick={onOpen}
+            className="lg:hidden justify-center mr-auto flex items-center text-white hover:bg-secondary"
+          >
+            <HamburgerMenuIcon />
+          </Button>
+
+          <Link href={"/"}>
+            <Image
+              src={Logo}
+              alt="Cash Stash"
+              width={200}
+              className="mx-auto lg:mx-0"
+              style={{
+                filter: "grayscale(1) invert(1)",
+              }}
+            />
+          </Link>
+          <div className="flex justify-center items-center gap-4 ml-auto lg:ml-0">
+            <div className="lg:flex items-center hidden gap-1">
+              <ModeToggle />
+            </div>
+            <UserMenu />
           </div>
-          <UserMenu />
         </div>
-      </div>
+      </motion.div>
+
       <Sheet
         open={isOpen}
         onOpenChange={(isOpen) => {

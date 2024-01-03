@@ -28,7 +28,6 @@ import CreateTransactionSchema, {
 import CreateReminderSchema, {
   CreateReminderSchemaType,
 } from "@/schemas/CreateReminderSchema";
-import { revalidatePath } from "next/cache";
 
 export const loginAction = async ({ email, password }: LoginSchemaType) => {
   const result = LoginSchema.safeParse({ email, password });

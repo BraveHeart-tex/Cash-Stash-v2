@@ -20,11 +20,11 @@ const AccountSummaries = ({
 
   return (
     <div>
-      <div className="grid grid-cols-1 gap-4">
+      <ul className="grid grid-cols-1 gap-4">
         {accounts.map((account) => (
           <AccountCard account={account} key={account.id} />
         ))}
-      </div>
+      </ul>
     </div>
   );
 };
