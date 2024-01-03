@@ -1,6 +1,7 @@
 import { SerializedBudget } from "@/app/redux/features/budgetSlice";
 import BudgetCard from "./BudgetCard";
 import CreateBudgetButton from "./CreateButtons/CreateBudgetButton";
+import AnimatePresenceClient from "@/components/animation/AnimatePresence";
 
 const BudgetStatus = ({ budgets }: { budgets: SerializedBudget[] }) => {
   if (!budgets || budgets.length === 0) {
@@ -16,9 +17,11 @@ const BudgetStatus = ({ budgets }: { budgets: SerializedBudget[] }) => {
 
   return (
     <div>
-      {budgets.map((budget) => (
-        <BudgetCard key={budget.id} budget={budget} />
-      ))}
+      <AnimatePresenceClient>
+        {budgets.map((budget) => (
+          <BudgetCard key={budget.id} budget={budget} />
+        ))}
+      </AnimatePresenceClient>
     </div>
   );
 };

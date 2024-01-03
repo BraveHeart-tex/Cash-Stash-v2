@@ -21,6 +21,7 @@ import { loginAction } from "@/actions";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 const LoginForm = () => {
   let [isPending, startTransition] = useTransition();
@@ -76,71 +77,83 @@ const LoginForm = () => {
     );
   }
 
+  const formVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0 },
+  };
+
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <Image
-          src={logo}
-          alt="Cash Stash"
-          width={200}
-          className="mb-4 md:mx-auto dark:invert"
-        />
-        <CardTitle>Welcome!</CardTitle>
-        <CardDescription>Sign in to access your account.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form
-          className="flex flex-col gap-4"
-          onSubmit={handleSubmit(handleLoginFormSubmit)}
-          data-testid="login-form"
-        >
-          <div className="grid grid-cols-1 gap-4">
-            {loginFormFields.map((field) => (
-              <FormInput
-                key={field.name}
-                name={field.name}
-                label={field.label}
-                placeholder={field.label}
-                type={field.type}
-                register={register}
-                errors={errors}
-              />
-            ))}
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={formVariants}
+      transition={{ duration: 0.5, ease: "easeInOut" }}
+    >
+      <Card className="w-full">
+        <CardHeader>
+          <Image
+            src={logo}
+            alt="Cash Stash"
+            width={200}
+            className="mb-4 md:mx-auto dark:invert"
+          />
+          <CardTitle>Welcome!</CardTitle>
+          <CardDescription>Sign in to access your account.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form
+            className="flex flex-col gap-4"
+            onSubmit={handleSubmit(handleLoginFormSubmit)}
+            data-testid="login-form"
+          >
+            <div className="grid grid-cols-1 gap-4">
+              {loginFormFields.map((field) => (
+                <FormInput
+                  key={field.name}
+                  name={field.name}
+                  label={field.label}
+                  placeholder={field.label}
+                  type={field.type}
+                  register={register}
+                  errors={errors}
+                />
+              ))}
+            </div>
+            <Button
+              loading={isPending}
+              type="submit"
+              className="font-semibold"
+              disabled={isPending}
+              data-testid="login-button"
+            >
+              Sign in
+            </Button>
+          </form>
+        </CardContent>
+        <CardFooter className="justify-between">
+          <div>
+            <p className="text-sm text-center">
+              Don't have an account?{" "}
+              <Link
+                href="/signup"
+                className="text-blue-500 hover:underline"
+                data-testid="signup-link"
+              >
+                Sign up
+              </Link>
+            </p>
           </div>
           <Button
-            loading={isPending}
-            type="submit"
-            className="font-semibold"
             disabled={isPending}
-            data-testid="login-button"
+            variant="ghost"
+            className="font-normal text-sm"
+            onClick={() => handleTestUserLogin()}
           >
-            Sign in
+            Login as a test user
           </Button>
-        </form>
-      </CardContent>
-      <CardFooter className="justify-between">
-        <div>
-          <p className="text-sm text-center">
-            Don't have an account?{" "}
-            <Link
-              href="/signup"
-              className="text-blue-500 hover:underline"
-              data-testid="signup-link"
-            >
-              Sign up
-            </Link>
-          </p>
-        </div>
-        <Button
-          disabled={isPending}
-          variant="ghost"
-          className="font-normal text-sm"
-          onClick={() => handleTestUserLogin()}
-        >
-          Login as a test user
-        </Button>
-      </CardFooter>
-    </Card>
+        </CardFooter>
+      </Card>
+    </motion.div>
   );
 };
 export default LoginForm;

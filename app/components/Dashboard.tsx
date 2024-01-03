@@ -16,7 +16,6 @@ import { SerializedUserAccount } from "../redux/features/userAccountSlice";
 import { SerializedBudget } from "../redux/features/budgetSlice";
 import { SerializedGoal } from "../redux/features/goalSlice";
 import { SerializedReminder } from "../redux/features/remindersSlice";
-import { AnimatePresence } from "framer-motion";
 import { motion } from "framer-motion";
 
 interface IDashboardProps {
@@ -95,31 +94,34 @@ const Dashboard = ({
     },
   ];
 
+  const dashboardVariants = {
+    hidden: { opacity: 0, y: -50 },
+    visible: { opacity: 1, y: 0 },
+  };
+
   return (
-    <AnimatePresence mode="popLayout">
-      <motion.div
-        initial={{ opacity: 0, y: -100, scale: 1.2 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, x: 200, scale: 1.2 }}
-        transition={{ duration: 0.6, type: "spring" }}
-      >
-        <div className="p-0 lg:p-1 lg.pt-0 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mt-8">
-            {sectionData.map((section) => (
-              <Card key={section.title}>
-                <CardHeader className="font-[500] text-xl text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/40">
-                  {section.title}
-                  <span className="text-gray-500 text-sm">
-                    {section.description}
-                  </span>
-                </CardHeader>
-                <CardContent>{section.data}</CardContent>
-              </Card>
-            ))}
-          </div>
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={dashboardVariants}
+      transition={{ duration: 0.5, ease: "easeInOut" }}
+    >
+      <div className="p-0 lg:p-1 lg.pt-0 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mt-8">
+          {sectionData.map((section) => (
+            <Card key={section.title}>
+              <CardHeader className="font-[500] text-xl text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/40">
+                {section.title}
+                <span className="text-gray-500 text-sm">
+                  {section.description}
+                </span>
+              </CardHeader>
+              <CardContent>{section.data}</CardContent>
+            </Card>
+          ))}
         </div>
-      </motion.div>
-    </AnimatePresence>
+      </div>
+    </motion.div>
   );
 };
 

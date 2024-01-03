@@ -1,6 +1,7 @@
 import { SerializedUserAccount } from "@/app/redux/features/userAccountSlice";
 import AccountCard from "./AccountCard";
 import CreateAccountButton from "./CreateButtons/CreateAccountButton";
+import AnimatePresenceClient from "@/components/animation/AnimatePresence";
 
 const AccountSummaries = ({
   accounts,
@@ -21,9 +22,11 @@ const AccountSummaries = ({
   return (
     <div>
       <ul className="grid grid-cols-1 gap-4">
-        {accounts.map((account) => (
-          <AccountCard account={account} key={account.id} />
-        ))}
+        <AnimatePresenceClient>
+          {accounts.map((account) => (
+            <AccountCard account={account} key={account.id} />
+          ))}
+        </AnimatePresenceClient>
       </ul>
     </div>
   );

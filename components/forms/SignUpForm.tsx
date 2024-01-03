@@ -20,11 +20,9 @@ import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import RegisterSchema, { RegisterSchemaType } from "@/schemas/RegisterSchema";
-import { useTheme } from "next-themes";
+import { motion } from "framer-motion";
 
 const SignUpForm = () => {
-  const { theme, systemTheme } = useTheme();
-  const hasDarkTheme = theme === "dark" || systemTheme === "dark";
   let [isPending, startTransition] = useTransition();
   const registerFormFields = generateFormFields(RegisterSchema);
 
@@ -49,53 +47,68 @@ const SignUpForm = () => {
     });
   };
 
+  const formVariants = {
+    hidden: { opacity: 0, y: -100 },
+    visible: { opacity: 1, y: 0 },
+  };
+
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <Image
-          src={logo}
-          alt="Cash Stash"
-          width={200}
-          className="mb-4 md:mx-auto"
-          style={{
-            filter: hasDarkTheme ? "grayscale(1) invert(1)" : "none",
-          }}
-        />
-        <CardTitle>Welcome!</CardTitle>
-        <CardDescription>Get started by creating your account.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form
-          className="flex flex-col gap-4"
-          onSubmit={handleSubmit(handleRegisterFormSubmit)}
-        >
-          <div className="grid grid-cols-1 gap-4">
-            {registerFormFields.map((field) => (
-              <FormInput
-                key={field.name}
-                name={field.name}
-                label={field.label}
-                placeholder={field.label}
-                type={field.type}
-                register={register}
-                errors={errors}
-              />
-            ))}
-          </div>
-          <Button type="submit" className="font-semibold" disabled={isPending}>
-            Sign up
-          </Button>
-        </form>
-      </CardContent>
-      <CardFooter>
-        <p className="text-sm text-center">
-          Already have an account?{" "}
-          <Link href="/login" className="text-blue-500 hover:underline">
-            Log In
-          </Link>
-        </p>
-      </CardFooter>
-    </Card>
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={formVariants}
+      transition={{ duration: 0.5, ease: "easeInOut" }}
+    >
+      <Card className="w-full">
+        <CardHeader>
+          <Image
+            src={logo}
+            alt="Cash Stash"
+            width={200}
+            className="mb-4 md:mx-auto dark:invert"
+          />
+          <CardTitle>Welcome!</CardTitle>
+          <CardDescription>
+            Get started by creating your account.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form
+            className="flex flex-col gap-4"
+            onSubmit={handleSubmit(handleRegisterFormSubmit)}
+          >
+            <div className="grid grid-cols-1 gap-4">
+              {registerFormFields.map((field) => (
+                <FormInput
+                  key={field.name}
+                  name={field.name}
+                  label={field.label}
+                  placeholder={field.label}
+                  type={field.type}
+                  register={register}
+                  errors={errors}
+                />
+              ))}
+            </div>
+            <Button
+              type="submit"
+              className="font-semibold"
+              disabled={isPending}
+            >
+              Sign up
+            </Button>
+          </form>
+        </CardContent>
+        <CardFooter>
+          <p className="text-sm text-center">
+            Already have an account?{" "}
+            <Link href="/login" className="text-blue-500 hover:underline">
+              Log In
+            </Link>
+          </p>
+        </CardFooter>
+      </Card>
+    </motion.div>
   );
 };
 export default SignUpForm;

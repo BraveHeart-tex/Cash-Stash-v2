@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { openGenericModal } from "../redux/features/genericModalSlice";
 import { FaRegClock } from "react-icons/fa";
 import ReminderCard from "@/components/ReminderCard";
+import AnimatePresenceClient from "@/components/animation/AnimatePresence";
 
 const NotificationsAndReminders = ({
   reminders,
@@ -44,11 +45,13 @@ const NotificationsAndReminders = ({
   return (
     <div className="p-2 min-h-[500px] max-h-[500px] overflow-y-scroll scrollbar-hide">
       <div className="grid grid-cols-1 gap-4">
-        {reminders.length > 0
-          ? reminders.map((reminder) => (
-              <ReminderCard key={reminder.id} reminder={reminder} />
-            ))
-          : noRemindersState()}
+        <AnimatePresenceClient>
+          {reminders.length > 0
+            ? reminders.map((reminder) => (
+                <ReminderCard key={reminder.id} reminder={reminder} />
+              ))
+            : noRemindersState()}
+        </AnimatePresenceClient>
       </div>
       <Button
         className="mt-3"

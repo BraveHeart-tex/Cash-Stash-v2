@@ -5,6 +5,7 @@ import { Pencil1Icon } from "@radix-ui/react-icons";
 import { openGenericModal } from "@/app/redux/features/genericModalSlice";
 import { useAppDispatch } from "@/app/redux/hooks";
 import { SerializedReminder } from "@/app/redux/features/remindersSlice";
+import MotionDiv from "./animation/MotionDiv";
 
 interface IReminderCardProps {
   reminder: SerializedReminder;
@@ -17,7 +18,12 @@ const ReminderCard = ({ reminder }: IReminderCardProps) => {
   const isPastReminderDate = new Date(reminder.reminderDate) < today;
 
   return (
-    <div
+    <MotionDiv
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 20 }}
+      transition={{ duration: 0.2 }}
+      layoutId={`reminder-${reminder.id}`}
       className="flex items-center flex-col gap-1 rounded-md bg-card p-4 shadow-xl relative border"
       key={reminder.id}
     >
@@ -78,7 +84,7 @@ const ReminderCard = ({ reminder }: IReminderCardProps) => {
       >
         <Pencil1Icon />
       </Button>
-    </div>
+    </MotionDiv>
   );
 };
 export default ReminderCard;

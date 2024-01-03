@@ -28,8 +28,9 @@ const UserMenu = () => {
 
   const handleLogout = () => {
     startTransition(async () => {
-      await logoutAction();
-      router.push("/login");
+      logoutAction().then(() => {
+        router.push("/login");
+      });
     });
   };
 

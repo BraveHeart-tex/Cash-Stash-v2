@@ -1,6 +1,7 @@
 import { SerializedGoal } from "@/app/redux/features/goalSlice";
 import GoalCard from "./GoalCard";
 import CreateGoalButton from "./CreateButtons/CreateGoalButton";
+import AnimatePresenceClient from "@/components/animation/AnimatePresence";
 
 const GoalStatus = ({ goals }: { goals: SerializedGoal[] }) => {
   if (goals.length === 0) {
@@ -16,9 +17,11 @@ const GoalStatus = ({ goals }: { goals: SerializedGoal[] }) => {
 
   return (
     <div className="flex flex-col gap-2">
-      {goals.map((goal) => (
-        <GoalCard key={goal.id} goal={goal} />
-      ))}
+      <AnimatePresenceClient>
+        {goals.map((goal) => (
+          <GoalCard key={goal.id} goal={goal} />
+        ))}
+      </AnimatePresenceClient>
     </div>
   );
 };
