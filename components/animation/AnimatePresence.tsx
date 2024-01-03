@@ -1,15 +1,14 @@
 "use client";
-import { HTMLMotionProps, motion } from "framer-motion";
+import { AnimatePresence, AnimatePresenceProps } from "framer-motion";
 
 interface IAnimatePresenceProps {
   children: React.ReactNode;
-  animationProps?: HTMLMotionProps<"div">;
 }
 
-const AnimatePresence = ({
+const AnimatePresenceClient = ({
   children,
-  animationProps,
-}: IAnimatePresenceProps) => {
-  return <motion.div {...animationProps}>{children}</motion.div>;
+  ...animationProps
+}: IAnimatePresenceProps & AnimatePresenceProps) => {
+  return <AnimatePresence {...animationProps}>{children}</AnimatePresence>;
 };
-export default AnimatePresence;
+export default AnimatePresenceClient;

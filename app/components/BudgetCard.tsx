@@ -13,6 +13,7 @@ import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
 import { deleteGeneric } from "@/actions/generic";
 import { Budget } from "@prisma/client";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
 interface IBudgetCardProps {
   budget: SerializedBudget;
@@ -36,7 +37,12 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
   };
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.5 }}
+      layoutId={`budget-card-${budget.id}`}
       key={budget.id}
       className="flex flex-col gap-2 p-4 pt-6 border-1 shadow-xl rounded-md relative bg-card border cursor-pointer"
     >
@@ -105,7 +111,7 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
           Budget: ${budget.budgetAmount} / Spent: ${budget.spentAmount}
         </span>
       </div>
-    </div>
+    </motion.div>
   );
 };
 export default BudgetCard;

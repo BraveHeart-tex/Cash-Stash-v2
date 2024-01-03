@@ -1,6 +1,7 @@
 import BudgetCards from "@/app/components/BudgetsPage/BudgetCards";
 import { SerializedBudget } from "@/app/redux/features/budgetSlice";
 import CreateBudgetButton from "../components/CreateButtons/CreateBudgetButton";
+import MotionDiv from "@/components/animation/MotionDiv";
 
 const BudgetsNotFoundMessage = () => (
   <div className="flex flex-col items-start lg:items-center justify-center gap-4">
@@ -14,8 +15,25 @@ const BudgetsNotFoundMessage = () => (
 const BudgetList = ({ budgets }: { budgets: SerializedBudget[] }) => {
   return (
     <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
-      <h3 className="text-4xl mb-4 text-primary">Budgets</h3>
-      {budgets?.length === 0 && <BudgetsNotFoundMessage />}
+      <MotionDiv
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0, y: -20 }}
+        transition={{ duration: 0.5 }}
+      >
+        <h3 className="text-4xl mb-4 text-primary">Budgets</h3>
+      </MotionDiv>
+      {budgets?.length === 0 && (
+        <MotionDiv
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 1 }}
+          transition={{ duration: 0.5, type: "just" }}
+          className="lg:text-center"
+        >
+          <BudgetsNotFoundMessage />
+        </MotionDiv>
+      )}
       <div className="flex flex-col gap-4 items-center justify-center">
         <div className="w-full">
           <div className="grid grid-cols md:grid-cols-2 xl:grid-cols-3 gap-4">

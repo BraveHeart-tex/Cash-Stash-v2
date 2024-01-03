@@ -10,6 +10,7 @@ import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { SerializedGoal } from "@/app/redux/features/goalSlice";
 import { deleteGeneric } from "@/actions/generic";
 import { Goal } from "@prisma/client";
+import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 
 interface IGoalCardProps {
@@ -50,7 +51,12 @@ const GoalCard = ({ goal }: IGoalCardProps) => {
   };
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.2 }}
+      exit={{ opacity: 0, y: 20 }}
+      layoutId={`goal-card-${goal.id}`}
       className="flex flex-col gap-2 p-4 pt-6 border-1 shadow-xl rounded-md relative bg-card border cursor-pointer"
       key={goal.name}
     >
@@ -101,7 +107,7 @@ const GoalCard = ({ goal }: IGoalCardProps) => {
           Current: {goal.currentAmount}₺ / Target: {goal.goalAmount}₺
         </p>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

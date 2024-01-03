@@ -59,10 +59,11 @@ const AccountCard = ({ account, className }: IAccountCardProps) => {
     <motion.div
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.5 }}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      layoutId={`account-card-${account.id}`}
       className={cn(
-        "p-4 rounded-md shadow-lg border w-full cursor-pointer hover-scale relative",
+        "p-4 rounded-md shadow-lg border w-full cursor-pointer relative",
         className
       )}
     >
