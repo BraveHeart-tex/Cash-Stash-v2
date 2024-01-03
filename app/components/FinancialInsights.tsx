@@ -5,6 +5,7 @@ import { cn, thousandSeparator } from "@/lib/utils";
 import { useAppDispatch } from "../redux/hooks";
 import { setSelectedTab } from "../redux/features/navigationTabsSlice";
 import { FaMoneyBill } from "react-icons/fa";
+import Link from "next/link";
 
 interface IFinancialInsightsProps {
   insightsData: InsightsData | null;
@@ -44,15 +45,12 @@ const FinancialInsights = ({ insightsData }: IFinancialInsightsProps) => {
       <article className="flex h-[300px] items-center justify-center">
         <div className="my-3">
           <NoDataMessage />
-          <Button
-            className="font-semibold text-md mt-3 flex items-center gap-[14px]"
-            onClick={() =>
-              dispatch(setSelectedTab({ selectedTab: "Transactions" }))
-            }
-          >
-            <FaMoneyBill size={18} />
-            Go To Transactions
-          </Button>
+          <Link href="/transactions">
+            <Button className="font-semibold text-md mt-3 flex items-center gap-[14px]">
+              <FaMoneyBill size={18} />
+              Go To Transactions
+            </Button>
+          </Link>
         </div>
       </article>
     );
