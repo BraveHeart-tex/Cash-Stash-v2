@@ -46,7 +46,9 @@ export function ModeToggle() {
             <TabsTrigger
               key={item.id}
               value={item.value}
-              data-state={item.value === theme ? "active" : "inactive"}
+              data-state={
+                item.value === (theme ?? "light") ? "active" : "inactive"
+              }
               className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-primary/70 data-[state=active]:text-white transition-all"
             >
               {item.icon}
