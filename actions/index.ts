@@ -28,6 +28,7 @@ import CreateTransactionSchema, {
 import CreateReminderSchema, {
   CreateReminderSchemaType,
 } from "@/schemas/CreateReminderSchema";
+import { redirect } from "next/navigation";
 
 export const loginAction = async ({ email, password }: LoginSchemaType) => {
   const result = LoginSchema.safeParse({ email, password });
@@ -118,6 +119,7 @@ export const registerAction = async ({
 
 export const logoutAction = async () => {
   cookies().delete("token");
+  redirect("/login");
 };
 
 export const getCurrentUserAction = async () => {

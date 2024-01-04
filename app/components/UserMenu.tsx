@@ -12,13 +12,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
 
 const UserMenu = () => {
   let [isPending, startTransition] = useTransition();
   const user = useAppSelector((state) => state.userReducer.currentUser);
   const dispatch = useDispatch<AppDispatch>();
-  const router = useRouter();
 
   useEffect(() => {
     dispatch(fetchCurrentUser());
@@ -28,9 +26,7 @@ const UserMenu = () => {
 
   const handleLogout = () => {
     startTransition(async () => {
-      logoutAction().then(() => {
-        router.push("/login");
-      });
+      logoutAction();
     });
   };
 
