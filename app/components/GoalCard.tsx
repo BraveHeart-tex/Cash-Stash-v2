@@ -54,7 +54,7 @@ const GoalCard = ({ goal }: IGoalCardProps) => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.2 }}
+      transition={{ duration: 0.5 }}
       exit={{ opacity: 0, y: 20 }}
       layoutId={`goal-card-${goal.id}`}
       className="flex flex-col gap-2 p-4 pt-6 border-1 shadow-xl rounded-md relative bg-card border cursor-pointer"
