@@ -2,6 +2,7 @@ import { SerializedTransaction } from "@/app/redux/features/transactionsSlice";
 import TransactionCard from "./TransactionsPage/TransactionCard";
 import CreateTransactionButton from "./CreateButtons/CreateTransactionButton";
 import AnimatePresenceClient from "@/components/animation/AnimatePresence";
+import MotionDiv from "@/components/animation/MotionDiv";
 
 interface ITransactionHistoryProps {
   transactions: SerializedTransaction[] | null;
@@ -11,10 +12,14 @@ const TransactionHistory = ({ transactions }: ITransactionHistoryProps) => {
   if (!transactions || transactions.length === 0) {
     return (
       <article className="flex h-[500px] items-center justify-center">
-        <div>
+        <MotionDiv
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
           <p className="text-primary">No transactions found.</p>
           <CreateTransactionButton />
-        </div>
+        </MotionDiv>
       </article>
     );
   }
