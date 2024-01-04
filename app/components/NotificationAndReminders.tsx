@@ -6,6 +6,7 @@ import { openGenericModal } from "../redux/features/genericModalSlice";
 import { FaRegClock } from "react-icons/fa";
 import ReminderCard from "@/components/ReminderCard";
 import AnimatePresenceClient from "@/components/animation/AnimatePresence";
+import MotionDiv from "@/components/animation/MotionDiv";
 
 const NotificationsAndReminders = ({
   reminders,
@@ -16,7 +17,12 @@ const NotificationsAndReminders = ({
 
   const noRemindersState = () => (
     <article className="flex h-[500px] items-center justify-center">
-      <div className="mt-[30px]">
+      <MotionDiv
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="mt-[30px]"
+      >
         <p className="text-primary">No reminders were found.</p>
         <Button
           className="mt-3 text-md font-semibold flex items-center gap-[14px]"
@@ -36,7 +42,7 @@ const NotificationsAndReminders = ({
           <FaRegClock size={18} />
           Create a reminder
         </Button>
-      </div>
+      </MotionDiv>
     </article>
   );
 

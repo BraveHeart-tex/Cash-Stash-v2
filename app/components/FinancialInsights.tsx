@@ -6,15 +6,21 @@ import { useAppDispatch } from "../redux/hooks";
 import { setSelectedTab } from "../redux/features/navigationTabsSlice";
 import { FaMoneyBill } from "react-icons/fa";
 import Link from "next/link";
+import MotionDiv from "@/components/animation/MotionDiv";
 
 interface IFinancialInsightsProps {
   insightsData: InsightsData | null;
 }
 
 const NoDataMessage = () => (
-  <div className="grid grid-cols-1 gap-4 text-primary">
+  <MotionDiv
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: 0.5 }}
+    className="grid grid-cols-1 gap-4 text-primary"
+  >
     <p>No data was found to generate financial insights from.</p>
-  </div>
+  </MotionDiv>
 );
 
 const SavingsRate = ({ value }: { value: number }) => (
