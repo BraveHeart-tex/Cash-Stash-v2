@@ -19,7 +19,7 @@ const MobileTabsList = () => {
           aria-label={`Navigate to the ${page.label} page`}
           key={index}
           data-state={pathname === page.link ? "active" : "inactive"}
-          className="relative cursor-pointer flex flex-col items-center gap-2 p-2 h-full text-muted-foreground data-[state=active]:text-white data-[state=active]:bg-transparent"
+          className="relative cursor-pointer  flex flex-col items-center gap-2 p-2 h-full text-muted-foreground data-[state=active]:text-white data-[state=active]:bg-transparent"
           onClick={(e) => {
             e.currentTarget.scrollIntoView({
               behavior: "smooth",
@@ -32,7 +32,7 @@ const MobileTabsList = () => {
             {pathname === page.link && (
               <motion.div
                 layoutId="mobile-active-pill"
-                className="absolute inset-0 bg-gradient-to-r from-primary to-primary/70"
+                className="absolute inset-0 rounded-md bg-gradient-to-r from-primary to-primary/70"
               />
             )}
             <span
