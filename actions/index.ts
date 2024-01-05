@@ -13,7 +13,11 @@ import CreateUserAccountSchema, {
 import CreateUserAccountOptions, {
   getKeyByValue,
 } from "@/lib/CreateUserAccountOptions";
-import { NotificationCategory, UserAccountCategory } from "@prisma/client";
+import {
+  NotificationCategory,
+  Prisma,
+  UserAccountCategory,
+} from "@prisma/client";
 import { EditReminderSchemaType } from "@/schemas/EditReminderSchema";
 import EditBudgetSchema, {
   EditBudgetSchemaType,
@@ -696,35 +700,51 @@ export const searchTransactions = async ({
   sortBy: "amount" | "createdAt";
   sortDirection: "asc" | "desc";
 }) => {
-  const currentUser = await getCurrentUser(cookies().get("token")?.value!);
-  if (!currentUser) {
-    return { error: "You are not authorized to perform this action." };
-  }
+  try {
+    const currentUser = await getCurrentUser(cookies().get("token")?.value!);
+    if (!currentUser) {
+      return { error: "You are not authorized to perform this action." };
+    }
 
-  const result = await db.transaction.findMany({
-    where: {
-      isIncome:
-        transactionType === "all" ? undefined : transactionType === "income",
-      accountId: accountId ? accountId : undefined,
+    const whereCondition: Prisma.TransactionWhereInput = {
       userId: currentUser.id,
-    },
-    orderBy: {
-      [sortBy]: sortDirection,
-    },
-    include: {
-      account: {
-        select: {
-          name: true,
+    };
+
+    if (transactionType === "income") {
+      whereCondition.isIncome = true;
+    }
+
+    if (transactionType === "expense") {
+      whereCondition.isIncome = false;
+    }
+
+    if (accountId) {
+      whereCondition.accountId = accountId;
+    }
+
+    const result = await db.transaction.findMany({
+      where: whereCondition,
+      orderBy: {
+        [sortBy]: sortDirection,
+      },
+      include: {
+        account: {
+          select: {
+            name: true,
+          },
         },
       },
-    },
-  });
+    });
 
-  return {
-    transactions: result.map((transaction) => ({
-      ...transaction,
-      createdAt: processDate(transaction.createdAt),
-      updatedAt: processDate(transaction.updatedAt),
-    })),
-  };
+    return {
+      transactions: result.map((transaction) => ({
+        ...transaction,
+        createdAt: processDate(transaction.createdAt),
+        updatedAt: processDate(transaction.updatedAt),
+      })),
+    };
+  } catch (error) {
+    console.error(error);
+    return { error: "An error occurred." };
+  }
 };

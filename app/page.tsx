@@ -1,4 +1,3 @@
-import NavigationTabs from "@/components/NavigationTabs";
 import Dashboard from "./components/Dashboard";
 import {
   fetchInsightsDataAction,
