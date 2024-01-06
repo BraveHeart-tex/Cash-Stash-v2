@@ -28,7 +28,7 @@ model UserAccount {
   id           String              @id @default(cuid())
   name         String
   balance      Float
-  userId       String
+  userId       String?
   category     UserAccountCategory @default(CHECKING)
   createdAt    DateTime            @default(now())
   updatedAt    DateTime            @updatedAt
