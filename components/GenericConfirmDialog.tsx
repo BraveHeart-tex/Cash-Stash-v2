@@ -12,8 +12,10 @@ import {
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 import { cleanUp } from "@/app/redux/features/genericConfirmSlice";
+import { useTransition } from "react";
 
 const GenericConfirmDialog = () => {
+  let [isPending, startTransition] = useTransition();
   const dispatch = useAppDispatch();
   const { visible, title, message, primaryActionLabel } = useAppSelector(
     (state) => state.genericConfirmReducer
@@ -32,8 +34,11 @@ const GenericConfirmDialog = () => {
           </AlertDialogCancel>
           {primaryActionLabel && (
             <AlertDialogAction
+              disabled={isPending}
               onClick={() => {
-                dispatch(callPrimaryAction());
+                startTransition(async () => {
+                  dispatch(callPrimaryAction());
+                });
               }}
             >
               {primaryActionLabel}
