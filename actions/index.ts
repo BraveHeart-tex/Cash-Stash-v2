@@ -144,30 +144,6 @@ export const getCurrentUserAction = async () => {
   };
 };
 
-export const getTopTransactionsByCategoryAction = async () => {
-  const currentUser = await getCurrentUser(cookies().get("token")?.value!);
-
-  if (!currentUser) return { error: "No user found." };
-
-  const categories = await db.transaction.groupBy({
-    by: ["category", "accountId", "createdAt"],
-    where: { userId: currentUser.id, isIncome: false },
-    _sum: { amount: true },
-    orderBy: { _sum: { amount: "desc" } },
-  });
-
-  return {
-    topTransactionsByCategory: categories.map(
-      ({ category, _sum, accountId, createdAt }) => ({
-        category,
-        totalAmount: _sum.amount || 0,
-        accountId,
-        createdAt,
-      })
-    ),
-  };
-};
-
 export const fetchMonthlyTransactionsDataAction = async () => {
   const currentUser = await getCurrentUser(cookies().get("token")?.value!);
 
