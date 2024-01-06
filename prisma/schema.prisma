@@ -28,12 +28,12 @@ model UserAccount {
   id           String              @id @default(cuid())
   name         String
   balance      Float
-  userId       String?
+  userId       String
   category     UserAccountCategory @default(CHECKING)
   createdAt    DateTime            @default(now())
   updatedAt    DateTime            @updatedAt
   transactions Transaction[]
-  user         User?               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User                @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId], map: "userAccounts_userId_fkey")
   @@map("userAccounts")
@@ -46,11 +46,11 @@ model Transaction {
   updatedAt   DateTime             @updatedAt
   description String
   category    NotificationCategory @default(OTHER)
-  accountId   String?
-  userId      String?
+  accountId   String
+  userId      String
   isIncome    Boolean              @default(false)
-  account     UserAccount?         @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  user        User?                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  account     UserAccount          @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  user        User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([accountId], map: "transactions_accountId_fkey")
   @@index([userId], map: "transactions_userId_fkey")
@@ -61,11 +61,11 @@ model Budget {
   id           String               @id @default(cuid())
   budgetAmount Float
   spentAmount  Float
-  userId       String?
+  userId       String
   category     NotificationCategory @default(OTHER)
   createdAt    DateTime             @default(now())
   updatedAt    DateTime             @updatedAt
-  user         User?                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId], map: "budgets_userId_fkey")
   @@map("budgets")
@@ -76,10 +76,10 @@ model Goal {
   name          String
   goalAmount    Float
   currentAmount Float
-  userId        String?
+  userId        String
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
-  user          User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId], map: "goals_userId_fkey")
   @@map("goals")
@@ -91,12 +91,12 @@ model Reminder {
   description  String
   amount       Float
   reminderDate DateTime
-  userId       String?
+  userId       String
   isRead       Boolean  @default(false)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   isIncome     Boolean
-  user         User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId], map: "reminders_userId_fkey")
   @@map("reminders")
