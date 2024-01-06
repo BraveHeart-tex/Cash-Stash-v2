@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3001",
+    "dev": "next dev -p 3000",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -32,6 +32,9 @@
     "@radix-ui/react-tabs": "^1.0.4",
     "@radix-ui/react-toast": "^1.1.4",
     "@reduxjs/toolkit": "^1.9.5",
+    "@serwist/next": "^8.3.0",
+    "@serwist/precaching": "^8.3.0",
+    "@serwist/sw": "^8.3.0",
     "@types/bcrypt": "^5.0.0",
     "@types/jest": "^29.5.5",
     "@types/node": "20.2.3",

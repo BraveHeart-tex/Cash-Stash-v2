@@ -8,17 +8,56 @@ import GenericModal from "@/components/GenericModal";
 import Navigation from "./components/Navigation";
 import { getCurrentUserAction } from "@/actions";
 import NavigationTabs from "@/components/NavigationTabs";
-import MobileTabsList from "@/components/MobileTabsList";
+import { Metadata, Viewport } from "next";
 
 const InterFont = Inter({
   weight: ["300", "400", "500", "600", "700"],
   subsets: ["latin"],
 });
 
-export const metadata = {
-  title: "Cash Stash | Personal Finance",
-  description:
-    "Minimalist personal finance app. Track your spending, set a budget, and save more.",
+const APP_NAME = "PWA App";
+const APP_DEFAULT_TITLE = "Cash Stash | Personal Finance";
+const APP_TITLE_TEMPLATE = "%s -Cash Stash";
+const APP_DESCRIPTION =
+  "Minimalist personal finance app. Track your spending, set a budget, and save more.";
+
+export const metadata: Metadata = {
+  manifest: "/manifest.json",
+  applicationName: APP_NAME,
+  title: {
+    default: APP_DEFAULT_TITLE,
+    template: APP_TITLE_TEMPLATE,
+  },
+  description: APP_DESCRIPTION,
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: APP_DEFAULT_TITLE,
+  },
+  formatDetection: {
+    telephone: false,
+  },
+  openGraph: {
+    type: "website",
+    siteName: APP_NAME,
+    title: {
+      default: APP_DEFAULT_TITLE,
+      template: APP_TITLE_TEMPLATE,
+    },
+    description: APP_DESCRIPTION,
+  },
+  twitter: {
+    card: "summary",
+    title: {
+      default: APP_DEFAULT_TITLE,
+      template: APP_TITLE_TEMPLATE,
+    },
+    description: APP_DESCRIPTION,
+  },
+};
+
+export const viewPort: Viewport = {
+  themeColor: "#e11d48",
 };
 
 interface ILayoutProps {

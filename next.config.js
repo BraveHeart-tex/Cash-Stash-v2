@@ -1,12 +1,16 @@
-const withPWA = require("@ducanh2912/next-pwa").default({
-  dest: "public",
+const withSerwist = require("@serwist/next").default({
+  swSrc: "app/sw.ts",
+  swDest: "public/sw.js",
+  cacheOnFrontEndNav: true,
+  reloadOnOnline: true,
+  disable: false,
 });
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["localhost", "res.cloudinary.com"],
+    domains: ["res.cloudinary.com"],
   },
 };
 
-module.exports = withPWA(nextConfig);
+module.exports = withSerwist(nextConfig);
