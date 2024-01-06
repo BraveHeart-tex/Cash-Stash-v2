@@ -145,14 +145,11 @@ export function generateFormFields(schema: ZodObject<any>) {
     };
 
     if (fieldType === "combobox") {
-      console.log(parsedDescription);
       const fieldOptions = parsedDescription
         .find((item: string) => item.startsWith("options:"))
         .split(":")[1]
         .trim()
         .split("-");
-
-      console.log(fieldOptions);
 
       fieldObject["options"] = fieldOptions;
     }

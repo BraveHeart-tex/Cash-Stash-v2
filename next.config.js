@@ -1,7 +1,6 @@
 const withSerwist = require("@serwist/next").default({
   swSrc: "app/sw.ts",
   swDest: "public/sw.js",
-  cacheOnFrontEndNav: true,
   reloadOnOnline: true,
   disable: false,
 });

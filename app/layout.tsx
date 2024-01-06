@@ -15,7 +15,7 @@ const InterFont = Inter({
   subsets: ["latin"],
 });
 
-const APP_NAME = "PWA App";
+const APP_NAME = "Cash Stash";
 const APP_DEFAULT_TITLE = "Cash Stash | Personal Finance";
 const APP_TITLE_TEMPLATE = "%s -Cash Stash";
 const APP_DESCRIPTION =
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
   },
 };
 
-export const viewPort: Viewport = {
+export const viewport: Viewport = {
   themeColor: "#e11d48",
 };
 

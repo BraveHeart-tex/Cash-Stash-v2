@@ -23,8 +23,6 @@ test("renders the create account modal after create button click", async ({
     },
   ]);
 
-  console.log(await context.cookies());
-
   await page.goto(baseURL!);
   expect(page.url()).toBe(`${baseURL}/`);
 

@@ -214,8 +214,6 @@ export const registerBankAccountAction = async ({
   category,
   name,
 }: CreateUserAccountSchemaType) => {
-  console.log(balance, category, name);
-
   const currentUser = await getCurrentUser(cookies().get("token")?.value!);
 
   if (!currentUser) {
@@ -237,7 +235,6 @@ export const registerBankAccountAction = async ({
   const mappedCategory = Object.entries(CreateUserAccountOptions).find(
     ([key, value]) => value === categoryResult
   )?.[0];
-  console.log(mappedCategory);
 
   if (!mappedCategory) {
     return { error: "Invalid category." };
@@ -421,8 +418,6 @@ export const updateReminderAction = async ({
   });
 
   if (!result.success) {
-    console.log(result.error);
-
     return { error: "Unprocessable entity." };
   }
 
