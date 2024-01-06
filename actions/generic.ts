@@ -171,7 +171,6 @@ export const createGeneric = async <T>({
 
     return result ? { data: result as T } : null;
   } catch (error) {
-    console.log(error);
     return { error: error instanceof Error ? error.message : error };
   }
 };
