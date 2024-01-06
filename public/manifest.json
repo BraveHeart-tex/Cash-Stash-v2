@@ -1,0 +1,62 @@
+{
+  "theme_color": "#e11d48",
+  "background_color": "#f4f4f4",
+  "display": "fullscreen",
+  "scope": "/",
+  "start_url": "/",
+  "name": "Cash Stash",
+  "short_name": "Cash Stash",
+  "description": "CashStash is aminimalist personal finance app. Track your spending, set a budget, and save more.",
+  "shorcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "View your overall financial health",
+      "url": "/dashboard",
+      "icons": [
+        {
+          "src": "/icon-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        },
+        {
+          "src": "/icon-256x256.png",
+          "sizes": "256x256",
+          "type": "image/png"
+        },
+        {
+          "src": "/icon-384x384.png",
+          "sizes": "384x384",
+          "type": "image/png"
+        },
+        {
+          "src": "/icon-512x512.png",
+          "sizes": "512x512",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-256x256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
