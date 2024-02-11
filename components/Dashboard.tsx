@@ -12,17 +12,17 @@ import TransactionHistory from "@/components/TransactionHistory";
 import BarChartComponent from "@/components/charts/BarChartComponent";
 import { MonthlyData } from "@/components/ReportsPage/ReportTable";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { SerializedUserAccount } from "@/actions/types";
 import { SerializedBudget } from "@/app/redux/features/budgetSlice";
 import { SerializedGoal } from "@/app/redux/features/goalSlice";
 import { SerializedReminder } from "@/app/redux/features/remindersSlice";
 import { motion } from "framer-motion";
+import { UserAccount } from "@prisma/client";
 
 interface IDashboardProps {
   monthlyTransactionsData: MonthlyData["monthlyTransactionsData"];
   insightsData: InsightsData;
   transactions: SerializedTransaction[];
-  accounts: SerializedUserAccount[];
+  accounts: UserAccount[];
   budgets: SerializedBudget[];
   goals: SerializedGoal[];
   reminders: SerializedReminder[];
@@ -41,7 +41,7 @@ const Dashboard = ({
     {
       title: "Accounts Summary",
       description:
-        "You can view your accounts here. Click on the account card to view the account details.",
+        "You can view your accounts here. Visit the 'Accounts' page to see all your accounts.",
       data: (
         <div className="max-h-[330px] min-h-[330px] lg:max-h-[350px] lg:min-h-[350px] overflow-y-scroll scrollbar-hide">
           <AccountSummaries accounts={accounts} />
