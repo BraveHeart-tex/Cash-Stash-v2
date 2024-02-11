@@ -1,5 +1,5 @@
 "use client";
-import { MonthlyData } from "@/app/components/ReportsPage/ReportTable";
+import { MonthlyData } from "@/components/ReportsPage/ReportTable";
 import {
   BarChart,
   Bar,

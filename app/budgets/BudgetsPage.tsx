@@ -1,6 +1,6 @@
-import BudgetCards from "@/app/components/BudgetsPage/BudgetCards";
+import BudgetCards from "@/components/BudgetsPage/BudgetCards";
 import { SerializedBudget } from "@/app/redux/features/budgetSlice";
-import CreateBudgetButton from "../components/CreateButtons/CreateBudgetButton";
+import CreateBudgetButton from "../../components/CreateButtons/CreateBudgetButton";
 import MotionDiv from "@/components/animation/MotionDiv";
 
 const BudgetsNotFoundMessage = () => (

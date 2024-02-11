@@ -5,10 +5,13 @@ import {
   fetchMonthlyTransactionsDataAction,
   getChartDataAction,
 } from "@/actions";
-import { MonthlyData } from "@/app/components/ReportsPage/ReportTable";
+import { MonthlyData } from "@/components/ReportsPage/ReportTable";
 import { getGenericListByCurrentUser } from "@/actions/generic";
 
-export type SerializedTransaction = Omit<Transaction, "createdAt" | "updatedAt"> & {
+export type SerializedTransaction = Omit<
+  Transaction,
+  "createdAt" | "updatedAt"
+> & {
   createdAt: string;
   updatedAt: string;
   account?: Partial<UserAccount>;

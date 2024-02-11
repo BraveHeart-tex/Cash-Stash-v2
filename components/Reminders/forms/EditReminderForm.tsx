@@ -2,7 +2,7 @@
 import { useAppDispatch } from "@/app/redux/hooks";
 import { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
-import FormLoadingSpinner from "../../../../components/FormLoadingSpinner";
+import FormLoadingSpinner from "../../FormLoadingSpinner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EditReminderSchema } from "@/schemas";
 import { EditReminderSchemaType } from "@/schemas/EditReminderSchema";

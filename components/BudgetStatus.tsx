@@ -1,6 +1,6 @@
 import { SerializedBudget } from "@/app/redux/features/budgetSlice";
 import BudgetCard from "./BudgetCard";
-import CreateBudgetButton from "../app/components/CreateButtons/CreateBudgetButton";
+import CreateBudgetButton from "./CreateButtons/CreateBudgetButton";
 import AnimatePresenceClient from "@/components/animation/AnimatePresence";
 import MotionDiv from "@/components/animation/MotionDiv";
 

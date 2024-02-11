@@ -10,7 +10,7 @@ import GoalStatus from "./GoalStatus";
 import NotificationsAndReminders from "./NotificationAndReminders";
 import TransactionHistory from "./TransactionHistory";
 import BarChartComponent from "@/components/charts/BarChartComponent";
-import { MonthlyData } from "../app/components/ReportsPage/ReportTable";
+import { MonthlyData } from "./ReportsPage/ReportTable";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { SerializedUserAccount } from "../app/redux/features/userAccountSlice";
 import { SerializedBudget } from "../app/redux/features/budgetSlice";

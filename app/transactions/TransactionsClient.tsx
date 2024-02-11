@@ -1,7 +1,7 @@
-import TransactionsFilter from "@/app/components/TransactionsPage/TransactionsFilter";
-import TransactionsSort from "@/app/components/TransactionsPage/TransactionsSort";
-import TransactionList from "@/app/components/TransactionsPage/TransactionList";
-import CreateTransactionButton from "../components/CreateButtons/CreateTransactionButton";
+import TransactionsFilter from "@/components/TransactionsPage/TransactionsFilter";
+import TransactionsSort from "@/components/TransactionsPage/TransactionsSort";
+import TransactionList from "@/components/TransactionsPage/TransactionList";
+import CreateTransactionButton from "../../components/CreateButtons/CreateTransactionButton";
 import { SerializedTransaction } from "../redux/features/transactionsSlice";
 import { SerializedUserAccount } from "../redux/features/userAccountSlice";
 import MotionDiv from "@/components/animation/MotionDiv";

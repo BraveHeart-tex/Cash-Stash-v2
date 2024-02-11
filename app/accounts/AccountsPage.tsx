@@ -1,5 +1,5 @@
-import AccountsFilter from "@/app/components/AccountsPage/AccountFilter";
-import CreateAccountButton from "../components/CreateButtons/CreateAccountButton";
+import AccountsFilter from "@/components/AccountsPage/AccountFilter";
+import CreateAccountButton from "../../components/CreateButtons/CreateAccountButton";
 import { getGenericListByCurrentUser } from "@/actions/generic";
 import { SerializedUserAccount } from "../redux/features/userAccountSlice";
 import MotionDiv from "@/components/animation/MotionDiv";

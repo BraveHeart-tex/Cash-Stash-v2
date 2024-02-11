@@ -1,12 +1,12 @@
-import EditUserAccountForm from "@/app/components/AccountsPage/forms/EditUserAccountForm";
-import CreateUserAccountForm from "@/app/components/AccountsPage/forms/CreateUserAccountForm";
-import CreateBudgetForm from "@/app/components/BudgetsPage/forms/CreateBudgetForm";
-import EditUserBudgetForm from "@/app/components/BudgetsPage/forms/EditBudgetForm";
-import CreateUserGoalForm from "@/app/components/GoalsPage/forms/CreateGoalForm";
-import EditUserGoalForm from "@/app/components/GoalsPage/forms/EditUserGoalForm";
-import CreateTransactionForm from "@/app/components/TransactionsPage/forms/CreateTransactionForm";
-import CreateReminderForm from "@/app/components/Reminders/forms/CreateReminderForm";
-import EditReminderForm from "@/app/components/Reminders/forms/EditReminderForm";
+import EditUserAccountForm from "@/components/AccountsPage/forms/EditUserAccountForm";
+import CreateUserAccountForm from "@/components/AccountsPage/forms/CreateUserAccountForm";
+import CreateBudgetForm from "@/components/BudgetsPage/forms/CreateBudgetForm";
+import EditUserBudgetForm from "@/components/BudgetsPage/forms/EditBudgetForm";
+import CreateUserGoalForm from "@/components/GoalsPage/forms/CreateGoalForm";
+import EditUserGoalForm from "@/components/GoalsPage/forms/EditUserGoalForm";
+import CreateTransactionForm from "@/components/TransactionsPage/forms/CreateTransactionForm";
+import CreateReminderForm from "@/components/Reminders/forms/CreateReminderForm";
+import EditReminderForm from "@/components/Reminders/forms/EditReminderForm";
 import { createElement } from "react";
 
 interface IGetGenericDialogContentParams {
