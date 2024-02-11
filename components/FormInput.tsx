@@ -40,6 +40,7 @@ const FormInput = ({
         {...register(name)}
         className={className}
         data-testid={name}
+        aria-invalid={isError ? "true" : "false"}
       />
       {isError && <FormError errorMessage={errors[name].message} />}
     </div>

@@ -122,6 +122,7 @@ const LoginForm = () => {
             <Button
               loading={isPending}
               type="submit"
+              name="Login to your account"
               className="font-semibold"
               disabled={isPending}
               data-testid="login-button"
@@ -136,6 +137,7 @@ const LoginForm = () => {
               Don't have an account?{" "}
               <Link
                 href="/signup"
+                aria-label="Sign up for a new account."
                 className="text-blue-500 hover:underline"
                 data-testid="signup-link"
               >
@@ -144,6 +146,7 @@ const LoginForm = () => {
             </p>
           </div>
           <Button
+            name="Login as a test user"
             disabled={isPending}
             variant="ghost"
             className="font-normal text-sm"
