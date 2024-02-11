@@ -5,7 +5,7 @@ import { openGenericModal } from "../app/redux/features/genericModalSlice";
 import { showGenericConfirm } from "@/app/redux/features/genericConfirmSlice";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
-import { cn } from "@/lib/utils";
+import { cn, formatMoney } from "@/lib/utils";
 import { deleteGeneric } from "@/actions/generic";
 import { UserAccount } from "@prisma/client";
 import { useRouter } from "next/navigation";
@@ -56,7 +56,6 @@ const AccountCard = ({ account, className }: IAccountCardProps) => {
 
   return (
     <motion.div
-      exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.5 }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -87,7 +86,7 @@ const AccountCard = ({ account, className }: IAccountCardProps) => {
           ({accountCategory})
         </span>
       </p>
-      <p className="text-md">Balance: {account.balance}$</p>
+      <p className="text-md">Balance: {formatMoney(account.balance)}</p>
     </motion.div>
   );
 };

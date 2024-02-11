@@ -1,7 +1,8 @@
 import AccountsFilter from "@/components/AccountsPage/AccountFilter";
 import CreateAccountButton from "@/components/CreateButtons/CreateAccountButton";
 import { getPaginatedAccountAction } from "@/actions";
-import SearchAccountInput from "@/components/SearchAccountInput";
+import SearchAccountInput from "@/components/AccountsPage/SearchAccountInput";
+import AccountsPaginationControls from "@/components/AccountsPage/AccountsPaginationControls";
 
 const AccountPage = async ({
   searchParams,
@@ -13,20 +14,24 @@ const AccountPage = async ({
 
   const result = await getPaginatedAccountAction({ pageNumber, query });
 
-  console.log(query);
-
   return (
     <main>
       <div className="p-1 lg:p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
-        <h3 className="text-4xl mb-4 text-primary">Accounts</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-4xl text-primary">Accounts</h3>
+          <CreateAccountButton className="self-start mt-0" />
+        </div>
         <SearchAccountInput />
         <div className="flex justify-center items-center flex-col gap-4">
           <div className="w-full">
-            <AccountsFilter accounts={result.accounts} />
+            <AccountsFilter
+              pageHasParams={!!query}
+              accounts={result.accounts}
+            />
           </div>
         </div>
-        <CreateAccountButton className="self-start" />
       </div>
+      <AccountsPaginationControls {...result} />
     </main>
   );
 };

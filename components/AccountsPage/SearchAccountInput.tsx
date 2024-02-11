@@ -1,6 +1,6 @@
 "use client";
 import { ChangeEvent, useEffect } from "react";
-import { Input } from "./ui/input";
+import { Input } from "../ui/input";
 import { useDebounceValue } from "usehooks-ts";
 import { FaSearch } from "react-icons/fa";
 import { useQueryState } from "nuqs";
@@ -22,7 +22,7 @@ const SearchAccountInput = () => {
   }, [debouncedQuery]);
 
   return (
-    <div className="relative lg:w-96 mb-2 lg:ml-auto w-full">
+    <div className="relative lg:w-96 mb-2  w-full">
       <Input
         defaultValue={searchQuery || ""}
         className="pl-8"

@@ -154,27 +154,40 @@ export const getPaginatedAccountAction = async ({
 }: IGetPaginatedAccountActionParams): Promise<IGetPaginatedAccountActionReturnType> => {
   const result = await getCurrentUserAction();
   if (result.error) {
-    return { accounts: [], hasNextPage: false, hasPreviousPage: false };
+    redirect("/login");
   }
 
   const PAGE_SIZE = 12;
   const skipAmount = (pageNumber - 1) * PAGE_SIZE;
-  const accounts = await db.userAccount.findMany({
-    skip: skipAmount,
-    take: PAGE_SIZE,
-    where: {
-      userId: result.user?.id,
-      name: {
-        contains: query,
+
+  const [accounts, totalCount] = await Promise.all([
+    db.userAccount.findMany({
+      skip: skipAmount,
+      take: PAGE_SIZE,
+      where: {
+        userId: result.user?.id,
+        name: {
+          contains: query,
+        },
       },
-    },
-  });
+    }),
+    db.userAccount.count({
+      where: {
+        userId: result.user?.id,
+        name: {
+          contains: query,
+        },
+      },
+    }),
+  ]);
 
   if (accounts.length === 0) {
     return {
       accounts: [],
       hasNextPage: false,
       hasPreviousPage: false,
+      currentPage: 1,
+      totalPages: 1,
     };
   }
 
@@ -182,6 +195,8 @@ export const getPaginatedAccountAction = async ({
     accounts,
     hasNextPage: accounts.length === PAGE_SIZE,
     hasPreviousPage: pageNumber > 1,
+    totalPages: Math.ceil(totalCount / PAGE_SIZE),
+    currentPage: pageNumber,
   };
 };
 

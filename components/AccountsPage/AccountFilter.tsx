@@ -14,7 +14,13 @@ import {
 import { motion } from "framer-motion";
 import { UserAccount } from "@prisma/client";
 
-const AccountsFilter = ({ accounts }: { accounts: UserAccount[] }) => {
+const AccountsFilter = ({
+  accounts,
+  pageHasParams,
+}: {
+  accounts: UserAccount[];
+  pageHasParams: boolean;
+}) => {
   const [selectedAccountType, setSelectedAccountType] = useState("");
 
   if (accounts.length === 0) {
@@ -24,13 +30,16 @@ const AccountsFilter = ({ accounts }: { accounts: UserAccount[] }) => {
         animate={{ opacity: 1 }}
         exit={{ opacity: 1 }}
         transition={{ duration: 0.5, type: "just" }}
-        className="lg:text-center"
+        className="lg:text-left h-[500px] p-4"
       >
         <h3 className="inline-block text-lg lg:text-3xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
-          You don&apos;t have any accounts yet.
+          {pageHasParams
+            ? "No accounts found for your search"
+            : "You don't have any accounts yet."}
         </h3>
         <p className="mt-3">
-          Create one by clicking the Create Account button.
+          {pageHasParams && "Remove existing filters or "}
+          create an account by clicking the "Create an Account" button.
         </p>
       </motion.div>
     );
@@ -70,7 +79,7 @@ const AccountsFilter = ({ accounts }: { accounts: UserAccount[] }) => {
           </SelectContent>
         </Select>
       </div>
-      <div className="col-span-10">
+      <div className="col-span-10 h-[500px] overflow-auto">
         <AccountInformation userAccounts={filteredAccounts} />
       </div>
     </div>
