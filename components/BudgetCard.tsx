@@ -1,13 +1,13 @@
 "use client";
 import { Progress } from "@/components/ui/progress";
-import { SerializedBudget } from "../redux/features/budgetSlice";
+import { SerializedBudget } from "../app/redux/features/budgetSlice";
 import ActionPopover from "@/components/ActionPopover";
 import { Badge } from "@/components/ui/badge";
-import { useAppDispatch } from "../redux/hooks";
+import { useAppDispatch } from "../app/redux/hooks";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
-import { openGenericModal } from "../redux/features/genericModalSlice";
-import { showGenericConfirm } from "../redux/features/genericConfirmSlice";
+import { openGenericModal } from "../app/redux/features/genericModalSlice";
+import { showGenericConfirm } from "../app/redux/features/genericConfirmSlice";
 import { cn } from "@/lib/utils";
 import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
 import { deleteGeneric } from "@/actions/generic";

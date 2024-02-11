@@ -1,8 +1,8 @@
 import CreateUserAccountOptions from "@/lib/CreateUserAccountOptions";
-import { SerializedUserAccount } from "../redux/features/userAccountSlice";
+import { SerializedUserAccount } from "../app/redux/features/userAccountSlice";
 import ActionPopover from "@/components/ActionPopover";
-import { useAppDispatch } from "../redux/hooks";
-import { openGenericModal } from "../redux/features/genericModalSlice";
+import { useAppDispatch } from "../app/redux/hooks";
+import { openGenericModal } from "../app/redux/features/genericModalSlice";
 import { showGenericConfirm } from "@/app/redux/features/genericConfirmSlice";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";

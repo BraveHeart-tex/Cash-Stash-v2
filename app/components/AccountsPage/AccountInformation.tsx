@@ -1,6 +1,6 @@
 "use client";
 import { SerializedUserAccount } from "@/app/redux/features/userAccountSlice";
-import AccountCard from "../AccountCard";
+import AccountCard from "../../../components/AccountCard";
 import { AnimatePresence, motion } from "framer-motion";
 
 interface IAccountInformationProps {

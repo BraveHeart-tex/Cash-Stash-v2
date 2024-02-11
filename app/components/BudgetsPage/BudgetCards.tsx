@@ -1,5 +1,5 @@
 import { SerializedBudget } from "@/app/redux/features/budgetSlice";
-import BudgetCard from "../BudgetCard";
+import BudgetCard from "../../../components/BudgetCard";
 import AnimatePresenceClient from "@/components/animation/AnimatePresence";
 
 interface IBudgetCardsProps {

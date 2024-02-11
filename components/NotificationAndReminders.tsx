@@ -2,7 +2,7 @@
 import { useAppDispatch } from "@/app/redux/hooks";
 import { SerializedReminder } from "@/app/redux/features/remindersSlice";
 import { Button } from "@/components/ui/button";
-import { openGenericModal } from "../redux/features/genericModalSlice";
+import { openGenericModal } from "../app/redux/features/genericModalSlice";
 import { FaRegClock } from "react-icons/fa";
 import ReminderCard from "@/components/ReminderCard";
 import AnimatePresenceClient from "@/components/animation/AnimatePresence";

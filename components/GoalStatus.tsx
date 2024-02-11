@@ -1,6 +1,6 @@
 import { SerializedGoal } from "@/app/redux/features/goalSlice";
 import GoalCard from "./GoalCard";
-import CreateGoalButton from "./CreateButtons/CreateGoalButton";
+import CreateGoalButton from "../app/components/CreateButtons/CreateGoalButton";
 import AnimatePresenceClient from "@/components/animation/AnimatePresence";
 import MotionDiv from "@/components/animation/MotionDiv";
 

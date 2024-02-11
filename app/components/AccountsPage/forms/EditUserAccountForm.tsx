@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import CreateUserAccountOptions, {
   getOptionLabel,
 } from "@/lib/CreateUserAccountOptions";
-import FormLoadingSpinner from "../../FormLoadingSpinner";
+import FormLoadingSpinner from "../../../../components/FormLoadingSpinner";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { fetchCurrentAccount } from "@/app/redux/features/currentAccountSlice";
 import FormInput from "@/components/FormInput";

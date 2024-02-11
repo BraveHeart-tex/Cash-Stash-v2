@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import logo from "@/app/components/Logo.svg";
+import logo from "@/components/Logo.svg";
 import Image from "next/image";
 import FormInput from "@/components/FormInput";
 import { useForm } from "react-hook-form";

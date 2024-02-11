@@ -1,6 +1,6 @@
 import { SerializedTransaction } from "@/app/redux/features/transactionsSlice";
-import TransactionCard from "./TransactionsPage/TransactionCard";
-import CreateTransactionButton from "./CreateButtons/CreateTransactionButton";
+import TransactionCard from "../app/components/TransactionsPage/TransactionCard";
+import CreateTransactionButton from "../app/components/CreateButtons/CreateTransactionButton";
 import AnimatePresenceClient from "@/components/animation/AnimatePresence";
 import MotionDiv from "@/components/animation/MotionDiv";
 

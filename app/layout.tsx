@@ -5,7 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
 import GenericConfirmDialog from "@/components/GenericConfirmDialog";
 import GenericModal from "@/components/GenericModal";
-import Navigation from "./components/Navigation";
+import Navigation from "../components/Navigation";
 import { getCurrentUserAction } from "@/actions";
 import NavigationTabs from "@/components/NavigationTabs";
 import { Metadata, Viewport } from "next";

@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/ModeToggle";
 import Link from "next/link";
 import { useState } from "react";
-import { useAppSelector } from "../redux/hooks";
+import { useAppSelector } from "../app/redux/hooks";
 import { Label } from "@/components/ui/label";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";

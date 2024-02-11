@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { fetchBudgetById } from "@/app/redux/features/currentBudgetSlice";
 import CreateBudgetOptions from "@/app/../lib/CreateBudgetOptions";
 import { getOptionLabel } from "@/lib/CreateUserAccountOptions";
-import FormLoadingSpinner from "../../FormLoadingSpinner";
+import FormLoadingSpinner from "../../../../components/FormLoadingSpinner";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 import {
   showDefaultToast,

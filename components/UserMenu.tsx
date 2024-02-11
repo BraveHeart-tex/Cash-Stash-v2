@@ -1,9 +1,9 @@
 "use client";
-import { useAppSelector } from "../redux/hooks";
+import { useAppSelector } from "../app/redux/hooks";
 import { useDispatch } from "react-redux";
-import { fetchCurrentUser } from "../redux/features/userSlice";
+import { fetchCurrentUser } from "../app/redux/features/userSlice";
 import { useEffect, useTransition } from "react";
-import { AppDispatch } from "../redux/store";
+import { AppDispatch } from "../app/redux/store";
 import { logoutAction } from "@/actions";
 import {
   DropdownMenu,

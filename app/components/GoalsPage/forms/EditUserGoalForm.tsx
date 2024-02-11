@@ -3,7 +3,7 @@ import { useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { fetchGoalById } from "@/app/redux/features/currentGoalSlice";
-import FormLoadingSpinner from "../../FormLoadingSpinner";
+import FormLoadingSpinner from "../../../../components/FormLoadingSpinner";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 import {
   showDefaultToast,
