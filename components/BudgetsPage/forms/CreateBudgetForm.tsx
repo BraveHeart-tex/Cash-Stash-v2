@@ -88,6 +88,7 @@ const CreateBudgetForm = () => {
           name={"spentAmount"}
           label={"Budget Spent ($)"}
           placeholder={"Budget Spent ($)"}
+          step={"0.01"}
           type={"number"}
           register={register}
           errors={errors}

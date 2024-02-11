@@ -146,6 +146,7 @@ const EditUserBudgetForm = ({ entityId }: IEditBudgetFormProps) => {
           label={"Budget Spent ($)"}
           placeholder={"Budget Spent ($)"}
           type={"number"}
+          step={"0.01"}
           register={register}
           errors={errors}
         />
