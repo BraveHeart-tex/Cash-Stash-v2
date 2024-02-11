@@ -1,9 +1,8 @@
-import AccountsPage from "./AccountPageClient";
+import AccountsPage from "./AccountsPage";
 
 const AccountPage = async () => {
   return (
     <main>
-      {/* @ts-expect-error React Server Component */}
       <AccountsPage />
     </main>
   );
