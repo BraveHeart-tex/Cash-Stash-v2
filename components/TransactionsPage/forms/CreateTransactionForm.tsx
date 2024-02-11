@@ -14,7 +14,7 @@ import FormSelect, { SelectOption } from "@/components/FormSelect";
 import { Button } from "@/components/ui/button";
 import { createTransactionAction } from "@/actions";
 import { useRouter } from "next/navigation";
-import { SerializedUserAccount } from "@/app/redux/features/userAccountSlice";
+import { SerializedUserAccount } from "@/actions/types";
 
 const CreateTransactionForm = ({
   userAccounts,
@@ -50,7 +50,7 @@ const CreateTransactionForm = ({
         router.refresh();
         showSuccessToast(
           "Transaction created.",
-          `Transaction for ${result?.transaction?.amount}₺ created.`
+          `Transaction for ${result?.transaction?.amount}$ created.`
         );
         dispatch(closeGenericModal());
       }
@@ -75,7 +75,7 @@ const CreateTransactionForm = ({
         {/* @ts-ignore */}
         <FormInput
           name={"amount"}
-          label={"Amount (₺)"}
+          label={"Amount ($)"}
           placeholder={"Amount"}
           type={"number"}
           register={register}

@@ -3,7 +3,7 @@ import TransactionsSort from "@/components/TransactionsPage/TransactionsSort";
 import TransactionList from "@/components/TransactionsPage/TransactionList";
 import CreateTransactionButton from "../../components/CreateButtons/CreateTransactionButton";
 import { SerializedTransaction } from "../redux/features/transactionsSlice";
-import { SerializedUserAccount } from "../redux/features/userAccountSlice";
+import { SerializedUserAccount } from "@/actions/types";
 import MotionDiv from "@/components/animation/MotionDiv";
 
 const TransactionsListPage = ({

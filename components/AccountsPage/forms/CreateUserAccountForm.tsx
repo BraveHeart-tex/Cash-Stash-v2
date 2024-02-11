@@ -82,8 +82,8 @@ const CreateUserAccountForm = () => {
         />
         <FormInput
           name={"balance"}
-          label={"Account Balance ₺"}
-          placeholder={"Balance (₺)"}
+          label={"Account Balance $"}
+          placeholder={"Balance ($)"}
           step={"0.01"}
           type={"number"}
           register={register}

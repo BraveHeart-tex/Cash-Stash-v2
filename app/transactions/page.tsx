@@ -1,6 +1,6 @@
 import { getGenericListByCurrentUser } from "@/actions/generic";
 import TransactionsListPage from "./TransactionsClient";
-import { SerializedUserAccount } from "../redux/features/userAccountSlice";
+import { SerializedUserAccount } from "@/actions/types";
 import { searchTransactions } from "@/actions";
 
 export interface SearchParams {

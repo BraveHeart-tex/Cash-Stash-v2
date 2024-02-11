@@ -86,8 +86,8 @@ const CreateBudgetForm = () => {
         />
         <FormInput
           name={"spentAmount"}
-          label={"Budget Spent (₺)"}
-          placeholder={"Budget Spent (₺)"}
+          label={"Budget Spent ($)"}
+          placeholder={"Budget Spent ($)"}
           type={"number"}
           register={register}
           errors={errors}

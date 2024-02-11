@@ -1,7 +1,7 @@
 import { getChartDataAction, searchTransactions } from "@/actions";
 import ReportTable from "../../components/ReportsPage/ReportTable";
 import { getGenericListByCurrentUser } from "@/actions/generic";
-import { SerializedUserAccount } from "../redux/features/userAccountSlice";
+import { SerializedUserAccount } from "@/actions/types";
 import { SearchParams } from "../transactions/page";
 import MotionDiv from "@/components/animation/MotionDiv";
 

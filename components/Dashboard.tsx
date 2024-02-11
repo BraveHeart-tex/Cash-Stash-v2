@@ -3,19 +3,19 @@ import {
   InsightsData,
   SerializedTransaction,
 } from "@/app/redux/features/transactionsSlice";
-import AccountSummaries from "./AccountSummaries";
-import BudgetStatus from "./BudgetStatus";
-import FinancialInsights from "./FinancialInsights";
-import GoalStatus from "./GoalStatus";
-import NotificationsAndReminders from "./NotificationAndReminders";
-import TransactionHistory from "./TransactionHistory";
+import AccountSummaries from "@/components/AccountSummaries";
+import BudgetStatus from "@/components/BudgetStatus";
+import FinancialInsights from "@/components/FinancialInsights";
+import GoalStatus from "@/components/GoalStatus";
+import NotificationsAndReminders from "@/components/NotificationAndReminders";
+import TransactionHistory from "@/components/TransactionHistory";
 import BarChartComponent from "@/components/charts/BarChartComponent";
-import { MonthlyData } from "./ReportsPage/ReportTable";
+import { MonthlyData } from "@/components/ReportsPage/ReportTable";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { SerializedUserAccount } from "../app/redux/features/userAccountSlice";
-import { SerializedBudget } from "../app/redux/features/budgetSlice";
-import { SerializedGoal } from "../app/redux/features/goalSlice";
-import { SerializedReminder } from "../app/redux/features/remindersSlice";
+import { SerializedUserAccount } from "@/actions/types";
+import { SerializedBudget } from "@/app/redux/features/budgetSlice";
+import { SerializedGoal } from "@/app/redux/features/goalSlice";
+import { SerializedReminder } from "@/app/redux/features/remindersSlice";
 import { motion } from "framer-motion";
 
 interface IDashboardProps {

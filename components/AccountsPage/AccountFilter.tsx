@@ -2,7 +2,6 @@
 import { useState } from "react";
 import CreateUserAccountOptions from "@/lib/CreateUserAccountOptions";
 import AccountInformation from "./AccountInformation";
-import { SerializedUserAccount } from "@/app/redux/features/userAccountSlice";
 import {
   Select,
   SelectTrigger,
@@ -13,12 +12,9 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { motion } from "framer-motion";
+import { UserAccount } from "@prisma/client";
 
-const AccountsFilter = ({
-  accounts,
-}: {
-  accounts: SerializedUserAccount[];
-}) => {
+const AccountsFilter = ({ accounts }: { accounts: UserAccount[] }) => {
   const [selectedAccountType, setSelectedAccountType] = useState("");
 
   if (accounts.length === 0) {

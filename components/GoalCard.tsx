@@ -104,7 +104,7 @@ const GoalCard = ({ goal }: IGoalCardProps) => {
           }
         />
         <p className="mt-4 text-md dark:text-white/60 text-foreground">
-          Current: {goal.currentAmount}₺ / Target: {goal.goalAmount}₺
+          Current: {goal.currentAmount}$ / Target: {goal.goalAmount}$
         </p>
       </div>
     </motion.div>

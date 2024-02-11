@@ -1,11 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { UserAccount } from "@prisma/client";
-import { getGenericListByCurrentUser } from "@/actions/generic";
-
-export type SerializedUserAccount = Omit<UserAccount, "createdAt" | "updatedAt"> & {
-  createdAt: string;
-  updatedAt: string;
-};
+import { IGetPaginatedAccountActionParams } from "@/actions/types";
+import { getPaginatedAccountAction } from "@/actions";
+import { SerializedUserAccount } from "@/actions/types";
 
 interface UserAccountsState {
   currentUserAccounts: SerializedUserAccount[] | null;
@@ -19,18 +15,10 @@ const initialState: UserAccountsState = {
 
 export const fetchCurrentUserAccounts = createAsyncThunk(
   "accounts/fetchCurrentUserAccounts",
-  async () => {
-    const result = await getGenericListByCurrentUser<UserAccount>({
-      tableName: "userAccount",
-    });
+  async ({ pageNumber, query }: IGetPaginatedAccountActionParams) => {
+    const result = await getPaginatedAccountAction({ pageNumber, query });
 
-    if (result?.error || !result || !result.data) {
-      return null;
-    }
-
-    const accounts = result.data;
-
-    const mappedAccounts = accounts.map((data) => ({
+    const mappedAccounts = result.accounts.map((data) => ({
       ...data,
       createdAt: new Date(data.createdAt).toLocaleDateString(),
       updatedAt: new Date(data.updatedAt).toLocaleDateString(),

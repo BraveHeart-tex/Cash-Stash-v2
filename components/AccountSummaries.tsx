@@ -1,4 +1,4 @@
-import { SerializedUserAccount } from "@/app/redux/features/userAccountSlice";
+import { SerializedUserAccount } from "@/actions/types";
 import AccountCard from "./AccountCard";
 import CreateAccountButton from "./CreateButtons/CreateAccountButton";
 import AnimatePresenceClient from "@/components/animation/AnimatePresence";

@@ -5,7 +5,7 @@ import {
   searchTransactions,
 } from "@/actions";
 import { getGenericListByCurrentUser } from "@/actions/generic";
-import { SerializedUserAccount } from "./redux/features/userAccountSlice";
+import { SerializedUserAccount } from "@/actions/types";
 import { SerializedBudget } from "./redux/features/budgetSlice";
 import { SerializedGoal } from "./redux/features/goalSlice";
 import { SerializedReminder } from "./redux/features/remindersSlice";

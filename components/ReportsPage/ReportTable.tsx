@@ -1,6 +1,6 @@
 "use client";
 import { SerializedTransaction } from "@/app/redux/features/transactionsSlice";
-import { SerializedUserAccount } from "@/app/redux/features/userAccountSlice";
+import { SerializedUserAccount } from "@/actions/types";
 import TransactionsFilter from "../TransactionsPage/TransactionsFilter";
 import TransactionsSort from "../TransactionsPage/TransactionsSort";
 import {
@@ -54,7 +54,7 @@ const ReportTable = ({
                     transaction.isIncome ? "text-green-500" : "text-red-500"
                   )}
                 >
-                  {thousandSeparator(transaction.amount)}₺
+                  {thousandSeparator(transaction.amount)}$
                 </TableCell>
                 <TableCell>
                   {currentUserAccounts &&

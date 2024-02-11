@@ -1,5 +1,4 @@
 import CreateUserAccountOptions from "@/lib/CreateUserAccountOptions";
-import { SerializedUserAccount } from "../app/redux/features/userAccountSlice";
 import ActionPopover from "@/components/ActionPopover";
 import { useAppDispatch } from "../app/redux/hooks";
 import { openGenericModal } from "../app/redux/features/genericModalSlice";
@@ -13,7 +12,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 
 interface IAccountCardProps {
-  account: SerializedUserAccount;
+  account: UserAccount;
   className?: string;
 }
 
@@ -88,7 +87,7 @@ const AccountCard = ({ account, className }: IAccountCardProps) => {
           ({accountCategory})
         </span>
       </p>
-      <p className="text-md">Balance: {account.balance}₺</p>
+      <p className="text-md">Balance: {account.balance}$</p>
     </motion.div>
   );
 };

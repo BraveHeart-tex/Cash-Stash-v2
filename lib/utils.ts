@@ -1,4 +1,4 @@
-import prisma from "@/app/libs/prismadb";
+import prisma from "@/lib/prismadb";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { MdDashboard, MdOutlineAccountBalanceWallet } from "react-icons/md";

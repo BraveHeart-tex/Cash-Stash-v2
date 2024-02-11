@@ -1,10 +1,10 @@
 "use client";
-import { SerializedUserAccount } from "@/app/redux/features/userAccountSlice";
 import AccountCard from "../AccountCard";
 import { AnimatePresence, motion } from "framer-motion";
+import { UserAccount } from "@prisma/client";
 
 interface IAccountInformationProps {
-  userAccounts: SerializedUserAccount[] | undefined | null;
+  userAccounts: UserAccount[];
 }
 
 const AccountInformation = ({ userAccounts }: IAccountInformationProps) => {

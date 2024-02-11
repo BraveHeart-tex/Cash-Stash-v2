@@ -1,5 +1,5 @@
 "use server";
-import db from "@/app/libs/prismadb";
+import db from "@/lib/prismadb";
 import { getCurrentUser, signToken } from "@/lib/session";
 import { EditReminderSchema, LoginSchema } from "@/schemas";
 import { LoginSchemaType } from "@/schemas/LoginSchema";
@@ -33,6 +33,10 @@ import CreateReminderSchema, {
   CreateReminderSchemaType,
 } from "@/schemas/CreateReminderSchema";
 import { redirect } from "next/navigation";
+import {
+  IGetPaginatedAccountActionParams,
+  IGetPaginatedAccountActionReturnType,
+} from "./types";
 
 export const loginAction = async ({ email, password }: LoginSchemaType) => {
   const result = LoginSchema.safeParse({ email, password });
@@ -141,6 +145,43 @@ export const getCurrentUserAction = async () => {
 
   return {
     user,
+  };
+};
+
+export const getPaginatedAccountAction = async ({
+  pageNumber,
+  query,
+}: IGetPaginatedAccountActionParams): Promise<IGetPaginatedAccountActionReturnType> => {
+  const result = await getCurrentUserAction();
+  if (result.error) {
+    return { accounts: [], hasNextPage: false, hasPreviousPage: false };
+  }
+
+  const PAGE_SIZE = 12;
+  const skipAmount = (pageNumber - 1) * PAGE_SIZE;
+  const accounts = await db.userAccount.findMany({
+    skip: skipAmount,
+    take: PAGE_SIZE,
+    where: {
+      userId: result.user?.id,
+      name: {
+        contains: query,
+      },
+    },
+  });
+
+  if (accounts.length === 0) {
+    return {
+      accounts: [],
+      hasNextPage: false,
+      hasPreviousPage: false,
+    };
+  }
+
+  return {
+    accounts,
+    hasNextPage: accounts.length === PAGE_SIZE,
+    hasPreviousPage: pageNumber > 1,
   };
 };
 

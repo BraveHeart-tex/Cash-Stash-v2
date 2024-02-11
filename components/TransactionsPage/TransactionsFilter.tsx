@@ -1,5 +1,5 @@
 "use client";
-import { SerializedUserAccount } from "@/app/redux/features/userAccountSlice";
+import { SerializedUserAccount } from "@/actions/types";
 import GenericSelect from "@/components/GenericSelect";
 import {
   Card,

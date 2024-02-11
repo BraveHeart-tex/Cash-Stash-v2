@@ -113,7 +113,7 @@ const FinancialInsights = ({ insightsData }: IFinancialInsightsProps) => {
         ) : (
           <div className="mb-4 flex flex-col" key={data.name}>
             <h3 className="font-bold text-lg">{data.name}</h3>
-            <p>{thousandSeparator(data.value as number)}₺</p>
+            <p>{thousandSeparator(data.value as number)}$</p>
           </div>
         )
       )}
