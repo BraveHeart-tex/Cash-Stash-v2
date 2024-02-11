@@ -1,5 +1,5 @@
 import { getGenericListByCurrentUser } from "@/actions/generic";
-import BudgetList from "./BudgetsPage";
+import BudgetList from "./BudgetsList";
 import { SerializedBudget } from "../redux/features/budgetSlice";
 
 const BudgetsPage = async () => {

@@ -4,7 +4,7 @@ import CreateBudgetButton from "../../components/CreateButtons/CreateBudgetButto
 import MotionDiv from "@/components/animation/MotionDiv";
 
 const BudgetsNotFoundMessage = () => (
-  <div className="flex flex-col items-start lg:items-center justify-center gap-4">
+  <div className="flex flex-col items-start lg:items-center justify-center gap-2">
     <h2 className="inline-block text-lg lg:text-3xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
       No budgets were found.
     </h2>

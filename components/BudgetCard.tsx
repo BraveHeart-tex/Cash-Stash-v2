@@ -85,10 +85,10 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
           />
           <Badge
             className={cn(
-              " select-none cursor-pointer",
+              "select-none cursor-pointer",
               budget.spentAmount / budget.budgetAmount > 0.5
-                ? "bg-red-500 hover:bg-red-600"
-                : "bg-green-400 hover:bg-green-500"
+                ? "bg-destructive hover:bg-destructive"
+                : "bg-success hover:bg-success"
             )}
           >
             {((budget.spentAmount / budget.budgetAmount) * 100).toFixed(0)}%
@@ -100,10 +100,10 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
         className="mt-4"
         indicatorClassName={cn(
           budget.spentAmount / budget.budgetAmount > 0.7
-            ? "bg-red-500"
+            ? "bg-destructive"
             : budget.spentAmount / budget.budgetAmount > 0.4
             ? "bg-orange-500"
-            : "bg-green-400"
+            : "bg-success"
         )}
       />
       <div className="w-full flex flex-col lg:flex-row lg:items-center justify-between mt-2">
