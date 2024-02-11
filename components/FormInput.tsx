@@ -4,18 +4,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 
-interface IFormInputProps {
+interface IFormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   name: string;
   label: string;
-  placeholder: string;
-  type: string;
   register: UseFormRegister<any>;
   errors: {
     [name: string]: {
       message?: string;
     };
   };
-  className?: string;
 }
 
 const FormInput = ({
@@ -26,6 +23,7 @@ const FormInput = ({
   errors,
   label,
   className,
+  ...props
 }: IFormInputProps) => {
   const isError = errors[name] && errors[name].message;
   return (
@@ -38,6 +36,7 @@ const FormInput = ({
         placeholder={placeholder}
         type={type}
         {...register(name)}
+        {...props}
         className={className}
         data-testid={name}
         aria-invalid={isError ? "true" : "false"}
