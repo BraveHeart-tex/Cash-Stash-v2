@@ -157,6 +157,7 @@ const EditUserAccountForm = ({ entityId }: IEditUserAccountFormProps) => {
           label={"Account Balance ₺"}
           placeholder={"Balance (₺)"}
           type={"number"}
+          step={"0.01"}
           register={register}
           errors={errors}
         />
