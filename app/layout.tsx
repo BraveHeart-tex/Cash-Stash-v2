@@ -74,7 +74,7 @@ export default async function RootLayout({ children }: ILayoutProps) {
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             {user ? <Navigation /> : null}
             <NavigationTabs />
-            {children}
+            <main className="pb-72 lg:pb-0">{children}</main>
             <GenericModal />
             <GenericConfirmDialog />
           </ThemeProvider>
