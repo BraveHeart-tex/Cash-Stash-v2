@@ -36,7 +36,7 @@ const AccountsFilter = ({
         renderMessage={({ className }) => (
           <p className={className}>
             {pageHasParams && "Remove existing filters or "}
-            create an account by clicking the "Create an Account" button.
+            Create an account by clicking the "Create an Account" button.
           </p>
         )}
       />

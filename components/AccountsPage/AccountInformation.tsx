@@ -9,7 +9,7 @@ interface IAccountInformationProps {
 
 const AccountInformation = ({ userAccounts }: IAccountInformationProps) => {
   return (
-    <motion.div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+    <motion.div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 lg:gap-8">
       {userAccounts && userAccounts?.length > 0 ? (
         userAccounts.map((userAccount) => (
           <AccountCard account={userAccount} key={userAccount.id} />
