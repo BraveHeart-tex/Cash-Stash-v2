@@ -75,6 +75,7 @@ const EditUserBudgetForm = ({ entityId }: IEditBudgetFormProps) => {
         "category",
         getOptionLabel(CreateBudgetOptions, currentBudget.category)
       );
+      setValue("name", currentBudget.name);
       setValue("spentAmount", currentBudget.spentAmount);
     }
   }, [currentBudget, setValue]);

@@ -4,6 +4,7 @@ import CreateBudgetButton from "@/components/CreateButtons/CreateBudgetButton";
 import MotionDiv from "@/components/animation/MotionDiv";
 import { Budget } from "@prisma/client";
 import RouteSearchInput from "../route-search-input";
+import BudgetCard from "../BudgetCard";
 
 const BudgetList = ({
   budgets,
@@ -30,8 +31,10 @@ const BudgetList = ({
           <BudgetsNotFoundMessage pageHasParams={pageHasParams} />
         </MotionDiv>
       )}
-      <div className="grid grid-cols md:grid-cols-2 xl:grid-cols-3 gap-4 h-[500px]overflow-auto items-center pb-4">
-        <BudgetCards budgets={budgets} />
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 max-h-[500px] overflow-auto pb-4">
+        {budgets.map((budget) => (
+          <BudgetCard key={budget.id} budget={budget} />
+        ))}
       </div>
     </div>
   );

@@ -472,6 +472,7 @@ export const updateBudgetByIdAction = async ({
   budgetAmount,
   spentAmount,
   category,
+  name,
 }: EditBudgetSchemaType & { budgetId: string }) => {
   if (!budgetId) return { error: "Budget ID not found." };
 
@@ -486,6 +487,7 @@ export const updateBudgetByIdAction = async ({
     budgetAmount,
     spentAmount,
     category,
+    name,
   });
 
   if (!result.success) return { error: "Unprocessable entity." };
@@ -502,6 +504,7 @@ export const updateBudgetByIdAction = async ({
       budgetAmount: data.budgetAmount,
       spentAmount: data.spentAmount,
       category: mappedCategory as NotificationCategory,
+      name: data.name,
     },
   });
 

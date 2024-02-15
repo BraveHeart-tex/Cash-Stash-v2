@@ -37,18 +37,22 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
       layoutId={`budget-card-${budget.id}`}
       key={budget.id}
       className="flex flex-col gap-2 p-4 pt-6 border-1 shadow-xl rounded-md relative bg-card border cursor-pointer"
     >
-      <span className="font-semibold dark:text-white/60 text-foreground text-lg">
-        {CreateBudgetOptions[budget.category]}
-      </span>
-      <div className="absolute top-3 right-1 mb-2">
+      <div className="flex flex-col gap-1 p-0">
+        <span className="font-semibold text-foreground text-lg">
+          {budget.name}
+        </span>
+        <span className="text-muted-foreground">
+          {CreateBudgetOptions[budget.category]}
+        </span>
+      </div>
+      <div className="absolute top-5 right-1 mb-2">
         <div className="flex items-center gap-1">
           <ActionPopover
             popoverHeading={"Budget Actions"}
