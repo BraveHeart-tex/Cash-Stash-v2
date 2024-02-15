@@ -53,7 +53,7 @@ async function main() {
   await prisma.userAccount.deleteMany();
   await prisma.budget.deleteMany();
 
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 40; i++) {
     await createAccount(userId);
     await createBudget(userId);
   }
