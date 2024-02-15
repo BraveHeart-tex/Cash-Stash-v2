@@ -153,6 +153,7 @@ export const getCurrentUserAction = async () => {
 export const getPaginatedAccountAction = async ({
   pageNumber,
   query,
+  category,
 }: IGetPaginatedAccountActionParams): Promise<IGetPaginatedAccountActionReturnType> => {
   const result = await getCurrentUserAction();
   if (result.error) {
@@ -161,6 +162,18 @@ export const getPaginatedAccountAction = async ({
 
   const PAGE_SIZE = 12;
   const skipAmount = (pageNumber - 1) * PAGE_SIZE;
+
+  if (category && !CreateUserAccountOptions.hasOwnProperty(category)) {
+    return {
+      accounts: [],
+      hasNextPage: false,
+      hasPreviousPage: false,
+      currentPage: 1,
+      totalPages: 1,
+    };
+  }
+
+  const categoryQuery = category ? { category } : {};
 
   const [accounts, totalCount] = await Promise.all([
     db.userAccount.findMany({
@@ -171,6 +184,7 @@ export const getPaginatedAccountAction = async ({
         name: {
           contains: query,
         },
+        ...categoryQuery,
       },
     }),
     db.userAccount.count({
@@ -179,6 +193,7 @@ export const getPaginatedAccountAction = async ({
         name: {
           contains: query,
         },
+        ...categoryQuery,
       },
     }),
   ]);
@@ -207,7 +222,6 @@ export const getPaginatedBudgetsAction = async ({
   query,
   category,
 }: IGetPaginatedBudgetsActionParams): Promise<IGetPaginatedBudgetsActionReturnType> => {
-  // TODO: Implement as HOF
   const result = await getCurrentUserAction();
   if (result.error) {
     redirect("/login");

@@ -1,3 +1,4 @@
+"use client";
 import CreateUserAccountOptions from "@/lib/CreateUserAccountOptions";
 import ActionPopover from "@/components/ActionPopover";
 import { useAppDispatch } from "../app/redux/hooks";

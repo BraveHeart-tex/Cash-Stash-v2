@@ -6,9 +6,9 @@ import { NotificationCategory } from "@prisma/client";
 const BudgetsPage = async ({
   searchParams,
 }: {
-  searchParams: { page: number; query: string; category: string };
+  searchParams: { page: string; query: string; category: string };
 }) => {
-  const pageNumber = searchParams.page || 1;
+  const pageNumber = parseInt(searchParams.page) || 1;
   const query = searchParams.query || "";
   const category = (searchParams.category || "") as NotificationCategory;
   const result = await getPaginatedBudgetsAction({
