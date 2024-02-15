@@ -12,10 +12,9 @@ import TransactionHistory from "@/components/TransactionHistory";
 import BarChartComponent from "@/components/charts/BarChartComponent";
 import { MonthlyData } from "@/components/ReportsPage/ReportTable";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { SerializedGoal } from "@/app/redux/features/goalSlice";
 import { SerializedReminder } from "@/app/redux/features/remindersSlice";
 import { motion } from "framer-motion";
-import { Budget, UserAccount } from "@prisma/client";
+import { Budget, Goal, UserAccount } from "@prisma/client";
 
 interface IDashboardProps {
   monthlyTransactionsData: MonthlyData["monthlyTransactionsData"];
@@ -23,7 +22,7 @@ interface IDashboardProps {
   transactions: SerializedTransaction[];
   accounts: UserAccount[];
   budgets: Budget[];
-  goals: SerializedGoal[];
+  goals: Goal[];
   reminders: SerializedReminder[];
 }
 

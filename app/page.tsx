@@ -4,6 +4,7 @@ import {
   getChartDataAction,
   getPaginatedAccountAction,
   getPaginatedBudgetsAction,
+  getPaginatedGoalsAction,
   searchTransactions,
 } from "@/actions";
 import { getGenericListByCurrentUser } from "@/actions/generic";
@@ -29,10 +30,7 @@ export default async function Home() {
     fetchInsightsDataAction(),
     getChartDataAction(),
     getPaginatedBudgetsAction({ pageNumber: 1, query: "" }),
-    getGenericListByCurrentUser<SerializedGoal>({
-      tableName: "goal",
-      serialize: true,
-    }),
+    getPaginatedGoalsAction({ pageNumber: 1, query: "" }),
     getGenericListByCurrentUser<SerializedReminder>({
       tableName: "reminder",
       whereCondition: { isRead: false },
@@ -59,7 +57,7 @@ export default async function Home() {
         monthlyTransactionsData={monthlyTransactions.data || []}
         insightsData={insightsDataResult}
         transactions={result?.transactions || []}
-        goals={goalsResult?.data || []}
+        goals={goalsResult.goals}
         reminders={remindersResult?.data || []}
       />
     </main>
