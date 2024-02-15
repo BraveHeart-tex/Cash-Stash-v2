@@ -18,8 +18,8 @@ const GoalsPage = async ({
   return (
     <main>
       <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
-        <div className="flex items-center justify-between mb-4 lg:mb-0">
-          <h2 className="text-4xl lg:mb-4 text-primary">Goals</h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-4xl text-primary">Goals</h2>
           <CreateGoalButton className="mt-0" />
         </div>
         <RouteSearchInput placeholder="Search goals by name" />
