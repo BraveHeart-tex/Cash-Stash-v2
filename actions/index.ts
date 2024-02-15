@@ -216,10 +216,7 @@ export const getPaginatedBudgetsAction = async ({
   const PAGE_SIZE = 12;
   const skipAmount = (pageNumber - 1) * PAGE_SIZE;
 
-  if (
-    category &&
-    !Object.entries(CreateBudgetOptions).includes(category as any)
-  ) {
+  if (category && !CreateBudgetOptions.hasOwnProperty(category)) {
     return {
       budgets: [],
       hasNextPage: false,

@@ -28,22 +28,28 @@ const BudgetList = ({
         <CreateBudgetButton className="mt-0" />
       </div>
       <RouteSearchInput placeholder="Search budgets by name" />
-      <RouteSelectFilter dataset={selectDataset} queryKey="category" />
       {budgets?.length === 0 && (
         <MotionDiv
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 1 }}
           transition={{ duration: 0.5, type: "just" }}
-          className="lg:text-center"
+          className="lg:text-center lg:col-span-6 text-center col-span-6 mt-4 w-full"
         >
           <BudgetsNotFoundMessage pageHasParams={pageHasParams} />
         </MotionDiv>
       )}
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 max-h-[500px] overflow-auto pb-4">
-        {budgets.map((budget) => (
-          <BudgetCard key={budget.id} budget={budget} />
-        ))}
+      <div className={"grid lg:grid-cols-6"}>
+        <RouteSelectFilter
+          dataset={selectDataset}
+          queryKey="category"
+          selectLabel="Budget Category"
+        />
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 max-h-[500px] overflow-auto pb-4 col-span-5">
+          {budgets.map((budget) => (
+            <BudgetCard key={budget.id} budget={budget} />
+          ))}
+        </div>
       </div>
     </div>
   );

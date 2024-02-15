@@ -14,6 +14,7 @@ const RouteSelectFilter = ({
   dataset,
   queryKey,
   defaultValue = "",
+  selectLabel,
 }: {
   dataset: {
     label: string;
@@ -21,6 +22,7 @@ const RouteSelectFilter = ({
   }[];
   queryKey: string;
   defaultValue?: string;
+  selectLabel?: string;
 }) => {
   const [key, setKey] = useQueryState(queryKey, {
     defaultValue,
@@ -40,7 +42,7 @@ const RouteSelectFilter = ({
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectLabel>Account Type</SelectLabel>
+          <SelectLabel>{selectLabel}</SelectLabel>
           <SelectItem value={""}>All</SelectItem>
           {dataset.map((item) => (
             <SelectItem key={item.value} value={item.value}>
