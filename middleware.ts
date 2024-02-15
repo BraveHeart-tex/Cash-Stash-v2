@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyJWTToken } from "@/lib/session";
 
+// TODO: Fix auth system
 export async function middleware(request: NextRequest) {
   const { url, nextUrl, cookies } = request;
   const token = cookies.get("token")?.value;
@@ -19,10 +20,12 @@ export async function middleware(request: NextRequest) {
   }
 
   if (isApiRoute && !hasVerifiedToken) {
+    cookies.delete("token");
     return NextResponse.json({ error: "Not authorized" }, { status: 401 });
   }
 
   if (!hasVerifiedToken) {
+    cookies.delete("token");
     return NextResponse.redirect(new URL("/login", url));
   }
 

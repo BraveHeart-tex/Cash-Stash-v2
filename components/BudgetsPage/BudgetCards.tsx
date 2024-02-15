@@ -1,9 +1,9 @@
-import { SerializedBudget } from "@/app/redux/features/budgetSlice";
 import BudgetCard from "../BudgetCard";
 import AnimatePresenceClient from "@/components/animation/AnimatePresence";
+import { Budget } from "@prisma/client";
 
 interface IBudgetCardsProps {
-  budgets: SerializedBudget[] | null;
+  budgets: Budget[] | null;
 }
 
 const BudgetCards = ({ budgets }: IBudgetCardsProps) => {

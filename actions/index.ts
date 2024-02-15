@@ -36,6 +36,8 @@ import { redirect } from "next/navigation";
 import {
   IGetPaginatedAccountActionParams,
   IGetPaginatedAccountActionReturnType,
+  IGetPaginatedBudgetsActionParams,
+  IGetPaginatedBudgetsActionReturnType,
 } from "./types";
 
 export const loginAction = async ({ email, password }: LoginSchemaType) => {
@@ -194,6 +196,58 @@ export const getPaginatedAccountAction = async ({
   return {
     accounts,
     hasNextPage: accounts.length === PAGE_SIZE,
+    hasPreviousPage: pageNumber > 1,
+    totalPages: Math.ceil(totalCount / PAGE_SIZE),
+    currentPage: pageNumber,
+  };
+};
+
+export const getPaginatedBudgetsAction = async ({
+  pageNumber,
+  query,
+}: IGetPaginatedBudgetsActionParams): Promise<IGetPaginatedBudgetsActionReturnType> => {
+  const result = await getCurrentUserAction();
+  if (result.error) {
+    redirect("/login");
+  }
+
+  const PAGE_SIZE = 12;
+  const skipAmount = (pageNumber - 1) * PAGE_SIZE;
+
+  const [budgets, totalCount] = await Promise.all([
+    db.budget.findMany({
+      skip: skipAmount,
+      take: PAGE_SIZE,
+      where: {
+        userId: result.user?.id,
+        name: {
+          contains: query,
+        },
+      },
+    }),
+    db.budget.count({
+      where: {
+        userId: result.user?.id,
+        name: {
+          contains: query,
+        },
+      },
+    }),
+  ]);
+
+  if (budgets.length === 0) {
+    return {
+      budgets: [],
+      hasNextPage: false,
+      hasPreviousPage: false,
+      currentPage: 1,
+      totalPages: 1,
+    };
+  }
+
+  return {
+    budgets,
+    hasNextPage: budgets.length === PAGE_SIZE,
     hasPreviousPage: pageNumber > 1,
     totalPages: Math.ceil(totalCount / PAGE_SIZE),
     currentPage: pageNumber,
@@ -365,11 +419,13 @@ export const createBudgetAction = async ({
   budgetAmount,
   spentAmount,
   category,
+  name,
 }: CreateBudgetSchemaType) => {
   let result = CreateBudgetSchema.safeParse({
     budgetAmount,
     spentAmount,
     category,
+    name,
   });
 
   if (!result.success) {
@@ -394,6 +450,7 @@ export const createBudgetAction = async ({
 
   const createdBudget = await db.budget.create({
     data: {
+      name,
       budgetAmount: budgetAmountResult,
       spentAmount: spentAmountResult,
       category: mappedCategory as NotificationCategory,

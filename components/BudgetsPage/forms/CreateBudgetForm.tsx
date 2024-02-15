@@ -28,11 +28,11 @@ const CreateBudgetForm = () => {
     setValue,
   } = useForm<CreateBudgetSchemaType>({
     defaultValues: {
+      name: "",
       budgetAmount: 10,
       category: "",
       spentAmount: 0,
     },
-    // @ts-ignore
     resolver: zodResolver(CreateBudgetSchema),
   });
 
@@ -64,6 +64,14 @@ const CreateBudgetForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="grid grid-cols-1 gap-4">
+        <FormInput
+          name={"name"}
+          label={"Budget Name"}
+          placeholder={"Give your budget a name"}
+          type={"text"}
+          register={register}
+          errors={errors}
+        />
         <FormInput
           name={"budgetAmount"}
           label={"Budget Amount"}

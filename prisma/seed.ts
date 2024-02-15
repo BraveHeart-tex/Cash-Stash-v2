@@ -31,6 +31,7 @@ const createBudget = async (userId: string) => {
   await prisma.budget.create({
     data: {
       userId,
+      name: faker.finance.accountName() + " Budget",
       budgetAmount: faker.number.float({ min: 0, max: 10000, precision: 3 }),
       category: budgetType,
       spentAmount: faker.number.float({ min: 0, max: 10000, precision: 3 }),

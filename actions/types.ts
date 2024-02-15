@@ -1,4 +1,4 @@
-import { UserAccount } from "@prisma/client";
+import { Budget, UserAccount } from "@prisma/client";
 
 export interface IGetPaginatedAccountActionParams {
   pageNumber: number;
@@ -7,6 +7,19 @@ export interface IGetPaginatedAccountActionParams {
 
 export interface IGetPaginatedAccountActionReturnType {
   accounts: UserAccount[];
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+  currentPage: number;
+  totalPages: number;
+}
+
+export interface IGetPaginatedBudgetsActionParams {
+  pageNumber: number;
+  query?: string;
+}
+
+export interface IGetPaginatedBudgetsActionReturnType {
+  budgets: Budget[];
   hasNextPage: boolean;
   hasPreviousPage: boolean;
   currentPage: number;

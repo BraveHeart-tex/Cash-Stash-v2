@@ -1,12 +1,11 @@
 "use client";
-
 import { useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { fetchBudgetById } from "@/app/redux/features/currentBudgetSlice";
-import CreateBudgetOptions from "@/app/../lib/CreateBudgetOptions";
+import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
 import { getOptionLabel } from "@/lib/CreateUserAccountOptions";
-import FormLoadingSpinner from "../../FormLoadingSpinner";
+import FormLoadingSpinner from "@/components/FormLoadingSpinner";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 import {
   showDefaultToast,
@@ -44,6 +43,7 @@ const EditUserBudgetForm = ({ entityId }: IEditBudgetFormProps) => {
     getValues,
   } = useForm<EditBudgetSchemaType>({
     defaultValues: {
+      name: "",
       budgetAmount: 0,
       category: "",
       spentAmount: 0,
@@ -118,6 +118,14 @@ const EditUserBudgetForm = ({ entityId }: IEditBudgetFormProps) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="grid grid-cols-1 gap-4">
+        <FormInput
+          name={"name"}
+          label={"Budget Name"}
+          placeholder={"Give your budget a name"}
+          type={"text"}
+          register={register}
+          errors={errors}
+        />
         <FormInput
           name={"budgetAmount"}
           label={"Budget Amount"}

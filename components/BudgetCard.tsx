@@ -1,6 +1,5 @@
 "use client";
 import { Progress } from "@/components/ui/progress";
-import { SerializedBudget } from "../app/redux/features/budgetSlice";
 import ActionPopover from "@/components/ActionPopover";
 import { Badge } from "@/components/ui/badge";
 import { useAppDispatch } from "../app/redux/hooks";
@@ -16,7 +15,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 
 interface IBudgetCardProps {
-  budget: SerializedBudget;
+  budget: Budget;
 }
 
 const BudgetCard = ({ budget }: IBudgetCardProps) => {

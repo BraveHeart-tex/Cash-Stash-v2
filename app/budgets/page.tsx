@@ -1,15 +1,18 @@
-import { getGenericListByCurrentUser } from "@/actions/generic";
 import BudgetList from "./BudgetsList";
-import { SerializedBudget } from "../redux/features/budgetSlice";
+import { getPaginatedBudgetsAction } from "@/actions";
 
-const BudgetsPage = async () => {
-  const result = await getGenericListByCurrentUser<SerializedBudget>({
-    tableName: "budget",
-  });
+const BudgetsPage = async ({
+  searchParams,
+}: {
+  searchParams: { page: number; query: string };
+}) => {
+  const pageNumber = searchParams.page || 1;
+  const query = searchParams.query || "";
+  const result = await getPaginatedBudgetsAction({ pageNumber, query });
 
   return (
     <main>
-      <BudgetList budgets={result?.data || []} />
+      <BudgetList budgets={result.budgets} />
     </main>
   );
 };

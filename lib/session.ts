@@ -5,6 +5,7 @@ import {
   SignJWT,
   jwtVerify,
 } from "jose";
+import db from "@/lib/prismadb";
 
 declare module "jose" {
   export interface JWTVerifyResultWithUser extends JWTVerifyResult {
@@ -29,8 +30,9 @@ export async function verifyJWTToken(token: string) {
       getJwtSecretKey()
     )) as JWTVerifyResultWithUser;
 
-    return payload.id !== undefined;
+    return payload.id ? true : false;
   } catch (error) {
+    console.error(error);
     return false;
   }
 }

@@ -1,7 +1,7 @@
 import BudgetCards from "@/components/BudgetsPage/BudgetCards";
-import { SerializedBudget } from "@/app/redux/features/budgetSlice";
-import CreateBudgetButton from "../../components/CreateButtons/CreateBudgetButton";
+import CreateBudgetButton from "@/components/CreateButtons/CreateBudgetButton";
 import MotionDiv from "@/components/animation/MotionDiv";
+import { Budget } from "@prisma/client";
 
 const BudgetsNotFoundMessage = () => (
   <div className="flex flex-col items-start lg:items-center justify-center gap-2">
@@ -12,7 +12,7 @@ const BudgetsNotFoundMessage = () => (
   </div>
 );
 
-const BudgetList = ({ budgets }: { budgets: SerializedBudget[] }) => {
+const BudgetList = ({ budgets }: { budgets: Budget[] }) => {
   return (
     <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
       <MotionDiv
@@ -20,8 +20,10 @@ const BudgetList = ({ budgets }: { budgets: SerializedBudget[] }) => {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0, y: -20 }}
         transition={{ duration: 0.5 }}
+        className="flex w-full items-center justify-between mb-4"
       >
-        <h3 className="text-4xl mb-4 text-primary">Budgets</h3>
+        <h3 className="text-4xl text-primary">Budgets</h3>
+        <CreateBudgetButton className="mt-0" />
       </MotionDiv>
       {budgets?.length === 0 && (
         <MotionDiv
@@ -40,7 +42,6 @@ const BudgetList = ({ budgets }: { budgets: SerializedBudget[] }) => {
             <BudgetCards budgets={budgets} />
           </div>
         </div>
-        <CreateBudgetButton className="mt-4 self-start" />
       </div>
     </div>
   );

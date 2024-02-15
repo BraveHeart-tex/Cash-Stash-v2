@@ -59,6 +59,7 @@ model Transaction {
 
 model Budget {
   id           String               @id @default(cuid())
+  name         String
   budgetAmount Float
   spentAmount  Float
   userId       String
