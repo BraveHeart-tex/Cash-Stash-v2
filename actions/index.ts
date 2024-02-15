@@ -195,7 +195,7 @@ export const getPaginatedAccountAction = async ({
 
   return {
     accounts,
-    hasNextPage: accounts.length === PAGE_SIZE,
+    hasNextPage: totalCount > skipAmount + PAGE_SIZE,
     hasPreviousPage: pageNumber > 1,
     totalPages: Math.ceil(totalCount / PAGE_SIZE),
     currentPage: pageNumber,
@@ -247,7 +247,7 @@ export const getPaginatedBudgetsAction = async ({
 
   return {
     budgets,
-    hasNextPage: budgets.length === PAGE_SIZE,
+    hasNextPage: totalCount > skipAmount + PAGE_SIZE,
     hasPreviousPage: pageNumber > 1,
     totalPages: Math.ceil(totalCount / PAGE_SIZE),
     currentPage: pageNumber,

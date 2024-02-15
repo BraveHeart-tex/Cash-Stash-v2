@@ -3,10 +3,10 @@ import {
   fetchInsightsDataAction,
   getChartDataAction,
   getPaginatedAccountAction,
+  getPaginatedBudgetsAction,
   searchTransactions,
 } from "@/actions";
 import { getGenericListByCurrentUser } from "@/actions/generic";
-import { SerializedBudget } from "./redux/features/budgetSlice";
 import { SerializedGoal } from "./redux/features/goalSlice";
 import { SerializedReminder } from "./redux/features/remindersSlice";
 
@@ -28,10 +28,7 @@ export default async function Home() {
     getPaginatedAccountAction({ pageNumber: 1, query: "" }),
     fetchInsightsDataAction(),
     getChartDataAction(),
-    getGenericListByCurrentUser<SerializedBudget>({
-      tableName: "budget",
-      serialize: true,
-    }),
+    getPaginatedBudgetsAction({ pageNumber: 1, query: "" }),
     getGenericListByCurrentUser<SerializedGoal>({
       tableName: "goal",
       serialize: true,
@@ -57,7 +54,7 @@ export default async function Home() {
   return (
     <main>
       <Dashboard
-        budgets={budgetsResult?.data || []}
+        budgets={budgetsResult.budgets}
         accounts={accountsResult?.accounts}
         monthlyTransactionsData={monthlyTransactions.data || []}
         insightsData={insightsDataResult}
