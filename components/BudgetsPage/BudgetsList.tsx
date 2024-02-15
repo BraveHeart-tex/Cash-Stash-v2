@@ -1,10 +1,9 @@
-import BudgetCards from "@/components/BudgetsPage/BudgetCards";
 import BudgetsNotFoundMessage from "@/components/BudgetsPage/BudgetsNotFoundMessage";
 import CreateBudgetButton from "@/components/CreateButtons/CreateBudgetButton";
 import MotionDiv from "@/components/animation/MotionDiv";
 import { Budget } from "@prisma/client";
-import RouteSearchInput from "../route-search-input";
-import BudgetCard from "../BudgetCard";
+import RouteSearchInput from "@/components/route-search-input";
+import BudgetCard from "@/components/BudgetCard";
 
 const BudgetList = ({
   budgets,
