@@ -16,8 +16,6 @@ const MobileTabsListItem = ({ page }: { page: PageItem }) => {
 
   useEffect(() => {
     if (isActive) {
-      document.title = `${page.label} - Cash Stash`;
-
       const element = document.querySelector(".active-tab");
       element?.scrollIntoView({ behavior: "smooth", block: "center" });
     }
