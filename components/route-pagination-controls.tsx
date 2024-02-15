@@ -37,7 +37,7 @@ const RoutePaginationControls = ({
     <div className="w-full flex items-center justify-center space-x-4">
       <Button
         onClick={() => handlePageChange("decrement")}
-        disabled={!hasPreviousPage || changingPage}
+        disabled={!hasPreviousPage || changingPage || currentPage === 1}
       >
         Previous
       </Button>
@@ -46,7 +46,7 @@ const RoutePaginationControls = ({
       </div>
       <Button
         onClick={() => handlePageChange("increment")}
-        disabled={!hasNextPage || changingPage}
+        disabled={!hasNextPage || changingPage || totalPages === currentPage}
       >
         Next
       </Button>
