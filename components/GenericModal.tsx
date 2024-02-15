@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
-import { getGenericDialogContent } from "@/getGenericModalContent";
+import { getGenericDialogContent } from "@/lib/getGenericModalContent";
 
 const GenericModal = () => {
   const dispatch = useAppDispatch();
