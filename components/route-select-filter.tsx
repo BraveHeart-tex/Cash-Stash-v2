@@ -12,7 +12,7 @@ import { useQueryState } from "nuqs";
 
 const RouteSelectFilter = ({
   dataset,
-  queryKey,
+  queryStringKey,
   defaultValue = "",
   selectLabel,
 }: {
@@ -20,11 +20,11 @@ const RouteSelectFilter = ({
     label: string;
     value: string;
   }[];
-  queryKey: string;
+  queryStringKey: string;
   defaultValue?: string;
   selectLabel?: string;
 }) => {
-  const [key, setKey] = useQueryState(queryKey, {
+  const [key, setKey] = useQueryState(queryStringKey, {
     defaultValue,
     shallow: false,
   });

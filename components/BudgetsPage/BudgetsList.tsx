@@ -42,13 +42,16 @@ const BudgetList = ({
       <div className={"grid lg:grid-cols-6"}>
         <RouteSelectFilter
           dataset={selectDataset}
-          queryKey="category"
+          queryStringKey="category"
           selectLabel="Budget Category"
         />
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 max-h-[500px] overflow-auto pb-4 col-span-5">
-          {budgets.map((budget) => (
-            <BudgetCard key={budget.id} budget={budget} />
-          ))}
+
+        <div className="h-[500px] lg:pr-4 col-span-5 mt-2 lg:mt-0 overflow-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 pb-4 pr-2">
+            {budgets.map((budget) => (
+              <BudgetCard key={budget.id} budget={budget} />
+            ))}
+          </div>
         </div>
       </div>
     </div>
