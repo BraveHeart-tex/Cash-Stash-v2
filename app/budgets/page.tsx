@@ -23,7 +23,7 @@ const BudgetsPage = async ({
         budgets={result.budgets}
         pageHasParams={!!(query || category)}
       />
-      <RoutePaginationControls {...result} />
+      {result.totalPages > 1 && <RoutePaginationControls {...result} />}
     </main>
   );
 };

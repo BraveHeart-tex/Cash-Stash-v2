@@ -6,6 +6,8 @@ import AccountCard from "@/components/AccountCard";
 import RouteSelectFilter from "@/components/route-select-filter";
 import CreateUserAccountOptions from "@/lib/CreateUserAccountOptions";
 import { UserAccountCategory } from "@prisma/client";
+import MotionDiv from "@/components/animation/MotionDiv";
+import AccountsNotFound from "@/components/accounts-not-found";
 
 const AccountPage = async ({
   searchParams,
@@ -31,7 +33,7 @@ const AccountPage = async ({
 
   return (
     <main>
-      <div className="p-1 lg:p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
+      <div className="p-1 lg:p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px] mb-2">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-4xl text-primary">Accounts</h3>
           <CreateAccountButton className="self-start mt-0" />
@@ -43,6 +45,17 @@ const AccountPage = async ({
             queryStringKey="category"
             selectLabel="Account Category"
           />
+          {result.accounts.length === 0 && (
+            <MotionDiv
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 1 }}
+              transition={{ duration: 0.5, type: "just" }}
+              className="lg:text-center lg:col-span-6 col-span-6 w-full lg:mt-0"
+            >
+              <AccountsNotFound pageHasParams={!!(query || category)} />
+            </MotionDiv>
+          )}
 
           <div className="h-[500px] lg:pr-4 col-span-5 mt-2 lg:mt-0 overflow-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 pb-4">
@@ -53,7 +66,7 @@ const AccountPage = async ({
           </div>
         </div>
       </div>
-      <RoutePaginationControls {...result} />
+      {result.totalPages > 1 && <RoutePaginationControls {...result} />}
     </main>
   );
 };
