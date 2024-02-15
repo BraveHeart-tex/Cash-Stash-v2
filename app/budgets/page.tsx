@@ -1,4 +1,4 @@
-import BudgetList from "./BudgetsList";
+import BudgetList from "@/components/BudgetsPage/BudgetsList";
 import { getPaginatedBudgetsAction } from "@/actions";
 
 const BudgetsPage = async ({
@@ -12,7 +12,7 @@ const BudgetsPage = async ({
 
   return (
     <main>
-      <BudgetList budgets={result.budgets} />
+      <BudgetList budgets={result.budgets} pageHasParams={!!query} />
     </main>
   );
 };

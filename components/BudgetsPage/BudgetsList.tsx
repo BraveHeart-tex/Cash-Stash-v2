@@ -1,18 +1,17 @@
 import BudgetCards from "@/components/BudgetsPage/BudgetCards";
+import BudgetsNotFoundMessage from "@/components/BudgetsPage/BudgetsNotFoundMessage";
+import SearchBudgetInput from "@/components/BudgetsPage/SearchBudgetInput";
 import CreateBudgetButton from "@/components/CreateButtons/CreateBudgetButton";
 import MotionDiv from "@/components/animation/MotionDiv";
 import { Budget } from "@prisma/client";
 
-const BudgetsNotFoundMessage = () => (
-  <div className="flex flex-col items-start lg:items-center justify-center gap-2">
-    <h2 className="inline-block text-lg lg:text-3xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
-      No budgets were found.
-    </h2>
-    <p className="text-sm lg:text-lg">Add a budget to get started!</p>
-  </div>
-);
-
-const BudgetList = ({ budgets }: { budgets: Budget[] }) => {
+const BudgetList = ({
+  budgets,
+  pageHasParams,
+}: {
+  budgets: Budget[];
+  pageHasParams: boolean;
+}) => {
   return (
     <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
       <MotionDiv
@@ -25,6 +24,7 @@ const BudgetList = ({ budgets }: { budgets: Budget[] }) => {
         <h3 className="text-4xl text-primary">Budgets</h3>
         <CreateBudgetButton className="mt-0" />
       </MotionDiv>
+      <SearchBudgetInput />
       {budgets?.length === 0 && (
         <MotionDiv
           initial={{ opacity: 0 }}
@@ -33,7 +33,7 @@ const BudgetList = ({ budgets }: { budgets: Budget[] }) => {
           transition={{ duration: 0.5, type: "just" }}
           className="lg:text-center"
         >
-          <BudgetsNotFoundMessage />
+          <BudgetsNotFoundMessage pageHasParams={pageHasParams} />
         </MotionDiv>
       )}
       <div className="flex flex-col gap-4 items-center justify-center">

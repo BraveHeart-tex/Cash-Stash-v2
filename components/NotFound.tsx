@@ -21,7 +21,7 @@ const GenericNotFound = ({
           "inline-block text-lg lg:text-3xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70",
       })}
       {renderMessage({
-        className: "mt-3",
+        className: "mt-3 text-foreground",
       })}
     </motion.div>
   );
