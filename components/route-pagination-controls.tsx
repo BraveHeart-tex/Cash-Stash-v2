@@ -1,20 +1,20 @@
 "use client";
 import { useQueryState } from "nuqs";
-import { Button } from "../ui/button";
+import { Button } from "./ui/button";
 
-interface IAccountsPaginationControlsProps {
+interface IPaginationControlsProps {
   currentPage: number;
   totalPages: number;
   hasNextPage: boolean;
   hasPreviousPage: boolean;
 }
 
-const AccountsPaginationControls = ({
+const RoutePaginationControls = ({
   currentPage,
   totalPages,
   hasNextPage,
   hasPreviousPage,
-}: IAccountsPaginationControlsProps) => {
+}: IPaginationControlsProps) => {
   const [page, setPage] = useQueryState("page", {
     defaultValue: "1",
     shallow: false,
@@ -48,4 +48,5 @@ const AccountsPaginationControls = ({
     </div>
   );
 };
-export default AccountsPaginationControls;
+
+export default RoutePaginationControls;

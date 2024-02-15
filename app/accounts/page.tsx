@@ -1,8 +1,8 @@
 import AccountsFilter from "@/components/AccountsPage/AccountFilter";
 import CreateAccountButton from "@/components/CreateButtons/CreateAccountButton";
 import { getPaginatedAccountAction } from "@/actions";
-import SearchAccountInput from "@/components/AccountsPage/SearchAccountInput";
-import AccountsPaginationControls from "@/components/AccountsPage/AccountsPaginationControls";
+import RoutePaginationControls from "@/components/route-pagination-controls";
+import RouteSearchInput from "@/components/route-search-input";
 
 const AccountPage = async ({
   searchParams,
@@ -21,7 +21,7 @@ const AccountPage = async ({
           <h3 className="text-4xl text-primary">Accounts</h3>
           <CreateAccountButton className="self-start mt-0" />
         </div>
-        <SearchAccountInput />
+        <RouteSearchInput placeholder="Search accounts by name" />
         <div className="flex justify-center items-center flex-col gap-4">
           <div className="w-full">
             <AccountsFilter
@@ -31,7 +31,7 @@ const AccountPage = async ({
           </div>
         </div>
       </div>
-      <AccountsPaginationControls {...result} />
+      <RoutePaginationControls {...result} />
     </main>
   );
 };

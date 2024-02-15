@@ -4,6 +4,7 @@ import SearchBudgetInput from "@/components/BudgetsPage/SearchBudgetInput";
 import CreateBudgetButton from "@/components/CreateButtons/CreateBudgetButton";
 import MotionDiv from "@/components/animation/MotionDiv";
 import { Budget } from "@prisma/client";
+import RouteSearchInput from "../route-search-input";
 
 const BudgetList = ({
   budgets,
@@ -24,7 +25,7 @@ const BudgetList = ({
         <h3 className="text-4xl text-primary">Budgets</h3>
         <CreateBudgetButton className="mt-0" />
       </MotionDiv>
-      <SearchBudgetInput />
+      <RouteSearchInput placeholder="Search budgets by name" />
       {budgets?.length === 0 && (
         <MotionDiv
           initial={{ opacity: 0 }}
