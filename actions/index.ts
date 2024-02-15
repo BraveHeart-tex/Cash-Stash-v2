@@ -1,5 +1,5 @@
 "use server";
-import db from "@/lib/prismadb";
+import prisma from "@/lib/prismadb";
 import { getCurrentUser, signToken } from "@/lib/session";
 import { EditReminderSchema, LoginSchema } from "@/schemas";
 import { LoginSchemaType } from "@/schemas/LoginSchema";
@@ -38,6 +38,8 @@ import {
   IGetPaginatedAccountActionReturnType,
   IGetPaginatedBudgetsActionParams,
   IGetPaginatedBudgetsActionReturnType,
+  IGetPaginatedGoalsActionParams,
+  IGetPaginatedGoalsActionReturnType,
 } from "./types";
 
 export const loginAction = async ({ email, password }: LoginSchemaType) => {
@@ -49,7 +51,7 @@ export const loginAction = async ({ email, password }: LoginSchemaType) => {
 
   const { email: emailResult, password: passwordResult } = result.data;
 
-  const user = await db.user.findUnique({
+  const user = await prisma.user.findUnique({
     where: {
       email: emailResult,
     },
@@ -92,7 +94,7 @@ export const registerAction = async ({
     password: passwordResult,
   } = result.data;
 
-  const userExists = await db.user.findUnique({
+  const userExists = await prisma.user.findUnique({
     where: {
       email: emailResult,
     },
@@ -106,7 +108,7 @@ export const registerAction = async ({
 
   const hashedPassword = await bcrypt.hash(passwordResult, 12);
 
-  const user = await db.user.create({
+  const user = await prisma.user.create({
     data: {
       name: nameResult,
       email: emailResult,
@@ -176,7 +178,7 @@ export const getPaginatedAccountAction = async ({
   const categoryQuery = category ? { category } : {};
 
   const [accounts, totalCount] = await Promise.all([
-    db.userAccount.findMany({
+    prisma.userAccount.findMany({
       skip: skipAmount,
       take: PAGE_SIZE,
       where: {
@@ -187,7 +189,7 @@ export const getPaginatedAccountAction = async ({
         ...categoryQuery,
       },
     }),
-    db.userAccount.count({
+    prisma.userAccount.count({
       where: {
         userId: result.user?.id,
         name: {
@@ -243,7 +245,7 @@ export const getPaginatedBudgetsAction = async ({
   const categoryCondition = category ? { category } : {};
 
   const [budgets, totalCount] = await Promise.all([
-    db.budget.findMany({
+    prisma.budget.findMany({
       skip: skipAmount,
       take: PAGE_SIZE,
       where: {
@@ -254,7 +256,7 @@ export const getPaginatedBudgetsAction = async ({
         ...categoryCondition,
       },
     }),
-    db.budget.count({
+    prisma.budget.count({
       where: {
         userId: result.user?.id,
         name: {
@@ -284,13 +286,65 @@ export const getPaginatedBudgetsAction = async ({
   };
 };
 
+export const getPaginatedGoalsAction = async ({
+  pageNumber,
+  query,
+}: IGetPaginatedGoalsActionParams): Promise<IGetPaginatedGoalsActionReturnType> => {
+  const result = await getCurrentUserAction();
+  if (result.error) {
+    redirect("/login");
+  }
+
+  const PAGE_SIZE = 12;
+  const skipAmount = (pageNumber - 1) * PAGE_SIZE;
+
+  const [goals, totalCount] = await Promise.all([
+    prisma.goal.findMany({
+      skip: skipAmount,
+      take: PAGE_SIZE,
+      where: {
+        userId: result.user?.id,
+        name: {
+          contains: query,
+        },
+      },
+    }),
+    prisma.goal.count({
+      where: {
+        userId: result.user?.id,
+        name: {
+          contains: query,
+        },
+      },
+    }),
+  ]);
+
+  if (goals.length === 0) {
+    return {
+      goals: [],
+      hasNextPage: false,
+      hasPreviousPage: false,
+      currentPage: 1,
+      totalPages: 1,
+    };
+  }
+
+  return {
+    goals,
+    hasNextPage: totalCount > skipAmount + PAGE_SIZE,
+    hasPreviousPage: pageNumber > 1,
+    totalPages: Math.ceil(totalCount / PAGE_SIZE),
+    currentPage: pageNumber,
+  };
+};
+
 export const fetchMonthlyTransactionsDataAction = async () => {
   const currentUser = await getCurrentUser(cookies().get("token")?.value!);
 
   if (!currentUser) return { error: "No user found." };
 
   const aggregateByType = async (isIncome: boolean) => {
-    const transactions = await db.transaction.groupBy({
+    const transactions = await prisma.transaction.groupBy({
       by: ["createdAt"],
       where: {
         userId: currentUser.id,
@@ -319,7 +373,7 @@ export const fetchInsightsDataAction = async () => {
   if (!currentUser) return { error: "No user found." };
 
   const aggregateTransaction = async (isIncome: boolean) => {
-    const result = await db.transaction.aggregate({
+    const result = await prisma.transaction.aggregate({
       where: {
         userId: currentUser.id,
         isIncome,
@@ -380,7 +434,7 @@ export const registerBankAccountAction = async ({
     return { error: "Invalid category." };
   }
 
-  const createdAccount = await db.userAccount.create({
+  const createdAccount = await prisma.userAccount.create({
     data: {
       balance: balanceResult,
       category: mappedCategory as UserAccountCategory,
@@ -425,7 +479,7 @@ export const updateAccountByIdAction = async ({
     categoryResult
   );
 
-  const updatedAccount = await db.userAccount.update({
+  const updatedAccount = await prisma.userAccount.update({
     where: {
       id: accountId,
     },
@@ -478,7 +532,7 @@ export const createBudgetAction = async ({
     return { error: "You are not authorized to perform this action." };
   }
 
-  const createdBudget = await db.budget.create({
+  const createdBudget = await prisma.budget.create({
     data: {
       name,
       budgetAmount: budgetAmountResult,
@@ -506,7 +560,7 @@ export const updateBudgetByIdAction = async ({
 }: EditBudgetSchemaType & { budgetId: string }) => {
   if (!budgetId) return { error: "Budget ID not found." };
 
-  const budgetToBeUpdated = await db.budget.findUnique({
+  const budgetToBeUpdated = await prisma.budget.findUnique({
     where: { id: budgetId },
   });
 
@@ -528,7 +582,7 @@ export const updateBudgetByIdAction = async ({
     ([, value]) => value === data.category
   )?.[0];
 
-  const updatedBudget = await db.budget.update({
+  const updatedBudget = await prisma.budget.update({
     where: { id: budgetId },
     data: {
       budgetAmount: data.budgetAmount,
@@ -567,14 +621,14 @@ export const updateReminderAction = async ({
     return { error: "Unprocessable entity." };
   }
 
-  const reminderToBeUpdated = await db.reminder.findUnique({
+  const reminderToBeUpdated = await prisma.reminder.findUnique({
     where: { id: reminderId },
   });
 
   if (!reminderToBeUpdated)
     return { error: "No reminder with the given reminder id was found." };
 
-  const updatedReminder = await db.reminder.update({
+  const updatedReminder = await prisma.reminder.update({
     data: {
       ...result.data,
       isRead: result.data.isRead === "isRead",
@@ -613,7 +667,7 @@ export const createTransactionAction = async ({
     return { error: "You are not authorized to perform this action." };
   }
 
-  const usersAccount = await db.userAccount.findFirst({
+  const usersAccount = await prisma.userAccount.findFirst({
     where: {
       id: accountId,
     },
@@ -643,7 +697,7 @@ export const createTransactionAction = async ({
     ([, value]) => value === data.category
   )?.[0];
 
-  const transaction = await db.transaction.create({
+  const transaction = await prisma.transaction.create({
     data: {
       amount: data.amount,
       description: data.description,
@@ -660,7 +714,7 @@ export const createTransactionAction = async ({
     };
   }
 
-  const updatedAccount = await db.userAccount.update({
+  const updatedAccount = await prisma.userAccount.update({
     where: {
       id: accountId,
     },
@@ -686,7 +740,7 @@ export const deleteTransactionByIdAction = async (transactionId: string) => {
       throw new Error("Transaction ID not found.");
     }
 
-    const deletedTransaction = await db.transaction.delete({
+    const deletedTransaction = await prisma.transaction.delete({
       where: {
         id: transactionId,
       },
@@ -700,7 +754,7 @@ export const deleteTransactionByIdAction = async (transactionId: string) => {
       ? { decrement: deletedTransaction.amount }
       : { increment: deletedTransaction.amount };
 
-    await db.userAccount.update({
+    await prisma.userAccount.update({
       where: {
         id: deletedTransaction.accountId,
       },
@@ -724,7 +778,7 @@ export const getChartDataAction = async () => {
       return { error: "No user found." };
     }
 
-    const transactions = await db.transaction.findMany({
+    const transactions = await prisma.transaction.findMany({
       where: {
         userId: currentUser.id,
       },
@@ -785,7 +839,7 @@ export const createReminderAction = async ({
     return { error: "You are not authorized to perform this action." };
   }
 
-  const createdReminder = await db.reminder.create({
+  const createdReminder = await prisma.reminder.create({
     data: {
       amount: data.amount,
       description: data.description,
@@ -839,7 +893,7 @@ export const searchTransactions = async ({
       whereCondition.accountId = accountId;
     }
 
-    const result = await db.transaction.findMany({
+    const result = await prisma.transaction.findMany({
       where: whereCondition,
       orderBy: {
         [sortBy]: sortDirection,

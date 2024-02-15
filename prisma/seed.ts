@@ -39,6 +39,17 @@ const createBudget = async (userId: string) => {
   });
 };
 
+const createGoal = async (userId: string) => {
+  await prisma.goal.create({
+    data: {
+      userId,
+      name: faker.finance.accountName() + " Goal",
+      goalAmount: faker.number.float({ min: 0, max: 10000, precision: 3 }),
+      currentAmount: faker.number.float({ min: 0, max: 10000, precision: 3 }),
+    },
+  });
+};
+
 async function main() {
   console.time("seed");
   const user = await prisma.user.findUnique({
@@ -50,12 +61,17 @@ async function main() {
   if (!userId) {
     throw new Error("User not found");
   }
+
   await prisma.userAccount.deleteMany();
   await prisma.budget.deleteMany();
+  await prisma.goal.deleteMany();
 
   for (let i = 0; i < 40; i++) {
-    await createAccount(userId);
-    await createBudget(userId);
+    await Promise.all([
+      createAccount(userId),
+      createBudget(userId),
+      createGoal(userId),
+    ]);
   }
 
   console.timeEnd("seed");

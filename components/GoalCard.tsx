@@ -7,14 +7,14 @@ import { openGenericModal } from "@/app/redux/features/genericModalSlice";
 import { showGenericConfirm } from "@/app/redux/features/genericConfirmSlice";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
-import { SerializedGoal } from "@/app/redux/features/goalSlice";
 import { deleteGeneric } from "@/actions/generic";
 import { Goal } from "@prisma/client";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { formatMoney } from "@/lib/utils";
 
 interface IGoalCardProps {
-  goal: SerializedGoal;
+  goal: Goal;
 }
 
 const GoalCard = ({ goal }: IGoalCardProps) => {
@@ -86,9 +86,7 @@ const GoalCard = ({ goal }: IGoalCardProps) => {
           <Badge className="ml-auto">
             {goal.currentAmount / goal.goalAmount >= 1
               ? "Completed!"
-              : `In Progress ${Math.round(
-                  (goal.currentAmount / goal.goalAmount) * 100
-                )}%`}
+              : `${Math.round((goal.currentAmount / goal.goalAmount) * 100)}%`}
           </Badge>
         </div>
       </div>
@@ -97,14 +95,15 @@ const GoalCard = ({ goal }: IGoalCardProps) => {
           value={(goal.currentAmount / goal.goalAmount) * 100}
           indicatorClassName={
             goal.currentAmount / goal.goalAmount > 0.7
-              ? "bg-green-200"
+              ? "bg-success"
               : goal.currentAmount / goal.goalAmount > 0.4
               ? "bg-orange-300"
-              : "bg-red-300"
+              : "bg-destructive"
           }
         />
         <p className="mt-4 text-md dark:text-white/60 text-foreground">
-          Current: {goal.currentAmount}$ / Target: {goal.goalAmount}$
+          Current: {formatMoney(goal.currentAmount)} / Target:{" "}
+          {formatMoney(goal.goalAmount)}
         </p>
       </div>
     </motion.div>

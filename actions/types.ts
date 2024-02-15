@@ -3,34 +3,47 @@ import {
   UserAccount,
   NotificationCategory,
   UserAccountCategory,
+  Goal,
 } from "@prisma/client";
 
-export interface IGetPaginatedAccountActionParams {
+interface IPaginatedReturnType {
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+  currentPage: number;
+  totalPages: number;
+}
+
+interface IPaginatedActionParams {
   pageNumber: number;
   query?: string;
+}
+
+export interface IGetPaginatedAccountActionParams
+  extends IPaginatedActionParams {
   category?: UserAccountCategory;
 }
 
-export interface IGetPaginatedAccountActionReturnType {
+export interface IGetPaginatedAccountActionReturnType
+  extends IPaginatedReturnType {
   accounts: UserAccount[];
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
-  currentPage: number;
-  totalPages: number;
 }
 
-export interface IGetPaginatedBudgetsActionParams {
-  pageNumber: number;
-  query?: string;
+export interface IGetPaginatedBudgetsActionParams
+  extends IPaginatedActionParams {
   category?: NotificationCategory;
 }
 
-export interface IGetPaginatedBudgetsActionReturnType {
+export interface IGetPaginatedBudgetsActionReturnType
+  extends IPaginatedReturnType {
   budgets: Budget[];
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
-  currentPage: number;
-  totalPages: number;
+}
+
+export interface IGetPaginatedGoalsActionParams
+  extends IPaginatedActionParams {}
+
+export interface IGetPaginatedGoalsActionReturnType
+  extends IPaginatedReturnType {
+  goals: Goal[];
 }
 
 export type SerializedUserAccount = Omit<
