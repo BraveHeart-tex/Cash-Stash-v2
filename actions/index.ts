@@ -205,7 +205,9 @@ export const getPaginatedAccountAction = async ({
 export const getPaginatedBudgetsAction = async ({
   pageNumber,
   query,
+  category,
 }: IGetPaginatedBudgetsActionParams): Promise<IGetPaginatedBudgetsActionReturnType> => {
+  // TODO: Implement as HOF
   const result = await getCurrentUserAction();
   if (result.error) {
     redirect("/login");
@@ -213,6 +215,21 @@ export const getPaginatedBudgetsAction = async ({
 
   const PAGE_SIZE = 12;
   const skipAmount = (pageNumber - 1) * PAGE_SIZE;
+
+  if (
+    category &&
+    !Object.entries(CreateBudgetOptions).includes(category as any)
+  ) {
+    return {
+      budgets: [],
+      hasNextPage: false,
+      hasPreviousPage: false,
+      currentPage: 1,
+      totalPages: 1,
+    };
+  }
+
+  const categoryCondition = category ? { category } : {};
 
   const [budgets, totalCount] = await Promise.all([
     db.budget.findMany({
@@ -223,6 +240,7 @@ export const getPaginatedBudgetsAction = async ({
         name: {
           contains: query,
         },
+        ...categoryCondition,
       },
     }),
     db.budget.count({
@@ -231,6 +249,7 @@ export const getPaginatedBudgetsAction = async ({
         name: {
           contains: query,
         },
+        ...categoryCondition,
       },
     }),
   ]);

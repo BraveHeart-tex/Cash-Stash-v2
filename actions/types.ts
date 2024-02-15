@@ -1,4 +1,4 @@
-import { Budget, UserAccount } from "@prisma/client";
+import { Budget, UserAccount, NotificationCategory } from "@prisma/client";
 
 export interface IGetPaginatedAccountActionParams {
   pageNumber: number;
@@ -16,6 +16,7 @@ export interface IGetPaginatedAccountActionReturnType {
 export interface IGetPaginatedBudgetsActionParams {
   pageNumber: number;
   query?: string;
+  category?: NotificationCategory;
 }
 
 export interface IGetPaginatedBudgetsActionReturnType {
