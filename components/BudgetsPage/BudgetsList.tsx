@@ -1,6 +1,5 @@
 import BudgetCards from "@/components/BudgetsPage/BudgetCards";
 import BudgetsNotFoundMessage from "@/components/BudgetsPage/BudgetsNotFoundMessage";
-import SearchBudgetInput from "@/components/BudgetsPage/SearchBudgetInput";
 import CreateBudgetButton from "@/components/CreateButtons/CreateBudgetButton";
 import MotionDiv from "@/components/animation/MotionDiv";
 import { Budget } from "@prisma/client";

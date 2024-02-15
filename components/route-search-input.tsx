@@ -9,7 +9,7 @@ const RouteSearchInput = ({ placeholder }: { placeholder: string }) => {
   const [searchQuery, setSearchQuery] = useQueryState("query", {
     shallow: false,
   });
-  const [debouncedQuery, setDebouncedQuery] = useDebounceValue("", 400);
+  const [debouncedQuery, setDebouncedQuery] = useDebounceValue("", 300);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -24,7 +24,6 @@ const RouteSearchInput = ({ placeholder }: { placeholder: string }) => {
   return (
     <div className="relative lg:w-96 mb-2 w-full">
       <Input
-        defaultValue={searchQuery || ""}
         className="pl-8"
         onChange={handleInputChange}
         placeholder={placeholder}
