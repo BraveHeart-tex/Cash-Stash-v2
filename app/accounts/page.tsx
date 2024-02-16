@@ -9,7 +9,7 @@ import { UserAccountCategory } from "@prisma/client";
 import MotionDiv from "@/components/animation/MotionDiv";
 import AccountsNotFound from "@/components/accounts-not-found";
 import RouteFiltersPopover from "@/components/route-filters-popover";
-import { BsArrowUp, BsSortDown, BsSortUp } from "react-icons/bs";
+import { BsSortDown, BsSortUp } from "react-icons/bs";
 
 const AccountPage = async ({
   searchParams,
@@ -50,29 +50,31 @@ const AccountPage = async ({
         </div>
         <div className="flex items-center justify-between gap-2">
           <RouteSearchInput placeholder="Search accounts by name" />
-          <RouteFiltersPopover
-            options={[
-              {
-                id: "1",
-                label: "Sort by balance ascending",
-                icon: <BsSortUp />,
-                data: {
-                  sortBy: "balance",
-                  sortDirection: "asc",
+          {result.accounts.length > 1 && (
+            <RouteFiltersPopover
+              options={[
+                {
+                  id: "1",
+                  label: "Sort by balance ascending",
+                  icon: <BsSortUp />,
+                  data: {
+                    sortBy: "balance",
+                    sortDirection: "asc",
+                  },
                 },
-              },
-              {
-                id: "2",
-                label: "Sort by balance descending",
-                icon: <BsSortDown />,
-                data: {
-                  sortBy: "balance",
-                  sortDirection: "desc",
+                {
+                  id: "2",
+                  label: "Sort by balance descending",
+                  icon: <BsSortDown />,
+                  data: {
+                    sortBy: "balance",
+                    sortDirection: "desc",
+                  },
                 },
-              },
-            ]}
-            queryKeys={["sortBy", "sortDirection"]}
-          />
+              ]}
+              queryKeys={["sortBy", "sortDirection"]}
+            />
+          )}
         </div>
         <div className={"grid lg:grid-cols-6"}>
           <RouteSelectFilter dataset={selectDataset} queryStringKey="category" selectLabel="Account Category" />
