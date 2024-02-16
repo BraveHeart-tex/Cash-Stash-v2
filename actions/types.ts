@@ -1,10 +1,4 @@
-import {
-  Budget,
-  UserAccount,
-  NotificationCategory,
-  UserAccountCategory,
-  Goal,
-} from "@prisma/client";
+import { Budget, UserAccount, NotificationCategory, UserAccountCategory, Goal } from "@prisma/client";
 
 interface IPaginatedReturnType {
   hasNextPage: boolean;
@@ -18,40 +12,37 @@ interface IPaginatedActionParams {
   query?: string;
 }
 
-export interface IGetPaginatedAccountActionParams
-  extends IPaginatedActionParams {
+export interface IGetPaginatedAccountActionParams extends IPaginatedActionParams {
   sortBy?: string;
   sortDirection?: string;
   category?: UserAccountCategory;
 }
 
-export interface IGetPaginatedAccountActionReturnType
-  extends IPaginatedReturnType {
+export interface IGetPaginatedAccountActionReturnType extends IPaginatedReturnType {
   accounts: UserAccount[];
 }
 
-export interface IGetPaginatedBudgetsActionParams
-  extends IPaginatedActionParams {
+export interface IGetPaginatedBudgetsActionParams extends IPaginatedActionParams {
   category?: NotificationCategory;
 }
 
-export interface IGetPaginatedBudgetsActionReturnType
-  extends IPaginatedReturnType {
+export interface IGetPaginatedBudgetsActionReturnType extends IPaginatedReturnType {
   budgets: Budget[];
 }
 
-export interface IGetPaginatedGoalsActionParams
-  extends IPaginatedActionParams {}
+export interface IGetPaginatedGoalsActionParams extends IPaginatedActionParams {}
 
-export interface IGetPaginatedGoalsActionReturnType
-  extends IPaginatedReturnType {
+export interface IGetPaginatedGoalsActionReturnType extends IPaginatedReturnType {
   goals: Goal[];
 }
 
-export type SerializedUserAccount = Omit<
-  UserAccount,
-  "createdAt" | "updatedAt"
-> & {
+export type SerializedUserAccount = Omit<UserAccount, "createdAt" | "updatedAt"> & {
   createdAt: string;
   updatedAt: string;
 };
+
+export interface GenericFilterOption<T> {
+  id: string;
+  label: string;
+  data: T;
+}

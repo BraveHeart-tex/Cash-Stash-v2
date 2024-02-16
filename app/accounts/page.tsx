@@ -35,12 +35,10 @@ const AccountPage = async ({
     sortDirection,
   });
 
-  const selectDataset = Object.entries(CreateUserAccountOptions).map(
-    ([key, value]) => ({
-      label: value,
-      value: key,
-    })
-  );
+  const selectDataset = Object.entries(CreateUserAccountOptions).map(([key, value]) => ({
+    label: value,
+    value: key,
+  }));
 
   return (
     <main>
@@ -51,14 +49,30 @@ const AccountPage = async ({
         </div>
         <div className="flex items-center justify-between gap-2">
           <RouteSearchInput placeholder="Search accounts by name" />
-          <RouteFiltersPopover />
+          <RouteFiltersPopover
+            options={[
+              {
+                id: "1",
+                label: "Sort by balance ascending",
+                data: {
+                  sortBy: "balance",
+                  sortDirection: "asc",
+                },
+              },
+              {
+                id: "2",
+                label: "Sort by balance descending",
+                data: {
+                  sortBy: "balance",
+                  sortDirection: "desc",
+                },
+              },
+            ]}
+            queryKeys={["sortBy", "sortDirection"]}
+          />
         </div>
         <div className={"grid lg:grid-cols-6"}>
-          <RouteSelectFilter
-            dataset={selectDataset}
-            queryStringKey="category"
-            selectLabel="Account Category"
-          />
+          <RouteSelectFilter dataset={selectDataset} queryStringKey="category" selectLabel="Account Category" />
           {result.accounts.length === 0 && (
             <MotionDiv
               initial={{ opacity: 0 }}
