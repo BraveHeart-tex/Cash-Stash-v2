@@ -65,6 +65,7 @@ const CreateUserGoalForm = () => {
           label={"Goal Amount"}
           placeholder={"Goal amount"}
           type={"number"}
+          step={"0.01"}
           register={register}
           errors={errors}
         />
@@ -72,6 +73,7 @@ const CreateUserGoalForm = () => {
           name={"currentAmount"}
           label={"Current Amount"}
           placeholder={"Current amount"}
+          step={"0.01"}
           type={"number"}
           register={register}
           errors={errors}

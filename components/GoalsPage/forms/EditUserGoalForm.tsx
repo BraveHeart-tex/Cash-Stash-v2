@@ -115,6 +115,7 @@ const EditUserGoalForm = ({ entityId }: IEditUserGoalFormProps) => {
         />
         <FormInput
           name={"goalAmount"}
+          step={"0.01"}
           label={"Goal Amount"}
           placeholder={"Goal amount"}
           type={"number"}
@@ -123,6 +124,7 @@ const EditUserGoalForm = ({ entityId }: IEditUserGoalFormProps) => {
         />
         <FormInput
           name={"currentAmount"}
+          step={"0.01"}
           label={"Current Amount"}
           placeholder={"Current amount"}
           type={"number"}
