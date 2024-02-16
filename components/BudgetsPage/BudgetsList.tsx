@@ -24,43 +24,45 @@ const BudgetList = ({ budgets, pageHasParams }: { budgets: Budget[]; pageHasPara
       </div>
       <div className="flex items-center gap-2 justify-between">
         <RouteSearchInput placeholder="Search budgets by name" />
-        <RouteFiltersPopover
-          options={[
-            {
-              label: "Sort by Spending (High to Low)",
-              icon: <GiPayMoney className="mr-auto" />,
-              data: {
-                sortBy: "spentAmount",
-                sortDirection: "desc",
+        {budgets.length > 1 && (
+          <RouteFiltersPopover
+            options={[
+              {
+                label: "Sort by Spending (High to Low)",
+                icon: <GiPayMoney className="mr-auto" />,
+                data: {
+                  sortBy: "spentAmount",
+                  sortDirection: "desc",
+                },
               },
-            },
-            {
-              label: "Sort by Spending (Low to High)",
-              icon: <GiPayMoney className="mr-auto" />,
-              data: {
-                sortBy: "spentAmount",
-                sortDirection: "asc",
+              {
+                label: "Sort by Spending (Low to High)",
+                icon: <GiPayMoney className="mr-auto" />,
+                data: {
+                  sortBy: "spentAmount",
+                  sortDirection: "asc",
+                },
               },
-            },
-            {
-              label: "Sort by Budget (High to Low)",
-              icon: <FaPiggyBank className="mr-2" />,
-              data: {
-                sortBy: "budgetAmount",
-                sortDirection: "desc",
+              {
+                label: "Sort by Budget (High to Low)",
+                icon: <FaPiggyBank className="mr-2" />,
+                data: {
+                  sortBy: "budgetAmount",
+                  sortDirection: "desc",
+                },
               },
-            },
-            {
-              label: "Sort by Budget (Low to High)",
-              icon: <FaPiggyBank className="mr-2" />,
-              data: {
-                sortBy: "budgetAmount",
-                sortDirection: "asc",
+              {
+                label: "Sort by Budget (Low to High)",
+                icon: <FaPiggyBank className="mr-2" />,
+                data: {
+                  sortBy: "budgetAmount",
+                  sortDirection: "asc",
+                },
               },
-            },
-          ]}
-          queryKeys={["sortBy", "sortDirection"]}
-        />
+            ]}
+            queryKeys={["sortBy", "sortDirection"]}
+          />
+        )}
       </div>
 
       <div className={"grid lg:grid-cols-6"}>
