@@ -8,20 +8,31 @@ import CreateUserAccountOptions from "@/lib/CreateUserAccountOptions";
 import { UserAccountCategory } from "@prisma/client";
 import MotionDiv from "@/components/animation/MotionDiv";
 import AccountsNotFound from "@/components/accounts-not-found";
+import RouteFiltersPopover from "@/components/route-filters-popover";
 
 const AccountPage = async ({
   searchParams,
 }: {
-  searchParams: { page: string; query: string; category: string };
+  searchParams: {
+    page: string;
+    query: string;
+    category: string;
+    sortBy: string;
+    sortDirection: string;
+  };
 }) => {
   const pageNumber = parseInt(searchParams.page) || 1;
   const query = searchParams.query || "";
   const category = (searchParams.category || "") as UserAccountCategory;
+  const sortBy = searchParams.sortBy || "";
+  const sortDirection = searchParams.sortDirection || "";
 
   const result = await getPaginatedAccountAction({
     pageNumber,
     query,
     category,
+    sortBy,
+    sortDirection,
   });
 
   const selectDataset = Object.entries(CreateUserAccountOptions).map(
@@ -38,7 +49,10 @@ const AccountPage = async ({
           <h3 className="text-4xl text-primary">Accounts</h3>
           <CreateAccountButton className="self-start mt-0" />
         </div>
-        <RouteSearchInput placeholder="Search accounts by name" />
+        <div className="flex items-center justify-between gap-2">
+          <RouteSearchInput placeholder="Search accounts by name" />
+          <RouteFiltersPopover />
+        </div>
         <div className={"grid lg:grid-cols-6"}>
           <RouteSelectFilter
             dataset={selectDataset}

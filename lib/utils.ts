@@ -182,3 +182,41 @@ export const formatMoney = (value: number) => {
   });
   return formatter.format(value);
 };
+
+// Utility function to check if a value is an object
+const isObject = (value: any): boolean => {
+  return value !== null && typeof value === "object";
+};
+
+export const areObjectsDeepEqual = (obj1: any, obj2: any): boolean => {
+  // Check if both objects are strictly equal
+  if (obj1 === obj2) return true;
+
+  // Check if either object is null or undefined
+  if (obj1 == null || obj2 == null) return false;
+
+  // Check if the number of keys in both objects is different
+  const keys1 = Object.keys(obj1);
+  const keys2 = Object.keys(obj2);
+  if (keys1.length !== keys2.length) return false;
+
+  // Check if all key-value pairs are equal
+  for (const key of keys1) {
+    const value1 = obj1[key];
+    const value2 = obj2[key];
+
+    // Check if both values are objects for deep comparison
+    const areObjects = isObject(value1) && isObject(value2);
+
+    // If both values are objects, recursively check equality
+    // If not, perform a simple equality check
+    if (
+      (areObjects && !areObjectsDeepEqual(value1, value2)) ||
+      (!areObjects && value1 !== value2)
+    ) {
+      return false;
+    }
+  }
+
+  return true;
+};

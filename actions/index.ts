@@ -156,6 +156,8 @@ export const getPaginatedAccountAction = async ({
   pageNumber,
   query,
   category,
+  sortBy,
+  sortDirection,
 }: IGetPaginatedAccountActionParams): Promise<IGetPaginatedAccountActionReturnType> => {
   const result = await getCurrentUserAction();
   if (result.error) {
@@ -175,6 +177,15 @@ export const getPaginatedAccountAction = async ({
     };
   }
 
+  let orderByCondition;
+  if (sortBy && sortDirection) {
+    orderByCondition = {
+      orderBy: {
+        [sortBy]: sortDirection,
+      },
+    };
+  }
+
   const categoryQuery = category ? { category } : {};
 
   const [accounts, totalCount] = await Promise.all([
@@ -188,6 +199,7 @@ export const getPaginatedAccountAction = async ({
         },
         ...categoryQuery,
       },
+      ...orderByCondition,
     }),
     prisma.userAccount.count({
       where: {

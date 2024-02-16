@@ -20,6 +20,8 @@ interface IPaginatedActionParams {
 
 export interface IGetPaginatedAccountActionParams
   extends IPaginatedActionParams {
+  sortBy?: string;
+  sortDirection?: string;
   category?: UserAccountCategory;
 }
 
