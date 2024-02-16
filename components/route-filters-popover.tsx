@@ -1,10 +1,11 @@
 "use client";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { BsFilterLeft } from "react-icons/bs";
 import { useQueryStates, parseAsString, UseQueryStatesKeysMap } from "nuqs";
 import { areObjectsDeepEqual } from "@/lib/utils";
 import { GenericFilterOption } from "@/actions/types";
+import { v4 as uuidv4 } from "uuid";
 
 interface IRouteFiltersPopoverProps<T extends Record<string, any>> {
   options: GenericFilterOption<T>[];
@@ -24,6 +25,11 @@ const RouteFiltersPopover = <T extends Record<string, any>>({ options, queryKeys
     }
   );
 
+  const optionsWithIds = options.map((option) => ({
+    ...option,
+    id: uuidv4(),
+  }));
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -32,11 +38,11 @@ const RouteFiltersPopover = <T extends Record<string, any>>({ options, queryKeys
           Filters
         </Button>
       </PopoverTrigger>
-      <PopoverContent>
+      <PopoverContent className="w-max">
         <h3 className="text-lg font-semibold mb-2 text-foreground">Filters</h3>
         <div className="p-1">
           <div className="flex flex-col gap-2">
-            {options.map((option) => (
+            {optionsWithIds.map((option) => (
               <Button
                 key={option.id}
                 variant={areObjectsDeepEqual(key, option.data) ? "default" : "outline"}

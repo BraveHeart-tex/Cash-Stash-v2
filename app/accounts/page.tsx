@@ -54,8 +54,7 @@ const AccountPage = async ({
             <RouteFiltersPopover
               options={[
                 {
-                  id: "1",
-                  label: "Sort by balance ascending",
+                  label: "Sort by balance (Low to High)",
                   icon: <BsSortUp />,
                   data: {
                     sortBy: "balance",
@@ -63,8 +62,7 @@ const AccountPage = async ({
                   },
                 },
                 {
-                  id: "2",
-                  label: "Sort by balance descending",
+                  label: "Sort by balance (High to Low)",
                   icon: <BsSortDown />,
                   data: {
                     sortBy: "balance",
