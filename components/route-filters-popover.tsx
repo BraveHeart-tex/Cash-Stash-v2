@@ -45,6 +45,7 @@ const RouteFiltersPopover = <T extends Record<string, any>>({ options, queryKeys
                   setKey({ ...option.data });
                 }}
               >
+                {option.icon}
                 {option.label}
               </Button>
             ))}

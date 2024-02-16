@@ -9,6 +9,7 @@ import { UserAccountCategory } from "@prisma/client";
 import MotionDiv from "@/components/animation/MotionDiv";
 import AccountsNotFound from "@/components/accounts-not-found";
 import RouteFiltersPopover from "@/components/route-filters-popover";
+import { BsArrowUp, BsSortDown, BsSortUp } from "react-icons/bs";
 
 const AccountPage = async ({
   searchParams,
@@ -54,6 +55,7 @@ const AccountPage = async ({
               {
                 id: "1",
                 label: "Sort by balance ascending",
+                icon: <BsSortUp />,
                 data: {
                   sortBy: "balance",
                   sortDirection: "asc",
@@ -62,6 +64,7 @@ const AccountPage = async ({
               {
                 id: "2",
                 label: "Sort by balance descending",
+                icon: <BsSortDown />,
                 data: {
                   sortBy: "balance",
                   sortDirection: "desc",

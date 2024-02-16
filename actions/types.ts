@@ -45,4 +45,5 @@ export interface GenericFilterOption<T> {
   id: string;
   label: string;
   data: T;
+  icon: React.JSX.Element;
 }
