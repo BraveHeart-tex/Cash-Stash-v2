@@ -37,6 +37,7 @@ const RoutePaginationControls = ({
       <Button
         onClick={() => handlePageChange("decrement")}
         disabled={!hasPreviousPage || changingPage || currentPage === 1}
+        className="select-none"
       >
         Previous
       </Button>
@@ -46,6 +47,7 @@ const RoutePaginationControls = ({
       <Button
         onClick={() => handlePageChange("increment")}
         disabled={!hasNextPage || changingPage || totalPages === currentPage}
+        className="select-none"
       >
         Next
       </Button>
