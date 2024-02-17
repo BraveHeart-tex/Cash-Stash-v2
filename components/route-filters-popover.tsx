@@ -22,7 +22,7 @@ const RouteFiltersPopover = <T extends Record<string, any>>({ options, queryKeys
     },
     {
       shallow: false,
-    }
+    },
   );
 
   const optionsWithIds = options.map((option) => ({
@@ -36,7 +36,7 @@ const RouteFiltersPopover = <T extends Record<string, any>>({ options, queryKeys
         // @ts-ignore
         acc[key] = "";
         return acc;
-      }, {} as UseQueryStatesKeysMap<any>)
+      }, {} as UseQueryStatesKeysMap<any>),
     );
   };
 
@@ -67,7 +67,7 @@ const RouteFiltersPopover = <T extends Record<string, any>>({ options, queryKeys
             ))}
           </div>
           <Button className="mt-2" variant="secondary" onClick={handleClearFilters}>
-            Clear all filters
+            Clear
           </Button>
         </div>
       </PopoverContent>
