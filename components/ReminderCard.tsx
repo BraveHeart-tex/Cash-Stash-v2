@@ -31,9 +31,13 @@ const ReminderCard = ({ reminder }: IReminderCardProps) => {
         <p className="font-semibold">{reminder.title}</p>
 
         {isPastReminderDate ? (
-          <Badge className="w-max mb-2 bg-destructive cursor-pointer select-none">Past Reminder Date</Badge>
+          <Badge className="w-max mb-2 bg-destructive cursor-pointer select-none">
+            Past Reminder Date
+          </Badge>
         ) : (
-          <Badge className="ml-2 bg-orange-400 cursor-pointer select-none hover:bg-orange-500">Reminder</Badge>
+          <Badge className="ml-2 bg-orange-400 cursor-pointer select-none hover:bg-orange-500">
+            Reminder
+          </Badge>
         )}
       </div>
 
@@ -50,7 +54,12 @@ const ReminderCard = ({ reminder }: IReminderCardProps) => {
             day: "numeric",
           })}
         </p>
-        <p className={cn("text-md font-semibold", reminder.isIncome ? "text-green-500" : "text-red-500")}>
+        <p
+          className={cn(
+            "text-md font-semibold",
+            reminder.isIncome ? "text-green-500" : "text-red-500"
+          )}
+        >
           {reminder.isIncome ? "Income" : "Expense"}: ${reminder.amount}
         </p>
       </div>
@@ -67,7 +76,8 @@ const ReminderCard = ({ reminder }: IReminderCardProps) => {
               mode: "edit",
               entityId: reminder.id,
               dialogTitle: "Edit Reminder",
-              dialogDescription: "You can edit your reminder by using the form below.",
+              dialogDescription:
+                "You can edit your reminder by using the form below.",
             })
           );
         }}

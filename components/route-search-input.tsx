@@ -23,7 +23,11 @@ const RouteSearchInput = ({ placeholder }: { placeholder: string }) => {
 
   return (
     <div className="relative lg:w-96 mb-2 w-full">
-      <Input className="pl-8" onChange={handleInputChange} placeholder={placeholder} />
+      <Input
+        className="pl-8"
+        onChange={handleInputChange}
+        placeholder={placeholder}
+      />
       <FaSearch className="absolute top-1/2 left-2 transform -translate-y-1/2 text-gray-500" />
     </div>
   );

@@ -5,7 +5,11 @@ import { getPaginatedGoalsAction } from "@/actions";
 import RoutePaginationControls from "@/components/route-pagination-controls";
 import RouteSearchInput from "@/components/route-search-input";
 
-const GoalsPage = async ({ searchParams }: { searchParams: { page: string; query: string } }) => {
+const GoalsPage = async ({
+  searchParams,
+}: {
+  searchParams: { page: string; query: string };
+}) => {
   const pageNumber = parseInt(searchParams.page) || 1;
   const query = searchParams.query || "";
 

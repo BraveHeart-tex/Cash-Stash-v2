@@ -7,15 +7,31 @@ import RegisterSchema, { RegisterSchemaType } from "@/schemas/RegisterSchema";
 import { cookies } from "next/headers";
 import bcrypt from "bcrypt";
 import { MONTHS_OF_THE_YEAR, processDate } from "@/lib/utils";
-import CreateUserAccountSchema, { CreateUserAccountSchemaType } from "@/schemas/CreateUserAccountSchema";
-import CreateUserAccountOptions, { getKeyByValue } from "@/lib/CreateUserAccountOptions";
-import { NotificationCategory, Prisma, UserAccountCategory } from "@prisma/client";
+import CreateUserAccountSchema, {
+  CreateUserAccountSchemaType,
+} from "@/schemas/CreateUserAccountSchema";
+import CreateUserAccountOptions, {
+  getKeyByValue,
+} from "@/lib/CreateUserAccountOptions";
+import {
+  NotificationCategory,
+  Prisma,
+  UserAccountCategory,
+} from "@prisma/client";
 import { EditReminderSchemaType } from "@/schemas/EditReminderSchema";
-import EditBudgetSchema, { EditBudgetSchemaType } from "@/schemas/EditBudgetSchema";
+import EditBudgetSchema, {
+  EditBudgetSchemaType,
+} from "@/schemas/EditBudgetSchema";
 import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
-import CreateBudgetSchema, { CreateBudgetSchemaType } from "@/schemas/CreateBudgetSchema";
-import CreateTransactionSchema, { CreateTransactionSchemaType } from "@/schemas/CreateTransactionSchema";
-import CreateReminderSchema, { CreateReminderSchemaType } from "@/schemas/CreateReminderSchema";
+import CreateBudgetSchema, {
+  CreateBudgetSchemaType,
+} from "@/schemas/CreateBudgetSchema";
+import CreateTransactionSchema, {
+  CreateTransactionSchemaType,
+} from "@/schemas/CreateTransactionSchema";
+import CreateReminderSchema, {
+  CreateReminderSchemaType,
+} from "@/schemas/CreateReminderSchema";
 import { redirect } from "next/navigation";
 import {
   IGetPaginatedAccountActionParams,
@@ -45,7 +61,10 @@ export const loginAction = async ({ email, password }: LoginSchemaType) => {
     return { error: "Invalid email or password" };
   }
 
-  const isPasswordValid = await bcrypt.compare(passwordResult, user.hashedPassword!);
+  const isPasswordValid = await bcrypt.compare(
+    passwordResult,
+    user.hashedPassword!
+  );
 
   if (!isPasswordValid) {
     return { error: "Invalid email or password." };
@@ -58,14 +77,22 @@ export const loginAction = async ({ email, password }: LoginSchemaType) => {
   return { user };
 };
 
-export const registerAction = async ({ name, email, password }: RegisterSchemaType) => {
+export const registerAction = async ({
+  name,
+  email,
+  password,
+}: RegisterSchemaType) => {
   const result = RegisterSchema.safeParse({ name, email, password });
 
   if (!result.success) {
     return { error: "Unprocessable entitiy." };
   }
 
-  const { name: nameResult, email: emailResult, password: passwordResult } = result.data;
+  const {
+    name: nameResult,
+    email: emailResult,
+    password: passwordResult,
+  } = result.data;
 
   const userExists = await prisma.user.findUnique({
     where: {
@@ -208,6 +235,8 @@ export const getPaginatedBudgetsAction = async ({
   pageNumber,
   query,
   category,
+  sortBy,
+  sortDirection,
 }: IGetPaginatedBudgetsActionParams): Promise<IGetPaginatedBudgetsActionReturnType> => {
   const result = await getCurrentUserAction();
   if (result.error) {
@@ -228,6 +257,9 @@ export const getPaginatedBudgetsAction = async ({
   }
 
   const categoryCondition = category ? { category } : {};
+  const sortByCondition = sortBy
+    ? { orderBy: { [sortBy]: sortDirection || "asc" } }
+    : {};
 
   const [budgets, totalCount] = await Promise.all([
     prisma.budget.findMany({
@@ -240,6 +272,7 @@ export const getPaginatedBudgetsAction = async ({
         },
         ...categoryCondition,
       },
+      orderBy: sortByCondition?.orderBy,
     }),
     prisma.budget.count({
       where: {
@@ -374,7 +407,8 @@ export const fetchInsightsDataAction = async () => {
   const totalIncome = await aggregateTransaction(true);
   const totalExpense = await aggregateTransaction(false);
 
-  if (!totalIncome || !totalExpense) return { error: "Error calculating net income" };
+  if (!totalIncome || !totalExpense)
+    return { error: "Error calculating net income" };
 
   const netIncome = totalIncome - totalExpense;
   const savingsRate = ((netIncome / totalIncome) * 100).toFixed(0);
@@ -387,7 +421,11 @@ export const fetchInsightsDataAction = async () => {
   };
 };
 
-export const registerBankAccountAction = async ({ balance, category, name }: CreateUserAccountSchemaType) => {
+export const registerBankAccountAction = async ({
+  balance,
+  category,
+  name,
+}: CreateUserAccountSchemaType) => {
   const currentUser = await getCurrentUser(cookies().get("token")?.value!);
 
   if (!currentUser) {
@@ -400,9 +438,15 @@ export const registerBankAccountAction = async ({ balance, category, name }: Cre
     return { error: "Unprocessable entity." };
   }
 
-  const { balance: balanceResult, category: categoryResult, name: nameResult } = result.data;
+  const {
+    balance: balanceResult,
+    category: categoryResult,
+    name: nameResult,
+  } = result.data;
 
-  const mappedCategory = Object.entries(CreateUserAccountOptions).find(([key, value]) => value === categoryResult)?.[0];
+  const mappedCategory = Object.entries(CreateUserAccountOptions).find(
+    ([key, value]) => value === categoryResult
+  )?.[0];
 
   if (!mappedCategory) {
     return { error: "Invalid category." };
@@ -442,9 +486,16 @@ export const updateAccountByIdAction = async ({
     return { error: "Unprocessable entity." };
   }
 
-  const { balance: balanceResult, category: categoryResult, name: nameResult } = result.data;
+  const {
+    balance: balanceResult,
+    category: categoryResult,
+    name: nameResult,
+  } = result.data;
 
-  const mappedCategory = getKeyByValue(CreateUserAccountOptions, categoryResult);
+  const mappedCategory = getKeyByValue(
+    CreateUserAccountOptions,
+    categoryResult
+  );
 
   const updatedAccount = await prisma.userAccount.update({
     where: {
@@ -466,7 +517,12 @@ export const updateAccountByIdAction = async ({
   };
 };
 
-export const createBudgetAction = async ({ budgetAmount, spentAmount, category, name }: CreateBudgetSchemaType) => {
+export const createBudgetAction = async ({
+  budgetAmount,
+  spentAmount,
+  category,
+  name,
+}: CreateBudgetSchemaType) => {
   let result = CreateBudgetSchema.safeParse({
     budgetAmount,
     spentAmount,
@@ -478,9 +534,15 @@ export const createBudgetAction = async ({ budgetAmount, spentAmount, category, 
     return { error: "Unprocessable entity." };
   }
 
-  const { budgetAmount: budgetAmountResult, spentAmount: spentAmountResult, category: categoryResult } = result.data;
+  const {
+    budgetAmount: budgetAmountResult,
+    spentAmount: spentAmountResult,
+    category: categoryResult,
+  } = result.data;
 
-  const mappedCategory = Object.entries(CreateBudgetOptions).find(([key, value]) => value === categoryResult)?.[0];
+  const mappedCategory = Object.entries(CreateBudgetOptions).find(
+    ([key, value]) => value === categoryResult
+  )?.[0];
 
   const currentUser = await getCurrentUser(cookies().get("token")?.value!);
 
@@ -520,7 +582,8 @@ export const updateBudgetByIdAction = async ({
     where: { id: budgetId },
   });
 
-  if (!budgetToBeUpdated) return { error: `Budget not found with the given id ${budgetId}` };
+  if (!budgetToBeUpdated)
+    return { error: `Budget not found with the given id ${budgetId}` };
 
   const result = EditBudgetSchema.safeParse({
     budgetAmount,
@@ -533,7 +596,9 @@ export const updateBudgetByIdAction = async ({
 
   const { data } = result;
 
-  const mappedCategory = Object.entries(CreateBudgetOptions).find(([, value]) => value === data.category)?.[0];
+  const mappedCategory = Object.entries(CreateBudgetOptions).find(
+    ([, value]) => value === data.category
+  )?.[0];
 
   const updatedBudget = await prisma.budget.update({
     where: { id: budgetId },
@@ -578,7 +643,8 @@ export const updateReminderAction = async ({
     where: { id: reminderId },
   });
 
-  if (!reminderToBeUpdated) return { error: "No reminder with the given reminder id was found." };
+  if (!reminderToBeUpdated)
+    return { error: "No reminder with the given reminder id was found." };
 
   const updatedReminder = await prisma.reminder.update({
     data: {
@@ -639,11 +705,15 @@ export const createTransactionAction = async ({
     };
   }
 
-  const updatedBalance = isIncome ? usersBalance + amount : usersBalance - amount;
+  const updatedBalance = isIncome
+    ? usersBalance + amount
+    : usersBalance - amount;
 
   const { data } = result;
 
-  const mappedCategory = Object.entries(CreateBudgetOptions).find(([, value]) => value === data.category)?.[0];
+  const mappedCategory = Object.entries(CreateBudgetOptions).find(
+    ([, value]) => value === data.category
+  )?.[0];
 
   const transaction = await prisma.transaction.create({
     data: {

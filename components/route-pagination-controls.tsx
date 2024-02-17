@@ -26,7 +26,8 @@ const RoutePaginationControls = ({
     if (changingPage) return;
     setChangingPage(true);
     setPage((prevPage) => {
-      const nextPage = type === "increment" ? parseInt(prevPage) + 1 : parseInt(prevPage) - 1;
+      const nextPage =
+        type === "increment" ? parseInt(prevPage) + 1 : parseInt(prevPage) - 1;
       return nextPage.toString();
     });
     setChangingPage(false);

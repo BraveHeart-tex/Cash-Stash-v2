@@ -9,7 +9,9 @@ const NotFound = () => {
         <h1 className="text-6xl font-semibold text-center text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/70">
           404 Page Not Found...
         </h1>
-        <p>Looks like you tried to navigate to a page that doesn&apos;t exist.</p>
+        <p>
+          Looks like you tried to navigate to a page that doesn&apos;t exist.
+        </p>
         <Button className="w-max">
           <Link href={"/"}>Back to the home page</Link>
         </Button>

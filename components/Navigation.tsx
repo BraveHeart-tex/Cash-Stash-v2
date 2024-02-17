@@ -29,7 +29,8 @@ const Navigation = () => {
   const onOpen = () => setIsOpen(true);
   const onClose = () => setIsOpen(false);
 
-  if (pathname.startsWith("/login") || pathname.startsWith("/signup")) return null;
+  if (pathname.startsWith("/login") || pathname.startsWith("/signup"))
+    return null;
 
   return (
     <div className="mb-6 shadow-lg p-4 bg-primary dark:bg-background dark:border-b">
@@ -81,9 +82,16 @@ const Navigation = () => {
         <SheetContent side="left" className="w-[300px] md:[540px]">
           <div className="flex flex-col justify-between items h-[100%]">
             <div className="flex flex-col gap-2">
-              <span className="font-bold text-lg"> Welcome! {currentUser?.name}</span>
+              <span className="font-bold text-lg">
+                {" "}
+                Welcome! {currentUser?.name}
+              </span>
               {NAV_LINKS.map((link) => (
-                <Link key={link.name} href={link.href} className="hover:underline">
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className="hover:underline"
+                >
                   {link.name}
                 </Link>
               ))}

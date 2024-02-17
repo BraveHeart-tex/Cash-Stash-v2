@@ -6,7 +6,11 @@ const test = base.extend({});
 
 const { expect } = test;
 
-test("renders the create account modal after create button click", async ({ page, baseURL, context }) => {
+test("renders the create account modal after create button click", async ({
+  page,
+  baseURL,
+  context,
+}) => {
   const jwt = await signToken(getUserData());
 
   await context.clearCookies();

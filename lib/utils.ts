@@ -12,7 +12,20 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const MONTHS_OF_THE_YEAR = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+export const MONTHS_OF_THE_YEAR = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "July",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
 
 export type TableMap = {
   [key in TableName]: (typeof prisma)[key];
@@ -44,9 +57,21 @@ export type UpdateGenericInput<T> = {
   [key in keyof Partial<T>]: T[key];
 };
 
-export type TableName = "userAccount" | "transaction" | "budget" | "goal" | "reminder";
+export type TableName =
+  | "userAccount"
+  | "transaction"
+  | "budget"
+  | "goal"
+  | "reminder";
 
-export type Page = "Dashboard" | "Accounts" | "Budgets" | "Goals" | "Transactions" | "Reports" | "Settings";
+export type Page =
+  | "Dashboard"
+  | "Accounts"
+  | "Budgets"
+  | "Goals"
+  | "Transactions"
+  | "Reports"
+  | "Settings";
 
 export interface IPage {
   label: Page;
@@ -94,7 +119,9 @@ export function generateFormFields(schema: ZodObject<any>) {
     const fieldSchema = schema.shape[key];
     const description = fieldSchema._def.description;
 
-    const parsedDescription = description.split(",").map((item: string) => item.trim());
+    const parsedDescription = description
+      .split(",")
+      .map((item: string) => item.trim());
 
     const fieldType = parsedDescription
       .find((item: string) => item.startsWith("type:"))
@@ -183,7 +210,10 @@ export const areObjectsDeepEqual = (obj1: any, obj2: any): boolean => {
 
     // If both values are objects, recursively check equality
     // If not, perform a simple equality check
-    if ((areObjects && !areObjectsDeepEqual(value1, value2)) || (!areObjects && value1 !== value2)) {
+    if (
+      (areObjects && !areObjectsDeepEqual(value1, value2)) ||
+      (!areObjects && value1 !== value2)
+    ) {
       return false;
     }
   }

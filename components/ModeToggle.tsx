@@ -46,7 +46,9 @@ export function ModeToggle() {
             <TabsTrigger
               key={item.id}
               value={item.value}
-              data-state={item.value === (theme ?? "light") ? "active" : "inactive"}
+              data-state={
+                item.value === (theme ?? "light") ? "active" : "inactive"
+              }
               className="relative data-[state=active]:text-white"
             >
               <div>

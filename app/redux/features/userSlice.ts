@@ -12,11 +12,14 @@ const initialState: UserState = {
   isLoading: false,
 };
 
-export const fetchCurrentUser = createAsyncThunk("user/fetchCurrentUser", async () => {
-  const { user } = await getCurrentUserAction();
+export const fetchCurrentUser = createAsyncThunk(
+  "user/fetchCurrentUser",
+  async () => {
+    const { user } = await getCurrentUserAction();
 
-  return user;
-});
+    return user;
+  }
+);
 
 const userSlice = createSlice({
   name: "user",

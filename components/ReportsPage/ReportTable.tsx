@@ -3,7 +3,15 @@ import { SerializedTransaction } from "@/app/redux/features/transactionsSlice";
 import { SerializedUserAccount } from "@/actions/types";
 import TransactionsFilter from "../TransactionsPage/TransactionsFilter";
 import TransactionsSort from "../TransactionsPage/TransactionsSort";
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { cn, thousandSeparator } from "@/lib/utils";
 import ResponsiveChartContainer from "@/app/ResponsiveChartContainer";
 import { useEffect, useState } from "react";
@@ -18,7 +26,11 @@ export interface MonthlyData {
   currentUserAccounts: SerializedUserAccount[];
 }
 
-const ReportTable = ({ monthlyTransactionsData, transactions, currentUserAccounts }: MonthlyData) => {
+const ReportTable = ({
+  monthlyTransactionsData,
+  transactions,
+  currentUserAccounts,
+}: MonthlyData) => {
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
@@ -32,17 +44,29 @@ const ReportTable = ({ monthlyTransactionsData, transactions, currentUserAccount
         {transactions && transactions.length > 0 ? (
           <>
             {transactions.map((transaction) => (
-              <TableRow key={transaction.id} className="even:bg-secondary hover:bg-muted cursor-pointer">
+              <TableRow
+                key={transaction.id}
+                className="even:bg-secondary hover:bg-muted cursor-pointer"
+              >
                 <TableCell>{transaction.createdAt}</TableCell>
-                <TableCell className={cn(transaction.isIncome ? "text-green-500" : "text-red-500")}>
+                <TableCell
+                  className={cn(
+                    transaction.isIncome ? "text-green-500" : "text-red-500"
+                  )}
+                >
                   {thousandSeparator(transaction.amount)}$
                 </TableCell>
                 <TableCell>
                   {currentUserAccounts &&
-                    currentUserAccounts.map((account) => (account.id === transaction.accountId ? account.name : ""))}
+                    currentUserAccounts.map((account) =>
+                      account.id === transaction.accountId ? account.name : ""
+                    )}
                 </TableCell>
                 <TableCell>{transaction.description}</TableCell>
-                <TableCell> {transaction.isIncome ? "Income" : "Expense"}</TableCell>
+                <TableCell>
+                  {" "}
+                  {transaction.isIncome ? "Income" : "Expense"}
+                </TableCell>
                 <TableCell>{transaction.category}</TableCell>
                 <TableRow />
               </TableRow>
@@ -86,7 +110,9 @@ const ReportTable = ({ monthlyTransactionsData, transactions, currentUserAccount
         </Table>
       </div>
       <div className="mt-4">
-        <ResponsiveChartContainer monthlyTransactionsData={monthlyTransactionsData} />
+        <ResponsiveChartContainer
+          monthlyTransactionsData={monthlyTransactionsData}
+        />
       </div>
     </div>
   );

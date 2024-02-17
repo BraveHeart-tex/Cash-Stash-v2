@@ -1,5 +1,11 @@
 "use client";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import GenericSelect from "@/components/GenericSelect";
 import { Label } from "@/components/ui/label";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -30,7 +36,9 @@ const TransactionsSort = ({}: ITransactionsSortProps) => {
   ];
 
   const handleSortChange = (value: string, key: "sortBy" | "sortDirection") => {
-    const currentSearchParams = new URLSearchParams(Array.from(searchParams.entries()));
+    const currentSearchParams = new URLSearchParams(
+      Array.from(searchParams.entries())
+    );
 
     currentSearchParams.set(key, value);
     const search = currentSearchParams.toString();
@@ -47,7 +55,9 @@ const TransactionsSort = ({}: ITransactionsSortProps) => {
       <CardContent>
         <div className={"grid grid-cols-1 gap-2"}>
           <div>
-            <Label className="text-[14px] xl:text-md font-semibold">Sort By</Label>
+            <Label className="text-[14px] xl:text-md font-semibold">
+              Sort By
+            </Label>
             <GenericSelect
               placeholder={"Sort By"}
               options={sortByOptions}
@@ -56,7 +66,9 @@ const TransactionsSort = ({}: ITransactionsSortProps) => {
             />
           </div>
           <div>
-            <Label className="text-[14px] xl:text-md font-semibold">Sort Direction</Label>
+            <Label className="text-[14px] xl:text-md font-semibold">
+              Sort Direction
+            </Label>
             <GenericSelect
               placeholder={"Sort Direction"}
               options={sortDirectionOptions}

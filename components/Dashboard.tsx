@@ -1,5 +1,8 @@
 "use client";
-import { InsightsData, SerializedTransaction } from "@/app/redux/features/transactionsSlice";
+import {
+  InsightsData,
+  SerializedTransaction,
+} from "@/app/redux/features/transactionsSlice";
 import AccountSummaries from "@/components/AccountSummaries";
 import BudgetStatus from "@/components/BudgetStatus";
 import FinancialInsights from "@/components/FinancialInsights";
@@ -35,7 +38,8 @@ const Dashboard = ({
   const sectionData = [
     {
       title: "Accounts Summary",
-      description: "You can view your accounts here. Visit the 'Accounts' page to see all your accounts.",
+      description:
+        "You can view your accounts here. Visit the 'Accounts' page to see all your accounts.",
       data: (
         <div className="max-h-[330px] min-h-[330px] lg:max-h-[350px] lg:min-h-[350px] overflow-y-scroll scrollbar-hide">
           <AccountSummaries accounts={accounts} />
@@ -70,10 +74,13 @@ const Dashboard = ({
     },
     {
       title: "Financial Insights",
-      description: "Get a comparison of your expenses vs income and other financial insights here.",
+      description:
+        "Get a comparison of your expenses vs income and other financial insights here.",
       data: (
         <div className="p-2 max-h-[500px] min-h-[500px] overflow-y-scroll scrollbar-hide flex flex-col gap-4 items-center justify-center">
-          <BarChartComponent monthlyTransactionsData={monthlyTransactionsData} />
+          <BarChartComponent
+            monthlyTransactionsData={monthlyTransactionsData}
+          />
           <FinancialInsights insightsData={insightsData} />
         </div>
       ),
@@ -103,7 +110,9 @@ const Dashboard = ({
             <Card key={section.title}>
               <CardHeader className="font-[500] text-xl text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/40">
                 {section.title}
-                <span className="text-gray-500 text-sm">{section.description}</span>
+                <span className="text-gray-500 text-sm">
+                  {section.description}
+                </span>
               </CardHeader>
               <CardContent>{section.data}</CardContent>
             </Card>

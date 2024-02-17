@@ -16,5 +16,7 @@ const CreateUserAccountSchema = z.object({
   name: z.string().nonempty("Account Name is required"),
 });
 
-export type CreateUserAccountSchemaType = z.infer<typeof CreateUserAccountSchema>;
+export type CreateUserAccountSchemaType = z.infer<
+  typeof CreateUserAccountSchema
+>;
 export default CreateUserAccountSchema;

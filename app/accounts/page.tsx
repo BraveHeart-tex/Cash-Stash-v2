@@ -36,10 +36,12 @@ const AccountPage = async ({
     sortDirection,
   });
 
-  const selectDataset = Object.entries(CreateUserAccountOptions).map(([key, value]) => ({
-    label: value,
-    value: key,
-  }));
+  const selectDataset = Object.entries(CreateUserAccountOptions).map(
+    ([key, value]) => ({
+      label: value,
+      value: key,
+    })
+  );
 
   return (
     <main>
@@ -75,7 +77,11 @@ const AccountPage = async ({
           )}
         </div>
         <div className={"grid lg:grid-cols-6"}>
-          <RouteSelectFilter dataset={selectDataset} queryStringKey="category" selectLabel="Account Category" />
+          <RouteSelectFilter
+            dataset={selectDataset}
+            queryStringKey="category"
+            selectLabel="Account Category"
+          />
           {result.accounts.length === 0 && (
             <MotionDiv
               initial={{ opacity: 0 }}

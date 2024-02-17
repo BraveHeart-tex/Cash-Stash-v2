@@ -9,7 +9,9 @@ import CreateBudgetOptions from "../lib/CreateBudgetOptions";
 const createAccount = async (userId: string) => {
   const accountOptions = Object.keys(CreateUserAccountOptions);
 
-  const accountType = accountOptions[Math.floor(Math.random() * accountOptions.length)] as UserAccountCategory;
+  const accountType = accountOptions[
+    Math.floor(Math.random() * accountOptions.length)
+  ] as UserAccountCategory;
 
   await prisma.userAccount.create({
     data: {
@@ -23,7 +25,9 @@ const createAccount = async (userId: string) => {
 
 const createBudget = async (userId: string) => {
   const budgetOptions = Object.keys(CreateBudgetOptions);
-  const budgetType = budgetOptions[Math.floor(Math.random() * budgetOptions.length)] as NotificationCategory;
+  const budgetType = budgetOptions[
+    Math.floor(Math.random() * budgetOptions.length)
+  ] as NotificationCategory;
   await prisma.budget.create({
     data: {
       userId,
@@ -63,7 +67,11 @@ async function main() {
   await prisma.goal.deleteMany();
 
   for (let i = 0; i < 40; i++) {
-    await Promise.all([createAccount(userId), createBudget(userId), createGoal(userId)]);
+    await Promise.all([
+      createAccount(userId),
+      createBudget(userId),
+      createGoal(userId),
+    ]);
   }
 
   console.timeEnd("seed");

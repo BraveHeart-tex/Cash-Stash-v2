@@ -17,7 +17,8 @@ const GenericNotFound = ({
       className="lg:text-left p-4"
     >
       {renderTitle({
-        className: "inline-block text-2xl lg:text-3xl font-semibold text-primary",
+        className:
+          "inline-block text-2xl lg:text-3xl font-semibold text-primary",
       })}
       {renderMessage({
         className: "mt-3 text-foreground",

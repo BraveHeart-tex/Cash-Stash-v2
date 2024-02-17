@@ -5,7 +5,9 @@ import { useForm } from "react-hook-form";
 import { useAppDispatch } from "@/app/redux/hooks";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
-import CreateUserAccountSchema, { CreateUserAccountSchemaType } from "@/schemas/CreateUserAccountSchema";
+import CreateUserAccountSchema, {
+  CreateUserAccountSchemaType,
+} from "@/schemas/CreateUserAccountSchema";
 import FormInput from "@/components/FormInput";
 import FormSelect from "@/components/FormSelect";
 import { Button } from "@/components/ui/button";
@@ -52,7 +54,10 @@ const CreateUserAccountForm = () => {
   }));
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} data-testid="create-user-account-form">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      data-testid="create-user-account-form"
+    >
       <div className="grid grid-cols-1 gap-4">
         <FormInput
           name={"name"}

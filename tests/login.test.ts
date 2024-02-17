@@ -30,7 +30,11 @@ const test = base.extend({
 
 const { expect } = test;
 
-test("redirects to the login page if the user is not authenticated", async ({ page, baseURL, context }) => {
+test("redirects to the login page if the user is not authenticated", async ({
+  page,
+  baseURL,
+  context,
+}) => {
   await context.clearCookies();
   await page.goto(baseURL!);
 

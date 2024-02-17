@@ -31,7 +31,10 @@ const AccountCard = ({ account, className }: IAccountCardProps) => {
       showErrorToast("An error occurred.", result.error as string);
     } else {
       router.refresh();
-      showSuccessToast("Account deleted.", "Selected account has been deleted.");
+      showSuccessToast(
+        "Account deleted.",
+        "Selected account has been deleted."
+      );
       dispatch(cleanUp());
     }
   };
@@ -58,7 +61,10 @@ const AccountCard = ({ account, className }: IAccountCardProps) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       layoutId={`account-card-${account.id}`}
-      className={cn("p-4 rounded-md shadow-lg border w-full cursor-pointer relative", className)}
+      className={cn(
+        "p-4 rounded-md shadow-lg border w-full cursor-pointer relative",
+        className
+      )}
     >
       <ActionPopover
         popoverHeading={"Account Actions"}
@@ -76,7 +82,10 @@ const AccountCard = ({ account, className }: IAccountCardProps) => {
         onDeleteActionClick={() => handleDeleteAccount(account.id)}
       />
       <p className="font-semibold mb-2 text-primary">
-        {account.name} <span className="dark:text-white/60 text-foreground">({accountCategory})</span>
+        {account.name}{" "}
+        <span className="dark:text-white/60 text-foreground">
+          ({accountCategory})
+        </span>
       </p>
       <p className="text-md">Balance: {formatMoney(account.balance)}</p>
     </motion.div>

@@ -32,7 +32,8 @@ const MobileTabsListItem = ({ page }: { page: PageItem }) => {
       )}
     >
       {createElement(page.icon, {
-        className: "w-5 h-5 mb-2 text-muted-foreground group-hover:text-primary group-[.active-tab]:text-primary",
+        className:
+          "w-5 h-5 mb-2 text-muted-foreground group-hover:text-primary group-[.active-tab]:text-primary",
       })}
 
       <span className="text-sm text-muted-foreground group-hover:text-primary group-[.active-tab]:text-primary">

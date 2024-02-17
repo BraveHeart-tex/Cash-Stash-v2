@@ -13,7 +13,10 @@ const CreateGoalButton = ({ className }: ICreateGoalButtonProps) => {
   const dispatch = useAppDispatch();
   return (
     <Button
-      className={cn("font-semibold text-md mt-3 flex items-center gap-[14px]", className)}
+      className={cn(
+        "font-semibold text-md mt-3 flex items-center gap-[14px]",
+        className
+      )}
       data-testid="create-goal-button"
       onClick={() => openGenericModal("Goals", dispatch)}
     >

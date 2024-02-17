@@ -17,7 +17,8 @@ const CreateTransactionButton = () => {
         tableName: "userAccount",
       });
 
-      if (result?.error) return showErrorToast("An error occurred.", result?.error as string);
+      if (result?.error)
+        return showErrorToast("An error occurred.", result?.error as string);
 
       if (!result) {
         return showErrorToast(

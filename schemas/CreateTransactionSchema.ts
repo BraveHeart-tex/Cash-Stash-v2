@@ -8,5 +8,7 @@ const CreateTransactionSchema = z.object({
   isIncome: z.boolean(),
 });
 
-export type CreateTransactionSchemaType = z.infer<typeof CreateTransactionSchema>;
+export type CreateTransactionSchemaType = z.infer<
+  typeof CreateTransactionSchema
+>;
 export default CreateTransactionSchema;

@@ -14,9 +14,15 @@ import { getGenericDialogContent } from "@/lib/getGenericModalContent";
 
 const GenericModal = () => {
   const dispatch = useAppDispatch();
-  const { entityId, dialogTitle, dialogDescription, isGenericModalOpen, mode, key, props } = useAppSelector(
-    (state) => state.genericModalReducer
-  );
+  const {
+    entityId,
+    dialogTitle,
+    dialogDescription,
+    isGenericModalOpen,
+    mode,
+    key,
+    props,
+  } = useAppSelector((state) => state.genericModalReducer);
 
   if (!key) {
     return null;

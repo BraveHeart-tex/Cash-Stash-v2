@@ -4,7 +4,9 @@ import { useAppDispatch } from "@/app/redux/hooks";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
-import CreateGoalSchema, { CreateGoalSchemaType } from "@/schemas/CreateGoalSchema";
+import CreateGoalSchema, {
+  CreateGoalSchemaType,
+} from "@/schemas/CreateGoalSchema";
 import FormInput from "@/components/FormInput";
 import { Button } from "@/components/ui/button";
 import { useTransition } from "react";

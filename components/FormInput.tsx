@@ -15,7 +15,16 @@ interface IFormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   };
 }
 
-const FormInput = ({ name, placeholder, type, register, errors, label, className, ...props }: IFormInputProps) => {
+const FormInput = ({
+  name,
+  placeholder,
+  type,
+  register,
+  errors,
+  label,
+  className,
+  ...props
+}: IFormInputProps) => {
   const isError = errors[name] && errors[name].message;
   return (
     <div className="flex flex-col gap-1">

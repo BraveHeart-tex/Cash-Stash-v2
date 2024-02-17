@@ -1,8 +1,10 @@
 import { z } from "zod";
 
 const RegisterSchema = z.object({
-  name: z.string().min(2, "Name cannot be less than 2 characters.").max(100, "Name cannot exceed 100 characters.")
-    .describe(`
+  name: z
+    .string()
+    .min(2, "Name cannot be less than 2 characters.")
+    .max(100, "Name cannot exceed 100 characters.").describe(`
     type: text,
     label: Full Name,
   `),

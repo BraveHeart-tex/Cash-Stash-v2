@@ -1,6 +1,13 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import logo from "@/components/Logo.svg";
 import Image from "next/image";
 import FormInput from "@/components/FormInput";
@@ -32,7 +39,8 @@ const SignUpForm = () => {
   const handleRegisterFormSubmit = (data: RegisterSchemaType) => {
     startTransition(async () => {
       registerAction(data).then((result) => {
-        if (result?.error) return showErrorToast("An error occurred.", result.error);
+        if (result?.error)
+          return showErrorToast("An error occurred.", result.error);
         router.push("/");
         showSuccessToast("Signed up.", "You have been signed up.");
       });
@@ -53,12 +61,22 @@ const SignUpForm = () => {
     >
       <Card className="w-full">
         <CardHeader>
-          <Image src={logo} alt="Cash Stash" width={200} className="mb-4 md:mx-auto dark:invert" />
+          <Image
+            src={logo}
+            alt="Cash Stash"
+            width={200}
+            className="mb-4 md:mx-auto dark:invert"
+          />
           <CardTitle>Welcome!</CardTitle>
-          <CardDescription>Get started by creating your account.</CardDescription>
+          <CardDescription>
+            Get started by creating your account.
+          </CardDescription>
         </CardHeader>
         <CardContent>
-          <form className="flex flex-col gap-4" onSubmit={handleSubmit(handleRegisterFormSubmit)}>
+          <form
+            className="flex flex-col gap-4"
+            onSubmit={handleSubmit(handleRegisterFormSubmit)}
+          >
             <div className="grid grid-cols-1 gap-4">
               {registerFormFields.map((field) => (
                 <FormInput
@@ -72,7 +90,11 @@ const SignUpForm = () => {
                 />
               ))}
             </div>
-            <Button type="submit" className="font-semibold" disabled={isPending}>
+            <Button
+              type="submit"
+              className="font-semibold"
+              disabled={isPending}
+            >
               Sign up
             </Button>
           </form>

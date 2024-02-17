@@ -1,5 +1,9 @@
 "use client";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { BsFilterLeft } from "react-icons/bs";
 import { useQueryStates, parseAsString, UseQueryStatesKeysMap } from "nuqs";
@@ -12,7 +16,10 @@ interface IRouteFiltersPopoverProps<T extends Record<string, any>> {
   queryKeys: Array<keyof T>;
 }
 
-const RouteFiltersPopover = <T extends Record<string, any>>({ options, queryKeys }: IRouteFiltersPopoverProps<T>) => {
+const RouteFiltersPopover = <T extends Record<string, any>>({
+  options,
+  queryKeys,
+}: IRouteFiltersPopoverProps<T>) => {
   const [key, setKey] = useQueryStates(
     {
       ...queryKeys.reduce((acc, key) => {
@@ -22,7 +29,7 @@ const RouteFiltersPopover = <T extends Record<string, any>>({ options, queryKeys
     },
     {
       shallow: false,
-    },
+    }
   );
 
   const optionsWithIds = options.map((option) => ({
@@ -36,14 +43,17 @@ const RouteFiltersPopover = <T extends Record<string, any>>({ options, queryKeys
         // @ts-ignore
         acc[key] = "";
         return acc;
-      }, {} as UseQueryStatesKeysMap<any>),
+      }, {} as UseQueryStatesKeysMap<any>)
     );
   };
 
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" className="w-max flex items-center gap-1 text-md mb-2">
+        <Button
+          variant="outline"
+          className="w-max flex items-center gap-1 text-md mb-2"
+        >
           <BsFilterLeft />
           Filters
         </Button>
@@ -55,7 +65,9 @@ const RouteFiltersPopover = <T extends Record<string, any>>({ options, queryKeys
             {optionsWithIds.map((option) => (
               <Button
                 key={option.id}
-                variant={areObjectsDeepEqual(key, option.data) ? "default" : "outline"}
+                variant={
+                  areObjectsDeepEqual(key, option.data) ? "default" : "outline"
+                }
                 className="capitalize font-normal whitespace-nowrap flex items-center gap-1"
                 onClick={() => {
                   setKey({ ...option.data });
@@ -66,7 +78,11 @@ const RouteFiltersPopover = <T extends Record<string, any>>({ options, queryKeys
               </Button>
             ))}
           </div>
-          <Button className="mt-2" variant="secondary" onClick={handleClearFilters}>
+          <Button
+            className="mt-2"
+            variant="secondary"
+            onClick={handleClearFilters}
+          >
             Clear
           </Button>
         </div>

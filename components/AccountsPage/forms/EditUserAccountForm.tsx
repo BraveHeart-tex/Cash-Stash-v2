@@ -1,17 +1,25 @@
 "use client";
 import { useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
-import CreateUserAccountOptions, { getOptionLabel } from "@/lib/CreateUserAccountOptions";
+import CreateUserAccountOptions, {
+  getOptionLabel,
+} from "@/lib/CreateUserAccountOptions";
 import FormLoadingSpinner from "../../FormLoadingSpinner";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { fetchCurrentAccount } from "@/app/redux/features/currentAccountSlice";
 import FormInput from "@/components/FormInput";
 import FormSelect from "@/components/FormSelect";
-import { showDefaultToast, showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
+import {
+  showDefaultToast,
+  showErrorToast,
+  showSuccessToast,
+} from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateAccountByIdAction } from "@/actions";
-import CreateUserAccountSchema, { CreateUserAccountSchemaType } from "@/schemas/CreateUserAccountSchema";
+import CreateUserAccountSchema, {
+  CreateUserAccountSchemaType,
+} from "@/schemas/CreateUserAccountSchema";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 import { useRouter } from "next/navigation";
 
@@ -20,7 +28,9 @@ interface IEditUserAccountFormProps {
 }
 
 const EditUserAccountForm = ({ entityId }: IEditUserAccountFormProps) => {
-  const { currentAccount, isLoading: isCurrentAccountLoading } = useAppSelector((state) => state.currentAccountReducer);
+  const { currentAccount, isLoading: isCurrentAccountLoading } = useAppSelector(
+    (state) => state.currentAccountReducer
+  );
   const router = useRouter();
 
   const dispatch = useAppDispatch();
@@ -55,7 +65,10 @@ const EditUserAccountForm = ({ entityId }: IEditUserAccountFormProps) => {
   useEffect(() => {
     if (currentAccount) {
       setValue("name", currentAccount.name);
-      setValue("category", getOptionLabel(CreateUserAccountOptions, currentAccount.category));
+      setValue(
+        "category",
+        getOptionLabel(CreateUserAccountOptions, currentAccount.category)
+      );
       setValue("balance", currentAccount.balance);
     }
 
@@ -68,7 +81,10 @@ const EditUserAccountForm = ({ entityId }: IEditUserAccountFormProps) => {
 
   const onSubmit = async (data: CreateUserAccountSchemaType) => {
     if (hasMadeNoChanges()) {
-      return showDefaultToast("No changes made.", "You haven't made any changes.");
+      return showDefaultToast(
+        "No changes made.",
+        "You haven't made any changes."
+      );
     }
 
     startTransition(async () => {
@@ -99,7 +115,8 @@ const EditUserAccountForm = ({ entityId }: IEditUserAccountFormProps) => {
 
     return (
       name === currentAccount?.name &&
-      category === getOptionLabel(CreateUserAccountOptions, currentAccount?.category!) &&
+      category ===
+        getOptionLabel(CreateUserAccountOptions, currentAccount?.category!) &&
       balance === currentAccount?.balance
     );
   };
@@ -121,7 +138,10 @@ const EditUserAccountForm = ({ entityId }: IEditUserAccountFormProps) => {
           errors={errors}
         />
         <FormSelect
-          defaultValue={getOptionLabel(CreateUserAccountOptions, currentAccount?.category!)}
+          defaultValue={getOptionLabel(
+            CreateUserAccountOptions,
+            currentAccount?.category!
+          )}
           selectOptions={selectOptions}
           nameParam={"category"}
           label={"Account Type"}

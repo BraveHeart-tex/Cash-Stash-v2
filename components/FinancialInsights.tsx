@@ -27,8 +27,15 @@ const SavingsRate = ({ value }: { value: number }) => (
   <div className="mb-4 flex flex-col">
     <h3 className="font-semibold text-lg">Savings Rate</h3>
     <p>{value}%</p>
-    <p className={cn("font-semibold", value > 0 ? "text-green-500" : "text-red-500")}>
-      {value > 0 ? "You are saving more than you are spending!" : "You are spending more than you are saving!"}
+    <p
+      className={cn(
+        "font-semibold",
+        value > 0 ? "text-green-500" : "text-red-500"
+      )}
+    >
+      {value > 0
+        ? "You are saving more than you are spending!"
+        : "You are spending more than you are saving!"}
     </p>
   </div>
 );
@@ -76,7 +83,9 @@ const FinancialInsights = ({ insightsData }: IFinancialInsightsProps) => {
     },
   ];
 
-  const isAllZero = mappedData.every((data) => parseFloat(data.value as string) === 0);
+  const isAllZero = mappedData.every(
+    (data) => parseFloat(data.value as string) === 0
+  );
 
   if (isAllZero) {
     return (
@@ -85,7 +94,9 @@ const FinancialInsights = ({ insightsData }: IFinancialInsightsProps) => {
           <NoDataMessage />
           <Button
             className="font-semibold text-md mt-3 hover:bg-foreground hover:text-muted"
-            onClick={() => dispatch(setSelectedTab({ selectedTab: "Transactions" }))}
+            onClick={() =>
+              dispatch(setSelectedTab({ selectedTab: "Transactions" }))
+            }
           >
             Transactions
           </Button>

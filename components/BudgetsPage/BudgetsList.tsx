@@ -10,11 +10,19 @@ import RouteFiltersPopover from "@/components/route-filters-popover";
 import { GiPayMoney } from "react-icons/gi";
 import { FaPiggyBank } from "react-icons/fa";
 
-const BudgetList = ({ budgets, pageHasParams }: { budgets: Budget[]; pageHasParams: boolean }) => {
-  const selectDataset = Object.entries(CreateBudgetOptions).map(([key, value]) => ({
-    label: value,
-    value: key,
-  }));
+const BudgetList = ({
+  budgets,
+  pageHasParams,
+}: {
+  budgets: Budget[];
+  pageHasParams: boolean;
+}) => {
+  const selectDataset = Object.entries(CreateBudgetOptions).map(
+    ([key, value]) => ({
+      label: value,
+      value: key,
+    })
+  );
 
   return (
     <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
@@ -66,7 +74,11 @@ const BudgetList = ({ budgets, pageHasParams }: { budgets: Budget[]; pageHasPara
       </div>
 
       <div className={"grid lg:grid-cols-6"}>
-        <RouteSelectFilter dataset={selectDataset} queryStringKey="category" selectLabel="Budget Category" />
+        <RouteSelectFilter
+          dataset={selectDataset}
+          queryStringKey="category"
+          selectLabel="Budget Category"
+        />
         {budgets.length === 0 ? (
           <MotionDiv
             initial={{ opacity: 0 }}

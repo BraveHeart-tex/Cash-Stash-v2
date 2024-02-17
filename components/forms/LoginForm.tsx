@@ -1,6 +1,13 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import logo from "@/components/Logo.svg";
 import Image from "next/image";
 import FormInput from "@/components/FormInput";
@@ -62,7 +69,9 @@ const LoginForm = () => {
   if (loggedIn) {
     return (
       <div className="flex flex-col items-center justify-center h-screen gap-2">
-        <h1 className="text-2xl font-semibold text-primary">Logged in successfully.</h1>
+        <h1 className="text-2xl font-semibold text-primary">
+          Logged in successfully.
+        </h1>
         <span className="animate-bounce">You are being redirected...</span>
       </div>
     );
@@ -82,12 +91,21 @@ const LoginForm = () => {
     >
       <Card className="w-full">
         <CardHeader>
-          <Image src={logo} alt="Cash Stash" width={200} className="mb-4 md:mx-auto dark:invert" />
+          <Image
+            src={logo}
+            alt="Cash Stash"
+            width={200}
+            className="mb-4 md:mx-auto dark:invert"
+          />
           <CardTitle>Welcome!</CardTitle>
           <CardDescription>Sign in to access your account.</CardDescription>
         </CardHeader>
         <CardContent>
-          <form className="flex flex-col gap-4" onSubmit={handleSubmit(handleLoginFormSubmit)} data-testid="login-form">
+          <form
+            className="flex flex-col gap-4"
+            onSubmit={handleSubmit(handleLoginFormSubmit)}
+            data-testid="login-form"
+          >
             <div className="grid grid-cols-1 gap-4">
               {loginFormFields.map((field) => (
                 <FormInput

@@ -17,7 +17,9 @@ import { useTransition } from "react";
 const GenericConfirmDialog = () => {
   let [isPending, startTransition] = useTransition();
   const dispatch = useAppDispatch();
-  const { visible, title, message, primaryActionLabel } = useAppSelector((state) => state.genericConfirmReducer);
+  const { visible, title, message, primaryActionLabel } = useAppSelector(
+    (state) => state.genericConfirmReducer
+  );
 
   return (
     <AlertDialog open={visible}>
@@ -27,7 +29,9 @@ const GenericConfirmDialog = () => {
           <AlertDialogDescription>{message}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={() => dispatch(cleanUp())}>Kapat</AlertDialogCancel>
+          <AlertDialogCancel onClick={() => dispatch(cleanUp())}>
+            Kapat
+          </AlertDialogCancel>
           {primaryActionLabel && (
             <AlertDialogAction
               disabled={isPending}

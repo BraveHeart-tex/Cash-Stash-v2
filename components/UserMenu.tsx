@@ -5,7 +5,11 @@ import { fetchCurrentUser } from "../app/redux/features/userSlice";
 import { useEffect, useTransition } from "react";
 import { AppDispatch } from "../app/redux/store";
 import { logoutAction } from "@/actions";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 
@@ -34,12 +38,19 @@ const UserMenu = () => {
           <AvatarFallback>{avatarPlaceholder}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="p-4 grid grid-cols-1 gap-[12px] w-[300px]" align="end">
+      <DropdownMenuContent
+        className="p-4 grid grid-cols-1 gap-[12px] w-[300px]"
+        align="end"
+      >
         <p className="text-lg font-semibold">{user?.name}</p>
         <hr />
         <p className="text-accent-foreground">{user?.email}</p>
 
-        <Button type="button" onClick={() => handleLogout()} disabled={isPending}>
+        <Button
+          type="button"
+          onClick={() => handleLogout()}
+          disabled={isPending}
+        >
           Logout
         </Button>
       </DropdownMenuContent>

@@ -28,7 +28,10 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
       showErrorToast("An error occurred.", result.error as string);
     } else {
       router.refresh();
-      showSuccessToast("Transaction deleted.", "Selected transaction has been deleted.");
+      showSuccessToast(
+        "Transaction deleted.",
+        "Selected transaction has been deleted."
+      );
       dispatch(cleanUp());
     }
   };
@@ -42,24 +45,39 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
       layoutId={`transaction-card-${transaction.id}`}
     >
       <Card className={"mt-4 cursor-pointer"}>
-        <CardHeader className={"flex items-center flex-row justify-between pt-1"}>
-          <CardTitle>{transaction.description || "No description provided."}</CardTitle>
+        <CardHeader
+          className={"flex items-center flex-row justify-between pt-1"}
+        >
+          <CardTitle>
+            {transaction.description || "No description provided."}
+          </CardTitle>
           <div className={"flex flex-row items-center gap-1"}>
-            <Badge className={cn(transaction.isIncome ? "bg-success dark:bg-green-700" : "bg-destructive")}>
+            <Badge
+              className={cn(
+                transaction.isIncome
+                  ? "bg-success dark:bg-green-700"
+                  : "bg-destructive"
+              )}
+            >
               {transaction.isIncome ? "Income" : "Expense"}
             </Badge>
             <ActionPopover
               popoverHeading={"Transaction Actions"}
               onEditActionClick={() => {
-                showErrorToast("Error", "You cannot edit transactions at this time.");
+                showErrorToast(
+                  "Error",
+                  "You cannot edit transactions at this time."
+                );
               }}
               onDeleteActionClick={() => {
                 dispatch(
                   showGenericConfirm({
                     title: "Delete Transaction",
-                    message: "Are you sure you want to delete this transaction?",
+                    message:
+                      "Are you sure you want to delete this transaction?",
                     primaryActionLabel: "Delete",
-                    primaryAction: async () => deleteTransactionByIdAction(transaction.id),
+                    primaryAction: async () =>
+                      deleteTransactionByIdAction(transaction.id),
                     resolveCallback: handleDeleteCallback,
                   })
                 );
@@ -81,7 +99,11 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
             </div>
             <div className={"flex items-center gap-1"}>
               <p className={"font-semibold"}>Amount: </p>
-              <p className={cn(transaction.isIncome ? "text-green-500" : "text-red-500")}>
+              <p
+                className={cn(
+                  transaction.isIncome ? "text-green-500" : "text-red-500"
+                )}
+              >
                 {transaction.isIncome ? "+" : "-"}${transaction.amount}
               </p>
             </div>

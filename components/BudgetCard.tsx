@@ -45,8 +45,12 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
       className="flex flex-col gap-2 p-4 pt-6 border-1 shadow-xl rounded-md relative bg-card border cursor-pointer"
     >
       <div className="flex flex-col gap-1 p-0">
-        <span className="font-semibold text-foreground text-lg">{budget.name}</span>
-        <span className="text-muted-foreground">{CreateBudgetOptions[budget.category]}</span>
+        <span className="font-semibold text-foreground text-lg">
+          {budget.name}
+        </span>
+        <span className="text-muted-foreground">
+          {CreateBudgetOptions[budget.category]}
+        </span>
       </div>
       <div className="absolute top-5 right-1 mb-2">
         <div className="flex items-center gap-1">
@@ -56,7 +60,8 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
               dispatch(
                 openGenericModal({
                   dialogTitle: "Edit Budget",
-                  dialogDescription: "Edit your budget information by using the form below.",
+                  dialogDescription:
+                    "Edit your budget information by using the form below.",
                   entityId: budget.id,
                   mode: "edit",
                   key: "budget",
@@ -100,13 +105,14 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
           budget.spentAmount / budget.budgetAmount > 0.7
             ? "bg-destructive"
             : budget.spentAmount / budget.budgetAmount > 0.4
-            ? "bg-orange-500"
-            : "bg-success"
+              ? "bg-orange-500"
+              : "bg-success"
         )}
       />
       <div className="w-full flex flex-col lg:flex-row lg:items-center justify-between mt-2">
         <span className="dark:text-white/60 text-foreground">
-          Budget: {formatMoney(budget.budgetAmount)} / Spent: {formatMoney(budget.spentAmount)}
+          Budget: {formatMoney(budget.budgetAmount)} / Spent:{" "}
+          {formatMoney(budget.spentAmount)}
         </span>
       </div>
     </motion.div>

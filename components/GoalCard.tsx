@@ -60,7 +60,9 @@ const GoalCard = ({ goal }: IGoalCardProps) => {
       className="flex flex-col gap-2 p-4 pt-6 border-1 shadow-xl rounded-md relative bg-card border cursor-pointer"
       key={goal.name}
     >
-      <p className="font-semibold dark:text-white/60 text-foreground">{goal.name}</p>
+      <p className="font-semibold dark:text-white/60 text-foreground">
+        {goal.name}
+      </p>
       <div className="absolute top-3 right-1 mb-2">
         <div className="flex items-center">
           <ActionPopover
@@ -69,7 +71,8 @@ const GoalCard = ({ goal }: IGoalCardProps) => {
             onEditActionClick={() =>
               dispatch(
                 openGenericModal({
-                  dialogDescription: "Edit your goal information by using the form below.",
+                  dialogDescription:
+                    "Edit your goal information by using the form below.",
                   dialogTitle: "Edit Goal",
                   mode: "edit",
                   key: "goal",
@@ -94,12 +97,13 @@ const GoalCard = ({ goal }: IGoalCardProps) => {
             goal.currentAmount / goal.goalAmount > 0.7
               ? "bg-success"
               : goal.currentAmount / goal.goalAmount > 0.4
-              ? "bg-orange-300"
-              : "bg-destructive"
+                ? "bg-orange-300"
+                : "bg-destructive"
           }
         />
         <p className="mt-4 text-md dark:text-white/60 text-foreground">
-          Current: {formatMoney(goal.currentAmount)} / Target: {formatMoney(goal.goalAmount)}
+          Current: {formatMoney(goal.currentAmount)} / Target:{" "}
+          {formatMoney(goal.goalAmount)}
         </p>
       </div>
     </motion.div>
