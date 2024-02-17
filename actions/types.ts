@@ -42,8 +42,10 @@ export interface IGetPaginatedBudgetsActionReturnType
   budgets: Budget[];
 }
 
-export interface IGetPaginatedGoalsActionParams
-  extends IPaginatedActionParams {}
+export interface IGetPaginatedGoalsActionParams extends IPaginatedActionParams {
+  sortBy?: string;
+  sortDirection?: string;
+}
 
 export interface IGetPaginatedGoalsActionReturnType
   extends IPaginatedReturnType {

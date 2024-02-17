@@ -4,16 +4,32 @@ import GoalCard from "@/components/GoalCard";
 import { getPaginatedGoalsAction } from "@/actions";
 import RoutePaginationControls from "@/components/route-pagination-controls";
 import RouteSearchInput from "@/components/route-search-input";
+import RouteFiltersPopover from "@/components/route-filters-popover";
+import { GiPayMoney } from "react-icons/gi";
+import { FaPiggyBank } from "react-icons/fa";
 
 const GoalsPage = async ({
   searchParams,
 }: {
-  searchParams: { page: string; query: string };
+  searchParams: {
+    page: string;
+    query: string;
+    sortBy: string;
+    sortDirection: string;
+  };
 }) => {
-  const pageNumber = parseInt(searchParams.page) || 1;
-  const query = searchParams.query || "";
+  const actionParams = {
+    pageNumber: parseInt(searchParams.page) || 1,
+    query: searchParams.query || "",
+    sortBy: searchParams.sortBy || "",
+    sortDirection: searchParams.sortDirection || "",
+  };
 
-  const result = await getPaginatedGoalsAction({ pageNumber, query });
+  const result = await getPaginatedGoalsAction(actionParams);
+
+  const pageHasParams = !!Object.values(searchParams).filter(
+    (param) => param !== searchParams.page
+  ).length;
 
   return (
     <main>
@@ -22,7 +38,46 @@ const GoalsPage = async ({
           <h2 className="text-4xl text-primary">Goals</h2>
           <CreateGoalButton className="mt-0" />
         </div>
-        <RouteSearchInput placeholder="Search goals by name" />
+        <div className="flex items-center justify-between gap-2">
+          <RouteSearchInput placeholder="Search goals by name" />
+          <RouteFiltersPopover
+            options={[
+              {
+                label: "Sort by Current (High to Low)",
+                icon: <GiPayMoney className="mr-auto" />,
+                data: {
+                  sortBy: "currentAmount",
+                  sortDirection: "desc",
+                },
+              },
+              {
+                label: "Sort by Current (Low to High)",
+                icon: <GiPayMoney className="mr-auto" />,
+                data: {
+                  sortBy: "currentAmount",
+                  sortDirection: "asc",
+                },
+              },
+              {
+                label: "Sort by Target (High to Low)",
+                icon: <FaPiggyBank className="mr-2" />,
+                data: {
+                  sortBy: "goalAmount",
+                  sortDirection: "desc",
+                },
+              },
+              {
+                label: "Sort by Target (Low to High)",
+                icon: <FaPiggyBank className="mr-2" />,
+                data: {
+                  sortBy: "goalAmount",
+                  sortDirection: "asc",
+                },
+              },
+            ]}
+            queryKeys={["sortBy", "sortDirection"]}
+          />
+        </div>
         <div className="h-[500px] lg:pr-4 mt-2 lg:mt-0 overflow-auto w-full">
           {result.goals.length > 0 ? (
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 pb-4 pr-2">
@@ -31,7 +86,7 @@ const GoalsPage = async ({
               ))}
             </div>
           ) : (
-            <GoalsNotFound pageHasParams={!!query} />
+            <GoalsNotFound pageHasParams={pageHasParams} />
           )}
         </div>
       </div>

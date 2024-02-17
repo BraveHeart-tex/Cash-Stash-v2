@@ -307,6 +307,8 @@ export const getPaginatedBudgetsAction = async ({
 export const getPaginatedGoalsAction = async ({
   pageNumber,
   query,
+  sortBy,
+  sortDirection,
 }: IGetPaginatedGoalsActionParams): Promise<IGetPaginatedGoalsActionReturnType> => {
   const result = await getCurrentUserAction();
   if (result.error) {
@@ -315,6 +317,14 @@ export const getPaginatedGoalsAction = async ({
 
   const PAGE_SIZE = 12;
   const skipAmount = (pageNumber - 1) * PAGE_SIZE;
+  const orderByCondition =
+    sortBy && sortDirection
+      ? {
+          orderBy: {
+            [sortBy]: sortDirection,
+          },
+        }
+      : {};
 
   const [goals, totalCount] = await Promise.all([
     prisma.goal.findMany({
@@ -326,6 +336,7 @@ export const getPaginatedGoalsAction = async ({
           contains: query,
         },
       },
+      orderBy: orderByCondition?.orderBy,
     }),
     prisma.goal.count({
       where: {
