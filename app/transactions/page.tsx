@@ -10,17 +10,8 @@ export interface SearchParams {
   sortDirection: string;
 }
 
-const TransactionsPage = async ({
-  searchParams,
-}: {
-  searchParams: SearchParams;
-}) => {
-  const {
-    transactionType = "all",
-    accountId = "",
-    sortBy = "createdAt",
-    sortDirection = "desc",
-  } = searchParams;
+const TransactionsPage = async ({ searchParams }: { searchParams: SearchParams }) => {
+  const { transactionType = "all", accountId = "", sortBy = "createdAt", sortDirection = "desc" } = searchParams;
   let result = await searchTransactions({
     transactionType: transactionType as "all" | "income" | "expense",
     accountId,
@@ -28,10 +19,9 @@ const TransactionsPage = async ({
     sortDirection: sortDirection as "asc" | "desc",
   });
 
-  const currentUserAccounts =
-    await getGenericListByCurrentUser<SerializedUserAccount>({
-      tableName: "userAccount",
-    });
+  const currentUserAccounts = await getGenericListByCurrentUser<SerializedUserAccount>({
+    tableName: "userAccount",
+  });
 
   return (
     <main>

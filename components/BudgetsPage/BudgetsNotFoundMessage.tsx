@@ -1,18 +1,12 @@
 "use client";
 import GenericNotFound from "../NotFound";
 
-const BudgetsNotFoundMessage = ({
-  pageHasParams,
-}: {
-  pageHasParams: boolean;
-}) => {
+const BudgetsNotFoundMessage = ({ pageHasParams }: { pageHasParams: boolean }) => {
   return (
     <GenericNotFound
       renderTitle={({ className }) => (
         <h3 className={className}>
-          {pageHasParams
-            ? "No budgets found for your search"
-            : "You don't have any budgets yet."}
+          {pageHasParams ? "No budgets found for your search" : "You don't have any budgets yet."}
         </h3>
       )}
       renderMessage={({ className }) => (

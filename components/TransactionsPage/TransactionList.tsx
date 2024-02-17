@@ -3,11 +3,7 @@ import TransactionCard from "./TransactionCard";
 import AnimatePresenceClient from "@/components/animation/AnimatePresence";
 import MotionDiv from "@/components/animation/MotionDiv";
 
-const TransactionList = ({
-  transactions,
-}: {
-  transactions: SerializedTransaction[];
-}) => {
+const TransactionList = ({ transactions }: { transactions: SerializedTransaction[] }) => {
   const renderNoTransactionsState = () => (
     <MotionDiv
       initial={{ opacity: 0 }}
@@ -19,10 +15,7 @@ const TransactionList = ({
       <h2 className="inline-block text-2xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
         No transactions found.
       </h2>
-      <p>
-        You can try again by removing any existing filters or creating a new
-        transaction below.
-      </p>
+      <p>You can try again by removing any existing filters or creating a new transaction below.</p>
     </MotionDiv>
   );
 

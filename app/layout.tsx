@@ -18,8 +18,7 @@ const InterFont = Inter({
 const APP_NAME = "Cash Stash";
 const APP_DEFAULT_TITLE = "Cash Stash | Personal Finance";
 const APP_TITLE_TEMPLATE = "%s - Cash Stash";
-const APP_DESCRIPTION =
-  "Minimalist personal finance app. Track your spending, set a budget, and save more.";
+const APP_DESCRIPTION = "Minimalist personal finance app. Track your spending, set a budget, and save more.";
 
 export const metadata: Metadata = {
   manifest: "/manifest.json",

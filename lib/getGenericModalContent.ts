@@ -51,12 +51,7 @@ const ContentMap: ContentMap = {
   },
 };
 
-export const getGenericDialogContent = ({
-  mode,
-  key,
-  entityId,
-  props,
-}: IGetGenericDialogContentParams) => {
+export const getGenericDialogContent = ({ mode, key, entityId, props }: IGetGenericDialogContentParams) => {
   const Component = ContentMap[key][mode];
 
   if (mode === "edit") {

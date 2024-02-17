@@ -12,33 +12,25 @@ import { SerializedGoal } from "./redux/features/goalSlice";
 import { SerializedReminder } from "./redux/features/remindersSlice";
 
 export default async function Home() {
-  let [
-    result,
-    accountsResult,
-    insightsDataResult,
-    monthlyTransactions,
-    budgetsResult,
-    goalsResult,
-    remindersResult,
-  ] = await Promise.all([
-    searchTransactions({
-      transactionType: "all",
-      sortBy: "createdAt",
-      sortDirection: "desc",
-    }),
-    getPaginatedAccountAction({ pageNumber: 1, query: "" }),
-    fetchInsightsDataAction(),
-    getChartDataAction(),
-    getPaginatedBudgetsAction({ pageNumber: 1, query: "" }),
-    getPaginatedGoalsAction({ pageNumber: 1, query: "" }),
-    getGenericListByCurrentUser<SerializedReminder>({
-      tableName: "reminder",
-      whereCondition: { isRead: false },
-    }),
-  ]);
+  let [result, accountsResult, insightsDataResult, monthlyTransactions, budgetsResult, goalsResult, remindersResult] =
+    await Promise.all([
+      searchTransactions({
+        transactionType: "all",
+        sortBy: "createdAt",
+        sortDirection: "desc",
+      }),
+      getPaginatedAccountAction({ pageNumber: 1, query: "" }),
+      fetchInsightsDataAction(),
+      getChartDataAction(),
+      getPaginatedBudgetsAction({ pageNumber: 1, query: "" }),
+      getPaginatedGoalsAction({ pageNumber: 1, query: "" }),
+      getGenericListByCurrentUser<SerializedReminder>({
+        tableName: "reminder",
+        whereCondition: { isRead: false },
+      }),
+    ]);
 
-  const { totalIncome, totalExpense, netIncome, savingsRate } =
-    insightsDataResult;
+  const { totalIncome, totalExpense, netIncome, savingsRate } = insightsDataResult;
 
   if (!totalIncome || !totalExpense || !netIncome || !savingsRate) {
     insightsDataResult = {

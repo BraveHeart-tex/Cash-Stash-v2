@@ -7,9 +7,7 @@ import FormInput from "@/components/FormInput";
 import FormSelect from "@/components/FormSelect";
 import { Button } from "@/components/ui/button";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
-import CreateReminderSchema, {
-  CreateReminderSchemaType,
-} from "@/schemas/CreateReminderSchema";
+import CreateReminderSchema, { CreateReminderSchemaType } from "@/schemas/CreateReminderSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
@@ -43,10 +41,7 @@ const CreateReminderForm = () => {
         return showErrorToast("An error occurred.", result.error);
       } else {
         router.refresh();
-        showSuccessToast(
-          "Reminder created.",
-          "Your reminder has been created."
-        );
+        showSuccessToast("Reminder created.", "Your reminder has been created.");
         dispatch(closeGenericModal());
       }
     });

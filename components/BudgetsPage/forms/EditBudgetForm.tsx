@@ -7,14 +7,8 @@ import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
 import { getOptionLabel } from "@/lib/CreateUserAccountOptions";
 import FormLoadingSpinner from "@/components/FormLoadingSpinner";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
-import {
-  showDefaultToast,
-  showErrorToast,
-  showSuccessToast,
-} from "@/components/ui/use-toast";
-import EditBudgetSchema, {
-  EditBudgetSchemaType,
-} from "@/schemas/EditBudgetSchema";
+import { showDefaultToast, showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
+import EditBudgetSchema, { EditBudgetSchemaType } from "@/schemas/EditBudgetSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import FormInput from "@/components/FormInput";
 import FormSelect from "@/components/FormSelect";
@@ -30,9 +24,7 @@ const EditUserBudgetForm = ({ entityId }: IEditBudgetFormProps) => {
   let [isPending, startTransition] = useTransition();
   const dispatch = useAppDispatch();
   const budgetOptions = Object.values(CreateBudgetOptions);
-  const { currentBudget, isLoading: isCurrentBudgetLoading } = useAppSelector(
-    (state) => state.currentBudgetReducer
-  );
+  const { currentBudget, isLoading: isCurrentBudgetLoading } = useAppSelector((state) => state.currentBudgetReducer);
   const router = useRouter();
 
   const {
@@ -71,10 +63,7 @@ const EditUserBudgetForm = ({ entityId }: IEditBudgetFormProps) => {
   useEffect(() => {
     if (currentBudget) {
       setValue("budgetAmount", currentBudget.budgetAmount);
-      setValue(
-        "category",
-        getOptionLabel(CreateBudgetOptions, currentBudget.category)
-      );
+      setValue("category", getOptionLabel(CreateBudgetOptions, currentBudget.category));
       setValue("name", currentBudget.name);
       setValue("spentAmount", currentBudget.spentAmount);
     }
@@ -82,10 +71,7 @@ const EditUserBudgetForm = ({ entityId }: IEditBudgetFormProps) => {
 
   const onSubmit = async (data: EditBudgetSchemaType) => {
     if (hasMadeNoChanges()) {
-      return showDefaultToast(
-        "No changes made.",
-        "You haven't made any changes."
-      );
+      return showDefaultToast("No changes made.", "You haven't made any changes.");
     }
 
     let payload = {
@@ -136,10 +122,7 @@ const EditUserBudgetForm = ({ entityId }: IEditBudgetFormProps) => {
           errors={errors}
         />
         <FormSelect
-          defaultValue={getOptionLabel(
-            CreateBudgetOptions,
-            currentBudget?.category!
-          )}
+          defaultValue={getOptionLabel(CreateBudgetOptions, currentBudget?.category!)}
           selectOptions={BudgetCategorySelectOptions}
           nameParam={"category"}
           label={"Budget Category"}

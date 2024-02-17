@@ -10,11 +10,7 @@ const BudgetStatus = ({ budgets }: { budgets: Budget[] }) => {
   if (!budgets || budgets.length === 0) {
     return (
       <article className="flex h-[300px] items-center justify-center">
-        <MotionDiv
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
+        <MotionDiv initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
           <p className="text-primary">No budgets found.</p>
           <CreateBudgetButton />
         </MotionDiv>

@@ -1,10 +1,5 @@
 import { User } from "@prisma/client";
-import {
-  JWTVerifyResult,
-  JWTVerifyResultWithUser,
-  SignJWT,
-  jwtVerify,
-} from "jose";
+import { JWTVerifyResult, JWTVerifyResultWithUser, SignJWT, jwtVerify } from "jose";
 import db from "@/lib/prismadb";
 
 declare module "jose" {
@@ -25,10 +20,7 @@ export const getJwtSecretKey = () => {
 
 export async function verifyJWTToken(token: string) {
   try {
-    const { payload } = (await jwtVerify(
-      token,
-      getJwtSecretKey()
-    )) as JWTVerifyResultWithUser;
+    const { payload } = (await jwtVerify(token, getJwtSecretKey())) as JWTVerifyResultWithUser;
 
     return payload.id ? true : false;
   } catch (error) {
@@ -39,10 +31,7 @@ export async function verifyJWTToken(token: string) {
 
 export async function getCurrentUser(token: string) {
   try {
-    const { payload } = (await jwtVerify(
-      token,
-      getJwtSecretKey()
-    )) as JWTVerifyResultWithUser;
+    const { payload } = (await jwtVerify(token, getJwtSecretKey())) as JWTVerifyResultWithUser;
     return payload;
   } catch (error) {
     return null;

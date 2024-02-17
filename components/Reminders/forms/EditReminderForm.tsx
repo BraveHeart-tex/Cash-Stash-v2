@@ -9,11 +9,7 @@ import { EditReminderSchemaType } from "@/schemas/EditReminderSchema";
 import FormInput from "@/components/FormInput";
 import { Button } from "@/components/ui/button";
 import FormSelect from "@/components/FormSelect";
-import {
-  showDefaultToast,
-  showErrorToast,
-  showSuccessToast,
-} from "@/components/ui/use-toast";
+import { showDefaultToast, showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import FormCheckbox from "@/components/FormCheckbox";
 import { updateReminderAction } from "@/actions";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
@@ -78,10 +74,7 @@ const EditReminderForm = ({ entityId }: IEditReminderFormProps) => {
 
   const onSubmit = async (data: EditReminderSchemaType) => {
     if (hasMadeNoChanges()) {
-      return showDefaultToast(
-        "No changes made.",
-        "You have not made any changes."
-      );
+      return showDefaultToast("No changes made.", "You have not made any changes.");
     }
 
     let payload = {
@@ -112,8 +105,7 @@ const EditReminderForm = ({ entityId }: IEditReminderFormProps) => {
       getValues("description") === currentReminder?.description &&
       getValues("amount") === currentReminder?.amount &&
       isIncome === currentReminder?.isIncome &&
-      getValues("reminderDate") ===
-        new Date(currentReminder?.reminderDate).toLocaleDateString("en-CA") &&
+      getValues("reminderDate") === new Date(currentReminder?.reminderDate).toLocaleDateString("en-CA") &&
       getValues("isRead") === (currentReminder?.isRead ? "isRead" : "isNotRead")
     );
   };
@@ -193,11 +185,7 @@ const EditReminderForm = ({ entityId }: IEditReminderFormProps) => {
         {isPending ? (
           <Button>Loading...</Button>
         ) : (
-          <Button
-            type="submit"
-            disabled={isPending || isPending || isSubmitting}
-            loading={isPending}
-          >
+          <Button type="submit" disabled={isPending || isPending || isSubmitting} loading={isPending}>
             Update
           </Button>
         )}

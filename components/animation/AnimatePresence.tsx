@@ -5,10 +5,7 @@ interface IAnimatePresenceProps {
   children: React.ReactNode;
 }
 
-const AnimatePresenceClient = ({
-  children,
-  ...animationProps
-}: IAnimatePresenceProps & AnimatePresenceProps) => {
+const AnimatePresenceClient = ({ children, ...animationProps }: IAnimatePresenceProps & AnimatePresenceProps) => {
   return <AnimatePresence {...animationProps}>{children}</AnimatePresence>;
 };
 export default AnimatePresenceClient;

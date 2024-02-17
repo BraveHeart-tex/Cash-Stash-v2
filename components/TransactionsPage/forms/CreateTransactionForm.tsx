@@ -5,9 +5,7 @@ import { useForm } from "react-hook-form";
 import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 import { zodResolver } from "@hookform/resolvers/zod";
-import CreateTransactionSchema, {
-  CreateTransactionSchemaType,
-} from "@/schemas/CreateTransactionSchema";
+import CreateTransactionSchema, { CreateTransactionSchemaType } from "@/schemas/CreateTransactionSchema";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import FormInput from "@/components/FormInput";
 import FormSelect, { SelectOption } from "@/components/FormSelect";
@@ -16,11 +14,7 @@ import { createTransactionAction } from "@/actions";
 import { useRouter } from "next/navigation";
 import { SerializedUserAccount } from "@/actions/types";
 
-const CreateTransactionForm = ({
-  userAccounts,
-}: {
-  userAccounts: SerializedUserAccount[];
-}) => {
+const CreateTransactionForm = ({ userAccounts }: { userAccounts: SerializedUserAccount[] }) => {
   let [isPending, startTransition] = useTransition();
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -48,21 +42,16 @@ const CreateTransactionForm = ({
         showErrorToast("An error occurred.", result.error);
       } else {
         router.refresh();
-        showSuccessToast(
-          "Transaction created.",
-          `Transaction for ${result?.transaction?.amount}$ created.`
-        );
+        showSuccessToast("Transaction created.", `Transaction for ${result?.transaction?.amount}$ created.`);
         dispatch(closeGenericModal());
       }
     });
   };
 
-  const categorySelectOptions = Object.values(CreateBudgetOptions).map(
-    (category) => ({
-      value: category,
-      label: category,
-    })
-  );
+  const categorySelectOptions = Object.values(CreateBudgetOptions).map((category) => ({
+    value: category,
+    label: category,
+  }));
 
   const userAccountSelectOptions = userAccounts?.map((acc) => ({
     value: acc.id.toString(),
@@ -130,11 +119,7 @@ const CreateTransactionForm = ({
             setValue("isIncome", isIncome);
           }}
         />
-        <Button
-          className="mt-4"
-          type="submit"
-          disabled={isPending || isSubmitting}
-        >
+        <Button className="mt-4" type="submit" disabled={isPending || isSubmitting}>
           Create
         </Button>
       </div>

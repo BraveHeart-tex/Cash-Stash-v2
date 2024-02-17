@@ -8,21 +8,12 @@ import ReminderCard from "@/components/ReminderCard";
 import AnimatePresenceClient from "@/components/animation/AnimatePresence";
 import MotionDiv from "@/components/animation/MotionDiv";
 
-const NotificationsAndReminders = ({
-  reminders,
-}: {
-  reminders: SerializedReminder[];
-}) => {
+const NotificationsAndReminders = ({ reminders }: { reminders: SerializedReminder[] }) => {
   const dispatch = useAppDispatch();
 
   const noRemindersState = () => (
     <article className="flex h-[500px] items-center justify-center">
-      <MotionDiv
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className="mt-[30px]"
-      >
+      <MotionDiv initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }} className="mt-[30px]">
         <p className="text-primary">No reminders were found.</p>
         <Button
           className="mt-3 text-md font-semibold flex items-center gap-[14px]"
@@ -32,8 +23,7 @@ const NotificationsAndReminders = ({
                 key: "reminder",
                 mode: "create",
                 dialogTitle: "Create Reminder",
-                dialogDescription:
-                  "You can create a reminder by using the form below.",
+                dialogDescription: "You can create a reminder by using the form below.",
                 entityId: "",
               })
             );
@@ -53,9 +43,7 @@ const NotificationsAndReminders = ({
       <div className="grid grid-cols-1 gap-4">
         <AnimatePresenceClient>
           {reminders.length > 0
-            ? reminders.map((reminder) => (
-                <ReminderCard key={reminder.id} reminder={reminder} />
-              ))
+            ? reminders.map((reminder) => <ReminderCard key={reminder.id} reminder={reminder} />)
             : noRemindersState()}
         </AnimatePresenceClient>
       </div>
@@ -67,8 +55,7 @@ const NotificationsAndReminders = ({
               key: "reminder",
               mode: "create",
               dialogTitle: "Create Reminder",
-              dialogDescription:
-                "You can create a reminder by using the form below.",
+              dialogDescription: "You can create a reminder by using the form below.",
               entityId: "",
             })
           )

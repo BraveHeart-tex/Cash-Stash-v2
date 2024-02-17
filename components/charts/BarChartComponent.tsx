@@ -1,14 +1,6 @@
 "use client";
 import { MonthlyData } from "@/components/ReportsPage/ReportTable";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
@@ -30,9 +22,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
-const BarChartComponent = ({
-  monthlyTransactionsData,
-}: Pick<MonthlyData, "monthlyTransactionsData">) => {
+const BarChartComponent = ({ monthlyTransactionsData }: Pick<MonthlyData, "monthlyTransactionsData">) => {
   if (monthlyTransactionsData.length === 0) {
     return null;
   }
@@ -51,23 +41,9 @@ const BarChartComponent = ({
           }}
         />
         <YAxis allowDecimals={false} />
-        <Tooltip
-          cursor={{ fill: "#374151", opacity: 0.3 }}
-          content={<CustomTooltip />}
-          labelClassName="text-primary"
-        />
-        <Bar
-          dataKey="income"
-          barSize={75}
-          className="fill-success"
-          radius={[10, 10, 0, 0]}
-        />
-        <Bar
-          dataKey="expense"
-          barSize={75}
-          radius={[10, 10, 0, 0]}
-          className="dark:fill-red-700 fill-destructive"
-        />
+        <Tooltip cursor={{ fill: "#374151", opacity: 0.3 }} content={<CustomTooltip />} labelClassName="text-primary" />
+        <Bar dataKey="income" barSize={75} className="fill-success" radius={[10, 10, 0, 0]} />
+        <Bar dataKey="expense" barSize={75} radius={[10, 10, 0, 0]} className="dark:fill-red-700 fill-destructive" />
       </BarChart>
     </ResponsiveContainer>
   );

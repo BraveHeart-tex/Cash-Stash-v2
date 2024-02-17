@@ -12,23 +12,20 @@ const initialState: CurrentGoalState = {
   isLoading: false,
 };
 
-export const fetchGoalById = createAsyncThunk(
-  "goals/fetchGoalById",
-  async (goalId: string) => {
-    try {
-      const result = await getGeneric<Goal>({
-        tableName: "goal",
-        whereCondition: { id: goalId },
-      });
+export const fetchGoalById = createAsyncThunk("goals/fetchGoalById", async (goalId: string) => {
+  try {
+    const result = await getGeneric<Goal>({
+      tableName: "goal",
+      whereCondition: { id: goalId },
+    });
 
-      if (result?.error || !result?.data) return null;
+    if (result?.error || !result?.data) return null;
 
-      return result.data;
-    } catch (error) {
-      throw error;
-    }
+    return result.data;
+  } catch (error) {
+    throw error;
   }
-);
+});
 
 const currentGoalSlice = createSlice({
   name: "currentGoal",

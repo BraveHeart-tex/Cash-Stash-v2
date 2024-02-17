@@ -2,11 +2,7 @@ import { AppDispatch } from "@/app/redux/store";
 import { Page } from "./utils";
 import { openGenericModal as openGenericModalAction } from "@/app/redux/features/genericModalSlice";
 
-export const openGenericModal = (
-  page: Page,
-  dispatch: AppDispatch,
-  data?: any
-) => {
+export const openGenericModal = (page: Page, dispatch: AppDispatch, data?: any) => {
   if (page === "Accounts") {
     dispatch(
       openGenericModalAction({

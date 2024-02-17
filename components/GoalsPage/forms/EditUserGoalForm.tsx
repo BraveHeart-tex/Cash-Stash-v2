@@ -5,11 +5,7 @@ import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { fetchGoalById } from "@/app/redux/features/currentGoalSlice";
 import FormLoadingSpinner from "../../FormLoadingSpinner";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
-import {
-  showDefaultToast,
-  showErrorToast,
-  showSuccessToast,
-} from "@/components/ui/use-toast";
+import { showDefaultToast, showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import EditGoalSchema, { EditGoalSchemaType } from "@/schemas/EditGoalSchema";
 import FormInput from "@/components/FormInput";
@@ -68,10 +64,7 @@ const EditUserGoalForm = ({ entityId }: IEditUserGoalFormProps) => {
 
   const onSubmit = async (data: EditGoalSchemaType) => {
     if (hasMadeNoChanges()) {
-      return showDefaultToast(
-        "No changes made.",
-        "You haven't made any changes."
-      );
+      return showDefaultToast("No changes made.", "You haven't made any changes.");
     }
 
     let payload = {

@@ -8,9 +8,7 @@ import FormInput from "@/components/FormInput";
 import FormSelect from "@/components/FormSelect";
 import { Button } from "@/components/ui/button";
 import { useTransition } from "react";
-import CreateBudgetSchema, {
-  CreateBudgetSchemaType,
-} from "@/schemas/CreateBudgetSchema";
+import CreateBudgetSchema, { CreateBudgetSchemaType } from "@/schemas/CreateBudgetSchema";
 import { createBudgetAction } from "@/actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -43,14 +41,8 @@ const CreateBudgetForm = () => {
         showErrorToast("An error occurred.", result.error);
       } else {
         router.refresh();
-        const category =
-          result.budget && result.budget.category
-            ? CreateBudgetOptions[result.budget.category]
-            : "";
-        showSuccessToast(
-          "Budget created.",
-          `Budget for ${category} has been created.`
-        );
+        const category = result.budget && result.budget.category ? CreateBudgetOptions[result.budget.category] : "";
+        showSuccessToast("Budget created.", `Budget for ${category} has been created.`);
         dispatch(closeGenericModal());
       }
     });

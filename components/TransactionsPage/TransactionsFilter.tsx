@@ -1,21 +1,11 @@
 "use client";
 import { SerializedUserAccount } from "@/actions/types";
 import GenericSelect from "@/components/GenericSelect";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-const TransactionsFilter = ({
-  currentUserAccounts,
-}: {
-  currentUserAccounts: SerializedUserAccount[];
-}) => {
+const TransactionsFilter = ({ currentUserAccounts }: { currentUserAccounts: SerializedUserAccount[] }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -34,13 +24,8 @@ const TransactionsFilter = ({
     })) ?? []),
   ];
 
-  const handleFilterChange = (
-    value: string,
-    key: "transactionType" | "accountId"
-  ) => {
-    const currentSearchParams = new URLSearchParams(
-      Array.from(searchParams.entries())
-    );
+  const handleFilterChange = (value: string, key: "transactionType" | "accountId") => {
+    const currentSearchParams = new URLSearchParams(Array.from(searchParams.entries()));
 
     currentSearchParams.set(key, value);
     const search = currentSearchParams.toString();
@@ -52,16 +37,12 @@ const TransactionsFilter = ({
     <Card className="min-h-[10rem] w-full lg:w-[75%] mt-4">
       <CardHeader>
         <CardTitle className="text-lg">Filter Transactions</CardTitle>
-        <CardDescription>
-          Filter transactions by transaction type and account.
-        </CardDescription>
+        <CardDescription>Filter transactions by transaction type and account.</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 gap-2">
           <div>
-            <Label className="text-[14px] xl:text-md font-semibold">
-              By Transaction Type
-            </Label>
+            <Label className="text-[14px] xl:text-md font-semibold">By Transaction Type</Label>
             <GenericSelect
               placeholder={"Transaction Type"}
               options={TransactionTypeOptions}
@@ -72,9 +53,7 @@ const TransactionsFilter = ({
             />
           </div>
           <div>
-            <Label className="text-[14px] xl:text-md font-semibold">
-              By Account
-            </Label>
+            <Label className="text-[14px] xl:text-md font-semibold">By Account</Label>
             <GenericSelect
               placeholder={"Account"}
               options={AccountOptions}

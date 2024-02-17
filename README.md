@@ -11,7 +11,7 @@ Cash Stash is a personal finance application that offers various functionalities
 You can check out the live of of this application from this [link](https://cash-stash-v2.vercel.app)
 
 - You can click on the 'Login as a test user' to test the application.
-  
+
 ## Key Features
 
 1. Authentication with JSON Web Tokens and Next.js Middleware.

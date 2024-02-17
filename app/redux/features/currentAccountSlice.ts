@@ -12,22 +12,19 @@ const initialState: UserAccountsState = {
   isLoading: false,
 };
 
-export const fetchCurrentAccount = createAsyncThunk(
-  "currentAccount/fetchCurrentAccount",
-  async (id: string | null) => {
-    if (!id) {
-      return null;
-    }
-    const result = await getGeneric<UserAccount>({
-      tableName: "userAccount",
-      whereCondition: { id },
-    });
-    if (result?.error || !result?.data) {
-      return null;
-    }
-    return result.data;
+export const fetchCurrentAccount = createAsyncThunk("currentAccount/fetchCurrentAccount", async (id: string | null) => {
+  if (!id) {
+    return null;
   }
-);
+  const result = await getGeneric<UserAccount>({
+    tableName: "userAccount",
+    whereCondition: { id },
+  });
+  if (result?.error || !result?.data) {
+    return null;
+  }
+  return result.data;
+});
 
 const accountSlice = createSlice({
   name: "currentAccount",

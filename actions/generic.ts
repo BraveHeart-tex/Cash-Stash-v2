@@ -36,11 +36,7 @@ export const getTable = async (tableName: TableName) => {
     Prisma.TransactionDelegate<DefaultArgs>;
 };
 
-export const getGeneric = async <T>({
-  tableName,
-  whereCondition,
-  selectCondition,
-}: IGenericParams<T>) => {
+export const getGeneric = async <T>({ tableName, whereCondition, selectCondition }: IGenericParams<T>) => {
   try {
     const table = await getTable(tableName);
 
@@ -58,11 +54,7 @@ export const getGeneric = async <T>({
   }
 };
 
-export const getGenericList = async <T>({
-  tableName,
-  whereCondition,
-  selectCondition,
-}: IGenericParams<T>) => {
+export const getGenericList = async <T>({ tableName, whereCondition, selectCondition }: IGenericParams<T>) => {
   try {
     const table = await getTable(tableName);
 

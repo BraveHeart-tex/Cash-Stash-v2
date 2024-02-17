@@ -6,8 +6,7 @@ import MobileTabsListItem from "./MobileTabsListItem";
 const MobileTabsList = () => {
   const pathname = usePathname();
 
-  if (pathname.startsWith("/login") || pathname.startsWith("/signup"))
-    return null;
+  if (pathname.startsWith("/login") || pathname.startsWith("/signup")) return null;
 
   return (
     <div className="fixed bottom-0 left-0 z-50 w-full h-16 bg-background border-t border-border lg:hidden">

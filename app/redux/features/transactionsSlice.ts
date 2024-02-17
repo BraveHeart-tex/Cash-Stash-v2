@@ -1,17 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Transaction, UserAccount } from "@prisma/client";
-import {
-  fetchInsightsDataAction,
-  fetchMonthlyTransactionsDataAction,
-  getChartDataAction,
-} from "@/actions";
+import { fetchInsightsDataAction, fetchMonthlyTransactionsDataAction, getChartDataAction } from "@/actions";
 import { MonthlyData } from "@/components/ReportsPage/ReportTable";
 import { getGenericListByCurrentUser } from "@/actions/generic";
 
-export type SerializedTransaction = Omit<
-  Transaction,
-  "createdAt" | "updatedAt"
-> & {
+export type SerializedTransaction = Omit<Transaction, "createdAt" | "updatedAt"> & {
   createdAt: string;
   updatedAt: string;
   account?: Partial<UserAccount>;
@@ -73,75 +66,62 @@ const initialState: TransactionState = {
   isLoading: false,
 };
 
-export const fetchTransactions = createAsyncThunk(
-  "transactions/fetchTransactions",
-  async () => {
-    const result = await getGenericListByCurrentUser<Transaction>({
-      tableName: "transaction",
-    });
+export const fetchTransactions = createAsyncThunk("transactions/fetchTransactions", async () => {
+  const result = await getGenericListByCurrentUser<Transaction>({
+    tableName: "transaction",
+  });
 
-    if (result?.error || !result || !result.data) {
-      return null;
-    }
-
-    const transactions = result.data;
-
-    return transactions.map((data) => ({
-      ...data,
-      createdAt: new Date(data.createdAt).toLocaleDateString(),
-      updatedAt: new Date(data.updatedAt).toLocaleDateString(),
-    }));
+  if (result?.error || !result || !result.data) {
+    return null;
   }
-);
 
-export const getChartData = createAsyncThunk(
-  "transactions/getChartData",
-  async () => {
-    const chartData = await getChartDataAction();
-    if (chartData.error) {
-      return null;
-    } else {
-      return chartData.data;
-    }
+  const transactions = result.data;
+
+  return transactions.map((data) => ({
+    ...data,
+    createdAt: new Date(data.createdAt).toLocaleDateString(),
+    updatedAt: new Date(data.updatedAt).toLocaleDateString(),
+  }));
+});
+
+export const getChartData = createAsyncThunk("transactions/getChartData", async () => {
+  const chartData = await getChartDataAction();
+  if (chartData.error) {
+    return null;
+  } else {
+    return chartData.data;
   }
-);
+});
 
-export const fetchMonthlyTransactionsData = createAsyncThunk(
-  "transactions/fetchMonthlyTransactionsData",
-  async () => {
-    const { incomes, expenses } = await fetchMonthlyTransactionsDataAction();
-    if (!incomes?.length || !expenses?.length) {
-      return {
-        error: "No data found.",
-      };
-    }
-    return { incomes, expenses };
-  }
-);
-
-export const fetchInsightsData = createAsyncThunk(
-  "transactions/fetchInsightsData",
-  async () => {
-    const { totalIncome, totalExpense, netIncome, savingsRate } =
-      await fetchInsightsDataAction();
-
-    if (!totalIncome || !totalExpense || !netIncome || !savingsRate) {
-      return {
-        totalIncome: 0,
-        totalExpense: 0,
-        netIncome: 0,
-        savingsRate: "0",
-      };
-    }
-
+export const fetchMonthlyTransactionsData = createAsyncThunk("transactions/fetchMonthlyTransactionsData", async () => {
+  const { incomes, expenses } = await fetchMonthlyTransactionsDataAction();
+  if (!incomes?.length || !expenses?.length) {
     return {
-      totalIncome,
-      totalExpense,
-      netIncome,
-      savingsRate,
+      error: "No data found.",
     };
   }
-);
+  return { incomes, expenses };
+});
+
+export const fetchInsightsData = createAsyncThunk("transactions/fetchInsightsData", async () => {
+  const { totalIncome, totalExpense, netIncome, savingsRate } = await fetchInsightsDataAction();
+
+  if (!totalIncome || !totalExpense || !netIncome || !savingsRate) {
+    return {
+      totalIncome: 0,
+      totalExpense: 0,
+      netIncome: 0,
+      savingsRate: "0",
+    };
+  }
+
+  return {
+    totalIncome,
+    totalExpense,
+    netIncome,
+    savingsRate,
+  };
+});
 
 const transactionsSlice = createSlice({
   name: "filteredTransactions",
@@ -168,10 +148,7 @@ const transactionsSlice = createSlice({
         state.filteredData =
           state.data?.filter((transaction) => {
             if (type !== "") {
-              if (
-                (type === "income" && !transaction.isIncome) ||
-                (type === "expense" && transaction.isIncome)
-              ) {
+              if ((type === "income" && !transaction.isIncome) || (type === "expense" && transaction.isIncome)) {
                 return false;
               }
             }
@@ -182,11 +159,7 @@ const transactionsSlice = createSlice({
           }) || null;
       }
 
-      if (
-        state.filteredData &&
-        state.filteredData.length > 0 &&
-        state.sort.sortBy
-      ) {
+      if (state.filteredData && state.filteredData.length > 0 && state.sort.sortBy) {
         state.filteredData.sort((a, b) => {
           const aValue = a[state.sort.sortBy as keyof Transaction];
           const bValue = b[state.sort.sortBy as keyof Transaction];
@@ -273,12 +246,7 @@ const transactionsSlice = createSlice({
   },
 });
 
-export const {
-  setFilterType,
-  setFilterAccount,
-  updateFilteredData,
-  setSortBy,
-  setSortDirection,
-} = transactionsSlice.actions;
+export const { setFilterType, setFilterAccount, updateFilteredData, setSortBy, setSortDirection } =
+  transactionsSlice.actions;
 
 export default transactionsSlice.reducer;

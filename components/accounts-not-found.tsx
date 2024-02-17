@@ -6,9 +6,7 @@ const AccountsNotFound = ({ pageHasParams }: { pageHasParams: boolean }) => {
     <GenericNotFound
       renderTitle={({ className }) => (
         <h3 className={className}>
-          {pageHasParams
-            ? "No accounts were found for your search"
-            : "You don't have any accounts yet."}
+          {pageHasParams ? "No accounts were found for your search" : "You don't have any accounts yet."}
         </h3>
       )}
       renderMessage={({ className }) => (

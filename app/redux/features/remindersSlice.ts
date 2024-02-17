@@ -2,10 +2,7 @@ import { getGeneric, getGenericListByCurrentUser } from "@/actions/generic";
 import { Reminder } from "@prisma/client";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export type SerializedReminder = Omit<
-  Reminder,
-  "createdAt" | "updatedAt" | "reminderDate"
-> & {
+export type SerializedReminder = Omit<Reminder, "createdAt" | "updatedAt" | "reminderDate"> & {
   createdAt: string;
   updatedAt: string;
   reminderDate: string;
@@ -23,48 +20,42 @@ const initialState: RemindersState = {
   isLoading: false,
 };
 
-export const fetchReminders = createAsyncThunk(
-  "reminders/fetchReminders",
-  async () => {
-    const result = await getGenericListByCurrentUser<Reminder>({
-      tableName: "reminder",
-      whereCondition: { isRead: false },
-    });
-    if (result?.error || !result?.data || !result?.data?.length) {
-      return null;
-    }
-
-    const serializedReminders = result.data.map((reminder) => ({
-      ...reminder,
-      createdAt: new Date(reminder.createdAt).toLocaleDateString(),
-      updatedAt: new Date(reminder.updatedAt).toLocaleDateString(),
-      reminderDate: new Date(reminder.reminderDate).toLocaleDateString(),
-    }));
-
-    return serializedReminders;
+export const fetchReminders = createAsyncThunk("reminders/fetchReminders", async () => {
+  const result = await getGenericListByCurrentUser<Reminder>({
+    tableName: "reminder",
+    whereCondition: { isRead: false },
+  });
+  if (result?.error || !result?.data || !result?.data?.length) {
+    return null;
   }
-);
 
-export const fetchReminderById = createAsyncThunk(
-  "reminders/fetchReminderById",
-  async (reminderId: string) => {
-    const result = await getGeneric<Reminder>({
-      tableName: "reminder",
-      whereCondition: { id: reminderId },
-    });
+  const serializedReminders = result.data.map((reminder) => ({
+    ...reminder,
+    createdAt: new Date(reminder.createdAt).toLocaleDateString(),
+    updatedAt: new Date(reminder.updatedAt).toLocaleDateString(),
+    reminderDate: new Date(reminder.reminderDate).toLocaleDateString(),
+  }));
 
-    if (result?.error || !result?.data) return null;
+  return serializedReminders;
+});
 
-    const serializedReminder = {
-      ...result.data,
-      createdAt: new Date(result.data.createdAt).toLocaleDateString(),
-      updatedAt: new Date(result.data.updatedAt).toLocaleDateString(),
-      reminderDate: new Date(result.data.reminderDate).toLocaleDateString(),
-    };
+export const fetchReminderById = createAsyncThunk("reminders/fetchReminderById", async (reminderId: string) => {
+  const result = await getGeneric<Reminder>({
+    tableName: "reminder",
+    whereCondition: { id: reminderId },
+  });
 
-    return serializedReminder;
-  }
-);
+  if (result?.error || !result?.data) return null;
+
+  const serializedReminder = {
+    ...result.data,
+    createdAt: new Date(result.data.createdAt).toLocaleDateString(),
+    updatedAt: new Date(result.data.updatedAt).toLocaleDateString(),
+    reminderDate: new Date(result.data.reminderDate).toLocaleDateString(),
+  };
+
+  return serializedReminder;
+});
 
 const remindersSlice = createSlice({
   name: "remindersSlice",

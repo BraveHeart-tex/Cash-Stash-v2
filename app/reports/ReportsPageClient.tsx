@@ -5,32 +5,22 @@ import { SerializedUserAccount } from "@/actions/types";
 import { SearchParams } from "../transactions/page";
 import MotionDiv from "@/components/animation/MotionDiv";
 
-const ReportsPageClient = async ({
-  searchParams,
-}: {
-  searchParams: SearchParams;
-}) => {
-  const {
-    transactionType = "all",
-    accountId = "",
-    sortBy = "createdAt",
-    sortDirection = "desc",
-  } = searchParams;
+const ReportsPageClient = async ({ searchParams }: { searchParams: SearchParams }) => {
+  const { transactionType = "all", accountId = "", sortBy = "createdAt", sortDirection = "desc" } = searchParams;
 
-  const [chartDataResponse, userAccountsResponse, userTransactionsResponse] =
-    await Promise.all([
-      getChartDataAction(),
-      getGenericListByCurrentUser<SerializedUserAccount>({
-        tableName: "userAccount",
-        serialize: true,
-      }),
-      searchTransactions({
-        transactionType: transactionType as "all" | "income" | "expense",
-        accountId,
-        sortBy: sortBy as "createdAt" | "amount",
-        sortDirection: sortDirection as "asc" | "desc",
-      }),
-    ]);
+  const [chartDataResponse, userAccountsResponse, userTransactionsResponse] = await Promise.all([
+    getChartDataAction(),
+    getGenericListByCurrentUser<SerializedUserAccount>({
+      tableName: "userAccount",
+      serialize: true,
+    }),
+    searchTransactions({
+      transactionType: transactionType as "all" | "income" | "expense",
+      accountId,
+      sortBy: sortBy as "createdAt" | "amount",
+      sortDirection: sortDirection as "asc" | "desc",
+    }),
+  ]);
 
   const data = chartDataResponse.data || [];
   let userAccountsResult = userAccountsResponse?.data || [];

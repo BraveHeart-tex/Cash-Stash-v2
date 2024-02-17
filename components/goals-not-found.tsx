@@ -6,9 +6,7 @@ const GoalsNotFound = ({ pageHasParams }: { pageHasParams: boolean }) => {
     <GenericNotFound
       renderTitle={({ className }) => (
         <h3 className={className}>
-          {pageHasParams
-            ? "No goals were found for your search"
-            : "You don't have any financial goals yet."}
+          {pageHasParams ? "No goals were found for your search" : "You don't have any financial goals yet."}
         </h3>
       )}
       renderMessage={({ className }) => (

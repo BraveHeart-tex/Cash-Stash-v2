@@ -12,26 +12,23 @@ const initialState: CurrentBudgetState = {
   isLoading: false,
 };
 
-export const fetchBudgetById = createAsyncThunk(
-  "budgets/fetchBudgetById",
-  async (budgetId: string) => {
-    try {
-      const result = await getGeneric<Budget>({
-        tableName: "budget",
-        whereCondition: { id: budgetId },
-      });
+export const fetchBudgetById = createAsyncThunk("budgets/fetchBudgetById", async (budgetId: string) => {
+  try {
+    const result = await getGeneric<Budget>({
+      tableName: "budget",
+      whereCondition: { id: budgetId },
+    });
 
-      if (result?.error || !result?.data) {
-        return null;
-      }
-
-      return result.data;
-    } catch (error) {
-      console.error(error);
-      throw error;
+    if (result?.error || !result?.data) {
+      return null;
     }
+
+    return result.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
-);
+});
 
 const currentBudgetSlice = createSlice({
   name: "currentBudget",

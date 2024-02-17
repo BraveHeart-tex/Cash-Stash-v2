@@ -1,15 +1,7 @@
 "use client";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import {
-  Cross1Icon,
-  DotsHorizontalIcon,
-  Pencil1Icon,
-} from "@radix-ui/react-icons";
+import { Cross1Icon, DotsHorizontalIcon, Pencil1Icon } from "@radix-ui/react-icons";
 import { cn } from "@/lib/utils";
 
 interface IActionPopoverProps {
@@ -32,10 +24,7 @@ const ActionPopover = ({
   return (
     <Popover>
       <PopoverTrigger
-        className={cn(
-          isAbsolute ? "absolute focus:outline-none outline-none" : "",
-          placementClasses
-        )}
+        className={cn(isAbsolute ? "absolute focus:outline-none outline-none" : "", placementClasses)}
         aria-label={popoverHeading}
       >
         <div className="p-2 hover:bg-secondary transition-all rounded-md">
@@ -43,9 +32,7 @@ const ActionPopover = ({
         </div>
       </PopoverTrigger>
       <PopoverContent align={align}>
-        <h3 className="text-center font-semibold text-primary">
-          {popoverHeading}
-        </h3>
+        <h3 className="text-center font-semibold text-primary">{popoverHeading}</h3>
         <hr className="my-2" />
         <div className="grid grid-cols-1 gap-1">
           <div className="flex items-center">

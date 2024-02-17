@@ -32,13 +32,7 @@ const genericConfirmSlice = createSlice({
         resolveCallback: (result: any, cleanUp: any) => void;
       }>
     ) => {
-      const {
-        title,
-        message,
-        primaryActionLabel,
-        primaryAction,
-        resolveCallback,
-      } = action.payload;
+      const { title, message, primaryActionLabel, primaryAction, resolveCallback } = action.payload;
 
       state.visible = true;
       state.title = title;
@@ -71,11 +65,6 @@ const genericConfirmSlice = createSlice({
   },
 });
 
-export const {
-  showGenericConfirm,
-  setPrimaryActionResult,
-  callPrimaryAction,
-  cleanUp,
-} = genericConfirmSlice.actions;
+export const { showGenericConfirm, setPrimaryActionResult, callPrimaryAction, cleanUp } = genericConfirmSlice.actions;
 
 export default genericConfirmSlice.reducer;

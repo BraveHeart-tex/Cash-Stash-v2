@@ -18,15 +18,7 @@ interface IFormCheckboxProps {
   onChange?: (value: CheckedState) => void;
 }
 
-const FormCheckbox = ({
-  name,
-  label,
-  register,
-  errors,
-  className,
-  defaultChecked,
-  onChange,
-}: IFormCheckboxProps) => {
+const FormCheckbox = ({ name, label, register, errors, className, defaultChecked, onChange }: IFormCheckboxProps) => {
   return (
     <div className="flex flex-col gap-1">
       <Label htmlFor={name}>{label}</Label>
@@ -39,9 +31,7 @@ const FormCheckbox = ({
           onChange && onChange(e);
         }}
       />
-      {errors[name] && errors[name].message && (
-        <FormError errorMessage={errors[name].message} />
-      )}
+      {errors[name] && errors[name].message && <FormError errorMessage={errors[name].message} />}
     </div>
   );
 };

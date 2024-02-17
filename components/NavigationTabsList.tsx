@@ -8,21 +8,16 @@ import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 
 const NavigationTabsList = () => {
-  const { selectedTab } = useAppSelector(
-    (state) => state.navigationTabsReducer
-  );
+  const { selectedTab } = useAppSelector((state) => state.navigationTabsReducer);
   const pathName = usePathname();
   const dispatch = useAppDispatch();
 
-  if (pathName.startsWith("/login") || pathName.startsWith("/signup"))
-    return null;
+  if (pathName.startsWith("/login") || pathName.startsWith("/signup")) return null;
 
   return (
     <Tabs
       value={selectedTab}
-      onValueChange={(value) =>
-        dispatch(setSelectedTab({ selectedTab: value as Page }))
-      }
+      onValueChange={(value) => dispatch(setSelectedTab({ selectedTab: value as Page }))}
       defaultValue={selectedTab}
     >
       <div className="overflow-scroll scrollbar-hide hidden lg:block">
@@ -32,9 +27,7 @@ const NavigationTabsList = () => {
               key={page.label}
               asChild
               value={page.label}
-              className={
-                "relative data-[state=active]:text-white data-[state=active]:bg-transparent"
-              }
+              className={"relative data-[state=active]:text-white data-[state=active]:bg-transparent"}
               data-state={pathName === page.link ? "active" : "inactive"}
             >
               <Link href={page.link}>

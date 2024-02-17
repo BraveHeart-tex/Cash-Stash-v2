@@ -35,8 +35,7 @@ export const genericModalSlice = createSlice({
         props?: any;
       }>
     ) => {
-      const { entityId, mode, dialogTitle, dialogDescription, key, props } =
-        action.payload;
+      const { entityId, mode, dialogTitle, dialogDescription, key, props } = action.payload;
 
       state.entityId = entityId;
       state.key = key;
@@ -58,7 +57,6 @@ export const genericModalSlice = createSlice({
   },
 });
 
-export const { openGenericModal, closeGenericModal } =
-  genericModalSlice.actions;
+export const { openGenericModal, closeGenericModal } = genericModalSlice.actions;
 
 export default genericModalSlice.reducer;
