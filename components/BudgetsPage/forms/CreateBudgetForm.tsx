@@ -27,18 +27,13 @@ const CreateBudgetForm = () => {
     formState: { errors, isSubmitting },
     setValue,
   } = useForm<CreateBudgetSchemaType>({
-    defaultValues: {
-      name: "",
-      budgetAmount: 10,
-      category: "",
-      spentAmount: 0,
-    },
     resolver: zodResolver(CreateBudgetSchema),
   });
 
   const onSubmit = async (data: CreateBudgetSchemaType) => {
     startTransition(async () => {
       const result = await createBudgetAction(data);
+
       if (result?.error) {
         showErrorToast("An error occurred.", result.error);
       } else {
