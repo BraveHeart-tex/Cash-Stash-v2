@@ -1,13 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { UserAccount } from "@prisma/client";
+import { Account } from "@prisma/client";
 import { getGeneric } from "@/actions/generic";
 
-interface UserAccountsState {
-  currentAccount: UserAccount | null;
+interface AccountState {
+  currentAccount: Account | null;
   isLoading: boolean;
 }
 
-const initialState: UserAccountsState = {
+const initialState: AccountState = {
   currentAccount: null,
   isLoading: false,
 };
@@ -18,7 +18,7 @@ export const fetchCurrentAccount = createAsyncThunk(
     if (!id) {
       return null;
     }
-    const result = await getGeneric<UserAccount>({
+    const result = await getGeneric<Account>({
       tableName: "userAccount",
       whereCondition: { id },
     });

@@ -15,7 +15,7 @@ import { DefaultArgs } from "@prisma/client/runtime/library";
 import { getCurrentUserAction } from ".";
 
 const TABLE_MAP: TableMap = {
-  userAccount: prisma.userAccount,
+  userAccount: prisma.account,
   transaction: prisma.transaction,
   budget: prisma.budget,
   goal: prisma.goal,
@@ -31,7 +31,7 @@ export const getTable = async (tableName: TableName) => {
 
   return table as Prisma.GoalDelegate<DefaultArgs> &
     Prisma.BudgetDelegate<DefaultArgs> &
-    Prisma.UserAccountDelegate<DefaultArgs> &
+    Prisma.AccountDelegate<DefaultArgs> &
     Prisma.ReminderDelegate<DefaultArgs> &
     Prisma.TransactionDelegate<DefaultArgs>;
 };
