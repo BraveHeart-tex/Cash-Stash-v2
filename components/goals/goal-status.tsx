@@ -1,9 +1,9 @@
 import GoalCard from "./goal-card";
-import CreateGoalButton from "./create-buttons/create-goal-button";
+import CreateGoalButton from "../create-buttons/create-goal-button";
 import AnimatePresenceClient from "@/components/animations/animate-presence";
 import MotionDiv from "@/components/animations/motion-div";
 import { Goal } from "@prisma/client";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import Link from "next/link";
 
 const GoalStatus = ({ goals }: { goals: Goal[] }) => {

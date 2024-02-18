@@ -4,7 +4,7 @@ import { InsightsData } from "@/actions/types";
 import AccountSummaries from "@/components/account-summaries";
 import BudgetStatus from "@/components/budget-status";
 import FinancialInsights from "@/components/financial-insights";
-import GoalStatus from "@/components/goal-status";
+import GoalStatus from "@/components/goals/goal-status";
 import NotificationsAndReminders from "@/components/notification-and-reminders";
 import TransactionHistory from "@/components/transaction-history";
 import BarChartComponent from "@/components/charts/bar-chart";

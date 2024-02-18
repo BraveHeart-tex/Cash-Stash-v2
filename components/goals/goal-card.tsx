@@ -86,6 +86,7 @@ const GoalCard = ({ goal }: IGoalCardProps) => {
                   mode: "edit",
                   key: "goal",
                   entityId: goal.id,
+                  data: goal,
                 })
               )
             }

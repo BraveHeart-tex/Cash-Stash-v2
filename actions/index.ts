@@ -14,14 +14,11 @@ import ACCOUNT_OPTIONS from "@/lib/CreateUserAccountOptions";
 import {
   TransactionCategory,
   Prisma,
-  BudgetCategory,
   Account,
   Budget,
+  Goal,
 } from "@prisma/client";
 import { EditReminderSchemaType } from "@/schemas/EditReminderSchema";
-import EditBudgetSchema, {
-  EditBudgetSchemaType,
-} from "@/schemas/EditBudgetSchema";
 import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
 import { CreateBudgetSchemaType } from "@/schemas/CreateBudgetSchema";
 import CreateTransactionSchema, {
@@ -39,10 +36,10 @@ import {
   IGetPaginatedGoalsParams,
   IGetPaginatedGoalsResponse,
   IValidatedResponse,
-  UpdateBudgetResponse,
 } from "./types";
 import { ZodError } from "zod";
 import budgetSchema, { BudgetSchemaType } from "@/schemas/budget-schema";
+import goalSchema, { GoalSchemaType } from "@/schemas/goal-schema";
 
 export const login = async ({ email, password }: LoginSchemaType) => {
   const result = LoginSchema.safeParse({ email, password });
@@ -930,5 +927,101 @@ export const getPaginatedTransactions = async ({
   } catch (error) {
     console.error(error);
     return { error: "An error occurred." };
+  }
+};
+
+export const createGoal = async (
+  values: GoalSchemaType
+): Promise<IValidatedResponse<Goal>> => {
+  const currentUser = await getCurrentUser(cookies().get("token")?.value!);
+
+  if (!currentUser) {
+    return {
+      error: "You are not authorized to perform this action.",
+      fieldErrors: [],
+    };
+  }
+
+  try {
+    const validatedData = goalSchema.parse(values);
+
+    const createdGoal = await prisma.goal.create({
+      data: {
+        ...validatedData,
+        userId: currentUser.id,
+      },
+    });
+
+    if (!createdGoal) {
+      return {
+        error:
+          "There was a problem while creating your goal. Please try again later.",
+        fieldErrors: [],
+      };
+    }
+
+    return {
+      data: createdGoal,
+      fieldErrors: [],
+    };
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return processZodError(error);
+    }
+
+    return {
+      error:
+        "There was a problem while creating your goal. Please try again later.",
+      fieldErrors: [],
+    };
+  }
+};
+
+export const updateGoal = async (
+  goalId: string,
+  values: GoalSchemaType
+): Promise<IValidatedResponse<Goal>> => {
+  const currentUser = await getCurrentUser(cookies().get("token")?.value!);
+  if (!currentUser) {
+    return {
+      error: "You are not authorized to perform this action.",
+      fieldErrors: [],
+    };
+  }
+
+  const goalToBeUpdated = await prisma.goal.findUnique({
+    where: { id: goalId },
+  });
+
+  if (!goalToBeUpdated)
+    return { error: `Goal to be updated cannot be found.`, fieldErrors: [] };
+
+  try {
+    const validatedData = goalSchema.parse(values);
+
+    const updatedGoal = await prisma.goal.update({
+      where: { id: goalId, userId: goalToBeUpdated.userId },
+      data: validatedData,
+    });
+
+    if (!updatedGoal)
+      return {
+        error:
+          "There was a problem while trying to update your goal. Please try again later.",
+        fieldErrors: [],
+      };
+
+    return { data: updatedGoal, fieldErrors: [] };
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return processZodError(error);
+    }
+
+    console.error(error);
+    return {
+      error:
+        "There was a problem while updating your goal. Please try again later.",
+      fieldErrors: [],
+    };
   }
 };
