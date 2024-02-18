@@ -12,28 +12,27 @@ model User {
   name           String
   email          String        @unique
   hashedPassword String
-  image          String?
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
   budgets        Budget[]
   goals          Goal[]
   reminders      Reminder[]
   transactions   Transaction[]
-  userAccounts   UserAccount[]
+  userAccounts   Account[]
 
   @@map("users")
 }
 
-model UserAccount {
-  id           String              @id @default(cuid())
+model Account {
+  id           String          @id @default(cuid())
   name         String
   balance      Float
   userId       String
-  category     UserAccountCategory @default(CHECKING)
-  createdAt    DateTime            @default(now())
-  updatedAt    DateTime            @updatedAt
+  category     AccountCategory @default(CHECKING)
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
   transactions Transaction[]
-  user         User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User            @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId], map: "userAccounts_userId_fkey")
   @@map("userAccounts")
@@ -48,28 +47,26 @@ model Transaction {
   category    NotificationCategory @default(OTHER)
   accountId   String
   userId      String
-  isIncome    Boolean              @default(false)
-  account     UserAccount          @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  account     Account              @relation(fields: [accountId], references: [id], onDelete: Cascade)
   user        User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([accountId], map: "transactions_accountId_fkey")
   @@index([userId], map: "transactions_userId_fkey")
-  @@map("transactions")
 }
 
 model Budget {
-  id           String               @id @default(cuid())
+  id           String         @id @default(cuid())
   name         String
   budgetAmount Float
   spentAmount  Float
   userId       String
-  category     NotificationCategory @default(OTHER)
-  createdAt    DateTime             @default(now())
-  updatedAt    DateTime             @updatedAt
-  user         User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  progress     Float          @default(0)
+  category     BudgetCategory @default(OTHER)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId], map: "budgets_userId_fkey")
-  @@map("budgets")
 }
 
 model Goal {
@@ -77,30 +74,37 @@ model Goal {
   name          String
   goalAmount    Float
   currentAmount Float
+  progress      Float    @default(0)
   userId        String
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId], map: "goals_userId_fkey")
-  @@map("goals")
 }
 
 model Reminder {
-  id           String   @id @default(cuid())
-  title        String
-  description  String
-  amount       Float
-  reminderDate DateTime
-  userId       String
-  isRead       Boolean  @default(false)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  isIncome     Boolean
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id             String    @id @default(cuid())
+  title          String
+  description    String
+  reminderDate   DateTime
+  userId         String
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  markedAsReadAt DateTime?
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId], map: "reminders_userId_fkey")
-  @@map("reminders")
+}
+
+enum BudgetCategory {
+  FOOD
+  TRANSPORTATION
+  ENTERTAINMENT
+  UTILITIES
+  SHOPPING
+  HOUSING
+  OTHER
 }
 
 enum NotificationCategory {
@@ -111,17 +115,13 @@ enum NotificationCategory {
   SHOPPING
   HOUSING
   OTHER
-
-  @@map("notificationCategories")
 }
 
-enum UserAccountCategory {
+enum AccountCategory {
   CHECKING
   SAVINGS
   CREDIT_CARD
   INVESTMENT
   LOAN
   OTHER
-
-  @@map("userAccountCategories")
 }
