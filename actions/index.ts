@@ -34,11 +34,11 @@ import CreateReminderSchema, {
 import { redirect } from "next/navigation";
 import {
   IGetPaginatedAccountActionParams,
-  IGetPaginatedAccountActionReturnType,
+  IGetPaginatedAccountActionResponse,
   IGetPaginatedBudgetsActionParams,
-  IGetPaginatedBudgetsActionReturnType,
+  IGetPaginatedBudgetsActionResponse,
   IGetPaginatedGoalsActionParams,
-  IGetPaginatedGoalsActionReturnType,
+  IGetPaginatedGoalsActionResponse,
   UpdateBudgetResponse,
 } from "./types";
 import { ZodError } from "zod";
@@ -159,7 +159,7 @@ export const getPaginatedAccountAction = async ({
   category,
   sortBy,
   sortDirection,
-}: IGetPaginatedAccountActionParams): Promise<IGetPaginatedAccountActionReturnType> => {
+}: IGetPaginatedAccountActionParams): Promise<IGetPaginatedAccountActionResponse> => {
   const result = await getCurrentUserAction();
   if (result.error) {
     redirect("/login");
@@ -238,7 +238,7 @@ export const getPaginatedBudgetsAction = async ({
   category,
   sortBy,
   sortDirection,
-}: IGetPaginatedBudgetsActionParams): Promise<IGetPaginatedBudgetsActionReturnType> => {
+}: IGetPaginatedBudgetsActionParams): Promise<IGetPaginatedBudgetsActionResponse> => {
   const result = await getCurrentUserAction();
   if (result.error) {
     redirect("/login");
@@ -310,7 +310,7 @@ export const getPaginatedGoalsAction = async ({
   query,
   sortBy,
   sortDirection,
-}: IGetPaginatedGoalsActionParams): Promise<IGetPaginatedGoalsActionReturnType> => {
+}: IGetPaginatedGoalsActionParams): Promise<IGetPaginatedGoalsActionResponse> => {
   const result = await getCurrentUserAction();
   if (result.error) {
     redirect("/login");

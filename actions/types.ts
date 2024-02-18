@@ -1,12 +1,12 @@
 import {
   Budget,
   Account,
-  NotificationCategory,
   AccountCategory,
   Goal,
+  BudgetCategory,
 } from "@prisma/client";
 
-interface IPaginatedReturnType {
+interface IPaginatedResponse {
   hasNextPage: boolean;
   hasPreviousPage: boolean;
   currentPage: number;
@@ -25,20 +25,18 @@ export interface IGetPaginatedAccountActionParams
   category?: AccountCategory;
 }
 
-export interface IGetPaginatedAccountActionReturnType
-  extends IPaginatedReturnType {
+export interface IGetPaginatedAccountActionResponse extends IPaginatedResponse {
   accounts: Account[];
 }
 
 export interface IGetPaginatedBudgetsActionParams
   extends IPaginatedActionParams {
-  category?: NotificationCategory;
+  category?: BudgetCategory;
   sortBy?: string;
   sortDirection?: string;
 }
 
-export interface IGetPaginatedBudgetsActionReturnType
-  extends IPaginatedReturnType {
+export interface IGetPaginatedBudgetsActionResponse extends IPaginatedResponse {
   budgets: Budget[];
 }
 
@@ -47,8 +45,7 @@ export interface IGetPaginatedGoalsActionParams extends IPaginatedActionParams {
   sortDirection?: string;
 }
 
-export interface IGetPaginatedGoalsActionReturnType
-  extends IPaginatedReturnType {
+export interface IGetPaginatedGoalsActionResponse extends IPaginatedResponse {
   goals: Goal[];
 }
 
