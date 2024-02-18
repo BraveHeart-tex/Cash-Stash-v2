@@ -2,7 +2,7 @@
 import { useAppDispatch } from "@/app/redux/hooks";
 import { SerializedTransaction } from "@/actions/types";
 import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
+import { cn, formatMoney } from "@/lib/utils";
 import ActionPopover from "@/components/action-popover";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { showGenericConfirm } from "@/app/redux/features/genericConfirmSlice";
@@ -100,7 +100,7 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
             <div className={"flex items-center gap-1"}>
               <p className={"font-semibold"}>Amount: </p>
               <p className={cn(isIncome ? "text-green-500" : "text-red-500")}>
-                {isIncome ? "+" : "-"}${transaction.amount}
+                {isIncome ? "+" : "-"}${formatMoney(transaction.amount)}
               </p>
             </div>
           </div>
