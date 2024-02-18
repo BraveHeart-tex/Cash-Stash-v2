@@ -58,7 +58,7 @@ export type UpdateGenericInput<T> = {
 };
 
 export type TableName =
-  | "userAccount"
+  | "account"
   | "transaction"
   | "budget"
   | "goal"

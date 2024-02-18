@@ -19,7 +19,7 @@ export const fetchCurrentAccount = createAsyncThunk(
       return null;
     }
     const result = await getGeneric<Account>({
-      tableName: "userAccount",
+      tableName: "account",
       whereCondition: { id },
     });
     if (result?.error || !result?.data) {

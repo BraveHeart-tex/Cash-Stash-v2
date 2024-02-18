@@ -8,12 +8,12 @@ import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 import { cn, formatMoney } from "@/lib/utils";
 import { deleteGeneric } from "@/actions/generic";
-import { UserAccount } from "@prisma/client";
+import { Account } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 
 interface IAccountCardProps {
-  account: UserAccount;
+  account: Account;
   className?: string;
 }
 
@@ -46,8 +46,8 @@ const AccountCard = ({ account, className }: IAccountCardProps) => {
         message: "Are you sure you want to delete this account?",
         primaryActionLabel: "Delete",
         primaryAction: async () =>
-          await deleteGeneric<UserAccount>({
-            tableName: "userAccount",
+          await deleteGeneric<Account>({
+            tableName: "account",
             whereCondition: { id },
           }),
         resolveCallback: handleActionCallback,

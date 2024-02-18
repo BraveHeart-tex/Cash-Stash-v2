@@ -21,7 +21,7 @@ const ReportsPageClient = async ({
     await Promise.all([
       getChartData(),
       getGenericListByCurrentUser<SerializedUserAccount>({
-        tableName: "userAccount",
+        tableName: "account",
         serialize: true,
       }),
       getPaginatedTransactions({

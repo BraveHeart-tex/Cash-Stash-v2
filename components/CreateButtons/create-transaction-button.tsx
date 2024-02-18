@@ -14,7 +14,7 @@ const CreateTransactionButton = ({ className }: { className: string }) => {
   const handleCreateTransactionClick = async () => {
     startTransition(async () => {
       const result = await getGenericListByCurrentUser({
-        tableName: "userAccount",
+        tableName: "account",
       });
 
       if (result?.error)
