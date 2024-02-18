@@ -1,5 +1,5 @@
 import CreateAccountButton from "@/components/CreateButtons/create-account-button";
-import { getPaginatedAccountAction } from "@/actions";
+import { getPaginatedAccounts } from "@/actions";
 import RoutePaginationControls from "@/components/route-pagination-controls";
 import RouteSearchInput from "@/components/route-search-input";
 import AccountCard from "@/components/account-card";
@@ -28,7 +28,7 @@ const AccountPage = async ({
   const sortBy = searchParams.sortBy || "";
   const sortDirection = searchParams.sortDirection || "";
 
-  const result = await getPaginatedAccountAction({
+  const result = await getPaginatedAccounts({
     pageNumber,
     query,
     category,

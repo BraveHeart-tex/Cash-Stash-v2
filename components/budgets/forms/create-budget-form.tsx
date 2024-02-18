@@ -11,7 +11,7 @@ import { useTransition } from "react";
 import CreateBudgetSchema, {
   CreateBudgetSchemaType,
 } from "@/schemas/CreateBudgetSchema";
-import { createBudgetAction } from "@/actions";
+import { createBudget } from "@/actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 
@@ -32,7 +32,7 @@ const CreateBudgetForm = () => {
 
   const onSubmit = async (data: CreateBudgetSchemaType) => {
     startTransition(async () => {
-      const result = await createBudgetAction(data);
+      const result = await createBudget(data);
 
       if (result?.error) {
         showErrorToast("An error occurred.", result.error);

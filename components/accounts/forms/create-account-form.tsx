@@ -11,7 +11,7 @@ import accountSchema, {
 import FormInput from "@/components/form-input";
 import FormSelect from "@/components/form-select";
 import { Button } from "@/components/ui/button";
-import { registerBankAccountAction } from "@/actions";
+import { registerBankAccount } from "@/actions";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 import { useRouter } from "next/navigation";
 
@@ -36,7 +36,7 @@ const CreateAccountForm = () => {
 
   const onSubmit = async (data: AccountSchemaType) => {
     startTransition(async () => {
-      const result = await registerBankAccountAction(data);
+      const result = await registerBankAccount(data);
 
       if (result?.error) {
         showErrorToast("An error occurred.", result.error);

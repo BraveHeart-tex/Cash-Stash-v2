@@ -1,12 +1,12 @@
 import GoalsNotFound from "@/components/goals-not-found";
 import CreateGoalButton from "@/components/CreateButtons/create-goal-button";
 import GoalCard from "@/components/goal-card";
-import { getPaginatedGoalsAction } from "@/actions";
 import RoutePaginationControls from "@/components/route-pagination-controls";
 import RouteSearchInput from "@/components/route-search-input";
 import RouteFiltersPopover from "@/components/route-filters-popover";
 import { GiPayMoney } from "react-icons/gi";
 import { FaPiggyBank } from "react-icons/fa";
+import { getPaginatedGoals } from "@/actions";
 
 const GoalsPage = async ({
   searchParams,
@@ -25,7 +25,7 @@ const GoalsPage = async ({
     sortDirection: searchParams.sortDirection || "",
   };
 
-  const result = await getPaginatedGoalsAction(actionParams);
+  const result = await getPaginatedGoals(actionParams);
 
   const pageHasParams = !!Object.values(searchParams)
     .filter((param) => param !== searchParams.page)

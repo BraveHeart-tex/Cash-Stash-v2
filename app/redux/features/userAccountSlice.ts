@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { IGetPaginatedAccountActionParams } from "@/actions/types";
-import { getPaginatedAccountAction } from "@/actions";
+import { IGetPaginatedAccountsParams } from "@/actions/types";
+import { getPaginatedAccounts } from "@/actions";
 import { SerializedUserAccount } from "@/actions/types";
 
 interface UserAccountsState {
@@ -15,8 +15,8 @@ const initialState: UserAccountsState = {
 
 export const fetchCurrentUserAccounts = createAsyncThunk(
   "accounts/fetchCurrentUserAccounts",
-  async ({ pageNumber, query }: IGetPaginatedAccountActionParams) => {
-    const result = await getPaginatedAccountAction({ pageNumber, query });
+  async ({ pageNumber, query }: IGetPaginatedAccountsParams) => {
+    const result = await getPaginatedAccounts({ pageNumber, query });
 
     const mappedAccounts = result.accounts.map((data) => ({
       ...data,

@@ -15,7 +15,7 @@ import {
   showSuccessToast,
 } from "@/components/ui/use-toast";
 import FormCheckbox from "@/components/form-checkbox";
-import { updateReminderAction } from "@/actions";
+import { updateReminder } from "@/actions";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 import { useRouter } from "next/navigation";
 import DatePicker from "@/components/date-picker";
@@ -88,7 +88,7 @@ const EditReminderForm = ({ entityId }: IEditReminderFormProps) => {
     };
 
     startTransition(async () => {
-      const result = await updateReminderAction(payload);
+      const result = await updateReminder(payload);
       if (result?.error) {
         showErrorToast("An error occurred.", result.error);
       } else {

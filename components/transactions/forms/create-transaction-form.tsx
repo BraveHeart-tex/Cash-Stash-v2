@@ -12,7 +12,7 @@ import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import FormInput from "@/components/form-input";
 import FormSelect, { SelectOption } from "@/components/form-select";
 import { Button } from "@/components/ui/button";
-import { createTransactionAction } from "@/actions";
+import { createTransaction } from "@/actions";
 import { useRouter } from "next/navigation";
 import { SerializedUserAccount } from "@/actions/types";
 
@@ -43,7 +43,7 @@ const CreateTransactionForm = ({
 
   const onSubmit = async (data: CreateTransactionSchemaType) => {
     startTransition(async () => {
-      const result = await createTransactionAction(data);
+      const result = await createTransaction(data);
       if (result?.error) {
         showErrorToast("An error occurred.", result.error);
       } else {

@@ -33,17 +33,17 @@ import CreateReminderSchema, {
 } from "@/schemas/CreateReminderSchema";
 import { redirect } from "next/navigation";
 import {
-  IGetPaginatedAccountActionParams,
-  IGetPaginatedAccountActionResponse,
-  IGetPaginatedBudgetsActionParams,
-  IGetPaginatedBudgetsActionResponse,
-  IGetPaginatedGoalsActionParams,
-  IGetPaginatedGoalsActionResponse,
+  IGetPaginatedAccountsParams,
+  IGetPaginatedAccountsResponse,
+  IGetPaginatedBudgetsParams,
+  IGetPaginatedBudgetsResponse,
+  IGetPaginatedGoalsParams,
+  IGetPaginatedGoalsResponse,
   UpdateBudgetResponse,
 } from "./types";
 import { ZodError } from "zod";
 
-export const loginAction = async ({ email, password }: LoginSchemaType) => {
+export const login = async ({ email, password }: LoginSchemaType) => {
   const result = LoginSchema.safeParse({ email, password });
 
   if (!result.success) {
@@ -78,7 +78,7 @@ export const loginAction = async ({ email, password }: LoginSchemaType) => {
   return { user };
 };
 
-export const registerAction = async ({
+export const register = async ({
   name,
   email,
   password,
@@ -130,12 +130,12 @@ export const registerAction = async ({
   };
 };
 
-export const logoutAction = async () => {
+export const logout = async () => {
   cookies().delete("token");
   redirect("/login");
 };
 
-export const getCurrentUserAction = async () => {
+export const getUserSession = async () => {
   const token = cookies().get("token")?.value;
 
   if (!token) {
@@ -153,14 +153,14 @@ export const getCurrentUserAction = async () => {
   };
 };
 
-export const getPaginatedAccountAction = async ({
+export const getPaginatedAccounts = async ({
   pageNumber,
   query,
   category,
   sortBy,
   sortDirection,
-}: IGetPaginatedAccountActionParams): Promise<IGetPaginatedAccountActionResponse> => {
-  const result = await getCurrentUserAction();
+}: IGetPaginatedAccountsParams): Promise<IGetPaginatedAccountsResponse> => {
+  const result = await getUserSession();
   if (result.error) {
     redirect("/login");
   }
@@ -232,14 +232,14 @@ export const getPaginatedAccountAction = async ({
   };
 };
 
-export const getPaginatedBudgetsAction = async ({
+export const getPaginatedBudgets = async ({
   pageNumber,
   query,
   category,
   sortBy,
   sortDirection,
-}: IGetPaginatedBudgetsActionParams): Promise<IGetPaginatedBudgetsActionResponse> => {
-  const result = await getCurrentUserAction();
+}: IGetPaginatedBudgetsParams): Promise<IGetPaginatedBudgetsResponse> => {
+  const result = await getUserSession();
   if (result.error) {
     redirect("/login");
   }
@@ -305,13 +305,13 @@ export const getPaginatedBudgetsAction = async ({
   };
 };
 
-export const getPaginatedGoalsAction = async ({
+export const getPaginatedGoals = async ({
   pageNumber,
   query,
   sortBy,
   sortDirection,
-}: IGetPaginatedGoalsActionParams): Promise<IGetPaginatedGoalsActionResponse> => {
-  const result = await getCurrentUserAction();
+}: IGetPaginatedGoalsParams): Promise<IGetPaginatedGoalsResponse> => {
+  const result = await getUserSession();
   if (result.error) {
     redirect("/login");
   }
@@ -368,7 +368,7 @@ export const getPaginatedGoalsAction = async ({
   };
 };
 
-export const fetchMonthlyTransactionsDataAction = async () => {
+export const fetchMonthlyTransactionsData = async () => {
   const currentUser = await getCurrentUser(cookies().get("token")?.value!);
 
   if (!currentUser) return { error: "No user found." };
@@ -435,7 +435,7 @@ export const fetchInsightsDataAction = async () => {
   };
 };
 
-export const registerBankAccountAction = async ({
+export const registerBankAccount = async ({
   balance,
   category,
   name,
@@ -484,7 +484,7 @@ export const registerBankAccountAction = async ({
   };
 };
 
-export const updateAccountByIdAction = async ({
+export const updateAccountById = async ({
   accountId,
   balance,
   category,
@@ -528,7 +528,7 @@ export const updateAccountByIdAction = async ({
   };
 };
 
-export const createBudgetAction = async ({
+export const createBudget = async ({
   budgetAmount,
   spentAmount,
   category,
@@ -638,53 +638,7 @@ export const updateBudget = async ({
   }
 };
 
-export const updateBudgetByIdAction = async ({
-  budgetId,
-  budgetAmount,
-  spentAmount,
-  category,
-  name,
-}: EditBudgetSchemaType & { budgetId: string }) => {
-  if (!budgetId) return { error: "Budget ID not found." };
-
-  const budgetToBeUpdated = await prisma.budget.findUnique({
-    where: { id: budgetId },
-  });
-
-  if (!budgetToBeUpdated)
-    return { error: `Budget not found with the given id ${budgetId}` };
-
-  const result = EditBudgetSchema.safeParse({
-    budgetAmount,
-    spentAmount,
-    category,
-    name,
-  });
-
-  if (!result.success) return { error: "Unprocessable entity." };
-
-  const { data } = result;
-
-  const mappedCategory = Object.entries(CreateBudgetOptions).find(
-    ([, value]) => value === data.category
-  )?.[0];
-
-  const updatedBudget = await prisma.budget.update({
-    where: { id: budgetId },
-    data: {
-      budgetAmount: data.budgetAmount,
-      spentAmount: data.spentAmount,
-      category: mappedCategory as NotificationCategory,
-      name: data.name,
-    },
-  });
-
-  if (!updatedBudget) return { error: "Error updating budget." };
-
-  return { budget: updatedBudget };
-};
-
-export const updateReminderAction = async ({
+export const updateReminder = async ({
   reminderId,
   title,
   description,
@@ -726,7 +680,7 @@ export const updateReminderAction = async ({
   return { reminder: updatedReminder };
 };
 
-export const createTransactionAction = async ({
+export const createTransaction = async ({
   amount,
   description,
   category,
@@ -817,7 +771,7 @@ export const createTransactionAction = async ({
   };
 };
 
-export const deleteTransactionByIdAction = async (transactionId: string) => {
+export const deleteTransactionById = async (transactionId: string) => {
   try {
     if (!transactionId) {
       throw new Error("Transaction ID not found.");
@@ -854,7 +808,8 @@ export const deleteTransactionByIdAction = async (transactionId: string) => {
     return { error: error instanceof Error ? error.message : error };
   }
 };
-export const getChartDataAction = async () => {
+
+export const getChartData = async () => {
   try {
     const currentUser = await getCurrentUser(cookies().get("token")?.value!);
 
@@ -896,7 +851,7 @@ export const getChartDataAction = async () => {
   }
 };
 
-export const createReminderAction = async ({
+export const createReminder = async ({
   amount,
   description,
   isIncome,

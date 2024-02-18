@@ -18,34 +18,32 @@ interface IPaginatedActionParams {
   query?: string;
 }
 
-export interface IGetPaginatedAccountActionParams
-  extends IPaginatedActionParams {
+export interface IGetPaginatedAccountsParams extends IPaginatedActionParams {
   sortBy?: string;
   sortDirection?: string;
   category?: AccountCategory;
 }
 
-export interface IGetPaginatedAccountActionResponse extends IPaginatedResponse {
+export interface IGetPaginatedAccountsResponse extends IPaginatedResponse {
   accounts: Account[];
 }
 
-export interface IGetPaginatedBudgetsActionParams
-  extends IPaginatedActionParams {
+export interface IGetPaginatedBudgetsParams extends IPaginatedActionParams {
   category?: BudgetCategory;
   sortBy?: string;
   sortDirection?: string;
 }
 
-export interface IGetPaginatedBudgetsActionResponse extends IPaginatedResponse {
+export interface IGetPaginatedBudgetsResponse extends IPaginatedResponse {
   budgets: Budget[];
 }
 
-export interface IGetPaginatedGoalsActionParams extends IPaginatedActionParams {
+export interface IGetPaginatedGoalsParams extends IPaginatedActionParams {
   sortBy?: string;
   sortDirection?: string;
 }
 
-export interface IGetPaginatedGoalsActionResponse extends IPaginatedResponse {
+export interface IGetPaginatedGoalsResponse extends IPaginatedResponse {
   goals: Goal[];
 }
 

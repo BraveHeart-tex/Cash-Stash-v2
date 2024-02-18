@@ -2,8 +2,8 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Transaction, UserAccount } from "@prisma/client";
 import {
   fetchInsightsDataAction,
-  fetchMonthlyTransactionsDataAction,
-  getChartDataAction,
+  fetchMonthlyTransactionsData,
+  getChartData,
 } from "@/actions";
 import { MonthlyData } from "@/components/reports/report-table";
 import { getGenericListByCurrentUser } from "@/actions/generic";
@@ -97,7 +97,7 @@ export const fetchTransactions = createAsyncThunk(
 export const getChartData = createAsyncThunk(
   "transactions/getChartData",
   async () => {
-    const chartData = await getChartDataAction();
+    const chartData = await getChartData();
     if (chartData.error) {
       return null;
     } else {
@@ -109,7 +109,7 @@ export const getChartData = createAsyncThunk(
 export const fetchMonthlyTransactionsData = createAsyncThunk(
   "transactions/fetchMonthlyTransactionsData",
   async () => {
-    const { incomes, expenses } = await fetchMonthlyTransactionsDataAction();
+    const { incomes, expenses } = await fetchMonthlyTransactionsData();
     if (!incomes?.length || !expenses?.length) {
       return {
         error: "No data found.",

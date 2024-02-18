@@ -1,10 +1,10 @@
 import Dashboard from "../components/dashboard";
 import {
   fetchInsightsDataAction,
-  getChartDataAction,
-  getPaginatedAccountAction,
-  getPaginatedBudgetsAction,
-  getPaginatedGoalsAction,
+  getChartData,
+  getPaginatedAccounts,
+  getPaginatedBudgets,
+  getPaginatedGoals,
   getPaginatedTransactions,
 } from "@/actions";
 import { getGenericListByCurrentUser } from "@/actions/generic";
@@ -25,11 +25,11 @@ export default async function Home() {
       sortBy: "createdAt",
       sortDirection: "desc",
     }),
-    getPaginatedAccountAction({ pageNumber: 1, query: "" }),
+    getPaginatedAccounts({ pageNumber: 1, query: "" }),
     fetchInsightsDataAction(),
-    getChartDataAction(),
-    getPaginatedBudgetsAction({ pageNumber: 1, query: "" }),
-    getPaginatedGoalsAction({ pageNumber: 1, query: "" }),
+    getChartData(),
+    getPaginatedBudgets({ pageNumber: 1, query: "" }),
+    getPaginatedGoals({ pageNumber: 1, query: "" }),
     getGenericListByCurrentUser<SerializedReminder>({
       tableName: "reminder",
       whereCondition: { markedAsReadAt: null },

@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { updateAccountByIdAction } from "@/actions";
+import { updateAccountById } from "@/actions";
 import accountSchema, {
   AccountSchemaType,
 } from "@/schemas/CreateUserAccountSchema";
@@ -88,7 +88,7 @@ const EditAccountForm = ({ entityId }: IEditAccountFormProps) => {
     }
 
     startTransition(async () => {
-      const result = await updateAccountByIdAction({
+      const result = await updateAccountById({
         accountId: entityId,
         ...data,
       });

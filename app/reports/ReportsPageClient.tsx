@@ -1,4 +1,4 @@
-import { getChartDataAction, getPaginatedTransactions } from "@/actions";
+import { getChartData, getPaginatedTransactions } from "@/actions";
 import ReportTable from "../../components/reports/report-table";
 import { getGenericListByCurrentUser } from "@/actions/generic";
 import { SerializedUserAccount } from "@/actions/types";
@@ -19,7 +19,7 @@ const ReportsPageClient = async ({
 
   const [chartDataResponse, userAccountsResponse, userTransactionsResponse] =
     await Promise.all([
-      getChartDataAction(),
+      getChartData(),
       getGenericListByCurrentUser<SerializedUserAccount>({
         tableName: "userAccount",
         serialize: true,

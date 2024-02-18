@@ -12,7 +12,7 @@ import {
 import prisma from "@/lib/prismadb";
 import { Prisma } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
-import { getCurrentUserAction } from ".";
+import { getUserSession } from ".";
 
 const TABLE_MAP: TableMap = {
   userAccount: prisma.account,
@@ -109,7 +109,7 @@ export const createGenericWithCurrentUser = async <T>({
 }: IGenericParams<T> & { data: CreateGenericWithCurrentUserInput<T> }) => {
   try {
     const table = await getTable(tableName);
-    const currentUser = await getCurrentUserAction();
+    const currentUser = await getUserSession();
 
     if (currentUser.error || !currentUser.user) {
       throw new Error("User not found");
@@ -185,7 +185,7 @@ export const getGenericListByCurrentUser = async <T>({
 }) => {
   try {
     const table = await getTable(tableName);
-    const currentUserResult = await getCurrentUserAction();
+    const currentUserResult = await getUserSession();
 
     if (currentUserResult.error || !currentUserResult.user) {
       throw new Error("User not found");

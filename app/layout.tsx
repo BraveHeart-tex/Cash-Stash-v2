@@ -5,7 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
 import GenericConfirmDialog from "@/components/generic-confirm-dialog";
 import GenericModal from "@/components/generic-modal";
-import { getCurrentUserAction } from "@/actions";
+import { getUserSession } from "@/actions";
 import NavigationTabs from "@/components/navigation-tabs";
 import { Metadata, Viewport } from "next";
 import Navigation from "@/components/navigation";
@@ -65,7 +65,7 @@ interface ILayoutProps {
 }
 
 export default async function RootLayout({ children }: ILayoutProps) {
-  const { user } = await getCurrentUserAction();
+  const { user } = await getUserSession();
 
   return (
     <html lang="en">

@@ -1,4 +1,4 @@
-import { getCurrentUserAction } from "@/actions/index";
+import { getUserSession } from "@/actions/index";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { User } from "@prisma/client";
 
@@ -15,7 +15,7 @@ const initialState: UserState = {
 export const fetchCurrentUser = createAsyncThunk(
   "user/fetchCurrentUser",
   async () => {
-    const { user } = await getCurrentUserAction();
+    const { user } = await getUserSession();
 
     return user;
   }

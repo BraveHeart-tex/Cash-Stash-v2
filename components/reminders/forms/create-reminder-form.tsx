@@ -1,5 +1,5 @@
 "use client";
-import { createReminderAction } from "@/actions";
+import { createReminder } from "@/actions";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 import { useAppDispatch } from "@/app/redux/hooks";
 import DatePicker from "@/components/date-picker";
@@ -38,7 +38,7 @@ const CreateReminderForm = () => {
 
   const onSubmit = async (data: CreateReminderSchemaType) => {
     startTransition(async () => {
-      const result = await createReminderAction(data);
+      const result = await createReminder(data);
       if (result?.error) {
         return showErrorToast("An error occurred.", result.error);
       } else {

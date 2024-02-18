@@ -7,7 +7,7 @@ import ActionPopover from "@/components/action-popover";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { showGenericConfirm } from "@/app/redux/features/genericConfirmSlice";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { deleteTransactionByIdAction } from "@/actions";
+import { deleteTransactionById } from "@/actions";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
@@ -21,7 +21,7 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
   const dispatch = useAppDispatch();
 
   const handleDeleteCallback = (
-    result: Awaited<ReturnType<typeof deleteTransactionByIdAction>>,
+    result: Awaited<ReturnType<typeof deleteTransactionById>>,
     cleanUp: ActionCreatorWithoutPayload<"genericConfirm/cleanUp">
   ) => {
     if (result?.error) {
@@ -77,7 +77,7 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
                       "Are you sure you want to delete this transaction?",
                     primaryActionLabel: "Delete",
                     primaryAction: async () =>
-                      deleteTransactionByIdAction(transaction.id),
+                      deleteTransactionById(transaction.id),
                     resolveCallback: handleDeleteCallback,
                   })
                 );

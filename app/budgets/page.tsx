@@ -1,4 +1,4 @@
-import { getPaginatedBudgetsAction } from "@/actions";
+import { getPaginatedBudgets } from "@/actions";
 import BudgetList from "@/components/budgets/budget-list";
 import RoutePaginationControls from "@/components/route-pagination-controls";
 import { NotificationCategory } from "@prisma/client";
@@ -26,7 +26,7 @@ const BudgetsPage = async ({
     .filter((param) => param !== searchParams.page)
     .some((param) => param);
 
-  const result = await getPaginatedBudgetsAction(actionParams);
+  const result = await getPaginatedBudgets(actionParams);
 
   return (
     <main>
