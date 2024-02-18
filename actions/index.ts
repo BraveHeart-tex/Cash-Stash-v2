@@ -7,15 +7,11 @@ import RegisterSchema, { RegisterSchemaType } from "@/schemas/RegisterSchema";
 import { cookies } from "next/headers";
 import bcrypt from "bcrypt";
 import { MONTHS_OF_THE_YEAR, processDate } from "@/lib/utils";
-import CreateUserAccountSchema, {
-  CreateUserAccountSchemaType,
+import accountSchema, {
+  AccountSchemaType,
 } from "@/schemas/CreateUserAccountSchema";
 import ACCOUNT_OPTIONS, { getKeyByValue } from "@/lib/CreateUserAccountOptions";
-import {
-  NotificationCategory,
-  Prisma,
-  UserAccountCategory,
-} from "@prisma/client";
+import { NotificationCategory, Prisma, AccountCategory } from "@prisma/client";
 import { EditReminderSchemaType } from "@/schemas/EditReminderSchema";
 import EditBudgetSchema, {
   EditBudgetSchemaType,
@@ -187,7 +183,7 @@ export const getPaginatedAccountAction = async ({
   const categoryQuery = category ? { category } : {};
 
   const [accounts, totalCount] = await Promise.all([
-    prisma.userAccount.findMany({
+    prisma.account.findMany({
       skip: skipAmount,
       take: PAGE_SIZE,
       where: {
@@ -199,7 +195,7 @@ export const getPaginatedAccountAction = async ({
       },
       ...orderByCondition,
     }),
-    prisma.userAccount.count({
+    prisma.account.count({
       where: {
         userId: result.user?.id,
         name: {
@@ -371,11 +367,12 @@ export const fetchMonthlyTransactionsDataAction = async () => {
   if (!currentUser) return { error: "No user found." };
 
   const aggregateByType = async (isIncome: boolean) => {
+    const amountQuery = isIncome ? { gt: 0 } : { lt: 0 };
     const transactions = await prisma.transaction.groupBy({
       by: ["createdAt"],
       where: {
         userId: currentUser.id,
-        isIncome,
+        amount: amountQuery,
       },
       _sum: {
         amount: true,
@@ -400,10 +397,11 @@ export const fetchInsightsDataAction = async () => {
   if (!currentUser) return { error: "No user found." };
 
   const aggregateTransaction = async (isIncome: boolean) => {
+    const amountQuery = isIncome ? { gt: 0 } : { lt: 0 };
     const result = await prisma.transaction.aggregate({
       where: {
         userId: currentUser.id,
-        isIncome,
+        amount: amountQuery,
       },
       _sum: {
         amount: true,
@@ -434,14 +432,14 @@ export const registerBankAccountAction = async ({
   balance,
   category,
   name,
-}: CreateUserAccountSchemaType) => {
+}: AccountSchemaType) => {
   const currentUser = await getCurrentUser(cookies().get("token")?.value!);
 
   if (!currentUser) {
     return { error: "You are not authorized to perform this action." };
   }
 
-  let result = CreateUserAccountSchema.safeParse({ balance, category, name });
+  let result = accountSchema.safeParse({ balance, category, name });
 
   if (!result.success) {
     return { error: "Unprocessable entity." };
@@ -461,10 +459,10 @@ export const registerBankAccountAction = async ({
     return { error: "Invalid category." };
   }
 
-  const createdAccount = await prisma.userAccount.create({
+  const createdAccount = await prisma.account.create({
     data: {
       balance: balanceResult,
-      category: mappedCategory as UserAccountCategory,
+      category: mappedCategory as AccountCategory,
       name: nameResult,
       userId: currentUser.id,
     },
@@ -484,12 +482,12 @@ export const updateAccountByIdAction = async ({
   balance,
   category,
   name,
-}: CreateUserAccountSchemaType & { accountId: string | null }) => {
+}: AccountSchemaType & { accountId: string | null }) => {
   if (!accountId) {
     return { error: "Account ID not found." };
   }
 
-  let result = CreateUserAccountSchema.safeParse({ balance, category, name });
+  let result = accountSchema.safeParse({ balance, category, name });
 
   if (!result.success) {
     return { error: "Unprocessable entity." };
@@ -503,13 +501,13 @@ export const updateAccountByIdAction = async ({
 
   const mappedCategory = getKeyByValue(ACCOUNT_OPTIONS, categoryResult);
 
-  const updatedAccount = await prisma.userAccount.update({
+  const updatedAccount = await prisma.account.update({
     where: {
       id: accountId,
     },
     data: {
       balance: balanceResult,
-      category: mappedCategory as UserAccountCategory,
+      category: mappedCategory as AccountCategory,
       name: nameResult,
     },
   });
@@ -546,6 +544,7 @@ export const createBudgetAction = async ({
     category: categoryResult,
   } = result.data;
 
+  // TODO: Refactor this to use a better approach
   const mappedCategory = Object.entries(CreateBudgetOptions).find(
     ([key, value]) => value === categoryResult
   )?.[0];
@@ -652,12 +651,9 @@ export const updateReminderAction = async ({
   if (!reminderToBeUpdated)
     return { error: "No reminder with the given reminder id was found." };
 
+  // TODO: Mark as read functionality to a different action
   const updatedReminder = await prisma.reminder.update({
-    data: {
-      ...result.data,
-      isRead: result.data.isRead === "isRead",
-      isIncome: result.data.isIncome === "income",
-    },
+    data: result.data,
     where: { id: reminderId },
   });
 
@@ -691,7 +687,7 @@ export const createTransactionAction = async ({
     return { error: "You are not authorized to perform this action." };
   }
 
-  const usersAccount = await prisma.userAccount.findFirst({
+  const usersAccount = await prisma.account.findFirst({
     where: {
       id: accountId,
     },
@@ -727,7 +723,6 @@ export const createTransactionAction = async ({
       description: data.description,
       category: mappedCategory as NotificationCategory,
       accountId: data.accountId,
-      isIncome: data.isIncome,
       userId: currentUser?.id,
     },
   });
@@ -738,7 +733,7 @@ export const createTransactionAction = async ({
     };
   }
 
-  const updatedAccount = await prisma.userAccount.update({
+  const updatedAccount = await prisma.account.update({
     where: {
       id: accountId,
     },
@@ -774,11 +769,12 @@ export const deleteTransactionByIdAction = async (transactionId: string) => {
       throw new Error("Error deleting transaction.");
     }
 
-    const updateBalance = deletedTransaction.isIncome
+    const wasIncome = deletedTransaction.amount > 0;
+    const updateBalance = wasIncome
       ? { decrement: deletedTransaction.amount }
       : { increment: deletedTransaction.amount };
 
-    await prisma.userAccount.update({
+    await prisma.account.update({
       where: {
         id: deletedTransaction.accountId,
       },
@@ -814,8 +810,9 @@ export const getChartDataAction = async () => {
       const year = date.getFullYear();
       const key = `${MONTHS_OF_THE_YEAR[month]} ${year}`;
       const entry = map.get(key) || { date: key, income: 0, expense: 0 };
+      const isIncome = transaction.amount > 0;
 
-      if (transaction.isIncome) {
+      if (isIncome) {
         entry.income += transaction.amount;
       } else {
         entry.expense += transaction.amount;
@@ -865,13 +862,10 @@ export const createReminderAction = async ({
 
   const createdReminder = await prisma.reminder.create({
     data: {
-      amount: data.amount,
       description: data.description,
-      isIncome: data.isIncome === "income",
       reminderDate: data.reminderDate,
       title: data.title,
       userId: currentUser.id,
-      isRead: data.isRead === "isRead",
     },
   });
 
@@ -884,6 +878,7 @@ export const createReminderAction = async ({
   };
 };
 
+// TODO: Change this to the new system
 export const searchTransactions = async ({
   transactionType,
   accountId,
@@ -906,11 +901,15 @@ export const searchTransactions = async ({
     };
 
     if (transactionType === "income") {
-      whereCondition.isIncome = true;
+      whereCondition.amount = {
+        gt: 0,
+      };
     }
 
     if (transactionType === "expense") {
-      whereCondition.isIncome = false;
+      whereCondition.amount = {
+        lt: 0,
+      };
     }
 
     if (accountId) {

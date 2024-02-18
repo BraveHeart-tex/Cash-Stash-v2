@@ -12,8 +12,9 @@ export const openGenericModal = (
       openGenericModalAction({
         mode: "create",
         key: "account",
-        dialogTitle: "Create an account",
-        dialogDescription: "Fill out the form below to create an account.",
+        dialogTitle: "Register Bank Account",
+        dialogDescription:
+          "Fill out the form below to register your bank account.",
         entityId: "",
       })
     );

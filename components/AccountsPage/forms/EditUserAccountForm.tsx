@@ -17,8 +17,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateAccountByIdAction } from "@/actions";
-import CreateUserAccountSchema, {
-  CreateUserAccountSchemaType,
+import accountSchema, {
+  AccountSchemaType,
 } from "@/schemas/CreateUserAccountSchema";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 import { useRouter } from "next/navigation";
@@ -43,13 +43,13 @@ const EditUserAccountForm = ({ entityId }: IEditUserAccountFormProps) => {
     formState: { errors, isLoading, isSubmitting },
     setValue,
     getValues,
-  } = useForm<CreateUserAccountSchemaType>({
+  } = useForm<AccountSchemaType>({
     defaultValues: {
       balance: 10,
       category: "",
       name: "",
     },
-    resolver: zodResolver(CreateUserAccountSchema),
+    resolver: zodResolver(accountSchema),
   });
 
   let [isPending, startTransition] = useTransition();
@@ -79,7 +79,7 @@ const EditUserAccountForm = ({ entityId }: IEditUserAccountFormProps) => {
     };
   }, [currentAccount, setValue]);
 
-  const onSubmit = async (data: CreateUserAccountSchemaType) => {
+  const onSubmit = async (data: AccountSchemaType) => {
     if (hasMadeNoChanges()) {
       return showDefaultToast(
         "No changes made.",

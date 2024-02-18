@@ -34,7 +34,7 @@ const LoginForm = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginSchemaType>({
-    resolver: zodResolver(LoginSchema, {}),
+    resolver: zodResolver(LoginSchema),
   });
 
   const handleLoginFormSubmit = (data: LoginSchemaType) => {

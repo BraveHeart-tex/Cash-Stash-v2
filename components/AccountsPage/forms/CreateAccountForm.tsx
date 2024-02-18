@@ -5,8 +5,8 @@ import { useForm } from "react-hook-form";
 import { useAppDispatch } from "@/app/redux/hooks";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
-import CreateUserAccountSchema, {
-  CreateUserAccountSchemaType,
+import accountSchema, {
+  AccountSchemaType,
 } from "@/schemas/CreateUserAccountSchema";
 import FormInput from "@/components/FormInput";
 import FormSelect from "@/components/FormSelect";
@@ -15,7 +15,7 @@ import { registerBankAccountAction } from "@/actions";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 import { useRouter } from "next/navigation";
 
-const CreateUserAccountForm = () => {
+const CreateAccountForm = () => {
   const dispatch = useAppDispatch();
   let [isPending, startTransition] = useTransition();
   const accountOptions = Object.values(ACCOUNT_OPTIONS);
@@ -25,16 +25,16 @@ const CreateUserAccountForm = () => {
     handleSubmit,
     formState: { errors, isSubmitting },
     setValue,
-  } = useForm<CreateUserAccountSchemaType>({
+  } = useForm<AccountSchemaType>({
     defaultValues: {
       balance: 10,
       category: "checking",
       name: "",
     },
-    resolver: zodResolver(CreateUserAccountSchema),
+    resolver: zodResolver(accountSchema),
   });
 
-  const onSubmit = async (data: CreateUserAccountSchemaType) => {
+  const onSubmit = async (data: AccountSchemaType) => {
     startTransition(async () => {
       const result = await registerBankAccountAction(data);
 
@@ -101,4 +101,4 @@ const CreateUserAccountForm = () => {
   );
 };
 
-export default CreateUserAccountForm;
+export default CreateAccountForm;
