@@ -7,7 +7,7 @@ import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { openGenericModal } from "../app/redux/features/genericModalSlice";
 import { showGenericConfirm } from "../app/redux/features/genericConfirmSlice";
-import { cn, formatMoney, getProgressColor } from "@/lib/utils";
+import { cn, formatMoney, getBadgeColor, getProgressColor } from "@/lib/utils";
 import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
 import { deleteGeneric } from "@/actions/generic";
 import { Budget } from "@prisma/client";
@@ -89,9 +89,7 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
           <Badge
             className={cn(
               "select-none cursor-pointer",
-              budget.spentAmount / budget.budgetAmount > 0.5
-                ? "bg-destructive hover:bg-destructive"
-                : "bg-success hover:bg-success"
+              getBadgeColor(budget.spentAmount / budget.budgetAmount)
             )}
           >
             {budget.progress.toFixed(0)}%
