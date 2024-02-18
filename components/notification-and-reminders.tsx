@@ -1,6 +1,6 @@
 "use client";
 import { useAppDispatch } from "@/app/redux/hooks";
-import { SerializedReminder } from "@/app/redux/features/remindersSlice";
+import { SerializedReminder } from "@/actions/types";
 import { Button } from "@/components/ui/button";
 import { openGenericModal } from "../app/redux/features/genericModalSlice";
 import { FaRegClock } from "react-icons/fa";

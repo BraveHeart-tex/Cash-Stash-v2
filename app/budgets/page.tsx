@@ -1,7 +1,7 @@
 import { getPaginatedBudgets } from "@/actions";
 import BudgetList from "@/components/budgets/budget-list";
 import RoutePaginationControls from "@/components/route-pagination-controls";
-import { NotificationCategory } from "@prisma/client";
+import { BudgetCategory } from "@prisma/client";
 
 const BudgetsPage = async ({
   searchParams,
@@ -17,7 +17,7 @@ const BudgetsPage = async ({
   const actionParams = {
     pageNumber: parseInt(searchParams.page) || 1,
     query: searchParams.query || "",
-    category: searchParams.category as NotificationCategory,
+    category: searchParams.category as BudgetCategory,
     sortBy: searchParams.sortBy || "",
     sortDirection: searchParams.sortDirection || "",
   };

@@ -10,7 +10,7 @@ import TransactionHistory from "@/components/transaction-history";
 import BarChartComponent from "@/components/charts/bar-chart";
 import { MonthlyData } from "@/components/reports/report-table";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { SerializedReminder } from "@/app/redux/features/remindersSlice";
+import { SerializedReminder } from "@/actions/types";
 import { motion } from "framer-motion";
 import { Budget, Goal, Account } from "@prisma/client";
 

@@ -12,7 +12,7 @@ import accountSchema, {
 } from "@/schemas/CreateUserAccountSchema";
 import ACCOUNT_OPTIONS, { getKeyByValue } from "@/lib/CreateUserAccountOptions";
 import {
-  NotificationCategory,
+  TransactionCategory,
   Prisma,
   AccountCategory,
   BudgetCategory,
@@ -566,7 +566,7 @@ export const createBudget = async ({
       name,
       budgetAmount: budgetAmountResult,
       spentAmount: spentAmountResult,
-      category: mappedCategory as NotificationCategory,
+      category: mappedCategory as BudgetCategory,
       userId: currentUser.id,
       progress: (spentAmountResult / budgetAmountResult) * 100,
     },
@@ -739,7 +739,7 @@ export const createTransaction = async ({
     data: {
       amount: data.amount,
       description: data.description,
-      category: mappedCategory as NotificationCategory,
+      category: mappedCategory as TransactionCategory,
       accountId: data.accountId,
       userId: currentUser?.id,
     },

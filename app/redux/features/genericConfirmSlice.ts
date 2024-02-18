@@ -29,6 +29,7 @@ const genericConfirmSlice = createSlice({
         message: string;
         primaryActionLabel: string;
         primaryAction: () => Promise<any> | void;
+        // eslint-disable-next-line no-unused-vars
         resolveCallback: (result: any, cleanUp: any) => void;
       }>
     ) => {

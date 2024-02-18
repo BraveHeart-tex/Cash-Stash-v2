@@ -5,6 +5,7 @@ import {
   Goal,
   BudgetCategory,
   Transaction,
+  Reminder,
 } from "@prisma/client";
 
 interface IPaginatedResponse {
@@ -80,4 +81,12 @@ export type SerializedTransaction = Omit<
   createdAt: string;
   updatedAt: string;
   account?: Partial<Account>;
+};
+export type SerializedReminder = Omit<
+  Reminder,
+  "createdAt" | "updatedAt" | "reminderDate"
+> & {
+  createdAt: string;
+  updatedAt: string;
+  reminderDate: string;
 };

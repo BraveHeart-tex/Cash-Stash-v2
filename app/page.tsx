@@ -8,7 +8,7 @@ import {
   getPaginatedTransactions,
 } from "@/actions";
 import { getGenericListByCurrentUser } from "@/actions/generic";
-import { SerializedReminder } from "./redux/features/remindersSlice";
+import { SerializedReminder } from "@/actions/types";
 import { Suspense } from "react";
 
 export default async function Home() {

@@ -6,7 +6,6 @@ import budgetReducer from "./features/budgetSlice";
 import currentBudgetReducer from "./features/currentBudgetSlice";
 import currentGoalReducer from "./features/currentGoalSlice";
 import goalReducer from "./features/goalSlice";
-import remindersReducer from "./features/remindersSlice";
 import genericConfirmReducer from "./features/genericConfirmSlice";
 import genericModalReducer from "./features/genericModalSlice";
 import navigationTabsReducer from "./features/navigationTabsSlice";
@@ -20,7 +19,6 @@ export const store = configureStore({
     currentBudgetReducer,
     goalReducer,
     currentGoalReducer,
-    remindersReducer,
     genericConfirmReducer,
     genericModalReducer,
     navigationTabsReducer,

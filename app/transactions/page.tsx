@@ -9,6 +9,10 @@ export interface SearchParams {
   sortDirection: string;
 }
 
+// amount between
+// createdAt between
+// by category
+
 const TransactionsPage = async ({
   searchParams,
 }: {
@@ -20,6 +24,7 @@ const TransactionsPage = async ({
     sortBy = "createdAt",
     sortDirection = "desc",
   } = searchParams;
+
   let result = await getPaginatedTransactions({
     transactionType: transactionType as "all" | "income" | "expense",
     accountId,

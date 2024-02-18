@@ -39,16 +39,16 @@ model Account {
 }
 
 model Transaction {
-  id          String               @id @default(cuid())
+  id          String              @id @default(cuid())
   amount      Float
-  createdAt   DateTime             @default(now())
-  updatedAt   DateTime             @updatedAt
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
   description String
-  category    NotificationCategory @default(OTHER)
+  category    TransactionCategory @default(OTHER)
   accountId   String
   userId      String
-  account     Account              @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  user        User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  account     Account             @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  user        User                @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([accountId], map: "transactions_accountId_fkey")
   @@index([userId], map: "transactions_userId_fkey")
@@ -98,6 +98,16 @@ model Reminder {
 }
 
 enum BudgetCategory {
+  FOOD
+  TRANSPORTATION
+  ENTERTAINMENT
+  UTILITIES
+  SHOPPING
+  HOUSING
+  OTHER
+}
+
+enum TransactionCategory {
   FOOD
   TRANSPORTATION
   ENTERTAINMENT
