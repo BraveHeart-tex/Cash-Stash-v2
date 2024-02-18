@@ -5,7 +5,7 @@ import {
   getPaginatedAccountAction,
   getPaginatedBudgetsAction,
   getPaginatedGoalsAction,
-  searchTransactions,
+  getPaginatedTransactions,
 } from "@/actions";
 import { getGenericListByCurrentUser } from "@/actions/generic";
 import { SerializedReminder } from "./redux/features/remindersSlice";
@@ -20,7 +20,7 @@ export default async function Home() {
     goalsResult,
     remindersResult,
   ] = await Promise.all([
-    searchTransactions({
+    getPaginatedTransactions({
       transactionType: "all",
       sortBy: "createdAt",
       sortDirection: "desc",

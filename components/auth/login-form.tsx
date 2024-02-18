@@ -17,7 +17,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchemaType } from "@/schemas/LoginSchema";
 import { generateFormFields } from "@/lib/utils";
 import { useState, useTransition } from "react";
-import { loginAction } from "@/actions";
+import { login } from "@/actions";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -39,7 +39,7 @@ const LoginForm = () => {
 
   const handleLoginFormSubmit = (data: LoginSchemaType) => {
     startTransition(async () => {
-      const result = await loginAction(data);
+      const result = await login(data);
       if (result?.error) {
         showErrorToast("An error occurred.", result.error);
       } else {
@@ -51,7 +51,7 @@ const LoginForm = () => {
 
   const handleTestUserLogin = () => {
     startTransition(async () => {
-      const result = await loginAction({
+      const result = await login({
         email: "testUser@email.com",
         password: "testUser123!",
       });

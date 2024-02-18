@@ -943,7 +943,7 @@ export const createReminderAction = async ({
 };
 
 // TODO: Change this to the new system
-export const searchTransactions = async ({
+export const getPaginatedTransactions = async ({
   transactionType,
   accountId,
   sortBy,

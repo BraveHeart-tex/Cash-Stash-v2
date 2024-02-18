@@ -1,4 +1,4 @@
-import { getChartDataAction, searchTransactions } from "@/actions";
+import { getChartDataAction, getPaginatedTransactions } from "@/actions";
 import ReportTable from "../../components/reports/report-table";
 import { getGenericListByCurrentUser } from "@/actions/generic";
 import { SerializedUserAccount } from "@/actions/types";
@@ -24,7 +24,7 @@ const ReportsPageClient = async ({
         tableName: "userAccount",
         serialize: true,
       }),
-      searchTransactions({
+      getPaginatedTransactions({
         transactionType: transactionType as "all" | "income" | "expense",
         accountId,
         sortBy: sortBy as "createdAt" | "amount",

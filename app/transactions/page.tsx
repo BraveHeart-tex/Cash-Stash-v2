@@ -1,6 +1,6 @@
-import { searchTransactions } from "@/actions";
+import { getPaginatedTransactions } from "@/actions";
 import TransactionList from "@/components/transactions/transaction-list";
-import CreateTransactionButton from "../../components/CreateButtons/create-transaction-button";
+import CreateTransactionButton from "@/components/CreateButtons/create-transaction-button";
 
 export interface SearchParams {
   transactionType: string;
@@ -20,7 +20,7 @@ const TransactionsPage = async ({
     sortBy = "createdAt",
     sortDirection = "desc",
   } = searchParams;
-  let result = await searchTransactions({
+  let result = await getPaginatedTransactions({
     transactionType: transactionType as "all" | "income" | "expense",
     accountId,
     sortBy: sortBy as "createdAt" | "amount",

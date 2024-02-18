@@ -5,7 +5,6 @@ import {
   SignJWT,
   jwtVerify,
 } from "jose";
-import db from "@/lib/prismadb";
 
 declare module "jose" {
   export interface JWTVerifyResultWithUser extends JWTVerifyResult {

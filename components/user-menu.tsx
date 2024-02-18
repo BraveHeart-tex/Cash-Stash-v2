@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { fetchCurrentUser } from "../app/redux/features/userSlice";
 import { useEffect, useTransition } from "react";
 import { AppDispatch } from "../app/redux/store";
-import { logoutAction } from "@/actions";
+import { logout } from "@/actions";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,7 +26,7 @@ const UserMenu = () => {
 
   const handleLogout = () => {
     startTransition(async () => {
-      logoutAction();
+      logout();
     });
   };
 
