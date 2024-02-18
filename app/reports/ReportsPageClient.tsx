@@ -3,7 +3,7 @@ import ReportTable from "../../components/ReportsPage/ReportTable";
 import { getGenericListByCurrentUser } from "@/actions/generic";
 import { SerializedUserAccount } from "@/actions/types";
 import { SearchParams } from "../transactions/page";
-import MotionDiv from "@/components/animation/MotionDiv";
+import MotionDiv from "@/components/animations/motion-div";
 
 const ReportsPageClient = async ({
   searchParams,

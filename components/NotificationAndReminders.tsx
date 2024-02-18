@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button";
 import { openGenericModal } from "../app/redux/features/genericModalSlice";
 import { FaRegClock } from "react-icons/fa";
 import ReminderCard from "@/components/ReminderCard";
-import AnimatePresenceClient from "@/components/animation/AnimatePresence";
-import MotionDiv from "@/components/animation/MotionDiv";
+import AnimatePresenceClient from "@/components/animations/animate-presence";
+import MotionDiv from "@/components/animations/motion-div";
 
 const NotificationsAndReminders = ({
   reminders,

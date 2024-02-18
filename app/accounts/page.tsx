@@ -6,7 +6,7 @@ import AccountCard from "@/components/AccountCard";
 import RouteSelectFilter from "@/components/route-select-filter";
 import ACCOUNT_OPTIONS from "@/lib/CreateUserAccountOptions";
 import { UserAccountCategory } from "@prisma/client";
-import MotionDiv from "@/components/animation/MotionDiv";
+import MotionDiv from "@/components/animations/motion-div";
 import AccountsNotFound from "@/components/accounts-not-found";
 import RouteFiltersPopover from "@/components/route-filters-popover";
 import { BsSortDown, BsSortUp } from "react-icons/bs";

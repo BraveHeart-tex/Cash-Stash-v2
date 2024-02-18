@@ -1,13 +1,13 @@
 import EditAccountForm from "@/components/accounts/forms/EditAccountForm";
 import CreateAccountForm from "@/components/accounts/forms/CreateAccountForm";
-import CreateBudgetForm from "@/components/BudgetsPage/forms/CreateBudgetForm";
-import EditUserBudgetForm from "@/components/BudgetsPage/forms/EditBudgetForm";
 import CreateUserGoalForm from "@/components/GoalsPage/forms/CreateGoalForm";
 import EditUserGoalForm from "@/components/GoalsPage/forms/EditUserGoalForm";
 import CreateTransactionForm from "@/components/TransactionsPage/forms/CreateTransactionForm";
 import CreateReminderForm from "@/components/Reminders/forms/CreateReminderForm";
 import EditReminderForm from "@/components/Reminders/forms/EditReminderForm";
 import { createElement } from "react";
+import CreateBudgetForm from "@/components/budgets/forms/create-budget-form";
+import EditUserBudgetForm from "@/components/budgets/forms/edit-budget-form";
 
 interface IGetGenericDialogContentParams {
   mode: "create" | "edit";

@@ -4,7 +4,7 @@ import TransactionList from "@/components/TransactionsPage/TransactionList";
 import CreateTransactionButton from "../../components/CreateButtons/CreateTransactionButton";
 import { SerializedTransaction } from "../redux/features/transactionsSlice";
 import { SerializedUserAccount } from "@/actions/types";
-import MotionDiv from "@/components/animation/MotionDiv";
+import MotionDiv from "@/components/animations/motion-div";
 
 const TransactionsListPage = ({
   transactions,

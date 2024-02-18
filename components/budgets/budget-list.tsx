@@ -1,6 +1,5 @@
-import BudgetsNotFoundMessage from "@/components/BudgetsPage/BudgetsNotFoundMessage";
 import CreateBudgetButton from "@/components/CreateButtons/CreateBudgetButton";
-import MotionDiv from "@/components/animation/MotionDiv";
+import MotionDiv from "@/components/animations/motion-div";
 import { Budget } from "@prisma/client";
 import RouteSearchInput from "@/components/route-search-input";
 import BudgetCard from "@/components/BudgetCard";
@@ -9,6 +8,7 @@ import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
 import RouteFiltersPopover from "@/components/route-filters-popover";
 import { GiPayMoney } from "react-icons/gi";
 import { FaPiggyBank } from "react-icons/fa";
+import BudgetsNotFoundMessage from "./budgets-not-found";
 
 const BudgetList = ({
   budgets,

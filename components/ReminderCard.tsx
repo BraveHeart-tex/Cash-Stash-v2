@@ -5,7 +5,7 @@ import { Pencil1Icon } from "@radix-ui/react-icons";
 import { openGenericModal } from "@/app/redux/features/genericModalSlice";
 import { useAppDispatch } from "@/app/redux/hooks";
 import { SerializedReminder } from "@/app/redux/features/remindersSlice";
-import MotionDiv from "./animation/MotionDiv";
+import MotionDiv from "./animations/motion-div";
 
 interface IReminderCardProps {
   reminder: SerializedReminder;

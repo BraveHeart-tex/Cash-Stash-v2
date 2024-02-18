@@ -1,5 +1,5 @@
-import BudgetList from "@/components/BudgetsPage/BudgetsList";
 import { getPaginatedBudgetsAction } from "@/actions";
+import BudgetList from "@/components/budgets/budget-list";
 import RoutePaginationControls from "@/components/route-pagination-controls";
 import { NotificationCategory } from "@prisma/client";
 

@@ -1,8 +1,8 @@
 import { SerializedTransaction } from "@/app/redux/features/transactionsSlice";
 import TransactionCard from "./TransactionsPage/TransactionCard";
 import CreateTransactionButton from "./CreateButtons/CreateTransactionButton";
-import AnimatePresenceClient from "@/components/animation/AnimatePresence";
-import MotionDiv from "@/components/animation/MotionDiv";
+import AnimatePresenceClient from "@/components/animations/animate-presence";
+import MotionDiv from "@/components/animations/motion-div";
 
 interface ITransactionHistoryProps {
   transactions: SerializedTransaction[] | null;

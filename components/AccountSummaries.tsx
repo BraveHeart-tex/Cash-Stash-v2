@@ -1,7 +1,7 @@
 import AccountCard from "./AccountCard";
 import CreateAccountButton from "./CreateButtons/CreateAccountButton";
-import AnimatePresenceClient from "@/components/animation/AnimatePresence";
-import MotionDiv from "@/components/animation/MotionDiv";
+import AnimatePresenceClient from "@/components/animations/animate-presence";
+import MotionDiv from "@/components/animations/motion-div";
 import { UserAccount } from "@prisma/client";
 import Link from "next/link";
 import { Button } from "./ui/button";

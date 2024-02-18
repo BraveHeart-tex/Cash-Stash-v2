@@ -6,7 +6,7 @@ import { useAppDispatch } from "../app/redux/hooks";
 import { setSelectedTab } from "../app/redux/features/navigationTabsSlice";
 import { FaMoneyBill } from "react-icons/fa";
 import Link from "next/link";
-import MotionDiv from "@/components/animation/MotionDiv";
+import MotionDiv from "@/components/animations/motion-div";
 
 interface IFinancialInsightsProps {
   insightsData: InsightsData | null;
