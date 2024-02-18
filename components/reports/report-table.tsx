@@ -13,7 +13,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn, thousandSeparator } from "@/lib/utils";
-import ResponsiveChartContainer from "@/app/ResponsiveChartContainer";
+import ResponsiveChartContainer from "@/app/chart-container";
 import { useEffect, useState } from "react";
 
 export interface MonthlyData {
@@ -51,7 +51,7 @@ const ReportTable = ({
                 <TableCell>{transaction.createdAt}</TableCell>
                 <TableCell
                   className={cn(
-                    transaction.isIncome ? "text-green-500" : "text-red-500"
+                    transaction.amount > 0 ? "text-green-500" : "text-red-500"
                   )}
                 >
                   {thousandSeparator(transaction.amount)}$
@@ -65,7 +65,7 @@ const ReportTable = ({
                 <TableCell>{transaction.description}</TableCell>
                 <TableCell>
                   {" "}
-                  {transaction.isIncome ? "Income" : "Expense"}
+                  {transaction.amount > 0 ? "Income" : "Expense"}
                 </TableCell>
                 <TableCell>{transaction.category}</TableCell>
                 <TableRow />

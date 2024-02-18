@@ -27,9 +27,9 @@ const GoalsPage = async ({
 
   const result = await getPaginatedGoalsAction(actionParams);
 
-  const pageHasParams = !!Object.values(searchParams).filter(
-    (param) => param !== searchParams.page
-  ).length;
+  const pageHasParams = !!Object.values(searchParams)
+    .filter((param) => param !== searchParams.page)
+    .some((param) => param);
 
   return (
     <main>
