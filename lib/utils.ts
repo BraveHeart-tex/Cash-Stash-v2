@@ -240,15 +240,3 @@ export const processZodError = (error: ZodError) => {
 
   return errorObject;
 };
-
-export const getProgressColor = (progress: number): string => {
-  if (progress > 70) return "bg-destructive";
-  if (progress > 60) return "bg-orange-500";
-  return "bg-success";
-};
-
-export const getBadgeColor = (progress: number): string => {
-  if (progress > 0.7) return "bg-destructive hover:bg-destructive";
-  if (progress > 0.6) return "bg-orange-500 hover:bg-orange-500";
-  return "bg-success hover:bg-success";
-};

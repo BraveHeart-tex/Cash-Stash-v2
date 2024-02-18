@@ -24,11 +24,6 @@ const CreateUserGoalForm = () => {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<CreateGoalSchemaType>({
-    defaultValues: {
-      name: "",
-      goalAmount: 10,
-      currentAmount: 0,
-    },
     resolver: zodResolver(CreateGoalSchema),
   });
 

@@ -11,7 +11,7 @@ import { deleteGeneric } from "@/actions/generic";
 import { Goal } from "@prisma/client";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { formatMoney } from "@/lib/utils";
+import { cn, formatMoney } from "@/lib/utils";
 
 interface IGoalCardProps {
   goal: Goal;
@@ -50,6 +50,18 @@ const GoalCard = ({ goal }: IGoalCardProps) => {
     );
   };
 
+  const getGoalProgressColor = (progress: number): string => {
+    if (progress >= 100) return "bg-success";
+    if (progress >= 75) return "bg-success/80";
+    return "bg-primary";
+  };
+
+  const getBadgeColor = (progress: number): string => {
+    if (progress >= 100) return "bg-success hover:bg-success/90";
+    if (progress >= 75) return "bg-success/80 hover:bg-success/90";
+    return "bg-primary hover:bg-bg-primary";
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -58,11 +70,8 @@ const GoalCard = ({ goal }: IGoalCardProps) => {
       exit={{ opacity: 0, y: 20 }}
       layoutId={`goal-card-${goal.id}`}
       className="flex flex-col gap-2 p-4 pt-6 border-1 shadow-xl rounded-md relative bg-card border cursor-pointer"
-      key={goal.name}
     >
-      <p className="font-semibold dark:text-white/60 text-foreground">
-        {goal.name}
-      </p>
+      <p className="font-semibold text-foreground">{goal.name}</p>
       <div className="absolute top-3 right-1 mb-2">
         <div className="flex items-center">
           <ActionPopover
@@ -83,25 +92,17 @@ const GoalCard = ({ goal }: IGoalCardProps) => {
             placementClasses="top-0 right-0 mb-0"
             onDeleteActionClick={() => handleDeleteGoal(goal.id)}
           />
-          <Badge className="ml-auto">
-            {goal.currentAmount / goal.goalAmount >= 1
-              ? "Completed!"
-              : `${Math.round((goal.currentAmount / goal.goalAmount) * 100)}%`}
+          <Badge className={cn("ml-auto", getBadgeColor(goal.progress))}>
+            {goal.progress >= 100 ? "Completed!" : `${goal.progress}%`}
           </Badge>
         </div>
       </div>
       <div className="mt-2">
         <Progress
-          value={(goal.currentAmount / goal.goalAmount) * 100}
-          indicatorClassName={
-            goal.currentAmount / goal.goalAmount > 0.7
-              ? "bg-success"
-              : goal.currentAmount / goal.goalAmount > 0.4
-                ? "bg-orange-300"
-                : "bg-destructive"
-          }
+          value={goal.progress >= 100 ? 100 : goal.progress}
+          indicatorClassName={getGoalProgressColor(goal.progress)}
         />
-        <p className="mt-4 text-md dark:text-white/60 text-foreground">
+        <p className="mt-4 text-md text-foreground">
           Current: {formatMoney(goal.currentAmount)} / Target:{" "}
           {formatMoney(goal.goalAmount)}
         </p>
