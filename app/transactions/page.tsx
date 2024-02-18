@@ -1,6 +1,7 @@
 import { getPaginatedTransactions } from "@/actions";
 import TransactionList from "@/components/transactions/transaction-list";
 import CreateTransactionButton from "@/components/CreateButtons/create-transaction-button";
+import TransactionsNotFound from "@/components/transactions-not-found";
 
 export interface SearchParams {
   transactionType: string;
@@ -40,7 +41,11 @@ const TransactionsPage = async ({
           <CreateTransactionButton className="mt-0" />
         </div>
         <div>
-          <TransactionList transactions={result.transactions || []} />
+          {result.transactions && result.transactions.length > 0 ? (
+            <TransactionList transactions={result.transactions || []} />
+          ) : (
+            <TransactionsNotFound pageHasParams={true} />
+          )}
         </div>
       </div>
     </main>

@@ -950,11 +950,7 @@ export const getPaginatedTransactions = async ({
     });
 
     return {
-      transactions: result.map((transaction) => ({
-        ...transaction,
-        createdAt: processDate(transaction.createdAt),
-        updatedAt: processDate(transaction.updatedAt),
-      })),
+      transactions: result,
     };
   } catch (error) {
     console.error(error);

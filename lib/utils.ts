@@ -240,3 +240,10 @@ export const processZodError = (error: ZodError) => {
 
   return errorObject;
 };
+
+export const formatTransactionDate = (date: Date) => {
+  const formattedDate = processDate(date).split(" ");
+  const [day, month, year] = formattedDate[0].split("/");
+  const [hours, minutes, seconds] = formattedDate[1].split(":");
+  return `${day} ${MONTHS_OF_THE_YEAR[parseInt(month) - 1]} ${year}, ${hours}:${minutes}:${seconds}`;
+};
