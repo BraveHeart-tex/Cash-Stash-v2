@@ -5,7 +5,7 @@ import RouteSearchInput from "@/components/route-search-input";
 import AccountCard from "@/components/account-card";
 import RouteSelectFilter from "@/components/route-select-filter";
 import ACCOUNT_OPTIONS from "@/lib/CreateUserAccountOptions";
-import { UserAccountCategory } from "@prisma/client";
+import { AccountCategory } from "@prisma/client";
 import MotionDiv from "@/components/animations/motion-div";
 import AccountsNotFound from "@/components/accounts-not-found";
 import RouteFiltersPopover from "@/components/route-filters-popover";
@@ -24,7 +24,7 @@ const AccountPage = async ({
 }) => {
   const pageNumber = parseInt(searchParams.page) || 1;
   const query = searchParams.query || "";
-  const category = (searchParams.category || "") as UserAccountCategory;
+  const category = (searchParams.category || "") as AccountCategory;
   const sortBy = searchParams.sortBy || "";
   const sortDirection = searchParams.sortDirection || "";
 
