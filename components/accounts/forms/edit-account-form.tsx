@@ -22,6 +22,8 @@ import accountSchema, {
 } from "@/schemas/CreateUserAccountSchema";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 import { useRouter } from "next/navigation";
+import { generateReadbleEnumLabels } from "@/lib/utils";
+import { AccountCategory } from "@prisma/client";
 
 interface IEditAccountFormProps {
   entityId: string | null;
@@ -35,8 +37,6 @@ const EditAccountForm = ({ entityId }: IEditAccountFormProps) => {
 
   const dispatch = useAppDispatch();
 
-  const accountOptions = Object.values(ACCOUNT_OPTIONS);
-
   const {
     register,
     handleSubmit,
@@ -44,11 +44,6 @@ const EditAccountForm = ({ entityId }: IEditAccountFormProps) => {
     setValue,
     getValues,
   } = useForm<AccountSchemaType>({
-    defaultValues: {
-      balance: 10,
-      category: "",
-      name: "",
-    },
     resolver: zodResolver(accountSchema),
   });
 
@@ -64,19 +59,12 @@ const EditAccountForm = ({ entityId }: IEditAccountFormProps) => {
 
   useEffect(() => {
     if (currentAccount) {
+      console.log(currentAccount);
+
       setValue("name", currentAccount.name);
-      setValue(
-        "category",
-        getOptionLabel(ACCOUNT_OPTIONS, currentAccount.category)
-      );
+      setValue("category", currentAccount.category);
       setValue("balance", currentAccount.balance);
     }
-
-    return () => {
-      setValue("name", "");
-      setValue("category", "");
-      setValue("balance", 0);
-    };
   }, [currentAccount, setValue]);
 
   const onSubmit = async (data: AccountSchemaType) => {
@@ -114,16 +102,13 @@ const EditAccountForm = ({ entityId }: IEditAccountFormProps) => {
     }
 
     return (
-      name === currentAccount?.name &&
-      category === getOptionLabel(ACCOUNT_OPTIONS, currentAccount?.category!) &&
-      balance === currentAccount?.balance
+      name === currentAccount.name &&
+      category === currentAccount.category &&
+      balance === currentAccount.balance
     );
   };
 
-  const selectOptions = accountOptions.map((option) => ({
-    label: option,
-    value: option,
-  }));
+  const selectOptions = generateReadbleEnumLabels({ enumObj: AccountCategory });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -137,10 +122,6 @@ const EditAccountForm = ({ entityId }: IEditAccountFormProps) => {
           errors={errors}
         />
         <FormSelect
-          defaultValue={getOptionLabel(
-            ACCOUNT_OPTIONS,
-            currentAccount?.category!
-          )}
           selectOptions={selectOptions}
           nameParam={"category"}
           label={"Account Type"}
@@ -148,7 +129,7 @@ const EditAccountForm = ({ entityId }: IEditAccountFormProps) => {
           register={register}
           errors={errors}
           onChange={(value) => {
-            setValue("category", value);
+            setValue("category", value as AccountCategory);
           }}
         />
         <FormInput

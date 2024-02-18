@@ -1,5 +1,4 @@
 "use client";
-import ACCOUNT_OPTIONS from "@/lib/CreateUserAccountOptions";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { useAppDispatch } from "@/app/redux/hooks";
@@ -14,29 +13,38 @@ import { Button } from "@/components/ui/button";
 import { registerBankAccount } from "@/actions";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 import { useRouter } from "next/navigation";
+import { generateReadbleEnumLabels } from "@/lib/utils";
+import { AccountCategory } from "@prisma/client";
 
 const CreateAccountForm = () => {
   const dispatch = useAppDispatch();
   let [isPending, startTransition] = useTransition();
-  const accountOptions = Object.values(ACCOUNT_OPTIONS);
   const router = useRouter();
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors, isSubmitting },
     setValue,
   } = useForm<AccountSchemaType>({
-    defaultValues: {
-      balance: 10,
-      category: "checking",
-      name: "",
-    },
     resolver: zodResolver(accountSchema),
+    defaultValues: {
+      balance: 0,
+    },
   });
 
   const onSubmit = async (data: AccountSchemaType) => {
     startTransition(async () => {
       const result = await registerBankAccount(data);
+
+      if (result.fieldErrors.length) {
+        result.fieldErrors.forEach((fieldError) => {
+          setError(fieldError.field as any, {
+            type: "manual",
+            message: fieldError.message,
+          });
+        });
+      }
 
       if (result?.error) {
         showErrorToast("An error occurred.", result.error);
@@ -48,10 +56,9 @@ const CreateAccountForm = () => {
     });
   };
 
-  const selectOptions = accountOptions.map((option) => ({
-    label: option,
-    value: option,
-  }));
+  const selectOptions = generateReadbleEnumLabels({
+    enumObj: AccountCategory,
+  });
 
   return (
     <form
@@ -68,7 +75,7 @@ const CreateAccountForm = () => {
           errors={errors}
         />
         <FormSelect
-          defaultValue={"Checking Account"}
+          defaultValue={"CHECKING"}
           selectOptions={selectOptions}
           defaultLabel={"Account Type"}
           nameParam={"category"}
@@ -77,7 +84,7 @@ const CreateAccountForm = () => {
           register={register}
           errors={errors}
           onChange={(value) => {
-            setValue("category", value);
+            value && setValue("category", value as AccountCategory);
           }}
         />
         <FormInput

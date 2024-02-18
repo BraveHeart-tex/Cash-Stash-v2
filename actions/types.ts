@@ -20,6 +20,15 @@ interface IPaginatedActionParams {
   query?: string;
 }
 
+export interface IValidatedResponse<T> {
+  data?: T;
+  error?: string;
+  fieldErrors: {
+    field: string;
+    message: string | undefined;
+  }[];
+}
+
 export interface IGetPaginatedAccountsParams extends IPaginatedActionParams {
   sortBy?: string;
   sortDirection?: string;
@@ -68,12 +77,14 @@ export type UpdateBudgetResponse = {
     message: string | undefined;
   }[];
 };
+
 export interface InsightsData {
   totalIncome: number;
   totalExpense: number;
   netIncome: number;
   savingsRate: string;
 }
+
 export type SerializedTransaction = Omit<
   Transaction,
   "createdAt" | "updatedAt"
@@ -82,6 +93,7 @@ export type SerializedTransaction = Omit<
   updatedAt: string;
   account?: Partial<Account>;
 };
+
 export type SerializedReminder = Omit<
   Reminder,
   "createdAt" | "updatedAt" | "reminderDate"

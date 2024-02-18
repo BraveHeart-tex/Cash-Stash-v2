@@ -19,7 +19,7 @@ export interface SelectOption {
 }
 
 interface IFromSelectProps {
-  defaultValue: string;
+  defaultValue?: string;
   onChange?: (value: string) => void;
   selectOptions: SelectOption[];
   defaultLabel?: string;
@@ -53,7 +53,7 @@ const FormSelect = ({
     if (defaultValue && onChange) {
       onChange(defaultValue);
     }
-  }, []);
+  }, [defaultValue, onChange]);
 
   return (
     <div className="flex flex-col gap-1">

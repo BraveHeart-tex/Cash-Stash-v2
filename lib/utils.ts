@@ -247,3 +247,45 @@ export const formatTransactionDate = (date: Date) => {
   const [hours, minutes, seconds] = formattedDate[1].split(":");
   return `${day} ${MONTHS_OF_THE_YEAR[parseInt(month) - 1]} ${year}, ${hours}:${minutes}:${seconds}`;
 };
+
+export const generateReadbleEnumValue = ({
+  key,
+  separator = "_",
+}: {
+  key: string;
+  separator?: string;
+}) => {
+  let label = key.replace(separator, " ");
+
+  if (label.split(" ").length > 1) {
+    const words = label.split(" ");
+    const capitalizedWords = words.map((word) => {
+      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    });
+    label = capitalizedWords.join(" ");
+  } else {
+    label = label.charAt(0).toUpperCase() + label.slice(1).toLowerCase();
+  }
+
+  return label;
+};
+
+export const generateReadbleEnumLabels = ({
+  enumObj,
+  separator = "_",
+}: {
+  enumObj: Record<string, string>;
+  separator?: string;
+}) => {
+  const keys = Object.keys(enumObj);
+
+  const readableLabels = keys.map((key) => {
+    const label = generateReadbleEnumValue({ key, separator });
+    return {
+      label,
+      value: key,
+    };
+  });
+
+  return readableLabels;
+};

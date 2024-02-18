@@ -16,6 +16,7 @@ import {
   Prisma,
   AccountCategory,
   BudgetCategory,
+  Account,
 } from "@prisma/client";
 import { EditReminderSchemaType } from "@/schemas/EditReminderSchema";
 import EditBudgetSchema, {
@@ -39,6 +40,7 @@ import {
   IGetPaginatedBudgetsResponse,
   IGetPaginatedGoalsParams,
   IGetPaginatedGoalsResponse,
+  IValidatedResponse,
   UpdateBudgetResponse,
 } from "./types";
 import { ZodError } from "zod";
@@ -439,49 +441,45 @@ export const registerBankAccount = async ({
   balance,
   category,
   name,
-}: AccountSchemaType) => {
+}: AccountSchemaType): Promise<IValidatedResponse<Account>> => {
   const currentUser = await getCurrentUser(cookies().get("token")?.value!);
 
   if (!currentUser) {
-    return { error: "You are not authorized to perform this action." };
+    return {
+      error: "You are not authorized to perform this action.",
+      fieldErrors: [],
+    };
   }
 
-  let result = accountSchema.safeParse({ balance, category, name });
+  try {
+    const validatedData = accountSchema.parse({ balance, category, name });
 
-  if (!result.success) {
-    return { error: "Unprocessable entity." };
+    const createdAccount = await prisma.account.create({
+      data: {
+        ...validatedData,
+        userId: currentUser.id,
+      },
+    });
+
+    if (!createdAccount) {
+      return { error: "Error creating account.", fieldErrors: [] };
+    }
+
+    return {
+      data: createdAccount,
+      fieldErrors: [],
+    };
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return processZodError(error);
+    }
+
+    return {
+      error:
+        "An error occurred while registering your bank account. Please try again later.",
+      fieldErrors: [],
+    };
   }
-
-  const {
-    balance: balanceResult,
-    category: categoryResult,
-    name: nameResult,
-  } = result.data;
-
-  const mappedCategory = Object.entries(ACCOUNT_OPTIONS).find(
-    ([key, value]) => value === categoryResult
-  )?.[0];
-
-  if (!mappedCategory) {
-    return { error: "Invalid category." };
-  }
-
-  const createdAccount = await prisma.account.create({
-    data: {
-      balance: balanceResult,
-      category: mappedCategory as AccountCategory,
-      name: nameResult,
-      userId: currentUser.id,
-    },
-  });
-
-  if (!createdAccount) {
-    return { error: "Error creating account." };
-  }
-
-  return {
-    account: createdAccount,
-  };
 };
 
 export const updateAccountById = async ({
