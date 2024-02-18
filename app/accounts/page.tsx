@@ -4,12 +4,12 @@ import RoutePaginationControls from "@/components/route-pagination-controls";
 import RouteSearchInput from "@/components/route-search-input";
 import AccountCard from "@/components/account-card";
 import RouteSelectFilter from "@/components/route-select-filter";
-import ACCOUNT_OPTIONS from "@/lib/CreateUserAccountOptions";
 import { AccountCategory } from "@prisma/client";
 import MotionDiv from "@/components/animations/motion-div";
 import AccountsNotFound from "@/components/accounts-not-found";
 import RouteFiltersPopover from "@/components/route-filters-popover";
 import { BsSortDown, BsSortUp } from "react-icons/bs";
+import { generateReadbleEnumLabels } from "@/lib/utils";
 
 const AccountPage = async ({
   searchParams,
@@ -36,10 +36,7 @@ const AccountPage = async ({
     sortDirection,
   });
 
-  const selectDataset = Object.entries(ACCOUNT_OPTIONS).map(([key, value]) => ({
-    label: value,
-    value: key,
-  }));
+  const selectDataset = generateReadbleEnumLabels({ enumObj: AccountCategory });
 
   return (
     <main>
