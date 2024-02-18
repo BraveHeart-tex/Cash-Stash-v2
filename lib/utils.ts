@@ -240,3 +240,9 @@ export const processZodError = (error: ZodError) => {
 
   return errorObject;
 };
+
+export const getProgressColor = (progress: number): string => {
+  if (progress > 70) return "bg-destructive";
+  if (progress > 60) return "bg-orange-500";
+  return "bg-success";
+};

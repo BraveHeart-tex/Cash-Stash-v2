@@ -7,7 +7,7 @@ import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { openGenericModal } from "../app/redux/features/genericModalSlice";
 import { showGenericConfirm } from "../app/redux/features/genericConfirmSlice";
-import { cn, formatMoney } from "@/lib/utils";
+import { cn, formatMoney, getProgressColor } from "@/lib/utils";
 import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
 import { deleteGeneric } from "@/actions/generic";
 import { Budget } from "@prisma/client";
@@ -94,20 +94,14 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
                 : "bg-success hover:bg-success"
             )}
           >
-            {((budget.spentAmount / budget.budgetAmount) * 100).toFixed(0)}%
+            {budget.progress.toFixed(0)}%
           </Badge>
         </div>
       </div>
       <Progress
         value={budget.progress}
         className="mt-4"
-        indicatorClassName={cn(
-          budget.progress > 50
-            ? "bg-destructive"
-            : budget.progress > 25
-              ? "bg-orange-500"
-              : "bg-success"
-        )}
+        indicatorClassName={getProgressColor(budget.progress)}
       />
       <div className="w-full flex flex-col lg:flex-row lg:items-center justify-between mt-2">
         <span className="dark:text-white/60 text-foreground">
