@@ -1,8 +1,6 @@
 "use client";
-import {
-  InsightsData,
-  SerializedTransaction,
-} from "@/app/redux/features/transactionsSlice";
+import { SerializedTransaction } from "@/actions/types";
+import { InsightsData } from "@/actions/types";
 import AccountSummaries from "@/components/account-summaries";
 import BudgetStatus from "@/components/budget-status";
 import FinancialInsights from "@/components/financial-insights";

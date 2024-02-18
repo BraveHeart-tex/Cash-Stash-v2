@@ -1,6 +1,6 @@
 "use client";
 import { useAppDispatch } from "@/app/redux/hooks";
-import { SerializedTransaction } from "@/app/redux/features/transactionsSlice";
+import { SerializedTransaction } from "@/actions/types";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import ActionPopover from "@/components/action-popover";

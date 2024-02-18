@@ -6,7 +6,6 @@ import budgetReducer from "./features/budgetSlice";
 import currentBudgetReducer from "./features/currentBudgetSlice";
 import currentGoalReducer from "./features/currentGoalSlice";
 import goalReducer from "./features/goalSlice";
-import transactionsReducer from "./features/transactionsSlice";
 import remindersReducer from "./features/remindersSlice";
 import genericConfirmReducer from "./features/genericConfirmSlice";
 import genericModalReducer from "./features/genericModalSlice";
@@ -21,7 +20,6 @@ export const store = configureStore({
     currentBudgetReducer,
     goalReducer,
     currentGoalReducer,
-    transactionsReducer,
     remindersReducer,
     genericConfirmReducer,
     genericModalReducer,

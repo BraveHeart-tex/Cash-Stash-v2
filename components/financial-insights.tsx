@@ -1,5 +1,5 @@
 "use client";
-import { InsightsData } from "@/app/redux/features/transactionsSlice";
+import { InsightsData } from "@/actions/types";
 import { Button } from "@/components/ui/button";
 import { cn, thousandSeparator } from "@/lib/utils";
 import { useAppDispatch } from "../app/redux/hooks";

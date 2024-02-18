@@ -4,6 +4,7 @@ import {
   AccountCategory,
   Goal,
   BudgetCategory,
+  Transaction,
 } from "@prisma/client";
 
 interface IPaginatedResponse {
@@ -65,4 +66,18 @@ export type UpdateBudgetResponse = {
     field: string;
     message: string | undefined;
   }[];
+};
+export interface InsightsData {
+  totalIncome: number;
+  totalExpense: number;
+  netIncome: number;
+  savingsRate: string;
+}
+export type SerializedTransaction = Omit<
+  Transaction,
+  "createdAt" | "updatedAt"
+> & {
+  createdAt: string;
+  updatedAt: string;
+  account?: Partial<Account>;
 };

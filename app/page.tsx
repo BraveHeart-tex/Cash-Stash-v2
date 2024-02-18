@@ -9,6 +9,7 @@ import {
 } from "@/actions";
 import { getGenericListByCurrentUser } from "@/actions/generic";
 import { SerializedReminder } from "./redux/features/remindersSlice";
+import { Suspense } from "react";
 
 export default async function Home() {
   let [
@@ -50,15 +51,17 @@ export default async function Home() {
 
   return (
     <main>
-      <Dashboard
-        budgets={budgetsResult.budgets}
-        accounts={accountsResult?.accounts}
-        monthlyTransactionsData={monthlyTransactions.data || []}
-        insightsData={insightsDataResult}
-        transactions={result?.transactions || []}
-        goals={goalsResult.goals}
-        reminders={remindersResult?.data || []}
-      />
+      <Suspense fallback={<div>Loading...</div>}>
+        <Dashboard
+          budgets={budgetsResult.budgets}
+          accounts={accountsResult?.accounts}
+          monthlyTransactionsData={monthlyTransactions.data || []}
+          insightsData={insightsDataResult}
+          transactions={result?.transactions || []}
+          goals={goalsResult.goals}
+          reminders={remindersResult?.data || []}
+        />
+      </Suspense>
     </main>
   );
 }

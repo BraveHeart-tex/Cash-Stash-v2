@@ -1,5 +1,5 @@
 "use client";
-import { SerializedTransaction } from "@/app/redux/features/transactionsSlice";
+import { SerializedTransaction } from "@/actions/types";
 import { SerializedUserAccount } from "@/actions/types";
 import TransactionsFilter from "../transactions/transactions-filter";
 import TransactionsSort from "../transactions/transactions-sort";

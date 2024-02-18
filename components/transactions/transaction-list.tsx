@@ -1,4 +1,4 @@
-import { SerializedTransaction } from "@/app/redux/features/transactionsSlice";
+import { SerializedTransaction } from "@/actions/types";
 import TransactionCard from "./transaction-card";
 import AnimatePresenceClient from "@/components/animations/animate-presence";
 import MotionDiv from "@/components/animations/motion-div";
