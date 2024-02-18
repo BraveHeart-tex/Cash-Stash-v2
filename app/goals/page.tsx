@@ -1,6 +1,6 @@
 import GoalsNotFound from "@/components/goals-not-found";
-import CreateGoalButton from "@/components/CreateButtons/CreateGoalButton";
-import GoalCard from "@/components/GoalCard";
+import CreateGoalButton from "@/components/CreateButtons/create-goal-button";
+import GoalCard from "@/components/goal-card";
 import { getPaginatedGoalsAction } from "@/actions";
 import RoutePaginationControls from "@/components/route-pagination-controls";
 import RouteSearchInput from "@/components/route-search-input";

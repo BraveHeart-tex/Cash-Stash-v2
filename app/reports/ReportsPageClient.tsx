@@ -1,5 +1,5 @@
 import { getChartDataAction, searchTransactions } from "@/actions";
-import ReportTable from "../../components/ReportsPage/ReportTable";
+import ReportTable from "../../components/reports/report-table";
 import { getGenericListByCurrentUser } from "@/actions/generic";
 import { SerializedUserAccount } from "@/actions/types";
 import { SearchParams } from "../transactions/page";

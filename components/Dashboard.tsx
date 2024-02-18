@@ -3,24 +3,24 @@ import {
   InsightsData,
   SerializedTransaction,
 } from "@/app/redux/features/transactionsSlice";
-import AccountSummaries from "@/components/AccountSummaries";
-import BudgetStatus from "@/components/BudgetStatus";
-import FinancialInsights from "@/components/FinancialInsights";
-import GoalStatus from "@/components/GoalStatus";
-import NotificationsAndReminders from "@/components/NotificationAndReminders";
-import TransactionHistory from "@/components/TransactionHistory";
-import BarChartComponent from "@/components/charts/BarChartComponent";
-import { MonthlyData } from "@/components/ReportsPage/ReportTable";
+import AccountSummaries from "@/components/account-summaries";
+import BudgetStatus from "@/components/budget-status";
+import FinancialInsights from "@/components/financial-insights";
+import GoalStatus from "@/components/goal-status";
+import NotificationsAndReminders from "@/components/notification-and-reminders";
+import TransactionHistory from "@/components/transaction-history";
+import BarChartComponent from "@/components/charts/bar-chart";
+import { MonthlyData } from "@/components/reports/report-table";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { SerializedReminder } from "@/app/redux/features/remindersSlice";
 import { motion } from "framer-motion";
-import { Budget, Goal, UserAccount } from "@prisma/client";
+import { Budget, Goal, Account } from "@prisma/client";
 
 interface IDashboardProps {
   monthlyTransactionsData: MonthlyData["monthlyTransactionsData"];
   insightsData: InsightsData;
   transactions: SerializedTransaction[];
-  accounts: UserAccount[];
+  accounts: Account[];
   budgets: Budget[];
   goals: Goal[];
   reminders: SerializedReminder[];

@@ -1,4 +1,4 @@
-import Dashboard from "../components/Dashboard";
+import Dashboard from "../components/dashboard";
 import {
   fetchInsightsDataAction,
   getChartDataAction,
@@ -8,7 +8,6 @@ import {
   searchTransactions,
 } from "@/actions";
 import { getGenericListByCurrentUser } from "@/actions/generic";
-import { SerializedGoal } from "./redux/features/goalSlice";
 import { SerializedReminder } from "./redux/features/remindersSlice";
 
 export default async function Home() {
@@ -33,7 +32,7 @@ export default async function Home() {
     getPaginatedGoalsAction({ pageNumber: 1, query: "" }),
     getGenericListByCurrentUser<SerializedReminder>({
       tableName: "reminder",
-      whereCondition: { isRead: false },
+      whereCondition: { markedAsReadAt: null },
     }),
   ]);
 

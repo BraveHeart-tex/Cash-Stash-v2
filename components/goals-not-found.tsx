@@ -1,5 +1,5 @@
 "use client";
-import GenericNotFound from "@/components/NotFound";
+import GenericNotFound from "@/components/generic-not-found";
 
 const GoalsNotFound = ({ pageHasParams }: { pageHasParams: boolean }) => {
   return (

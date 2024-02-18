@@ -4,8 +4,8 @@ import { useForm } from "react-hook-form";
 import { useAppDispatch } from "@/app/redux/hooks";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
-import FormInput from "@/components/FormInput";
-import FormSelect from "@/components/FormSelect";
+import FormInput from "@/components/form-input";
+import FormSelect from "@/components/form-select";
 import { Button } from "@/components/ui/button";
 import { useTransition } from "react";
 import CreateBudgetSchema, {

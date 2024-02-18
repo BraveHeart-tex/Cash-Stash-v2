@@ -1,5 +1,5 @@
-import { MonthlyData } from "@/components/ReportsPage/ReportTable";
-import BarChartComponent from "@/components/charts/BarChartComponent";
+import { MonthlyData } from "@/components/reports/report-table";
+import BarChartComponent from "@/components/charts/bar-chart";
 
 const ResponsiveChartContainer = ({
   monthlyTransactionsData,

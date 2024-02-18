@@ -1,8 +1,8 @@
-import CreateAccountButton from "@/components/CreateButtons/CreateAccountButton";
+import CreateAccountButton from "@/components/CreateButtons/create-account-button";
 import { getPaginatedAccountAction } from "@/actions";
 import RoutePaginationControls from "@/components/route-pagination-controls";
 import RouteSearchInput from "@/components/route-search-input";
-import AccountCard from "@/components/AccountCard";
+import AccountCard from "@/components/account-card";
 import RouteSelectFilter from "@/components/route-select-filter";
 import ACCOUNT_OPTIONS from "@/lib/CreateUserAccountOptions";
 import { UserAccountCategory } from "@prisma/client";

@@ -1,5 +1,5 @@
 "use client";
-import GenericNotFound from "../NotFound";
+import GenericNotFound from "../generic-not-found";
 
 const BudgetsNotFoundMessage = ({
   pageHasParams,

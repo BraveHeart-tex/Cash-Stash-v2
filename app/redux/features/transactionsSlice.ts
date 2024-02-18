@@ -5,7 +5,7 @@ import {
   fetchMonthlyTransactionsDataAction,
   getChartDataAction,
 } from "@/actions";
-import { MonthlyData } from "@/components/ReportsPage/ReportTable";
+import { MonthlyData } from "@/components/reports/report-table";
 import { getGenericListByCurrentUser } from "@/actions/generic";
 
 export type SerializedTransaction = Omit<

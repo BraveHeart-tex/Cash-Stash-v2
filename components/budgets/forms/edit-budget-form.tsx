@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { fetchBudgetById } from "@/app/redux/features/currentBudgetSlice";
 import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
 import { getOptionLabel } from "@/lib/CreateUserAccountOptions";
-import FormLoadingSpinner from "@/components/FormLoadingSpinner";
+import FormLoadingSpinner from "@/components/form-loading-spinner";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 import {
   showDefaultToast,
@@ -16,8 +16,8 @@ import EditBudgetSchema, {
   EditBudgetSchemaType,
 } from "@/schemas/EditBudgetSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import FormInput from "@/components/FormInput";
-import FormSelect from "@/components/FormSelect";
+import FormInput from "@/components/form-input";
+import FormSelect from "@/components/form-select";
 import { Button } from "@/components/ui/button";
 import { updateBudget } from "@/actions";
 import { useRouter } from "next/navigation";

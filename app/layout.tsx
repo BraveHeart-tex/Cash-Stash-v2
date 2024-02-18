@@ -3,12 +3,12 @@ import { Inter } from "next/font/google";
 import { Providers as ReduxProviders } from "@/app/redux/provider";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
-import GenericConfirmDialog from "@/components/GenericConfirmDialog";
-import GenericModal from "@/components/GenericModal";
-import Navigation from "../components/Navigation";
+import GenericConfirmDialog from "@/components/generic-confirm-dialog";
+import GenericModal from "@/components/generic-modal";
 import { getCurrentUserAction } from "@/actions";
-import NavigationTabs from "@/components/NavigationTabs";
+import NavigationTabs from "@/components/navigation-tabs";
 import { Metadata, Viewport } from "next";
+import Navigation from "@/components/navigation";
 
 const InterFont = Inter({
   weight: ["300", "400", "500", "600", "700"],

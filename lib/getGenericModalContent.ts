@@ -1,10 +1,10 @@
-import EditAccountForm from "@/components/accounts/forms/EditAccountForm";
-import CreateAccountForm from "@/components/accounts/forms/CreateAccountForm";
-import CreateUserGoalForm from "@/components/GoalsPage/forms/CreateGoalForm";
-import EditUserGoalForm from "@/components/GoalsPage/forms/EditUserGoalForm";
-import CreateTransactionForm from "@/components/TransactionsPage/forms/CreateTransactionForm";
-import CreateReminderForm from "@/components/Reminders/forms/CreateReminderForm";
-import EditReminderForm from "@/components/Reminders/forms/EditReminderForm";
+import EditAccountForm from "@/components/accounts/forms/edit-account-form";
+import CreateAccountForm from "@/components/accounts/forms/create-account-form";
+import CreateUserGoalForm from "@/components/goals/forms/create-goal-form";
+import EditUserGoalForm from "@/components/goals/forms/edit-goal-form";
+import CreateTransactionForm from "@/components/transactions/forms/create-transaction-form";
+import CreateReminderForm from "@/components/reminders/forms/create-reminder-form";
+import EditReminderForm from "@/components/reminders/forms/edit-reminder-form";
 import { createElement } from "react";
 import CreateBudgetForm from "@/components/budgets/forms/create-budget-form";
 import EditUserBudgetForm from "@/components/budgets/forms/edit-budget-form";
