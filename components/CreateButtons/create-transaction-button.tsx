@@ -8,7 +8,7 @@ import { openGenericModal } from "@/lib/genericModalUtils";
 import { FaExchangeAlt } from "react-icons/fa";
 import { cn } from "@/lib/utils";
 
-const CreateTransactionButton = () => {
+const CreateTransactionButton = ({ className }: { className: string }) => {
   let [isPending, startTransition] = useTransition();
   const dispatch = useAppDispatch();
   const handleCreateTransactionClick = async () => {
@@ -37,7 +37,8 @@ const CreateTransactionButton = () => {
     <Button
       className={cn(
         "font-semibold text-md mt-3 flex items-center gap-[14px]",
-        isPending && "opacity-50 cursor-not-allowed"
+        isPending && "opacity-50 cursor-not-allowed",
+        className
       )}
       onClick={handleCreateTransactionClick}
       loading={isPending}

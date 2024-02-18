@@ -108,7 +108,7 @@ const Dashboard = ({
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mt-8">
           {sectionData.map((section) => (
             <Card key={section.title}>
-              <CardHeader className="font-[500] text-xl text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/40">
+              <CardHeader className="font-[500] text-xl text-primary">
                 {section.title}
                 <span className="text-gray-500 text-sm">
                   {section.description}
