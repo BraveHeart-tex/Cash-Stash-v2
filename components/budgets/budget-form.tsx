@@ -11,8 +11,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { accountSchema } from "@/schemas";
-import { AccountSchemaType } from "@/schemas/CreateUserAccountSchema";
 import {
   Select,
   SelectContent,
@@ -21,58 +19,55 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { generateReadbleEnumLabels } from "@/lib/utils";
-import { Account, AccountCategory } from "@prisma/client";
-import { registerBankAccount, updateBankAccount } from "@/actions";
+import { Budget, BudgetCategory } from "@prisma/client";
 import { IValidatedResponse } from "@/actions/types";
 import { showErrorToast, showSuccessToast } from "../ui/use-toast";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/app/redux/hooks";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 import { useEffect } from "react";
+import budgetSchema, { BudgetSchemaType } from "@/schemas/budget-schema";
+import { createBudget, updateBudget } from "@/actions";
 
-interface IAccountFormProps {
-  data?: Account;
+interface IBudgetFormProps {
+  data?: Budget;
 }
 
-const AccountForm: React.FC<IAccountFormProps> = ({
-  data: accountToBeUpdated,
+const BudgetForm: React.FC<IBudgetFormProps> = ({
+  data: budgetToBeUpdated,
 }) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const form = useForm<AccountSchemaType>({
-    resolver: zodResolver(accountSchema),
+  const form = useForm<BudgetSchemaType>({
+    resolver: zodResolver(budgetSchema),
   });
-  const entityId = accountToBeUpdated?.id;
+  const entityId = budgetToBeUpdated?.id;
 
   useEffect(() => {
-    if (accountToBeUpdated) {
-      const keys = Object.keys(
-        accountToBeUpdated ?? {}
-      ) as (keyof AccountSchemaType)[];
+    if (budgetToBeUpdated) {
+      const keys = Object.keys(budgetToBeUpdated) as (keyof BudgetSchemaType)[];
+
       if (keys.length) {
         keys.forEach((key) => {
-          form.setValue(key, accountToBeUpdated[key]);
+          form.setValue(key, budgetToBeUpdated[key]);
         });
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [accountToBeUpdated]);
+  }, [budgetToBeUpdated]);
 
-  const handleFormSubmit = async (values: AccountSchemaType) => {
+  const handleFormSubmit = async (values: BudgetSchemaType) => {
     let result;
     if (entityId) {
-      result = await updateBankAccount({
-        ...values,
-        accountId: entityId,
-      });
+      result = await updateBudget(entityId, values);
     } else {
-      result = await registerBankAccount(values);
+      result = await createBudget(values);
     }
 
     processFormErrors(result);
   };
 
-  const processFormErrors = (result: IValidatedResponse<Account>) => {
+  const processFormErrors = (result: IValidatedResponse<Budget>) => {
     if (result.fieldErrors.length) {
       result.fieldErrors.forEach((fieldError) => {
         form.setError(fieldError.field as any, {
@@ -86,8 +81,8 @@ const AccountForm: React.FC<IAccountFormProps> = ({
       showErrorToast("An error occurred.", result.error);
     } else {
       const successMessage = {
-        create: "Your account has been created.",
-        update: "Your account has been updated.",
+        create: "Your budget has been created.",
+        update: "Your budget has been updated.",
       };
       router.refresh();
       showSuccessToast(
@@ -98,7 +93,7 @@ const AccountForm: React.FC<IAccountFormProps> = ({
     }
   };
 
-  const selectOptions = generateReadbleEnumLabels({ enumObj: AccountCategory });
+  const selectOptions = generateReadbleEnumLabels({ enumObj: BudgetCategory });
 
   return (
     <Form {...form}>
@@ -111,9 +106,35 @@ const AccountForm: React.FC<IAccountFormProps> = ({
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Account Name</FormLabel>
+              <FormLabel>Budget Name</FormLabel>
               <FormControl>
-                <Input placeholder="Account name" {...field} />
+                <Input placeholder="Give your budget a name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="budgetAmount"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Budget Amount</FormLabel>
+              <FormControl>
+                <Input type="number" step="0.01" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="spentAmount"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Spent Amount</FormLabel>
+              <FormControl>
+                <Input type="number" step="0.01" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -124,14 +145,14 @@ const AccountForm: React.FC<IAccountFormProps> = ({
           name="category"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Account Type</FormLabel>
+              <FormLabel>Budget Category</FormLabel>
               <Select
                 onValueChange={field.onChange}
-                defaultValue={accountToBeUpdated?.category || field.value}
+                defaultValue={budgetToBeUpdated?.category || field.value}
               >
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select an account type" />
+                    <SelectValue placeholder="Select an budget category" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
@@ -146,19 +167,6 @@ const AccountForm: React.FC<IAccountFormProps> = ({
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="balance"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Balance</FormLabel>
-              <FormControl>
-                <Input type="number" step="0.01" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <Button className="w-full" type="submit">
           {!entityId ? "Create" : "Update"}
         </Button>
@@ -167,4 +175,4 @@ const AccountForm: React.FC<IAccountFormProps> = ({
   );
 };
 
-export default AccountForm;
+export default BudgetForm;

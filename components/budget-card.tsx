@@ -77,6 +77,7 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
                   entityId: budget.id,
                   mode: "edit",
                   key: "budget",
+                  data: budget,
                 })
               )
             }

@@ -6,26 +6,24 @@ import { LoginSchemaType } from "@/schemas/LoginSchema";
 import RegisterSchema, { RegisterSchemaType } from "@/schemas/RegisterSchema";
 import { cookies } from "next/headers";
 import bcrypt from "bcrypt";
-import { MONTHS_OF_THE_YEAR, processDate, processZodError } from "@/lib/utils";
+import { MONTHS_OF_THE_YEAR, processZodError } from "@/lib/utils";
 import accountSchema, {
   AccountSchemaType,
 } from "@/schemas/CreateUserAccountSchema";
-import ACCOUNT_OPTIONS, { getKeyByValue } from "@/lib/CreateUserAccountOptions";
+import ACCOUNT_OPTIONS from "@/lib/CreateUserAccountOptions";
 import {
   TransactionCategory,
   Prisma,
-  AccountCategory,
   BudgetCategory,
   Account,
+  Budget,
 } from "@prisma/client";
 import { EditReminderSchemaType } from "@/schemas/EditReminderSchema";
 import EditBudgetSchema, {
   EditBudgetSchemaType,
 } from "@/schemas/EditBudgetSchema";
 import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
-import CreateBudgetSchema, {
-  CreateBudgetSchemaType,
-} from "@/schemas/CreateBudgetSchema";
+import { CreateBudgetSchemaType } from "@/schemas/CreateBudgetSchema";
 import CreateTransactionSchema, {
   CreateTransactionSchemaType,
 } from "@/schemas/CreateTransactionSchema";
@@ -44,6 +42,7 @@ import {
   UpdateBudgetResponse,
 } from "./types";
 import { ZodError } from "zod";
+import budgetSchema, { BudgetSchemaType } from "@/schemas/budget-schema";
 
 export const login = async ({ email, password }: LoginSchemaType) => {
   const result = LoginSchema.safeParse({ email, password });
@@ -530,112 +529,53 @@ export const updateBankAccount = async ({
   }
 };
 
-export const updateAccountById = async ({
-  accountId,
-  balance,
-  category,
-  name,
-}: AccountSchemaType & { accountId: string | null }) => {
-  if (!accountId) {
-    return { error: "Account ID not found." };
-  }
-
-  let result = accountSchema.safeParse({ balance, category, name });
-
-  if (!result.success) {
-    return { error: "Unprocessable entity." };
-  }
-
-  const {
-    balance: balanceResult,
-    category: categoryResult,
-    name: nameResult,
-  } = result.data;
-
-  const mappedCategory = getKeyByValue(ACCOUNT_OPTIONS, categoryResult);
-
-  const updatedAccount = await prisma.account.update({
-    where: {
-      id: accountId,
-    },
-    data: {
-      balance: balanceResult,
-      category: mappedCategory as AccountCategory,
-      name: nameResult,
-    },
-  });
-
-  if (!updatedAccount) {
-    return { error: "Error updating account." };
-  }
-
-  return {
-    account: updatedAccount,
-  };
-};
-
-export const createBudget = async ({
-  budgetAmount,
-  spentAmount,
-  category,
-  name,
-}: CreateBudgetSchemaType) => {
-  let result = CreateBudgetSchema.safeParse({
-    budgetAmount,
-    spentAmount,
-    category,
-    name,
-  });
-
-  if (!result.success) {
-    return { error: "Unprocessable entity." };
-  }
-
-  const {
-    budgetAmount: budgetAmountResult,
-    spentAmount: spentAmountResult,
-    category: categoryResult,
-  } = result.data;
-
-  const mappedCategory = Object.entries(CreateBudgetOptions).find(
-    ([key, value]) => value === categoryResult
-  )?.[0];
-
+export const createBudget = async (
+  data: CreateBudgetSchemaType
+): Promise<IValidatedResponse<Budget>> => {
   const currentUser = await getCurrentUser(cookies().get("token")?.value!);
 
   if (!currentUser) {
-    return { error: "You are not authorized to perform this action." };
+    return {
+      error: "You are not authorized to perform this action.",
+      fieldErrors: [],
+    };
   }
 
-  const createdBudget = await prisma.budget.create({
-    data: {
-      name,
-      budgetAmount: budgetAmountResult,
-      spentAmount: spentAmountResult,
-      category: mappedCategory as BudgetCategory,
-      userId: currentUser.id,
-      progress: (spentAmountResult / budgetAmountResult) * 100,
-    },
-  });
+  try {
+    const validatedData = budgetSchema.parse(data);
 
-  if (!createdBudget) {
-    return { error: "Error creating budget." };
+    const createdBudget = await prisma.budget.create({
+      data: {
+        ...validatedData,
+        userId: currentUser.id,
+      },
+    });
+
+    if (!createdBudget) {
+      return {
+        error:
+          "There was a problem while creating your budget. Please try again later.",
+        fieldErrors: [],
+      };
+    }
+
+    return {
+      data: createdBudget,
+      fieldErrors: [],
+    };
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return processZodError(error);
+    }
+
+    return { error: "An error occurred.", fieldErrors: [] };
   }
-
-  return {
-    budget: createdBudget,
-  };
 };
 
-export const updateBudget = async ({
-  budgetId,
-  budgetAmount,
-  spentAmount,
-  category,
-  name,
-}: EditBudgetSchemaType & {
-  budgetId: string;
-}): Promise<UpdateBudgetResponse> => {
+export const updateBudget = async (
+  budgetId: string,
+  values: BudgetSchemaType
+): Promise<IValidatedResponse<Budget>> => {
   const budgetToBeUpdated = await prisma.budget.findUnique({
     where: { id: budgetId },
   });
@@ -644,43 +584,32 @@ export const updateBudget = async ({
     return { error: `Budget to be updated cannot be found.`, fieldErrors: [] };
 
   try {
-    const validatedData = EditBudgetSchema.parse({
-      budgetAmount,
-      spentAmount,
-      category,
-      name,
-    });
-
-    // TODO: Fix this
-    const mappedCategory = Object.entries(CreateBudgetOptions).find(
-      ([, value]) => value === validatedData.category
-    )?.[0];
+    const validatedData = budgetSchema.parse(values);
 
     const updatedBudget = await prisma.budget.update({
-      where: { id: budgetId },
-      data: {
-        ...validatedData,
-        progress:
-          (validatedData.spentAmount / validatedData.budgetAmount) * 100,
-        category: mappedCategory as BudgetCategory,
-      },
+      where: { id: budgetId, userId: budgetToBeUpdated.userId },
+      data: validatedData,
     });
 
     if (!updatedBudget)
       return {
         error:
-          "There was an error while trying to update your budget. Please try again later.",
+          "There was a problem while trying to update your budget. Please try again later.",
         fieldErrors: [],
       };
 
-    return { budget: updatedBudget, fieldErrors: [] };
+    return { data: updatedBudget, fieldErrors: [] };
   } catch (error) {
     if (error instanceof ZodError) {
       return processZodError(error);
     }
 
     console.error(error);
-    return { error: "An error occurred.", fieldErrors: [] };
+    return {
+      error:
+        "There was a problem while updating your budget. Please try again later.",
+      fieldErrors: [],
+    };
   }
 };
 
