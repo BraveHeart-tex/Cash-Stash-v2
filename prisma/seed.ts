@@ -1,6 +1,6 @@
 "use server";
 
-import { NotificationCategory, AccountCategory } from "@prisma/client";
+import { BudgetCategory, AccountCategory } from "@prisma/client";
 import prisma from "../lib/prismadb";
 import { faker } from "@faker-js/faker";
 import ACCOUNT_OPTIONS from "../lib/CreateUserAccountOptions";
@@ -27,7 +27,7 @@ const createBudget = async (userId: string) => {
   const budgetOptions = Object.keys(CreateBudgetOptions);
   const budgetType = budgetOptions[
     Math.floor(Math.random() * budgetOptions.length)
-  ] as NotificationCategory;
+  ] as BudgetCategory;
   await prisma.budget.create({
     data: {
       userId,

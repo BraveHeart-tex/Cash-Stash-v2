@@ -36,6 +36,8 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
     }
   };
 
+  const isIncome = transaction.amount > 0;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -54,12 +56,10 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
           <div className={"flex flex-row items-center gap-1"}>
             <Badge
               className={cn(
-                transaction.isIncome
-                  ? "bg-success dark:bg-green-700"
-                  : "bg-destructive"
+                isIncome ? "bg-success dark:bg-green-700" : "bg-destructive"
               )}
             >
-              {transaction.isIncome ? "Income" : "Expense"}
+              {isIncome ? "Income" : "Expense"}
             </Badge>
             <ActionPopover
               popoverHeading={"Transaction Actions"}
@@ -99,12 +99,8 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
             </div>
             <div className={"flex items-center gap-1"}>
               <p className={"font-semibold"}>Amount: </p>
-              <p
-                className={cn(
-                  transaction.isIncome ? "text-green-500" : "text-red-500"
-                )}
-              >
-                {transaction.isIncome ? "+" : "-"}${transaction.amount}
+              <p className={cn(isIncome ? "text-green-500" : "text-red-500")}>
+                {isIncome ? "+" : "-"}${transaction.amount}
               </p>
             </div>
           </div>

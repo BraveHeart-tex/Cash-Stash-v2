@@ -34,7 +34,7 @@ const UserMenu = () => {
     <DropdownMenu>
       <DropdownMenuTrigger className="outline-none focus:outline-none">
         <Avatar>
-          <AvatarImage src={user?.image as string} alt={user?.name} />
+          <AvatarImage alt={user?.name} />
           <AvatarFallback>{avatarPlaceholder}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>

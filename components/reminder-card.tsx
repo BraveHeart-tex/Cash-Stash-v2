@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
 import { Pencil1Icon } from "@radix-ui/react-icons";
 import { openGenericModal } from "@/app/redux/features/genericModalSlice";
 import { useAppDispatch } from "@/app/redux/hooks";
@@ -53,14 +52,6 @@ const ReminderCard = ({ reminder }: IReminderCardProps) => {
             month: "numeric",
             day: "numeric",
           })}
-        </p>
-        <p
-          className={cn(
-            "text-md font-semibold",
-            reminder.isIncome ? "text-green-500" : "text-red-500"
-          )}
-        >
-          {reminder.isIncome ? "Income" : "Expense"}: ${reminder.amount}
         </p>
       </div>
       <div className="my-2 h-1 bg-card" />

@@ -15,7 +15,7 @@ import { DefaultArgs } from "@prisma/client/runtime/library";
 import { getUserSession } from ".";
 
 const TABLE_MAP: TableMap = {
-  userAccount: prisma.account,
+  account: prisma.account,
   transaction: prisma.transaction,
   budget: prisma.budget,
   goal: prisma.goal,

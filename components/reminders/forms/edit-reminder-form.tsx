@@ -8,13 +8,11 @@ import { EditReminderSchema } from "@/schemas";
 import { EditReminderSchemaType } from "@/schemas/EditReminderSchema";
 import FormInput from "@/components/form-input";
 import { Button } from "@/components/ui/button";
-import FormSelect from "@/components/form-select";
 import {
   showDefaultToast,
   showErrorToast,
   showSuccessToast,
 } from "@/components/ui/use-toast";
-import FormCheckbox from "@/components/form-checkbox";
 import { updateReminder } from "@/actions";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 import { useRouter } from "next/navigation";
@@ -103,17 +101,19 @@ const EditReminderForm = ({ entityId }: IEditReminderFormProps) => {
     return <FormLoadingSpinner />;
   }
 
+  // TODO:
   const hasMadeNoChanges = () => {
     let isIncome = getValues("isIncome") === "income" ? true : false;
-    return (
-      getValues("title") === currentReminder?.title &&
-      getValues("description") === currentReminder?.description &&
-      getValues("amount") === currentReminder?.amount &&
-      isIncome === currentReminder?.isIncome &&
-      getValues("reminderDate") ===
-        new Date(currentReminder?.reminderDate).toLocaleDateString("en-CA") &&
-      getValues("isRead") === (currentReminder?.isRead ? "isRead" : "isNotRead")
-    );
+    return false;
+    // return (
+    //   getValues("title") === currentReminder?.title &&
+    //   getValues("description") === currentReminder?.description &&
+    //   getValues("amount") === currentReminder?.amount &&
+    //   isIncome === currentReminder?.isIncome &&
+    //   getValues("reminderDate") ===
+    //     new Date(currentReminder?.reminderDate).toLocaleDateString("en-CA") &&
+    //   getValues("isRead") === (currentReminder?.isRead ? "isRead" : "isNotRead")
+    // );
   };
 
   return (
@@ -153,39 +153,6 @@ const EditReminderForm = ({ entityId }: IEditReminderFormProps) => {
           className="w-full"
           onChange={(value) => {
             setValue("reminderDate", value);
-          }}
-        />
-        <FormSelect
-          defaultValue={currentReminder?.isIncome ? "income" : "expense"}
-          selectOptions={[
-            { label: "Income", value: "income" },
-            { label: "Expense", value: "expense" },
-          ]}
-          nameParam={"isIncome"}
-          label={"Transaction type"}
-          placeholder={""}
-          register={register}
-          errors={errors}
-          onChange={(value) => {
-            let valueToSet: "income" | "expense" = "income";
-            if (value === "expense") {
-              valueToSet = "expense";
-            }
-            setValue("isIncome", valueToSet);
-          }}
-        />
-        <FormCheckbox
-          name={"isRead"}
-          label={"Mark as read"}
-          register={register}
-          errors={errors}
-          defaultChecked={currentReminder?.isRead}
-          onChange={(value) => {
-            let valueToSet: "isNotRead" | "isRead" = "isNotRead";
-            if (value) {
-              valueToSet = "isRead";
-            }
-            setValue("isRead", valueToSet);
           }}
         />
         {isPending ? (

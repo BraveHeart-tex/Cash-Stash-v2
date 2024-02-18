@@ -15,7 +15,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { generateFormFields } from "@/lib/utils";
 import { useTransition } from "react";
-import { register } from "@/actions";
+import { register as registerUser } from "@/actions";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -38,12 +38,11 @@ const SignUpForm = () => {
 
   const handleRegisterFormSubmit = (data: RegisterSchemaType) => {
     startTransition(async () => {
-      register(data).then((result) => {
-        if (result?.error)
-          return showErrorToast("An error occurred.", result.error);
-        router.push("/");
-        showSuccessToast("Signed up.", "You have been signed up.");
-      });
+      const result = await registerUser(data);
+      if (result?.error)
+        return showErrorToast("An error occurred.", result.error);
+      router.push("/");
+      showSuccessToast("Signed up.", "You have been signed up.");
     });
   };
 

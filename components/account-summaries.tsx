@@ -2,11 +2,11 @@ import AccountCard from "./account-card";
 import CreateAccountButton from "./CreateButtons/create-account-button";
 import AnimatePresenceClient from "@/components/animations/animate-presence";
 import MotionDiv from "@/components/animations/motion-div";
-import { UserAccount } from "@prisma/client";
+import { Account } from "@prisma/client";
 import Link from "next/link";
 import { Button } from "./ui/button";
 
-const AccountSummaries = ({ accounts }: { accounts: UserAccount[] }) => {
+const AccountSummaries = ({ accounts }: { accounts: Account[] }) => {
   if (accounts.length === 0) {
     return (
       <article className="flex h-[300px] items-center justify-center">

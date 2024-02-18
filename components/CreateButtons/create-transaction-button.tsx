@@ -8,7 +8,7 @@ import { openGenericModal } from "@/lib/genericModalUtils";
 import { FaExchangeAlt } from "react-icons/fa";
 import { cn } from "@/lib/utils";
 
-const CreateTransactionButton = ({ className }: { className: string }) => {
+const CreateTransactionButton = ({ className }: { className?: string }) => {
   let [isPending, startTransition] = useTransition();
   const dispatch = useAppDispatch();
   const handleCreateTransactionClick = async () => {
