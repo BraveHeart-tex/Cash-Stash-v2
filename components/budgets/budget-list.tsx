@@ -1,4 +1,4 @@
-import CreateBudgetButton from "@/components/CreateButtons/create-budget-button";
+import CreateBudgetButton from "@/components/create-buttons/create-budget-button";
 import MotionDiv from "@/components/animations/motion-div";
 import { Budget } from "@prisma/client";
 import RouteSearchInput from "@/components/route-search-input";

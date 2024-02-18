@@ -1,4 +1,4 @@
-import CreateAccountButton from "@/components/CreateButtons/create-account-button";
+import CreateAccountButton from "@/components/create-buttons/create-account-button";
 import { getPaginatedAccounts } from "@/actions";
 import RoutePaginationControls from "@/components/route-pagination-controls";
 import RouteSearchInput from "@/components/route-search-input";

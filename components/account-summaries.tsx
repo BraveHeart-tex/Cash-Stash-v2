@@ -1,5 +1,5 @@
 import AccountCard from "./account-card";
-import CreateAccountButton from "./CreateButtons/create-account-button";
+import CreateAccountButton from "./create-buttons/create-account-button";
 import AnimatePresenceClient from "@/components/animations/animate-presence";
 import MotionDiv from "@/components/animations/motion-div";
 import { Account } from "@prisma/client";

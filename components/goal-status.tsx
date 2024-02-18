@@ -1,5 +1,5 @@
 import GoalCard from "./goal-card";
-import CreateGoalButton from "./CreateButtons/create-goal-button";
+import CreateGoalButton from "./create-buttons/create-goal-button";
 import AnimatePresenceClient from "@/components/animations/animate-presence";
 import MotionDiv from "@/components/animations/motion-div";
 import { Goal } from "@prisma/client";

@@ -482,6 +482,54 @@ export const registerBankAccount = async ({
   }
 };
 
+export const updateBankAccount = async ({
+  accountId,
+  ...rest
+}: AccountSchemaType & { accountId: string }): Promise<
+  IValidatedResponse<Account>
+> => {
+  if (!accountId) {
+    return {
+      error: "Invalid request. Please provide an account ID.",
+      fieldErrors: [],
+    };
+  }
+
+  try {
+    const validatedData = accountSchema.parse(rest);
+
+    const updatedAccount = await prisma.account.update({
+      where: {
+        id: accountId,
+      },
+      data: validatedData,
+    });
+
+    if (!updatedAccount) {
+      return {
+        error:
+          "An error occurred while updating your bank account. Please try again later.",
+        fieldErrors: [],
+      };
+    }
+
+    return {
+      data: updatedAccount,
+      fieldErrors: [],
+    };
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return processZodError(error);
+    }
+
+    return {
+      error:
+        "An error occurred while updating your bank account. Please try again later.",
+      fieldErrors: [],
+    };
+  }
+};
+
 export const updateAccountById = async ({
   accountId,
   balance,

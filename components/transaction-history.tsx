@@ -1,6 +1,6 @@
 import { SerializedTransaction } from "@/actions/types";
 import TransactionCard from "./transactions/transaction-card";
-import CreateTransactionButton from "./CreateButtons/create-transaction-button";
+import CreateTransactionButton from "./create-buttons/create-transaction-button";
 import AnimatePresenceClient from "@/components/animations/animate-presence";
 import MotionDiv from "@/components/animations/motion-div";
 

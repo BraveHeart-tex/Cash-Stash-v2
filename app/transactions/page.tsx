@@ -1,6 +1,6 @@
 import { getPaginatedTransactions } from "@/actions";
 import TransactionList from "@/components/transactions/transaction-list";
-import CreateTransactionButton from "@/components/CreateButtons/create-transaction-button";
+import CreateTransactionButton from "@/components/create-buttons/create-transaction-button";
 import TransactionsNotFound from "@/components/transactions-not-found";
 
 export interface SearchParams {

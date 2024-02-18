@@ -21,6 +21,7 @@ const GenericModal = () => {
     isGenericModalOpen,
     mode,
     key,
+    data,
     props,
   } = useAppSelector((state) => state.genericModalReducer);
 
@@ -33,6 +34,7 @@ const GenericModal = () => {
     key,
     entityId,
     props,
+    data,
   });
 
   return (

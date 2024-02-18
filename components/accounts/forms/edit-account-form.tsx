@@ -59,8 +59,6 @@ const EditAccountForm = ({ entityId }: IEditAccountFormProps) => {
 
   useEffect(() => {
     if (currentAccount) {
-      console.log(currentAccount);
-
       setValue("name", currentAccount.name);
       setValue("category", currentAccount.category);
       setValue("balance", currentAccount.balance);

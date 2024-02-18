@@ -73,6 +73,7 @@ const AccountCard = ({ account, className }: IAccountCardProps) => {
             openGenericModal({
               mode: "edit",
               key: "account",
+              data: account,
               dialogTitle: "Edit an account",
               dialogDescription: "Fill out the form below to edit an account.",
               entityId: account.id,

@@ -1,5 +1,5 @@
 import BudgetCard from "@/components/budget-card";
-import CreateBudgetButton from "@/components/CreateButtons/create-budget-button";
+import CreateBudgetButton from "@/components/create-buttons/create-budget-button";
 import AnimatePresenceClient from "@/components/animations/animate-presence";
 import MotionDiv from "@/components/animations/motion-div";
 import { Budget } from "@prisma/client";
