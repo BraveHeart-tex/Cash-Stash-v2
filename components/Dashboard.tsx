@@ -108,7 +108,7 @@ const Dashboard = ({
             <Card key={section.title}>
               <CardHeader className="font-[500] text-xl text-primary">
                 {section.title}
-                <span className="text-gray-500 text-sm">
+                <span className="text-muted-foreground text-sm">
                   {section.description}
                 </span>
               </CardHeader>

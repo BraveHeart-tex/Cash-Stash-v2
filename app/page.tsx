@@ -9,6 +9,7 @@ import {
 } from "@/actions";
 import { getGenericListByCurrentUser } from "@/actions/generic";
 import { SerializedReminder } from "@/actions/types";
+import DashboardSkeleton from "@/components/dashboard-skeleton";
 import { Suspense } from "react";
 
 export default async function Home() {
@@ -51,7 +52,7 @@ export default async function Home() {
 
   return (
     <main>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<DashboardSkeleton />}>
         <Dashboard
           budgets={budgetsResult.budgets}
           accounts={accountsResult?.accounts}
