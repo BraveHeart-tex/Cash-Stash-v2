@@ -3,16 +3,20 @@ import TransactionList from "@/components/transactions/transaction-list";
 import CreateTransactionButton from "@/components/create-buttons/create-transaction-button";
 import TransactionsNotFound from "@/components/transactions-not-found";
 
+// TODO: Implement search functionality and pass searchParams to the page
 export interface SearchParams {
   transactionType: string;
   accountId: string;
   sortBy: string;
   sortDirection: string;
+  amountStart?: number;
+  amountEnd?: number;
+  amountOperator?: "equals" | "lessThan" | "greaterThan" | "range";
+  createdAtStart?: Date;
+  createdAtEnd?: Date;
+  createdAtOperator?: "equals" | "before" | "after" | "range";
+  category?: string;
 }
-
-// amount between
-// createdAt between
-// by category
 
 const TransactionsPage = async ({
   searchParams,
