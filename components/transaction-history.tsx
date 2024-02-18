@@ -1,11 +1,11 @@
-import { SerializedTransaction } from "@/actions/types";
 import TransactionCard from "./transactions/transaction-card";
 import CreateTransactionButton from "./create-buttons/create-transaction-button";
 import AnimatePresenceClient from "@/components/animations/animate-presence";
 import MotionDiv from "@/components/animations/motion-div";
+import { Transaction } from "@prisma/client";
 
 interface ITransactionHistoryProps {
-  transactions: SerializedTransaction[] | null;
+  transactions: Transaction[] | null;
 }
 
 const TransactionHistory = ({ transactions }: ITransactionHistoryProps) => {

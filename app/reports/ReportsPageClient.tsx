@@ -48,7 +48,8 @@ const ReportsPageClient = async ({
         <ReportTable
           monthlyTransactionsData={data}
           currentUserAccounts={userAccountsResult}
-          transactions={userTransactionsResult}
+          // TODO:
+          transactions={[]}
         />
       </MotionDiv>
     </div>

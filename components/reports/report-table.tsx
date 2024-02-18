@@ -1,8 +1,7 @@
 "use client";
 import { SerializedTransaction } from "@/actions/types";
 import { SerializedUserAccount } from "@/actions/types";
-import TransactionsFilter from "../transactions/transactions-filter";
-import TransactionsSort from "../transactions/transactions-sort";
+
 import {
   Table,
   TableBody,
@@ -81,10 +80,7 @@ const ReportTable = ({
     <div>
       <h3 className="my-4 text-lg">Transaction History Report</h3>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-4">
-        <div className="flex justify-center flex-col">
-          <TransactionsFilter currentUserAccounts={currentUserAccounts} />
-          <TransactionsSort />
-        </div>
+        <div className="flex justify-center flex-col"></div>
         <Table>
           <TableCaption>List of your Transactions</TableCaption>
           <TableHeader>
