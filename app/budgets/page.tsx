@@ -22,9 +22,9 @@ const BudgetsPage = async ({
     sortDirection: searchParams.sortDirection || "",
   };
 
-  const pageHasParams = !!Object.values(searchParams).filter(
-    (param) => param !== searchParams.page
-  ).length;
+  const pageHasParams = Object.values(searchParams)
+    .filter((param) => param !== searchParams.page)
+    .some((param) => param);
 
   const result = await getPaginatedBudgetsAction(actionParams);
 

@@ -2,7 +2,7 @@ import prisma from "@/lib/prismadb";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { MdDashboard, MdOutlineAccountBalanceWallet } from "react-icons/md";
-import { ZodObject } from "zod";
+import { ZodError, ZodObject } from "zod";
 import { IconType } from "react-icons/lib";
 import { FaMoneyBill, FaPiggyBank } from "react-icons/fa";
 import { TbReportAnalytics } from "react-icons/tb";
@@ -219,4 +219,24 @@ export const areObjectsDeepEqual = (obj1: any, obj2: any): boolean => {
   }
 
   return true;
+};
+
+export const processZodError = (error: ZodError) => {
+  const fieldErrors = error.flatten().fieldErrors;
+  const errorMessages = Object.entries(fieldErrors).map(
+    // eslint-disable-next-line no-unused-vars
+    ([_, message]) => `${message}`
+  );
+
+  const errorMessage = errorMessages.join(", ");
+
+  const errorObject = {
+    error: errorMessage,
+    fieldErrors: Object.entries(fieldErrors).map(([field, message]) => ({
+      field,
+      message: message?.join(", "),
+    })),
+  };
+
+  return errorObject;
 };

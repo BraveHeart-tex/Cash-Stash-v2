@@ -99,12 +99,12 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
         </div>
       </div>
       <Progress
-        value={(budget.spentAmount / budget.budgetAmount) * 100}
+        value={budget.progress}
         className="mt-4"
         indicatorClassName={cn(
-          budget.spentAmount / budget.budgetAmount > 0.7
+          budget.progress > 50
             ? "bg-destructive"
-            : budget.spentAmount / budget.budgetAmount > 0.4
+            : budget.progress > 25
               ? "bg-orange-500"
               : "bg-success"
         )}

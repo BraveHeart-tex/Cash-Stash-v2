@@ -6,12 +6,17 @@ import { LoginSchemaType } from "@/schemas/LoginSchema";
 import RegisterSchema, { RegisterSchemaType } from "@/schemas/RegisterSchema";
 import { cookies } from "next/headers";
 import bcrypt from "bcrypt";
-import { MONTHS_OF_THE_YEAR, processDate } from "@/lib/utils";
+import { MONTHS_OF_THE_YEAR, processDate, processZodError } from "@/lib/utils";
 import accountSchema, {
   AccountSchemaType,
 } from "@/schemas/CreateUserAccountSchema";
 import ACCOUNT_OPTIONS, { getKeyByValue } from "@/lib/CreateUserAccountOptions";
-import { NotificationCategory, Prisma, AccountCategory } from "@prisma/client";
+import {
+  NotificationCategory,
+  Prisma,
+  AccountCategory,
+  BudgetCategory,
+} from "@prisma/client";
 import { EditReminderSchemaType } from "@/schemas/EditReminderSchema";
 import EditBudgetSchema, {
   EditBudgetSchemaType,
@@ -34,7 +39,9 @@ import {
   IGetPaginatedBudgetsActionReturnType,
   IGetPaginatedGoalsActionParams,
   IGetPaginatedGoalsActionReturnType,
+  UpdateBudgetResponse,
 } from "./types";
+import { ZodError } from "zod";
 
 export const loginAction = async ({ email, password }: LoginSchemaType) => {
   const result = LoginSchema.safeParse({ email, password });
@@ -544,7 +551,6 @@ export const createBudgetAction = async ({
     category: categoryResult,
   } = result.data;
 
-  // TODO: Refactor this to use a better approach
   const mappedCategory = Object.entries(CreateBudgetOptions).find(
     ([key, value]) => value === categoryResult
   )?.[0];
@@ -562,6 +568,7 @@ export const createBudgetAction = async ({
       spentAmount: spentAmountResult,
       category: mappedCategory as NotificationCategory,
       userId: currentUser.id,
+      progress: (spentAmountResult / budgetAmountResult) * 100,
     },
   });
 
@@ -572,6 +579,63 @@ export const createBudgetAction = async ({
   return {
     budget: createdBudget,
   };
+};
+
+export const updateBudget = async ({
+  budgetId,
+  budgetAmount,
+  spentAmount,
+  category,
+  name,
+}: EditBudgetSchemaType & {
+  budgetId: string;
+}): Promise<UpdateBudgetResponse> => {
+  const budgetToBeUpdated = await prisma.budget.findUnique({
+    where: { id: budgetId },
+  });
+
+  if (!budgetToBeUpdated)
+    return { error: `Budget to be updated cannot be found.`, fieldErrors: [] };
+
+  try {
+    const validatedData = EditBudgetSchema.parse({
+      budgetAmount,
+      spentAmount,
+      category,
+      name,
+    });
+
+    // TODO: Fix this
+    const mappedCategory = Object.entries(CreateBudgetOptions).find(
+      ([, value]) => value === validatedData.category
+    )?.[0];
+
+    const updatedBudget = await prisma.budget.update({
+      where: { id: budgetId },
+      data: {
+        ...validatedData,
+        progress:
+          (validatedData.spentAmount / validatedData.budgetAmount) * 100,
+        category: mappedCategory as BudgetCategory,
+      },
+    });
+
+    if (!updatedBudget)
+      return {
+        error:
+          "There was an error while trying to update your budget. Please try again later.",
+        fieldErrors: [],
+      };
+
+    return { budget: updatedBudget, fieldErrors: [] };
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return processZodError(error);
+    }
+
+    console.error(error);
+    return { error: "An error occurred.", fieldErrors: [] };
+  }
 };
 
 export const updateBudgetByIdAction = async ({

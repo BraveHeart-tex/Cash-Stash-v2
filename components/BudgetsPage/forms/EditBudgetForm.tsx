@@ -19,7 +19,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import FormInput from "@/components/FormInput";
 import FormSelect from "@/components/FormSelect";
 import { Button } from "@/components/ui/button";
-import { updateBudgetByIdAction } from "@/actions";
+import { updateBudget } from "@/actions";
 import { useRouter } from "next/navigation";
 
 interface IEditBudgetFormProps {
@@ -40,6 +40,7 @@ const EditUserBudgetForm = ({ entityId }: IEditBudgetFormProps) => {
     handleSubmit,
     formState: { errors, isLoading, isSubmitting },
     setValue,
+    setError,
     getValues,
   } = useForm<EditBudgetSchemaType>({
     defaultValues: {
@@ -94,7 +95,14 @@ const EditUserBudgetForm = ({ entityId }: IEditBudgetFormProps) => {
     };
 
     startTransition(async () => {
-      const result = await updateBudgetByIdAction(payload);
+      const result = await updateBudget(payload);
+
+      if (result.fieldErrors?.length) {
+        result.fieldErrors.forEach(({ field, message }) => {
+          setError(field as any, { type: "validate", message });
+        });
+      }
+
       if (result.error) {
         showErrorToast("An error occurred.", result.error);
       } else {

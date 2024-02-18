@@ -1,8 +1,8 @@
 import {
   Budget,
-  UserAccount,
+  Account,
   NotificationCategory,
-  UserAccountCategory,
+  AccountCategory,
   Goal,
 } from "@prisma/client";
 
@@ -22,12 +22,12 @@ export interface IGetPaginatedAccountActionParams
   extends IPaginatedActionParams {
   sortBy?: string;
   sortDirection?: string;
-  category?: UserAccountCategory;
+  category?: AccountCategory;
 }
 
 export interface IGetPaginatedAccountActionReturnType
   extends IPaginatedReturnType {
-  accounts: UserAccount[];
+  accounts: Account[];
 }
 
 export interface IGetPaginatedBudgetsActionParams
@@ -52,10 +52,7 @@ export interface IGetPaginatedGoalsActionReturnType
   goals: Goal[];
 }
 
-export type SerializedUserAccount = Omit<
-  UserAccount,
-  "createdAt" | "updatedAt"
-> & {
+export type SerializedUserAccount = Omit<Account, "createdAt" | "updatedAt"> & {
   createdAt: string;
   updatedAt: string;
 };
@@ -65,3 +62,12 @@ export interface GenericFilterOption<T> {
   data: T;
   icon: React.JSX.Element;
 }
+
+export type UpdateBudgetResponse = {
+  budget?: Budget;
+  error?: string;
+  fieldErrors: {
+    field: string;
+    message: string | undefined;
+  }[];
+};
