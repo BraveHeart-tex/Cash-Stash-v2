@@ -36,6 +36,22 @@ const BudgetList = ({
           <RouteFiltersPopover
             options={[
               {
+                label: "Sort by Remaining (Low to High)",
+                icon: <FaPiggyBank className="mr-2" />,
+                data: {
+                  sortBy: "progress",
+                  sortDirection: "desc",
+                },
+              },
+              {
+                label: "Sort by Remaining (High to Low)",
+                icon: <FaPiggyBank className="mr-2" />,
+                data: {
+                  sortBy: "progress",
+                  sortDirection: "asc",
+                },
+              },
+              {
                 label: "Sort by Spending (High to Low)",
                 icon: <GiPayMoney className="mr-auto" />,
                 data: {
