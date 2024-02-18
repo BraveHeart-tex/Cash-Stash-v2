@@ -30,10 +30,9 @@ const BudgetList = ({
         <h3 className="text-4xl text-primary">Budgets</h3>
         <CreateBudgetButton className="mt-0" />
       </div>
-      {budgets.length > 1 && (
-        <div className="flex items-center gap-2 justify-between">
-          <RouteSearchInput placeholder="Search budgets by name" />
-
+      <div className="flex items-center gap-2 justify-between">
+        <RouteSearchInput placeholder="Search budgets by name" />
+        {budgets.length > 1 && (
           <RouteFiltersPopover
             options={[
               {
@@ -87,8 +86,8 @@ const BudgetList = ({
             ]}
             queryKeys={["sortBy", "sortDirection"]}
           />
-        </div>
-      )}
+        )}
+      </div>
       <div className={"grid lg:grid-cols-6"}>
         <RouteSelectFilter
           dataset={selectDataset}

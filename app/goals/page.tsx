@@ -38,6 +38,7 @@ const GoalsPage = async ({
           <h2 className="text-4xl text-primary">Goals</h2>
           <CreateGoalButton className="mt-0" />
         </div>
+
         <div className="flex items-center justify-between gap-2">
           <RouteSearchInput placeholder="Search goals by name" />
           {result.goals.length > 1 && (

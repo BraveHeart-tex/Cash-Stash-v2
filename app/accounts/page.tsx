@@ -48,9 +48,9 @@ const AccountPage = async ({
           <h3 className="text-4xl text-primary">Accounts</h3>
           <CreateAccountButton className="self-start mt-0" />
         </div>
-        {result.accounts.length > 1 && (
-          <div className="flex items-center justify-between gap-2">
-            <RouteSearchInput placeholder="Search accounts by name" />
+        <div className="flex items-center justify-between gap-2">
+          <RouteSearchInput placeholder="Search accounts by name" />
+          {result.accounts.length > 1 && (
             <RouteFiltersPopover
               options={[
                 {
@@ -72,8 +72,8 @@ const AccountPage = async ({
               ]}
               queryKeys={["sortBy", "sortDirection"]}
             />
-          </div>
-        )}
+          )}
+        </div>
         <div className={"grid lg:grid-cols-6"}>
           <RouteSelectFilter
             dataset={selectDataset}
