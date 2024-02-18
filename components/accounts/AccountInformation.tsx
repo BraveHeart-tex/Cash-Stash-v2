@@ -1,10 +1,10 @@
 "use client";
 import AccountCard from "../AccountCard";
 import { motion } from "framer-motion";
-import { UserAccount } from "@prisma/client";
+import { Account } from "@prisma/client";
 
 interface IAccountInformationProps {
-  userAccounts: UserAccount[];
+  userAccounts: Account[];
 }
 
 const AccountInformation = ({ userAccounts }: IAccountInformationProps) => {

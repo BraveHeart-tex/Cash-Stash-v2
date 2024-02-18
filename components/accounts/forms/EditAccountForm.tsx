@@ -23,11 +23,11 @@ import accountSchema, {
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 import { useRouter } from "next/navigation";
 
-interface IEditUserAccountFormProps {
+interface IEditAccountFormProps {
   entityId: string | null;
 }
 
-const EditUserAccountForm = ({ entityId }: IEditUserAccountFormProps) => {
+const EditAccountForm = ({ entityId }: IEditAccountFormProps) => {
   const { currentAccount, isLoading: isCurrentAccountLoading } = useAppSelector(
     (state) => state.currentAccountReducer
   );
@@ -172,4 +172,4 @@ const EditUserAccountForm = ({ entityId }: IEditUserAccountFormProps) => {
   );
 };
 
-export default EditUserAccountForm;
+export default EditAccountForm;

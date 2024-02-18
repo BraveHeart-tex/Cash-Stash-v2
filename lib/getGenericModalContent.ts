@@ -1,5 +1,5 @@
-import EditUserAccountForm from "@/components/AccountsPage/forms/EditUserAccountForm";
-import CreateAccountForm from "@/components/AccountsPage/forms/CreateAccountForm";
+import EditAccountForm from "@/components/accounts/forms/EditAccountForm";
+import CreateAccountForm from "@/components/accounts/forms/CreateAccountForm";
 import CreateBudgetForm from "@/components/BudgetsPage/forms/CreateBudgetForm";
 import EditUserBudgetForm from "@/components/BudgetsPage/forms/EditBudgetForm";
 import CreateUserGoalForm from "@/components/GoalsPage/forms/CreateGoalForm";
@@ -47,7 +47,7 @@ const ContentMap: ContentMap = {
   },
   account: {
     create: CreateAccountForm,
-    edit: EditUserAccountForm,
+    edit: EditAccountForm,
   },
 };
 
