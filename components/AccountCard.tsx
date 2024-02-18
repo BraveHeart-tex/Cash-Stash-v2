@@ -1,5 +1,5 @@
 "use client";
-import CreateUserAccountOptions from "@/lib/CreateUserAccountOptions";
+import ACCOUNT_OPTIONS from "@/lib/CreateUserAccountOptions";
 import ActionPopover from "@/components/ActionPopover";
 import { useAppDispatch } from "../app/redux/hooks";
 import { openGenericModal } from "../app/redux/features/genericModalSlice";
@@ -21,7 +21,7 @@ const AccountCard = ({ account, className }: IAccountCardProps) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const accountCategory = CreateUserAccountOptions[account.category];
+  const accountCategory = ACCOUNT_OPTIONS[account.category];
 
   const handleActionCallback = (
     result: Awaited<ReturnType<typeof deleteGeneric>>,

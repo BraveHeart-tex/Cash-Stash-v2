@@ -1,19 +1,19 @@
 "use server";
 
-import { NotificationCategory, UserAccountCategory } from "@prisma/client";
+import { NotificationCategory, AccountCategory } from "@prisma/client";
 import prisma from "../lib/prismadb";
 import { faker } from "@faker-js/faker";
-import CreateUserAccountOptions from "../lib/CreateUserAccountOptions";
+import ACCOUNT_OPTIONS from "../lib/CreateUserAccountOptions";
 import CreateBudgetOptions from "../lib/CreateBudgetOptions";
 
 const createAccount = async (userId: string) => {
-  const accountOptions = Object.keys(CreateUserAccountOptions);
+  const accountOptions = Object.keys(ACCOUNT_OPTIONS);
 
   const accountType = accountOptions[
     Math.floor(Math.random() * accountOptions.length)
-  ] as UserAccountCategory;
+  ] as AccountCategory;
 
-  await prisma.userAccount.create({
+  await prisma.account.create({
     data: {
       userId,
       name: faker.finance.accountName(),
@@ -51,7 +51,6 @@ const createGoal = async (userId: string) => {
 };
 
 async function main() {
-  console.time("seed");
   const user = await prisma.user.findUnique({
     where: {
       email: "testUser@email.com",
@@ -62,7 +61,7 @@ async function main() {
     throw new Error("User not found");
   }
 
-  await prisma.userAccount.deleteMany();
+  await prisma.account.deleteMany();
   await prisma.budget.deleteMany();
   await prisma.goal.deleteMany();
 
@@ -73,8 +72,6 @@ async function main() {
       createGoal(userId),
     ]);
   }
-
-  console.timeEnd("seed");
 }
 
 main()

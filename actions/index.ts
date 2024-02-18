@@ -10,9 +10,7 @@ import { MONTHS_OF_THE_YEAR, processDate } from "@/lib/utils";
 import CreateUserAccountSchema, {
   CreateUserAccountSchemaType,
 } from "@/schemas/CreateUserAccountSchema";
-import CreateUserAccountOptions, {
-  getKeyByValue,
-} from "@/lib/CreateUserAccountOptions";
+import ACCOUNT_OPTIONS, { getKeyByValue } from "@/lib/CreateUserAccountOptions";
 import {
   NotificationCategory,
   Prisma,
@@ -167,7 +165,7 @@ export const getPaginatedAccountAction = async ({
   const PAGE_SIZE = 12;
   const skipAmount = (pageNumber - 1) * PAGE_SIZE;
 
-  if (category && !CreateUserAccountOptions.hasOwnProperty(category)) {
+  if (category && !ACCOUNT_OPTIONS.hasOwnProperty(category)) {
     return {
       accounts: [],
       hasNextPage: false,
@@ -455,7 +453,7 @@ export const registerBankAccountAction = async ({
     name: nameResult,
   } = result.data;
 
-  const mappedCategory = Object.entries(CreateUserAccountOptions).find(
+  const mappedCategory = Object.entries(ACCOUNT_OPTIONS).find(
     ([key, value]) => value === categoryResult
   )?.[0];
 
@@ -503,10 +501,7 @@ export const updateAccountByIdAction = async ({
     name: nameResult,
   } = result.data;
 
-  const mappedCategory = getKeyByValue(
-    CreateUserAccountOptions,
-    categoryResult
-  );
+  const mappedCategory = getKeyByValue(ACCOUNT_OPTIONS, categoryResult);
 
   const updatedAccount = await prisma.userAccount.update({
     where: {

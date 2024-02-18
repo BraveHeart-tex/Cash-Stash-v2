@@ -1,5 +1,5 @@
 "use client";
-import CreateUserAccountOptions from "@/lib/CreateUserAccountOptions";
+import ACCOUNT_OPTIONS from "@/lib/CreateUserAccountOptions";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { useAppDispatch } from "@/app/redux/hooks";
@@ -18,7 +18,7 @@ import { useRouter } from "next/navigation";
 const CreateUserAccountForm = () => {
   const dispatch = useAppDispatch();
   let [isPending, startTransition] = useTransition();
-  const accountOptions = Object.values(CreateUserAccountOptions);
+  const accountOptions = Object.values(ACCOUNT_OPTIONS);
   const router = useRouter();
   const {
     register,

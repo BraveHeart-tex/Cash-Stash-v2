@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
-import CreateUserAccountOptions, {
+import ACCOUNT_OPTIONS, {
   getOptionLabel,
 } from "@/lib/CreateUserAccountOptions";
 import FormLoadingSpinner from "../../FormLoadingSpinner";
@@ -35,7 +35,7 @@ const EditUserAccountForm = ({ entityId }: IEditUserAccountFormProps) => {
 
   const dispatch = useAppDispatch();
 
-  const accountOptions = Object.values(CreateUserAccountOptions);
+  const accountOptions = Object.values(ACCOUNT_OPTIONS);
 
   const {
     register,
@@ -67,7 +67,7 @@ const EditUserAccountForm = ({ entityId }: IEditUserAccountFormProps) => {
       setValue("name", currentAccount.name);
       setValue(
         "category",
-        getOptionLabel(CreateUserAccountOptions, currentAccount.category)
+        getOptionLabel(ACCOUNT_OPTIONS, currentAccount.category)
       );
       setValue("balance", currentAccount.balance);
     }
@@ -115,8 +115,7 @@ const EditUserAccountForm = ({ entityId }: IEditUserAccountFormProps) => {
 
     return (
       name === currentAccount?.name &&
-      category ===
-        getOptionLabel(CreateUserAccountOptions, currentAccount?.category!) &&
+      category === getOptionLabel(ACCOUNT_OPTIONS, currentAccount?.category!) &&
       balance === currentAccount?.balance
     );
   };
@@ -139,7 +138,7 @@ const EditUserAccountForm = ({ entityId }: IEditUserAccountFormProps) => {
         />
         <FormSelect
           defaultValue={getOptionLabel(
-            CreateUserAccountOptions,
+            ACCOUNT_OPTIONS,
             currentAccount?.category!
           )}
           selectOptions={selectOptions}

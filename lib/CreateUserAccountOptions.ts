@@ -1,4 +1,4 @@
-const CreateUserAccountOptions = {
+const ACCOUNT_OPTIONS = {
   CHECKING: "Checking Account",
   SAVINGS: "Savings Account",
   CREDIT_CARD: "Credit Card",
@@ -27,4 +27,4 @@ export function getKeyByValue<T>(
   return null;
 }
 
-export default CreateUserAccountOptions;
+export default ACCOUNT_OPTIONS;
