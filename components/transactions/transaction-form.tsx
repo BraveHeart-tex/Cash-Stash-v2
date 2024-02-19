@@ -81,7 +81,11 @@ const TransactionForm: React.FC<ITransactionFormProps> = ({
   const handleFormSubmit = async (values: TransactionSchemaType) => {
     let result;
     if (entityId) {
-      result = await updateTransaction(entityId, values);
+      result = await updateTransaction(
+        entityId,
+        values,
+        transactionToBeUpdated
+      );
     } else {
       result = await createTransaction(values);
     }

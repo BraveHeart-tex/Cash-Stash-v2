@@ -80,7 +80,8 @@ export const createTransaction = async (
 // TODO: Handle the case when we need to update the account balance if the user edits the accountId
 export const updateTransaction = async (
   transactionId: string,
-  values: TransactionSchemaType
+  values: TransactionSchemaType,
+  oldTransaction: Transaction
 ): Promise<IValidatedResponse<Transaction>> => {
   const currentUser = await getCurrentUser(cookies().get("token")?.value!);
   if (!currentUser) {
@@ -88,7 +89,13 @@ export const updateTransaction = async (
   }
 
   try {
+    const { amount: oldAmount, accountId: oldAccountId } = oldTransaction;
+
     const validatedData = transactionSchema.parse(values);
+
+    // handle the case if the transaction is registered to a different account
+    if (oldAccountId !== validatedData.accountId) {
+    }
 
     const updatedTransaction = prisma.transaction.update({
       where: {
