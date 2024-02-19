@@ -1,4 +1,5 @@
-import { getChartData, getPaginatedTransactions } from "@/actions";
+import { getChartData } from "@/actions";
+import { getPaginatedTransactions } from "@/actions/transaction";
 import ReportTable from "../../components/reports/report-table";
 import { getGenericListByCurrentUser } from "@/actions/generic";
 import { SerializedUserAccount } from "@/actions/types";

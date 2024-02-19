@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/select";
 import { generateReadbleEnumLabels } from "@/lib/utils";
 import { Account, AccountCategory } from "@prisma/client";
-import { registerBankAccount, updateBankAccount } from "@/actions";
+import { registerBankAccount, updateBankAccount } from "@/actions/account";
 import { IValidatedResponse } from "@/actions/types";
 import { showErrorToast, showSuccessToast } from "../ui/use-toast";
 import { useRouter } from "next/navigation";

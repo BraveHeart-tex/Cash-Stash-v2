@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { fetchCurrentUser } from "../app/redux/features/userSlice";
 import { useEffect, useTransition } from "react";
 import { AppDispatch } from "../app/redux/store";
-import { logout } from "@/actions";
+import { logout } from "@/actions/auth";
 import {
   DropdownMenu,
   DropdownMenuContent,

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { IGetPaginatedAccountsParams } from "@/actions/types";
-import { getPaginatedAccounts } from "@/actions";
+import { getPaginatedAccounts } from "@/actions/account";
 import { SerializedUserAccount } from "@/actions/types";
 
 interface UserAccountsState {

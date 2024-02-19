@@ -1,12 +1,9 @@
 import Dashboard from "../components/dashboard";
-import {
-  fetchInsightsDataAction,
-  getChartData,
-  getPaginatedAccounts,
-  getPaginatedBudgets,
-  getPaginatedGoals,
-  getPaginatedTransactions,
-} from "@/actions";
+import { fetchInsightsDataAction, getChartData } from "@/actions";
+import { getPaginatedTransactions } from "@/actions/transaction";
+import { getPaginatedAccounts } from "@/actions/account";
+import { getPaginatedBudgets } from "@/actions/budget";
+import { getPaginatedGoals } from "@/actions/goal";
 import { getGenericListByCurrentUser } from "@/actions/generic";
 import { SerializedReminder } from "@/actions/types";
 import DashboardSkeleton from "@/components/dashboard-skeleton";

@@ -6,11 +6,12 @@ import ActionPopover from "@/components/action-popover";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { showGenericConfirm } from "@/app/redux/features/genericConfirmSlice";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { deleteTransactionById } from "@/actions";
+import { deleteTransactionById } from "@/actions/transaction";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Transaction } from "@prisma/client";
+import { openGenericModal } from "@/app/redux/features/genericModalSlice";
 
 interface ITransactionCardProps {
   transaction: Transaction;
@@ -64,9 +65,16 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
             <ActionPopover
               popoverHeading={"Transaction Actions"}
               onEditActionClick={() => {
-                showErrorToast(
-                  "Error",
-                  "You cannot edit transactions at this time."
+                dispatch(
+                  openGenericModal({
+                    dialogTitle: "Edit Transaction",
+                    dialogDescription:
+                      "Edit the transaction information by using the form below.",
+                    entityId: transaction.id,
+                    mode: "edit",
+                    key: "transaction",
+                    data: transaction,
+                  })
                 );
               }}
               onDeleteActionClick={() => {
@@ -100,8 +108,8 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
             </div>
             <div className={"flex items-center gap-1"}>
               <p className={"font-semibold"}>Amount: </p>
-              <p className={cn(isIncome ? "text-green-500" : "text-red-500")}>
-                {isIncome ? "+" : "-"}${formatMoney(transaction.amount)}
+              <p className={cn(isIncome ? "text-success" : "text-destructive")}>
+                {formatMoney(transaction.amount)}
               </p>
             </div>
           </div>

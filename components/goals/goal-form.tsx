@@ -19,7 +19,7 @@ import { useAppDispatch } from "@/app/redux/hooks";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 import { useEffect } from "react";
 import goalSchema, { GoalSchemaType } from "@/schemas/goal-schema";
-import { createGoal, updateGoal } from "@/actions";
+import { createGoal, updateGoal } from "@/actions/goal";
 
 interface IGoalFormProps {
   data?: Goal;

@@ -27,7 +27,7 @@ import { useAppDispatch } from "@/app/redux/hooks";
 import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
 import { useEffect } from "react";
 import budgetSchema, { BudgetSchemaType } from "@/schemas/budget-schema";
-import { createBudget, updateBudget } from "@/actions";
+import { createBudget, updateBudget } from "@/actions/budget";
 
 interface IBudgetFormProps {
   data?: Budget;

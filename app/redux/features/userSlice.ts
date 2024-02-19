@@ -1,4 +1,4 @@
-import { getUserSession } from "@/actions/index";
+import { getUserSession } from "@/actions/auth";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { User } from "@prisma/client";
 

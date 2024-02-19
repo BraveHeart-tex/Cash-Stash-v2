@@ -12,7 +12,7 @@ import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import FormInput from "@/components/form-input";
 import FormSelect, { SelectOption } from "@/components/form-select";
 import { Button } from "@/components/ui/button";
-import { createTransaction } from "@/actions";
+import { createTransaction } from "@/actions/transaction";
 import { useRouter } from "next/navigation";
 import { SerializedUserAccount } from "@/actions/types";
 

@@ -1,4 +1,4 @@
-import { getPaginatedTransactions } from "@/actions";
+import { getPaginatedTransactions } from "@/actions/transaction";
 import TransactionList from "@/components/transactions/transaction-list";
 import CreateTransactionButton from "@/components/create-buttons/create-transaction-button";
 import TransactionsNotFound from "@/components/transactions-not-found";

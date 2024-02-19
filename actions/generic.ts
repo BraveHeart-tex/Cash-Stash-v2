@@ -12,7 +12,7 @@ import {
 import prisma from "@/lib/prismadb";
 import { Prisma } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
-import { getUserSession } from ".";
+import { getUserSession } from "./auth";
 
 const TABLE_MAP: TableMap = {
   account: prisma.account,
