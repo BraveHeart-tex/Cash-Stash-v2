@@ -14,7 +14,8 @@ graph TD;
     CheckOldAccountBalance -- Yes --> UpdateOldAccount[Update old account's balance];
     CheckOldAccountBalance -- No --> UpdateTransaction[Update transaction];
     UpdateOldAccount --> UpdateNewAccount[Update new account's balance];
-    UpdateTransaction --> NotifySuccess[Notify user of successful update];
+    UpdateTransaction --> UpdateNewAccount[Update new account's balance];
+    UpdateNewAccount --> NotifySucess[Notify user of the update]
     NotifyError --> End[End];
-    NotifySuccess --> End;
+    NotifySucess --> End[End]
 ```
