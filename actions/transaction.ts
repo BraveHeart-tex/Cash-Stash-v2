@@ -77,7 +77,6 @@ export const createTransaction = async (
   }
 };
 
-// TODO: Handle the case when we need to update the account balance if the user edits the accountId
 export const updateTransaction = async (
   transactionId: string,
   values: TransactionSchemaType,
@@ -93,38 +92,53 @@ export const updateTransaction = async (
 
     const validatedData = transactionSchema.parse(values);
 
-    // handle the case if the transaction is registered to a different account
+    let dbTransactions: any[] = [];
+
     if (oldAccountId !== validatedData.accountId) {
+      dbTransactions.push(
+        prisma.account.update({
+          where: {
+            id: oldAccountId,
+          },
+          data: {
+            balance: {
+              decrement: oldAmount,
+            },
+          },
+        })
+      );
     }
 
-    const updatedTransaction = prisma.transaction.update({
-      where: {
-        id: transactionId,
-      },
-      data: {
-        ...validatedData,
-      },
-    });
-
-    const updatedAccount = prisma.account.update({
-      where: {
-        id: validatedData.accountId,
-      },
-      data: {
-        balance: {
-          increment: validatedData.amount,
+    dbTransactions.push(
+      prisma.transaction.update({
+        where: {
+          id: transactionId,
         },
-      },
-    });
+        data: {
+          ...validatedData,
+        },
+      })
+    );
+
+    dbTransactions.push(
+      prisma.account.update({
+        where: {
+          id: validatedData.accountId,
+        },
+        data: {
+          balance: {
+            increment: validatedData.amount,
+          },
+        },
+      })
+    );
 
     // eslint-disable-next-line no-unused-vars
-    const [_, transaction] = await prisma.$transaction([
-      updatedAccount,
-      updatedTransaction,
-    ]);
+    const [oldAccount, updatedTransaction, newAccount] =
+      await prisma.$transaction(dbTransactions);
 
     return {
-      data: transaction,
+      data: updatedTransaction,
       fieldErrors: [],
     };
   } catch (error) {
@@ -140,6 +154,7 @@ export const updateTransaction = async (
   }
 };
 
+// TODO: re-write as a db transaction
 export const deleteTransactionById = async (transactionId: string) => {
   try {
     if (!transactionId) {
@@ -156,17 +171,14 @@ export const deleteTransactionById = async (transactionId: string) => {
       throw new Error("Error deleting transaction.");
     }
 
-    const wasIncome = deletedTransaction.amount > 0;
-    const updateBalance = wasIncome
-      ? { decrement: deletedTransaction.amount }
-      : { increment: deletedTransaction.amount };
-
     await prisma.account.update({
       where: {
         id: deletedTransaction.accountId,
       },
       data: {
-        balance: updateBalance,
+        balance: {
+          decrement: deletedTransaction.amount,
+        },
       },
     });
 
