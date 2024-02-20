@@ -6,7 +6,7 @@ const transactionSchema = z.object({
     required_error: "Amount is required",
     invalid_type_error: "Amount must be a number",
   }),
-  description: z.coerce.string(),
+  description: z.coerce.string().min(1, "Description is required"),
   category: z.nativeEnum(TransactionCategory).superRefine((val, ctx) => {
     if (!val) {
       ctx.addIssue({
