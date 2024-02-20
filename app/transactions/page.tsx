@@ -32,9 +32,30 @@ const TransactionsPage = async ({
     accountId: searchParams.accountId,
     sortBy: searchParams.sortBy as "createdAt" | "amount",
     sortDirection: searchParams.sortDirection as "asc" | "desc",
+    amountStart: searchParams.amountStart,
+    amountEnd: searchParams.amountEnd,
+    amountOperator: searchParams.amountOperator as
+      | "equals"
+      | "lessThan"
+      | "greaterThan"
+      | "range",
+    createdAtStart: searchParams.createdAtStart,
+    createdAtEnd: searchParams.createdAtEnd,
+    createdAtOperator: searchParams.createdAtOperator as
+      | "equals"
+      | "before"
+      | "after"
+      | "range",
+    category: searchParams.category,
+    page: searchParams.page,
+    query: searchParams.query,
   };
 
   let result = await getPaginatedTransactions(actionParams);
+
+  const pageHasParams = Object.keys(actionParams)
+    .filter((key) => key !== "page")
+    .some((key: string) => actionParams[key as keyof typeof actionParams]);
 
   return (
     <main>
@@ -47,7 +68,7 @@ const TransactionsPage = async ({
           {result.transactions && result.transactions.length > 0 ? (
             <TransactionList transactions={result.transactions || []} />
           ) : (
-            <TransactionsNotFound pageHasParams={true} />
+            <TransactionsNotFound pageHasParams={pageHasParams} />
           )}
         </div>
       </div>
