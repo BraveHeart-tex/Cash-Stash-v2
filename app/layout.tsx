@@ -8,7 +8,7 @@ import GenericModal from "@/components/generic-modal";
 import { getUserSession } from "@/actions/auth";
 import NavigationTabs from "@/components/navigation-tabs";
 import { Metadata, Viewport } from "next";
-import Navigation from "@/components/navigation";
+import Navbar from "@/components/navbar";
 
 const InterFont = Inter({
   weight: ["300", "400", "500", "600", "700"],
@@ -72,7 +72,7 @@ export default async function RootLayout({ children }: ILayoutProps) {
       <body className={InterFont.className}>
         <ReduxProviders>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            {user ? <Navigation /> : null}
+            {user ? <Navbar /> : null}
             <NavigationTabs />
             {/* Padding bottom is the same as the height of the navigation bar */}
             <main className="pb-16 lg:pb-0">{children}</main>

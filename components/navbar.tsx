@@ -22,7 +22,7 @@ const NAV_LINKS = [
   { name: "Reports", href: "/reports" },
 ];
 
-const Navigation = () => {
+const Navbar = () => {
   const pathname = usePathname();
   const currentUser = useAppSelector((state) => state.userReducer.currentUser);
   const [isOpen, setIsOpen] = useState(false);
@@ -107,4 +107,4 @@ const Navigation = () => {
   );
 };
 
-export default Navigation;
+export default Navbar;
