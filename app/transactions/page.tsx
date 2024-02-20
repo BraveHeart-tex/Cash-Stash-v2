@@ -3,12 +3,11 @@ import TransactionList from "@/components/transactions/transaction-list";
 import CreateTransactionButton from "@/components/create-buttons/create-transaction-button";
 import TransactionsNotFound from "@/components/transactions-not-found";
 
-// TODO: Implement search functionality and pass searchParams to the page
 export interface SearchParams {
-  transactionType: string;
-  accountId: string;
-  sortBy: string;
-  sortDirection: string;
+  transactionType?: string;
+  accountId?: string;
+  sortBy?: string;
+  sortDirection?: string;
   amountStart?: number;
   amountEnd?: number;
   amountOperator?: "equals" | "lessThan" | "greaterThan" | "range";
@@ -16,6 +15,8 @@ export interface SearchParams {
   createdAtEnd?: Date;
   createdAtOperator?: "equals" | "before" | "after" | "range";
   category?: string;
+  page?: string;
+  query?: string;
 }
 
 const TransactionsPage = async ({
@@ -23,19 +24,17 @@ const TransactionsPage = async ({
 }: {
   searchParams: SearchParams;
 }) => {
-  const {
-    transactionType = "all",
-    accountId = "",
-    sortBy = "createdAt",
-    sortDirection = "desc",
-  } = searchParams;
+  const actionParams = {
+    transactionType: searchParams.transactionType as
+      | "all"
+      | "income"
+      | "expense",
+    accountId: searchParams.accountId,
+    sortBy: searchParams.sortBy as "createdAt" | "amount",
+    sortDirection: searchParams.sortDirection as "asc" | "desc",
+  };
 
-  let result = await getPaginatedTransactions({
-    transactionType: transactionType as "all" | "income" | "expense",
-    accountId,
-    sortBy: sortBy as "createdAt" | "amount",
-    sortDirection: sortDirection as "asc" | "desc",
-  });
+  let result = await getPaginatedTransactions(actionParams);
 
   return (
     <main>
