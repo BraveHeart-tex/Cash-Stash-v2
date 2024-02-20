@@ -1,4 +1,4 @@
-import Dashboard from "../components/dashboard";
+import Dashboard from "@/components/main-dashboard";
 import { fetchInsightsDataAction, getChartData } from "@/actions";
 import { getPaginatedTransactions } from "@/actions/transaction";
 import { getPaginatedAccounts } from "@/actions/account";
