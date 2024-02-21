@@ -1,5 +1,4 @@
 "use server";
-
 import {
   CreateGenericInput,
   CreateGenericWithCurrentUserInput,
@@ -8,11 +7,11 @@ import {
   TableName,
   UpdateGenericInput,
 } from "@/lib/utils";
-
 import prisma from "@/lib/db";
 import { Prisma } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
-import { getUserSession } from "./auth";
+import { getUser } from "@/lib/session";
+import { redirect } from "next/navigation";
 
 const TABLE_MAP: TableMap = {
   account: prisma.account,
@@ -107,19 +106,20 @@ export const createGenericWithCurrentUser = async <T>({
   tableName,
   data,
 }: IGenericParams<T> & { data: CreateGenericWithCurrentUserInput<T> }) => {
+  const { user } = await getUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
   try {
     const table = await getTable(tableName);
-    const currentUser = await getUserSession();
-
-    if (currentUser.error || !currentUser.user) {
-      throw new Error("User not found");
-    }
 
     const result = await table.create({
       // @ts-ignore
       data: {
         ...data,
-        userId: currentUser.user.id,
+        userId: user.id,
       },
     });
 
@@ -183,18 +183,19 @@ export const getGenericListByCurrentUser = async <T>({
 }: IGenericParams<T> & {
   serialize?: boolean;
 }) => {
+  const { user } = await getUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
   try {
     const table = await getTable(tableName);
-    const currentUserResult = await getUserSession();
-
-    if (currentUserResult.error || !currentUserResult.user) {
-      throw new Error("User not found");
-    }
 
     const queryOptions = {
       where: {
         ...whereCondition,
-        userId: currentUserResult.user.id,
+        userId: user.id,
       },
       select: selectCondition,
     };
