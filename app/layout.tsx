@@ -65,14 +65,12 @@ interface ILayoutProps {
 }
 
 export default async function RootLayout({ children }: ILayoutProps) {
-  const { user } = await getUserSession();
-
   return (
     <html lang="en">
       <body className={InterFont.className}>
         <ReduxProviders>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            {user ? <Navbar /> : null}
+            <Navbar />
             <NavigationTabs />
             {/* Padding bottom is the same as the height of the navigation bar */}
             <main className="pb-16 lg:pb-0">{children}</main>
