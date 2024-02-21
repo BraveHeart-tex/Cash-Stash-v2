@@ -54,7 +54,7 @@ export const login = async (values: LoginSchemaType) => {
 
     return {
       error:
-        "Something went wrong while procession your request. Please try again later.",
+        "Something went wrong while processing your request. Please try again later.",
       fieldErrors: [],
     };
   }
@@ -118,7 +118,7 @@ export const register = async (values: RegisterSchemaType) => {
 
     return {
       error:
-        "Something went wrong while procession your request. Please try again later.",
+        "Something went wrong while processing your request. Please try again later.",
       fieldErrors: [],
     };
   }
