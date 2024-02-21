@@ -9,6 +9,7 @@ import NavigationTabs from "@/components/navigation-tabs";
 import { Metadata, Viewport } from "next";
 import Navbar from "@/components/navbar";
 import { getUser } from "@/lib/session";
+import GenericConfirmDialog2 from "./generic-confirm-dialog";
 
 const InterFont = Inter({
   weight: ["300", "400", "500", "600", "700"],
@@ -78,6 +79,7 @@ export default async function RootLayout({ children }: ILayoutProps) {
             <main className="pb-16 lg:pb-0">{children}</main>
             <GenericModal />
             <GenericConfirmDialog />
+            <GenericConfirmDialog2 />
           </ThemeProvider>
           <Toaster />
         </ReduxProviders>

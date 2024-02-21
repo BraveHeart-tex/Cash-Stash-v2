@@ -1,12 +1,11 @@
 "use server";
 import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
 import prisma from "@/lib/db";
-import { getCurrentUser, getUser } from "@/lib/session";
+import { getUser } from "@/lib/session";
 import { processZodError } from "@/lib/utils";
 import { CreateBudgetSchemaType } from "@/schemas/CreateBudgetSchema";
 import budgetSchema, { BudgetSchemaType } from "@/schemas/budget-schema";
 import { Budget } from "@prisma/client";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import {
@@ -18,13 +17,9 @@ import {
 export const createBudget = async (
   data: CreateBudgetSchemaType
 ): Promise<IValidatedResponse<Budget>> => {
-  const currentUser = await getCurrentUser(cookies().get("token")?.value!);
-
-  if (!currentUser) {
-    return {
-      error: "You are not authorized to perform this action.",
-      fieldErrors: [],
-    };
+  const { user } = await getUser();
+  if (!user) {
+    redirect("/login");
   }
 
   try {
@@ -33,7 +28,7 @@ export const createBudget = async (
     const createdBudget = await prisma.budget.create({
       data: {
         ...validatedData,
-        userId: currentUser.id,
+        userId: user.id,
       },
     });
 

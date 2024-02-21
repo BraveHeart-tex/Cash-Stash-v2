@@ -1,10 +1,8 @@
 "use server";
-
-import { getCurrentUser, getUser } from "@/lib/session";
+import { getUser } from "@/lib/session";
 import { processZodError } from "@/lib/utils";
 import goalSchema, { GoalSchemaType } from "@/schemas/goal-schema";
 import { Goal } from "@prisma/client";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import {
@@ -17,13 +15,9 @@ import prisma from "@/lib/db";
 export const createGoal = async (
   values: GoalSchemaType
 ): Promise<IValidatedResponse<Goal>> => {
-  const currentUser = await getCurrentUser(cookies().get("token")?.value!);
-
-  if (!currentUser) {
-    return {
-      error: "You are not authorized to perform this action.",
-      fieldErrors: [],
-    };
+  const { user } = await getUser();
+  if (!user) {
+    redirect("/login");
   }
 
   try {
@@ -32,7 +26,7 @@ export const createGoal = async (
     const createdGoal = await prisma.goal.create({
       data: {
         ...validatedData,
-        userId: currentUser.id,
+        userId: user.id,
       },
     });
 
@@ -65,12 +59,9 @@ export const updateGoal = async (
   goalId: string,
   values: GoalSchemaType
 ): Promise<IValidatedResponse<Goal>> => {
-  const currentUser = await getCurrentUser(cookies().get("token")?.value!);
-  if (!currentUser) {
-    return {
-      error: "You are not authorized to perform this action.",
-      fieldErrors: [],
-    };
+  const { user } = await getUser();
+  if (!user) {
+    redirect("/login");
   }
 
   const goalToBeUpdated = await prisma.goal.findUnique({
