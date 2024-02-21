@@ -19,8 +19,16 @@ model User {
   reminders      Reminder[]
   transactions   Transaction[]
   userAccounts   Account[]
+  Session        Session[]
 
   @@map("users")
+}
+
+model Session {
+  id        String   @id
+  userId    String
+  expiresAt DateTime
+  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
 }
 
 model Account {
