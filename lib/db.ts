@@ -16,6 +16,13 @@ export const lucia = new Lucia(adapter, {
       secure: process.env.NODE_ENV === "production",
     },
   },
+  getUserAttributes(databaseUserAttributes) {
+    return {
+      id: databaseUserAttributes.id,
+      name: databaseUserAttributes.name,
+      email: databaseUserAttributes.email,
+    };
+  },
 });
 
 if (process.env.NODE_ENV === "development") {
@@ -25,7 +32,14 @@ if (process.env.NODE_ENV === "development") {
 declare module "lucia" {
   interface Register {
     Lucia: typeof lucia;
+    DatabaseUserAttributes: DatabaseUserAttributes;
   }
+}
+
+interface DatabaseUserAttributes {
+  id: string;
+  name: string;
+  email: string;
 }
 
 export default prisma;
