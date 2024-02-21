@@ -5,10 +5,10 @@ import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
 import GenericConfirmDialog from "@/components/generic-confirm-dialog";
 import GenericModal from "@/components/generic-modal";
-import { getUserSession } from "@/actions/auth";
 import NavigationTabs from "@/components/navigation-tabs";
 import { Metadata, Viewport } from "next";
 import Navbar from "@/components/navbar";
+import { getUser } from "@/lib/session";
 
 const InterFont = Inter({
   weight: ["300", "400", "500", "600", "700"],
@@ -65,12 +65,14 @@ interface ILayoutProps {
 }
 
 export default async function RootLayout({ children }: ILayoutProps) {
+  const { user } = await getUser();
+
   return (
     <html lang="en">
       <body className={InterFont.className}>
         <ReduxProviders>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <Navbar />
+            <Navbar user={user} />
             <NavigationTabs />
             {/* Padding bottom is the same as the height of the navigation bar */}
             <main className="pb-16 lg:pb-0">{children}</main>

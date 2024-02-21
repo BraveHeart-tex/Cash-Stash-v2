@@ -7,11 +7,12 @@ import UserMenu from "./user-menu";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/mode-toggle";
 import Link from "next/link";
-import { useState } from "react";
-import { useAppSelector } from "../app/redux/hooks";
+import { useEffect, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
+import { User } from "lucia";
+import useAuthStore from "@/store/auth/authStore";
 
 const NAV_LINKS = [
   { name: "Dashboard", href: "/" },
@@ -22,12 +23,17 @@ const NAV_LINKS = [
   { name: "Reports", href: "/reports" },
 ];
 
-const Navbar = () => {
+const Navbar = ({ user }: { user: User | null }) => {
   const pathname = usePathname();
-  const currentUser = useAppSelector((state) => state.userReducer.currentUser);
   const [isOpen, setIsOpen] = useState(false);
   const onOpen = () => setIsOpen(true);
   const onClose = () => setIsOpen(false);
+  const setCurrentUser = useAuthStore((state) => state.setUser);
+
+  useEffect(() => {
+    setCurrentUser(user);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   if (pathname.startsWith("/login") || pathname.startsWith("/signup"))
     return null;
@@ -82,10 +88,7 @@ const Navbar = () => {
         <SheetContent side="left" className="w-[300px] md:[540px]">
           <div className="flex flex-col justify-between items h-[100%]">
             <div className="flex flex-col gap-2">
-              <span className="font-bold text-lg">
-                {" "}
-                Welcome! {currentUser?.name}
-              </span>
+              <span className="font-bold text-lg"> Welcome! {user?.name}</span>
               {NAV_LINKS.map((link) => (
                 <Link
                   key={link.name}

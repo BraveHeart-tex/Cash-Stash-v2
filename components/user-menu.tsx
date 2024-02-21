@@ -1,9 +1,5 @@
 "use client";
-import { useAppSelector } from "../app/redux/hooks";
-import { useDispatch } from "react-redux";
-import { fetchCurrentUser } from "../app/redux/features/userSlice";
-import { useEffect, useTransition } from "react";
-import { AppDispatch } from "../app/redux/store";
+import { useTransition } from "react";
 import { logout } from "@/actions/auth";
 import {
   DropdownMenu,
@@ -12,15 +8,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import useAuthStore from "@/store/auth/authStore";
 
 const UserMenu = () => {
   let [isPending, startTransition] = useTransition();
-  const user = useAppSelector((state) => state.userReducer.currentUser);
-  const dispatch = useDispatch<AppDispatch>();
-
-  useEffect(() => {
-    dispatch(fetchCurrentUser());
-  }, [dispatch]);
+  const user = useAuthStore((state) => state.user);
 
   const avatarPlaceholder = user?.name ? user.name[0] : "";
 
