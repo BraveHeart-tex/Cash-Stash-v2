@@ -1,39 +1,21 @@
+import { verifyRequestOrigin } from "lucia";
 import { NextRequest, NextResponse } from "next/server";
-import { verifyJWTToken } from "@/lib/session";
 
-// TODO: Fix auth system
 export async function middleware(request: NextRequest) {
-  const { url, nextUrl, cookies } = request;
-  const token = cookies.get("token")?.value;
-  const isLoginPage = nextUrl.pathname.startsWith("/login");
-  const isRegisterPage = nextUrl.pathname.startsWith("/signup");
-  const isApiRoute = nextUrl.pathname.startsWith("/api");
-
-  const hasVerifiedToken =
-    token && (await verifyJWTToken(token).catch((error) => console.log(error)));
-
-  if ((isLoginPage || isRegisterPage) && !hasVerifiedToken)
+  if (request.method === "GET") {
     return NextResponse.next();
-
-  if ((isLoginPage || isRegisterPage) && hasVerifiedToken) {
-    return NextResponse.redirect(new URL("/", url));
   }
-
-  if (isApiRoute && !hasVerifiedToken) {
-    cookies.delete("token");
-    return NextResponse.json({ error: "Not authorized" }, { status: 401 });
+  const originHeader = request.headers.get("Origin");
+  // NOTE: You may need to use `X-Forwarded-Host` instead
+  const hostHeader = request.headers.get("Host");
+  if (
+    !originHeader ||
+    !hostHeader ||
+    !verifyRequestOrigin(originHeader, [hostHeader])
+  ) {
+    return new NextResponse(null, {
+      status: 403,
+    });
   }
-
-  if (!hasVerifiedToken) {
-    cookies.delete("token");
-    return NextResponse.redirect(new URL("/login", url));
-  }
-
   return NextResponse.next();
 }
-
-export const config = {
-  matcher: [
-    "/((?!_next/static|_next/image|_next/server|favicon.ico|m.svg|manifest.json).*)",
-  ],
-};
