@@ -1,7 +1,7 @@
 "use server";
 import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
 import prisma from "@/lib/db";
-import { getCurrentUser } from "@/lib/session";
+import { getCurrentUser, getUser } from "@/lib/session";
 import { processZodError } from "@/lib/utils";
 import { CreateBudgetSchemaType } from "@/schemas/CreateBudgetSchema";
 import budgetSchema, { BudgetSchemaType } from "@/schemas/budget-schema";
@@ -9,7 +9,6 @@ import { Budget } from "@prisma/client";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
-import { getUserSession } from "./auth";
 import {
   IValidatedResponse,
   IGetPaginatedBudgetsParams,
@@ -106,8 +105,9 @@ export const getPaginatedBudgets = async ({
   sortBy,
   sortDirection,
 }: IGetPaginatedBudgetsParams): Promise<IGetPaginatedBudgetsResponse> => {
-  const result = await getUserSession();
-  if (result.error) {
+  const { user } = await getUser();
+
+  if (!user) {
     redirect("/login");
   }
 
@@ -134,7 +134,7 @@ export const getPaginatedBudgets = async ({
       skip: skipAmount,
       take: PAGE_SIZE,
       where: {
-        userId: result.user?.id,
+        userId: user?.id,
         name: {
           contains: query,
         },
@@ -144,7 +144,7 @@ export const getPaginatedBudgets = async ({
     }),
     prisma.budget.count({
       where: {
-        userId: result.user?.id,
+        userId: user?.id,
         name: {
           contains: query,
         },

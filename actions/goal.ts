@@ -1,13 +1,12 @@
 "use server";
 
-import { getCurrentUser } from "@/lib/session";
+import { getCurrentUser, getUser } from "@/lib/session";
 import { processZodError } from "@/lib/utils";
 import goalSchema, { GoalSchemaType } from "@/schemas/goal-schema";
 import { Goal } from "@prisma/client";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
-import { getUserSession } from "./auth";
 import {
   IValidatedResponse,
   IGetPaginatedGoalsParams,
@@ -116,8 +115,9 @@ export const getPaginatedGoals = async ({
   sortBy,
   sortDirection,
 }: IGetPaginatedGoalsParams): Promise<IGetPaginatedGoalsResponse> => {
-  const result = await getUserSession();
-  if (result.error) {
+  const { user } = await getUser();
+
+  if (!user) {
     redirect("/login");
   }
 
@@ -137,7 +137,7 @@ export const getPaginatedGoals = async ({
       skip: skipAmount,
       take: PAGE_SIZE,
       where: {
-        userId: result.user?.id,
+        userId: user?.id,
         name: {
           contains: query,
         },
@@ -146,7 +146,7 @@ export const getPaginatedGoals = async ({
     }),
     prisma.goal.count({
       where: {
-        userId: result.user?.id,
+        userId: user?.id,
         name: {
           contains: query,
         },

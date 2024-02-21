@@ -1,6 +1,6 @@
 "use server";
 import prisma from "@/lib/db";
-import { getCurrentUser } from "@/lib/session";
+import { getCurrentUser, getUser } from "@/lib/session";
 import { processZodError } from "@/lib/utils";
 
 import transactionSchema, {
@@ -15,9 +15,9 @@ import { IValidatedResponse } from "./types";
 export const createTransaction = async (
   values: TransactionSchemaType
 ): Promise<IValidatedResponse<Transaction>> => {
-  const currentUser = await getCurrentUser(cookies().get("token")?.value!);
+  const { user } = await getUser();
 
-  if (!currentUser) {
+  if (!user) {
     redirect("/login");
   }
 
@@ -41,7 +41,7 @@ export const createTransaction = async (
     const newTransaction = prisma.transaction.create({
       data: {
         ...validatedData,
-        userId: currentUser.id,
+        userId: user.id,
       },
     });
 
@@ -82,8 +82,9 @@ export const updateTransaction = async (
   values: TransactionSchemaType,
   oldTransaction: Transaction
 ): Promise<IValidatedResponse<Transaction>> => {
-  const currentUser = await getCurrentUser(cookies().get("token")?.value!);
-  if (!currentUser) {
+  const { user } = await getUser();
+
+  if (!user) {
     redirect("/login");
   }
 

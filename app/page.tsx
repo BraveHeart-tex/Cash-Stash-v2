@@ -8,8 +8,15 @@ import { getGenericListByCurrentUser } from "@/actions/generic";
 import { SerializedReminder } from "@/actions/types";
 import DashboardSkeleton from "@/components/dashboard-skeleton";
 import { Suspense } from "react";
+import { getUser } from "@/lib/session";
+import { redirect } from "next/navigation";
 
 export default async function Home() {
+  const user = await getUser();
+  if (!user) {
+    redirect("/login");
+  }
+
   let [
     result,
     accountsResult,
@@ -55,7 +62,6 @@ export default async function Home() {
           accounts={accountsResult?.accounts}
           monthlyTransactionsData={monthlyTransactions.data || []}
           insightsData={insightsDataResult}
-          // TODO:
           transactions={[]}
           goals={goalsResult.goals}
           reminders={remindersResult?.data || []}

@@ -61,7 +61,7 @@ export async function signToken(payload: Partial<User>) {
 
 export const getUser = cache(async () => {
   const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
-  if (!sessionId) return null;
+  if (!sessionId) return { user: null, session: null };
   const { user, session } = await lucia.validateSession(sessionId);
   try {
     if (session && session.fresh) {
