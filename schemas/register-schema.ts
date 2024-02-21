@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const RegisterSchema = z.object({
+const registerSchema = z.object({
   name: z
     .string()
     .min(2, "Name cannot be less than 2 characters.")
@@ -19,11 +19,7 @@ const RegisterSchema = z.object({
     type: password,
     label: Password,
   `),
-  // img: z.string().url().optional().describe(`
-  //   type: text,
-  //   label: Profile Picture,
-  // `),
 });
 
-export type RegisterSchemaType = z.infer<typeof RegisterSchema>;
-export default RegisterSchema;
+export type RegisterSchemaType = z.infer<typeof registerSchema>;
+export default registerSchema;

@@ -1,7 +1,7 @@
 import { z } from "zod";
-import RegisterSchema from "./RegisterSchema";
+import registerSchema from "./register-schema";
 
-const LoginSchema = RegisterSchema.pick({
+const LoginSchema = registerSchema.pick({
   email: true,
   password: true,
 });

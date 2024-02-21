@@ -19,12 +19,12 @@ import { register as registerUser } from "@/actions/auth";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import RegisterSchema, { RegisterSchemaType } from "@/schemas/RegisterSchema";
+import registerSchema, { RegisterSchemaType } from "@/schemas/register-schema";
 import { motion } from "framer-motion";
 
 const SignUpForm = () => {
   let [isPending, startTransition] = useTransition();
-  const registerFormFields = generateFormFields(RegisterSchema);
+  const registerFormFields = generateFormFields(registerSchema);
 
   const router = useRouter();
 
@@ -32,18 +32,40 @@ const SignUpForm = () => {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<RegisterSchemaType>({
-    resolver: zodResolver(RegisterSchema),
+    resolver: zodResolver(registerSchema),
   });
 
   const handleRegisterFormSubmit = (data: RegisterSchemaType) => {
     startTransition(async () => {
       const result = await registerUser(data);
-      if (result?.error)
-        return showErrorToast("An error occurred.", result.error);
+
+      if (result.error || result.fieldErrors.length) {
+        processFormErrors(result);
+        return;
+      }
+
       router.push("/");
       showSuccessToast("Signed up.", "You have been signed up.");
     });
+  };
+
+  const processFormErrors = (
+    result: Awaited<ReturnType<typeof registerUser>>
+  ) => {
+    if (result.fieldErrors.length) {
+      result.fieldErrors.forEach((fieldError) => {
+        setError(fieldError.field as any, {
+          type: "manual",
+          message: fieldError.message,
+        });
+      });
+    }
+
+    if (result.error) {
+      showErrorToast("An error occurred.", result.error);
+    }
   };
 
   const formVariants = {

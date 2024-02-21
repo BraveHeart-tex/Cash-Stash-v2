@@ -1,12 +1,15 @@
 "use server";
-import prisma from "@/lib/db";
+import prisma, { lucia } from "@/lib/db";
 import { signToken, getCurrentUser } from "@/lib/session";
-import { LoginSchema, RegisterSchema } from "@/schemas";
+import { LoginSchema } from "@/schemas";
+import { Argon2id } from "oslo/password";
 import { LoginSchemaType } from "@/schemas/LoginSchema";
-import { RegisterSchemaType } from "@/schemas/RegisterSchema";
+import registerSchema, { RegisterSchemaType } from "@/schemas/register-schema";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import bcrypt from "bcrypt";
+import { ZodError } from "zod";
+import { processZodError } from "@/lib/utils";
 
 export const login = async ({ email, password }: LoginSchemaType) => {
   const result = LoginSchema.safeParse({ email, password });
@@ -43,56 +46,68 @@ export const login = async ({ email, password }: LoginSchemaType) => {
   return { user };
 };
 
-export const register = async ({
-  name,
-  email,
-  password,
-}: RegisterSchemaType) => {
-  const result = RegisterSchema.safeParse({ name, email, password });
+export const register = async (values: RegisterSchemaType) => {
+  try {
+    const data = registerSchema.parse(values);
 
-  if (!result.success) {
-    return { error: "Unprocessable entitiy." };
-  }
+    const userExists = await prisma.user.findUnique({
+      where: {
+        email: data.email,
+      },
+    });
 
-  const {
-    name: nameResult,
-    email: emailResult,
-    password: passwordResult,
-  } = result.data;
+    if (userExists) {
+      return {
+        error: `User already exists with the given email: ${data.email}`,
+        fieldErrors: [
+          {
+            field: "email",
+            message: "User already exists with the given email",
+          },
+        ],
+      };
+    }
 
-  const userExists = await prisma.user.findUnique({
-    where: {
-      email: emailResult,
-    },
-  });
+    const hashedPassword = await new Argon2id().hash(data.password);
+    const user = await prisma.user.create({
+      data: {
+        name: data.name,
+        email: data.email,
+        hashedPassword,
+      },
+    });
 
-  if (userExists) {
+    if (!user) {
+      return {
+        error:
+          "There was a problem while processing your request. Please try again later.",
+        fieldErrors: [],
+      };
+    }
+
+    const session = await lucia.createSession(user.id, {});
+    const sessionCookie = lucia.createSessionCookie(session.id);
+    cookies().set(
+      sessionCookie.name,
+      sessionCookie.value,
+      sessionCookie.attributes
+    );
     return {
-      error: `User already exists with the given email: ${emailResult}`,
+      user,
+      error: "",
+      fieldErrors: [],
+    };
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return processZodError(error);
+    }
+
+    return {
+      error:
+        "Something went wrong while procession your request. Please try again later.",
+      fieldErrors: [],
     };
   }
-
-  const hashedPassword = await bcrypt.hash(passwordResult, 12);
-
-  const user = await prisma.user.create({
-    data: {
-      name: nameResult,
-      email: emailResult,
-      hashedPassword,
-    },
-  });
-
-  if (!user) {
-    return { error: "There was an error while creating a user." };
-  }
-
-  const jwt = await signToken(user);
-
-  cookies().set("token", jwt);
-
-  return {
-    user,
-  };
 };
 
 export const logout = async () => {
