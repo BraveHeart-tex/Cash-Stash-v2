@@ -12,9 +12,8 @@ import logo from "@/components/Logo.svg";
 import Image from "next/image";
 import FormInput from "@/components/form-input";
 import { useForm } from "react-hook-form";
-import { LoginSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoginSchemaType } from "@/schemas/LoginSchema";
+import loginSchema, { LoginSchemaType } from "@/schemas/login-schema";
 import { generateFormFields } from "@/lib/utils";
 import { useState, useTransition } from "react";
 import { login } from "@/actions/auth";
@@ -27,26 +26,42 @@ const LoginForm = () => {
   let [isPending, startTransition] = useTransition();
   const router = useRouter();
   const [loggedIn, setLoggedIn] = useState(false);
-  const loginFormFields = generateFormFields(LoginSchema);
+  const loginFormFields = generateFormFields(loginSchema);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<LoginSchemaType>({
-    resolver: zodResolver(LoginSchema),
+    resolver: zodResolver(loginSchema),
   });
 
   const handleLoginFormSubmit = (data: LoginSchemaType) => {
     startTransition(async () => {
       const result = await login(data);
       if (result?.error) {
-        showErrorToast("An error occurred.", result.error);
+        processFormErrors(result);
       } else {
         router.push("/");
         showSuccessToast("Logged in.", "You have been logged in.");
       }
     });
+  };
+
+  const processFormErrors = (result: Awaited<ReturnType<typeof login>>) => {
+    if (result.fieldErrors.length) {
+      result.fieldErrors.forEach((fieldError) => {
+        setError(fieldError.field as any, {
+          type: "manual",
+          message: fieldError.message,
+        });
+      });
+    }
+
+    if (result.error) {
+      showErrorToast("An error occurred.", result.error);
+    }
   };
 
   const handleTestUserLogin = () => {

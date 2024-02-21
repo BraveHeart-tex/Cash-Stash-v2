@@ -1,49 +1,59 @@
 "use server";
 import prisma, { lucia } from "@/lib/db";
-import { signToken, getCurrentUser } from "@/lib/session";
-import { LoginSchema } from "@/schemas";
+import { getCurrentUser } from "@/lib/session";
 import { Argon2id } from "oslo/password";
-import { LoginSchemaType } from "@/schemas/LoginSchema";
+import loginSchema, { LoginSchemaType } from "@/schemas/login-schema";
 import registerSchema, { RegisterSchemaType } from "@/schemas/register-schema";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import bcrypt from "bcrypt";
 import { ZodError } from "zod";
 import { processZodError } from "@/lib/utils";
 
-export const login = async ({ email, password }: LoginSchemaType) => {
-  const result = LoginSchema.safeParse({ email, password });
+export const login = async (values: LoginSchemaType) => {
+  try {
+    const data = loginSchema.parse(values);
 
-  if (!result.success) {
-    return { error: "Unprocessable entity." };
+    const existingUser = await prisma.user.findUnique({
+      where: {
+        email: data.email,
+      },
+    });
+
+    if (!existingUser) {
+      return { error: "Incorrect email or password", fieldErrors: [] };
+    }
+
+    const isPasswordValid = await new Argon2id().verify(
+      existingUser.hashedPassword,
+      data.password
+    );
+
+    if (!isPasswordValid) {
+      return { error: "Incorrect email or password", fieldErrors: [] };
+    }
+
+    const session = await lucia.createSession(existingUser.id, {});
+    const sessionCookie = lucia.createSessionCookie(session.id);
+    cookies().set(
+      sessionCookie.name,
+      sessionCookie.value,
+      sessionCookie.attributes
+    );
+
+    return redirect("/");
+  } catch (error) {
+    console.error(error);
+
+    if (error instanceof ZodError) {
+      return processZodError(error);
+    }
+
+    return {
+      error:
+        "Something went wrong while procession your request. Please try again later.",
+      fieldErrors: [],
+    };
   }
-
-  const { email: emailResult, password: passwordResult } = result.data;
-
-  const user = await prisma.user.findUnique({
-    where: {
-      email: emailResult,
-    },
-  });
-
-  if (!user) {
-    return { error: "Invalid email or password" };
-  }
-
-  const isPasswordValid = await bcrypt.compare(
-    passwordResult,
-    user.hashedPassword!
-  );
-
-  if (!isPasswordValid) {
-    return { error: "Invalid email or password." };
-  }
-
-  const jwt = await signToken(user);
-
-  cookies().set("token", jwt);
-
-  return { user };
 };
 
 export const register = async (values: RegisterSchemaType) => {
