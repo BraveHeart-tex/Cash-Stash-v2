@@ -44,6 +44,7 @@ const LoginForm = () => {
         processFormErrors(result);
       } else {
         router.push("/");
+        setLoggedIn(true);
         showSuccessToast("Logged in.", "You have been logged in.");
       }
     });

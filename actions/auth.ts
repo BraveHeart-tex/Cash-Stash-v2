@@ -40,7 +40,11 @@ export const login = async (values: LoginSchemaType) => {
       sessionCookie.attributes
     );
 
-    return redirect("/");
+    return {
+      user: existingUser,
+      error: "",
+      fieldErrors: [],
+    };
   } catch (error) {
     console.error(error);
 
