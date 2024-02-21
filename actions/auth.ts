@@ -1,13 +1,13 @@
 "use server";
 import prisma, { lucia } from "@/lib/db";
-import { getCurrentUser } from "@/lib/session";
+import { getCurrentUser, getUser } from "@/lib/session";
 import { Argon2id } from "oslo/password";
 import loginSchema, { LoginSchemaType } from "@/schemas/login-schema";
 import registerSchema, { RegisterSchemaType } from "@/schemas/register-schema";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import { processZodError } from "@/lib/utils";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export const login = async (values: LoginSchemaType) => {
   try {
@@ -121,8 +121,29 @@ export const register = async (values: RegisterSchemaType) => {
 };
 
 export const logout = async () => {
-  cookies().delete("token");
-  redirect("/login");
+  const result = await getUser();
+  if (!result) {
+    return {
+      error: "Unauthorized",
+    };
+  }
+
+  const { session } = result;
+  if (!session) {
+    return {
+      error: "Unauthorized",
+    };
+  }
+
+  await lucia.invalidateSession(session.id);
+
+  const sessionCookie = lucia.createBlankSessionCookie();
+  cookies().set(
+    sessionCookie.name,
+    sessionCookie.value,
+    sessionCookie.attributes
+  );
+  return redirect("/login");
 };
 
 export const getUserSession = async () => {
