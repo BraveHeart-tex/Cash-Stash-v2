@@ -4,7 +4,12 @@ import { z } from "zod";
 const budgetSchema = z
   .object({
     name: z.string().min(1, "Name cannot be blank"),
-    budgetAmount: z.coerce.number().positive("Budget amount must be positive"),
+    budgetAmount: z.coerce
+      .number({
+        invalid_type_error: "Budget amount must be a number",
+        required_error: "Budget amount is required",
+      })
+      .positive("Budget amount must be positive"),
     category: z
       .nativeEnum(BudgetCategory, {
         required_error: "Budget Category is required",
