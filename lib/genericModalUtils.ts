@@ -1,6 +1,6 @@
-import { AppDispatch } from "@/app/redux/store";
+import { AppDispatch } from "@/redux/store";
 import { Page } from "./utils";
-import { openGenericModal as openGenericModalAction } from "@/app/redux/features/genericModalSlice";
+import { openGenericModal as openGenericModalAction } from "@/redux/features/genericModalSlice";
 
 export const openGenericModal = (
   page: Page,

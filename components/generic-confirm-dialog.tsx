@@ -1,6 +1,6 @@
 "use client";
-import { callPrimaryAction } from "@/app/redux/features/genericConfirmSlice";
-import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
+import { callPrimaryAction } from "@/redux/features/genericConfirmSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -11,7 +11,7 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
-import { cleanUp } from "@/app/redux/features/genericConfirmSlice";
+import { cleanUp } from "@/redux/features/genericConfirmSlice";
 import { useTransition } from "react";
 
 const GenericConfirmDialog = () => {

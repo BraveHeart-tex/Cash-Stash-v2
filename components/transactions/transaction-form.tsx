@@ -23,8 +23,8 @@ import { Account, Transaction, TransactionCategory } from "@prisma/client";
 import { IValidatedResponse } from "@/actions/types";
 import { showErrorToast, showSuccessToast } from "../ui/use-toast";
 import { useRouter } from "next/navigation";
-import { useAppDispatch } from "@/app/redux/hooks";
-import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
+import { useAppDispatch } from "@/redux/hooks";
+import { closeGenericModal } from "@/redux/features/genericModalSlice";
 import { useEffect, useMemo, useState } from "react";
 import transactionSchema, {
   TransactionSchemaType,

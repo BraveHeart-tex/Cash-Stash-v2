@@ -1,5 +1,5 @@
 "use client";
-import { useAppDispatch } from "@/app/redux/hooks";
+import { useAppDispatch } from "@/redux/hooks";
 import {
   cn,
   formatMoney,
@@ -8,7 +8,7 @@ import {
 } from "@/lib/utils";
 import ActionPopover from "@/components/action-popover";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
-import { showGenericConfirm } from "@/app/redux/features/genericConfirmSlice";
+import { showGenericConfirm } from "@/redux/features/genericConfirmSlice";
 import {
   Card,
   CardContent,
@@ -21,7 +21,7 @@ import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Transaction } from "@prisma/client";
-import { openGenericModal } from "@/app/redux/features/genericModalSlice";
+import { openGenericModal } from "@/redux/features/genericModalSlice";
 import DataLabel from "../data-label";
 
 interface ITransactionCardProps {

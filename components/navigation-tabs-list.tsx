@@ -1,6 +1,6 @@
 "use client";
-import { setSelectedTab } from "@/app/redux/features/navigationTabsSlice";
-import { useAppSelector, useAppDispatch } from "@/app/redux/hooks";
+import { setSelectedTab } from "@/redux/features/navigationTabsSlice";
+import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { PAGES, Page } from "@/lib/utils";
 import { TabsList, TabsTrigger, Tabs } from "./ui/tabs";
 import Link from "next/link";

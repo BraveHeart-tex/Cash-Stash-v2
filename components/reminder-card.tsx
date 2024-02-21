@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Pencil1Icon } from "@radix-ui/react-icons";
-import { openGenericModal } from "@/app/redux/features/genericModalSlice";
-import { useAppDispatch } from "@/app/redux/hooks";
+import { openGenericModal } from "@/redux/features/genericModalSlice";
+import { useAppDispatch } from "@/redux/hooks";
 import { SerializedReminder } from "@/actions/types";
 import MotionDiv from "./animations/motion-div";
 

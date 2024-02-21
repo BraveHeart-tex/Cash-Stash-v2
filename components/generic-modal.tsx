@@ -1,5 +1,5 @@
 "use client";
-import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   Dialog,
   DialogContent,
@@ -9,7 +9,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
+import { closeGenericModal } from "@/redux/features/genericModalSlice";
 import { getGenericDialogContent } from "@/lib/getGenericModalContent";
 
 const GenericModal = () => {

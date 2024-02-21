@@ -1,6 +1,6 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
-import { Providers as ReduxProviders } from "@/app/redux/provider";
+import { Providers as ReduxProviders } from "@/redux/provider";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
 import GenericConfirmDialog from "@/components/generic-confirm-dialog";

@@ -1,13 +1,11 @@
 "use server";
 import prisma from "@/lib/db";
-import { getCurrentUser, getUser } from "@/lib/session";
+import { getUser } from "@/lib/session";
 import { processZodError } from "@/lib/utils";
-
 import transactionSchema, {
   TransactionSchemaType,
 } from "@/schemas/transaction-schema";
 import { Prisma, Transaction } from "@prisma/client";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import { IValidatedResponse } from "./types";
@@ -203,14 +201,14 @@ export const getPaginatedTransactions = async ({
   sortBy: "amount" | "createdAt";
   sortDirection: "asc" | "desc";
 }) => {
-  try {
-    const currentUser = await getCurrentUser(cookies().get("token")?.value!);
-    if (!currentUser) {
-      return { error: "You are not authorized to perform this action." };
-    }
+  const { user } = await getUser();
+  if (!user) {
+    return redirect("/login");
+  }
 
+  try {
     const whereCondition: Prisma.TransactionWhereInput = {
-      userId: currentUser.id,
+      userId: user.id,
     };
 
     if (transactionType === "income") {

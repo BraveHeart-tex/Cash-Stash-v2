@@ -1,7 +1,7 @@
 "use client";
 import { createReminder } from "@/actions";
-import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
-import { useAppDispatch } from "@/app/redux/hooks";
+import { closeGenericModal } from "@/redux/features/genericModalSlice";
+import { useAppDispatch } from "@/redux/hooks";
 import DatePicker from "@/components/date-picker";
 import FormInput from "@/components/form-input";
 import FormSelect from "@/components/form-select";

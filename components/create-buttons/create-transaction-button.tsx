@@ -1,5 +1,5 @@
 "use client";
-import { useAppDispatch } from "@/app/redux/hooks";
+import { useAppDispatch } from "@/redux/hooks";
 import { Button } from "@/components/ui/button";
 import { useTransition } from "react";
 import { showErrorToast } from "@/components/ui/use-toast";

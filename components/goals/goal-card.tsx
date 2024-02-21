@@ -1,10 +1,10 @@
 "use client";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { useAppDispatch } from "@/app/redux/hooks";
+import { useAppDispatch } from "@/redux/hooks";
 import ActionPopover from "@/components/action-popover";
-import { openGenericModal } from "@/app/redux/features/genericModalSlice";
-import { showGenericConfirm } from "@/app/redux/features/genericConfirmSlice";
+import { openGenericModal } from "@/redux/features/genericModalSlice";
+import { showGenericConfirm } from "@/redux/features/genericConfirmSlice";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { deleteGeneric } from "@/actions/generic";

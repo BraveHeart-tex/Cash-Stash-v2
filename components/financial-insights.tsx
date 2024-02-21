@@ -2,8 +2,8 @@
 import { InsightsData } from "@/actions/types";
 import { Button } from "@/components/ui/button";
 import { cn, thousandSeparator } from "@/lib/utils";
-import { useAppDispatch } from "../app/redux/hooks";
-import { setSelectedTab } from "../app/redux/features/navigationTabsSlice";
+import { useAppDispatch } from "../redux/hooks";
+import { setSelectedTab } from "../redux/features/navigationTabsSlice";
 import { FaMoneyBill } from "react-icons/fa";
 import Link from "next/link";
 import MotionDiv from "@/components/animations/motion-div";

@@ -2,11 +2,11 @@
 import { Progress } from "@/components/ui/progress";
 import ActionPopover from "@/components/action-popover";
 import { Badge } from "@/components/ui/badge";
-import { useAppDispatch } from "../app/redux/hooks";
+import { useAppDispatch } from "../redux/hooks";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
-import { openGenericModal } from "../app/redux/features/genericModalSlice";
-import { showGenericConfirm } from "../app/redux/features/genericConfirmSlice";
+import { openGenericModal } from "../redux/features/genericModalSlice";
+import { showGenericConfirm } from "../redux/features/genericConfirmSlice";
 import { cn, formatMoney } from "@/lib/utils";
 import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
 import { deleteGeneric } from "@/actions/generic";

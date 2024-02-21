@@ -1,5 +1,5 @@
 "use client";
-import { useAppDispatch } from "@/app/redux/hooks";
+import { useAppDispatch } from "@/redux/hooks";
 import { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import FormLoadingSpinner from "../../form-loading-spinner";
@@ -14,7 +14,7 @@ import {
   showSuccessToast,
 } from "@/components/ui/use-toast";
 import { updateReminder } from "@/actions";
-import { closeGenericModal } from "@/app/redux/features/genericModalSlice";
+import { closeGenericModal } from "@/redux/features/genericModalSlice";
 import { useRouter } from "next/navigation";
 import DatePicker from "@/components/date-picker";
 import { getGeneric } from "@/actions/generic";

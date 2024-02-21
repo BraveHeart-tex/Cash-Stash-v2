@@ -1,9 +1,9 @@
 "use client";
 import ACCOUNT_OPTIONS from "@/lib/CreateUserAccountOptions";
 import ActionPopover from "@/components/action-popover";
-import { useAppDispatch } from "../app/redux/hooks";
-import { openGenericModal } from "../app/redux/features/genericModalSlice";
-import { showGenericConfirm } from "@/app/redux/features/genericConfirmSlice";
+import { useAppDispatch } from "../redux/hooks";
+import { openGenericModal } from "../redux/features/genericModalSlice";
+import { showGenericConfirm } from "@/redux/features/genericConfirmSlice";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 import { cn, formatMoney } from "@/lib/utils";
