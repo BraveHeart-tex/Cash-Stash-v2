@@ -1,6 +1,6 @@
 "use server";
 import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
-import prisma from "@/lib/prismadb";
+import prisma from "@/lib/db";
 import { getCurrentUser } from "@/lib/session";
 import { processZodError } from "@/lib/utils";
 import { CreateBudgetSchemaType } from "@/schemas/CreateBudgetSchema";

@@ -13,7 +13,7 @@ import {
   IGetPaginatedGoalsParams,
   IGetPaginatedGoalsResponse,
 } from "./types";
-import prisma from "@/lib/prismadb";
+import prisma from "@/lib/db";
 
 export const createGoal = async (
   values: GoalSchemaType

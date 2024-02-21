@@ -1,5 +1,5 @@
 "use server";
-import prisma from "@/lib/prismadb";
+import prisma from "@/lib/db";
 import { getCurrentUser } from "@/lib/session";
 import { EditReminderSchema } from "@/schemas";
 import { cookies } from "next/headers";

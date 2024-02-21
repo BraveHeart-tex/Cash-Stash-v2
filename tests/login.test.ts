@@ -1,5 +1,5 @@
 import { test as base } from "@playwright/test";
-import prisma from "../lib/prismadb";
+import prisma from "../lib/db";
 import { getUserData } from "./testUtils";
 import { faker } from "@faker-js/faker";
 

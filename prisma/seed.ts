@@ -1,7 +1,7 @@
 "use server";
 
 import { BudgetCategory, AccountCategory } from "@prisma/client";
-import prisma from "../lib/prismadb";
+import prisma from "../lib/db";
 import { faker } from "@faker-js/faker";
 import ACCOUNT_OPTIONS from "../lib/CreateUserAccountOptions";
 import CreateBudgetOptions from "../lib/CreateBudgetOptions";

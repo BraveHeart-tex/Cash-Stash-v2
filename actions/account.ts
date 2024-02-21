@@ -1,6 +1,6 @@
 "use server";
 import ACCOUNT_OPTIONS from "@/lib/CreateUserAccountOptions";
-import prisma from "@/lib/prismadb";
+import prisma from "@/lib/db";
 import { getCurrentUser } from "@/lib/session";
 import { processZodError } from "@/lib/utils";
 import { accountSchema } from "@/schemas";

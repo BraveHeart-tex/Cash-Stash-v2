@@ -1,5 +1,5 @@
 "use server";
-import prisma from "@/lib/prismadb";
+import prisma from "@/lib/db";
 import { signToken, getCurrentUser } from "@/lib/session";
 import { LoginSchema, RegisterSchema } from "@/schemas";
 import { LoginSchemaType } from "@/schemas/LoginSchema";

@@ -9,7 +9,7 @@ import {
   UpdateGenericInput,
 } from "@/lib/utils";
 
-import prisma from "@/lib/prismadb";
+import prisma from "@/lib/db";
 import { Prisma } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
 import { getUserSession } from "./auth";
