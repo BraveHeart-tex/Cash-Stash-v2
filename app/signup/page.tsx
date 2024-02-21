@@ -5,7 +5,7 @@ import SignUpForm from "@/components/auth/sign-up-form";
 const SignUpPage = async () => {
   const { user } = await getUser();
   if (user) {
-    redirect("/dashboard");
+    redirect("/");
   }
 
   return (

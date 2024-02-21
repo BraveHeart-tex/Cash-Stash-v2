@@ -12,7 +12,7 @@
       "name": "Dashboard",
       "short_name": "Dashboard",
       "description": "View your overall financial health",
-      "url": "/dashboard",
+      "url": "/",
       "icons": [
         {
           "src": "/icon-192x192.png",

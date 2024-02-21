@@ -1,8 +1,14 @@
-"use client";
 import { Button } from "@/components/ui/button";
+import { getUser } from "@/lib/session";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
-const NotFound = () => {
+const NotFound = async () => {
+  const { user } = await getUser();
+  if (!user) {
+    redirect("/login");
+  }
+
   return (
     <div className="max-w-7xl flex justify-center items-center h-screen">
       <div className="grid grid-cols-1 gap-4">
