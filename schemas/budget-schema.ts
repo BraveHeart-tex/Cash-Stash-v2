@@ -31,7 +31,7 @@ const budgetSchema = z
     progress: z.number().default(0),
   })
   .superRefine((data) => {
-    data.progress = Math.round((data.spentAmount / data.budgetAmount) * 100);
+    data.progress = Math.floor((data.spentAmount / data.budgetAmount) * 100);
     return data;
   });
 
