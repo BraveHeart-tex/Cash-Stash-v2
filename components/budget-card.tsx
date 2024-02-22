@@ -2,37 +2,50 @@
 import { Progress } from "@/components/ui/progress";
 import ActionPopover from "@/components/action-popover";
 import { Badge } from "@/components/ui/badge";
-import { useAppDispatch } from "../redux/hooks";
-import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
+import { useAppDispatch } from "@/redux/hooks";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
-import { openGenericModal } from "../redux/features/genericModalSlice";
-import { showGenericConfirm } from "../redux/features/genericConfirmSlice";
+import { openGenericModal } from "@/redux/features/genericModalSlice";
 import { cn, formatMoney } from "@/lib/utils";
 import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
 import { deleteGeneric } from "@/actions/generic";
 import { Budget } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 
 interface IBudgetCardProps {
   budget: Budget;
 }
 
 const BudgetCard = ({ budget }: IBudgetCardProps) => {
+  const showGenericConfirm = useGenericConfirmStore(
+    (state) => state.showConfirm
+  );
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const handleActionCallback = (
-    result: Awaited<ReturnType<typeof deleteGeneric>>,
-    cleanUp: ActionCreatorWithoutPayload<"genericConfirm/cleanUp">
-  ) => {
-    if (result?.error) {
-      showErrorToast("An error occurred.", result.error as string);
-    } else {
-      router.refresh();
-      showSuccessToast("Budget deleted.", "Selected budget has been deleted.");
-      dispatch(cleanUp());
-    }
+  const handleDeleteClick = (id: string) => {
+    showGenericConfirm({
+      title: "Delete Budget",
+      message: "Are you sure you want to delete this budget?",
+      primaryActionLabel: "Delete",
+      onConfirm: async () => {
+        const response = await deleteGeneric<Budget>({
+          tableName: "budget",
+          whereCondition: { id },
+        });
+
+        if (response?.error) {
+          showErrorToast("An error occurred.", response.error as string);
+        } else {
+          router.refresh();
+          showSuccessToast(
+            "Budget deleted.",
+            "Selected budget has been deleted."
+          );
+        }
+      },
+    });
   };
 
   const getProgressColor = (progress: number): string => {
@@ -81,21 +94,7 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
                 })
               )
             }
-            onDeleteActionClick={() =>
-              dispatch(
-                showGenericConfirm({
-                  title: "Delete Budget",
-                  message: "Are you sure you want to delete this budget?",
-                  primaryActionLabel: "Delete",
-                  primaryAction: async () =>
-                    await deleteGeneric<Budget>({
-                      tableName: "budget",
-                      whereCondition: { id: budget.id },
-                    }),
-                  resolveCallback: handleActionCallback,
-                })
-              )
-            }
+            onDeleteActionClick={() => handleDeleteClick(budget.id)}
             isAbsolute={false}
             placementClasses="top-0 right-0 mb-0"
           />
