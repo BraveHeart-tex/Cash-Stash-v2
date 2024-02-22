@@ -2,8 +2,6 @@
 import { InsightsData } from "@/actions/types";
 import { Button } from "@/components/ui/button";
 import { cn, thousandSeparator } from "@/lib/utils";
-import { useAppDispatch } from "../redux/hooks";
-import { setSelectedTab } from "../redux/features/navigationTabsSlice";
 import { FaMoneyBill } from "react-icons/fa";
 import Link from "next/link";
 import MotionDiv from "@/components/animations/motion-div";
@@ -41,7 +39,6 @@ const SavingsRate = ({ value }: { value: number }) => (
 );
 
 const FinancialInsights = ({ insightsData }: IFinancialInsightsProps) => {
-  const dispatch = useAppDispatch();
   const noInsightsData = Object.keys(insightsData || {}).length === 0;
 
   if (!insightsData) return <NoDataMessage />;
@@ -92,13 +89,8 @@ const FinancialInsights = ({ insightsData }: IFinancialInsightsProps) => {
       <article className="flex h-[300px] items-center justify-center">
         <div className="my-3">
           <NoDataMessage />
-          <Button
-            className="font-semibold text-md mt-3 hover:bg-foreground hover:text-muted"
-            onClick={() =>
-              dispatch(setSelectedTab({ selectedTab: "Transactions" }))
-            }
-          >
-            Transactions
+          <Button className="font-semibold text-md mt-3 hover:bg-foreground hover:text-muted">
+            <Link href="/transactions">Go To Transactions</Link>
           </Button>
         </div>
       </article>

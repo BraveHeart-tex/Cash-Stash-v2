@@ -1,11 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
 import genericModalReducer from "./features/genericModalSlice";
-import navigationTabsReducer from "./features/navigationTabsSlice";
 
 export const store = configureStore({
   reducer: {
     genericModalReducer,
-    navigationTabsReducer,
   },
   devTools: process.env.NODE_ENV !== "production",
 });
