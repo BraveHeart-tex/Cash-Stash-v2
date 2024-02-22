@@ -20,7 +20,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { areObjectsDeepEqual, generateReadbleEnumLabels } from "@/lib/utils";
+import {
+  areObjectsDeepEqual,
+  formHasChanged,
+  generateReadbleEnumLabels,
+} from "@/lib/utils";
 import { Account, AccountCategory } from "@prisma/client";
 import { registerBankAccount, updateBankAccount } from "@/actions/account";
 import { IValidatedResponse } from "@/actions/types";
@@ -63,14 +67,7 @@ const AccountForm: React.FC<IAccountFormProps> = ({
   }, [accountToBeUpdated]);
 
   const handleFormSubmit = async (values: AccountSchemaType) => {
-    if (
-      entityId &&
-      areObjectsDeepEqual(values, {
-        name: accountToBeUpdated?.name,
-        category: accountToBeUpdated?.category,
-        balance: accountToBeUpdated?.balance,
-      })
-    ) {
+    if (entityId && formHasChanged(accountToBeUpdated, values)) {
       showDefaultToast("No changes detected.", "You haven't made any changes.");
       return;
     }
