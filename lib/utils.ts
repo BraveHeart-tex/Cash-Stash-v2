@@ -300,3 +300,11 @@ export const generateReadbleEnumLabels = ({
 
   return readableLabels;
 };
+
+export const formHasChanged = (initialValues: any, values: any): boolean => {
+  const matchingKeys = Object.keys(initialValues).filter(
+    (key) => key in values
+  );
+
+  return !matchingKeys.some((key) => values[key] !== initialValues[key]);
+};

@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { areObjectsDeepEqual, generateReadbleEnumLabels } from "@/lib/utils";
+import { formHasChanged, generateReadbleEnumLabels } from "@/lib/utils";
 import { Budget, BudgetCategory } from "@prisma/client";
 import { IValidatedResponse } from "@/actions/types";
 import {
@@ -61,17 +61,7 @@ const BudgetForm: React.FC<IBudgetFormProps> = ({
   }, [budgetToBeUpdated]);
 
   const handleFormSubmit = async (values: BudgetSchemaType) => {
-    // TODO: Implement this as a seperate function formHasChanged
-    if (
-      entityId &&
-      areObjectsDeepEqual(values, {
-        name: budgetToBeUpdated?.name,
-        budgetAmount: budgetToBeUpdated?.budgetAmount,
-        category: budgetToBeUpdated?.category,
-        spentAmount: budgetToBeUpdated?.spentAmount,
-        progress: budgetToBeUpdated?.progress,
-      })
-    ) {
+    if (entityId && formHasChanged(budgetToBeUpdated, values)) {
       showDefaultToast(
         "No changes detected.",
         "You haven't made any changes to the budget."
