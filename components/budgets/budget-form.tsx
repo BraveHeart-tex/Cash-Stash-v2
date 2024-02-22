@@ -18,10 +18,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { generateReadbleEnumLabels } from "@/lib/utils";
+import { areObjectsDeepEqual, generateReadbleEnumLabels } from "@/lib/utils";
 import { Budget, BudgetCategory } from "@prisma/client";
 import { IValidatedResponse } from "@/actions/types";
-import { showErrorToast, showSuccessToast } from "../ui/use-toast";
+import {
+  showDefaultToast,
+  showErrorToast,
+  showSuccessToast,
+} from "../ui/use-toast";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/redux/hooks";
 import { closeGenericModal } from "@/redux/features/genericModalSlice";
@@ -57,6 +61,24 @@ const BudgetForm: React.FC<IBudgetFormProps> = ({
   }, [budgetToBeUpdated]);
 
   const handleFormSubmit = async (values: BudgetSchemaType) => {
+    // TODO: Implement this as a seperate function formHasChanged
+    if (
+      entityId &&
+      areObjectsDeepEqual(values, {
+        name: budgetToBeUpdated?.name,
+        budgetAmount: budgetToBeUpdated?.budgetAmount,
+        category: budgetToBeUpdated?.category,
+        spentAmount: budgetToBeUpdated?.spentAmount,
+        progress: budgetToBeUpdated?.progress,
+      })
+    ) {
+      showDefaultToast(
+        "No changes detected.",
+        "You haven't made any changes to the budget."
+      );
+      return;
+    }
+
     let result;
     if (entityId) {
       result = await updateBudget(entityId, values);
@@ -94,6 +116,14 @@ const BudgetForm: React.FC<IBudgetFormProps> = ({
   };
 
   const selectOptions = generateReadbleEnumLabels({ enumObj: BudgetCategory });
+
+  const renderSubmitButtonContent = () => {
+    if (form.formState.isSubmitting) {
+      return "Submitting...";
+    }
+
+    return entityId ? "Update" : "Create";
+  };
 
   return (
     <Form {...form}>
@@ -167,8 +197,12 @@ const BudgetForm: React.FC<IBudgetFormProps> = ({
             </FormItem>
           )}
         />
-        <Button className="w-full" type="submit">
-          {!entityId ? "Create" : "Update"}
+        <Button
+          className="w-full"
+          type="submit"
+          disabled={form.formState.isSubmitting}
+        >
+          {renderSubmitButtonContent()}
         </Button>
       </form>
     </Form>
