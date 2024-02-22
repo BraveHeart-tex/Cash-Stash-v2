@@ -188,6 +188,12 @@ const isObject = (value: any): boolean => {
   return value !== null && typeof value === "object";
 };
 
+/**
+ * Check if two objects are deeply equal.
+ * @param {any} obj1 - The first object.
+ * @param {any} obj2 - The second object.
+ * @returns {boolean} True if objects are deeply equal, otherwise false.
+ */
 export const areObjectsDeepEqual = (obj1: any, obj2: any): boolean => {
   // Check if both objects are strictly equal
   if (obj1 === obj2) return true;
@@ -221,6 +227,11 @@ export const areObjectsDeepEqual = (obj1: any, obj2: any): boolean => {
   return true;
 };
 
+/**
+ * Processes a ZodError instance and extracts error information.
+ * @param {ZodError} error - The ZodError object to process.
+ * @returns An object containing error and fieldErrors properties.
+ */
 export const processZodError = (error: ZodError) => {
   const fieldErrors = error.flatten().fieldErrors;
   const errorMessages = Object.entries(fieldErrors).map(

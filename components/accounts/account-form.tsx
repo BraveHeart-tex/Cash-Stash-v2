@@ -20,11 +20,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { generateReadbleEnumLabels } from "@/lib/utils";
+import { areObjectsDeepEqual, generateReadbleEnumLabels } from "@/lib/utils";
 import { Account, AccountCategory } from "@prisma/client";
 import { registerBankAccount, updateBankAccount } from "@/actions/account";
 import { IValidatedResponse } from "@/actions/types";
-import { showErrorToast, showSuccessToast } from "../ui/use-toast";
+import {
+  showDefaultToast,
+  showErrorToast,
+  showSuccessToast,
+} from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/redux/hooks";
 import { closeGenericModal } from "@/redux/features/genericModalSlice";
@@ -59,6 +63,18 @@ const AccountForm: React.FC<IAccountFormProps> = ({
   }, [accountToBeUpdated]);
 
   const handleFormSubmit = async (values: AccountSchemaType) => {
+    if (
+      entityId &&
+      areObjectsDeepEqual(values, {
+        name: accountToBeUpdated?.name,
+        category: accountToBeUpdated?.category,
+        balance: accountToBeUpdated?.balance,
+      })
+    ) {
+      showDefaultToast("No changes detected.", "You haven't made any changes.");
+      return;
+    }
+
     let result;
     if (entityId) {
       result = await updateBankAccount({
@@ -99,6 +115,14 @@ const AccountForm: React.FC<IAccountFormProps> = ({
   };
 
   const selectOptions = generateReadbleEnumLabels({ enumObj: AccountCategory });
+
+  const renderSubmitButtonContent = () => {
+    if (form.formState.isSubmitting) {
+      return "Submitting...";
+    }
+
+    return entityId ? "Update" : "Create";
+  };
 
   return (
     <Form {...form}>
@@ -159,8 +183,12 @@ const AccountForm: React.FC<IAccountFormProps> = ({
             </FormItem>
           )}
         />
-        <Button className="w-full" type="submit">
-          {!entityId ? "Create" : "Update"}
+        <Button
+          className="w-full"
+          type="submit"
+          disabled={form.formState.isSubmitting}
+        >
+          {renderSubmitButtonContent()}
         </Button>
       </form>
     </Form>
