@@ -23,12 +23,7 @@ interface GenericConfirmStoreState {
   onDenyResult: any;
   callPrimaryAction: () => void;
   callSecondaryAction: () => void;
-  resolvePrimaryAction: (actionResult: any) => void;
-  resolveSecondaryAction: (actionResult: any) => void;
-  showConfirm: (
-    confirmObject: GenericConfirmObject,
-    resolveCallback?: (actionResult: any, cleanUp: () => void) => void
-  ) => Promise<any>;
+  showConfirm: (confirmObject: GenericConfirmObject) => void;
   cleanUp: () => void;
 }
 
@@ -42,8 +37,6 @@ export const useGenericConfirmStore = create<GenericConfirmStoreState>(
     onConfirmResult: null,
     onDenyResult: null,
     loading: false,
-    resolvePrimaryAction: () => {},
-    resolveSecondaryAction: () => {},
     onConfirm: () => {},
     onDeny: () => {},
     callPrimaryAction: async () => {
@@ -59,10 +52,6 @@ export const useGenericConfirmStore = create<GenericConfirmStoreState>(
         loading: false,
         primaryActionResult: actionResult,
       }));
-
-      if (get().resolvePrimaryAction) {
-        get().resolvePrimaryAction(actionResult);
-      }
     },
     callSecondaryAction: async () => {
       const { onDeny } = get();
@@ -74,22 +63,15 @@ export const useGenericConfirmStore = create<GenericConfirmStoreState>(
         visible: false,
         secondaryActionResult: actionResult,
       }));
-
-      if (get().resolveSecondaryAction) {
-        get().resolveSecondaryAction(actionResult);
-      }
     },
-    showConfirm: (
-      {
-        title,
-        message,
-        primaryActionLabel,
-        onConfirm,
-        onDeny,
-        secondaryActionLabel,
-      },
-      resolveCallback
-    ) => {
+    showConfirm: ({
+      title,
+      message,
+      primaryActionLabel,
+      onConfirm,
+      onDeny,
+      secondaryActionLabel,
+    }) => {
       set((state) => ({
         ...state,
         visible: true,
@@ -100,26 +82,6 @@ export const useGenericConfirmStore = create<GenericConfirmStoreState>(
         onConfirm,
         onDeny,
       }));
-
-      const cleanUp = get().cleanUp;
-
-      return new Promise((resolve) => {
-        set((state) => ({
-          ...state,
-          resolvePrimaryAction: (actionResult) => {
-            if (resolveCallback && actionResult) {
-              resolveCallback(actionResult, cleanUp);
-            }
-            resolve(actionResult);
-          },
-          resolveSecondaryAction: (actionResult) => {
-            if (resolveCallback && actionResult) {
-              resolveCallback(actionResult, cleanUp);
-            }
-            resolve(actionResult);
-          },
-        }));
-      });
     },
     cleanUp: () => {
       set((state) => ({

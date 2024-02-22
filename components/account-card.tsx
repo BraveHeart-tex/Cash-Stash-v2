@@ -3,14 +3,13 @@ import ACCOUNT_OPTIONS from "@/lib/CreateUserAccountOptions";
 import ActionPopover from "@/components/action-popover";
 import { useAppDispatch } from "../redux/hooks";
 import { openGenericModal } from "../redux/features/genericModalSlice";
-import { showGenericConfirm } from "@/redux/features/genericConfirmSlice";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
-import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 import { cn, formatMoney } from "@/lib/utils";
 import { deleteGeneric } from "@/actions/generic";
 import { Account } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 
 interface IAccountCardProps {
   account: Account;
@@ -20,39 +19,34 @@ interface IAccountCardProps {
 const AccountCard = ({ account, className }: IAccountCardProps) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const showGenericConfirm = useGenericConfirmStore(
+    (state) => state.showConfirm
+  );
 
   const accountCategory = ACCOUNT_OPTIONS[account.category];
 
-  const handleActionCallback = (
-    result: Awaited<ReturnType<typeof deleteGeneric>>,
-    cleanUp: ActionCreatorWithoutPayload<"genericConfirm/cleanUp">
-  ) => {
-    if (result?.error) {
-      showErrorToast("An error occurred.", result.error as string);
-    } else {
-      router.refresh();
-      showSuccessToast(
-        "Account deleted.",
-        "Selected account has been deleted."
-      );
-      dispatch(cleanUp());
-    }
-  };
-
   const handleDeleteAccount = (id: string) => {
-    dispatch(
-      showGenericConfirm({
-        title: "Delete Account",
-        message: "Are you sure you want to delete this account?",
-        primaryActionLabel: "Delete",
-        primaryAction: async () =>
-          await deleteGeneric<Account>({
-            tableName: "account",
-            whereCondition: { id },
-          }),
-        resolveCallback: handleActionCallback,
-      })
-    );
+    showGenericConfirm({
+      title: "Delete Account",
+      message: "Are you sure you want to delete this account?",
+      primaryActionLabel: "Delete",
+      async onConfirm() {
+        const result = await deleteGeneric<Account>({
+          tableName: "account",
+          whereCondition: { id },
+        });
+
+        if (result?.error) {
+          showErrorToast("An error occurred.", result.error as string);
+        } else {
+          router.refresh();
+          showSuccessToast(
+            "Account deleted.",
+            "Selected account has been deleted."
+          );
+        }
+      },
+    });
   };
 
   return (

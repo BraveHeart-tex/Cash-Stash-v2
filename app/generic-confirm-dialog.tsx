@@ -7,9 +7,17 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useTransition } from "react";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import { Button } from "@/components/ui/button";
+import { useMediaQuery } from "usehooks-ts";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
 
 const GenericConfirmDialog2 = () => {
   const {
@@ -24,6 +32,8 @@ const GenericConfirmDialog2 = () => {
     loading,
   } = useGenericConfirmStore((state) => state);
   const actionRef = useRef<HTMLButtonElement | null>(null);
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  let [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     if (visible && actionRef?.current) {
@@ -45,6 +55,50 @@ const GenericConfirmDialog2 = () => {
     };
   }, [visible]);
 
+  if (isMobile) {
+    return (
+      <Drawer
+        open={visible}
+        onOpenChange={(isOpen) => {
+          if (!isOpen) {
+            cleanUp();
+          }
+        }}
+      >
+        <DrawerContent>
+          <DrawerHeader className="text-left">
+            <DrawerTitle>{title}</DrawerTitle>
+          </DrawerHeader>
+          <div className="px-4">{message}</div>
+          <DrawerFooter className="pt-2">
+            {primaryActionLabel && (
+              <Button
+                disabled={isPending}
+                onClick={() => {
+                  startTransition(async () => {
+                    callPrimaryAction();
+                  });
+                }}
+              >
+                {primaryActionLabel}
+              </Button>
+            )}
+            <Button
+              disabled={isPending}
+              variant="ghost"
+              onClick={() => {
+                callSecondaryAction();
+                cleanUp();
+              }}
+            >
+              {secondaryActionLabel || "Cancel"}
+            </Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+    );
+  }
+
   return (
     <AlertDialog open={visible}>
       <AlertDialogContent onEscapeKeyDown={cleanUp}>
@@ -62,7 +116,7 @@ const GenericConfirmDialog2 = () => {
                 cleanUp();
               }}
             >
-              {secondaryActionLabel ?? "Cancel"}
+              {secondaryActionLabel || "Cancel"}
             </Button>
             {primaryActionLabel && (
               <Button
