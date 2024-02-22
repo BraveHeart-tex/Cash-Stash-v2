@@ -1,33 +1,17 @@
 "use client";
-import { Sheet, SheetContent } from "@/components/ui/sheet";
-import { HamburgerMenuIcon } from "@radix-ui/react-icons";
-import Logo from "./Logo.svg";
+import Logo from "@/components/Logo.svg";
 import Image from "next/image";
-import UserMenu from "./user-menu";
-import { Button } from "@/components/ui/button";
+import UserMenu from "@/components/user-menu";
 import { ModeToggle } from "@/components/mode-toggle";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { Label } from "@/components/ui/label";
+import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { User } from "lucia";
 import useAuthStore from "@/store/auth/authStore";
 
-const NAV_LINKS = [
-  { name: "Dashboard", href: "/" },
-  { name: "Accounts", href: "/accounts" },
-  { name: "Budgets", href: "/budgets" },
-  { name: "Goals", href: "/goals" },
-  { name: "Transactions", href: "/transactions" },
-  { name: "Reports", href: "/reports" },
-];
-
 const Navbar = ({ user }: { user: User | null }) => {
   const pathname = usePathname();
-  const [isOpen, setIsOpen] = useState(false);
-  const onOpen = () => setIsOpen(true);
-  const onClose = () => setIsOpen(false);
   const setCurrentUser = useAuthStore((state) => state.setUser);
 
   useEffect(() => {
@@ -47,17 +31,7 @@ const Navbar = ({ user }: { user: User | null }) => {
       >
         <div className="flex justify-between items-center">
           <div className="hidden md:block" />
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label="Menu"
-            onClick={onOpen}
-            className="lg:hidden justify-center mr-auto flex items-center text-white hover:bg-secondary"
-          >
-            <HamburgerMenuIcon />
-          </Button>
-
-          <Link href={"/"}>
+          <Link href={"/"} className="ml-auto lg:ml-0">
             <Image
               src={Logo}
               alt="Cash Stash"
@@ -76,36 +50,6 @@ const Navbar = ({ user }: { user: User | null }) => {
           </div>
         </div>
       </motion.div>
-
-      <Sheet
-        open={isOpen}
-        onOpenChange={(isOpen) => {
-          if (!isOpen) {
-            onClose();
-          }
-        }}
-      >
-        <SheetContent side="left" className="w-[300px] md:[540px]">
-          <div className="flex flex-col justify-between items h-[100%]">
-            <div className="flex flex-col gap-2">
-              <span className="font-bold text-lg"> Welcome! {user?.name}</span>
-              {NAV_LINKS.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className="hover:underline"
-                >
-                  {link.name}
-                </Link>
-              ))}
-            </div>
-            <div>
-              <Label>Change Color Mode</Label>
-              <ModeToggle />
-            </div>
-          </div>
-        </SheetContent>
-      </Sheet>
     </div>
   );
 };
