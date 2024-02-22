@@ -1,30 +1,18 @@
 "use client";
-import { setSelectedTab } from "@/redux/features/navigationTabsSlice";
-import { useAppSelector, useAppDispatch } from "@/redux/hooks";
-import { PAGES, Page } from "@/lib/utils";
+import { PAGES } from "@/lib/utils";
 import { TabsList, TabsTrigger, Tabs } from "./ui/tabs";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 
 const NavigationTabsList = () => {
-  const { selectedTab } = useAppSelector(
-    (state) => state.navigationTabsReducer
-  );
   const pathName = usePathname();
-  const dispatch = useAppDispatch();
 
   if (pathName.startsWith("/login") || pathName.startsWith("/signup"))
     return null;
 
   return (
-    <Tabs
-      value={selectedTab}
-      onValueChange={(value) =>
-        dispatch(setSelectedTab({ selectedTab: value as Page }))
-      }
-      defaultValue={selectedTab}
-    >
+    <Tabs defaultValue={PAGES[0].label}>
       <div className="overflow-scroll scrollbar-hide hidden lg:block">
         <TabsList className="lg:w-auto">
           {PAGES.map((page) => (

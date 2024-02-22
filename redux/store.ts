@@ -1,11 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import genericConfirmReducer from "./features/genericConfirmSlice";
 import genericModalReducer from "./features/genericModalSlice";
 import navigationTabsReducer from "./features/navigationTabsSlice";
 
 export const store = configureStore({
   reducer: {
-    genericConfirmReducer,
     genericModalReducer,
     navigationTabsReducer,
   },

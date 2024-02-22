@@ -3,13 +3,12 @@ import { Inter } from "next/font/google";
 import { Providers as ReduxProviders } from "@/redux/provider";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
-import GenericConfirmDialog from "@/components/generic-confirm-dialog";
 import GenericModal from "@/components/generic-modal";
 import NavigationTabs from "@/components/navigation-tabs";
 import { Metadata, Viewport } from "next";
 import Navbar from "@/components/navbar";
 import { getUser } from "@/lib/session";
-import GenericConfirmDialog2 from "./generic-confirm-dialog";
+import GenericConfirmDialog from "./generic-confirm-dialog";
 
 const InterFont = Inter({
   weight: ["300", "400", "500", "600", "700"],
@@ -79,7 +78,6 @@ export default async function RootLayout({ children }: ILayoutProps) {
             <main className="pb-16 lg:pb-0">{children}</main>
             <GenericModal />
             <GenericConfirmDialog />
-            <GenericConfirmDialog2 />
           </ThemeProvider>
           <Toaster />
         </ReduxProviders>

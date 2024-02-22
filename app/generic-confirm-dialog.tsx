@@ -19,7 +19,7 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 
-const GenericConfirmDialog2 = () => {
+const GenericConfirmDialog = () => {
   const {
     visible,
     cleanUp,
@@ -137,4 +137,4 @@ const GenericConfirmDialog2 = () => {
   );
 };
 
-export default GenericConfirmDialog2;
+export default GenericConfirmDialog;
