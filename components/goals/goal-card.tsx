@@ -4,50 +4,44 @@ import { Progress } from "@/components/ui/progress";
 import { useAppDispatch } from "@/redux/hooks";
 import ActionPopover from "@/components/action-popover";
 import { openGenericModal } from "@/redux/features/genericModalSlice";
-import { showGenericConfirm } from "@/redux/features/genericConfirmSlice";
-import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { deleteGeneric } from "@/actions/generic";
 import { Goal } from "@prisma/client";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { cn, formatMoney } from "@/lib/utils";
+import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 
 interface IGoalCardProps {
   goal: Goal;
 }
 
 const GoalCard = ({ goal }: IGoalCardProps) => {
+  const showGenericConfirm = useGenericConfirmStore(
+    (state) => state.showConfirm
+  );
   const dispatch = useAppDispatch();
   const router = useRouter();
 
   const handleDeleteGoal = (id: string) => {
-    const handleActionCallback = (
-      result: Awaited<ReturnType<typeof deleteGeneric>>,
-      cleanUp: ActionCreatorWithoutPayload<"genericConfirm/cleanUp">
-    ) => {
-      if (result?.error) {
-        showErrorToast("An error occurred.", result.error as string);
-      } else {
-        router.refresh();
-        showSuccessToast("Goal deleted.", "Selected goal has been deleted.");
-        dispatch(cleanUp());
-      }
-    };
+    showGenericConfirm({
+      title: "Delete Goal",
+      message: "Are you sure you want to delete this goal?",
+      primaryActionLabel: "Delete",
+      onConfirm: async () => {
+        const response = await deleteGeneric<Goal>({
+          tableName: "goal",
+          whereCondition: { id },
+        });
 
-    dispatch(
-      showGenericConfirm({
-        title: "Delete Goal",
-        message: "Are you sure you want to delete this goal?",
-        primaryActionLabel: "Delete",
-        primaryAction: async () =>
-          await deleteGeneric<Goal>({
-            tableName: "goal",
-            whereCondition: { id },
-          }),
-        resolveCallback: handleActionCallback,
-      })
-    );
+        if (response?.error) {
+          showErrorToast("An error occurred.", response.error as string);
+        } else {
+          router.refresh();
+          showSuccessToast("Goal deleted.", "Selected goal has been deleted.");
+        }
+      },
+    });
   };
 
   const getGoalProgressColor = (progress: number): string => {
