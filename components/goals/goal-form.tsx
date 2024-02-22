@@ -19,19 +19,21 @@ import {
   showSuccessToast,
 } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
-import { useAppDispatch } from "@/redux/hooks";
-import { closeGenericModal } from "@/redux/features/genericModalSlice";
+
 import { useEffect } from "react";
 import goalSchema, { GoalSchemaType } from "@/schemas/goal-schema";
 import { createGoal, updateGoal } from "@/actions/goal";
 import { formHasChanged } from "@/lib/utils";
+import useGenericModalStore from "@/store/genericModalStore";
 
 interface IGoalFormProps {
   data?: Goal;
 }
 
 const GoalForm: React.FC<IGoalFormProps> = ({ data: goalToBeUpdated }) => {
-  const dispatch = useAppDispatch();
+  const closeGenericModal = useGenericModalStore(
+    (state) => state.closeGenericModal
+  );
   const router = useRouter();
   const form = useForm<GoalSchemaType>({
     resolver: zodResolver(goalSchema),
@@ -93,7 +95,7 @@ const GoalForm: React.FC<IGoalFormProps> = ({ data: goalToBeUpdated }) => {
         "Success!",
         successMessage[entityId ? "update" : "create"]
       );
-      dispatch(closeGenericModal());
+      closeGenericModal();
     }
   };
 

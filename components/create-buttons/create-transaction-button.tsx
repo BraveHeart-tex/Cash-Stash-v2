@@ -1,16 +1,17 @@
 "use client";
-import { useAppDispatch } from "@/redux/hooks";
 import { Button } from "@/components/ui/button";
 import { useTransition } from "react";
 import { showErrorToast } from "@/components/ui/use-toast";
 import { getGenericListByCurrentUser } from "@/actions/generic";
-import { openGenericModal } from "@/lib/genericModalUtils";
 import { FaExchangeAlt } from "react-icons/fa";
 import { cn } from "@/lib/utils";
+import useGenericModalStore from "@/store/genericModalStore";
 
 const CreateTransactionButton = ({ className }: { className?: string }) => {
   let [isPending, startTransition] = useTransition();
-  const dispatch = useAppDispatch();
+  const openGenericModal = useGenericModalStore(
+    (state) => state.openGenericModal
+  );
   const handleCreateTransactionClick = async () => {
     startTransition(async () => {
       const result = await getGenericListByCurrentUser({
@@ -26,8 +27,11 @@ const CreateTransactionButton = ({ className }: { className?: string }) => {
           "You need to create an account before you can create a transaction."
         );
       } else {
-        openGenericModal("Transactions", dispatch, {
-          userAccounts: result.data,
+        openGenericModal({
+          dialogTitle: "Create Transaction",
+          dialogDescription: "Use the form below to create a new transaction.",
+          mode: "create",
+          key: "transaction",
         });
       }
     });

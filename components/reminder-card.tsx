@@ -1,17 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Pencil1Icon } from "@radix-ui/react-icons";
-import { openGenericModal } from "@/redux/features/genericModalSlice";
-import { useAppDispatch } from "@/redux/hooks";
+
 import { SerializedReminder } from "@/actions/types";
 import MotionDiv from "./animations/motion-div";
+import useGenericModalStore from "@/store/genericModalStore";
 
 interface IReminderCardProps {
   reminder: SerializedReminder;
 }
 
 const ReminderCard = ({ reminder }: IReminderCardProps) => {
-  const dispatch = useAppDispatch();
+  const openGenericModal = useGenericModalStore(
+    (state) => state.openGenericModal
+  );
   const today = new Date();
 
   const isPastReminderDate = new Date(reminder.reminderDate) < today;
@@ -61,16 +63,14 @@ const ReminderCard = ({ reminder }: IReminderCardProps) => {
         className="absolute bottom-0 right-1 hover:bg-transparent focus:outline-none outline-none"
         aria-label="Edit notification"
         onClick={() => {
-          dispatch(
-            openGenericModal({
-              key: "reminder",
-              mode: "edit",
-              entityId: reminder.id,
-              dialogTitle: "Edit Reminder",
-              dialogDescription:
-                "You can edit your reminder by using the form below.",
-            })
-          );
+          openGenericModal({
+            key: "reminder",
+            mode: "edit",
+            entityId: reminder.id,
+            dialogTitle: "Edit Reminder",
+            dialogDescription:
+              "You can edit your reminder by using the form below.",
+          });
         }}
       >
         <Pencil1Icon />

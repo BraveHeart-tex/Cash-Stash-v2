@@ -1,5 +1,4 @@
 "use client";
-import { useAppDispatch } from "@/redux/hooks";
 import { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import FormLoadingSpinner from "../../form-loading-spinner";
@@ -14,11 +13,11 @@ import {
   showSuccessToast,
 } from "@/components/ui/use-toast";
 import { updateReminder } from "@/actions";
-import { closeGenericModal } from "@/redux/features/genericModalSlice";
 import { useRouter } from "next/navigation";
 import DatePicker from "@/components/date-picker";
 import { getGeneric } from "@/actions/generic";
 import { Reminder } from "@prisma/client";
+import useGenericModalStore from "@/store/genericModalStore";
 
 interface IEditReminderFormProps {
   entityId: string;
@@ -28,7 +27,9 @@ const EditReminderForm = ({ entityId }: IEditReminderFormProps) => {
   let [isPending, startTransition] = useTransition();
   const [currentReminder, setCurrentReminder] = useState<Reminder>();
   const router = useRouter();
-  const dispatch = useAppDispatch();
+  const closeGenericModal = useGenericModalStore(
+    (state) => state.closeGenericModal
+  );
 
   useEffect(() => {
     if (entityId) {
@@ -43,7 +44,7 @@ const EditReminderForm = ({ entityId }: IEditReminderFormProps) => {
         }
       });
     }
-  }, [dispatch, entityId]);
+  }, [entityId]);
 
   const {
     register,
@@ -92,7 +93,7 @@ const EditReminderForm = ({ entityId }: IEditReminderFormProps) => {
       } else {
         showSuccessToast("Reminder updated.", "Reminder updated successfully.");
         router.refresh();
-        dispatch(closeGenericModal());
+        closeGenericModal();
       }
     });
   };

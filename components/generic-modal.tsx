@@ -1,5 +1,4 @@
 "use client";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   Dialog,
   DialogContent,
@@ -9,7 +8,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { closeGenericModal } from "@/redux/features/genericModalSlice";
 import { getGenericDialogContent } from "@/lib/getGenericModalContent";
 import { useMediaQuery } from "usehooks-ts";
 import {
@@ -20,9 +18,9 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
+import useGenericModalStore from "@/store/genericModalStore";
 
 const GenericModal = () => {
-  const dispatch = useAppDispatch();
   const {
     entityId,
     dialogTitle,
@@ -32,7 +30,8 @@ const GenericModal = () => {
     key,
     data,
     props,
-  } = useAppSelector((state) => state.genericModalReducer);
+    closeGenericModal,
+  } = useGenericModalStore((state) => state);
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   if (!key) {
@@ -53,7 +52,7 @@ const GenericModal = () => {
         open={isGenericModalOpen}
         onOpenChange={(isOpen) => {
           if (!isOpen) {
-            dispatch(closeGenericModal());
+            closeGenericModal();
           }
         }}
       >
@@ -64,10 +63,7 @@ const GenericModal = () => {
           </DrawerHeader>
           <div className="px-4">{dialogContentToBeRendered}</div>
           <DrawerFooter className="pt-2">
-            <Button
-              variant="ghost"
-              onClick={() => dispatch(closeGenericModal())}
-            >
+            <Button variant="ghost" onClick={() => closeGenericModal()}>
               Cancel
             </Button>
           </DrawerFooter>
@@ -81,7 +77,7 @@ const GenericModal = () => {
       open={isGenericModalOpen}
       onOpenChange={(isOpen) => {
         if (!isOpen) {
-          dispatch(closeGenericModal());
+          closeGenericModal();
         }
       }}
     >
@@ -94,7 +90,7 @@ const GenericModal = () => {
         </DialogHeader>
         {dialogContentToBeRendered}
         <DialogFooter>
-          <Button variant="ghost" onClick={() => dispatch(closeGenericModal())}>
+          <Button variant="ghost" onClick={() => closeGenericModal()}>
             Cancel
           </Button>
         </DialogFooter>

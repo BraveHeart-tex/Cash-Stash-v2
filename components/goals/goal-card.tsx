@@ -1,9 +1,7 @@
 "use client";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { useAppDispatch } from "@/redux/hooks";
 import ActionPopover from "@/components/action-popover";
-import { openGenericModal } from "@/redux/features/genericModalSlice";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { deleteGeneric } from "@/actions/generic";
 import { Goal } from "@prisma/client";
@@ -11,6 +9,7 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { cn, formatMoney } from "@/lib/utils";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
+import useGenericModalStore from "@/store/genericModalStore";
 
 interface IGoalCardProps {
   goal: Goal;
@@ -20,7 +19,9 @@ const GoalCard = ({ goal }: IGoalCardProps) => {
   const showGenericConfirm = useGenericConfirmStore(
     (state) => state.showConfirm
   );
-  const dispatch = useAppDispatch();
+  const openGenericModal = useGenericModalStore(
+    (state) => state.openGenericModal
+  );
   const router = useRouter();
 
   const handleDeleteGoal = (id: string) => {
@@ -72,17 +73,15 @@ const GoalCard = ({ goal }: IGoalCardProps) => {
             popoverHeading={"Goal Actions"}
             isAbsolute={false}
             onEditActionClick={() =>
-              dispatch(
-                openGenericModal({
-                  dialogDescription:
-                    "Edit your goal information by using the form below.",
-                  dialogTitle: "Edit Goal",
-                  mode: "edit",
-                  key: "goal",
-                  entityId: goal.id,
-                  data: goal,
-                })
-              )
+              openGenericModal({
+                dialogDescription:
+                  "Edit your goal information by using the form below.",
+                dialogTitle: "Edit Goal",
+                mode: "edit",
+                key: "goal",
+                entityId: goal.id,
+                data: goal,
+              })
             }
             placementClasses="top-0 right-0 mb-0"
             onDeleteActionClick={() => handleDeleteGoal(goal.id)}

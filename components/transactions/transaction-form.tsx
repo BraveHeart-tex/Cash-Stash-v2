@@ -21,16 +21,15 @@ import {
 import { generateReadbleEnumLabels } from "@/lib/utils";
 import { Account, Transaction, TransactionCategory } from "@prisma/client";
 import { IValidatedResponse } from "@/actions/types";
-import { showErrorToast, showSuccessToast } from "../ui/use-toast";
+import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
-import { useAppDispatch } from "@/redux/hooks";
-import { closeGenericModal } from "@/redux/features/genericModalSlice";
 import { useEffect, useMemo, useState } from "react";
 import transactionSchema, {
   TransactionSchemaType,
 } from "@/schemas/transaction-schema";
 import { getAccountsByCurrentUser } from "@/actions/account";
 import { createTransaction, updateTransaction } from "@/actions/transaction";
+import useGenericModalStore from "@/store/genericModalStore";
 
 interface ITransactionFormProps {
   data?: Transaction;
@@ -39,8 +38,10 @@ interface ITransactionFormProps {
 const TransactionForm: React.FC<ITransactionFormProps> = ({
   data: transactionToBeUpdated,
 }) => {
+  const closeGenericModal = useGenericModalStore(
+    (state) => state.closeGenericModal
+  );
   const [accounts, setAccounts] = useState<Account[]>([]);
-  const dispatch = useAppDispatch();
   const router = useRouter();
   const form = useForm<TransactionSchemaType>({
     resolver: zodResolver(transactionSchema),
@@ -115,7 +116,7 @@ const TransactionForm: React.FC<ITransactionFormProps> = ({
         "Success!",
         successMessage[entityId ? "update" : "create"]
       );
-      dispatch(closeGenericModal());
+      closeGenericModal();
     }
   };
 

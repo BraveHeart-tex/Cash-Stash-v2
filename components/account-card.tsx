@@ -1,8 +1,6 @@
 "use client";
 import ACCOUNT_OPTIONS from "@/lib/CreateUserAccountOptions";
 import ActionPopover from "@/components/action-popover";
-import { useAppDispatch } from "../redux/hooks";
-import { openGenericModal } from "../redux/features/genericModalSlice";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { cn, formatMoney } from "@/lib/utils";
 import { deleteGeneric } from "@/actions/generic";
@@ -10,6 +8,7 @@ import { Account } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
+import useGenericModalStore from "@/store/genericModalStore";
 
 interface IAccountCardProps {
   account: Account;
@@ -17,8 +16,10 @@ interface IAccountCardProps {
 }
 
 const AccountCard = ({ account, className }: IAccountCardProps) => {
-  const dispatch = useAppDispatch();
   const router = useRouter();
+  const openGenericModal = useGenericModalStore(
+    (state) => state.openGenericModal
+  );
   const showGenericConfirm = useGenericConfirmStore(
     (state) => state.showConfirm
   );
@@ -63,16 +64,14 @@ const AccountCard = ({ account, className }: IAccountCardProps) => {
       <ActionPopover
         popoverHeading={"Account Actions"}
         onEditActionClick={() => {
-          dispatch(
-            openGenericModal({
-              mode: "edit",
-              key: "account",
-              data: account,
-              dialogTitle: "Edit your account",
-              dialogDescription: "Use the form below to edit your account.",
-              entityId: account.id,
-            })
-          );
+          openGenericModal({
+            mode: "edit",
+            key: "account",
+            data: account,
+            dialogTitle: "Edit your account",
+            dialogDescription: "Use the form below to edit your account.",
+            entityId: account.id,
+          });
         }}
         onDeleteActionClick={() => handleDeleteAccount(account.id)}
       />

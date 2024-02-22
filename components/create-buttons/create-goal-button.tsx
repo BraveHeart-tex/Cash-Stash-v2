@@ -1,8 +1,7 @@
 "use client";
-import { useAppDispatch } from "@/redux/hooks";
 import { Button } from "@/components/ui/button";
-import { openGenericModal } from "@/lib/genericModalUtils";
 import { cn } from "@/lib/utils";
+import useGenericModalStore from "@/store/genericModalStore";
 import { FaBullseye } from "react-icons/fa";
 
 interface ICreateGoalButtonProps {
@@ -10,7 +9,10 @@ interface ICreateGoalButtonProps {
 }
 
 const CreateGoalButton = ({ className }: ICreateGoalButtonProps) => {
-  const dispatch = useAppDispatch();
+  const openGenericModal = useGenericModalStore(
+    (state) => state.openGenericModal
+  );
+
   return (
     <Button
       className={cn(
@@ -18,7 +20,14 @@ const CreateGoalButton = ({ className }: ICreateGoalButtonProps) => {
         className
       )}
       data-testid="create-goal-button"
-      onClick={() => openGenericModal("Goals", dispatch)}
+      onClick={() =>
+        openGenericModal({
+          mode: "create",
+          dialogTitle: "Create Goal",
+          dialogDescription: "Create a new goal by filling out the form below.",
+          key: "goal",
+        })
+      }
     >
       <FaBullseye size={18} />
       Create a goal

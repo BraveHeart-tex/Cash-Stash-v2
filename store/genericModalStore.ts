@@ -9,6 +9,9 @@ interface GenericModalState {
   key: "budget" | "goal" | "transaction" | "reminder" | "account" | "";
   props: Record<string, any>;
   data: Record<string, any>;
+  // eslint-disable-next-line no-unused-vars
+  openGenericModal: (params: Partial<GenericModalState>) => void;
+  closeGenericModal: () => void;
 }
 
 const useGenericModalStore = create<GenericModalState>((set) => ({
@@ -20,7 +23,7 @@ const useGenericModalStore = create<GenericModalState>((set) => ({
   key: "",
   props: {},
   data: {},
-  openGenericModal: (params: GenericModalState) => {
+  openGenericModal: (params: Partial<GenericModalState>) => {
     const { entityId, mode, dialogTitle, dialogDescription, key, props } =
       params;
 

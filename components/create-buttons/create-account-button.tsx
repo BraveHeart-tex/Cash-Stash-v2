@@ -1,8 +1,7 @@
 "use client";
-import { useAppDispatch } from "@/redux/hooks";
 import { Button } from "@/components/ui/button";
-import { openGenericModal } from "@/lib/genericModalUtils";
 import { cn } from "@/lib/utils";
+import useGenericModalStore from "@/store/genericModalStore";
 import { FaPiggyBank } from "react-icons/fa";
 
 interface ICreateAccountButtonProps {
@@ -10,7 +9,9 @@ interface ICreateAccountButtonProps {
 }
 
 const CreateAccountButton = ({ className }: ICreateAccountButtonProps) => {
-  const dispatch = useAppDispatch();
+  const openGenericModal = useGenericModalStore(
+    (state) => state.openGenericModal
+  );
   return (
     <Button
       className={cn(
@@ -18,7 +19,15 @@ const CreateAccountButton = ({ className }: ICreateAccountButtonProps) => {
         className
       )}
       data-testid="create-account-button"
-      onClick={() => openGenericModal("Accounts", dispatch)}
+      onClick={() =>
+        openGenericModal({
+          mode: "create",
+          key: "account",
+          dialogTitle: "Register Bank Account",
+          dialogDescription:
+            "Fill out the form below to register your bank account.",
+        })
+      }
     >
       <FaPiggyBank size={18} /> Create an account
     </Button>

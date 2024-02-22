@@ -20,11 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  areObjectsDeepEqual,
-  formHasChanged,
-  generateReadbleEnumLabels,
-} from "@/lib/utils";
+import { formHasChanged, generateReadbleEnumLabels } from "@/lib/utils";
 import { Account, AccountCategory } from "@prisma/client";
 import { registerBankAccount, updateBankAccount } from "@/actions/account";
 import { IValidatedResponse } from "@/actions/types";
@@ -34,9 +30,8 @@ import {
   showSuccessToast,
 } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
-import { useAppDispatch } from "@/redux/hooks";
-import { closeGenericModal } from "@/redux/features/genericModalSlice";
 import { useEffect } from "react";
+import useGenericModalStore from "@/store/genericModalStore";
 
 interface IAccountFormProps {
   data?: Account;
@@ -45,8 +40,10 @@ interface IAccountFormProps {
 const AccountForm: React.FC<IAccountFormProps> = ({
   data: accountToBeUpdated,
 }) => {
-  const dispatch = useAppDispatch();
   const router = useRouter();
+  const closeGenericModal = useGenericModalStore(
+    (state) => state.closeGenericModal
+  );
   const form = useForm<AccountSchemaType>({
     resolver: zodResolver(accountSchema),
   });
@@ -107,7 +104,7 @@ const AccountForm: React.FC<IAccountFormProps> = ({
         "Success!",
         successMessage[entityId ? "update" : "create"]
       );
-      dispatch(closeGenericModal());
+      closeGenericModal();
     }
   };
 

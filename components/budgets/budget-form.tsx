@@ -25,13 +25,12 @@ import {
   showDefaultToast,
   showErrorToast,
   showSuccessToast,
-} from "../ui/use-toast";
+} from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
-import { useAppDispatch } from "@/redux/hooks";
-import { closeGenericModal } from "@/redux/features/genericModalSlice";
 import { useEffect } from "react";
 import budgetSchema, { BudgetSchemaType } from "@/schemas/budget-schema";
 import { createBudget, updateBudget } from "@/actions/budget";
+import useGenericModalStore from "@/store/genericModalStore";
 
 interface IBudgetFormProps {
   data?: Budget;
@@ -40,7 +39,9 @@ interface IBudgetFormProps {
 const BudgetForm: React.FC<IBudgetFormProps> = ({
   data: budgetToBeUpdated,
 }) => {
-  const dispatch = useAppDispatch();
+  const closeGenericModal = useGenericModalStore(
+    (state) => state.closeGenericModal
+  );
   const router = useRouter();
   const form = useForm<BudgetSchemaType>({
     resolver: zodResolver(budgetSchema),
@@ -101,7 +102,7 @@ const BudgetForm: React.FC<IBudgetFormProps> = ({
         "Success!",
         successMessage[entityId ? "update" : "create"]
       );
-      dispatch(closeGenericModal());
+      closeGenericModal();
     }
   };
 

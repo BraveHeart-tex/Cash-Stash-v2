@@ -1,5 +1,4 @@
 "use client";
-import { useAppDispatch } from "@/redux/hooks";
 import {
   cn,
   formatMoney,
@@ -19,9 +18,9 @@ import { deleteTransactionById } from "@/actions/transaction";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Transaction } from "@prisma/client";
-import { openGenericModal } from "@/redux/features/genericModalSlice";
-import DataLabel from "../data-label";
+import DataLabel from "@/components/data-label";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
+import useGenericModalStore from "@/store/genericModalStore";
 
 interface ITransactionCardProps {
   transaction: Transaction;
@@ -31,8 +30,10 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
   const showGenericConfirm = useGenericConfirmStore(
     (state) => state.showConfirm
   );
+  const openGenericModal = useGenericModalStore(
+    (state) => state.openGenericModal
+  );
   const router = useRouter();
-  const dispatch = useAppDispatch();
 
   const handleDeleteClick = () => {
     showGenericConfirm({
@@ -101,17 +102,15 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
       <ActionPopover
         popoverHeading={"Transaction Actions"}
         onEditActionClick={() => {
-          dispatch(
-            openGenericModal({
-              dialogTitle: "Edit Transaction",
-              dialogDescription:
-                "Edit the transaction information by using the form below.",
-              entityId: transaction.id,
-              mode: "edit",
-              key: "transaction",
-              data: transaction,
-            })
-          );
+          openGenericModal({
+            dialogTitle: "Edit Transaction",
+            dialogDescription:
+              "Edit the transaction information by using the form below.",
+            entityId: transaction.id,
+            mode: "edit",
+            key: "transaction",
+            data: transaction,
+          });
         }}
         onDeleteActionClick={() => handleDeleteClick()}
         placementClasses={"mb-0 top-4 right-0"}

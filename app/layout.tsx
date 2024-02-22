@@ -1,6 +1,5 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
-import { Providers as ReduxProviders } from "@/redux/provider";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
 import GenericModal from "@/components/generic-modal";
@@ -70,17 +69,15 @@ export default async function RootLayout({ children }: ILayoutProps) {
   return (
     <html lang="en">
       <body className={InterFont.className}>
-        <ReduxProviders>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <Navbar user={user} />
-            <NavigationTabs />
-            {/* Padding bottom is the same as the height of the navigation bar */}
-            <main className="pb-16 lg:pb-0">{children}</main>
-            <GenericModal />
-            <GenericConfirmDialog />
-          </ThemeProvider>
-          <Toaster />
-        </ReduxProviders>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <Navbar user={user} />
+          <NavigationTabs />
+          {/* Padding bottom is the same as the height of the navigation bar */}
+          <main className="pb-16 lg:pb-0">{children}</main>
+          <GenericModal />
+          <GenericConfirmDialog />
+        </ThemeProvider>
+        <Toaster />
       </body>
     </html>
   );

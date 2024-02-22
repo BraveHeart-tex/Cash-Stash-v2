@@ -1,19 +1,20 @@
 "use client";
-import { useAppDispatch } from "@/redux/hooks";
 import { SerializedReminder } from "@/actions/types";
 import { Button } from "@/components/ui/button";
-import { openGenericModal } from "../redux/features/genericModalSlice";
 import { FaRegClock } from "react-icons/fa";
 import ReminderCard from "@/components/reminder-card";
 import AnimatePresenceClient from "@/components/animations/animate-presence";
 import MotionDiv from "@/components/animations/motion-div";
+import useGenericModalStore from "@/store/genericModalStore";
 
 const NotificationsAndReminders = ({
   reminders,
 }: {
   reminders: SerializedReminder[];
 }) => {
-  const dispatch = useAppDispatch();
+  const openGenericModal = useGenericModalStore(
+    (state) => state.openGenericModal
+  );
 
   const noRemindersState = () => (
     <article className="flex h-[500px] items-center justify-center">
@@ -25,18 +26,17 @@ const NotificationsAndReminders = ({
       >
         <p className="text-primary">No reminders were found.</p>
         <Button
+          disabled
           className="mt-3 text-md font-semibold flex items-center gap-[14px]"
           onClick={() => {
-            dispatch(
-              openGenericModal({
-                key: "reminder",
-                mode: "create",
-                dialogTitle: "Create Reminder",
-                dialogDescription:
-                  "You can create a reminder by using the form below.",
-                entityId: "",
-              })
-            );
+            openGenericModal({
+              key: "reminder",
+              mode: "create",
+              dialogTitle: "Create Reminder",
+              dialogDescription:
+                "You can create a reminder by using the form below.",
+              entityId: "",
+            });
           }}
         >
           <FaRegClock size={18} />
@@ -61,17 +61,16 @@ const NotificationsAndReminders = ({
       </div>
       <Button
         className="mt-3"
+        disabled
         onClick={() =>
-          dispatch(
-            openGenericModal({
-              key: "reminder",
-              mode: "create",
-              dialogTitle: "Create Reminder",
-              dialogDescription:
-                "You can create a reminder by using the form below.",
-              entityId: "",
-            })
-          )
+          openGenericModal({
+            key: "reminder",
+            mode: "create",
+            dialogTitle: "Create Reminder",
+            dialogDescription:
+              "You can create a reminder by using the form below.",
+            entityId: "",
+          })
         }
       >
         Create a reminder

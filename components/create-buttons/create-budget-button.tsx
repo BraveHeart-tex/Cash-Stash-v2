@@ -1,8 +1,7 @@
 "use client";
-import { useAppDispatch } from "@/redux/hooks";
 import { Button } from "@/components/ui/button";
-import { openGenericModal } from "@/lib/genericModalUtils";
 import { cn } from "@/lib/utils";
+import useGenericModalStore from "@/store/genericModalStore";
 import { FaMoneyBillAlt } from "react-icons/fa";
 
 interface ICreateBudgetButtonProps {
@@ -10,7 +9,9 @@ interface ICreateBudgetButtonProps {
 }
 
 const CreateBudgetButton = ({ className }: ICreateBudgetButtonProps) => {
-  const dispatch = useAppDispatch();
+  const openGenericModal = useGenericModalStore(
+    (state) => state.openGenericModal
+  );
   return (
     <Button
       className={cn(
@@ -18,7 +19,14 @@ const CreateBudgetButton = ({ className }: ICreateBudgetButtonProps) => {
         className
       )}
       data-testid="create-budget-button"
-      onClick={() => openGenericModal("Budgets", dispatch)}
+      onClick={() =>
+        openGenericModal({
+          mode: "create",
+          key: "budget",
+          dialogTitle: "Create a budget",
+          dialogDescription: "Fill out the form below to create a budget.",
+        })
+      }
     >
       <FaMoneyBillAlt size={18} /> Create a budget
     </Button>

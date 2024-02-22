@@ -2,9 +2,7 @@
 import { Progress } from "@/components/ui/progress";
 import ActionPopover from "@/components/action-popover";
 import { Badge } from "@/components/ui/badge";
-import { useAppDispatch } from "@/redux/hooks";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
-import { openGenericModal } from "@/redux/features/genericModalSlice";
 import { cn, formatMoney } from "@/lib/utils";
 import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
 import { deleteGeneric } from "@/actions/generic";
@@ -12,6 +10,7 @@ import { Budget } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
+import useGenericModalStore from "@/store/genericModalStore";
 
 interface IBudgetCardProps {
   budget: Budget;
@@ -21,7 +20,9 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
   const showGenericConfirm = useGenericConfirmStore(
     (state) => state.showConfirm
   );
-  const dispatch = useAppDispatch();
+  const openGenericModal = useGenericModalStore(
+    (state) => state.openGenericModal
+  );
   const router = useRouter();
 
   const handleDeleteClick = (id: string) => {
@@ -82,17 +83,15 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
           <ActionPopover
             popoverHeading={"Budget Actions"}
             onEditActionClick={() =>
-              dispatch(
-                openGenericModal({
-                  dialogTitle: "Edit Budget",
-                  dialogDescription:
-                    "Edit your budget information by using the form below.",
-                  entityId: budget.id,
-                  mode: "edit",
-                  key: "budget",
-                  data: budget,
-                })
-              )
+              openGenericModal({
+                dialogTitle: "Edit Budget",
+                dialogDescription:
+                  "Edit your budget information by using the form below.",
+                entityId: budget.id,
+                mode: "edit",
+                key: "budget",
+                data: budget,
+              })
             }
             onDeleteActionClick={() => handleDeleteClick(budget.id)}
             isAbsolute={false}

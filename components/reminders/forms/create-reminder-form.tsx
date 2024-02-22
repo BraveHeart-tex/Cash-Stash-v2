@@ -1,7 +1,6 @@
 "use client";
 import { createReminder } from "@/actions";
-import { closeGenericModal } from "@/redux/features/genericModalSlice";
-import { useAppDispatch } from "@/redux/hooks";
+
 import DatePicker from "@/components/date-picker";
 import FormInput from "@/components/form-input";
 import FormSelect from "@/components/form-select";
@@ -10,14 +9,17 @@ import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import CreateReminderSchema, {
   CreateReminderSchemaType,
 } from "@/schemas/CreateReminderSchema";
+import useGenericModalStore from "@/store/genericModalStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 
 const CreateReminderForm = () => {
+  const closeGenericModal = useGenericModalStore(
+    (state) => state.closeGenericModal
+  );
   let [isPending, startTransition] = useTransition();
-  const dispatch = useAppDispatch();
   const router = useRouter();
   const {
     register,
@@ -47,7 +49,7 @@ const CreateReminderForm = () => {
           "Reminder created.",
           "Your reminder has been created."
         );
-        dispatch(closeGenericModal());
+        closeGenericModal();
       }
     });
   };
