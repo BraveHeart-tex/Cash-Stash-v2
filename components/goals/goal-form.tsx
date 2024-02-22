@@ -13,13 +13,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Goal } from "@prisma/client";
 import { IValidatedResponse } from "@/actions/types";
-import { showErrorToast, showSuccessToast } from "../ui/use-toast";
+import {
+  showDefaultToast,
+  showErrorToast,
+  showSuccessToast,
+} from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/redux/hooks";
 import { closeGenericModal } from "@/redux/features/genericModalSlice";
 import { useEffect } from "react";
 import goalSchema, { GoalSchemaType } from "@/schemas/goal-schema";
 import { createGoal, updateGoal } from "@/actions/goal";
+import { formHasChanged } from "@/lib/utils";
 
 interface IGoalFormProps {
   data?: Goal;
@@ -48,6 +53,14 @@ const GoalForm: React.FC<IGoalFormProps> = ({ data: goalToBeUpdated }) => {
   }, [goalToBeUpdated]);
 
   const handleFormSubmit = async (values: GoalSchemaType) => {
+    if (entityId && formHasChanged(goalToBeUpdated, values)) {
+      showDefaultToast(
+        "No changes detected.",
+        "You haven't made any changes to your goal."
+      );
+      return;
+    }
+
     let result;
     if (entityId) {
       result = await updateGoal(entityId, values);
@@ -84,6 +97,14 @@ const GoalForm: React.FC<IGoalFormProps> = ({ data: goalToBeUpdated }) => {
     }
   };
 
+  const renderSubmitButtonContent = () => {
+    if (form.formState.isSubmitting) {
+      return "Submitting...";
+    }
+
+    return entityId ? "Update" : "Create";
+  };
+
   return (
     <Form {...form}>
       <form
@@ -110,7 +131,12 @@ const GoalForm: React.FC<IGoalFormProps> = ({ data: goalToBeUpdated }) => {
             <FormItem>
               <FormLabel>Goal Amount</FormLabel>
               <FormControl>
-                <Input type="number" step="0.01" {...field} />
+                <Input
+                  type="number"
+                  placeholder="e.g. 1000"
+                  step="0.01"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -123,14 +149,23 @@ const GoalForm: React.FC<IGoalFormProps> = ({ data: goalToBeUpdated }) => {
             <FormItem>
               <FormLabel>Current Amount</FormLabel>
               <FormControl>
-                <Input type="number" step="0.01" {...field} />
+                <Input
+                  type="number"
+                  placeholder="e.g. 200"
+                  step="0.01"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button className="w-full" type="submit">
-          {!entityId ? "Create" : "Update"}
+        <Button
+          className="w-full"
+          type="submit"
+          disabled={form.formState.isSubmitting}
+        >
+          {renderSubmitButtonContent()}
         </Button>
       </form>
     </Form>

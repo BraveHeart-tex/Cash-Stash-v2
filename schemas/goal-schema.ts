@@ -3,9 +3,16 @@ import { z } from "zod";
 const goalSchema = z
   .object({
     name: z.string().min(1, "Goal name is required").max(50),
-    goalAmount: z.coerce.number().min(1, "Goal amount must be greater than 0"),
+    goalAmount: z.coerce
+      .number({
+        invalid_type_error: "Goal amount must be a number",
+        required_error: "Goal amount is required",
+      })
+      .min(1, "Goal amount must be greater than 0"),
     currentAmount: z.coerce
-      .number()
+      .number({
+        invalid_type_error: "Current amount must be a number",
+      })
       .min(0, "Current amount cannot be less than 0"),
     progress: z.number().default(0),
   })
