@@ -74,8 +74,8 @@ const AccountCard = ({ account, className }: IAccountCardProps) => {
               mode: "edit",
               key: "account",
               data: account,
-              dialogTitle: "Edit an account",
-              dialogDescription: "Fill out the form below to edit an account.",
+              dialogTitle: "Edit your account",
+              dialogDescription: "Use the form below to edit your account.",
               entityId: account.id,
             })
           );
