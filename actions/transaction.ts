@@ -153,39 +153,41 @@ export const updateTransaction = async (
   }
 };
 
-// TODO: re-write as a db transaction
-export const deleteTransactionById = async (transactionId: string) => {
+export const deleteTransactionById = async (
+  transactionToDelete: Transaction
+) => {
   try {
-    if (!transactionId) {
-      throw new Error("Transaction ID not found.");
-    }
-
-    const deletedTransaction = await prisma.transaction.delete({
+    const deletedTransaction = prisma.transaction.delete({
       where: {
-        id: transactionId,
+        id: transactionToDelete.id,
       },
     });
 
-    if (!deletedTransaction) {
-      throw new Error("Error deleting transaction.");
-    }
-
-    await prisma.account.update({
+    const updatedAccount = prisma.account.update({
       where: {
-        id: deletedTransaction.accountId,
+        id: transactionToDelete.accountId,
       },
       data: {
         balance: {
-          decrement: deletedTransaction.amount,
+          decrement: transactionToDelete.amount,
         },
       },
     });
 
+    // eslint-disable-next-line no-unused-vars
+    const [_, deleteTransactionResult] = await prisma.$transaction([
+      updatedAccount,
+      deletedTransaction,
+    ]);
+
     return {
-      transaction: deletedTransaction,
+      transaction: deleteTransactionResult,
     };
   } catch (error) {
-    return { error: error instanceof Error ? error.message : error };
+    return {
+      error:
+        "We encountered a problem while deleting the transaction. Please try again later.",
+    };
   }
 };
 

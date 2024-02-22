@@ -8,7 +8,6 @@ import {
 } from "@/lib/utils";
 import ActionPopover from "@/components/action-popover";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
-import { showGenericConfirm } from "@/redux/features/genericConfirmSlice";
 import {
   Card,
   CardContent,
@@ -17,35 +16,42 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { deleteTransactionById } from "@/actions/transaction";
-import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Transaction } from "@prisma/client";
 import { openGenericModal } from "@/redux/features/genericModalSlice";
 import DataLabel from "../data-label";
+import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 
 interface ITransactionCardProps {
   transaction: Transaction;
 }
 
 const TransactionCard = ({ transaction }: ITransactionCardProps) => {
+  const showGenericConfirm = useGenericConfirmStore(
+    (state) => state.showConfirm
+  );
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const handleDeleteCallback = (
-    result: Awaited<ReturnType<typeof deleteTransactionById>>,
-    cleanUp: ActionCreatorWithoutPayload<"genericConfirm/cleanUp">
-  ) => {
-    if (result?.error) {
-      showErrorToast("An error occurred.", result.error as string);
-    } else {
-      router.refresh();
-      showSuccessToast(
-        "Transaction deleted.",
-        "Selected transaction has been deleted."
-      );
-      dispatch(cleanUp());
-    }
+  const handleDeleteClick = () => {
+    showGenericConfirm({
+      title: "Delete Transaction",
+      message: "Are you sure you want to delete this transaction?",
+      primaryActionLabel: "Delete",
+      onConfirm: async () => {
+        const response = await deleteTransactionById(transaction);
+        if (response?.error) {
+          showErrorToast("An error occurred.", response.error);
+        } else {
+          router.refresh();
+          showSuccessToast(
+            "Transaction deleted.",
+            "Selected transaction has been deleted."
+          );
+        }
+      },
+    });
   };
 
   const isIncome = transaction.amount > 0;
@@ -107,17 +113,7 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
             })
           );
         }}
-        onDeleteActionClick={() => {
-          dispatch(
-            showGenericConfirm({
-              title: "Delete Transaction",
-              message: "Are you sure you want to delete this transaction?",
-              primaryActionLabel: "Delete",
-              primaryAction: async () => deleteTransactionById(transaction.id),
-              resolveCallback: handleDeleteCallback,
-            })
-          );
-        }}
+        onDeleteActionClick={() => handleDeleteClick()}
         placementClasses={"mb-0 top-4 right-0"}
         isAbsolute={true}
       />
