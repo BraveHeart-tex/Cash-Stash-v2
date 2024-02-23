@@ -17,13 +17,13 @@ import {
 import { deleteTransactionById } from "@/actions/transaction";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Transaction } from "@prisma/client";
 import DataLabel from "@/components/data-label";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import useGenericModalStore from "@/store/genericModalStore";
+import { TransactionWithAccount } from "@/actions/types";
 
 interface ITransactionCardProps {
-  transaction: Transaction;
+  transaction: TransactionWithAccount;
 }
 
 const TransactionCard = ({ transaction }: ITransactionCardProps) => {
@@ -83,8 +83,10 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
               label={"Category"}
               value={generateReadbleEnumValue({ key: transaction.category })}
             />
-            {/* TODO: */}
-            <DataLabel label={"Account Name"} value={""} />
+            <DataLabel
+              label={"Account Name"}
+              value={transaction.account.name}
+            />
 
             <DataLabel
               label="Amount"

@@ -20,6 +20,10 @@ interface IPaginatedActionParams {
   query?: string;
 }
 
+export interface TransactionWithAccount extends Transaction {
+  account: Partial<Account>;
+}
+
 export interface IValidatedResponse<T> {
   data?: T;
   error?: string;
