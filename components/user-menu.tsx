@@ -11,12 +11,10 @@ import { Button } from "@/components/ui/button";
 import useAuthStore from "@/store/auth/authStore";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Label } from "@/components/ui/label";
-import { useMediaQuery } from "usehooks-ts";
 
 const UserMenu = () => {
   let [isPending, startTransition] = useTransition();
   const user = useAuthStore((state) => state.user);
-  const isMobile = useMediaQuery("(max-width: 768px)");
 
   const avatarPlaceholder = user?.name ? user.name[0] : "";
 
@@ -44,12 +42,10 @@ const UserMenu = () => {
         </div>
         <hr />
 
-        {isMobile && (
-          <div>
-            <Label>Color Mode</Label>
-            <ModeToggle />
-          </div>
-        )}
+        <div className="block lg:hidden">
+          <Label>Color Mode</Label>
+          <ModeToggle layoutId="active-colorTheme-pill-userMenu" />
+        </div>
 
         <Button
           type="button"

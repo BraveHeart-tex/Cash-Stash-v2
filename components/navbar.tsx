@@ -44,7 +44,7 @@ const Navbar = ({ user }: { user: User | null }) => {
           </Link>
           <div className="flex justify-center items-center gap-4 ml-auto lg:ml-0">
             <div className="lg:flex items-center hidden gap-1">
-              <ModeToggle />
+              <ModeToggle layoutId="active-colorTheme-pill" />
             </div>
             <UserMenu />
           </div>

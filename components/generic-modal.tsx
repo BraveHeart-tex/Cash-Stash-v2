@@ -84,9 +84,7 @@ const GenericModal = () => {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{dialogTitle}</DialogTitle>
-          <DialogDescription>
-            <p>{dialogDescription}</p>
-          </DialogDescription>
+          <DialogDescription>{dialogDescription}</DialogDescription>
         </DialogHeader>
         {dialogContentToBeRendered}
         <DialogFooter>
