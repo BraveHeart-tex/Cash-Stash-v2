@@ -1,5 +1,5 @@
 "use client";
-import { InsightsData } from "@/actions/types";
+import { InsightsData, TransactionWithAccount } from "@/actions/types";
 import AccountSummaries from "@/components/account-summaries";
 import BudgetStatus from "@/components/budget-status";
 import FinancialInsights from "@/components/financial-insights";
@@ -11,12 +11,12 @@ import { MonthlyData } from "@/components/reports/report-table";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { SerializedReminder } from "@/actions/types";
 import { motion } from "framer-motion";
-import { Budget, Goal, Account, Transaction } from "@prisma/client";
+import { Budget, Goal, Account } from "@prisma/client";
 
 interface IDashboardProps {
   monthlyTransactionsData: MonthlyData["monthlyTransactionsData"];
   insightsData: InsightsData;
-  transactions: Transaction[];
+  transactions: TransactionWithAccount[];
   accounts: Account[];
   budgets: Budget[];
   goals: Goal[];
