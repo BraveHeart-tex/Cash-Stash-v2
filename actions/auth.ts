@@ -1,6 +1,6 @@
 "use server";
 import prisma, { lucia } from "@/lib/db";
-import { getCurrentUser, getUser } from "@/lib/session";
+import { getUser } from "@/lib/session";
 import { Argon2id } from "oslo/password";
 import loginSchema, { LoginSchemaType } from "@/schemas/login-schema";
 import registerSchema, { RegisterSchemaType } from "@/schemas/register-schema";
@@ -148,22 +148,4 @@ export const logout = async () => {
     sessionCookie.attributes
   );
   return redirect("/login");
-};
-
-export const getUserSession = async () => {
-  const token = cookies().get("token")?.value;
-
-  if (!token) {
-    return { error: "No token found." };
-  }
-
-  const user = await getCurrentUser(cookies().get("token")?.value!);
-
-  if (!user) {
-    return { error: "No user found." };
-  }
-
-  return {
-    user,
-  };
 };
