@@ -9,7 +9,6 @@ import {
   Reminder,
 } from "@prisma/client";
 import { IconType } from "react-icons/lib";
-import { IconType } from "react-icons/lib";
 
 interface IPaginatedResponse {
   hasNextPage: boolean;

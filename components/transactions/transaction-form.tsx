@@ -27,7 +27,7 @@ import { useEffect, useMemo, useState } from "react";
 import transactionSchema, {
   TransactionSchemaType,
 } from "@/schemas/transaction-schema";
-import { getAccountsByCurrentUser } from "@/actions/account";
+import { getPaginatedAccounts } from "@/actions/account";
 import { createTransaction, updateTransaction } from "@/actions/transaction";
 import useGenericModalStore from "@/store/genericModalStore";
 
@@ -57,9 +57,15 @@ const TransactionForm: React.FC<ITransactionFormProps> = ({
 
   useEffect(() => {
     const fetchAccounts = async () => {
-      const response = await getAccountsByCurrentUser();
-      if (response.error) {
-        return showErrorToast("An error occurred.", response.error);
+      const response = await getPaginatedAccounts({
+        pageNumber: 1,
+      });
+
+      if (response.accounts.length === 0) {
+        return showErrorToast(
+          "No accounts found.",
+          "Please create an account first to create a transaction."
+        );
       }
 
       setAccounts(response.accounts);

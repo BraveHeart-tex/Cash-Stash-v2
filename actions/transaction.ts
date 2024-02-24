@@ -1,4 +1,9 @@
 "use server";
+import redis, {
+  getAccountKey,
+  getTransactionKey,
+  invalidateCachedPaginatedAccounts,
+} from "@/lib/redis";
 import prisma from "@/lib/db";
 import { getUser } from "@/lib/session";
 import { processZodError } from "@/lib/utils";
@@ -8,7 +13,7 @@ import transactionSchema, {
 import { Prisma, Transaction } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
-import { IValidatedResponse } from "./types";
+import { IValidatedResponse } from "@/actions/types";
 
 export const createTransaction = async (
   values: TransactionSchemaType
@@ -56,6 +61,12 @@ export const createTransaction = async (
     const [_, transaction] = await prisma.$transaction([
       updatedAccount,
       newTransaction,
+    ]);
+
+    await Promise.all([
+      invalidateCachedPaginatedAccounts(),
+      redis.hset(getTransactionKey(transaction.id), newTransaction),
+      redis.hset(getAccountKey(validatedData.accountId), updatedAccount),
     ]);
 
     return {
@@ -179,6 +190,9 @@ export const deleteTransactionById = async (
       updatedAccount,
       deletedTransaction,
     ]);
+
+    // invalidate the cache
+    await invalidateCachedPaginatedAccounts();
 
     return {
       transaction: deleteTransactionResult,

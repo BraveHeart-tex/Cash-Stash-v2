@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import useGenericModalStore from "@/store/genericModalStore";
+import { deleteAccount } from "@/actions/account";
 
 interface IAccountCardProps {
   account: Account;
@@ -32,13 +33,10 @@ const AccountCard = ({ account, className }: IAccountCardProps) => {
       message: "Are you sure you want to delete this account?",
       primaryActionLabel: "Delete",
       async onConfirm() {
-        const result = await deleteGeneric<Account>({
-          tableName: "account",
-          whereCondition: { id },
-        });
+        const result = await deleteAccount(id);
 
         if (result?.error) {
-          showErrorToast("An error occurred.", result.error as string);
+          showErrorToast("An error occurred.", result.error);
         } else {
           router.refresh();
           showSuccessToast(

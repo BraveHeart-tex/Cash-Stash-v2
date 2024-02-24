@@ -12,7 +12,12 @@ import {
   IValidatedResponse,
   IGetPaginatedAccountsParams,
   IGetPaginatedAccountsResponse,
-} from "./types";
+} from "@/actions/types";
+import redis, {
+  getAccountKey,
+  getPaginatedAccountsKey,
+  invalidateCachedPaginatedAccounts,
+} from "@/lib/redis";
 
 export const registerBankAccount = async ({
   balance,
@@ -38,6 +43,11 @@ export const registerBankAccount = async ({
     if (!createdAccount) {
       return { error: "Error creating account.", fieldErrors: [] };
     }
+
+    await Promise.all([
+      invalidateCachedPaginatedAccounts(),
+      redis.hset(getAccountKey(createdAccount.id), createdAccount),
+    ]);
 
     return {
       data: createdAccount,
@@ -87,6 +97,12 @@ export const updateBankAccount = async ({
       };
     }
 
+    await Promise.all([
+      invalidateCachedPaginatedAccounts(),
+      redis.del(getAccountKey(accountId)),
+      redis.hset(getAccountKey(updatedAccount.id), updatedAccount),
+    ]);
+
     return {
       data: updatedAccount,
       fieldErrors: [],
@@ -103,6 +119,7 @@ export const updateBankAccount = async ({
     };
   }
 };
+
 export const getPaginatedAccounts = async ({
   pageNumber,
   query,
@@ -140,6 +157,32 @@ export const getPaginatedAccounts = async ({
 
   const categoryQuery = category ? { category } : {};
 
+  const cacheKey = getPaginatedAccountsKey({
+    userId: user.id,
+    pageNumber,
+    query,
+    category,
+    sortBy,
+    sortDirection,
+    orderByCondition: orderByCondition?.orderBy
+      ? JSON.stringify(orderByCondition)
+      : "",
+  });
+
+  const cachedData = await redis.get(cacheKey);
+  if (cachedData) {
+    console.info("CACHE HIT");
+    const parsedData = JSON.parse(cachedData);
+    return {
+      accounts: parsedData.accounts,
+      hasNextPage: parsedData.totalCount > skipAmount + PAGE_SIZE,
+      hasPreviousPage: pageNumber > 1,
+      totalPages: Math.ceil(parsedData.totalCount / PAGE_SIZE),
+      currentPage: pageNumber,
+    };
+  }
+  console.info("CACHE MISS");
+
   const [accounts, totalCount] = await Promise.all([
     prisma.account.findMany({
       skip: skipAmount,
@@ -174,6 +217,13 @@ export const getPaginatedAccounts = async ({
     };
   }
 
+  await redis.set(
+    cacheKey,
+    JSON.stringify({ accounts, totalCount }),
+    "EX",
+    5 * 60
+  );
+
   return {
     accounts,
     hasNextPage: totalCount > skipAmount + PAGE_SIZE,
@@ -183,7 +233,7 @@ export const getPaginatedAccounts = async ({
   };
 };
 
-export const getAccountsByCurrentUser = async () => {
+export const deleteAccount = async (accountId: string) => {
   const { user } = await getUser();
 
   if (!user) {
@@ -191,17 +241,23 @@ export const getAccountsByCurrentUser = async () => {
   }
 
   try {
-    const accounts = await prisma.account.findMany({
+    const deletedAccount = await prisma.account.delete({
       where: {
-        userId: user.id,
+        id: accountId,
       },
     });
 
-    return { accounts, error: null };
+    if (!deletedAccount) {
+      return { error: "An error occurred while deleting the account." };
+    }
+
+    await Promise.all([
+      invalidateCachedPaginatedAccounts(),
+      redis.del(getAccountKey(accountId)),
+    ]);
+
+    return { data: deletedAccount };
   } catch (error) {
-    return {
-      error: "An error occurred while getting the accounts.",
-      accounts: [],
-    };
+    return { error: "An error occurred while deleting the account." };
   }
 };
