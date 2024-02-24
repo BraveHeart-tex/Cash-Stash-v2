@@ -1,6 +1,6 @@
 "use server";
-import prisma from "@/lib/db";
-import { getUser } from "@/lib/session";
+import prisma from "@/lib/data/db";
+import { getUser } from "@/lib/auth/session";
 import { EditReminderSchema } from "@/schemas";
 import { MONTHS_OF_THE_YEAR } from "@/lib/constants";
 import { EditReminderSchemaType } from "@/schemas/EditReminderSchema";

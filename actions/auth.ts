@@ -1,6 +1,6 @@
 "use server";
-import prisma, { lucia } from "@/lib/db";
-import { getUser } from "@/lib/session";
+import prisma, { lucia } from "@/lib/data/db";
+import { getUser } from "@/lib/auth/session";
 import { Argon2id } from "oslo/password";
 import loginSchema, { LoginSchemaType } from "@/schemas/login-schema";
 import registerSchema, { RegisterSchemaType } from "@/schemas/register-schema";

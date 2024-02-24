@@ -1,7 +1,28 @@
-import Redis from "ioredis";
+import { redis } from ".";
 import { CACHE_PREFIXES } from "@/lib/constants";
+import { Budget, BudgetCategory } from "@prisma/client";
 
-const redis = new Redis(process.env.REDIS_CONNECTION_STRING!);
+interface Entity {
+  [key: string]: any;
+}
+
+const mapRedisHashToEntity = <T extends Entity>(
+  hash: Record<string, string> | null,
+  mappingConfig: { [K in keyof T]: (value: string) => T[K] }
+): T | null => {
+  if (!hash) {
+    return null;
+  }
+
+  const mappedEntity: Partial<T> = {};
+  for (const [field, mapper] of Object.entries(mappingConfig)) {
+    if (hash[field] !== undefined) {
+      mappedEntity[field as keyof T] = mapper(hash[field]);
+    }
+  }
+
+  return mappedEntity as T;
+};
 
 export const getAccountKey = (accountId: string) =>
   `${CACHE_PREFIXES.ACCOUNT}:${accountId}`;
@@ -84,24 +105,20 @@ export const invalidateKeysByPrefix = async (prefix: string) => {
   await redis.del(keysToDelete);
 };
 
-redis.on("connect", () => {
-  console.log("Redis client connected.");
-});
+export const mapRedisHashToBudget = (
+  budgetFromCache: Record<string, string> | null
+): Budget | null => {
+  const mappingConfig = {
+    id: (value: string) => value,
+    name: (value: string) => value,
+    budgetAmount: (value: string) => Number(value),
+    spentAmount: (value: string) => Number(value),
+    userId: (value: string) => value,
+    progress: (value: string) => Number(value),
+    category: (value: string) => value as BudgetCategory,
+    createdAt: (value: string) => new Date(value),
+    updatedAt: (value: string) => new Date(value),
+  };
 
-redis.on("ready", () => {
-  console.log("Redis client is ready.");
-});
-
-redis.on("error", (error) => {
-  console.error("Redis client error", error.message);
-});
-
-redis.on("end", () => {
-  console.log("Redis client disconnected.");
-});
-
-process.on("SIGINT", () => {
-  redis.quit();
-});
-
-export default redis;
+  return mapRedisHashToEntity<Budget>(budgetFromCache, mappingConfig);
+};

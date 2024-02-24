@@ -1,7 +1,7 @@
 "use server";
 
 import { BudgetCategory, AccountCategory } from "@prisma/client";
-import prisma from "../lib/db";
+import prisma from "../lib/data/db";
 import { faker } from "@faker-js/faker";
 
 const createAccount = async (userId: string) => {

@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { getUser } from "@/lib/session";
+import { getUser } from "@/lib/auth/session";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 

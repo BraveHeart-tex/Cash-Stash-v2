@@ -1,8 +1,7 @@
 "use server";
-import prisma from "@/lib/db";
-import { getUser } from "@/lib/session";
+import prisma from "@/lib/data/db";
+import { getUser } from "@/lib/auth/session";
 import { processZodError, validateEnumValue } from "@/lib/utils";
-import { CreateBudgetSchemaType } from "@/schemas/CreateBudgetSchema";
 import budgetSchema, { BudgetSchemaType } from "@/schemas/budget-schema";
 import { Budget, BudgetCategory } from "@prisma/client";
 import { redirect } from "next/navigation";
@@ -12,15 +11,17 @@ import {
   IGetPaginatedBudgetsParams,
   IGetPaginatedBudgetsResponse,
 } from "@/actions/types";
-import redis, {
+import redis from "@/lib/redis";
+import {
   getBudgetKey,
   getPaginatedBudgetsKey,
   invalidateKeysByPrefix,
-} from "@/lib/redis";
+  mapRedisHashToBudget,
+} from "@/lib/redis/redisUtils";
 import { CACHE_PREFIXES } from "@/lib/constants";
 
 export const createBudget = async (
-  data: CreateBudgetSchemaType
+  data: BudgetSchemaType
 ): Promise<IValidatedResponse<Budget>> => {
   const { user } = await getUser();
   if (!user) {
@@ -55,11 +56,16 @@ export const createBudget = async (
       fieldErrors: [],
     };
   } catch (error) {
+    console.error(error);
     if (error instanceof ZodError) {
       return processZodError(error);
     }
 
-    return { error: "An error occurred.", fieldErrors: [] };
+    return {
+      error:
+        "There was a problem while creating your budget. Please try again later.",
+      fieldErrors: [],
+    };
   }
 };
 
@@ -72,10 +78,10 @@ export const updateBudget = async (
   const budgetFromCache = await redis.hgetall(getBudgetKey(budgetId));
 
   if (budgetFromCache) {
-    console.log("budgetFromCache", budgetFromCache);
-    // TODO: Fix this
-    budgetToBeUpdated = JSON.parse(budgetFromCache);
+    console.log("UPDATE Budget CACHE HIT");
+    budgetToBeUpdated = mapRedisHashToBudget(budgetFromCache);
   } else {
+    console.log("UPDATE Budget CACHE MISS");
     budgetToBeUpdated = await prisma.budget.findUnique({
       where: { id: budgetId },
     });
@@ -161,7 +167,6 @@ export const getPaginatedBudgets = async ({
   const cachedData = await redis.get(cacheKey);
   if (cachedData) {
     console.log("Budgets CACHE HIT");
-
     return {
       budgets: JSON.parse(cachedData).budgets,
       hasNextPage: JSON.parse(cachedData).totalCount > skipAmount + PAGE_SIZE,
@@ -170,6 +175,7 @@ export const getPaginatedBudgets = async ({
       currentPage: pageNumber,
     };
   }
+  console.log("Budgets CACHE MISS");
 
   const [budgets, totalCount] = await Promise.all([
     prisma.budget.findMany({
@@ -214,4 +220,37 @@ export const getPaginatedBudgets = async ({
     totalPages: Math.ceil(totalCount / PAGE_SIZE),
     currentPage: pageNumber,
   };
+};
+
+export const deleteBudget = async (id: string) => {
+  const { user } = await getUser();
+  if (!user) {
+    redirect("/login");
+  }
+
+  try {
+    const response = await prisma.budget.delete({
+      where: { id },
+    });
+
+    if (!response) {
+      return {
+        error: "We encountered a problem while deleting the budget.",
+      };
+    }
+
+    await Promise.all([
+      invalidateKeysByPrefix(CACHE_PREFIXES.PAGINATED_BUDGETS),
+      redis.del(getBudgetKey(id)),
+    ]);
+
+    return {
+      data: response,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      error: "We encountered a problem while deleting the budget.",
+    };
+  }
 };

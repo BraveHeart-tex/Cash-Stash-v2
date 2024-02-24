@@ -8,7 +8,7 @@ import { getGenericListByCurrentUser } from "@/actions/generic";
 import { SerializedReminder } from "@/actions/types";
 import DashboardSkeleton from "@/components/dashboard-skeleton";
 import { Suspense } from "react";
-import { getUser } from "@/lib/session";
+import { getUser } from "@/lib/auth/session";
 import { redirect } from "next/navigation";
 
 export default async function Home() {

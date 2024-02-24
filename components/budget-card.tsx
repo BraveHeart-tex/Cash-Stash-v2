@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import useGenericModalStore from "@/store/genericModalStore";
+import { deleteBudget } from "@/actions/budget";
 
 interface IBudgetCardProps {
   budget: Budget;
@@ -34,13 +35,10 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
       message: "Are you sure you want to delete this budget?",
       primaryActionLabel: "Delete",
       onConfirm: async () => {
-        const response = await deleteGeneric<Budget>({
-          tableName: "budget",
-          whereCondition: { id },
-        });
+        const response = await deleteBudget(id);
 
         if (response?.error) {
-          showErrorToast("An error occurred.", response.error as string);
+          showErrorToast("An error occurred.", response.error);
         } else {
           router.refresh();
           showSuccessToast(

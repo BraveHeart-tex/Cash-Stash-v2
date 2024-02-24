@@ -7,10 +7,10 @@ import {
   TableName,
   UpdateGenericInput,
 } from "./types";
-import prisma from "@/lib/db";
+import prisma from "@/lib/data/db";
 import { Prisma } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
-import { getUser } from "@/lib/session";
+import { getUser } from "@/lib/auth/session";
 import { redirect } from "next/navigation";
 
 const TABLE_MAP: TableMap = {

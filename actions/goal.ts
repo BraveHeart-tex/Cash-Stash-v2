@@ -1,5 +1,5 @@
 "use server";
-import { getUser } from "@/lib/session";
+import { getUser } from "@/lib/auth/session";
 import { processZodError } from "@/lib/utils";
 import goalSchema, { GoalSchemaType } from "@/schemas/goal-schema";
 import { Goal } from "@prisma/client";
@@ -10,7 +10,7 @@ import {
   IGetPaginatedGoalsParams,
   IGetPaginatedGoalsResponse,
 } from "./types";
-import prisma from "@/lib/db";
+import prisma from "@/lib/data/db";
 
 export const createGoal = async (
   values: GoalSchemaType

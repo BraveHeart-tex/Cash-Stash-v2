@@ -1,7 +1,6 @@
 import { cache } from "react";
 import { cookies } from "next/headers";
-
-import { lucia } from "./db";
+import { lucia } from "@/lib/data/db";
 
 export const getUser = cache(async () => {
   const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;

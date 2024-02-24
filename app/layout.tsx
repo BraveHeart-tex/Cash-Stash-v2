@@ -6,7 +6,7 @@ import GenericModal from "@/components/generic-modal";
 import NavigationTabs from "@/components/navigation-tabs";
 import { Metadata, Viewport } from "next";
 import Navbar from "@/components/navbar";
-import { getUser } from "@/lib/session";
+import { getUser } from "@/lib/auth/session";
 import GenericConfirmDialog from "./generic-confirm-dialog";
 
 const InterFont = Inter({

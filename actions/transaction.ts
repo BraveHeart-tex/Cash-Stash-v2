@@ -1,11 +1,12 @@
 "use server";
-import redis, {
+import redis from "@/lib/redis";
+import {
   getAccountKey,
   getTransactionKey,
   invalidateKeysByPrefix,
-} from "@/lib/redis";
-import prisma from "@/lib/db";
-import { getUser } from "@/lib/session";
+} from "@/lib/redis/redisUtils";
+import prisma from "@/lib/data/db";
+import { getUser } from "@/lib/auth/session";
 import { processZodError } from "@/lib/utils";
 import transactionSchema, {
   TransactionSchemaType,

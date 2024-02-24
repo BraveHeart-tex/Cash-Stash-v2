@@ -1,6 +1,6 @@
 "use server";
-import prisma from "@/lib/db";
-import { getUser } from "@/lib/session";
+import prisma from "@/lib/data/db";
+import { getUser } from "@/lib/auth/session";
 import { processZodError, validateEnumValue } from "@/lib/utils";
 import { accountSchema } from "@/schemas";
 import { AccountSchemaType } from "@/schemas/CreateUserAccountSchema";
@@ -12,11 +12,12 @@ import {
   IGetPaginatedAccountsParams,
   IGetPaginatedAccountsResponse,
 } from "@/actions/types";
-import redis, {
+import redis from "@/lib/redis";
+import {
   getAccountKey,
   getPaginatedAccountsKey,
   invalidateKeysByPrefix,
-} from "@/lib/redis";
+} from "@/lib/redis/redisUtils";
 import { CACHE_PREFIXES } from "@/lib/constants";
 
 export const registerBankAccount = async ({
