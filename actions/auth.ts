@@ -6,10 +6,23 @@ import loginSchema, { LoginSchemaType } from "@/schemas/login-schema";
 import registerSchema, { RegisterSchemaType } from "@/schemas/register-schema";
 import { ZodError } from "zod";
 import { processZodError } from "@/lib/utils";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { checkRateLimit } from "@/lib/redis/redisUtils";
+import { MAX_LOGIN_REQUESTS_PER_MINUTE } from "@/lib/constants";
 
 export const login = async (values: LoginSchemaType) => {
+  const header = headers();
+  const ipAdress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(",")[0];
+  const count = await checkRateLimit(ipAdress);
+  if (count > MAX_LOGIN_REQUESTS_PER_MINUTE) {
+    return {
+      error:
+        "You have made too many requests. Please wait a minute before trying again.",
+      fieldErrors: [],
+    };
+  }
+
   try {
     const data = loginSchema.parse(values);
 

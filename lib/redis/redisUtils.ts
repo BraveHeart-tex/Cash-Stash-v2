@@ -39,6 +39,10 @@ export const getGoalKey = (goalId: string) => {
   return `${CACHE_PREFIXES.GOAL}:${goalId}`;
 };
 
+export const getLoginRateLimitKey = (ipAddress: string) => {
+  return `${CACHE_PREFIXES.LOGIN_RATE_LIMIT}:${ipAddress}`;
+};
+
 export const getPaginatedAccountsKey = ({
   userId,
   pageNumber = 1,
@@ -167,4 +171,13 @@ export const mapRedisHashToGoal = (
   };
 
   return mapRedisHashToEntity<Goal>(goalFromCache, mappingConfig);
+};
+
+export const checkRateLimit = async (ipAdress: string) => {
+  const key = getLoginRateLimitKey(ipAdress);
+  const count = await redis.incr(key);
+  if (count === 1) {
+    await redis.expire(key, 60);
+  }
+  return count;
 };

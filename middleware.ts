@@ -5,8 +5,8 @@ export async function middleware(request: NextRequest) {
   if (request.method === "GET") {
     return NextResponse.next();
   }
+
   const originHeader = request.headers.get("Origin");
-  // NOTE: You may need to use `X-Forwarded-Host` instead
   const hostHeader = request.headers.get("Host");
   if (
     !originHeader ||
