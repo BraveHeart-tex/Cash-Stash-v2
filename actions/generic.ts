@@ -6,7 +6,7 @@ import {
   TableMap,
   TableName,
   UpdateGenericInput,
-} from "@/lib/utils";
+} from "./types";
 import prisma from "@/lib/db";
 import { Prisma } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";

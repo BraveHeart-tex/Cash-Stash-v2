@@ -10,45 +10,41 @@ import {
 } from "@/components/ui/card";
 import logo from "@/components/Logo.svg";
 import Image from "next/image";
-import FormInput from "@/components/form-input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { generateFormFields } from "@/lib/utils";
-import { useTransition } from "react";
 import { register as registerUser } from "@/actions/auth";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import registerSchema, { RegisterSchemaType } from "@/schemas/register-schema";
 import { motion } from "framer-motion";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
+import { Input } from "../ui/input";
 
 const SignUpForm = () => {
-  let [isPending, startTransition] = useTransition();
-  const registerFormFields = generateFormFields(registerSchema);
-
   const router = useRouter();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setError,
-  } = useForm<RegisterSchemaType>({
+  const form = useForm<RegisterSchemaType>({
     resolver: zodResolver(registerSchema),
   });
 
-  const handleRegisterFormSubmit = (data: RegisterSchemaType) => {
-    startTransition(async () => {
-      const result = await registerUser(data);
+  const handleRegisterFormSubmit = async (data: RegisterSchemaType) => {
+    const result = await registerUser(data);
 
-      if (result.error || result.fieldErrors.length) {
-        processFormErrors(result);
-        return;
-      }
+    if (result.error || result.fieldErrors.length) {
+      processFormErrors(result);
+      return;
+    }
 
-      router.push("/");
-      showSuccessToast("Signed up.", "You have been signed up.");
-    });
+    router.push("/");
+    showSuccessToast("Signed up.", "You have been signed up.");
   };
 
   const processFormErrors = (
@@ -56,7 +52,7 @@ const SignUpForm = () => {
   ) => {
     if (result.fieldErrors.length) {
       result.fieldErrors.forEach((fieldError) => {
-        setError(fieldError.field as any, {
+        form.setError(fieldError.field as any, {
           type: "manual",
           message: fieldError.message,
         });
@@ -80,6 +76,7 @@ const SignUpForm = () => {
       variants={formVariants}
       transition={{ duration: 0.5, ease: "easeInOut" }}
     >
+      <pre>{JSON.stringify(form.formState.errors, null, 2)}</pre>
       <Card className="w-full">
         <CardHeader>
           <Image
@@ -94,31 +91,69 @@ const SignUpForm = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form
-            className="flex flex-col gap-4"
-            onSubmit={handleSubmit(handleRegisterFormSubmit)}
-          >
-            <div className="grid grid-cols-1 gap-4">
-              {registerFormFields.map((field) => (
-                <FormInput
-                  key={field.name}
-                  name={field.name}
-                  label={field.label}
-                  placeholder={field.label}
-                  type={field.type}
-                  register={register}
-                  errors={errors}
-                />
-              ))}
-            </div>
-            <Button
-              type="submit"
-              className="font-semibold"
-              disabled={isPending}
+          <Form {...form}>
+            <form
+              className="flex flex-col gap-4"
+              onSubmit={form.handleSubmit(handleRegisterFormSubmit)}
             >
-              Sign up
-            </Button>
-          </form>
+              <div className="grid grid-cols-1 gap-2">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Full Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="John Doe" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="email"
+                          placeholder="Your email adress"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="password"
+                          placeholder="Enter a strong password"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <Button
+                type="submit"
+                className="font-semibold"
+                disabled={form.formState.isSubmitting}
+              >
+                Sign up
+              </Button>
+            </form>
+          </Form>
         </CardContent>
         <CardFooter>
           <p className="text-sm text-center">

@@ -1,3 +1,4 @@
+import prisma from "@/lib/db";
 import {
   Budget,
   Account,
@@ -7,6 +8,8 @@ import {
   Transaction,
   Reminder,
 } from "@prisma/client";
+import { IconType } from "react-icons/lib";
+import { IconType } from "react-icons/lib";
 
 interface IPaginatedResponse {
   hasNextPage: boolean;
@@ -106,3 +109,55 @@ export type SerializedReminder = Omit<
   updatedAt: string;
   reminderDate: string;
 };
+
+export type TableMap = {
+  [key in TableName]: (typeof prisma)[key];
+};
+
+export type WhereCondition<T> = {
+  [key in keyof T]?: T[key];
+};
+
+export type SelectCondition<T> = {
+  [key in keyof T]?: boolean;
+};
+
+export interface IGenericParams<T> {
+  tableName: TableName;
+  whereCondition?: WhereCondition<T>;
+  selectCondition?: SelectCondition<T>;
+}
+
+export type CreateGenericInput<T> = {
+  [key in keyof Omit<T, "id" | "createdAt" | "updatedAt">]: T[key];
+};
+
+export type CreateGenericWithCurrentUserInput<T> = {
+  [key in keyof Omit<T, "id" | "createdAt" | "updatedAt" | "userId">]: T[key];
+};
+
+export type UpdateGenericInput<T> = {
+  [key in keyof Partial<T>]: T[key];
+};
+
+export type TableName =
+  | "account"
+  | "transaction"
+  | "budget"
+  | "goal"
+  | "reminder";
+
+export type Page =
+  | "Dashboard"
+  | "Accounts"
+  | "Budgets"
+  | "Goals"
+  | "Transactions"
+  | "Reports"
+  | "Settings";
+
+export interface IPage {
+  label: Page;
+  icon: IconType;
+  link: string;
+}
