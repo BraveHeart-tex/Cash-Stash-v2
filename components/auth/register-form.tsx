@@ -151,7 +151,7 @@ const RegisterForm = () => {
                 className="font-semibold"
                 disabled={form.formState.isSubmitting}
               >
-                Sign up
+                {form.formState.isSubmitting ? "Signing up..." : "Sign Up"}
               </Button>
             </form>
           </Form>

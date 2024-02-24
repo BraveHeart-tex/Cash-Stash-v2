@@ -1,10 +1,10 @@
 "use client";
 
-import * as React from "react";
 import { DesktopIcon, MoonIcon, SunIcon } from "@radix-ui/react-icons";
 import { useTheme } from "next-themes";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
 const items = [
   {
@@ -25,7 +25,14 @@ const items = [
 ];
 
 export function ModeToggle({ layoutId }: { layoutId: string }) {
+  const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
 
   return (
     <Tabs defaultValue={theme} value={theme} onValueChange={setTheme}>
