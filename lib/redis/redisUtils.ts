@@ -1,6 +1,6 @@
 import { redis } from ".";
 import { CACHE_PREFIXES } from "@/lib/constants";
-import { Budget, BudgetCategory } from "@prisma/client";
+import { Budget, BudgetCategory, Goal } from "@prisma/client";
 
 interface Entity {
   [key: string]: any;
@@ -33,6 +33,10 @@ export const getTransactionKey = (transactionId: string) => {
 
 export const getBudgetKey = (budgetId: string) => {
   return `${CACHE_PREFIXES.BUDGET}:${budgetId}`;
+};
+
+export const getGoalKey = (goalId: string) => {
+  return `${CACHE_PREFIXES.GOAL}:${goalId}`;
 };
 
 export const getPaginatedAccountsKey = ({
@@ -95,6 +99,31 @@ export const getPaginatedBudgetsKey = ({
   );
 };
 
+export const getPaginatedGoalsKeys = ({
+  userId,
+  pageNumber = 1,
+  query = "",
+  sortBy = "",
+  sortDirection = "",
+}: {
+  userId: string;
+  pageNumber?: number;
+  query?: string;
+  sortBy?: string;
+  sortDirection?: string;
+}) => {
+  return (
+    CACHE_PREFIXES.PAGINATED_GOALS +
+    JSON.stringify({
+      userId,
+      pageNumber,
+      query,
+      sortBy,
+      sortDirection,
+    })
+  );
+};
+
 export const invalidateCacheKey = async (key: string) => {
   await redis.del(key);
 };
@@ -121,4 +150,21 @@ export const mapRedisHashToBudget = (
   };
 
   return mapRedisHashToEntity<Budget>(budgetFromCache, mappingConfig);
+};
+
+export const mapRedisHashToGoal = (
+  goalFromCache: Record<string, string> | null
+): Goal | null => {
+  const mappingConfig = {
+    id: (value: string) => value,
+    name: (value: string) => value,
+    goalAmount: (value: string) => Number(value),
+    currentAmount: (value: string) => Number(value),
+    userId: (value: string) => value,
+    createdAt: (value: string) => new Date(value),
+    updatedAt: (value: string) => new Date(value),
+    progress: (value: string) => Number(value),
+  };
+
+  return mapRedisHashToEntity<Goal>(goalFromCache, mappingConfig);
 };

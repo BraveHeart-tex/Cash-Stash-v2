@@ -54,7 +54,10 @@ export const PAGES: IPage[] = [
 export const CACHE_PREFIXES = {
   ACCOUNT: "account",
   PAGINATED_ACCOUNTS: "paginated_accounts",
+  PAGINATED_BUDGETS: "paginated_budgets",
+  PAGINATED_TRANSACTIONS: "paginated_transactions",
+  PAGINATED_GOALS: "paginated_goals",
   TRANSACTION: "transaction",
   BUDGET: "budget",
-  PAGINATED_BUDGETS: "paginated_budgets",
+  GOAL: "goal",
 };

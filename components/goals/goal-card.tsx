@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { cn, formatMoney } from "@/lib/utils";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import useGenericModalStore from "@/store/genericModalStore";
+import { deleteGoal } from "@/actions/goal";
 
 interface IGoalCardProps {
   goal: Goal;
@@ -30,13 +31,10 @@ const GoalCard = ({ goal }: IGoalCardProps) => {
       message: "Are you sure you want to delete this goal?",
       primaryActionLabel: "Delete",
       onConfirm: async () => {
-        const response = await deleteGeneric<Goal>({
-          tableName: "goal",
-          whereCondition: { id },
-        });
+        const response = await deleteGoal(id);
 
         if (response?.error) {
-          showErrorToast("An error occurred.", response.error as string);
+          showErrorToast("An error occurred.", response.error);
         } else {
           router.refresh();
           showSuccessToast("Goal deleted.", "Selected goal has been deleted.");
