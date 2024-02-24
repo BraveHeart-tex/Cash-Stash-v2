@@ -25,10 +25,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import PasswordRequirements from "./password-requirements";
 
-const SignUpForm = () => {
+const RegisterForm = () => {
   const router = useRouter();
 
   const form = useForm<RegisterSchemaType>({
@@ -76,7 +77,6 @@ const SignUpForm = () => {
       variants={formVariants}
       transition={{ duration: 0.5, ease: "easeInOut" }}
     >
-      <pre>{JSON.stringify(form.formState.errors, null, 2)}</pre>
       <Card className="w-full">
         <CardHeader>
           <Image
@@ -141,6 +141,7 @@ const SignUpForm = () => {
                         />
                       </FormControl>
                       <FormMessage />
+                      <PasswordRequirements password={field.value} />
                     </FormItem>
                   )}
                 />
@@ -167,4 +168,4 @@ const SignUpForm = () => {
     </motion.div>
   );
 };
-export default SignUpForm;
+export default RegisterForm;
