@@ -10,6 +10,10 @@ export const getTransactionKey = (transactionId: string) => {
   return `${CACHE_PREFIXES.TRANSACTION}:${transactionId}`;
 };
 
+export const getBudgetKey = (budgetId: string) => {
+  return `${CACHE_PREFIXES.BUDGET}:${budgetId}`;
+};
+
 export const getPaginatedAccountsKey = ({
   userId,
   pageNumber = 1,
@@ -41,16 +45,43 @@ export const getPaginatedAccountsKey = ({
   );
 };
 
+export const getPaginatedBudgetsKey = ({
+  userId,
+  pageNumber = 1,
+  query = "",
+  category = "",
+  sortBy = "",
+  sortDirection = "",
+}: {
+  userId: string;
+  pageNumber?: number;
+  query?: string;
+  category?: string;
+  sortBy?: string;
+  sortDirection?: string;
+  orderByCondition?: string;
+}) => {
+  return (
+    CACHE_PREFIXES.PAGINATED_BUDGETS +
+    JSON.stringify({
+      userId,
+      pageNumber,
+      query,
+      category,
+      sortBy,
+      sortDirection,
+    })
+  );
+};
+
 export const invalidateCacheKey = async (key: string) => {
   await redis.del(key);
 };
 
-export const invalidateCachedPaginatedAccounts = async () => {
+export const invalidateKeysByPrefix = async (prefix: string) => {
   const keys = await redis.keys("*");
-  const paginatedAccountKeys = keys.filter((key) =>
-    key.startsWith(CACHE_PREFIXES.PAGINATED_ACCOUNTS)
-  );
-  await redis.del(paginatedAccountKeys);
+  const keysToDelete = keys.filter((key) => key.startsWith(prefix));
+  await redis.del(keysToDelete);
 };
 
 redis.on("connect", () => {

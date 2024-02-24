@@ -15,8 +15,9 @@ import {
 import redis, {
   getAccountKey,
   getPaginatedAccountsKey,
-  invalidateCachedPaginatedAccounts,
+  invalidateKeysByPrefix,
 } from "@/lib/redis";
+import { CACHE_PREFIXES } from "@/lib/constants";
 
 export const registerBankAccount = async ({
   balance,
@@ -44,7 +45,7 @@ export const registerBankAccount = async ({
     }
 
     await Promise.all([
-      invalidateCachedPaginatedAccounts(),
+      invalidateKeysByPrefix(CACHE_PREFIXES.PAGINATED_ACCOUNTS),
       redis.hset(getAccountKey(createdAccount.id), createdAccount),
     ]);
 
@@ -97,8 +98,7 @@ export const updateBankAccount = async ({
     }
 
     await Promise.all([
-      invalidateCachedPaginatedAccounts(),
-      redis.del(getAccountKey(accountId)),
+      invalidateKeysByPrefix(CACHE_PREFIXES.PAGINATED_ACCOUNTS),
       redis.hset(getAccountKey(updatedAccount.id), updatedAccount),
     ]);
 
@@ -251,7 +251,7 @@ export const deleteAccount = async (accountId: string) => {
     }
 
     await Promise.all([
-      invalidateCachedPaginatedAccounts(),
+      invalidateKeysByPrefix(CACHE_PREFIXES.PAGINATED_ACCOUNTS),
       redis.del(getAccountKey(accountId)),
     ]);
 

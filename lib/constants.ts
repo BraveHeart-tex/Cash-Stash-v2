@@ -55,4 +55,6 @@ export const CACHE_PREFIXES = {
   ACCOUNT: "account",
   PAGINATED_ACCOUNTS: "paginated_accounts",
   TRANSACTION: "transaction",
+  BUDGET: "budget",
+  PAGINATED_BUDGETS: "paginated_budgets",
 };
