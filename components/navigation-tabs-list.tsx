@@ -1,5 +1,5 @@
 "use client";
-import { PAGES } from "@/lib/utils";
+import { PAGES } from "@/lib/constants";
 import { TabsList, TabsTrigger, Tabs } from "./ui/tabs";
 import Link from "next/link";
 import { usePathname } from "next/navigation";

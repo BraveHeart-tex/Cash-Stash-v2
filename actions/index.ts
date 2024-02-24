@@ -2,7 +2,7 @@
 import prisma from "@/lib/db";
 import { getUser } from "@/lib/session";
 import { EditReminderSchema } from "@/schemas";
-import { MONTHS_OF_THE_YEAR } from "@/lib/utils";
+import { MONTHS_OF_THE_YEAR } from "@/lib/constants";
 import { EditReminderSchemaType } from "@/schemas/EditReminderSchema";
 import CreateReminderSchema, {
   CreateReminderSchemaType,

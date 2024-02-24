@@ -10,15 +10,13 @@ interface IGetGenericDialogContentParams {
   mode: "create" | "edit";
   key: "budget" | "goal" | "transaction" | "reminder" | "account" | "";
   entityId: string;
-  props?: any;
+  props?: Record<string, any>;
   data?: any;
 }
 
-interface ContentMap {
+const ContentMap: {
   [key: string]: any;
-}
-
-const ContentMap: ContentMap = {
+} = {
   budget: BudgetForm,
   goal: GoalForm,
   transaction: TransactionForm,

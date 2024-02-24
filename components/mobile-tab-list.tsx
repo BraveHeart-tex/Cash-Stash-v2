@@ -1,5 +1,5 @@
 "use client";
-import { PAGES } from "@/lib/utils";
+import { PAGES } from "@/lib/constants";
 import { usePathname } from "next/navigation";
 import MobileTabsListItem from "./mobile-tab-list-item";
 

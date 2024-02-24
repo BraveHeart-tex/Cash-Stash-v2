@@ -3,7 +3,7 @@ import {
   cn,
   formatMoney,
   formatTransactionDate,
-  generateReadbleEnumValue,
+  generateReadableLabelFromEnumValue,
 } from "@/lib/utils";
 import ActionPopover from "@/components/action-popover";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
@@ -70,7 +70,7 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
         <CardHeader className={"border-b h-[100px]"}>
           <CardTitle>{transaction.description}</CardTitle>
           <CardDescription>
-            {generateReadbleEnumValue({ key: transaction.category })}
+            {generateReadableLabelFromEnumValue({ key: transaction.category })}
           </CardDescription>
         </CardHeader>
         <CardContent className="py-2">
@@ -81,7 +81,9 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
             />
             <DataLabel
               label={"Category"}
-              value={generateReadbleEnumValue({ key: transaction.category })}
+              value={generateReadableLabelFromEnumValue({
+                key: transaction.category,
+              })}
             />
             <DataLabel
               label={"Account Name"}

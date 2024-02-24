@@ -1,7 +1,11 @@
 "use client";
 import ActionPopover from "@/components/action-popover";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
-import { cn, formatMoney, generateReadbleEnumValue } from "@/lib/utils";
+import {
+  cn,
+  formatMoney,
+  generateReadableLabelFromEnumValue,
+} from "@/lib/utils";
 import { Account } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
@@ -24,7 +28,7 @@ const AccountCard = ({ account, className }: IAccountCardProps) => {
   );
 
   const accountCategory =
-    generateReadbleEnumValue({ key: account.category }) + " Account";
+    generateReadableLabelFromEnumValue({ key: account.category }) + " Account";
 
   const handleDeleteAccount = (id: string) => {
     showGenericConfirm({

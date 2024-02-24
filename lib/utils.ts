@@ -1,64 +1,13 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { MdDashboard, MdOutlineAccountBalanceWallet } from "react-icons/md";
 import { ZodError, ZodObject } from "zod";
-import { FaMoneyBill, FaPiggyBank } from "react-icons/fa";
-import { TbReportAnalytics } from "react-icons/tb";
-import { AiOutlineTransaction } from "react-icons/ai";
-import { IPage } from "@/actions/types";
+import { MONTHS_OF_THE_YEAR } from "./constants";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const MONTHS_OF_THE_YEAR = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "July",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
-
-export const PAGES: IPage[] = [
-  {
-    label: "Dashboard",
-    icon: MdDashboard,
-    link: "/",
-  },
-  {
-    label: "Accounts",
-    icon: MdOutlineAccountBalanceWallet,
-    link: "/accounts",
-  },
-  {
-    label: "Budgets",
-    icon: FaMoneyBill,
-    link: "/budgets",
-  },
-  {
-    label: "Goals",
-    icon: FaPiggyBank,
-    link: "/goals",
-  },
-  {
-    label: "Transactions",
-    icon: AiOutlineTransaction,
-    link: "/transactions",
-  },
-  {
-    label: "Reports",
-    icon: TbReportAnalytics,
-    link: "/reports",
-  },
-];
-
+// TODO: Remove this.
 export function generateFormFields(schema: ZodObject<any>) {
   const formFields = [];
 
@@ -130,17 +79,10 @@ export const formatMoney = (value: number) => {
   return formatter.format(value);
 };
 
-// Utility function to check if a value is an object
 const isObject = (value: any): boolean => {
   return value !== null && typeof value === "object";
 };
 
-/**
- * Check if two objects are deeply equal.
- * @param {any} obj1 - The first object.
- * @param {any} obj2 - The second object.
- * @returns {boolean} True if objects are deeply equal, otherwise false.
- */
 export const areObjectsDeepEqual = (obj1: any, obj2: any): boolean => {
   // Check if both objects are strictly equal
   if (obj1 === obj2) return true;
@@ -206,7 +148,7 @@ export const formatTransactionDate = (date: Date) => {
   return `${day} ${MONTHS_OF_THE_YEAR[parseInt(month) - 1]} ${year}, ${hours}:${minutes}:${seconds}`;
 };
 
-export const generateReadbleEnumValue = ({
+export const generateReadableLabelFromEnumValue = ({
   key,
   separator = "_",
 }: {
@@ -238,7 +180,7 @@ export const generateReadbleEnumLabels = ({
   const keys = Object.keys(enumObj);
 
   const readableLabels = keys.map((key) => {
-    const label = generateReadbleEnumValue({ key, separator });
+    const label = generateReadableLabelFromEnumValue({ key, separator });
     return {
       label,
       value: key,
