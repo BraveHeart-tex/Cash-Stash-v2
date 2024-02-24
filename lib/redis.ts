@@ -1,5 +1,5 @@
 import Redis from "ioredis";
-import { CACHE_PREFIXES } from "./cache_prefixes";
+import { CACHE_PREFIXES } from "@/lib/constants";
 
 const redis = new Redis(process.env.REDIS_CONNECTION_STRING!);
 
@@ -54,7 +54,23 @@ export const invalidateCachedPaginatedAccounts = async () => {
 };
 
 redis.on("connect", () => {
-  console.log("Redis connected");
+  console.log("Redis client connected.");
+});
+
+redis.on("ready", () => {
+  console.log("Redis client is ready.");
+});
+
+redis.on("error", (error) => {
+  console.error("Redis client error", error.message);
+});
+
+redis.on("end", () => {
+  console.log("Redis client disconnected.");
+});
+
+process.on("SIGINT", () => {
+  redis.quit();
 });
 
 export default redis;
