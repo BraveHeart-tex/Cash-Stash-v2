@@ -1,59 +1,10 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { ZodError, ZodObject } from "zod";
+import { ZodError } from "zod";
 import { MONTHS_OF_THE_YEAR } from "@/lib/constants";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
-}
-
-// TODO: Remove this.
-export function generateFormFields(schema: ZodObject<any>) {
-  const formFields = [];
-
-  for (const key of Object.keys(schema.shape)) {
-    const fieldSchema = schema.shape[key];
-    const description = fieldSchema._def.description;
-
-    const parsedDescription = description
-      .split(",")
-      .map((item: string) => item.trim());
-
-    const fieldType = parsedDescription
-      .find((item: string) => item.startsWith("type:"))
-      .split(":")[1]
-      .trim();
-
-    const fieldLabel = parsedDescription
-      .find((item: string) => item.startsWith("label:"))
-      .split(":")[1]
-      .trim();
-
-    const fieldObject: {
-      name: string;
-      type: string;
-      label: string;
-      options?: string[];
-    } = {
-      name: key,
-      type: fieldType,
-      label: fieldLabel,
-    };
-
-    if (fieldType === "combobox") {
-      const fieldOptions = parsedDescription
-        .find((item: string) => item.startsWith("options:"))
-        .split(":")[1]
-        .trim()
-        .split("-");
-
-      fieldObject["options"] = fieldOptions;
-    }
-
-    formFields.push(fieldObject);
-  }
-
-  return formFields;
 }
 
 export const processDate = (date: Date) => {

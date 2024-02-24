@@ -10,30 +10,31 @@ import {
 } from "@/components/ui/card";
 import logo from "@/components/Logo.svg";
 import Image from "next/image";
-import FormInput from "@/components/form-input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import loginSchema, { LoginSchemaType } from "@/schemas/login-schema";
-import { generateFormFields } from "@/lib/utils";
 import { useState, useTransition } from "react";
 import { login } from "@/actions/auth";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
 const LoginForm = () => {
   let [isPending, startTransition] = useTransition();
   const router = useRouter();
   const [loggedIn, setLoggedIn] = useState(false);
-  const loginFormFields = generateFormFields(loginSchema);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setError,
-  } = useForm<LoginSchemaType>({
+  const form = useForm<LoginSchemaType>({
     resolver: zodResolver(loginSchema),
   });
 
@@ -53,7 +54,7 @@ const LoginForm = () => {
   const processFormErrors = (result: Awaited<ReturnType<typeof login>>) => {
     if (result.fieldErrors.length) {
       result.fieldErrors.forEach((fieldError) => {
-        setError(fieldError.field as any, {
+        form.setError(fieldError.field as any, {
           type: "manual",
           message: fieldError.message,
         });
@@ -63,23 +64,6 @@ const LoginForm = () => {
     if (result.error) {
       showErrorToast("An error occurred.", result.error);
     }
-  };
-
-  const handleTestUserLogin = () => {
-    startTransition(async () => {
-      const result = await login({
-        email: "testUser@email.com",
-        password: "testUser123!",
-      });
-
-      if (result?.error) {
-        showErrorToast("An error occurred.", result.error);
-      } else {
-        setLoggedIn(true);
-        router.push("/");
-        showSuccessToast("Logged in.", "You have been logged in.");
-      }
-    });
   };
 
   if (loggedIn) {
@@ -117,35 +101,60 @@ const LoginForm = () => {
           <CardDescription>Sign in to access your account.</CardDescription>
         </CardHeader>
         <CardContent>
-          <form
-            className="flex flex-col gap-4"
-            onSubmit={handleSubmit(handleLoginFormSubmit)}
-            data-testid="login-form"
-          >
-            <div className="grid grid-cols-1 gap-4">
-              {loginFormFields.map((field) => (
-                <FormInput
-                  key={field.name}
-                  name={field.name}
-                  label={field.label}
-                  placeholder={field.label}
-                  type={field.type}
-                  register={register}
-                  errors={errors}
-                />
-              ))}
-            </div>
-            <Button
-              loading={isPending}
-              type="submit"
-              name="Login to your account"
-              className="font-semibold"
-              disabled={isPending}
-              data-testid="login-button"
+          <Form {...form}>
+            <form
+              className="flex flex-col gap-4"
+              onSubmit={form.handleSubmit(handleLoginFormSubmit)}
+              data-testid="login-form"
             >
-              Sign in
-            </Button>
-          </form>
+              <div className="grid grid-cols-1 gap-2">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="email"
+                          placeholder="Enter your email"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="password"
+                          placeholder="Enter your password"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <Button
+                loading={isPending}
+                type="submit"
+                name="Login to your account"
+                className="font-semibold"
+                disabled={isPending}
+                data-testid="login-button"
+              >
+                Sign in
+              </Button>
+            </form>
+          </Form>
         </CardContent>
         <CardFooter className="justify-between">
           <div>
@@ -161,15 +170,6 @@ const LoginForm = () => {
               </Link>
             </p>
           </div>
-          <Button
-            name="Login as a test user"
-            disabled={isPending}
-            variant="ghost"
-            className="font-normal text-sm"
-            onClick={() => handleTestUserLogin()}
-          >
-            Login as a test user
-          </Button>
         </CardFooter>
       </Card>
     </motion.div>
