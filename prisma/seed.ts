@@ -3,10 +3,9 @@
 import { BudgetCategory, AccountCategory } from "@prisma/client";
 import prisma from "../lib/db";
 import { faker } from "@faker-js/faker";
-import ACCOUNT_OPTIONS from "../lib/CreateUserAccountOptions";
 
 const createAccount = async (userId: string) => {
-  const accountOptions = Object.keys(ACCOUNT_OPTIONS);
+  const accountOptions = Object.keys(AccountCategory);
 
   const accountType = accountOptions[
     Math.floor(Math.random() * accountOptions.length)

@@ -1,11 +1,10 @@
 "use server";
-import ACCOUNT_OPTIONS from "@/lib/CreateUserAccountOptions";
 import prisma from "@/lib/db";
 import { getUser } from "@/lib/session";
-import { processZodError } from "@/lib/utils";
+import { processZodError, validateEnumValue } from "@/lib/utils";
 import { accountSchema } from "@/schemas";
 import { AccountSchemaType } from "@/schemas/CreateUserAccountSchema";
-import { Account } from "@prisma/client";
+import { Account, AccountCategory } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import {
@@ -136,7 +135,7 @@ export const getPaginatedAccounts = async ({
   const PAGE_SIZE = 12;
   const skipAmount = (pageNumber - 1) * PAGE_SIZE;
 
-  if (category && !ACCOUNT_OPTIONS.hasOwnProperty(category)) {
+  if (category && !validateEnumValue(category, AccountCategory)) {
     return {
       accounts: [],
       hasNextPage: false,
