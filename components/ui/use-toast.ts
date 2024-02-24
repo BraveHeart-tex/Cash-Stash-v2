@@ -204,12 +204,17 @@ const showSuccessToast = (title: string, description: string) => {
   });
 };
 
-const showDefaultToast = (title: string, description: string) => {
+const showDefaultToast = (
+  title: string,
+  description: string,
+  options?: Partial<ToasterToast>
+) => {
   toast({
     title,
     description,
     variant: "default",
     duration: 4000,
+    ...options,
   });
 };
 

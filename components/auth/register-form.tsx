@@ -13,14 +13,14 @@ import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { register as registerUser } from "@/actions/auth";
-import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
-import { useRouter } from "next/navigation";
+import { showDefaultToast, showErrorToast } from "@/components/ui/use-toast";
 import Link from "next/link";
 import registerSchema, { RegisterSchemaType } from "@/schemas/register-schema";
 import { motion } from "framer-motion";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -30,8 +30,6 @@ import { Input } from "@/components/ui/input";
 import PasswordRequirements from "./password-requirements";
 
 const RegisterForm = () => {
-  const router = useRouter();
-
   const form = useForm<RegisterSchemaType>({
     resolver: zodResolver(registerSchema),
   });
@@ -44,8 +42,13 @@ const RegisterForm = () => {
       return;
     }
 
-    router.push("/");
-    showSuccessToast("Signed up.", "You have been signed up.");
+    showDefaultToast(
+      "Account created successfully",
+      "Please check your email to verify your account.",
+      {
+        duration: 10000,
+      }
+    );
   };
 
   const processFormErrors = (
@@ -123,6 +126,14 @@ const RegisterForm = () => {
                           {...field}
                         />
                       </FormControl>
+                      <FormDescription className="text-[0.9em]">
+                        <strong>Note</strong>: Please use a valid email address.{" "}
+                        Your email will be used for{" "}
+                        <u>
+                          account verification, password recovery, and other
+                          important communications.
+                        </u>
+                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}

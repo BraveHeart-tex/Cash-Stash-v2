@@ -9,6 +9,7 @@ declare global {
 
 const prisma = globalThis.client || new PrismaClient();
 const adapter = new PrismaAdapter(prisma.session, prisma.user);
+
 export const lucia = new Lucia(adapter, {
   sessionCookie: {
     expires: false,
@@ -21,6 +22,7 @@ export const lucia = new Lucia(adapter, {
       id: databaseUserAttributes.id,
       name: databaseUserAttributes.name,
       email: databaseUserAttributes.email,
+      emailVerified: databaseUserAttributes.email_verified,
     };
   },
 });
@@ -40,6 +42,7 @@ interface DatabaseUserAttributes {
   id: string;
   name: string;
   email: string;
+  email_verified: boolean;
 }
 
 export default prisma;

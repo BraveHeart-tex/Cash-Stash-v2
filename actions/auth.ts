@@ -10,11 +10,16 @@ import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { checkRateLimit } from "@/lib/redis/redisUtils";
 import { MAX_LOGIN_REQUESTS_PER_MINUTE } from "@/lib/constants";
+import {
+  generateEmailVerificationCode,
+  sendEmailVerificationCode,
+} from "@/lib/auth/utils";
 
 export const login = async (values: LoginSchemaType) => {
   const header = headers();
   const ipAdress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(",")[0];
   const count = await checkRateLimit(ipAdress);
+
   if (count > MAX_LOGIN_REQUESTS_PER_MINUTE) {
     return {
       error:
@@ -83,6 +88,19 @@ export const register = async (values: RegisterSchemaType) => {
       },
     });
 
+    if (userExists && userExists.email_verified === false) {
+      return {
+        error: `User already exists with the given email. Please verify your email.`,
+        fieldErrors: [
+          {
+            field: "email",
+            message:
+              "User already exists with the given email. Please verify your email.",
+          },
+        ],
+      };
+    }
+
     if (userExists) {
       return {
         error: `User already exists with the given email: ${data.email}`,
@@ -101,6 +119,7 @@ export const register = async (values: RegisterSchemaType) => {
         name: data.name,
         email: data.email,
         hashedPassword,
+        email_verified: false,
       },
     });
 
@@ -112,19 +131,20 @@ export const register = async (values: RegisterSchemaType) => {
       };
     }
 
-    const session = await lucia.createSession(user.id, {});
-    const sessionCookie = lucia.createSessionCookie(session.id);
-    cookies().set(
-      sessionCookie.name,
-      sessionCookie.value,
-      sessionCookie.attributes
+    const verificationCode = await generateEmailVerificationCode(
+      user.id,
+      user.email
     );
+
+    await sendEmailVerificationCode(user.email, verificationCode);
+
     return {
       user,
       error: "",
       fieldErrors: [],
     };
   } catch (error) {
+    console.error(error);
     if (error instanceof ZodError) {
       return processZodError(error);
     }
