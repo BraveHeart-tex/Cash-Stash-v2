@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { ZodError, ZodObject } from "zod";
-import { MONTHS_OF_THE_YEAR } from "./constants";
+import { MONTHS_OF_THE_YEAR } from "@/lib/constants";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
