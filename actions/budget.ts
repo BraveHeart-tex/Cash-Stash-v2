@@ -1,11 +1,10 @@
 "use server";
-import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
 import prisma from "@/lib/db";
 import { getUser } from "@/lib/session";
-import { processZodError } from "@/lib/utils";
+import { processZodError, validateEnumValue } from "@/lib/utils";
 import { CreateBudgetSchemaType } from "@/schemas/CreateBudgetSchema";
 import budgetSchema, { BudgetSchemaType } from "@/schemas/budget-schema";
-import { Budget } from "@prisma/client";
+import { Budget, BudgetCategory } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import {
@@ -109,7 +108,7 @@ export const getPaginatedBudgets = async ({
   const PAGE_SIZE = 12;
   const skipAmount = (pageNumber - 1) * PAGE_SIZE;
 
-  if (category && !CreateBudgetOptions.hasOwnProperty(category)) {
+  if (category && !validateEnumValue(category, BudgetCategory)) {
     return {
       budgets: [],
       hasNextPage: false,

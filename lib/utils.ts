@@ -262,3 +262,7 @@ export const formHasChanged = (initialValues: any, values: any): boolean => {
 
   return !matchingKeys.some((key) => values[key] !== initialValues[key]);
 };
+
+export const validateEnumValue = (value: any, enumObj: Record<string, any>) => {
+  return Object.values(enumObj).includes(value);
+};

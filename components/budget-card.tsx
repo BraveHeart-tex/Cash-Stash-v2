@@ -3,8 +3,7 @@ import { Progress } from "@/components/ui/progress";
 import ActionPopover from "@/components/action-popover";
 import { Badge } from "@/components/ui/badge";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
-import { cn, formatMoney } from "@/lib/utils";
-import CreateBudgetOptions from "@/lib/CreateBudgetOptions";
+import { cn, formatMoney, generateReadbleEnumValue } from "@/lib/utils";
 import { deleteGeneric } from "@/actions/generic";
 import { Budget } from "@prisma/client";
 import { useRouter } from "next/navigation";
@@ -75,7 +74,7 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
           {budget.name}
         </span>
         <span className="text-muted-foreground">
-          {CreateBudgetOptions[budget.category]}
+          {generateReadbleEnumValue({ key: budget.category })}
         </span>
       </div>
       <div className="absolute top-5 right-1 mb-2">

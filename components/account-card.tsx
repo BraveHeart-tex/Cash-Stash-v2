@@ -3,7 +3,6 @@ import ACCOUNT_OPTIONS from "@/lib/CreateUserAccountOptions";
 import ActionPopover from "@/components/action-popover";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { cn, formatMoney } from "@/lib/utils";
-import { deleteGeneric } from "@/actions/generic";
 import { Account } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
