@@ -30,3 +30,6 @@ export const sendEmailVerificationCode = async (
   email: string,
   code: string
 ) => {};
+
+// TODO: Implement this function
+export const verificationCodeIsValid = async (code: string) => {};

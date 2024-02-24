@@ -5,6 +5,7 @@ import { MdDashboard, MdOutlineAccountBalanceWallet } from "react-icons/md";
 import { TbReportAnalytics } from "react-icons/tb";
 
 export const MAX_LOGIN_REQUESTS_PER_MINUTE = 5;
+export const MAX_SIGN_UP_REQUESTS_PER_MINUTE = 5;
 export const MONTHS_OF_THE_YEAR = [
   "Jan",
   "Feb",
@@ -60,6 +61,7 @@ export const CACHE_PREFIXES = {
   PAGINATED_TRANSACTIONS: "paginated_transactions",
   PAGINATED_GOALS: "paginated_goals",
   LOGIN_RATE_LIMIT: "login_rate_limit",
+  SIGN_UP_RATE_LIMIT: "sign_up_rate_limit",
   TRANSACTION: "transaction",
   BUDGET: "budget",
   GOAL: "goal",

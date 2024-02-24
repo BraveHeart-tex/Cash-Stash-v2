@@ -8,8 +8,11 @@ import { ZodError } from "zod";
 import { processZodError } from "@/lib/utils";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { checkRateLimit } from "@/lib/redis/redisUtils";
-import { MAX_LOGIN_REQUESTS_PER_MINUTE } from "@/lib/constants";
+import { checkRateLimit, checkSignUpRateLimit } from "@/lib/redis/redisUtils";
+import {
+  MAX_LOGIN_REQUESTS_PER_MINUTE,
+  MAX_SIGN_UP_REQUESTS_PER_MINUTE,
+} from "@/lib/constants";
 import {
   generateEmailVerificationCode,
   sendEmailVerificationCode,
@@ -89,6 +92,20 @@ export const register = async (values: RegisterSchemaType) => {
     });
 
     if (userExists && userExists.email_verified === false) {
+      const header = headers();
+      const ipAdress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
+        ","
+      )[0];
+      const count = await checkSignUpRateLimit(userExists.id, ipAdress);
+
+      if (count > MAX_SIGN_UP_REQUESTS_PER_MINUTE) {
+        return {
+          error:
+            "You have made too many requests. Please wait a minute before trying again.",
+          fieldErrors: [],
+        };
+      }
+
       return {
         error: `User already exists with the given email. Please verify your email.`,
         fieldErrors: [

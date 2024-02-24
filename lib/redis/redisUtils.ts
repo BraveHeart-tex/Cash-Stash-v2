@@ -43,6 +43,10 @@ export const getLoginRateLimitKey = (ipAddress: string) => {
   return `${CACHE_PREFIXES.LOGIN_RATE_LIMIT}:${ipAddress}`;
 };
 
+export const getSignUpRateLimitKey = (userId: string, ipAddress: string) => {
+  return `${CACHE_PREFIXES.SIGN_UP_RATE_LIMIT}:${ipAddress}`;
+};
+
 export const getPaginatedAccountsKey = ({
   userId,
   pageNumber = 1,
@@ -175,6 +179,18 @@ export const mapRedisHashToGoal = (
 
 export const checkRateLimit = async (ipAdress: string) => {
   const key = getLoginRateLimitKey(ipAdress);
+  const count = await redis.incr(key);
+  if (count === 1) {
+    await redis.expire(key, 60);
+  }
+  return count;
+};
+
+export const checkSignUpRateLimit = async (
+  userId: string,
+  ipAdress: string
+) => {
+  const key = getSignUpRateLimitKey(userId, ipAdress);
   const count = await redis.incr(key);
   if (count === 1) {
     await redis.expire(key, 60);
