@@ -10,8 +10,9 @@ import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import {
   checkRateLimit,
-  checkSendVerificationCodeRateLimit,
+  checkIPBasedSendVerificationCodeRateLimit,
   checkSignUpRateLimit,
+  checkUserIdBasedSendVerificationCodeRateLimit,
 } from "@/lib/redis/redisUtils";
 import {
   MAX_LOGIN_REQUESTS_PER_MINUTE,
@@ -300,7 +301,7 @@ export const handleEmailVerification = async (email: string, code: string) => {
 export const resendEmailVerificationCode = async (email: string) => {
   const header = headers();
   const ipAdress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(",")[0];
-  const count = await checkSendVerificationCodeRateLimit(ipAdress);
+  const count = await checkIPBasedSendVerificationCodeRateLimit(ipAdress);
   if (count > SEND_VERIFICATION_CODE_RATE_LIMIT) {
     return {
       message: "Too many requests. Please wait before trying again.",
@@ -319,6 +320,17 @@ export const resendEmailVerificationCode = async (email: string) => {
       message:
         "If you have an account, an email has been sent to you. Please check your inbox. Make sure to check your spam folder",
       isError: false,
+    };
+  }
+
+  const userIdBasedCount = await checkUserIdBasedSendVerificationCodeRateLimit(
+    user.id
+  );
+
+  if (userIdBasedCount > SEND_VERIFICATION_CODE_RATE_LIMIT) {
+    return {
+      message: "Too many requests. Please wait before trying again.",
+      isError: true,
     };
   }
 

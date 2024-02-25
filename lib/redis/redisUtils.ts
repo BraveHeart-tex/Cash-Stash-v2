@@ -197,8 +197,21 @@ export const checkRateLimit = async (ipAdress: string) => {
   return count;
 };
 
-export const checkSendVerificationCodeRateLimit = async (ipAdress: string) => {
+export const checkIPBasedSendVerificationCodeRateLimit = async (
+  ipAdress: string
+) => {
   const key = getSendVerificationCodeRateLimitKey(ipAdress);
+  const count = await redis.incr(key);
+  if (count === 1) {
+    await redis.expire(key, 60);
+  }
+  return count;
+};
+
+export const checkUserIdBasedSendVerificationCodeRateLimit = async (
+  userId: string
+) => {
+  const key = `${CACHE_PREFIXES.SEND_VERIFICATION_CODE_RATE_LIMIT}:${userId}`;
   const count = await redis.incr(key);
   if (count === 1) {
     await redis.expire(key, 60);
