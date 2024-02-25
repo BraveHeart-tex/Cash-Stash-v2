@@ -4,6 +4,11 @@ import { FaMoneyBill, FaPiggyBank } from "react-icons/fa";
 import { MdDashboard, MdOutlineAccountBalanceWallet } from "react-icons/md";
 import { TbReportAnalytics } from "react-icons/tb";
 
+export const PRIMARY_COLOR = "#c4002b";
+export const PRIMARY_FOREGROUND_COLOR = "#fefcfa";
+export const FOREGROUND_COLOR = "#001400";
+export const MUTED_FOREGROUND_COLOR = "#767b9c";
+
 export const MAX_LOGIN_REQUESTS_PER_MINUTE = 5;
 export const MAX_SIGN_UP_REQUESTS_PER_MINUTE = 5;
 export const MONTHS_OF_THE_YEAR = [
