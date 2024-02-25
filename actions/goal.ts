@@ -18,14 +18,14 @@ import {
   invalidateKeysByPrefix,
   mapRedisHashToGoal,
 } from "@/lib/redis/redisUtils";
-import { CACHE_PREFIXES } from "@/lib/constants";
+import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 
 export const createGoal = async (
   values: GoalSchemaType
 ): Promise<IValidatedResponse<Goal>> => {
   const { user } = await getUser();
   if (!user) {
-    redirect("/login");
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   try {
@@ -75,7 +75,7 @@ export const updateGoal = async (
 ): Promise<IValidatedResponse<Goal>> => {
   const { user } = await getUser();
   if (!user) {
-    redirect("/login");
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   let goalToBeUpdated: Goal | null = null;
@@ -135,7 +135,7 @@ export const getPaginatedGoals = async ({
   const { user } = await getUser();
 
   if (!user) {
-    redirect("/login");
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   try {
@@ -228,7 +228,7 @@ export const deleteGoal = async (goalId: string) => {
   const { user } = await getUser();
 
   if (!user) {
-    redirect("/login");
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   try {

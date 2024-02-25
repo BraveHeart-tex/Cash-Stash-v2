@@ -10,11 +10,12 @@ import DashboardSkeleton from "@/components/dashboard-skeleton";
 import { Suspense } from "react";
 import { getUser } from "@/lib/auth/session";
 import { redirect } from "next/navigation";
+import { PAGE_ROUTES } from "@/lib/constants";
 
 export default async function Home() {
   const user = await getUser();
   if (!user) {
-    redirect("/login");
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   let [

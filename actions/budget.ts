@@ -18,14 +18,14 @@ import {
   invalidateKeysByPrefix,
   mapRedisHashToBudget,
 } from "@/lib/redis/redisUtils";
-import { CACHE_PREFIXES } from "@/lib/constants";
+import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 
 export const createBudget = async (
   data: BudgetSchemaType
 ): Promise<IValidatedResponse<Budget>> => {
   const { user } = await getUser();
   if (!user) {
-    redirect("/login");
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   try {
@@ -134,7 +134,7 @@ export const getPaginatedBudgets = async ({
   const { user } = await getUser();
 
   if (!user) {
-    redirect("/login");
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   const PAGE_SIZE = 12;
@@ -225,7 +225,7 @@ export const getPaginatedBudgets = async ({
 export const deleteBudget = async (id: string) => {
   const { user } = await getUser();
   if (!user) {
-    redirect("/login");
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   try {

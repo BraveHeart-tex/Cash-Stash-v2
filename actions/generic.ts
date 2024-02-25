@@ -12,6 +12,7 @@ import { Prisma } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
 import { getUser } from "@/lib/auth/session";
 import { redirect } from "next/navigation";
+import { PAGE_ROUTES } from "@/lib/constants";
 
 const TABLE_MAP: TableMap = {
   account: prisma.account,
@@ -109,7 +110,7 @@ export const createGenericWithCurrentUser = async <T>({
   const { user } = await getUser();
 
   if (!user) {
-    redirect("/login");
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   try {
@@ -186,7 +187,7 @@ export const getGenericListByCurrentUser = async <T>({
   const { user } = await getUser();
 
   if (!user) {
-    redirect("/login");
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   try {

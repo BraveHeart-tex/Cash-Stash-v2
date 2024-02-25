@@ -2,7 +2,7 @@
 import prisma from "@/lib/data/db";
 import { getUser } from "@/lib/auth/session";
 import { EditReminderSchema } from "@/schemas";
-import { MONTHS_OF_THE_YEAR } from "@/lib/constants";
+import { MONTHS_OF_THE_YEAR, PAGE_ROUTES } from "@/lib/constants";
 import { EditReminderSchemaType } from "@/schemas/EditReminderSchema";
 import CreateReminderSchema, {
   CreateReminderSchemaType,
@@ -12,7 +12,7 @@ import { redirect } from "next/navigation";
 export const fetchMonthlyTransactionsData = async () => {
   const { user } = await getUser();
   if (!user) {
-    redirect("/login");
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   const aggregateByType = async (isIncome: boolean) => {
@@ -43,7 +43,7 @@ export const fetchMonthlyTransactionsData = async () => {
 export const fetchInsightsDataAction = async () => {
   const { user } = await getUser();
   if (!user) {
-    redirect("/login");
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   const aggregateTransaction = async (isIncome: boolean) => {
@@ -125,7 +125,7 @@ export const getChartData = async () => {
     const { user } = await getUser();
 
     if (!user) {
-      redirect("/login");
+      redirect(PAGE_ROUTES.LOGIN_ROUTE);
     }
 
     const transactions = await prisma.transaction.findMany({
@@ -172,7 +172,7 @@ export const createReminder = async ({
 }: CreateReminderSchemaType) => {
   const { user } = await getUser();
   if (!user) {
-    redirect("/login");
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   const result = CreateReminderSchema.safeParse({

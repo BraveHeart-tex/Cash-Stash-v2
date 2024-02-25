@@ -9,6 +9,11 @@ export const PRIMARY_FOREGROUND_COLOR = "#fefcfa";
 export const FOREGROUND_COLOR = "#001400";
 export const MUTED_FOREGROUND_COLOR = "#767b9c";
 
+export const PAGE_ROUTES = {
+  LOGIN_ROUTE: "/auth/login",
+  SIGN_UP_ROUTE: "/auth/signup",
+};
+
 export const MAX_LOGIN_REQUESTS_PER_MINUTE = 5;
 export const MAX_SIGN_UP_REQUESTS_PER_MINUTE = 5;
 export const MONTHS_OF_THE_YEAR = [

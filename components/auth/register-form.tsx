@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import PasswordRequirements from "@/components/auth/password-requirements";
+import { PAGE_ROUTES } from "@/lib/constants";
 
 const RegisterForm = () => {
   const form = useForm<RegisterSchemaType>({
@@ -168,12 +169,20 @@ const RegisterForm = () => {
           </Form>
         </CardContent>
         <CardFooter>
-          <p className="text-sm text-center">
-            Already have an account?{" "}
-            <Link href="/login" className="text-blue-500 hover:underline">
-              Log In
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between w-full gap-2">
+            <p>
+              Already have an account?{" "}
+              <Link
+                href={PAGE_ROUTES.LOGIN_ROUTE}
+                className="text-blue-500 underline"
+              >
+                Log In
+              </Link>
+            </p>
+            <Link href="/" className="text-sm text-blue-500 underline">
+              I need a new verification code
             </Link>
-          </p>
+          </div>
         </CardFooter>
       </Card>
     </motion.div>

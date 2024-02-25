@@ -18,7 +18,7 @@ import {
   getPaginatedAccountsKey,
   invalidateKeysByPrefix,
 } from "@/lib/redis/redisUtils";
-import { CACHE_PREFIXES } from "@/lib/constants";
+import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 
 export const registerBankAccount = async ({
   balance,
@@ -28,7 +28,7 @@ export const registerBankAccount = async ({
   const { user } = await getUser();
 
   if (!user) {
-    redirect("/login");
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   try {
@@ -130,7 +130,7 @@ export const getPaginatedAccounts = async ({
   const { user } = await getUser();
 
   if (!user) {
-    redirect("/login");
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   const PAGE_SIZE = 12;
@@ -237,7 +237,7 @@ export const deleteAccount = async (accountId: string) => {
   const { user } = await getUser();
 
   if (!user) {
-    redirect("/login");
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   try {

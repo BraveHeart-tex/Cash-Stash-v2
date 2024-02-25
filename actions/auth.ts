@@ -12,6 +12,7 @@ import { checkRateLimit, checkSignUpRateLimit } from "@/lib/redis/redisUtils";
 import {
   MAX_LOGIN_REQUESTS_PER_MINUTE,
   MAX_SIGN_UP_REQUESTS_PER_MINUTE,
+  PAGE_ROUTES,
 } from "@/lib/constants";
 import {
   generateEmailVerificationCode,
@@ -198,5 +199,5 @@ export const logout = async () => {
     sessionCookie.value,
     sessionCookie.attributes
   );
-  return redirect("/login");
+  return redirect(PAGE_ROUTES.LOGIN_ROUTE);
 };

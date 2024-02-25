@@ -15,7 +15,7 @@ import { Prisma, Transaction } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import { IValidatedResponse } from "@/actions/types";
-import { CACHE_PREFIXES } from "@/lib/constants";
+import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 
 export const createTransaction = async (
   values: TransactionSchemaType
@@ -23,7 +23,7 @@ export const createTransaction = async (
   const { user } = await getUser();
 
   if (!user) {
-    redirect("/login");
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   try {
@@ -96,7 +96,7 @@ export const updateTransaction = async (
   const { user } = await getUser();
 
   if (!user) {
-    redirect("/login");
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   try {
@@ -221,7 +221,7 @@ export const getPaginatedTransactions = async ({
 }) => {
   const { user } = await getUser();
   if (!user) {
-    return redirect("/login");
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   try {
