@@ -184,12 +184,6 @@ const RegisterForm = () => {
                 <Link href={PAGE_ROUTES.LOGIN_ROUTE}>Log In</Link>
               </Button>
             </p>
-            {/* TODO: */}
-            <Button variant="link" className="text-sm p-0 w-max">
-              <Link href="/" className="underline">
-                I need a new verification code
-              </Link>
-            </Button>
           </div>
         </CardFooter>
       </Card>

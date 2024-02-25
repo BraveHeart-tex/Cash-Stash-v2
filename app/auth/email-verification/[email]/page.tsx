@@ -12,13 +12,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { getUser } from "@/lib/auth/session";
-import { resendEmailVerificationCode } from "@/lib/auth/authUtils";
+import { resendEmailVerificationCode } from "@/actions/auth";
 import {
   EMAIL_VERIFICATION_REDIRECTION_PATHS,
   PAGE_ROUTES,
 } from "@/lib/constants";
 import Image from "next/image";
 import { redirect } from "next/navigation";
+import ResendVerificationTokenButton from "@/components/resend-verification-token-button";
 
 interface IEmailVerificationPageProps {
   params: {
@@ -69,16 +70,7 @@ const EmailVerificationPage = async ({
         <CardFooter>
           <div className="text-sm flex items-center">
             <p>Didn't receive the email?</p>
-            <form
-              action={async () => {
-                "use server";
-                await resendEmailVerificationCode(email);
-              }}
-            >
-              <Button variant="link" className="p-0 ml-1 underline">
-                Request Again
-              </Button>
-            </form>
+            <ResendVerificationTokenButton email={email} />
           </div>
         </CardFooter>
       </Card>

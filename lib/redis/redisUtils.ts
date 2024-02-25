@@ -31,6 +31,10 @@ export const generateCachePrefixWithUserId = (
   return `${prefix}:${userId}`;
 };
 
+export const getSendVerificationCodeRateLimitKey = (ipAdress: string) => {
+  return `${CACHE_PREFIXES.SEND_VERIFICATION_CODE_RATE_LIMIT}:${ipAdress}`;
+};
+
 export const getAccountKey = (accountId: string) =>
   `${CACHE_PREFIXES.ACCOUNT}:${accountId}`;
 
@@ -186,6 +190,15 @@ export const mapRedisHashToGoal = (
 
 export const checkRateLimit = async (ipAdress: string) => {
   const key = getLoginRateLimitKey(ipAdress);
+  const count = await redis.incr(key);
+  if (count === 1) {
+    await redis.expire(key, 60);
+  }
+  return count;
+};
+
+export const checkSendVerificationCodeRateLimit = async (ipAdress: string) => {
+  const key = getSendVerificationCodeRateLimitKey(ipAdress);
   const count = await redis.incr(key);
   if (count === 1) {
     await redis.expire(key, 60);

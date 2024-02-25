@@ -8,11 +8,16 @@ import { ZodError } from "zod";
 import { processZodError } from "@/lib/utils";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { checkRateLimit, checkSignUpRateLimit } from "@/lib/redis/redisUtils";
+import {
+  checkRateLimit,
+  checkSendVerificationCodeRateLimit,
+  checkSignUpRateLimit,
+} from "@/lib/redis/redisUtils";
 import {
   MAX_LOGIN_REQUESTS_PER_MINUTE,
   MAX_SIGN_UP_REQUESTS_PER_MINUTE,
   PAGE_ROUTES,
+  SEND_VERIFICATION_CODE_RATE_LIMIT,
 } from "@/lib/constants";
 import {
   deleteEmailVerificationCode,
@@ -20,6 +25,7 @@ import {
   sendEmailVerificationCode,
   verifyVerificationCode,
 } from "@/lib/auth/authUtils";
+import { revalidatePath } from "next/cache";
 
 export const login = async (values: LoginSchemaType) => {
   const header = headers();
@@ -289,5 +295,45 @@ export const handleEmailVerification = async (email: string, code: string) => {
   return {
     error: null,
     successMessage: "Email verified successfully. You are being redirected...",
+  };
+};
+export const resendEmailVerificationCode = async (email: string) => {
+  const header = headers();
+  const ipAdress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(",")[0];
+  const count = await checkSendVerificationCodeRateLimit(ipAdress);
+  if (count > SEND_VERIFICATION_CODE_RATE_LIMIT) {
+    return {
+      message: "Too many requests. Please wait before trying again.",
+      isError: true,
+    };
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      email,
+    },
+  });
+
+  if (!user) {
+    return {
+      message:
+        "If you have an account, an email has been sent to you. Please check your inbox. Make sure to check your spam folder",
+      isError: false,
+    };
+  }
+
+  const verificationCode = await generateEmailVerificationCode(
+    user.id,
+    user.email
+  );
+
+  await sendEmailVerificationCode(user.email, verificationCode);
+
+  revalidatePath(PAGE_ROUTES.EMAIL_VERIFICATION_ROUTE + "/" + email);
+
+  return {
+    isError: false,
+    message:
+      "If you have an account, an email has been sent to you. Please check your inbox. Make sure to check your spam folder",
   };
 };
