@@ -212,7 +212,10 @@ export const checkEmailValidityBeforeVerification = async (email: string) => {
     });
 
     if (!userWithEmail) {
-      return false;
+      return {
+        hasValidVarficationCode: false,
+        timeLeft: 0,
+      };
     }
 
     const verificationCode = await prisma.emailVerificationCode.findFirst({
@@ -225,9 +228,17 @@ export const checkEmailValidityBeforeVerification = async (email: string) => {
       },
     });
 
-    return !!verificationCode;
+    return {
+      hasValidVarficationCode: !!verificationCode,
+      timeLeft: verificationCode?.expiresAt
+        ? Math.floor((verificationCode.expiresAt.getTime() - Date.now()) / 1000)
+        : 0,
+    };
   } catch (error) {
     console.error(error);
-    return false;
+    return {
+      hasValidVarficationCode: false,
+      timeLeft: 0,
+    };
   }
 };

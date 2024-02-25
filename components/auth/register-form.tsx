@@ -132,8 +132,8 @@ const RegisterForm = () => {
                         />
                       </FormControl>
                       <FormDescription className="text-[0.9em]">
-                        <strong>Note</strong>: Please use a valid email address.{" "}
-                        Your email will be used for{" "}
+                        <strong>Note</strong>: Please provide a valid email
+                        address for{" "}
                         <u>
                           account verification, password recovery, and other
                           important communications.

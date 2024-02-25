@@ -10,6 +10,7 @@ export type ICountDownTimerOptions = {
 };
 
 interface ICountDownTimerProps {
+  countDownFrom: number;
   timer: number;
   onTimerEnd?: () => void;
   options?: Partial<ICountDownTimerOptions>;
@@ -21,6 +22,7 @@ const CountDownTimer = ({
   onTimerEnd,
   options,
   className,
+  countDownFrom,
 }: ICountDownTimerProps) => {
   const [time, setTime] = useState(timer);
   const timerOptions: Partial<ICountDownTimerOptions> = {
@@ -81,7 +83,7 @@ const CountDownTimer = ({
             <div
               className="h-full bg-primary rounded-full animate-pulse"
               style={{
-                width: `${(time / timer) * 100}%`,
+                width: `${(time / countDownFrom) * 100}%`,
               }}
             ></div>
           </div>
@@ -104,7 +106,7 @@ const CountDownTimer = ({
               r="16"
               strokeWidth="4"
               strokeDasharray="100, 100"
-              strokeDashoffset={100 - (time / timer) * 100}
+              strokeDashoffset={100 - (time / countDownFrom) * 100}
               fill="none"
             />
           </svg>

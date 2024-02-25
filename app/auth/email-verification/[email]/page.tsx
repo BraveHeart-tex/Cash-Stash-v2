@@ -31,11 +31,12 @@ const EmailVerificationPage = async ({
     redirect(PAGE_ROUTES.HOME_PAGE);
   }
 
-  const email = params.email;
-  //   const userWithEmail = await checkEmailValidityBeforeVerification(email);
-  //   if (!userWithEmail) {
-  //     redirect(PAGE_ROUTES.LOGIN_ROUTE + "?error=invalid-email");
-  //   }
+  const email = decodeURIComponent(params.email);
+  const emailValidityResponse =
+    await checkEmailValidityBeforeVerification(email);
+  if (!emailValidityResponse.hasValidVarficationCode) {
+    redirect(PAGE_ROUTES.LOGIN_ROUTE + "?error=invalid-email");
+  }
 
   return (
     <div className="flex flex-col justify-center items-center h-screen p-2">
@@ -51,12 +52,12 @@ const EmailVerificationPage = async ({
         </CardHeader>
         <CardContent>
           <CardDescription>
-            An email has been sent to <b>{email}</b>. Please verify your email
-            address to continue. <br />
+            An email has been sent to <b>{email}</b>. Please enter the
+            verification code to the field below. <br />
             Make sure to check your spam folder if you do not see the email in
             your inbox.
           </CardDescription>
-          <EmailVerificationTimer />
+          <EmailVerificationTimer time={emailValidityResponse.timeLeft} />
           <EmailVerificationInput />
         </CardContent>
         <CardFooter>

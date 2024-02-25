@@ -7,17 +7,20 @@ import React, {
   HTMLInputTypeAttribute,
 } from "react";
 import { Input } from "@/components/ui/input";
+import { Label } from "./ui/label";
 
 interface IAutoProgressInputProps {
   length: number;
   // eslint-disable-next-line no-unused-vars
   onChange: (value: string) => void;
   type?: HTMLInputTypeAttribute;
+  label?: string;
 }
 
 const AutoProgressInput = ({
   length,
   onChange,
+  label,
   type = "text",
 }: IAutoProgressInputProps) => {
   const [values, setValues] = useState(new Array(length).fill(""));
