@@ -18,6 +18,7 @@ export const PAGE_ROUTES = {
   GOALS_ROUTE: "/goals",
   TRANSACTIONS_ROUTE: "/transactions",
   REPORTS_ROUTE: "/reports",
+  EMAIL_VERIFICATION_ROUTE: "/auth/email-verification",
 } as const;
 
 export const MAX_LOGIN_REQUESTS_PER_MINUTE = 5 as const;

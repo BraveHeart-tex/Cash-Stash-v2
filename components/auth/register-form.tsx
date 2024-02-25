@@ -29,11 +29,13 @@ import {
 import { Input } from "@/components/ui/input";
 import PasswordRequirements from "@/components/auth/password-requirements";
 import { PAGE_ROUTES } from "@/lib/constants";
+import { useRouter } from "next/navigation";
 
 const RegisterForm = () => {
   const form = useForm<RegisterSchemaType>({
     resolver: zodResolver(registerSchema),
   });
+  const router = useRouter();
 
   const handleRegisterFormSubmit = async (data: RegisterSchemaType) => {
     const result = await registerUser(data);
@@ -50,6 +52,8 @@ const RegisterForm = () => {
         duration: 10000,
       }
     );
+
+    router.push(PAGE_ROUTES.EMAIL_VERIFICATION_ROUTE + `/${data.email}`);
   };
 
   const processFormErrors = (
@@ -82,7 +86,7 @@ const RegisterForm = () => {
       transition={{ duration: 0.5, ease: "easeInOut" }}
     >
       <Card className="w-full">
-        <CardHeader>
+        <CardHeader className="text-xl">
           <Image
             src={logo}
             alt="Cash Stash"
@@ -172,17 +176,20 @@ const RegisterForm = () => {
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between w-full gap-2">
             <p>
               Already have an account?{" "}
-              <Link
-                href={PAGE_ROUTES.LOGIN_ROUTE}
-                className="text-blue-500 underline"
+              <Button
+                variant="link"
+                aria-label="Sign up for a new account."
+                className="p-0 underline text-md"
               >
-                Log In
-              </Link>
+                <Link href={PAGE_ROUTES.LOGIN_ROUTE}>Log In</Link>
+              </Button>
             </p>
             {/* TODO: */}
-            <Link href="/" className="text-sm text-blue-500 underline">
-              I need a new verification code
-            </Link>
+            <Button variant="link" className="text-sm p-0 w-max">
+              <Link href="/" className="underline">
+                I need a new verification code
+              </Link>
+            </Button>
           </div>
         </CardFooter>
       </Card>

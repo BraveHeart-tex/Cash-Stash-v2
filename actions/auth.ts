@@ -215,7 +215,17 @@ export const checkEmailValidityBeforeVerification = async (email: string) => {
       return false;
     }
 
-    return true;
+    const verificationCode = await prisma.emailVerificationCode.findFirst({
+      where: {
+        userId: userWithEmail.id,
+        email,
+        expiresAt: {
+          gt: new Date(),
+        },
+      },
+    });
+
+    return !!verificationCode;
   } catch (error) {
     console.error(error);
     return false;

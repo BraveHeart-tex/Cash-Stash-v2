@@ -23,6 +23,7 @@ const APP_DESCRIPTION =
 export const metadata: Metadata = {
   manifest: "/manifest.json",
   applicationName: APP_NAME,
+  metadataBase: new URL("https://cashstash.borakaraca.tech"),
   title: {
     default: APP_DEFAULT_TITLE,
     template: APP_TITLE_TEMPLATE,

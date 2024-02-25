@@ -1,14 +1,20 @@
 import { checkEmailValidityBeforeVerification } from "@/actions/auth";
-import CountDownTimer from "@/components/countdown-timer";
+import EmailVerificationInput from "@/components/auth/email-verification-input";
+import EmailVerificationTimer from "@/components/auth/email-verification-timer";
+import logo from "@/components/Logo.svg";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { getUser } from "@/lib/auth/session";
+import { resendEmailVerificationCode } from "@/lib/auth/utils";
 import { PAGE_ROUTES } from "@/lib/constants";
+import Image from "next/image";
 import { redirect } from "next/navigation";
 
 interface IEmailVerificationPageProps {
@@ -32,25 +38,42 @@ const EmailVerificationPage = async ({
   //   }
 
   return (
-    <div>
+    <div className="flex flex-col justify-center items-center h-screen p-2">
       <Card>
-        <CardHeader>
+        <CardHeader className="text-xl">
+          <Image
+            src={logo}
+            alt="Cash Stash"
+            width={200}
+            className="mb-4 md:mx-auto dark:invert"
+          />
           <CardTitle>Email Verification</CardTitle>
         </CardHeader>
         <CardContent>
           <CardDescription>
-            An email has been sent to {email}. Please verify your email address
-            to continue.
+            An email has been sent to <b>{email}</b>. Please verify your email
+            address to continue. <br />
+            Make sure to check your spam folder if you do not see the email in
+            your inbox.
           </CardDescription>
-          <CountDownTimer
-            timer={5 * 60}
-            options={{
-              showMinutes: true,
-              showSeconds: true,
-              progressBarType: "circular",
-            }}
-          />
+          <EmailVerificationTimer />
+          <EmailVerificationInput />
         </CardContent>
+        <CardFooter>
+          <div className="text-sm flex items-center">
+            <p>Didn't receive the email?</p>
+            <form
+              action={async () => {
+                "use server";
+                await resendEmailVerificationCode(email);
+              }}
+            >
+              <Button variant="link" className="p-0 ml-1 underline">
+                Request Again
+              </Button>
+            </form>
+          </div>
+        </CardFooter>
       </Card>
     </div>
   );

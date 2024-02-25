@@ -91,7 +91,7 @@ const LoginForm = () => {
       transition={{ duration: 0.5, ease: "easeInOut" }}
     >
       <Card className="w-full">
-        <CardHeader>
+        <CardHeader className="text-xl">
           <Image
             src={logo}
             alt="Cash Stash"
@@ -158,25 +158,36 @@ const LoginForm = () => {
           </Form>
         </CardContent>
         <CardFooter>
-          <div className="flex flex-col gap-2 lg:flex-row lg:justify-between w-full">
+          <div className="flex flex-col gap-2 lg:flex-row lg:justify-between w-full text-md">
             <p>
               Don't have an account?{" "}
-              <Link
-                href={PAGE_ROUTES.SIGN_UP_ROUTE}
+              <Button
+                variant="link"
                 aria-label="Sign up for a new account."
-                className="text-blue-500 underline"
+                className="p-0 underline text-md"
               >
-                Sign up
-              </Link>
+                <Link
+                  href={PAGE_ROUTES.SIGN_UP_ROUTE}
+                  aria-label="Sign up for a new account."
+                >
+                  Sign up
+                </Link>
+              </Button>
             </p>
             {/* TODO: */}
-            <Link
-              href="#"
-              aria-label="I need help signing in."
-              className="text-blue-500 underline"
+            <Button
+              variant="link"
+              aria-label="Sign up for a new account."
+              className="w-max p-0 underline"
             >
-              I need help signing in
-            </Link>
+              <Link
+                href={"#"}
+                aria-label="Sign up for a new account."
+                className=""
+              >
+                I need help signing in
+              </Link>
+            </Button>
           </div>
         </CardFooter>
       </Card>

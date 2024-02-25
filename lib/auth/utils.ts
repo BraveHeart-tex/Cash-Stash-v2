@@ -81,3 +81,7 @@ export const verifyVerificationCode = async (user: User, code: string) => {
 
   return true;
 };
+
+export const resendEmailVerificationCode = async (email: string) => {
+  console.log("Resending email verification code", email);
+};

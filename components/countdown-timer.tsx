@@ -19,14 +19,16 @@ interface ICountDownTimerProps {
 const CountDownTimer = ({
   timer,
   onTimerEnd,
-  options = {
-    showHours: false,
-    showMinutes: true,
-    showSeconds: true,
-  },
+  options,
   className,
 }: ICountDownTimerProps) => {
   const [time, setTime] = useState(timer);
+  const timerOptions: Partial<ICountDownTimerOptions> = {
+    showHours: false,
+    showMinutes: true,
+    showSeconds: true,
+    ...options,
+  };
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
@@ -55,15 +57,15 @@ const CountDownTimer = ({
   const renderContentAndProgressBar = () => {
     const parts = [];
 
-    if (options?.showHours) {
+    if (timerOptions?.showHours) {
       parts.push(formattedHours);
     }
 
-    if (options?.showMinutes) {
+    if (timerOptions?.showMinutes) {
       parts.push(formattedMinutes);
     }
 
-    if (options?.showSeconds) {
+    if (timerOptions?.showSeconds) {
       parts.push(formattedSeconds);
     }
 
@@ -71,7 +73,7 @@ const CountDownTimer = ({
       <div className={cn("font-mono", className)}>{parts.join(":")}</div>
     );
 
-    if (options?.progressBarType === "linear") {
+    if (timerOptions?.progressBarType === "linear") {
       return (
         <>
           {content}
@@ -87,7 +89,7 @@ const CountDownTimer = ({
       );
     }
 
-    if (options?.progressBarType === "circular") {
+    if (timerOptions?.progressBarType === "circular") {
       return (
         <div className="relative w-20 h-20 mt-1">
           <svg
@@ -114,7 +116,9 @@ const CountDownTimer = ({
       );
     }
 
-    return null;
+    return (
+      <div className="font-mono text-2xl text-primary">{parts.join(":")}</div>
+    );
   };
 
   return <div>{renderContentAndProgressBar()}</div>;
