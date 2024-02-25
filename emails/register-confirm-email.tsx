@@ -16,17 +16,21 @@ import {
   Section,
   Text,
 } from "@react-email/components";
+import { Link } from "@react-email/components";
+
 import * as React from "react";
 
-interface SlackConfirmEmailProps {
-  validationCode?: string;
+interface IRegisterConfirmEmailProps {
+  validationCode: string;
+  validationUrl: string;
 }
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
 export const RegisterConfirmEmail = ({
   validationCode,
-}: SlackConfirmEmailProps) => (
+  validationUrl,
+}: IRegisterConfirmEmailProps) => (
   <Html>
     <Head>
       <Font
@@ -57,13 +61,20 @@ export const RegisterConfirmEmail = ({
           we'll help you get signed in.
         </Text>
 
+        <Text>
+          This code will expire in 5 minutes, so don't wait too long to use it.
+        </Text>
         <Section style={codeBox}>
-          <Text style={confirmationCodeText}>{validationCode}</Text>
+          <Text style={validationCodeText}>{validationCode}</Text>
+        </Section>
+        <Section>
+          <Text>Or you can click the link below to enter your code:</Text>
+          <Link href={validationUrl}>Click here to to enter your code</Link>
         </Section>
 
         <Text style={text}>
           If you didn't sign up for this service, there's nothing to worry
-          about, you can safely ignore it.
+          about, you can safely ignore this email.
         </Text>
 
         <Section>
@@ -128,10 +139,11 @@ const codeBox = {
   padding: "40px 10px",
 };
 
-const confirmationCodeText = {
+const validationCodeText = {
   fontSize: "30px",
   textAlign: "center" as const,
   verticalAlign: "middle",
+  letterSpacing: "8px",
 };
 
 const text = {

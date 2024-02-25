@@ -46,6 +46,8 @@ export const sendEmailVerificationCode = async (
   const emailHTML = render(
     RegisterConfirmEmail({
       validationCode: code,
+      validationUrl:
+        process.env.NEXT_PUBLIC_BASE_URL! + `/email-verification/${email}`,
     })
   );
 
