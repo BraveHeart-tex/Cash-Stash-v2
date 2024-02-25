@@ -1,5 +1,6 @@
+import { User } from "lucia";
 import { RegisterConfirmEmail } from "@/emails/register-confirm-email";
-import { TimeSpan, createDate } from "oslo";
+import { TimeSpan, createDate, isWithinExpirationDate } from "oslo";
 import { generateRandomString, alphabet } from "oslo/crypto";
 import prisma from "@/lib/data/db";
 import nodemailer from "nodemailer";
@@ -58,5 +59,25 @@ export const sendEmailVerificationCode = async (
   await transporter.sendMail(options);
 };
 
-// TODO: Implement this function
-export const verificationCodeIsValid = async (code: string) => {};
+export const verifyVerificationCode = async (user: User, code: string) => {
+  const emailVerificationCode = await prisma.emailVerificationCode.findFirst({
+    where: {
+      userId: user.id,
+      code,
+    },
+  });
+
+  if (!emailVerificationCode) {
+    return false;
+  }
+
+  if (!isWithinExpirationDate(emailVerificationCode.expiresAt)) {
+    return false;
+  }
+
+  if (emailVerificationCode.email !== user.email) {
+    return false;
+  }
+
+  return true;
+};
