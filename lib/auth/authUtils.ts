@@ -5,6 +5,7 @@ import prisma from "@/lib/data/db";
 import nodemailer from "nodemailer";
 import { render } from "@react-email/render";
 import { User } from "@prisma/client";
+import { PAGE_ROUTES, VERIFICATION_CODE_EXPIRY_MINUTES } from "@/lib/constants";
 
 export const generateEmailVerificationCode = async (
   userId: string,
@@ -22,7 +23,9 @@ export const generateEmailVerificationCode = async (
       userId,
       email,
       code,
-      expiresAt: createDate(new TimeSpan(5, "m")),
+      expiresAt: createDate(
+        new TimeSpan(VERIFICATION_CODE_EXPIRY_MINUTES, "m")
+      ),
     },
   });
 
@@ -46,8 +49,7 @@ export const sendEmailVerificationCode = async (
   const emailHTML = render(
     RegisterConfirmEmail({
       validationCode: code,
-      validationUrl:
-        process.env.NEXT_PUBLIC_BASE_URL! + `/email-verification/${email}`,
+      validationUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/${PAGE_ROUTES.EMAIL_VERIFICATION_ROUTE}/${email}`,
     })
   );
 

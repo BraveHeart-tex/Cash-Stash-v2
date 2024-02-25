@@ -27,11 +27,13 @@ const EmailVerificationPage = async ({
   params,
 }: IEmailVerificationPageProps) => {
   const { user } = await getUser();
+
   if (user) {
     redirect(PAGE_ROUTES.HOME_PAGE);
   }
 
   const email = decodeURIComponent(params.email);
+
   const emailValidityResponse =
     await checkEmailValidityBeforeVerification(email);
 
