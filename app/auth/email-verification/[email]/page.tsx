@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { getUser } from "@/lib/auth/session";
-import { resendEmailVerificationCode } from "@/lib/auth/utils";
+import { resendEmailVerificationCode } from "@/lib/auth/authUtils";
 import { PAGE_ROUTES } from "@/lib/constants";
 import Image from "next/image";
 import { redirect } from "next/navigation";

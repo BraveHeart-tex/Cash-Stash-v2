@@ -17,7 +17,7 @@ import {
 import {
   generateEmailVerificationCode,
   sendEmailVerificationCode,
-} from "@/lib/auth/utils";
+} from "@/lib/auth/authUtils";
 
 export const login = async (values: LoginSchemaType) => {
   const header = headers();
