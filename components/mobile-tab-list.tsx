@@ -1,12 +1,18 @@
 "use client";
-import { PAGES } from "@/lib/constants";
+import { PAGES, PAGE_ROUTES } from "@/lib/constants";
 import { usePathname } from "next/navigation";
 import MobileTabsListItem from "./mobile-tab-list-item";
+import useAuthStore from "@/store/auth/authStore";
 
 const MobileTabsList = () => {
+  const userInState = useAuthStore((state) => state.user);
   const pathname = usePathname();
 
-  if (pathname.startsWith("/login") || pathname.startsWith("/signup"))
+  if (
+    !userInState ||
+    pathname.startsWith(PAGE_ROUTES.LOGIN_ROUTE) ||
+    pathname.startsWith(PAGE_ROUTES.SIGN_UP_ROUTE)
+  )
     return null;
 
   return (
