@@ -179,6 +179,7 @@ const RegisterForm = () => {
                 Log In
               </Link>
             </p>
+            {/* TODO: */}
             <Link href="/" className="text-sm text-blue-500 underline">
               I need a new verification code
             </Link>

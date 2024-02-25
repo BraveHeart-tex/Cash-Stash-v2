@@ -5,6 +5,7 @@ import MotionDiv from "@/components/animations/motion-div";
 import { Account } from "@prisma/client";
 import Link from "next/link";
 import { Button } from "./ui/button";
+import { PAGE_ROUTES } from "@/lib/constants";
 
 const AccountSummaries = ({ accounts }: { accounts: Account[] }) => {
   if (accounts.length === 0) {
@@ -30,7 +31,7 @@ const AccountSummaries = ({ accounts }: { accounts: Account[] }) => {
             <AccountCard account={account} key={account.id + index} />
           ))}
           <Button className="w-max mt-2 ml-auto">
-            <Link href="/accounts">See all your accounts</Link>
+            <Link href={PAGE_ROUTES.ACCOUNTS_ROUTE}>See all your accounts</Link>
           </Button>
         </AnimatePresenceClient>
       </ul>

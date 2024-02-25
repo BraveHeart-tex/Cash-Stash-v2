@@ -5,6 +5,7 @@ import { cn, thousandSeparator } from "@/lib/utils";
 import { FaMoneyBill } from "react-icons/fa";
 import Link from "next/link";
 import MotionDiv from "@/components/animations/motion-div";
+import { PAGE_ROUTES } from "@/lib/constants";
 
 interface IFinancialInsightsProps {
   insightsData: InsightsData | null;
@@ -48,7 +49,7 @@ const FinancialInsights = ({ insightsData }: IFinancialInsightsProps) => {
       <article className="flex h-[300px] items-center justify-center">
         <div className="my-3">
           <NoDataMessage />
-          <Link href="/transactions">
+          <Link href={PAGE_ROUTES.TRANSACTIONS_ROUTE}>
             <Button className="font-semibold text-md mt-3 flex items-center gap-[14px]">
               <FaMoneyBill size={18} />
               Go To Transactions
@@ -90,7 +91,9 @@ const FinancialInsights = ({ insightsData }: IFinancialInsightsProps) => {
         <div className="my-3">
           <NoDataMessage />
           <Button className="font-semibold text-md mt-3 hover:bg-foreground hover:text-muted">
-            <Link href="/transactions">Go To Transactions</Link>
+            <Link href={PAGE_ROUTES.TRANSACTIONS_ROUTE}>
+              Go To Transactions
+            </Link>
           </Button>
         </div>
       </article>

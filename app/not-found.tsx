@@ -20,7 +20,7 @@ const NotFound = async () => {
           Looks like you tried to navigate to a page that doesn&apos;t exist.
         </p>
         <Button className="w-max">
-          <Link href={"/"}>Back to the home page</Link>
+          <Link href={PAGE_ROUTES.HOME_PAGE}>Back to the home page</Link>
         </Button>
       </div>
     </div>

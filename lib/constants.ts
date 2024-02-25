@@ -10,8 +10,14 @@ export const FOREGROUND_COLOR = "#001400";
 export const MUTED_FOREGROUND_COLOR = "#767b9c";
 
 export const PAGE_ROUTES = {
+  HOME_PAGE: "/",
   LOGIN_ROUTE: "/auth/login",
   SIGN_UP_ROUTE: "/auth/signup",
+  ACCOUNTS_ROUTE: "/accounts",
+  BUDGETS_ROUTE: "/budgets",
+  GOALS_ROUTE: "/goals",
+  TRANSACTIONS_ROUTE: "/transactions",
+  REPORTS_ROUTE: "/reports",
 };
 
 export const MAX_LOGIN_REQUESTS_PER_MINUTE = 5;
@@ -35,32 +41,32 @@ export const PAGES: IPage[] = [
   {
     label: "Dashboard",
     icon: MdDashboard,
-    link: "/",
+    link: PAGE_ROUTES.HOME_PAGE,
   },
   {
     label: "Accounts",
     icon: MdOutlineAccountBalanceWallet,
-    link: "/accounts",
+    link: PAGE_ROUTES.ACCOUNTS_ROUTE,
   },
   {
     label: "Budgets",
     icon: FaMoneyBill,
-    link: "/budgets",
+    link: PAGE_ROUTES.BUDGETS_ROUTE,
   },
   {
     label: "Goals",
     icon: FaPiggyBank,
-    link: "/goals",
+    link: PAGE_ROUTES.GOALS_ROUTE,
   },
   {
     label: "Transactions",
     icon: AiOutlineTransaction,
-    link: "/transactions",
+    link: PAGE_ROUTES.TRANSACTIONS_ROUTE,
   },
   {
     label: "Reports",
     icon: TbReportAnalytics,
-    link: "/reports",
+    link: PAGE_ROUTES.REPORTS_ROUTE,
   },
 ];
 

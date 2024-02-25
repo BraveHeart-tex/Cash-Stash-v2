@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { User } from "lucia";
 import useAuthStore from "@/store/auth/authStore";
+import { PAGE_ROUTES } from "@/lib/constants";
 
 const Navbar = ({ user }: { user: User | null }) => {
   const setCurrentUser = useAuthStore((state) => state.setUser);
@@ -29,7 +30,7 @@ const Navbar = ({ user }: { user: User | null }) => {
       >
         <div className="flex justify-between items-center">
           <div className="hidden md:block" />
-          <Link href={"/"} className="ml-auto lg:ml-0">
+          <Link href={PAGE_ROUTES.HOME_PAGE} className="ml-auto lg:ml-0">
             <Image
               src={Logo}
               alt="Cash Stash"

@@ -1,10 +1,11 @@
-import GoalCard from "./goal-card";
-import CreateGoalButton from "../create-buttons/create-goal-button";
+import GoalCard from "@/components/goals/goal-card";
+import CreateGoalButton from "@/components/create-buttons/create-goal-button";
 import AnimatePresenceClient from "@/components/animations/animate-presence";
 import MotionDiv from "@/components/animations/motion-div";
 import { Goal } from "@prisma/client";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { PAGE_ROUTES } from "@/lib/constants";
 
 const GoalStatus = ({ goals }: { goals: Goal[] }) => {
   if (goals.length === 0) {
@@ -29,7 +30,7 @@ const GoalStatus = ({ goals }: { goals: Goal[] }) => {
           <GoalCard key={goal.id} goal={goal} />
         ))}
         <Button className="w-max mt-2 ml-auto">
-          <Link href="/goals">See all your goals</Link>
+          <Link href={PAGE_ROUTES.GOALS_ROUTE}>See all your goals</Link>
         </Button>
       </AnimatePresenceClient>
     </div>

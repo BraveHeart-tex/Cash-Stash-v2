@@ -5,6 +5,7 @@ import MotionDiv from "@/components/animations/motion-div";
 import { Budget } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { PAGE_ROUTES } from "@/lib/constants";
 
 const BudgetStatus = ({ budgets }: { budgets: Budget[] }) => {
   if (!budgets || budgets.length === 0) {
@@ -29,7 +30,7 @@ const BudgetStatus = ({ budgets }: { budgets: Budget[] }) => {
           <BudgetCard key={budget.id} budget={budget} />
         ))}
         <Button className="w-max mt-2 ml-auto">
-          <Link href="/budgets">See all your budgets</Link>
+          <Link href={PAGE_ROUTES.BUDGETS_ROUTE}>See all your budgets</Link>
         </Button>
       </AnimatePresenceClient>
     </div>
