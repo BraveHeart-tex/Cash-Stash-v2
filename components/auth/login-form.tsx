@@ -28,6 +28,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { PAGE_ROUTES } from "@/lib/constants";
 
 const LoginForm = () => {
   let [isPending, startTransition] = useTransition();
@@ -156,19 +157,26 @@ const LoginForm = () => {
             </form>
           </Form>
         </CardContent>
-        <CardFooter className="justify-between">
-          <div>
-            <p className="text-sm text-center">
+        <CardFooter>
+          <div className="flex flex-col gap-2 lg:flex-row lg:justify-between w-full">
+            <p>
               Don't have an account?{" "}
               <Link
-                href="/signup"
+                href={PAGE_ROUTES.SIGN_UP_ROUTE}
                 aria-label="Sign up for a new account."
-                className="text-blue-500 hover:underline"
-                data-testid="signup-link"
+                className="text-blue-500 underline"
               >
                 Sign up
               </Link>
             </p>
+            {/* TODO: */}
+            <Link
+              href="#"
+              aria-label="I need help signing in."
+              className="text-blue-500 underline"
+            >
+              I need help signing in
+            </Link>
           </div>
         </CardFooter>
       </Card>

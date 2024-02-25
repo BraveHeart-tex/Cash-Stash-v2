@@ -2,14 +2,15 @@
 import { PAGES } from "@/lib/constants";
 import { TabsList, TabsTrigger, Tabs } from "./ui/tabs";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
+import useAuthStore from "@/store/auth/authStore";
+import { usePathname } from "next/navigation";
 
 const NavigationTabsList = () => {
+  const userInState = useAuthStore((state) => state.user);
   const pathName = usePathname();
 
-  if (pathName.startsWith("/login") || pathName.startsWith("/signup"))
-    return null;
+  if (!userInState) return null;
 
   return (
     <Tabs defaultValue={PAGES[0].label}>

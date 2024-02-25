@@ -5,22 +5,20 @@ import UserMenu from "@/components/user-menu";
 import { ModeToggle } from "@/components/mode-toggle";
 import Link from "next/link";
 import { useEffect } from "react";
-import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { User } from "lucia";
 import useAuthStore from "@/store/auth/authStore";
 
 const Navbar = ({ user }: { user: User | null }) => {
-  const pathname = usePathname();
   const setCurrentUser = useAuthStore((state) => state.setUser);
+  const userInState = useAuthStore((state) => state.user);
 
   useEffect(() => {
     setCurrentUser(user);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
-  if (pathname.startsWith("/login") || pathname.startsWith("/signup"))
-    return null;
+  if (!userInState) return null;
 
   return (
     <div className="mb-6 shadow-lg p-4 bg-primary dark:bg-background dark:border-b">
