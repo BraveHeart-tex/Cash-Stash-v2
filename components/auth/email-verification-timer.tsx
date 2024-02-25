@@ -1,7 +1,10 @@
 "use client";
 import { redirect } from "next/navigation";
 import CountDownTimer from "@/components/countdown-timer";
-import { PAGE_ROUTES, VERIFICATION_CODE_EXPIRY_SECONDS } from "@/lib/constants";
+import {
+  PAGE_ROUTES,
+  EMAIL_VERIFICATION_CODE_EXPIRY_SECONDS,
+} from "@/lib/constants";
 import { showErrorToast } from "@/components/ui/use-toast";
 
 const EmailVerificationTimer = ({ time }: { time: number }) => {
@@ -15,7 +18,7 @@ const EmailVerificationTimer = ({ time }: { time: number }) => {
 
   return (
     <CountDownTimer
-      countDownFrom={VERIFICATION_CODE_EXPIRY_SECONDS}
+      countDownFrom={EMAIL_VERIFICATION_CODE_EXPIRY_SECONDS}
       className="mt-2 w-full text-center text-2xl"
       timer={time}
       options={{

@@ -7,8 +7,8 @@ import { render } from "@react-email/render";
 import { User } from "@prisma/client";
 import {
   PAGE_ROUTES,
-  VERIFICATION_CODE_EXPIRY_MINUTES,
-  VERIFICATION_CODE_LENGTH,
+  EMAIL_VERIFICATION_CODE_EXPIRY_MINUTES,
+  EMAIL_VERIFICATION_CODE_LENGTH,
 } from "@/lib/constants";
 
 export const generateEmailVerificationCode = async (
@@ -21,14 +21,17 @@ export const generateEmailVerificationCode = async (
     },
   });
 
-  const code = generateRandomString(VERIFICATION_CODE_LENGTH, alphabet("0-9"));
+  const code = generateRandomString(
+    EMAIL_VERIFICATION_CODE_LENGTH,
+    alphabet("0-9")
+  );
   await prisma.emailVerificationCode.create({
     data: {
       userId,
       email,
       code,
       expiresAt: createDate(
-        new TimeSpan(VERIFICATION_CODE_EXPIRY_MINUTES, "m")
+        new TimeSpan(EMAIL_VERIFICATION_CODE_EXPIRY_MINUTES, "m")
       ),
     },
   });

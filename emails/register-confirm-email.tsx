@@ -3,7 +3,7 @@ import {
   MUTED_FOREGROUND_COLOR,
   PRIMARY_COLOR,
   PRIMARY_FOREGROUND_COLOR,
-  VERIFICATION_CODE_EXPIRY_MINUTES,
+  EMAIL_VERIFICATION_CODE_EXPIRY_MINUTES,
 } from "@/lib/constants";
 import {
   Body,
@@ -63,8 +63,8 @@ export const RegisterConfirmEmail = ({
         </Text>
 
         <Text>
-          This code will expire in {VERIFICATION_CODE_EXPIRY_MINUTES} minutes,
-          so don't wait too long to use it.
+          This code will expire in {EMAIL_VERIFICATION_CODE_EXPIRY_MINUTES}{" "}
+          minutes, so don't wait too long to use it.
         </Text>
         <Section style={codeBox}>
           <Text style={validationCodeText}>{validationCode}</Text>

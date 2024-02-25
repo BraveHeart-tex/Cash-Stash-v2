@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { handleEmailVerification } from "@/actions/auth";
 import { showErrorToast, showSuccessToast } from "../ui/use-toast";
-import { VERIFICATION_CODE_LENGTH } from "@/lib/constants";
+import { EMAIL_VERIFICATION_CODE_LENGTH } from "@/lib/constants";
 
 const EmailVerificationInput = ({ email }: { email: string }) => {
   const [errorMessage, setErrorMessage] = useState("");
@@ -26,7 +26,7 @@ const EmailVerificationInput = ({ email }: { email: string }) => {
   }, [email, verificationCode]);
 
   useEffect(() => {
-    if (verificationCode.length === VERIFICATION_CODE_LENGTH) {
+    if (verificationCode.length === EMAIL_VERIFICATION_CODE_LENGTH) {
       verifyEmail();
     }
   }, [email, verificationCode, verifyEmail]);
@@ -36,7 +36,7 @@ const EmailVerificationInput = ({ email }: { email: string }) => {
       <div className="gap-1 hidden lg:flex lg:flex-col">
         <Label htmlFor="verificationCode">Verification Code</Label>
         <AutoProgressInput
-          length={VERIFICATION_CODE_LENGTH}
+          length={EMAIL_VERIFICATION_CODE_LENGTH}
           onChange={setVerificationCode}
         />
       </div>
