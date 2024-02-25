@@ -25,6 +25,7 @@ export const MAX_LOGIN_REQUESTS_PER_MINUTE = 5 as const;
 export const MAX_SIGN_UP_REQUESTS_PER_MINUTE = 5 as const;
 export const VERIFICATION_CODE_EXPIRY_SECONDS = 300 as const;
 export const VERIFICATION_CODE_EXPIRY_MINUTES = 5 as const;
+export const VERIFICATION_CODE_LENGTH = 8 as const;
 
 export const MONTHS_OF_THE_YEAR = [
   "Jan",

@@ -5,7 +5,11 @@ import prisma from "@/lib/data/db";
 import nodemailer from "nodemailer";
 import { render } from "@react-email/render";
 import { User } from "@prisma/client";
-import { PAGE_ROUTES, VERIFICATION_CODE_EXPIRY_MINUTES } from "@/lib/constants";
+import {
+  PAGE_ROUTES,
+  VERIFICATION_CODE_EXPIRY_MINUTES,
+  VERIFICATION_CODE_LENGTH,
+} from "@/lib/constants";
 
 export const generateEmailVerificationCode = async (
   userId: string,
@@ -17,7 +21,7 @@ export const generateEmailVerificationCode = async (
     },
   });
 
-  const code = generateRandomString(8, alphabet("0-9"));
+  const code = generateRandomString(VERIFICATION_CODE_LENGTH, alphabet("0-9"));
   await prisma.emailVerificationCode.create({
     data: {
       userId,
