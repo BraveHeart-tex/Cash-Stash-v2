@@ -285,7 +285,7 @@ export const handleEmailVerification = async (email: string, code: string) => {
     sessionCookie.attributes
   );
 
-  deleteEmailVerificationCode(user.id);
+  await deleteEmailVerificationCode(user.id);
 
   return {
     error: null,
