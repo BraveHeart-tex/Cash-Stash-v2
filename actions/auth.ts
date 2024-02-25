@@ -267,6 +267,8 @@ export const handleEmailVerification = async (email: string, code: string) => {
 
   if (!isValid) {
     // TODO: incr trial count for rate limiting
+    // if the trial count is greater than 3, delete the verification code
+    // and redirect to the login page with an error message
     const triesLeft = 2;
     return {
       error: "Invalid verification code. You have " + triesLeft + " tries left",

@@ -2,7 +2,6 @@ import { checkEmailValidityBeforeVerification } from "@/actions/auth";
 import EmailVerificationInput from "@/components/auth/email-verification-input";
 import EmailVerificationTimer from "@/components/auth/email-verification-timer";
 import logo from "@/components/Logo.svg";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -12,7 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { getUser } from "@/lib/auth/session";
-import { resendEmailVerificationCode } from "@/actions/auth";
+
 import {
   EMAIL_VERIFICATION_REDIRECTION_PATHS,
   PAGE_ROUTES,
@@ -62,7 +61,8 @@ const EmailVerificationPage = async ({
             An email has been sent to <b>{email}</b>. Please enter the
             verification code to the field below. <br />
             Make sure to check your spam folder if you do not see the email in
-            your inbox.
+            your inbox. <br />
+            <u>Unverified accounts will be deleted after 7 days.</u>
           </CardDescription>
           <EmailVerificationTimer time={emailValidityResponse.timeLeft} />
           <EmailVerificationInput email={email} />
