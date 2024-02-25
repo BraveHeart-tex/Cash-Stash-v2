@@ -17,6 +17,7 @@ import {
 import {
   generateEmailVerificationCode,
   sendEmailVerificationCode,
+  verifyVerificationCode,
 } from "@/lib/auth/authUtils";
 
 export const login = async (values: LoginSchemaType) => {
@@ -241,4 +242,50 @@ export const checkEmailValidityBeforeVerification = async (email: string) => {
       timeLeft: 0,
     };
   }
+};
+
+export const handleEmailVerification = async (email: string, code: string) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      email,
+    },
+  });
+
+  if (!user) {
+    // TODO: Extract to constants and implement custom component for showing errors
+    redirect(PAGE_ROUTES.LOGIN_ROUTE + "?error=verification-failed");
+  }
+
+  const isValid = await verifyVerificationCode(user, code);
+
+  if (!isValid) {
+    // TODO: incr trial count for rate limiting
+    const triesLeft = 2;
+    return {
+      error: "Invalid verification code. You have " + triesLeft + " tries left",
+      successMessage: null,
+    };
+  }
+
+  await prisma.user.update({
+    where: {
+      id: user.id,
+    },
+    data: {
+      email_verified: true,
+    },
+  });
+
+  const session = await lucia.createSession(user.id, {});
+  const sessionCookie = lucia.createSessionCookie(session.id);
+  cookies().set(
+    sessionCookie.name,
+    sessionCookie.value,
+    sessionCookie.attributes
+  );
+
+  return {
+    error: null,
+    successMessage: "Email verified successfully. You are being redirected...",
+  };
 };

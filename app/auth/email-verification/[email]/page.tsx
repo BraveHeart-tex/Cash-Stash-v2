@@ -58,7 +58,7 @@ const EmailVerificationPage = async ({
             your inbox.
           </CardDescription>
           <EmailVerificationTimer time={emailValidityResponse.timeLeft} />
-          <EmailVerificationInput />
+          <EmailVerificationInput email={email} />
         </CardContent>
         <CardFooter>
           <div className="text-sm flex items-center">

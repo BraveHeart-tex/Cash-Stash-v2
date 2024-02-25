@@ -1,34 +1,43 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import AutoProgressInput from "../AutoProgressInput";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
+import { useCallback, useEffect, useState } from "react";
+import AutoProgressInput from "@/components/auto-progress-input";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { handleEmailVerification } from "@/actions/auth";
+import { showErrorToast, showSuccessToast } from "../ui/use-toast";
 
-const EmailVerificationInput = () => {
+const EmailVerificationInput = ({ email }: { email: string }) => {
+  const [errorMessage, setErrorMessage] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
 
-  const onVerify = () => {
-    console.log("Verifying email");
-  };
+  const verifyEmail = useCallback(async () => {
+    const result = await handleEmailVerification(email, verificationCode);
+    if (result.error) {
+      showErrorToast("Error verifying email", result.error);
+      setErrorMessage(result.error);
+      return;
+    }
+
+    if (result.successMessage) {
+      showSuccessToast(result.successMessage);
+    }
+  }, [email, verificationCode]);
 
   useEffect(() => {
     if (verificationCode.length === 8) {
-      onVerify();
+      verifyEmail();
     }
-  }, [verificationCode.length]);
+  }, [email, verificationCode, verifyEmail]);
 
   return (
     <div className="mt-4 w-full flex lg:items-center lg:justify-center">
       <div className="gap-1 hidden lg:flex lg:flex-col">
         <Label htmlFor="verificationCode">Verification Code</Label>
-        <AutoProgressInput
-          label="Verification Code"
-          length={8}
-          onChange={setVerificationCode}
-        />
+        <AutoProgressInput length={8} onChange={setVerificationCode} />
       </div>
       <div className="lg:hidden w-full">
+        {errorMessage && <p className="text-destructive">{errorMessage}</p>}
         <Label htmlFor="verificationCode">Verification Code</Label>
         <Input
           className="w-full"

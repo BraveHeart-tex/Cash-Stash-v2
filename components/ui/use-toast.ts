@@ -195,7 +195,7 @@ const showErrorToast = (title: string, description: string) => {
   });
 };
 
-const showSuccessToast = (title: string, description: string) => {
+const showSuccessToast = (title: string, description?: string) => {
   toast({
     title,
     description,

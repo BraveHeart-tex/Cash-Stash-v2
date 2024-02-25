@@ -1,10 +1,10 @@
-import { User } from "lucia";
 import { RegisterConfirmEmail } from "@/emails/register-confirm-email";
 import { TimeSpan, createDate, isWithinExpirationDate } from "oslo";
 import { generateRandomString, alphabet } from "oslo/crypto";
 import prisma from "@/lib/data/db";
 import nodemailer from "nodemailer";
 import { render } from "@react-email/render";
+import { User } from "@prisma/client";
 
 export const generateEmailVerificationCode = async (
   userId: string,

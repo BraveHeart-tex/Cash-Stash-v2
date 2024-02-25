@@ -81,7 +81,7 @@ const CountDownTimer = ({
           {content}
           <div className="w-full h-2 bg-gray-200 rounded-full mt-1">
             <div
-              className="h-full bg-primary rounded-full animate-pulse"
+              className="h-full bg-primary rounded-full"
               style={{
                 width: `${(time / countDownFrom) * 100}%`,
               }}
