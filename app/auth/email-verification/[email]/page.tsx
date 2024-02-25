@@ -34,6 +34,7 @@ const EmailVerificationPage = async ({
   const email = decodeURIComponent(params.email);
   const emailValidityResponse =
     await checkEmailValidityBeforeVerification(email);
+
   if (!emailValidityResponse.hasValidVarficationCode) {
     redirect(PAGE_ROUTES.LOGIN_ROUTE + "?error=invalid-email");
   }

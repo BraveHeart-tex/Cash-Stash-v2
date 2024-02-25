@@ -8,29 +8,33 @@ datasource db {
 }
 
 model User {
-  id             String        @id @default(cuid())
-  name           String
-  email          String        @unique
-  hashedPassword String
-  email_verified Boolean       @default(false)
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-  budgets        Budget[]
-  goals          Goal[]
-  reminders      Reminder[]
-  transactions   Transaction[]
-  userAccounts   Account[]
-  Session        Session[]
+  id                    String                 @id @default(cuid())
+  name                  String
+  email                 String                 @unique
+  hashedPassword        String
+  email_verified        Boolean                @default(false)
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  budgets               Budget[]
+  goals                 Goal[]
+  reminders             Reminder[]
+  transactions          Transaction[]
+  userAccounts          Account[]
+  Session               Session[]
+  EmailVerificationCode EmailVerificationCode?
 }
 
 model EmailVerificationCode {
   id        String   @id @default(cuid())
   code      String
   userId    String   @unique
-  email     String
+  email     String   @unique
   expiresAt DateTime
 
+  User User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@index([userId], map: "emailVerificationCodes_userId_fkey")
+  @@index([email], map: "emailVerificationCodes_email_fkey")
 }
 
 model Session {

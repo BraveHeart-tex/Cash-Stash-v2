@@ -15,6 +15,7 @@ import {
   PAGE_ROUTES,
 } from "@/lib/constants";
 import {
+  deleteEmailVerificationCode,
   generateEmailVerificationCode,
   sendEmailVerificationCode,
   verifyVerificationCode,
@@ -283,6 +284,8 @@ export const handleEmailVerification = async (email: string, code: string) => {
     sessionCookie.value,
     sessionCookie.attributes
   );
+
+  await deleteEmailVerificationCode(user.id);
 
   return {
     error: null,

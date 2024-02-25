@@ -85,3 +85,11 @@ export const verifyVerificationCode = async (user: User, code: string) => {
 export const resendEmailVerificationCode = async (email: string) => {
   console.log("Resending email verification code", email);
 };
+
+export const deleteEmailVerificationCode = async (userId: string) => {
+  await prisma.emailVerificationCode.deleteMany({
+    where: {
+      userId,
+    },
+  });
+};
