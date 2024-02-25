@@ -8,6 +8,7 @@ import { Metadata, Viewport } from "next";
 import Navbar from "@/components/navbar";
 import { getUser } from "@/lib/auth/session";
 import GenericConfirmDialog from "./generic-confirm-dialog";
+import RedirectionPathToaster from "@/components/redirection-path-toaster";
 
 const InterFont = Inter({
   weight: ["300", "400", "500", "600", "700"],
@@ -77,6 +78,7 @@ export default async function RootLayout({ children }: ILayoutProps) {
           <main className="pb-16 lg:pb-0">{children}</main>
           <GenericModal />
           <GenericConfirmDialog />
+          <RedirectionPathToaster />
         </ThemeProvider>
         <Toaster />
       </body>

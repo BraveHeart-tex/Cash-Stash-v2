@@ -1,11 +1,12 @@
 import { getUser } from "@/lib/auth/session";
 import { redirect } from "next/navigation";
 import RegisterForm from "@/components/auth/register-form";
+import { PAGE_ROUTES } from "@/lib/constants";
 
 const SignUpPage = async () => {
   const { user } = await getUser();
   if (user) {
-    redirect("/");
+    redirect(PAGE_ROUTES.HOME_PAGE);
   }
 
   return (

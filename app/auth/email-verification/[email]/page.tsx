@@ -13,7 +13,10 @@ import {
 } from "@/components/ui/card";
 import { getUser } from "@/lib/auth/session";
 import { resendEmailVerificationCode } from "@/lib/auth/authUtils";
-import { PAGE_ROUTES } from "@/lib/constants";
+import {
+  EMAIL_VERIFICATION_REDIRECTION_PATHS,
+  PAGE_ROUTES,
+} from "@/lib/constants";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 
@@ -38,7 +41,7 @@ const EmailVerificationPage = async ({
     await checkEmailValidityBeforeVerification(email);
 
   if (!emailValidityResponse.hasValidVarficationCode) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE + "?error=invalid-email");
+    redirect(EMAIL_VERIFICATION_REDIRECTION_PATHS.INVALID_EMAIL);
   }
 
   return (

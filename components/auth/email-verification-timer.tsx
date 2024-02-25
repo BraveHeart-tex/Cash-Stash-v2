@@ -2,8 +2,8 @@
 import { redirect } from "next/navigation";
 import CountDownTimer from "@/components/countdown-timer";
 import {
-  PAGE_ROUTES,
   EMAIL_VERIFICATION_CODE_EXPIRY_SECONDS,
+  EMAIL_VERIFICATION_REDIRECTION_PATHS,
 } from "@/lib/constants";
 import { showErrorToast } from "@/components/ui/use-toast";
 
@@ -13,7 +13,7 @@ const EmailVerificationTimer = ({ time }: { time: number }) => {
       "Verification time expired",
       "Please request a new verification code."
     );
-    redirect(PAGE_ROUTES.LOGIN_ROUTE + "?error=verification-timeout");
+    redirect(EMAIL_VERIFICATION_REDIRECTION_PATHS.VERIFICATION_TIMEOUT);
   };
 
   return (

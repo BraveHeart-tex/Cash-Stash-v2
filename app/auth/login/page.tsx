@@ -1,11 +1,12 @@
 import LoginForm from "@/components/auth/login-form";
 import { getUser } from "@/lib/auth/session";
+import { PAGE_ROUTES } from "@/lib/constants";
 import { redirect } from "next/navigation";
 
 const LoginPage = async () => {
   const { user } = await getUser();
   if (user) {
-    redirect("/");
+    redirect(PAGE_ROUTES.HOME_PAGE);
   }
 
   return (

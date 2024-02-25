@@ -253,8 +253,7 @@ export const handleEmailVerification = async (email: string, code: string) => {
   });
 
   if (!user) {
-    // TODO: Extract to constants and implement custom component for showing errors
-    redirect(PAGE_ROUTES.LOGIN_ROUTE + "?error=verification-failed");
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   const isValid = await verifyVerificationCode(user, code);
