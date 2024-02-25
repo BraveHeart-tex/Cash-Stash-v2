@@ -201,3 +201,23 @@ export const logout = async () => {
   );
   return redirect(PAGE_ROUTES.LOGIN_ROUTE);
 };
+
+export const checkEmailValidityBeforeVerification = async (email: string) => {
+  try {
+    const userWithEmail = await prisma.user.findUnique({
+      where: {
+        email,
+        email_verified: false,
+      },
+    });
+
+    if (!userWithEmail) {
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};

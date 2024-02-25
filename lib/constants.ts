@@ -4,10 +4,10 @@ import { FaMoneyBill, FaPiggyBank } from "react-icons/fa";
 import { MdDashboard, MdOutlineAccountBalanceWallet } from "react-icons/md";
 import { TbReportAnalytics } from "react-icons/tb";
 
-export const PRIMARY_COLOR = "#c4002b";
-export const PRIMARY_FOREGROUND_COLOR = "#fefcfa";
-export const FOREGROUND_COLOR = "#001400";
-export const MUTED_FOREGROUND_COLOR = "#767b9c";
+export const PRIMARY_COLOR = "#c4002b" as const;
+export const PRIMARY_FOREGROUND_COLOR = "#fefcfa" as const;
+export const FOREGROUND_COLOR = "#001400" as const;
+export const MUTED_FOREGROUND_COLOR = "#767b9c" as const;
 
 export const PAGE_ROUTES = {
   HOME_PAGE: "/",
@@ -18,10 +18,10 @@ export const PAGE_ROUTES = {
   GOALS_ROUTE: "/goals",
   TRANSACTIONS_ROUTE: "/transactions",
   REPORTS_ROUTE: "/reports",
-};
+} as const;
 
-export const MAX_LOGIN_REQUESTS_PER_MINUTE = 5;
-export const MAX_SIGN_UP_REQUESTS_PER_MINUTE = 5;
+export const MAX_LOGIN_REQUESTS_PER_MINUTE = 5 as const;
+export const MAX_SIGN_UP_REQUESTS_PER_MINUTE = 5 as const;
 export const MONTHS_OF_THE_YEAR = [
   "Jan",
   "Feb",
@@ -35,7 +35,7 @@ export const MONTHS_OF_THE_YEAR = [
   "Oct",
   "Nov",
   "Dec",
-];
+] as const;
 
 export const PAGES: IPage[] = [
   {
@@ -81,4 +81,4 @@ export const CACHE_PREFIXES = {
   TRANSACTION: "transaction",
   BUDGET: "budget",
   GOAL: "goal",
-};
+} as const;
