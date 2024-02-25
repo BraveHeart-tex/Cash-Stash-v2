@@ -21,8 +21,6 @@ model User {
   transactions   Transaction[]
   userAccounts   Account[]
   Session        Session[]
-
-  @@map("users")
 }
 
 model EmailVerificationCode {
@@ -56,7 +54,6 @@ model Account {
   user         User            @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId], map: "userAccounts_userId_fkey")
-  @@map("userAccounts")
 }
 
 model Transaction {

@@ -89,6 +89,7 @@
     "@quramy/jest-prisma": "^1.5.0",
     "@quramy/jest-prisma-node": "^1.5.0",
     "@testing-library/react": "^14.0.0",
+    "@types/nodemailer": "^6.4.14",
     "@types/uuid": "^9.0.8",
     "autoprefixer": "^10.4.15",
     "husky": "^9.0.11",

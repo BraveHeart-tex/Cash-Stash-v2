@@ -162,6 +162,7 @@ export const register = async (values: RegisterSchemaType) => {
     };
   } catch (error) {
     console.error(error);
+
     if (error instanceof ZodError) {
       return processZodError(error);
     }

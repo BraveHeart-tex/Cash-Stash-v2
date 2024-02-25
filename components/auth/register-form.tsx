@@ -27,7 +27,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import PasswordRequirements from "./password-requirements";
+import PasswordRequirements from "@/components/auth/password-requirements";
 
 const RegisterForm = () => {
   const form = useForm<RegisterSchemaType>({

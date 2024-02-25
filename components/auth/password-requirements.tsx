@@ -1,9 +1,7 @@
 import { cn } from "@/lib/utils";
 import { MdCheck, MdClear, MdPassword } from "react-icons/md";
 
-const PasswordRequirements = ({ password }: { password: string }) => {
-  if (!password) return null;
-
+const PasswordRequirements = ({ password = "" }: { password: string }) => {
   const validations = [
     {
       label: "8 characters",

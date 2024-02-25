@@ -24,7 +24,7 @@ interface SlackConfirmEmailProps {
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-export const SlackConfirmEmail = ({
+export const RegisterConfirmEmail = ({
   validationCode,
 }: SlackConfirmEmailProps) => (
   <Html>
@@ -78,7 +78,7 @@ export const SlackConfirmEmail = ({
   </Html>
 );
 
-export default SlackConfirmEmail;
+export default RegisterConfirmEmail;
 
 const footerText = {
   fontSize: "12px",
