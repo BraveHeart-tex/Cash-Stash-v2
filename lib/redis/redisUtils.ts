@@ -24,6 +24,13 @@ const mapRedisHashToEntity = <T extends Entity>(
   return mappedEntity as T;
 };
 
+export const generateCachePrefixWithUserId = (
+  prefix: string,
+  userId: string
+) => {
+  return `${prefix}:${userId}`;
+};
+
 export const getAccountKey = (accountId: string) =>
   `${CACHE_PREFIXES.ACCOUNT}:${accountId}`;
 
@@ -65,7 +72,7 @@ export const getPaginatedAccountsKey = ({
   orderByCondition?: string;
 }) => {
   return (
-    CACHE_PREFIXES.PAGINATED_ACCOUNTS +
+    generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_ACCOUNTS, userId) +
     JSON.stringify({
       userId,
       pageNumber,
@@ -95,7 +102,7 @@ export const getPaginatedBudgetsKey = ({
   orderByCondition?: string;
 }) => {
   return (
-    CACHE_PREFIXES.PAGINATED_BUDGETS +
+    generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_BUDGETS, userId) +
     JSON.stringify({
       userId,
       pageNumber,
@@ -121,7 +128,7 @@ export const getPaginatedGoalsKeys = ({
   sortDirection?: string;
 }) => {
   return (
-    CACHE_PREFIXES.PAGINATED_GOALS +
+    generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_GOALS, userId) +
     JSON.stringify({
       userId,
       pageNumber,

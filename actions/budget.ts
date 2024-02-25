@@ -13,6 +13,7 @@ import {
 } from "@/actions/types";
 import redis from "@/lib/redis";
 import {
+  generateCachePrefixWithUserId,
   getBudgetKey,
   getPaginatedBudgetsKey,
   invalidateKeysByPrefix,
@@ -47,7 +48,9 @@ export const createBudget = async (
     }
 
     await Promise.all([
-      invalidateKeysByPrefix(CACHE_PREFIXES.PAGINATED_BUDGETS),
+      invalidateKeysByPrefix(
+        generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_BUDGETS, user.id)
+      ),
       redis.hset(getBudgetKey(createdBudget.id), createdBudget),
     ]);
 
@@ -73,6 +76,11 @@ export const updateBudget = async (
   budgetId: string,
   values: BudgetSchemaType
 ): Promise<IValidatedResponse<Budget>> => {
+  const { user } = await getUser();
+  if (!user) {
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+  }
+
   let budgetToBeUpdated: Budget | null = null;
 
   const budgetFromCache = await redis.hgetall(getBudgetKey(budgetId));
@@ -94,7 +102,7 @@ export const updateBudget = async (
     const validatedData = budgetSchema.parse(values);
 
     const updatedBudget = await prisma.budget.update({
-      where: { id: budgetId, userId: budgetToBeUpdated.userId },
+      where: { id: budgetId, userId: user.id },
       data: validatedData,
     });
 
@@ -106,7 +114,9 @@ export const updateBudget = async (
       };
 
     await Promise.all([
-      invalidateKeysByPrefix(CACHE_PREFIXES.PAGINATED_BUDGETS),
+      invalidateKeysByPrefix(
+        generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_BUDGETS, user.id)
+      ),
       redis.hset(getBudgetKey(updatedBudget.id), updatedBudget),
     ]);
 
@@ -240,7 +250,9 @@ export const deleteBudget = async (id: string) => {
     }
 
     await Promise.all([
-      invalidateKeysByPrefix(CACHE_PREFIXES.PAGINATED_BUDGETS),
+      invalidateKeysByPrefix(
+        generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_BUDGETS, user.id)
+      ),
       redis.del(getBudgetKey(id)),
     ]);
 

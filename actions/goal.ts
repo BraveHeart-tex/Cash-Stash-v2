@@ -13,6 +13,7 @@ import {
 import prisma from "@/lib/data/db";
 import redis from "@/lib/redis";
 import {
+  generateCachePrefixWithUserId,
   getGoalKey,
   getPaginatedGoalsKeys,
   invalidateKeysByPrefix,
@@ -47,7 +48,9 @@ export const createGoal = async (
     }
 
     await Promise.all([
-      invalidateKeysByPrefix(CACHE_PREFIXES.PAGINATED_GOALS),
+      invalidateKeysByPrefix(
+        generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_GOALS, user.id)
+      ),
       redis.hset(getGoalKey(createdGoal.id), createdGoal),
     ]);
 
@@ -108,7 +111,9 @@ export const updateGoal = async (
       };
 
     await Promise.all([
-      invalidateKeysByPrefix(CACHE_PREFIXES.PAGINATED_GOALS),
+      invalidateKeysByPrefix(
+        generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_GOALS, user.id)
+      ),
       redis.hset(getGoalKey(updatedGoal.id), updatedGoal),
     ]);
 
@@ -244,7 +249,9 @@ export const deleteGoal = async (goalId: string) => {
     }
 
     await Promise.all([
-      invalidateKeysByPrefix(CACHE_PREFIXES.PAGINATED_GOALS),
+      invalidateKeysByPrefix(
+        generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_GOALS, user.id)
+      ),
       redis.del(getGoalKey(goalId)),
     ]);
 

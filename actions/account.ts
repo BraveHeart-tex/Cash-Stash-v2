@@ -14,6 +14,7 @@ import {
 } from "@/actions/types";
 import redis from "@/lib/redis";
 import {
+  generateCachePrefixWithUserId,
   getAccountKey,
   getPaginatedAccountsKey,
   invalidateKeysByPrefix,
@@ -46,7 +47,12 @@ export const registerBankAccount = async ({
     }
 
     await Promise.all([
-      invalidateKeysByPrefix(CACHE_PREFIXES.PAGINATED_ACCOUNTS),
+      invalidateKeysByPrefix(
+        generateCachePrefixWithUserId(
+          CACHE_PREFIXES.PAGINATED_ACCOUNTS,
+          user.id
+        )
+      ),
       redis.hset(getAccountKey(createdAccount.id), createdAccount),
     ]);
 
@@ -73,6 +79,11 @@ export const updateBankAccount = async ({
 }: AccountSchemaType & { accountId: string }): Promise<
   IValidatedResponse<Account>
 > => {
+  const { user } = await getUser();
+  if (!user) {
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+  }
+
   if (!accountId) {
     return {
       error: "Invalid request. Please provide an account ID.",
@@ -99,7 +110,12 @@ export const updateBankAccount = async ({
     }
 
     await Promise.all([
-      invalidateKeysByPrefix(CACHE_PREFIXES.PAGINATED_ACCOUNTS),
+      invalidateKeysByPrefix(
+        generateCachePrefixWithUserId(
+          CACHE_PREFIXES.PAGINATED_ACCOUNTS,
+          user.id
+        )
+      ),
       redis.hset(getAccountKey(updatedAccount.id), updatedAccount),
     ]);
 
@@ -252,7 +268,12 @@ export const deleteAccount = async (accountId: string) => {
     }
 
     await Promise.all([
-      invalidateKeysByPrefix(CACHE_PREFIXES.PAGINATED_ACCOUNTS),
+      invalidateKeysByPrefix(
+        generateCachePrefixWithUserId(
+          CACHE_PREFIXES.PAGINATED_ACCOUNTS,
+          user.id
+        )
+      ),
       redis.del(getAccountKey(accountId)),
     ]);
 

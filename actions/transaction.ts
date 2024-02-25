@@ -1,6 +1,7 @@
 "use server";
 import redis from "@/lib/redis";
 import {
+  generateCachePrefixWithUserId,
   getAccountKey,
   getTransactionKey,
   invalidateKeysByPrefix,
@@ -66,7 +67,12 @@ export const createTransaction = async (
     ]);
 
     await Promise.all([
-      invalidateKeysByPrefix(CACHE_PREFIXES.PAGINATED_ACCOUNTS),
+      invalidateKeysByPrefix(
+        generateCachePrefixWithUserId(
+          CACHE_PREFIXES.PAGINATED_ACCOUNTS,
+          user.id
+        )
+      ),
       redis.hset(getTransactionKey(transaction.id), newTransaction),
       redis.hset(getAccountKey(validatedData.accountId), updatedAccount),
     ]);
@@ -169,6 +175,11 @@ export const updateTransaction = async (
 export const deleteTransactionById = async (
   transactionToDelete: Transaction
 ) => {
+  const { user } = await getUser();
+  if (!user) {
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
+  }
+
   try {
     const deletedTransaction = prisma.transaction.delete({
       where: {
@@ -193,8 +204,9 @@ export const deleteTransactionById = async (
       deletedTransaction,
     ]);
 
-    // invalidate the cache
-    await invalidateKeysByPrefix(CACHE_PREFIXES.PAGINATED_ACCOUNTS);
+    await invalidateKeysByPrefix(
+      generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_ACCOUNTS, user.id)
+    );
 
     return {
       transaction: deleteTransactionResult,
