@@ -25,7 +25,7 @@ You can check out the live of of this application from this [link](https://cash-
 - The front end of the application is built with
   - Next.js
   - Shadcn UI
-  - Redux Toolkit for application wide state management
+  - Zustand for state management
   - Recharts
   - React Hook Form and Zod for form validation
 - The back end of the application is built with
