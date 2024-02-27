@@ -13,7 +13,7 @@ import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { register as registerUser } from "@/data/auth";
-import { showDefaultToast, showErrorToast } from "@/components/ui/use-toast";
+import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import Link from "next/link";
 import registerSchema, { RegisterSchemaType } from "@/schemas/register-schema";
 import { motion } from "framer-motion";
@@ -45,15 +45,12 @@ const RegisterForm = () => {
       return;
     }
 
-    showDefaultToast(
-      "Account created successfully",
-      "Please check your email to verify your account.",
-      {
-        duration: 10000,
-      }
-    );
-
     router.push(PAGE_ROUTES.EMAIL_VERIFICATION_ROUTE + `/${data.email}`);
+
+    showSuccessToast(
+      "Account created successfully",
+      "Please check your email to verify your account."
+    );
   };
 
   const processFormErrors = (
