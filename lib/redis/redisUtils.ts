@@ -8,6 +8,7 @@ interface Entity {
 
 const mapRedisHashToEntity = <T extends Entity>(
   hash: Record<string, string> | null,
+  // eslint-disable-next-line no-unused-vars
   mappingConfig: { [K in keyof T]: (value: string) => T[K] }
 ): T | null => {
   if (!hash) {
@@ -29,6 +30,10 @@ export const generateCachePrefixWithUserId = (
   userId: string
 ) => {
   return `${prefix}:${userId}`;
+};
+
+export const getVerifyVerificationCodeRateLimitKey = (ipAdress: string) => {
+  return `${CACHE_PREFIXES.VERIFY_VERIFICATION_CODE_RATE_LIMIT}:${ipAdress}`;
 };
 
 export const getSendVerificationCodeRateLimitKey = (ipAdress: string) => {
@@ -55,7 +60,7 @@ export const getLoginRateLimitKey = (ipAddress: string) => {
 };
 
 export const getSignUpRateLimitKey = (userId: string, ipAddress: string) => {
-  return `${CACHE_PREFIXES.SIGN_UP_RATE_LIMIT}:${ipAddress}`;
+  return `${CACHE_PREFIXES.SIGN_UP_RATE_LIMIT}:${userId}:${ipAddress}`;
 };
 
 export const getPaginatedAccountsKey = ({
@@ -224,6 +229,15 @@ export const checkSignUpRateLimit = async (
   ipAdress: string
 ) => {
   const key = getSignUpRateLimitKey(userId, ipAdress);
+  const count = await redis.incr(key);
+  if (count === 1) {
+    await redis.expire(key, 60);
+  }
+  return count;
+};
+
+export const verifyVerificationCodeRateLimit = async (ipAdress: string) => {
+  const key = getVerifyVerificationCodeRateLimitKey(ipAdress);
   const count = await redis.incr(key);
   if (count === 1) {
     await redis.expire(key, 60);

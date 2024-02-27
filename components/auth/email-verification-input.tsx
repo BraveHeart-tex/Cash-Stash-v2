@@ -5,25 +5,30 @@ import AutoProgressInput from "@/components/auto-progress-input";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { handleEmailVerification } from "@/data/auth";
-import { showErrorToast, showSuccessToast } from "../ui/use-toast";
+import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { EMAIL_VERIFICATION_CODE_LENGTH } from "@/lib/constants";
+import { useRouter } from "next/navigation";
 
 const EmailVerificationInput = ({ email }: { email: string }) => {
+  const router = useRouter();
   const [errorMessage, setErrorMessage] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
 
   const verifyEmail = useCallback(async () => {
     const result = await handleEmailVerification(email, verificationCode);
-    if (result.error) {
+    if (result?.error) {
       showErrorToast("Error verifying email", result.error);
       setErrorMessage(result.error);
-      return;
+
+      if (result?.redirectPath) {
+        router.push(result.redirectPath);
+      }
     }
 
-    if (result.successMessage) {
+    if (result?.successMessage) {
       showSuccessToast(result.successMessage);
     }
-  }, [email, verificationCode]);
+  }, [email, verificationCode, router]);
 
   useEffect(() => {
     if (verificationCode.length === EMAIL_VERIFICATION_CODE_LENGTH) {

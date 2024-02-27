@@ -10,6 +10,7 @@ const ResendVerificationTokenButton = ({ email }: { email: string }) => {
   const handleRequestAgain = async () => {
     startTransition(async () => {
       const response = await resendEmailVerificationCode(email);
+
       if (response.isError) {
         showErrorToast("Failed to send verification code", response.message);
       } else {

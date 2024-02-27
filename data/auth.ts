@@ -13,10 +13,13 @@ import {
   checkIPBasedSendVerificationCodeRateLimit,
   checkSignUpRateLimit,
   checkUserIdBasedSendVerificationCodeRateLimit,
+  verifyVerificationCodeRateLimit,
 } from "@/lib/redis/redisUtils";
 import {
+  EMAIL_VERIFICATION_REDIRECTION_PATHS,
   MAX_LOGIN_REQUESTS_PER_MINUTE,
   MAX_SIGN_UP_REQUESTS_PER_MINUTE,
+  MAX_VERIFICATION_CODE_ATTEMPTS,
   PAGE_ROUTES,
   SEND_VERIFICATION_CODE_RATE_LIMIT,
 } from "@/lib/constants";
@@ -266,10 +269,23 @@ export const handleEmailVerification = async (email: string, code: string) => {
   const isValid = await verifyVerificationCode(user, code);
 
   if (!isValid) {
-    // TODO: incr trial count for rate limiting
-    // if the trial count is greater than 3, delete the verification code
-    // and redirect to the login page with an error message
-    const triesLeft = 2;
+    const header = headers();
+    const ipAdress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
+      ","
+    )[0];
+    const verificationCount = await verifyVerificationCodeRateLimit(ipAdress);
+
+    if (verificationCount === MAX_VERIFICATION_CODE_ATTEMPTS) {
+      await deleteEmailVerificationCode(user.id);
+      return {
+        error: "Too many attempts. Please wait before trying again.",
+        successMessage: null,
+        redirectPath: EMAIL_VERIFICATION_REDIRECTION_PATHS.TOO_MANY_REQUESTS,
+      };
+    }
+
+    const triesLeft = MAX_VERIFICATION_CODE_ATTEMPTS - verificationCount;
+
     return {
       error: "Invalid verification code. You have " + triesLeft + " tries left",
       successMessage: null,
@@ -343,7 +359,7 @@ export const resendEmailVerificationCode = async (email: string) => {
 
   await sendEmailVerificationCode(user.email, verificationCode);
 
-  revalidatePath(PAGE_ROUTES.EMAIL_VERIFICATION_ROUTE + "/" + email);
+  revalidatePath(PAGE_ROUTES.EMAIL_VERIFICATION_ROUTE + "/" + email, "layout");
 
   return {
     isError: false,

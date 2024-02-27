@@ -11,7 +11,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { getUser } from "@/lib/auth/session";
-
 import {
   EMAIL_VERIFICATION_REDIRECTION_PATHS,
   PAGE_ROUTES,

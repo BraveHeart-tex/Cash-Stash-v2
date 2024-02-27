@@ -97,4 +97,5 @@ export const CACHE_PREFIXES = {
   BUDGET: "budget",
   GOAL: "goal",
   SEND_VERIFICATION_CODE_RATE_LIMIT: "send_verification_code_rate_limit",
+  VERIFY_VERIFICATION_CODE_RATE_LIMIT: "verify_verification_code_rate_limit",
 } as const;
