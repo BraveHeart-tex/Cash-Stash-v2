@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/card";
 import { getUser } from "@/lib/auth/session";
 import {
+  ACCOUNT_VERIFICATION_EXPIRATION_PERIOD_DAYS,
   EMAIL_VERIFICATION_REDIRECTION_PATHS,
   PAGE_ROUTES,
 } from "@/lib/constants";
@@ -61,7 +62,10 @@ const EmailVerificationPage = async ({
             verification code to the field below. <br />
             Make sure to check your spam folder if you do not see the email in
             your inbox. <br />
-            <u>Unverified accounts will be deleted after 7 days.</u>
+            <u>
+              Unverified accounts will be deleted after{" "}
+              {ACCOUNT_VERIFICATION_EXPIRATION_PERIOD_DAYS} days.
+            </u>
           </CardDescription>
           <EmailVerificationTimer time={emailValidityResponse.timeLeft} />
           <EmailVerificationInput email={email} />

@@ -1,3 +1,4 @@
+import { ACCOUNT_VERIFICATION_EXPIRATION_PERIOD_DAYS } from "@/lib/constants";
 import prisma from "@/lib/data/db";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -12,7 +13,10 @@ export async function GET(request: NextRequest) {
       where: {
         email_verified: false,
         createdAt: {
-          lte: new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000),
+          lte: new Date(
+            new Date().getTime() -
+              ACCOUNT_VERIFICATION_EXPIRATION_PERIOD_DAYS * 24 * 60 * 60 * 1000
+          ),
         },
       },
     });
