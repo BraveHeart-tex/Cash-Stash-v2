@@ -1,5 +1,5 @@
 "use client";
-import { createReminder } from "@/actions";
+import { createReminder } from "@/data";
 
 import DatePicker from "@/components/date-picker";
 import FormInput from "@/components/form-input";

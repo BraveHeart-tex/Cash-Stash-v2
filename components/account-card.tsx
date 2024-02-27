@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import useGenericModalStore from "@/store/genericModalStore";
-import { deleteAccount } from "@/actions/account";
+import { deleteAccount } from "@/data/account";
 
 interface IAccountCardProps {
   account: Account;

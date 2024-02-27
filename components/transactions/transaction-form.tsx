@@ -20,15 +20,15 @@ import {
 } from "@/components/ui/select";
 import { generateReadbleEnumLabels } from "@/lib/utils";
 import { Account, Transaction, TransactionCategory } from "@prisma/client";
-import { IValidatedResponse } from "@/actions/types";
+import { IValidatedResponse } from "@/data/types";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import transactionSchema, {
   TransactionSchemaType,
 } from "@/schemas/transaction-schema";
-import { getPaginatedAccounts } from "@/actions/account";
-import { createTransaction, updateTransaction } from "@/actions/transaction";
+import { getPaginatedAccounts } from "@/data/account";
+import { createTransaction, updateTransaction } from "@/data/transaction";
 import useGenericModalStore from "@/store/genericModalStore";
 
 interface ITransactionFormProps {

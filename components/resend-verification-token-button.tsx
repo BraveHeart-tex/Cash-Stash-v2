@@ -1,5 +1,5 @@
 "use client";
-import { resendEmailVerificationCode } from "@/actions/auth";
+import { resendEmailVerificationCode } from "@/data/auth";
 import { Button } from "@/components/ui/button";
 import { useTransition } from "react";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";

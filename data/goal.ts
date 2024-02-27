@@ -9,7 +9,7 @@ import {
   IValidatedResponse,
   IGetPaginatedGoalsParams,
   IGetPaginatedGoalsResponse,
-} from "@/actions/types";
+} from "@/data/types";
 import prisma from "@/lib/data/db";
 import redis from "@/lib/redis";
 import {

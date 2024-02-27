@@ -15,7 +15,7 @@ import transactionSchema, {
 import { Prisma, Transaction } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
-import { IValidatedResponse } from "@/actions/types";
+import { IValidatedResponse } from "@/data/types";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 
 export const createTransaction = async (

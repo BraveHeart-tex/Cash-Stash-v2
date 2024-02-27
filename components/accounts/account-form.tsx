@@ -22,8 +22,8 @@ import {
 } from "@/components/ui/select";
 import { formHasChanged, generateReadbleEnumLabels } from "@/lib/utils";
 import { Account, AccountCategory } from "@prisma/client";
-import { registerBankAccount, updateBankAccount } from "@/actions/account";
-import { IValidatedResponse } from "@/actions/types";
+import { registerBankAccount, updateBankAccount } from "@/data/account";
+import { IValidatedResponse } from "@/data/types";
 import {
   showDefaultToast,
   showErrorToast,

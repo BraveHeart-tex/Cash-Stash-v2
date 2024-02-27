@@ -1,4 +1,4 @@
-import { getPaginatedBudgets } from "@/actions/budget";
+import { getPaginatedBudgets } from "@/data/budget";
 import BudgetList from "@/components/budgets/budget-list";
 import RoutePaginationControls from "@/components/route-pagination-controls";
 import { BudgetCategory } from "@prisma/client";

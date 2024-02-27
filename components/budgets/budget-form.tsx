@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/select";
 import { formHasChanged, generateReadbleEnumLabels } from "@/lib/utils";
 import { Budget, BudgetCategory } from "@prisma/client";
-import { IValidatedResponse } from "@/actions/types";
+import { IValidatedResponse } from "@/data/types";
 import {
   showDefaultToast,
   showErrorToast,
@@ -29,7 +29,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import budgetSchema, { BudgetSchemaType } from "@/schemas/budget-schema";
-import { createBudget, updateBudget } from "@/actions/budget";
+import { createBudget, updateBudget } from "@/data/budget";
 import useGenericModalStore from "@/store/genericModalStore";
 
 interface IBudgetFormProps {

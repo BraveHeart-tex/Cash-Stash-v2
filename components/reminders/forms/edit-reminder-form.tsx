@@ -12,10 +12,10 @@ import {
   showErrorToast,
   showSuccessToast,
 } from "@/components/ui/use-toast";
-import { updateReminder } from "@/actions";
+import { updateReminder } from "@/data";
 import { useRouter } from "next/navigation";
 import DatePicker from "@/components/date-picker";
-import { getGeneric } from "@/actions/generic";
+import { getGeneric } from "@/data/generic";
 import { Reminder } from "@prisma/client";
 import useGenericModalStore from "@/store/genericModalStore";
 

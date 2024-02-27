@@ -1,5 +1,5 @@
 "use client";
-import { InsightsData, TransactionWithAccount } from "@/actions/types";
+import { InsightsData, TransactionWithAccount } from "@/data/types";
 import AccountSummaries from "@/components/account-summaries";
 import BudgetStatus from "@/components/budget-status";
 import FinancialInsights from "@/components/financial-insights";
@@ -9,7 +9,7 @@ import TransactionHistory from "@/components/transaction-history";
 import BarChartComponent from "@/components/charts/bar-chart";
 import { MonthlyData } from "@/components/reports/report-table";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { SerializedReminder } from "@/actions/types";
+import { SerializedReminder } from "@/data/types";
 import { motion } from "framer-motion";
 import { Budget, Goal, Account } from "@prisma/client";
 

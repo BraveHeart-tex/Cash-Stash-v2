@@ -8,13 +8,13 @@ import {
   formatMoney,
   generateReadableLabelFromEnumValue,
 } from "@/lib/utils";
-import { deleteGeneric } from "@/actions/generic";
+import { deleteGeneric } from "@/data/generic";
 import { Budget } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import useGenericModalStore from "@/store/genericModalStore";
-import { deleteBudget } from "@/actions/budget";
+import { deleteBudget } from "@/data/budget";
 
 interface IBudgetCardProps {
   budget: Budget;

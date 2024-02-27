@@ -10,7 +10,7 @@ import {
   IValidatedResponse,
   IGetPaginatedBudgetsParams,
   IGetPaginatedBudgetsResponse,
-} from "@/actions/types";
+} from "@/data/types";
 import redis from "@/lib/redis";
 import {
   generateCachePrefixWithUserId,

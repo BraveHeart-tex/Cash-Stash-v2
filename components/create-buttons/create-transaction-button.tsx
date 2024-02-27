@@ -5,7 +5,7 @@ import { showErrorToast } from "@/components/ui/use-toast";
 import { FaExchangeAlt } from "react-icons/fa";
 import { cn } from "@/lib/utils";
 import useGenericModalStore from "@/store/genericModalStore";
-import { getPaginatedAccounts } from "@/actions/account";
+import { getPaginatedAccounts } from "@/data/account";
 
 const CreateTransactionButton = ({ className }: { className?: string }) => {
   let [isPending, startTransition] = useTransition();

@@ -1,6 +1,6 @@
 "use client";
-import { SerializedTransaction } from "@/actions/types";
-import { SerializedUserAccount } from "@/actions/types";
+import { SerializedTransaction } from "@/data/types";
+import { SerializedUserAccount } from "@/data/types";
 
 import {
   Table,

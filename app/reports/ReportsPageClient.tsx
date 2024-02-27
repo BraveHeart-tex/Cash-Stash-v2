@@ -1,8 +1,8 @@
-import { getChartData } from "@/actions";
-import { getPaginatedTransactions } from "@/actions/transaction";
+import { getChartData } from "@/data";
+import { getPaginatedTransactions } from "@/data/transaction";
 import ReportTable from "../../components/reports/report-table";
-import { getGenericListByCurrentUser } from "@/actions/generic";
-import { SerializedUserAccount } from "@/actions/types";
+import { getGenericListByCurrentUser } from "@/data/generic";
+import { SerializedUserAccount } from "@/data/types";
 import { SearchParams } from "../transactions/page";
 import MotionDiv from "@/components/animations/motion-div";
 

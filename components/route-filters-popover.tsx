@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { BsFilterLeft } from "react-icons/bs";
 import { useQueryStates, parseAsString, UseQueryStatesKeysMap } from "nuqs";
 import { areObjectsDeepEqual } from "@/lib/utils";
-import { GenericFilterOption } from "@/actions/types";
+import { GenericFilterOption } from "@/data/types";
 import { v4 as uuidv4 } from "uuid";
 
 interface IRouteFiltersPopoverProps<T extends Record<string, any>> {

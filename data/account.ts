@@ -11,7 +11,7 @@ import {
   IValidatedResponse,
   IGetPaginatedAccountsParams,
   IGetPaginatedAccountsResponse,
-} from "@/actions/types";
+} from "@/data/types";
 import redis from "@/lib/redis";
 import {
   generateCachePrefixWithUserId,

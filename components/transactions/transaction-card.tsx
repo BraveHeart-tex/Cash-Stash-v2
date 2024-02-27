@@ -14,13 +14,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { deleteTransactionById } from "@/actions/transaction";
+import { deleteTransactionById } from "@/data/transaction";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import DataLabel from "@/components/data-label";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import useGenericModalStore from "@/store/genericModalStore";
-import { TransactionWithAccount } from "@/actions/types";
+import { TransactionWithAccount } from "@/data/types";
 
 interface ITransactionCardProps {
   transaction: TransactionWithAccount;

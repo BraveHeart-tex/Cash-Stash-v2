@@ -3,14 +3,14 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import ActionPopover from "@/components/action-popover";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
-import { deleteGeneric } from "@/actions/generic";
+import { deleteGeneric } from "@/data/generic";
 import { Goal } from "@prisma/client";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { cn, formatMoney } from "@/lib/utils";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import useGenericModalStore from "@/store/genericModalStore";
-import { deleteGoal } from "@/actions/goal";
+import { deleteGoal } from "@/data/goal";
 
 interface IGoalCardProps {
   goal: Goal;

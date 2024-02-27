@@ -12,7 +12,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Goal } from "@prisma/client";
-import { IValidatedResponse } from "@/actions/types";
+import { IValidatedResponse } from "@/data/types";
 import {
   showDefaultToast,
   showErrorToast,
@@ -22,7 +22,7 @@ import { useRouter } from "next/navigation";
 
 import { useEffect } from "react";
 import goalSchema, { GoalSchemaType } from "@/schemas/goal-schema";
-import { createGoal, updateGoal } from "@/actions/goal";
+import { createGoal, updateGoal } from "@/data/goal";
 import { formHasChanged } from "@/lib/utils";
 import useGenericModalStore from "@/store/genericModalStore";
 
