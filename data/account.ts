@@ -2,8 +2,6 @@
 import prisma from "@/lib/data/db";
 import { getUser } from "@/lib/auth/session";
 import { processZodError, validateEnumValue } from "@/lib/utils";
-import { accountSchema } from "@/schemas";
-import { AccountSchemaType } from "@/schemas/CreateUserAccountSchema";
 import { Account, AccountCategory } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
@@ -21,6 +19,7 @@ import {
   invalidateKeysByPrefix,
 } from "@/lib/redis/redisUtils";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
+import accountSchema, { AccountSchemaType } from "@/schemas/account-schema";
 
 export const registerBankAccount = async ({
   balance,

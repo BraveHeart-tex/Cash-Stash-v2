@@ -22,6 +22,16 @@ model User {
   userAccounts          Account[]
   Session               Session[]
   EmailVerificationCode EmailVerificationCode?
+  PasswordResetToken    PasswordResetToken?
+}
+
+model PasswordResetToken {
+  id         String   @id @default(cuid())
+  user_id    String   @unique
+  expires_At DateTime
+  User       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id], map: "passwordResetTokens_user_id_fkey")
 }
 
 model EmailVerificationCode {

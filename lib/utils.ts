@@ -159,3 +159,7 @@ export const formHasChanged = (initialValues: any, values: any): boolean => {
 export const validateEnumValue = (value: any, enumObj: Record<string, any>) => {
   return Object.values(enumObj).includes(value);
 };
+
+export const getResetPasswordUrl = (email: string, token: string) => {
+  return `${process.env.NEXT_PUBLIC_BASE_URL}/auth/reset-password/${email}?token=${token}`;
+};

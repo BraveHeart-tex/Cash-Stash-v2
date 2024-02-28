@@ -9,7 +9,10 @@ import {
   PAGE_ROUTES,
   EMAIL_VERIFICATION_CODE_EXPIRY_MINUTES,
   EMAIL_VERIFICATION_CODE_LENGTH,
+  FORGOT_PASSWORD_LINK_EXPIRATION_MINUTES,
 } from "@/lib/constants";
+import { generateId } from "lucia";
+import ForgotPasswordEmail from "@/emails/forgot-password-email";
 
 export const generateEmailVerificationCode = async (
   userId: string,
@@ -70,6 +73,33 @@ export const sendEmailVerificationCode = async (
   await transporter.sendMail(options);
 };
 
+export const sendResetPasswordLink = async (email: string, url: string) => {
+  const transporter = nodemailer.createTransport({
+    host: process.env.EMAIL_HOST,
+    port: parseInt(process.env.EMAIL_PORT!),
+    secure: true,
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASSWORD,
+    },
+  });
+
+  const emailHTML = render(
+    ForgotPasswordEmail({
+      url,
+    })
+  );
+
+  const options = {
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: "Reset your password",
+    html: emailHTML,
+  };
+
+  await transporter.sendMail(options);
+};
+
 export const verifyVerificationCode = async (user: User, code: string) => {
   const emailVerificationCode = await prisma.emailVerificationCode.findFirst({
     where: {
@@ -99,4 +129,25 @@ export const deleteEmailVerificationCode = async (userId: string) => {
       userId,
     },
   });
+};
+
+export const createPasswordResetToken = async (userId: string) => {
+  await prisma.passwordResetToken.deleteMany({
+    where: {
+      user_id: userId,
+    },
+  });
+
+  const tokenId = generateId(40);
+  await prisma.passwordResetToken.create({
+    data: {
+      id: tokenId,
+      user_id: userId,
+      expires_At: createDate(
+        new TimeSpan(FORGOT_PASSWORD_LINK_EXPIRATION_MINUTES, "m")
+      ),
+    },
+  });
+
+  return tokenId;
 };

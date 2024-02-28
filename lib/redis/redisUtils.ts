@@ -249,3 +249,14 @@ export const verifyVerificationCodeRateLimit = async (ipAdress: string) => {
   }
   return count;
 };
+
+export const verifyResetPasswordLinkRequestRateLimit = async (
+  ipAdress: string
+) => {
+  const key = `${CACHE_PREFIXES.RESET_PASSWORD_LINK_REQUEST_RATE_LIMIT}:${ipAdress}`;
+  const count = await redis.incr(key);
+  if (count === 1) {
+    await redis.expire(key, 60);
+  }
+  return count;
+};

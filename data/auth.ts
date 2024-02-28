@@ -5,7 +5,7 @@ import { Argon2id } from "oslo/password";
 import loginSchema, { LoginSchemaType } from "@/schemas/login-schema";
 import registerSchema, { RegisterSchemaType } from "@/schemas/register-schema";
 import { ZodError } from "zod";
-import { processZodError } from "@/lib/utils";
+import { getResetPasswordUrl, processZodError } from "@/lib/utils";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import {
@@ -14,29 +14,34 @@ import {
   checkSignUpRateLimit,
   checkUserIdBasedSendVerificationCodeRateLimit,
   verifyVerificationCodeRateLimit,
+  verifyResetPasswordLinkRequestRateLimit,
 } from "@/lib/redis/redisUtils";
 import {
   EMAIL_VERIFICATION_REDIRECTION_PATHS,
   MAX_LOGIN_REQUESTS_PER_MINUTE,
+  MAX_RESET_PASSWORD_LINK_REQUESTS_PER_MINUTE,
   MAX_SIGN_UP_REQUESTS_PER_MINUTE,
   MAX_VERIFICATION_CODE_ATTEMPTS,
   PAGE_ROUTES,
   SEND_VERIFICATION_CODE_RATE_LIMIT,
 } from "@/lib/constants";
 import {
+  createPasswordResetToken,
   deleteEmailVerificationCode,
   generateEmailVerificationCode,
   sendEmailVerificationCode,
+  sendResetPasswordLink,
   verifyVerificationCode,
 } from "@/lib/auth/authUtils";
 import { revalidatePath } from "next/cache";
+import { isWithinExpirationDate } from "oslo";
 
 export const login = async (values: LoginSchemaType) => {
   const header = headers();
   const ipAdress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(",")[0];
   const count = await checkRateLimit(ipAdress);
 
-  if (count > MAX_LOGIN_REQUESTS_PER_MINUTE) {
+  if (count >= MAX_LOGIN_REQUESTS_PER_MINUTE) {
     return {
       error:
         "You have made too many requests. Please wait a minute before trying again.",
@@ -111,7 +116,7 @@ export const register = async (values: RegisterSchemaType) => {
       )[0];
       const count = await checkSignUpRateLimit(userExists.id, ipAdress);
 
-      if (count > MAX_SIGN_UP_REQUESTS_PER_MINUTE) {
+      if (count >= MAX_SIGN_UP_REQUESTS_PER_MINUTE) {
         return {
           error:
             "You have made too many requests. Please wait a minute before trying again.",
@@ -275,7 +280,7 @@ export const handleEmailVerification = async (email: string, code: string) => {
     )[0];
     const verificationCount = await verifyVerificationCodeRateLimit(ipAdress);
 
-    if (verificationCount === MAX_VERIFICATION_CODE_ATTEMPTS) {
+    if (verificationCount >= MAX_VERIFICATION_CODE_ATTEMPTS) {
       await deleteEmailVerificationCode(user.id);
       return {
         error: "Too many attempts. Please wait before trying again.",
@@ -320,7 +325,7 @@ export const resendEmailVerificationCode = async (email: string) => {
   const header = headers();
   const ipAdress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(",")[0];
   const count = await checkIPBasedSendVerificationCodeRateLimit(ipAdress);
-  if (count > SEND_VERIFICATION_CODE_RATE_LIMIT) {
+  if (count >= SEND_VERIFICATION_CODE_RATE_LIMIT) {
     return {
       message: "Too many requests. Please wait before trying again.",
       isError: true,
@@ -345,7 +350,7 @@ export const resendEmailVerificationCode = async (email: string) => {
     user.id
   );
 
-  if (userIdBasedCount > SEND_VERIFICATION_CODE_RATE_LIMIT) {
+  if (userIdBasedCount >= SEND_VERIFICATION_CODE_RATE_LIMIT) {
     return {
       message: "Too many requests. Please wait before trying again.",
       isError: true,
@@ -365,5 +370,108 @@ export const resendEmailVerificationCode = async (email: string) => {
     isError: false,
     message:
       "If you have an account, an email has been sent to you. Please check your inbox. Make sure to check your spam folder",
+  };
+};
+
+export const sendPasswordResetEmail = async (email: string) => {
+  const header = headers();
+  const ipAdress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(",")[0];
+  const count = await verifyResetPasswordLinkRequestRateLimit(ipAdress);
+  if (count >= MAX_RESET_PASSWORD_LINK_REQUESTS_PER_MINUTE) {
+    return {
+      message: "Too many requests. Please wait before trying again.",
+      isError: true,
+    };
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      email,
+      email_verified: true,
+    },
+  });
+
+  if (!user) {
+    return {
+      message:
+        "If you have an account, an email has been sent to you. Please check your inbox. Make sure to check your spam folder",
+      isError: false,
+    };
+  }
+
+  const verificationToken = await createPasswordResetToken(user.id);
+  const verificationLink = getResetPasswordUrl(email, verificationToken);
+
+  await sendResetPasswordLink(email, verificationLink);
+
+  return {
+    isError: false,
+    message:
+      "If you have an account, an email has been sent to you. Please check your inbox. Make sure to check your spam folder",
+  };
+};
+
+export const resetPassword = async ({
+  email,
+  token,
+  password,
+}: {
+  email: string;
+  token: string;
+  password: string;
+}) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      email,
+      email_verified: true,
+    },
+  });
+
+  if (!user) {
+    return {
+      error: "Invalid request",
+      sucessMessage: null,
+    };
+  }
+
+  const resetToken = await prisma.passwordResetToken.findUnique({
+    where: {
+      id: token,
+    },
+  });
+
+  if (!resetToken || !isWithinExpirationDate(resetToken.expires_At)) {
+    return {
+      error: "Invalid request",
+      sucessMessage: null,
+    };
+  }
+
+  await prisma.passwordResetToken.delete({
+    where: {
+      id: token,
+    },
+  });
+  await lucia.invalidateUserSessions(user.id);
+  const hashedPassword = await new Argon2id().hash(password);
+  await prisma.user.update({
+    where: {
+      id: user.id,
+    },
+    data: {
+      hashedPassword,
+    },
+  });
+  const session = await lucia.createSession(user.id, {});
+  const sessionCookie = lucia.createSessionCookie(session.id);
+  cookies().set(
+    sessionCookie.name,
+    sessionCookie.value,
+    sessionCookie.attributes
+  );
+
+  return {
+    error: null,
+    sucessMessage: "Password reset successfully. You are being redirected...",
   };
 };
