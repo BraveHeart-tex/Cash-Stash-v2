@@ -5,7 +5,7 @@ import { Argon2id } from "oslo/password";
 import loginSchema, { LoginSchemaType } from "@/schemas/login-schema";
 import registerSchema, { RegisterSchemaType } from "@/schemas/register-schema";
 import { ZodError } from "zod";
-import { processZodError } from "@/lib/utils";
+import { getResetPasswordUrl, processZodError } from "@/lib/utils";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import {
@@ -24,9 +24,11 @@ import {
   SEND_VERIFICATION_CODE_RATE_LIMIT,
 } from "@/lib/constants";
 import {
+  createPasswordResetToken,
   deleteEmailVerificationCode,
   generateEmailVerificationCode,
   sendEmailVerificationCode,
+  sendResetPasswordLink,
   verifyVerificationCode,
 } from "@/lib/auth/authUtils";
 import { revalidatePath } from "next/cache";
@@ -360,6 +362,34 @@ export const resendEmailVerificationCode = async (email: string) => {
   await sendEmailVerificationCode(user.email, verificationCode);
 
   revalidatePath(PAGE_ROUTES.EMAIL_VERIFICATION_ROUTE + "/" + email, "layout");
+
+  return {
+    isError: false,
+    message:
+      "If you have an account, an email has been sent to you. Please check your inbox. Make sure to check your spam folder",
+  };
+};
+
+export const sendPasswordResetEmail = async (email: string) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      email,
+      email_verified: true,
+    },
+  });
+
+  if (!user) {
+    return {
+      message:
+        "If you have an account, an email has been sent to you. Please check your inbox. Make sure to check your spam folder",
+      isError: false,
+    };
+  }
+
+  const verificationToken = await createPasswordResetToken(user.id);
+  const verificationLink = getResetPasswordUrl(email, verificationToken);
+
+  await sendResetPasswordLink(email, verificationLink);
 
   return {
     isError: false,
