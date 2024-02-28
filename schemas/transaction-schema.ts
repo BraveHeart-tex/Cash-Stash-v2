@@ -6,7 +6,7 @@ const transactionSchema = z.object({
     required_error: "Amount is required",
     invalid_type_error: "Amount must be a number",
   }),
-  description: z.coerce
+  description: z
     .string()
     .min(1, "Description is required")
     .max(100, "Description is too long"),
