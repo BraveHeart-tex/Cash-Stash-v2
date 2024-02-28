@@ -186,7 +186,7 @@ function useToast() {
   };
 }
 
-const showErrorToast = (title: string, description: string) => {
+const showErrorToast = (title: string, description?: string) => {
   toast({
     title,
     description,

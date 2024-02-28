@@ -34,6 +34,7 @@ import {
   verifyVerificationCode,
 } from "@/lib/auth/authUtils";
 import { revalidatePath } from "next/cache";
+import { isWithinExpirationDate } from "oslo";
 
 export const login = async (values: LoginSchemaType) => {
   const header = headers();
@@ -407,5 +408,70 @@ export const sendPasswordResetEmail = async (email: string) => {
     isError: false,
     message:
       "If you have an account, an email has been sent to you. Please check your inbox. Make sure to check your spam folder",
+  };
+};
+
+export const resetPassword = async ({
+  email,
+  token,
+  password,
+}: {
+  email: string;
+  token: string;
+  password: string;
+}) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      email,
+      email_verified: true,
+    },
+  });
+
+  if (!user) {
+    return {
+      error: "Invalid request",
+      sucessMessage: null,
+    };
+  }
+
+  const resetToken = await prisma.passwordResetToken.findUnique({
+    where: {
+      id: token,
+    },
+  });
+
+  if (!resetToken || !isWithinExpirationDate(resetToken.expires_At)) {
+    return {
+      error: "Invalid request",
+      sucessMessage: null,
+    };
+  }
+
+  await prisma.passwordResetToken.delete({
+    where: {
+      id: token,
+    },
+  });
+  await lucia.invalidateUserSessions(user.id);
+  const hashedPassword = await new Argon2id().hash(password);
+  await prisma.user.update({
+    where: {
+      id: user.id,
+    },
+    data: {
+      hashedPassword,
+    },
+  });
+  const session = await lucia.createSession(user.id, {});
+  const sessionCookie = lucia.createSessionCookie(session.id);
+  cookies().set(
+    sessionCookie.name,
+    sessionCookie.value,
+    sessionCookie.attributes
+  );
+
+  return {
+    error: null,
+    sucessMessage: "Password reset successfully. You are being redirected...",
   };
 };

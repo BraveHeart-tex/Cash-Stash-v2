@@ -53,7 +53,7 @@ const ResetPassword = async ({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <ResetPasswordForm />
+          <ResetPasswordForm email={email} token={token} />
         </CardContent>
       </Card>
     </div>

@@ -17,16 +17,37 @@ import resetPasswordSchema, {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useTransition } from "react";
+import { resetPassword } from "@/data/auth";
+import { showErrorToast, showSuccessToast } from "./ui/use-toast";
+import { useRouter } from "next/navigation";
+import { PAGE_ROUTES } from "@/lib/constants";
 
-const ResetPasswordForm = () => {
+interface ResetPasswordFormProps {
+  email: string;
+  token: string;
+}
+
+const ResetPasswordForm = ({ email, token }: ResetPasswordFormProps) => {
   let [isPending, startTransition] = useTransition();
+  const router = useRouter();
   const form = useForm<ResetPasswordSchemaType>({
     resolver: zodResolver(resetPasswordSchema),
   });
 
   const onSubmit = (data: ResetPasswordSchemaType) => {
     startTransition(async () => {
-      console.log(data);
+      const response = await resetPassword({
+        email,
+        token,
+        password: data.password,
+      });
+
+      if (response.error) {
+        showErrorToast(response.error);
+        router.push(PAGE_ROUTES.LOGIN_ROUTE);
+      }
+
+      showSuccessToast(response.sucessMessage || "Password reset successfully");
     });
   };
 
