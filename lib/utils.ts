@@ -161,5 +161,5 @@ export const validateEnumValue = (value: any, enumObj: Record<string, any>) => {
 };
 
 export const getResetPasswordUrl = (email: string, token: string) => {
-  return `${process.env.NEXT_PUBLIC_BASE_URL}/reset-password/${email}?token=${token}`;
+  return `${process.env.NEXT_PUBLIC_BASE_URL}/auth/reset-password/${email}?token=${token}`;
 };
