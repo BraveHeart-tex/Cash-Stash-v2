@@ -155,6 +155,7 @@ export const invalidateCacheKey = async (key: string) => {
 export const invalidateKeysByPrefix = async (prefix: string) => {
   const keys = await redis.keys("*");
   const keysToDelete = keys.filter((key) => key.startsWith(prefix));
+  if (keysToDelete.length === 0) return;
   await redis.del(keysToDelete);
 };
 
