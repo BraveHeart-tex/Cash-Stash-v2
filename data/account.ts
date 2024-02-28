@@ -16,6 +16,7 @@ import redis from "@/lib/redis";
 import {
   generateCachePrefixWithUserId,
   getAccountKey,
+  getAccountTransactionsKey,
   getPaginatedAccountsKey,
   invalidateKeysByPrefix,
 } from "@/lib/redis/redisUtils";
@@ -280,5 +281,43 @@ export const deleteAccount = async (accountId: string) => {
     return { data: deletedAccount };
   } catch (error) {
     return { error: "An error occurred while deleting the account." };
+  }
+};
+
+export const getTransactionsForAccount = async (accountId: string) => {
+  const { user } = await getUser();
+
+  if (!user) {
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+  }
+
+  try {
+    const key = getAccountTransactionsKey(accountId);
+    const cachedData = await redis.get(key);
+    if (cachedData) {
+      console.info("getTransactionsForAccount CACHE HIT");
+      return JSON.parse(cachedData);
+    }
+
+    const transactions = await prisma.transaction.findMany({
+      where: {
+        accountId,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: 10,
+    });
+
+    if (transactions.length === 0) {
+      return [];
+    }
+
+    await redis.set(key, JSON.stringify(transactions), "EX", 5 * 60);
+
+    return transactions;
+  } catch (error) {
+    console.error("Error fetching transactions for account", error);
+    return [];
   }
 };

@@ -63,6 +63,10 @@ export const getSignUpRateLimitKey = (userId: string, ipAddress: string) => {
   return `${CACHE_PREFIXES.SIGN_UP_RATE_LIMIT}:${userId}:${ipAddress}`;
 };
 
+export const getAccountTransactionsKey = (accountId: string) => {
+  return `${CACHE_PREFIXES.ACCOUNT_TRANSACTIONS}:${accountId}`;
+};
+
 export const getPaginatedAccountsKey = ({
   userId,
   pageNumber = 1,
