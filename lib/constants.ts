@@ -28,6 +28,7 @@ export const MAX_VERIFICATION_CODE_ATTEMPTS = 3 as const;
 export const SEND_VERIFICATION_CODE_RATE_LIMIT = 3 as const;
 export const MAX_LOGIN_REQUESTS_PER_MINUTE = 5 as const;
 export const MAX_SIGN_UP_REQUESTS_PER_MINUTE = 5 as const;
+export const MAX_RESET_PASSWORD_LINK_REQUESTS_PER_MINUTE = 3 as const;
 export const EMAIL_VERIFICATION_CODE_EXPIRY_SECONDS = 300 as const;
 export const EMAIL_VERIFICATION_CODE_EXPIRY_MINUTES = 5 as const;
 export const EMAIL_VERIFICATION_CODE_LENGTH = 8 as const;
@@ -105,4 +106,6 @@ export const CACHE_PREFIXES = {
   SEND_VERIFICATION_CODE_RATE_LIMIT: "send_verification_code_rate_limit",
   VERIFY_VERIFICATION_CODE_RATE_LIMIT: "verify_verification_code_rate_limit",
   ACCOUNT_TRANSACTIONS: "account_transactions",
+  RESET_PASSWORD_LINK_REQUEST_RATE_LIMIT:
+    "reset_password_link_request_rate_limit",
 } as const;

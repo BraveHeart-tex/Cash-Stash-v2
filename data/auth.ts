@@ -14,10 +14,12 @@ import {
   checkSignUpRateLimit,
   checkUserIdBasedSendVerificationCodeRateLimit,
   verifyVerificationCodeRateLimit,
+  verifyResetPasswordLinkRequestRateLimit,
 } from "@/lib/redis/redisUtils";
 import {
   EMAIL_VERIFICATION_REDIRECTION_PATHS,
   MAX_LOGIN_REQUESTS_PER_MINUTE,
+  MAX_RESET_PASSWORD_LINK_REQUESTS_PER_MINUTE,
   MAX_SIGN_UP_REQUESTS_PER_MINUTE,
   MAX_VERIFICATION_CODE_ATTEMPTS,
   PAGE_ROUTES,
@@ -38,7 +40,7 @@ export const login = async (values: LoginSchemaType) => {
   const ipAdress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(",")[0];
   const count = await checkRateLimit(ipAdress);
 
-  if (count > MAX_LOGIN_REQUESTS_PER_MINUTE) {
+  if (count === MAX_LOGIN_REQUESTS_PER_MINUTE) {
     return {
       error:
         "You have made too many requests. Please wait a minute before trying again.",
@@ -322,7 +324,7 @@ export const resendEmailVerificationCode = async (email: string) => {
   const header = headers();
   const ipAdress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(",")[0];
   const count = await checkIPBasedSendVerificationCodeRateLimit(ipAdress);
-  if (count > SEND_VERIFICATION_CODE_RATE_LIMIT) {
+  if (count === SEND_VERIFICATION_CODE_RATE_LIMIT) {
     return {
       message: "Too many requests. Please wait before trying again.",
       isError: true,
@@ -371,6 +373,16 @@ export const resendEmailVerificationCode = async (email: string) => {
 };
 
 export const sendPasswordResetEmail = async (email: string) => {
+  const header = headers();
+  const ipAdress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(",")[0];
+  const count = await verifyResetPasswordLinkRequestRateLimit(ipAdress);
+  if (count === MAX_RESET_PASSWORD_LINK_REQUESTS_PER_MINUTE) {
+    return {
+      message: "Too many requests. Please wait before trying again.",
+      isError: true,
+    };
+  }
+
   const user = await prisma.user.findUnique({
     where: {
       email,
