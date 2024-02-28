@@ -1,6 +1,5 @@
 "use client";
 import { Progress } from "@/components/ui/progress";
-import ActionPopover from "@/components/action-popover";
 import { Badge } from "@/components/ui/badge";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import {
@@ -8,13 +7,14 @@ import {
   formatMoney,
   generateReadableLabelFromEnumValue,
 } from "@/lib/utils";
-import { deleteGeneric } from "@/data/generic";
 import { Budget } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import useGenericModalStore from "@/store/genericModalStore";
 import { deleteBudget } from "@/data/budget";
+import ActionPopover from "@/components/action-popover";
+import { RxCross1, RxPencil2 } from "react-icons/rx";
 
 interface IBudgetCardProps {
   budget: Budget;
@@ -62,6 +62,18 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
     return "bg-success hover:bg-success";
   };
 
+  const handleEditClick = () => {
+    openGenericModal({
+      dialogTitle: "Edit Budget",
+      dialogDescription:
+        "Edit your budget information by using the form below.",
+      entityId: budget.id,
+      mode: "edit",
+      key: "budget",
+      data: budget,
+    });
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -82,21 +94,20 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
       <div className="absolute top-5 right-1 mb-2">
         <div className="flex items-center gap-1">
           <ActionPopover
-            popoverHeading={"Budget Actions"}
-            onEditActionClick={() =>
-              openGenericModal({
-                dialogTitle: "Edit Budget",
-                dialogDescription:
-                  "Edit your budget information by using the form below.",
-                entityId: budget.id,
-                mode: "edit",
-                key: "budget",
-                data: budget,
-              })
-            }
-            onDeleteActionClick={() => handleDeleteClick(budget.id)}
-            isAbsolute={false}
-            placementClasses="top-0 right-0 mb-0"
+            heading="Budget Actions"
+            triggerClassName="top-0 right-0 mb-0"
+            options={[
+              {
+                icon: RxPencil2,
+                label: "Edit",
+                onClick: () => handleEditClick(),
+              },
+              {
+                icon: RxCross1,
+                label: "Delete",
+                onClick: () => handleDeleteClick(budget.id),
+              },
+            ]}
           />
           <Badge
             className={cn(

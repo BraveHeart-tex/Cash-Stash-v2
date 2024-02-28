@@ -5,7 +5,6 @@ import {
   formatTransactionDate,
   generateReadableLabelFromEnumValue,
 } from "@/lib/utils";
-import ActionPopover from "@/components/action-popover";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import {
   Card,
@@ -21,6 +20,8 @@ import DataLabel from "@/components/data-label";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import useGenericModalStore from "@/store/genericModalStore";
 import { TransactionWithAccount } from "@/data/types";
+import ActionPopover from "@/components/action-popover";
+import { RxCross1, RxPencil2 } from "react-icons/rx";
 
 interface ITransactionCardProps {
   transaction: TransactionWithAccount;
@@ -56,6 +57,18 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
   };
 
   const isIncome = transaction.amount > 0;
+
+  const handleEditClick = () => {
+    openGenericModal({
+      dialogTitle: "Edit Transaction",
+      dialogDescription:
+        "Edit the transaction information by using the form below.",
+      entityId: transaction.id,
+      mode: "edit",
+      key: "transaction",
+      data: transaction,
+    });
+  };
 
   return (
     <motion.div
@@ -104,21 +117,21 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
         </CardContent>
       </Card>
       <ActionPopover
-        popoverHeading={"Transaction Actions"}
-        onEditActionClick={() => {
-          openGenericModal({
-            dialogTitle: "Edit Transaction",
-            dialogDescription:
-              "Edit the transaction information by using the form below.",
-            entityId: transaction.id,
-            mode: "edit",
-            key: "transaction",
-            data: transaction,
-          });
-        }}
-        onDeleteActionClick={() => handleDeleteClick()}
-        placementClasses={"mb-0 top-4 right-0"}
-        isAbsolute={true}
+        heading="Transaction Actions"
+        options={[
+          {
+            icon: RxPencil2,
+            label: "Edit",
+            onClick: () => handleEditClick(),
+          },
+          {
+            icon: RxCross1,
+            label: "Delete",
+            onClick: () => handleDeleteClick(),
+          },
+        ]}
+        positionAbsolute
+        triggerClassName="mb-0 top-4 right-0"
       />
     </motion.div>
   );

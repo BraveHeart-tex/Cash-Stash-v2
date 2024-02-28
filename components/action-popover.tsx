@@ -1,80 +1,78 @@
 "use client";
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { IconType } from "react-icons/lib";
 import { Button } from "@/components/ui/button";
-import {
-  Cross1Icon,
-  DotsHorizontalIcon,
-  Pencil1Icon,
-} from "@radix-ui/react-icons";
 import { cn } from "@/lib/utils";
 
+type PopoverActionOption = {
+  icon: IconType;
+  label: string;
+  onClick: () => void;
+};
+
 interface IActionPopoverProps {
-  popoverHeading: string;
-  onEditActionClick: () => void;
-  onDeleteActionClick: () => void;
-  align?: "start" | "center" | "end";
-  isAbsolute?: boolean;
-  placementClasses?: string;
+  heading: string;
+  positionAbsolute?: boolean;
+  options: PopoverActionOption[];
+  trigger?: React.ReactNode;
+  triggerClassName?: string;
 }
 
 const ActionPopover = ({
-  onEditActionClick,
-  onDeleteActionClick,
-  popoverHeading,
-  align = "start",
-  isAbsolute = true,
-  placementClasses = "top-2 right-2 mb-2",
+  options,
+  trigger,
+  heading,
+  positionAbsolute,
+  triggerClassName = "top-2 right-2 mb-2",
 }: IActionPopoverProps) => {
+  const renderTrigger = () => {
+    if (trigger) {
+      return trigger;
+    }
+
+    return (
+      <div className="p-2 hover:bg-secondary transition-all rounded-md">
+        <DotsHorizontalIcon className="h-5 w-5" />
+      </div>
+    );
+  };
+
   return (
     <Popover>
       <PopoverTrigger
         className={cn(
-          isAbsolute ? "absolute focus:outline-none outline-none" : "",
-          placementClasses
+          positionAbsolute && "absolute focus:outline-none outline-none",
+          triggerClassName
         )}
-        aria-label={popoverHeading}
       >
-        <div className="p-2 hover:bg-secondary transition-all rounded-md">
-          <DotsHorizontalIcon className="h-5 w-5" />
-        </div>
+        {renderTrigger()}
       </PopoverTrigger>
-      <PopoverContent align={align}>
-        <h3 className="text-center font-semibold text-primary">
-          {popoverHeading}
-        </h3>
+      <PopoverContent align={"start"}>
+        <h3 className="text-center font-semibold text-primary">{heading}</h3>
         <hr className="my-2" />
         <div className="grid grid-cols-1 gap-1">
-          <div className="flex items-center">
+          {options.map((option) => (
             <Button
+              key={option.label}
               variant={"ghost"}
               size={"icon"}
-              aria-label="Edit user account"
-              onClick={() => onEditActionClick()}
+              aria-label={option.label}
+              onClick={option.onClick}
               className="mr-2 p-1 flex items-center gap-2 w-full justify-start"
             >
-              <Pencil1Icon className="h-5 w-5" />
-              <span className="text-[16px]">Edit</span>
+              {option.icon({ className: "h-5 w-5" })}
+              <span className="text-[1.1em]">{option.label}</span>
             </Button>
-          </div>
-          <div className="flex items-center">
-            <Button
-              variant={"ghost"}
-              size={"icon"}
-              aria-label="Delete user account"
-              onClick={() => onDeleteActionClick()}
-              className="mr-2 p-1 flex items-center gap-2 w-full justify-start"
-            >
-              <Cross1Icon />
-              <span className="text-[16px]">Delete</span>
-            </Button>
-          </div>
+          ))}
         </div>
       </PopoverContent>
     </Popover>
   );
 };
+
 export default ActionPopover;
