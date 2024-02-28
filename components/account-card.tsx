@@ -1,5 +1,4 @@
 "use client";
-import ActionPopover from "@/components/action-popover";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import {
   cn,
@@ -12,6 +11,8 @@ import { motion } from "framer-motion";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import useGenericModalStore from "@/store/genericModalStore";
 import { deleteAccount } from "@/data/account";
+import ActionPopover from "@/components/action-popover";
+import { RxCross1, RxPencil2 } from "react-icons/rx";
 
 interface IAccountCardProps {
   account: Account;
@@ -32,8 +33,9 @@ const AccountCard = ({ account, className }: IAccountCardProps) => {
 
   const handleDeleteAccount = (id: string) => {
     showGenericConfirm({
-      title: "Delete Account",
-      message: "Are you sure you want to delete this account?",
+      title: "Are you sure you want to delete this account?",
+      message:
+        "This will also delete all the transactions associated with this account. This action cannot be undone.",
       primaryActionLabel: "Delete",
       async onConfirm() {
         const result = await deleteAccount(id);
@@ -51,6 +53,17 @@ const AccountCard = ({ account, className }: IAccountCardProps) => {
     });
   };
 
+  const handleEditAccount = () => {
+    openGenericModal({
+      mode: "edit",
+      key: "account",
+      data: account,
+      dialogTitle: "Edit your account",
+      dialogDescription: "Use the form below to edit your account.",
+      entityId: account.id,
+    });
+  };
+
   return (
     <motion.div
       transition={{ duration: 0.5 }}
@@ -63,18 +76,20 @@ const AccountCard = ({ account, className }: IAccountCardProps) => {
       )}
     >
       <ActionPopover
-        popoverHeading={"Account Actions"}
-        onEditActionClick={() => {
-          openGenericModal({
-            mode: "edit",
-            key: "account",
-            data: account,
-            dialogTitle: "Edit your account",
-            dialogDescription: "Use the form below to edit your account.",
-            entityId: account.id,
-          });
-        }}
-        onDeleteActionClick={() => handleDeleteAccount(account.id)}
+        heading="Account Actions"
+        options={[
+          {
+            icon: RxPencil2,
+            label: "Edit",
+            onClick: () => handleEditAccount(),
+          },
+          {
+            icon: RxCross1,
+            label: "Delete",
+            onClick: () => handleDeleteAccount(account.id),
+          },
+        ]}
+        positionAbsolute
       />
       <p className="font-semibold mb-2 text-primary">
         {account.name}{" "}

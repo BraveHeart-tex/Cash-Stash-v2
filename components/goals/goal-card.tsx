@@ -1,9 +1,7 @@
 "use client";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import ActionPopover from "@/components/action-popover";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
-import { deleteGeneric } from "@/data/generic";
 import { Goal } from "@prisma/client";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
@@ -11,6 +9,8 @@ import { cn, formatMoney } from "@/lib/utils";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import useGenericModalStore from "@/store/genericModalStore";
 import { deleteGoal } from "@/data/goal";
+import ActionPopover from "@/components/action-popover";
+import { RxCross1, RxPencil2 } from "react-icons/rx";
 
 interface IGoalCardProps {
   goal: Goal;
@@ -55,6 +55,17 @@ const GoalCard = ({ goal }: IGoalCardProps) => {
     return "bg-primary hover:bg-bg-primary";
   };
 
+  const handleEditGoal = () => {
+    openGenericModal({
+      dialogDescription: "Edit your goal information by using the form below.",
+      dialogTitle: "Edit Goal",
+      mode: "edit",
+      key: "goal",
+      entityId: goal.id,
+      data: goal,
+    });
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -68,22 +79,22 @@ const GoalCard = ({ goal }: IGoalCardProps) => {
       <div className="absolute top-3 right-1 mb-2">
         <div className="flex items-center">
           <ActionPopover
-            popoverHeading={"Goal Actions"}
-            isAbsolute={false}
-            onEditActionClick={() =>
-              openGenericModal({
-                dialogDescription:
-                  "Edit your goal information by using the form below.",
-                dialogTitle: "Edit Goal",
-                mode: "edit",
-                key: "goal",
-                entityId: goal.id,
-                data: goal,
-              })
-            }
-            placementClasses="top-0 right-0 mb-0"
-            onDeleteActionClick={() => handleDeleteGoal(goal.id)}
+            heading="Goal Actions"
+            triggerClassName="top-0 right-0 mb-0"
+            options={[
+              {
+                icon: RxPencil2,
+                label: "Edit",
+                onClick: () => handleEditGoal(),
+              },
+              {
+                icon: RxCross1,
+                label: "Delete",
+                onClick: () => handleDeleteGoal(goal.id),
+              },
+            ]}
           />
+
           <Badge className={cn("ml-auto", getBadgeColor(goal.progress))}>
             {goal.progress >= 100 ? "Completed!" : `${goal.progress}%`}
           </Badge>
