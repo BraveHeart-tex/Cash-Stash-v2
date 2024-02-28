@@ -20,6 +20,11 @@ const ForgotPassword = () => {
 
     startTransition(async () => {
       const response = await sendPasswordResetEmail(email);
+      if (response?.isError) {
+        showErrorToast("Error", response.message);
+        return;
+      }
+
       showSuccessToast(response.message);
     });
   };
