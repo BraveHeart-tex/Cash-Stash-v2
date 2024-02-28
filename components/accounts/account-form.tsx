@@ -11,8 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { accountSchema } from "@/schemas";
-import { AccountSchemaType } from "@/schemas/CreateUserAccountSchema";
+
 import {
   Select,
   SelectContent,
@@ -32,6 +31,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import useGenericModalStore from "@/store/genericModalStore";
+import accountSchema, { AccountSchemaType } from "@/schemas/account-schema";
 
 interface IAccountFormProps {
   data?: Account;
