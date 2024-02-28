@@ -6,8 +6,8 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-} from "./ui/drawer";
-import { Button } from "./ui/button";
+} from "@/components/ui/drawer";
+import { Button } from "@/components/ui/button";
 import { Account, Transaction } from "@prisma/client";
 import { useEffect, useState, useTransition } from "react";
 import {
@@ -18,7 +18,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { getTransactionsForAccount } from "@/data/account";
-import AccountCard from "./account-card";
+import AccountCard from "@/components/account-card";
+import TransactionCard from "@/components/transactions/transaction-card";
+import { FaSpinner } from "react-icons/fa";
 
 interface ILatestAccountTransactionsDialogProps {
   selectedAccount: Account | null;
@@ -47,6 +49,14 @@ const LatestAccountTransactionsDialog = ({
     }
   }, [selectedAccount]);
 
+  const renderLoadingState = () => {
+    return (
+      <div className="flex items-center justify-center h-48">
+        <FaSpinner className="animate-spin" />
+      </div>
+    );
+  };
+
   if (isMobile) {
     return (
       <Drawer
@@ -61,8 +71,24 @@ const LatestAccountTransactionsDialog = ({
             <DrawerDescription>{description}</DrawerDescription>
           </DrawerHeader>
           <div className="px-4">
-            {selectedAccount && (
-              <AccountCard showPopover={false} account={selectedAccount} />
+            {isPending && renderLoadingState()}
+            {!isPending && selectedAccount && (
+              <>
+                <AccountCard showPopover={false} account={selectedAccount} />
+                <div className="max-h-[400px] overflow-auto">
+                  {transactions.map((transaction) => (
+                    <TransactionCard
+                      key={transaction.id}
+                      transaction={{
+                        ...transaction,
+                        createdAt: new Date(transaction.createdAt),
+                        updatedAt: new Date(transaction.updatedAt),
+                        account: selectedAccount!,
+                      }}
+                    />
+                  ))}
+                </div>
+              </>
             )}
           </div>
           <DrawerFooter className="pt-2">
@@ -87,8 +113,24 @@ const LatestAccountTransactionsDialog = ({
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
-        {selectedAccount && (
-          <AccountCard showPopover={false} account={selectedAccount} />
+        {isPending && renderLoadingState()}
+        {!isPending && selectedAccount && (
+          <>
+            <AccountCard showPopover={false} account={selectedAccount} />
+            <div className="max-h-[400px] overflow-auto">
+              {transactions.map((transaction) => (
+                <TransactionCard
+                  key={transaction.id}
+                  transaction={{
+                    ...transaction,
+                    createdAt: new Date(transaction.createdAt),
+                    updatedAt: new Date(transaction.updatedAt),
+                    account: selectedAccount!,
+                  }}
+                />
+              ))}
+            </div>
+          </>
         )}
       </DialogContent>
     </Dialog>
