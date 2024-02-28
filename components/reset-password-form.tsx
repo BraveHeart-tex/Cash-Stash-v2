@@ -32,7 +32,10 @@ const ResetPasswordForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="grid grid-cols-1 gap-2"
+      >
         <FormField
           control={form.control}
           name="password"
@@ -69,7 +72,7 @@ const ResetPasswordForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={isPending}>
+        <Button type="submit" disabled={isPending} className="w-full">
           {isPending ? "Submitting..." : "Submit"}
         </Button>
       </form>
