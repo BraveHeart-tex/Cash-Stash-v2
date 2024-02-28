@@ -57,6 +57,14 @@ const LatestAccountTransactionsDialog = ({
     );
   };
 
+  const renderEmptyState = () => {
+    return (
+      <div className="flex items-center justify-center h-48">
+        No transactions found for this account.
+      </div>
+    );
+  };
+
   if (isMobile) {
     return (
       <Drawer
@@ -72,6 +80,7 @@ const LatestAccountTransactionsDialog = ({
           </DrawerHeader>
           <div className="px-4">
             {isPending && renderLoadingState()}
+            {!isPending && transactions.length === 0 && renderEmptyState()}
             {!isPending && selectedAccount && (
               <>
                 <AccountCard showPopover={false} account={selectedAccount} />
@@ -114,6 +123,7 @@ const LatestAccountTransactionsDialog = ({
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
         {isPending && renderLoadingState()}
+        {!isPending && transactions.length === 0 && renderEmptyState()}
         {!isPending && selectedAccount && (
           <>
             <AccountCard showPopover={false} account={selectedAccount} />
