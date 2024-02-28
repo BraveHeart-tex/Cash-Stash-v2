@@ -3,6 +3,7 @@ import redis from "@/lib/redis";
 import {
   generateCachePrefixWithUserId,
   getAccountKey,
+  getAccountTransactionsKey,
   getTransactionKey,
   invalidateKeysByPrefix,
 } from "@/lib/redis/redisUtils";
@@ -72,6 +73,9 @@ export const createTransaction = async (
           CACHE_PREFIXES.PAGINATED_ACCOUNTS,
           user.id
         )
+      ),
+      invalidateKeysByPrefix(
+        getAccountTransactionsKey(validatedData.accountId)
       ),
       redis.hset(getTransactionKey(transaction.id), newTransaction),
       redis.hset(getAccountKey(validatedData.accountId), updatedAccount),
@@ -155,6 +159,18 @@ export const updateTransaction = async (
     const [oldAccount, updatedTransaction, newAccount] =
       await prisma.$transaction(dbTransactions);
 
+    await Promise.all([
+      invalidateKeysByPrefix(
+        generateCachePrefixWithUserId(
+          CACHE_PREFIXES.PAGINATED_ACCOUNTS,
+          user.id
+        )
+      ),
+      invalidateKeysByPrefix(
+        getAccountTransactionsKey(validatedData.accountId)
+      ),
+    ]);
+
     return {
       data: updatedTransaction,
       fieldErrors: [],
@@ -204,9 +220,17 @@ export const deleteTransactionById = async (
       deletedTransaction,
     ]);
 
-    await invalidateKeysByPrefix(
-      generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_ACCOUNTS, user.id)
-    );
+    await Promise.all([
+      invalidateKeysByPrefix(
+        generateCachePrefixWithUserId(
+          CACHE_PREFIXES.PAGINATED_ACCOUNTS,
+          user.id
+        )
+      ),
+      invalidateKeysByPrefix(
+        getAccountTransactionsKey(transactionToDelete.accountId)
+      ),
+    ]);
 
     return {
       transaction: deleteTransactionResult,
