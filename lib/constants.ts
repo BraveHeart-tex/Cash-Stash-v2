@@ -20,6 +20,8 @@ export const PAGE_ROUTES = {
   REPORTS_ROUTE: "/reports",
   EMAIL_VERIFICATION_ROUTE: "/auth/email-verification",
   SIGN_IN_HELP_ROUTE: "/auth/help",
+  FORGOT_PASSWORD_ROUTE: "/auth/help?category=forgot-password",
+  VERIFICATION_TOKEN_ROUTE: "/auth/help?category=verification-token",
 } as const;
 
 export const MAX_VERIFICATION_CODE_ATTEMPTS = 3 as const;

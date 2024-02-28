@@ -10,6 +10,7 @@ import logo from "@/components/Logo.svg";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import ForgotPassword from "@/components/auth/forgot-password";
+import { PAGE_ROUTES } from "@/lib/constants";
 
 const SignInHelpPage = ({
   searchParams,
@@ -30,7 +31,7 @@ const SignInHelpPage = ({
 
   return (
     <div className="flex flex-col justify-center items-center h-screen p-2">
-      <Card>
+      <Card className="min-w-[400px]">
         <CardHeader className="text-xl">
           <Image
             src={logo}
@@ -38,9 +39,17 @@ const SignInHelpPage = ({
             width={200}
             className="mb-4 md:mx-auto dark:invert"
           />
-          <CardTitle>I need help signing in</CardTitle>
+          <CardTitle>
+            {!category && "I need help signing in"}
+            {category === "forgot-password"
+              ? "I forgot my password"
+              : "I need a new verification token"}
+          </CardTitle>
           <CardDescription>
-            Select one of the following options to get help signing in.
+            {!category && "Select an option below to get started"}
+            {category === "forgot-password"
+              ? "Enter your email to reset your password"
+              : "Enter your email to get a new verification token"}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -49,12 +58,12 @@ const SignInHelpPage = ({
           ) : (
             <>
               <Button variant="link" className="underline">
-                <Link href="/auth/help?category=forgot-password">
+                <Link href={PAGE_ROUTES.FORGOT_PASSWORD_ROUTE}>
                   I forgot my password
                 </Link>
               </Button>
               <Button variant="link" className="underline">
-                <Link href="/auth/help?category=verification-token">
+                <Link href={PAGE_ROUTES.VERIFICATION_TOKEN_ROUTE}>
                   I need a new verification token
                 </Link>
               </Button>
