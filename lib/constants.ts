@@ -19,6 +19,7 @@ export const PAGE_ROUTES = {
   TRANSACTIONS_ROUTE: "/transactions",
   REPORTS_ROUTE: "/reports",
   EMAIL_VERIFICATION_ROUTE: "/auth/email-verification",
+  SIGN_IN_HELP_ROUTE: "/auth/help",
 } as const;
 
 export const MAX_VERIFICATION_CODE_ATTEMPTS = 3 as const;

@@ -181,9 +181,8 @@ const LoginForm = () => {
               className="w-max p-0 underline"
             >
               <Link
-                href={"#"}
+                href={PAGE_ROUTES.SIGN_IN_HELP_ROUTE}
                 aria-label="Sign up for a new account."
-                className=""
               >
                 I need help signing in
               </Link>
