@@ -37,6 +37,8 @@ export const FORGOT_PASSWORD_LINK_EXPIRATION_MINUTES = 60 as const;
 export const ACCOUNT_VERIFICATION_EXPIRATION_PERIOD_DAYS = 7 as const;
 export const TWO_FACTOR_AUTH_INPUT_TIMEOUT_SECONDS = 180 as const;
 
+export const MAX_TWO_FACTOR_AUTH_ATTEMPTS = 3 as const;
+
 export const EMAIL_VERIFICATION_REDIRECTION_PATHS = {
   INVALID_EMAIL: PAGE_ROUTES.LOGIN_ROUTE + "?error=invalid-email",
   EXPIRED_CODE: PAGE_ROUTES.LOGIN_ROUTE + "?error=expired-code",
@@ -109,4 +111,5 @@ export const CACHE_PREFIXES = {
   ACCOUNT_TRANSACTIONS: "account_transactions",
   RESET_PASSWORD_LINK_REQUEST_RATE_LIMIT:
     "reset_password_link_request_rate_limit",
+  TWO_FACTOR_AUTH_RATE_LIMIT: "two_factor_auth_rate_limit",
 } as const;

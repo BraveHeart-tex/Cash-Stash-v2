@@ -260,3 +260,23 @@ export const verifyResetPasswordLinkRequestRateLimit = async (
   }
   return count;
 };
+
+export const checkIpBasedTwoFactorAuthRateLimit = async (ipAdress: string) => {
+  const key = `${CACHE_PREFIXES.TWO_FACTOR_AUTH_RATE_LIMIT}:${ipAdress}`;
+  const count = await redis.incr(key);
+  if (count === 1) {
+    await redis.expire(key, 60);
+  }
+  return count;
+};
+
+export const checkUserIdBasedTwoFactorAuthRateLimit = async (
+  userId: string
+) => {
+  const key = `${CACHE_PREFIXES.TWO_FACTOR_AUTH_RATE_LIMIT}:${userId}`;
+  const count = await redis.incr(key);
+  if (count === 1) {
+    await redis.expire(key, 60);
+  }
+  return count;
+};

@@ -15,9 +15,10 @@ import logo from "@/components/Logo.svg";
 import { Label } from "@/components/ui/label";
 import TwoFactorAuthenticationTimer from "@/components/two-factor-authentication-timer";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
+import { redirect } from "next/navigation";
 
 const TwoFactorAuthenticationForm = ({ email }: { email: string }) => {
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const [code, setCode] = useState("");
 
   useEffect(() => {
@@ -27,6 +28,9 @@ const TwoFactorAuthenticationForm = ({ email }: { email: string }) => {
 
         if (response.error) {
           showErrorToast(response.error);
+          if (response.redirectPath) {
+            redirect(response.redirectPath);
+          }
         }
 
         if (response.successMessage) {

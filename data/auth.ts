@@ -18,12 +18,15 @@ import {
   checkUserIdBasedSendVerificationCodeRateLimit,
   verifyVerificationCodeRateLimit,
   verifyResetPasswordLinkRequestRateLimit,
+  checkIpBasedTwoFactorAuthRateLimit,
+  checkUserIdBasedTwoFactorAuthRateLimit,
 } from "@/lib/redis/redisUtils";
 import {
   EMAIL_VERIFICATION_REDIRECTION_PATHS,
   MAX_LOGIN_REQUESTS_PER_MINUTE,
   MAX_RESET_PASSWORD_LINK_REQUESTS_PER_MINUTE,
   MAX_SIGN_UP_REQUESTS_PER_MINUTE,
+  MAX_TWO_FACTOR_AUTH_ATTEMPTS,
   MAX_VERIFICATION_CODE_ATTEMPTS,
   PAGE_ROUTES,
   SEND_VERIFICATION_CODE_RATE_LIMIT,
@@ -536,7 +539,20 @@ export const enableTwoFactorAuthentication = async () => {
 };
 
 export const validateOTP = async (otp: string, email: string) => {
-  // TODO: Add rate limiting for this endpoint based on IP address
+  const header = headers();
+  const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
+    ","
+  )[0];
+  const count = await checkIpBasedTwoFactorAuthRateLimit(ipAddress);
+
+  if (count >= MAX_TWO_FACTOR_AUTH_ATTEMPTS) {
+    return {
+      error: "Too many attempts. You are being redirected to the login page.",
+      successMessage: null,
+      redirectPath: PAGE_ROUTES.LOGIN_ROUTE,
+    };
+  }
+
   const user = await prisma.user.findUnique({
     where: {
       email,
@@ -548,6 +564,19 @@ export const validateOTP = async (otp: string, email: string) => {
     return {
       error: "Invalid request",
       successMessage: null,
+      redirectPath: null,
+    };
+  }
+
+  const userIdBasedCount = await checkUserIdBasedTwoFactorAuthRateLimit(
+    user.id
+  );
+
+  if (userIdBasedCount >= MAX_TWO_FACTOR_AUTH_ATTEMPTS) {
+    return {
+      error: "Too many attempts. You are being redirected to the login page.",
+      successMessage: null,
+      redirectPath: PAGE_ROUTES.LOGIN_ROUTE,
     };
   }
 
@@ -561,6 +590,7 @@ export const validateOTP = async (otp: string, email: string) => {
     return {
       error: "Invalid request",
       successMessage: null,
+      redirectPath: PAGE_ROUTES.LOGIN_ROUTE,
     };
   }
 
@@ -570,9 +600,11 @@ export const validateOTP = async (otp: string, email: string) => {
   );
 
   if (!isValid) {
+    const attemptsLeft = MAX_TWO_FACTOR_AUTH_ATTEMPTS - userIdBasedCount;
     return {
-      error: "Invalid verification code.",
+      error: `Invalid verification code. You have ${attemptsLeft} tries left.`,
       successMessage: null,
+      redirectPath: null,
     };
   }
 
@@ -587,5 +619,6 @@ export const validateOTP = async (otp: string, email: string) => {
   return {
     error: null,
     successMessage: "Logged in successfully. You are being redirected...",
+    redirectPath: null,
   };
 };
