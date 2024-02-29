@@ -8,6 +8,9 @@ import { ZodError } from "zod";
 import { getResetPasswordUrl, processZodError } from "@/lib/utils";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { createTOTPKeyURI, TOTPController } from "oslo/otp";
+import { decodeHex, encodeHex } from "oslo/encoding";
+
 import {
   checkRateLimit,
   checkIPBasedSendVerificationCodeRateLimit,
@@ -15,12 +18,15 @@ import {
   checkUserIdBasedSendVerificationCodeRateLimit,
   verifyVerificationCodeRateLimit,
   verifyResetPasswordLinkRequestRateLimit,
+  checkIpBasedTwoFactorAuthRateLimit,
+  checkUserIdBasedTwoFactorAuthRateLimit,
 } from "@/lib/redis/redisUtils";
 import {
   EMAIL_VERIFICATION_REDIRECTION_PATHS,
   MAX_LOGIN_REQUESTS_PER_MINUTE,
   MAX_RESET_PASSWORD_LINK_REQUESTS_PER_MINUTE,
   MAX_SIGN_UP_REQUESTS_PER_MINUTE,
+  MAX_TWO_FACTOR_AUTH_ATTEMPTS,
   MAX_VERIFICATION_CODE_ATTEMPTS,
   PAGE_ROUTES,
   SEND_VERIFICATION_CODE_RATE_LIMIT,
@@ -38,14 +44,17 @@ import { isWithinExpirationDate } from "oslo";
 
 export const login = async (values: LoginSchemaType) => {
   const header = headers();
-  const ipAdress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(",")[0];
-  const count = await checkRateLimit(ipAdress);
+  const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
+    ","
+  )[0];
+  const count = await checkRateLimit(ipAddress);
 
   if (count >= MAX_LOGIN_REQUESTS_PER_MINUTE) {
     return {
       error:
         "You have made too many requests. Please wait a minute before trying again.",
       fieldErrors: [],
+      twoFactorAuthenticationRequired: false,
     };
   }
 
@@ -59,7 +68,11 @@ export const login = async (values: LoginSchemaType) => {
     });
 
     if (!existingUser) {
-      return { error: "Incorrect email or password", fieldErrors: [] };
+      return {
+        error: "Incorrect email or password",
+        fieldErrors: [],
+        twoFactorAuthenticationRequired: false,
+      };
     }
 
     const isPasswordValid = await new Argon2id().verify(
@@ -68,7 +81,19 @@ export const login = async (values: LoginSchemaType) => {
     );
 
     if (!isPasswordValid) {
-      return { error: "Incorrect email or password", fieldErrors: [] };
+      return {
+        error: "Incorrect email or password",
+        fieldErrors: [],
+        twoFactorAuthenticationRequired: false,
+      };
+    }
+
+    if (existingUser.prefersTwoFactorAuthentication) {
+      return {
+        error: null,
+        fieldErrors: [],
+        twoFactorAuthenticationRequired: true,
+      };
     }
 
     const session = await lucia.createSession(existingUser.id, {});
@@ -80,21 +105,26 @@ export const login = async (values: LoginSchemaType) => {
     );
 
     return {
-      user: existingUser,
       error: "",
       fieldErrors: [],
+      twoFactorAuthenticationRequired: false,
     };
   } catch (error) {
     console.error(error);
 
     if (error instanceof ZodError) {
-      return processZodError(error);
+      return {
+        ...processZodError(error),
+        twoFactorAuthenticationRequired: false,
+      };
     }
 
     return {
       error:
         "Something went wrong while processing your request. Please try again later.",
       fieldErrors: [],
+      redirectPath: null,
+      twoFactorAuthenticationRequired: false,
     };
   }
 };
@@ -111,10 +141,10 @@ export const register = async (values: RegisterSchemaType) => {
 
     if (userExists && userExists.email_verified === false) {
       const header = headers();
-      const ipAdress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
+      const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
         ","
       )[0];
-      const count = await checkSignUpRateLimit(userExists.id, ipAdress);
+      const count = await checkSignUpRateLimit(userExists.id, ipAddress);
 
       if (count >= MAX_SIGN_UP_REQUESTS_PER_MINUTE) {
         return {
@@ -230,7 +260,7 @@ export const checkEmailValidityBeforeVerification = async (email: string) => {
 
     if (!userWithEmail) {
       return {
-        hasValidVarficationCode: false,
+        hasValidVerificationCode: false,
         timeLeft: 0,
       };
     }
@@ -246,7 +276,7 @@ export const checkEmailValidityBeforeVerification = async (email: string) => {
     });
 
     return {
-      hasValidVarficationCode: !!verificationCode,
+      hasValidVerificationCode: !!verificationCode,
       timeLeft: verificationCode?.expiresAt
         ? Math.floor((verificationCode.expiresAt.getTime() - Date.now()) / 1000)
         : 0,
@@ -254,7 +284,7 @@ export const checkEmailValidityBeforeVerification = async (email: string) => {
   } catch (error) {
     console.error(error);
     return {
-      hasValidVarficationCode: false,
+      hasValidVerificationCode: false,
       timeLeft: 0,
     };
   }
@@ -275,10 +305,10 @@ export const handleEmailVerification = async (email: string, code: string) => {
 
   if (!isValid) {
     const header = headers();
-    const ipAdress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
+    const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
       ","
     )[0];
-    const verificationCount = await verifyVerificationCodeRateLimit(ipAdress);
+    const verificationCount = await verifyVerificationCodeRateLimit(ipAddress);
 
     if (verificationCount >= MAX_VERIFICATION_CODE_ATTEMPTS) {
       await deleteEmailVerificationCode(user.id);
@@ -323,8 +353,10 @@ export const handleEmailVerification = async (email: string, code: string) => {
 };
 export const resendEmailVerificationCode = async (email: string) => {
   const header = headers();
-  const ipAdress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(",")[0];
-  const count = await checkIPBasedSendVerificationCodeRateLimit(ipAdress);
+  const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
+    ","
+  )[0];
+  const count = await checkIPBasedSendVerificationCodeRateLimit(ipAddress);
   if (count >= SEND_VERIFICATION_CODE_RATE_LIMIT) {
     return {
       message: "Too many requests. Please wait before trying again.",
@@ -376,8 +408,10 @@ export const resendEmailVerificationCode = async (email: string) => {
 
 export const sendPasswordResetEmail = async (email: string) => {
   const header = headers();
-  const ipAdress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(",")[0];
-  const count = await verifyResetPasswordLinkRequestRateLimit(ipAdress);
+  const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
+    ","
+  )[0];
+  const count = await verifyResetPasswordLinkRequestRateLimit(ipAddress);
   if (count >= MAX_RESET_PASSWORD_LINK_REQUESTS_PER_MINUTE) {
     return {
       message: "Too many requests. Please wait before trying again.",
@@ -431,7 +465,7 @@ export const resetPassword = async ({
   if (!user) {
     return {
       error: "Invalid request",
-      sucessMessage: null,
+      successMessage: null,
     };
   }
 
@@ -444,7 +478,7 @@ export const resetPassword = async ({
   if (!resetToken || !isWithinExpirationDate(resetToken.expires_At)) {
     return {
       error: "Invalid request",
-      sucessMessage: null,
+      successMessage: null,
     };
   }
 
@@ -473,6 +507,155 @@ export const resetPassword = async ({
 
   return {
     error: null,
-    sucessMessage: "Password reset successfully. You are being redirected...",
+    successMessage: "Password reset successfully. You are being redirected...",
   };
+};
+
+export const enableTwoFactorAuthentication = async () => {
+  const { user } = await getUser();
+
+  if (!user) {
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+  }
+
+  await prisma.user.update({
+    where: {
+      id: user.id,
+    },
+    data: {
+      prefersTwoFactorAuthentication: true,
+    },
+  });
+
+  const twoFactorSecret = crypto.getRandomValues(new Uint8Array(20));
+  await prisma.twoFactorAuthenticationSecret.create({
+    data: {
+      secret: encodeHex(twoFactorSecret),
+      userId: user.id,
+    },
+  });
+
+  return createTOTPKeyURI("CashStash", user.email, twoFactorSecret);
+};
+
+export const validateOTP = async (otp: string, email: string) => {
+  const header = headers();
+  const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
+    ","
+  )[0];
+  const count = await checkIpBasedTwoFactorAuthRateLimit(ipAddress);
+
+  if (count >= MAX_TWO_FACTOR_AUTH_ATTEMPTS) {
+    return {
+      error: "Too many attempts. You are being redirected to the login page.",
+      successMessage: null,
+      redirectPath: PAGE_ROUTES.LOGIN_ROUTE,
+    };
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      email,
+      prefersTwoFactorAuthentication: true,
+    },
+  });
+
+  if (!user) {
+    return {
+      error: "Invalid request",
+      successMessage: null,
+      redirectPath: null,
+    };
+  }
+
+  const userIdBasedCount = await checkUserIdBasedTwoFactorAuthRateLimit(
+    user.id
+  );
+
+  if (userIdBasedCount >= MAX_TWO_FACTOR_AUTH_ATTEMPTS) {
+    return {
+      error: "Too many attempts. You are being redirected to the login page.",
+      successMessage: null,
+      redirectPath: PAGE_ROUTES.LOGIN_ROUTE,
+    };
+  }
+
+  const result = await prisma.twoFactorAuthenticationSecret.findFirst({
+    where: {
+      userId: user.id,
+    },
+  });
+
+  if (!result) {
+    return {
+      error: "Invalid request",
+      successMessage: null,
+      redirectPath: PAGE_ROUTES.LOGIN_ROUTE,
+    };
+  }
+
+  const isValid = await new TOTPController().verify(
+    otp,
+    decodeHex(result.secret)
+  );
+
+  if (!isValid) {
+    const attemptsLeft = MAX_TWO_FACTOR_AUTH_ATTEMPTS - userIdBasedCount;
+    return {
+      error: `Invalid verification code. You have ${attemptsLeft} tries left.`,
+      successMessage: null,
+      redirectPath: null,
+    };
+  }
+
+  const session = await lucia.createSession(user.id, {});
+  const sessionCookie = lucia.createSessionCookie(session.id);
+  cookies().set(
+    sessionCookie.name,
+    sessionCookie.value,
+    sessionCookie.attributes
+  );
+
+  return {
+    error: null,
+    successMessage: "Logged in successfully. You are being redirected...",
+    redirectPath: null,
+  };
+};
+
+export const disableTwoFactorAuthentication = async () => {
+  const { user } = await getUser();
+  if (!user) {
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+  }
+
+  try {
+    await prisma.$transaction([
+      prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          prefersTwoFactorAuthentication: false,
+        },
+      }),
+      prisma.twoFactorAuthenticationSecret.deleteMany({
+        where: {
+          userId: user.id,
+        },
+      }),
+    ]);
+
+    return {
+      error: null,
+      successMessage: "Two-factor authentication disabled successfully.",
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      error:
+        "Something went wrong while processing your request. Please try again later.",
+      successMessage: null,
+    };
+  }
 };

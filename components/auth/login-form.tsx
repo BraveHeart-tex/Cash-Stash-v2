@@ -29,11 +29,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { PAGE_ROUTES } from "@/lib/constants";
+import TwoFactorAuthenticationForm from "@/components/auth/TwoFactorAuthenticationForm";
 
 const LoginForm = () => {
   let [isPending, startTransition] = useTransition();
-  const router = useRouter();
+  const [showTwoFactorForm, setShowTwoFactorForm] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
+  const router = useRouter();
 
   const form = useForm<LoginSchemaType>({
     resolver: zodResolver(loginSchema),
@@ -42,13 +44,20 @@ const LoginForm = () => {
   const handleLoginFormSubmit = (data: LoginSchemaType) => {
     startTransition(async () => {
       const result = await login(data);
-      if (result?.error) {
-        processFormErrors(result);
-      } else {
-        router.push("/");
-        setLoggedIn(true);
-        showSuccessToast("Logged in.", "You have been logged in.");
+
+      if (result.twoFactorAuthenticationRequired) {
+        setShowTwoFactorForm(true);
+        return;
       }
+
+      if (result.error) {
+        processFormErrors(result);
+        return;
+      }
+
+      router.push(PAGE_ROUTES.HOME_PAGE);
+      setLoggedIn(true);
+      showSuccessToast("Logged in.", "You have been logged in.");
     });
   };
 
@@ -90,106 +99,109 @@ const LoginForm = () => {
       variants={formVariants}
       transition={{ duration: 0.5, ease: "easeInOut" }}
     >
-      <Card className="w-full">
-        <CardHeader className="text-xl">
-          <Image
-            src={logo}
-            alt="Cash Stash"
-            width={200}
-            className="mb-4 md:mx-auto dark:invert"
-          />
-          <CardTitle>Welcome!</CardTitle>
-          <CardDescription>Sign in to access your account.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form
-              className="flex flex-col gap-4"
-              onSubmit={form.handleSubmit(handleLoginFormSubmit)}
-              data-testid="login-form"
-            >
-              <div className="grid grid-cols-1 gap-2">
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="email"
-                          placeholder="Enter your email"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Password</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="password"
-                          placeholder="Enter your password"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <Button
-                loading={isPending}
-                type="submit"
-                name="Login to your account"
-                className="font-semibold"
-                disabled={isPending}
-                data-testid="login-button"
+      {showTwoFactorForm ? (
+        <TwoFactorAuthenticationForm email={form.getValues("email")} />
+      ) : (
+        <Card className="w-full">
+          <CardHeader className="text-xl">
+            <Image
+              src={logo}
+              alt="Cash Stash"
+              width={200}
+              className="mb-4 md:mx-auto dark:invert"
+            />
+            <CardTitle>Welcome!</CardTitle>
+            <CardDescription>Sign in to access your account.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Form {...form}>
+              <form
+                className="flex flex-col gap-4"
+                onSubmit={form.handleSubmit(handleLoginFormSubmit)}
+                data-testid="login-form"
               >
-                Sign in
-              </Button>
-            </form>
-          </Form>
-        </CardContent>
-        <CardFooter>
-          <div className="flex flex-col gap-2 lg:flex-row lg:justify-between w-full text-md">
-            <p>
-              Don't have an account?{" "}
+                <div className="grid grid-cols-1 gap-2">
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="email"
+                            placeholder="Enter your email"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="password"
+                            placeholder="Enter your password"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <Button
+                  loading={isPending}
+                  type="submit"
+                  name="Login to your account"
+                  className="font-semibold"
+                  disabled={isPending}
+                  data-testid="login-button"
+                >
+                  Sign in
+                </Button>
+              </form>
+            </Form>
+          </CardContent>
+          <CardFooter>
+            <div className="flex flex-col gap-2 lg:flex-row lg:justify-between w-full text-md">
+              <p>
+                Don't have an account?{" "}
+                <Button
+                  variant="link"
+                  aria-label="Sign up for a new account."
+                  className="p-0 underline text-md"
+                >
+                  <Link
+                    href={PAGE_ROUTES.SIGN_UP_ROUTE}
+                    aria-label="Sign up for a new account."
+                  >
+                    Sign up
+                  </Link>
+                </Button>
+              </p>
               <Button
                 variant="link"
                 aria-label="Sign up for a new account."
-                className="p-0 underline text-md"
+                className="w-max p-0 underline"
               >
                 <Link
-                  href={PAGE_ROUTES.SIGN_UP_ROUTE}
+                  href={PAGE_ROUTES.SIGN_IN_HELP_ROUTE}
                   aria-label="Sign up for a new account."
                 >
-                  Sign up
+                  I need help signing in
                 </Link>
               </Button>
-            </p>
-            {/* TODO: */}
-            <Button
-              variant="link"
-              aria-label="Sign up for a new account."
-              className="w-max p-0 underline"
-            >
-              <Link
-                href={PAGE_ROUTES.SIGN_IN_HELP_ROUTE}
-                aria-label="Sign up for a new account."
-              >
-                I need help signing in
-              </Link>
-            </Button>
-          </div>
-        </CardFooter>
-      </Card>
+            </div>
+          </CardFooter>
+        </Card>
+      )}
     </motion.div>
   );
 };

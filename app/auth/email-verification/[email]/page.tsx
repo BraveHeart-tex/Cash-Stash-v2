@@ -40,7 +40,7 @@ const EmailVerificationPage = async ({
   const emailValidityResponse =
     await checkEmailValidityBeforeVerification(email);
 
-  if (!emailValidityResponse.hasValidVarficationCode) {
+  if (!emailValidityResponse.hasValidVerificationCode) {
     redirect(EMAIL_VERIFICATION_REDIRECTION_PATHS.INVALID_EMAIL);
   }
 

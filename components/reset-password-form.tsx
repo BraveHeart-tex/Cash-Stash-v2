@@ -47,7 +47,9 @@ const ResetPasswordForm = ({ email, token }: ResetPasswordFormProps) => {
         router.push(PAGE_ROUTES.LOGIN_ROUTE);
       }
 
-      showSuccessToast(response.sucessMessage || "Password reset successfully");
+      showSuccessToast(
+        response.successMessage ?? "Password reset successfully"
+      );
     });
   };
 

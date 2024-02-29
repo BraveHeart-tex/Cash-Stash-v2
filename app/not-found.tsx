@@ -11,12 +11,12 @@ const NotFound = async () => {
   }
 
   return (
-    <div className="max-w-7xl flex justify-center items-center h-screen">
+    <div className="p-1 lg:p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px] mb-2">
       <div className="grid grid-cols-1 gap-4">
-        <h1 className="text-6xl font-semibold text-center text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/70">
+        <h1 className="text-6xl font-semibold text-left text-primary">
           404 Page Not Found...
         </h1>
-        <p>
+        <p className="text-foreground">
           Looks like you tried to navigate to a page that doesn&apos;t exist.
         </p>
         <Button className="w-max">

@@ -3,6 +3,7 @@ import { AiOutlineTransaction } from "react-icons/ai";
 import { FaMoneyBill, FaPiggyBank } from "react-icons/fa";
 import { MdDashboard, MdOutlineAccountBalanceWallet } from "react-icons/md";
 import { TbReportAnalytics } from "react-icons/tb";
+import { FaCog } from "react-icons/all";
 
 export const PRIMARY_COLOR = "#c4002b" as const;
 export const PRIMARY_FOREGROUND_COLOR = "#fefcfa" as const;
@@ -22,6 +23,7 @@ export const PAGE_ROUTES = {
   SIGN_IN_HELP_ROUTE: "/auth/help",
   FORGOT_PASSWORD_ROUTE: "/auth/help?category=forgot-password",
   VERIFICATION_TOKEN_ROUTE: "/auth/help?category=verification-token",
+  SETTINGS_ROUTE: "/settings",
 } as const;
 
 export const MAX_VERIFICATION_CODE_ATTEMPTS = 3 as const;
@@ -35,6 +37,9 @@ export const EMAIL_VERIFICATION_CODE_LENGTH = 8 as const;
 export const FORGOT_PASSWORD_LINK_EXPIRATION_MINUTES = 60 as const;
 
 export const ACCOUNT_VERIFICATION_EXPIRATION_PERIOD_DAYS = 7 as const;
+export const TWO_FACTOR_AUTH_INPUT_TIMEOUT_SECONDS = 180 as const;
+
+export const MAX_TWO_FACTOR_AUTH_ATTEMPTS = 3 as const;
 
 export const EMAIL_VERIFICATION_REDIRECTION_PATHS = {
   INVALID_EMAIL: PAGE_ROUTES.LOGIN_ROUTE + "?error=invalid-email",
@@ -90,6 +95,11 @@ export const PAGES: IPage[] = [
     icon: TbReportAnalytics,
     link: PAGE_ROUTES.REPORTS_ROUTE,
   },
+  {
+    label: "Settings",
+    icon: FaCog,
+    link: PAGE_ROUTES.SETTINGS_ROUTE,
+  },
 ];
 
 export const CACHE_PREFIXES = {
@@ -108,4 +118,5 @@ export const CACHE_PREFIXES = {
   ACCOUNT_TRANSACTIONS: "account_transactions",
   RESET_PASSWORD_LINK_REQUEST_RATE_LIMIT:
     "reset_password_link_request_rate_limit",
+  TWO_FACTOR_AUTH_RATE_LIMIT: "two_factor_auth_rate_limit",
 } as const;

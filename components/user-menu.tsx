@@ -20,7 +20,7 @@ const UserMenu = () => {
 
   const handleLogout = () => {
     startTransition(async () => {
-      logout();
+      await logout();
     });
   };
 
