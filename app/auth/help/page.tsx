@@ -11,6 +11,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import ForgotPassword from "@/components/auth/forgot-password";
 import { PAGE_ROUTES } from "@/lib/constants";
+import ResendNotificationInput from "@/components/resend-verification-token-input";
 
 const SignInHelpPage = ({
   searchParams,
@@ -26,7 +27,7 @@ const SignInHelpPage = ({
       return <ForgotPassword />;
     }
 
-    return null;
+    return <ResendNotificationInput />;
   };
 
   const renderTitle = () => {
