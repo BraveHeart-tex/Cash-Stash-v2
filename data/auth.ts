@@ -8,6 +8,9 @@ import { ZodError } from "zod";
 import { getResetPasswordUrl, processZodError } from "@/lib/utils";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { createTOTPKeyURI } from "oslo/otp";
+import { encodeHex } from "oslo/encoding";
+
 import {
   checkRateLimit,
   checkIPBasedSendVerificationCodeRateLimit,
@@ -38,8 +41,10 @@ import { isWithinExpirationDate } from "oslo";
 
 export const login = async (values: LoginSchemaType) => {
   const header = headers();
-  const ipAdress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(",")[0];
-  const count = await checkRateLimit(ipAdress);
+  const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
+    ","
+  )[0];
+  const count = await checkRateLimit(ipAddress);
 
   if (count >= MAX_LOGIN_REQUESTS_PER_MINUTE) {
     return {
@@ -111,10 +116,10 @@ export const register = async (values: RegisterSchemaType) => {
 
     if (userExists && userExists.email_verified === false) {
       const header = headers();
-      const ipAdress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
+      const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
         ","
       )[0];
-      const count = await checkSignUpRateLimit(userExists.id, ipAdress);
+      const count = await checkSignUpRateLimit(userExists.id, ipAddress);
 
       if (count >= MAX_SIGN_UP_REQUESTS_PER_MINUTE) {
         return {
@@ -230,7 +235,7 @@ export const checkEmailValidityBeforeVerification = async (email: string) => {
 
     if (!userWithEmail) {
       return {
-        hasValidVarficationCode: false,
+        hasValidVerificationCode: false,
         timeLeft: 0,
       };
     }
@@ -246,7 +251,7 @@ export const checkEmailValidityBeforeVerification = async (email: string) => {
     });
 
     return {
-      hasValidVarficationCode: !!verificationCode,
+      hasValidVerificationCode: !!verificationCode,
       timeLeft: verificationCode?.expiresAt
         ? Math.floor((verificationCode.expiresAt.getTime() - Date.now()) / 1000)
         : 0,
@@ -254,7 +259,7 @@ export const checkEmailValidityBeforeVerification = async (email: string) => {
   } catch (error) {
     console.error(error);
     return {
-      hasValidVarficationCode: false,
+      hasValidVerificationCode: false,
       timeLeft: 0,
     };
   }
@@ -275,10 +280,10 @@ export const handleEmailVerification = async (email: string, code: string) => {
 
   if (!isValid) {
     const header = headers();
-    const ipAdress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
+    const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
       ","
     )[0];
-    const verificationCount = await verifyVerificationCodeRateLimit(ipAdress);
+    const verificationCount = await verifyVerificationCodeRateLimit(ipAddress);
 
     if (verificationCount >= MAX_VERIFICATION_CODE_ATTEMPTS) {
       await deleteEmailVerificationCode(user.id);
@@ -323,8 +328,10 @@ export const handleEmailVerification = async (email: string, code: string) => {
 };
 export const resendEmailVerificationCode = async (email: string) => {
   const header = headers();
-  const ipAdress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(",")[0];
-  const count = await checkIPBasedSendVerificationCodeRateLimit(ipAdress);
+  const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
+    ","
+  )[0];
+  const count = await checkIPBasedSendVerificationCodeRateLimit(ipAddress);
   if (count >= SEND_VERIFICATION_CODE_RATE_LIMIT) {
     return {
       message: "Too many requests. Please wait before trying again.",
@@ -376,8 +383,10 @@ export const resendEmailVerificationCode = async (email: string) => {
 
 export const sendPasswordResetEmail = async (email: string) => {
   const header = headers();
-  const ipAdress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(",")[0];
-  const count = await verifyResetPasswordLinkRequestRateLimit(ipAdress);
+  const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
+    ","
+  )[0];
+  const count = await verifyResetPasswordLinkRequestRateLimit(ipAddress);
   if (count >= MAX_RESET_PASSWORD_LINK_REQUESTS_PER_MINUTE) {
     return {
       message: "Too many requests. Please wait before trying again.",
@@ -431,7 +440,7 @@ export const resetPassword = async ({
   if (!user) {
     return {
       error: "Invalid request",
-      sucessMessage: null,
+      successMessage: null,
     };
   }
 
@@ -444,7 +453,7 @@ export const resetPassword = async ({
   if (!resetToken || !isWithinExpirationDate(resetToken.expires_At)) {
     return {
       error: "Invalid request",
-      sucessMessage: null,
+      successMessage: null,
     };
   }
 
@@ -473,6 +482,33 @@ export const resetPassword = async ({
 
   return {
     error: null,
-    sucessMessage: "Password reset successfully. You are being redirected...",
+    successMessage: "Password reset successfully. You are being redirected...",
   };
+};
+
+export const enableTwoFactorAuthentication = async () => {
+  const { user } = await getUser();
+
+  if (!user) {
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+  }
+
+  await prisma.user.update({
+    where: {
+      id: user.id,
+    },
+    data: {
+      prefersTwoFactorAuthentication: true,
+    },
+  });
+
+  const twoFactorSecret = crypto.getRandomValues(new Uint8Array(20));
+  await prisma.twoFactorAuthenticatioSecret.create({
+    data: {
+      secret: encodeHex(twoFactorSecret),
+      userId: user.id,
+    },
+  });
+
+  return createTOTPKeyURI("CashStash", user.email, twoFactorSecret);
 };
