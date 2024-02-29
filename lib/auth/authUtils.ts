@@ -59,7 +59,7 @@ export const sendEmailVerificationCode = async (
   const emailHTML = render(
     RegisterConfirmEmail({
       validationCode: code,
-      validationUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/${PAGE_ROUTES.EMAIL_VERIFICATION_ROUTE}/${email}`,
+      validationUrl: `${process.env.NEXT_PUBLIC_BASE_URL}${PAGE_ROUTES.EMAIL_VERIFICATION_ROUTE}/${email}`,
     })
   );
 

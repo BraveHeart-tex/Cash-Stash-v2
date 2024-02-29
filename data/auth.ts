@@ -335,6 +335,7 @@ export const resendEmailVerificationCode = async (email: string) => {
   const user = await prisma.user.findUnique({
     where: {
       email,
+      email_verified: false,
     },
   });
 

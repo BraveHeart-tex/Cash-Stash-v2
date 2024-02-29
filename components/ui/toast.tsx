@@ -2,7 +2,6 @@ import * as React from "react";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import * as ToastPrimitives from "@radix-ui/react-toast";
 import { cva, type VariantProps } from "class-variance-authority";
-import { FaCheck, FaExclamation, FaQuoteLeft } from "react-icons/fa";
 
 import { cn } from "@/lib/utils";
 
@@ -42,16 +41,6 @@ const toastVariants = cva(
   }
 );
 
-const variantIconMap: {
-  [key in VariantProps<
-    typeof toastVariants
-  >["variant"] as string]: React.ElementType;
-} = {
-  default: FaQuoteLeft,
-  success: FaCheck,
-  destructive: FaExclamation,
-};
-
 const Toast = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Root>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitives.Root> &
@@ -64,11 +53,6 @@ const Toast = React.forwardRef<
       {...props}
     >
       <div className="flex items-center space-x-2">
-        {variant &&
-          React.createElement(variantIconMap[variant], {
-            className: "font-semibold mr-2",
-            size: 16,
-          })}
         <div className="flex flex-col space-y-1">{props.children}</div>
       </div>
     </ToastPrimitives.Root>

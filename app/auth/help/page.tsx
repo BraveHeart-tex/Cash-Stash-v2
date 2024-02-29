@@ -11,6 +11,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import ForgotPassword from "@/components/auth/forgot-password";
 import { PAGE_ROUTES } from "@/lib/constants";
+import ResendNotificationInput from "@/components/resend-verification-token-input";
 
 const SignInHelpPage = ({
   searchParams,
@@ -26,7 +27,31 @@ const SignInHelpPage = ({
       return <ForgotPassword />;
     }
 
-    return null;
+    return <ResendNotificationInput />;
+  };
+
+  const renderTitle = () => {
+    const titleByCategory: {
+      [key: string]: string;
+    } = {
+      "forgot-password": "Forgot Password",
+      "verification-token": "Verification Token",
+    };
+
+    return titleByCategory[category] || "I need help signing in";
+  };
+
+  const renderDescription = () => {
+    const descriptionByCategory: {
+      [key: string]: string;
+    } = {
+      "forgot-password": "Enter your email to reset your password",
+      "verification-token": "Enter your email to get a new verification token",
+    };
+
+    return (
+      descriptionByCategory[category] || "Select an option below to get started"
+    );
   };
 
   return (
@@ -39,18 +64,8 @@ const SignInHelpPage = ({
             width={200}
             className="mb-4 md:mx-auto dark:invert"
           />
-          <CardTitle>
-            {!category && "I need help signing in"}
-            {category === "forgot-password"
-              ? "I forgot my password"
-              : "I need a new verification token"}
-          </CardTitle>
-          <CardDescription>
-            {!category && "Select an option below to get started"}
-            {category === "forgot-password"
-              ? "Enter your email to reset your password"
-              : "Enter your email to get a new verification token"}
-          </CardDescription>
+          <CardTitle>{renderTitle()}</CardTitle>
+          <CardDescription>{renderDescription()}</CardDescription>
         </CardHeader>
         <CardContent>
           {category ? (
