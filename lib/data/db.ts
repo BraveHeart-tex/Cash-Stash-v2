@@ -23,6 +23,8 @@ export const lucia = new Lucia(adapter, {
       name: databaseUserAttributes.name,
       email: databaseUserAttributes.email,
       emailVerified: databaseUserAttributes.email_verified,
+      prefersTwoFactorAuthentication:
+        databaseUserAttributes.prefersTwoFactorAuthentication,
     };
   },
 });
@@ -43,6 +45,7 @@ interface DatabaseUserAttributes {
   name: string;
   email: string;
   email_verified: boolean;
+  prefersTwoFactorAuthentication: boolean;
 }
 
 export default prisma;

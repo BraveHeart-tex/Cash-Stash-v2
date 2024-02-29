@@ -622,3 +622,40 @@ export const validateOTP = async (otp: string, email: string) => {
     redirectPath: null,
   };
 };
+
+export const disableTwoFactorAuthentication = async () => {
+  const { user } = await getUser();
+  if (!user) {
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+  }
+
+  try {
+    await prisma.$transaction([
+      prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          prefersTwoFactorAuthentication: false,
+        },
+      }),
+      prisma.twoFactorAuthenticationSecret.deleteMany({
+        where: {
+          userId: user.id,
+        },
+      }),
+    ]);
+
+    return {
+      error: null,
+      successMessage: "Two-factor authentication disabled successfully.",
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      error:
+        "Something went wrong while processing your request. Please try again later.",
+      successMessage: null,
+    };
+  }
+};
