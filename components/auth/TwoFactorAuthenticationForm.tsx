@@ -7,7 +7,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -15,6 +14,7 @@ import Image from "next/image";
 import logo from "@/components/Logo.svg";
 import { Label } from "@/components/ui/label";
 import TwoFactorAuthenticationTimer from "@/components/two-factor-authentication-timer";
+import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 
 const TwoFactorAuthenticationForm = ({ email }: { email: string }) => {
   const [isPending, startTransition] = useTransition();
@@ -23,7 +23,15 @@ const TwoFactorAuthenticationForm = ({ email }: { email: string }) => {
   useEffect(() => {
     if (code.length === 6) {
       startTransition(async () => {
-        await validateOTP(code, email);
+        const response = await validateOTP(code, email);
+
+        if (response.error) {
+          showErrorToast(response.error);
+        }
+
+        if (response.successMessage) {
+          showSuccessToast("You have been logged in successfully.");
+        }
       });
     }
   }, [code]);
@@ -46,17 +54,12 @@ const TwoFactorAuthenticationForm = ({ email }: { email: string }) => {
       <CardContent>
         <TwoFactorAuthenticationTimer />
         <div className="w-full flex items-center justify-center mt-4">
-          {isPending ? (
-            <p>Validating...</p>
-          ) : (
-            <div>
-              <Label>Your 6-digit code</Label>
-              <AutoProgressInput length={6} onChange={setCode} />
-            </div>
-          )}
+          <div>
+            <Label>Your 6-digit code</Label>
+            <AutoProgressInput length={6} onChange={setCode} />
+          </div>
         </div>
       </CardContent>
-      <CardFooter></CardFooter>
     </Card>
   );
 };

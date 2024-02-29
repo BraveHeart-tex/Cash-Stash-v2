@@ -51,7 +51,7 @@ export const login = async (values: LoginSchemaType) => {
       error:
         "You have made too many requests. Please wait a minute before trying again.",
       fieldErrors: [],
-      redirectPath: null,
+      twoFactorAuthenticationRequired: false,
     };
   }
 
@@ -68,7 +68,7 @@ export const login = async (values: LoginSchemaType) => {
       return {
         error: "Incorrect email or password",
         fieldErrors: [],
-        redirectPath: null,
+        twoFactorAuthenticationRequired: false,
       };
     }
 
@@ -81,7 +81,7 @@ export const login = async (values: LoginSchemaType) => {
       return {
         error: "Incorrect email or password",
         fieldErrors: [],
-        redirectPath: null,
+        twoFactorAuthenticationRequired: false,
       };
     }
 
@@ -89,8 +89,7 @@ export const login = async (values: LoginSchemaType) => {
       return {
         error: null,
         fieldErrors: [],
-        redirectPath:
-          PAGE_ROUTES.TWO_FACTOR_AUTHENTICATION_ROUTE + "?email=" + data.email,
+        twoFactorAuthenticationRequired: true,
       };
     }
 
@@ -105,7 +104,7 @@ export const login = async (values: LoginSchemaType) => {
     return {
       error: "",
       fieldErrors: [],
-      redirectPath: null,
+      twoFactorAuthenticationRequired: false,
     };
   } catch (error) {
     console.error(error);
@@ -113,7 +112,7 @@ export const login = async (values: LoginSchemaType) => {
     if (error instanceof ZodError) {
       return {
         ...processZodError(error),
-        redirectPath: null,
+        twoFactorAuthenticationRequired: false,
       };
     }
 
@@ -122,6 +121,7 @@ export const login = async (values: LoginSchemaType) => {
         "Something went wrong while processing your request. Please try again later.",
       fieldErrors: [],
       redirectPath: null,
+      twoFactorAuthenticationRequired: false,
     };
   }
 };

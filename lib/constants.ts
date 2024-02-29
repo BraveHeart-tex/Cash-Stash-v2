@@ -22,7 +22,6 @@ export const PAGE_ROUTES = {
   SIGN_IN_HELP_ROUTE: "/auth/help",
   FORGOT_PASSWORD_ROUTE: "/auth/help?category=forgot-password",
   VERIFICATION_TOKEN_ROUTE: "/auth/help?category=verification-token",
-  TWO_FACTOR_AUTHENTICATION_ROUTE: "/auth/login/two-factor-auth",
 } as const;
 
 export const MAX_VERIFICATION_CODE_ATTEMPTS = 3 as const;
