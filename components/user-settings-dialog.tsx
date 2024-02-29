@@ -45,8 +45,10 @@ const UserSettingsDialog = () => {
             <DrawerTitle>{title}</DrawerTitle>
             <DrawerDescription>{description}</DrawerDescription>
           </DrawerHeader>
-          <UserSettings />
-          <DrawerFooter className="pt-2">
+          <div className="px-4">
+            <UserSettings />
+          </div>
+          <DrawerFooter className="pt-2 mt-2">
             <DrawerClose asChild>
               <Button variant="outline">Close</Button>
             </DrawerClose>
