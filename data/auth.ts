@@ -8,8 +8,8 @@ import { ZodError } from "zod";
 import { getResetPasswordUrl, processZodError } from "@/lib/utils";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { createTOTPKeyURI } from "oslo/otp";
-import { encodeHex } from "oslo/encoding";
+import { createTOTPKeyURI, TOTPController } from "oslo/otp";
+import { decodeHex, encodeHex } from "oslo/encoding";
 
 import {
   checkRateLimit,
@@ -51,6 +51,7 @@ export const login = async (values: LoginSchemaType) => {
       error:
         "You have made too many requests. Please wait a minute before trying again.",
       fieldErrors: [],
+      redirectPath: null,
     };
   }
 
@@ -64,7 +65,11 @@ export const login = async (values: LoginSchemaType) => {
     });
 
     if (!existingUser) {
-      return { error: "Incorrect email or password", fieldErrors: [] };
+      return {
+        error: "Incorrect email or password",
+        fieldErrors: [],
+        redirectPath: null,
+      };
     }
 
     const isPasswordValid = await new Argon2id().verify(
@@ -73,7 +78,20 @@ export const login = async (values: LoginSchemaType) => {
     );
 
     if (!isPasswordValid) {
-      return { error: "Incorrect email or password", fieldErrors: [] };
+      return {
+        error: "Incorrect email or password",
+        fieldErrors: [],
+        redirectPath: null,
+      };
+    }
+
+    if (existingUser.prefersTwoFactorAuthentication) {
+      return {
+        error: null,
+        fieldErrors: [],
+        redirectPath:
+          PAGE_ROUTES.TWO_FACTOR_AUTHENTICATION_ROUTE + "?email=" + data.email,
+      };
     }
 
     const session = await lucia.createSession(existingUser.id, {});
@@ -85,21 +103,25 @@ export const login = async (values: LoginSchemaType) => {
     );
 
     return {
-      user: existingUser,
       error: "",
       fieldErrors: [],
+      redirectPath: null,
     };
   } catch (error) {
     console.error(error);
 
     if (error instanceof ZodError) {
-      return processZodError(error);
+      return {
+        ...processZodError(error),
+        redirectPath: null,
+      };
     }
 
     return {
       error:
         "Something went wrong while processing your request. Please try again later.",
       fieldErrors: [],
+      redirectPath: null,
     };
   }
 };
@@ -503,7 +525,7 @@ export const enableTwoFactorAuthentication = async () => {
   });
 
   const twoFactorSecret = crypto.getRandomValues(new Uint8Array(20));
-  await prisma.twoFactorAuthenticatioSecret.create({
+  await prisma.twoFactorAuthenticationSecret.create({
     data: {
       secret: encodeHex(twoFactorSecret),
       userId: user.id,
@@ -511,4 +533,59 @@ export const enableTwoFactorAuthentication = async () => {
   });
 
   return createTOTPKeyURI("CashStash", user.email, twoFactorSecret);
+};
+
+export const validateOTP = async (otp: string, email: string) => {
+  // TODO: Add rate limiting for this endpoint based on IP address
+  const user = await prisma.user.findUnique({
+    where: {
+      email,
+      prefersTwoFactorAuthentication: true,
+    },
+  });
+
+  if (!user) {
+    return {
+      error: "Invalid request",
+      successMessage: null,
+    };
+  }
+
+  const result = await prisma.twoFactorAuthenticationSecret.findFirst({
+    where: {
+      userId: user.id,
+    },
+  });
+
+  if (!result) {
+    return {
+      error: "Invalid request",
+      successMessage: null,
+    };
+  }
+
+  const isValid = await new TOTPController().verify(
+    otp,
+    decodeHex(result.secret)
+  );
+
+  if (!isValid) {
+    return {
+      error: "Invalid verification code.",
+      successMessage: null,
+    };
+  }
+
+  const session = await lucia.createSession(user.id, {});
+  const sessionCookie = lucia.createSessionCookie(session.id);
+  cookies().set(
+    sessionCookie.name,
+    sessionCookie.value,
+    sessionCookie.attributes
+  );
+
+  return {
+    error: null,
+    successMessage: "Logged in successfully. You are being redirected...",
+  };
 };

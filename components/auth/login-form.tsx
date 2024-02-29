@@ -42,13 +42,20 @@ const LoginForm = () => {
   const handleLoginFormSubmit = (data: LoginSchemaType) => {
     startTransition(async () => {
       const result = await login(data);
-      if (result?.error) {
+
+      if (result.error) {
         processFormErrors(result);
-      } else {
-        router.push("/");
-        setLoggedIn(true);
-        showSuccessToast("Logged in.", "You have been logged in.");
+        return;
       }
+
+      if (result?.redirectPath) {
+        router.push(result.redirectPath);
+        return;
+      }
+
+      router.push(PAGE_ROUTES.HOME_PAGE);
+      setLoggedIn(true);
+      showSuccessToast("Logged in.", "You have been logged in.");
     });
   };
 
@@ -174,7 +181,6 @@ const LoginForm = () => {
                 </Link>
               </Button>
             </p>
-            {/* TODO: */}
             <Button
               variant="link"
               aria-label="Sign up for a new account."

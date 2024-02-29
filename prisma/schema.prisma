@@ -8,13 +8,13 @@ datasource db {
 }
 
 model User {
-  id                             String                        @id @default(cuid())
+  id                             String                         @id @default(cuid())
   name                           String
-  email                          String                        @unique
+  email                          String                         @unique
   hashedPassword                 String
-  email_verified                 Boolean                       @default(false)
-  createdAt                      DateTime                      @default(now())
-  updatedAt                      DateTime                      @updatedAt
+  email_verified                 Boolean                        @default(false)
+  createdAt                      DateTime                       @default(now())
+  updatedAt                      DateTime                       @updatedAt
   budgets                        Budget[]
   goals                          Goal[]
   reminders                      Reminder[]
@@ -23,11 +23,11 @@ model User {
   Session                        Session[]
   EmailVerificationCode          EmailVerificationCode?
   PasswordResetToken             PasswordResetToken?
-  prefersTwoFactorAuthentication Boolean                       @default(false)
-  TwoFactorAuthenticatioSecret   TwoFactorAuthenticatioSecret?
+  prefersTwoFactorAuthentication Boolean                        @default(false)
+  TwoFactorAuthenticationSecret  TwoFactorAuthenticationSecret?
 }
 
-model TwoFactorAuthenticatioSecret {
+model TwoFactorAuthenticationSecret {
   id        String   @id @default(cuid())
   secret    String
   userId    String   @unique
