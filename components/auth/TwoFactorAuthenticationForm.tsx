@@ -34,7 +34,7 @@ const TwoFactorAuthenticationForm = ({ email }: { email: string }) => {
         }
       });
     }
-  }, [code]);
+  }, [code, email]);
 
   return (
     <Card>
