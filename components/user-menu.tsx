@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import useAuthStore from "@/store/auth/authStore";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Label } from "@/components/ui/label";
+import UserSettingsDialog from "@/components/user-settings-dialog";
 
 const UserMenu = () => {
   let [isPending, startTransition] = useTransition();
@@ -45,6 +46,10 @@ const UserMenu = () => {
         <div className="block lg:hidden">
           <Label>Color Mode</Label>
           <ModeToggle layoutId="active-colorTheme-pill-userMenu" />
+        </div>
+
+        <div className="w-full">
+          <UserSettingsDialog />
         </div>
 
         <Button

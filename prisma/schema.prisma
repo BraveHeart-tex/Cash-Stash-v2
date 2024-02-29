@@ -23,6 +23,18 @@ model User {
   Session               Session[]
   EmailVerificationCode EmailVerificationCode?
   PasswordResetToken    PasswordResetToken?
+  prefrersTwoFactorAuth Boolean                @default(false)
+  TwoFactorAuthSecret   TwoFactorAuthSecret?
+}
+
+model TwoFactorAuthSecret {
+  id        String   @id @default(cuid())
+  secret    String
+  user_id   String   @unique
+  createdAt DateTime @default(now())
+  User      User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id], map: "twoFactorAuthSecrets_user_id_fkey")
 }
 
 model PasswordResetToken {
