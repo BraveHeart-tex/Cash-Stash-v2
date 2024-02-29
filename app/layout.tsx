@@ -4,11 +4,13 @@ import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
 import GenericModal from "@/components/generic-modal";
 import NavigationTabs from "@/components/navigation-tabs";
-import { Metadata, Viewport } from "next";
+import { Metadata } from "next";
 import Navbar from "@/components/navbar";
 import { getUser } from "@/lib/auth/session";
 import GenericConfirmDialog from "./generic-confirm-dialog";
 import RedirectionPathToaster from "@/components/redirection-path-toaster";
+import UriBarcodeDialog from "@/components/uri-barcode-dialog";
+import { ReactNode } from "react";
 
 const InterFont = Inter({
   weight: ["300", "400", "500", "600", "700"],
@@ -57,12 +59,8 @@ export const metadata: Metadata = {
   },
 };
 
-export const viewport: Viewport = {
-  themeColor: "#e11d48",
-};
-
 interface ILayoutProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export default async function RootLayout({ children }: ILayoutProps) {
@@ -77,6 +75,7 @@ export default async function RootLayout({ children }: ILayoutProps) {
           {/* Padding bottom is the same as the height of the navigation bar */}
           <main className="pb-16 lg:pb-0">{children}</main>
           <GenericModal />
+          <UriBarcodeDialog />
           <GenericConfirmDialog />
           <RedirectionPathToaster />
         </ThemeProvider>

@@ -5,8 +5,10 @@ import { MdPhonelinkSetup } from "react-icons/md";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import { useTransition } from "react";
 import { enableTwoFactorAuthentication } from "@/data/auth";
+import useAuthStore from "@/store/auth/authStore";
 
 const UserSettings = () => {
+  const setUri = useAuthStore((state) => state.setUri);
   const [isPending, startTransition] = useTransition();
   const showGenericConfirm = useGenericConfirmStore(
     (state) => state.showConfirm
@@ -18,8 +20,8 @@ const UserSettings = () => {
       primaryActionLabel: "Enable",
       onConfirm: () => {
         startTransition(async () => {
-          const uri = await enableTwoFactorAuthentication();
-          console.log("uri", uri);
+          const uriResponse = await enableTwoFactorAuthentication();
+          setUri(uriResponse);
         });
       },
     });
