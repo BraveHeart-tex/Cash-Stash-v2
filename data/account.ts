@@ -320,3 +320,22 @@ export const getTransactionsForAccount = async (accountId: string) => {
     return [];
   }
 };
+
+// TODO: Implement caching for this function
+export const getCurrentUserAccounts = async () => {
+  const { user } = await getUser();
+
+  if (!user) {
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+  }
+
+  return prisma.account.findMany({
+    where: {
+      userId: user.id,
+    },
+    select: {
+      id: true,
+      name: true,
+    },
+  });
+};

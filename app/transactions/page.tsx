@@ -3,7 +3,14 @@ import TransactionList from "@/components/transactions/transaction-list";
 import CreateTransactionButton from "@/components/create-buttons/create-transaction-button";
 import TransactionsNotFound from "@/components/transactions-not-found";
 import RouteSearchInput from "@/components/route-search-input";
-import { createGetPaginatedTransactionsParams } from "@/lib/utils";
+import {
+  createGetPaginatedTransactionsParams,
+  generateReadbleEnumLabels,
+} from "@/lib/utils";
+import RouteSelectFilter from "@/components/route-select-filter";
+import { getCurrentUserAccounts } from "@/data/account";
+import { TransactionCategory } from "@prisma/client";
+import { Label } from "@/components/ui/label";
 
 export interface ITransactionPageSearchParams {
   transactionType?: string;
@@ -30,6 +37,17 @@ const TransactionsPage = async ({
 
   let result = await getPaginatedTransactions(actionParams);
 
+  const usersAccounts = await getCurrentUserAccounts();
+
+  const accountsFilterDataset = usersAccounts.map((account) => ({
+    label: account.name,
+    value: account.id,
+  }));
+
+  const categoryFilterDataset = generateReadbleEnumLabels({
+    enumObj: TransactionCategory,
+  });
+
   const pageHasParams = Object.keys(actionParams)
     .filter((key) => key !== "page")
     .some((key: string) => actionParams[key as keyof typeof actionParams]);
@@ -44,6 +62,26 @@ const TransactionsPage = async ({
         <div className="flex items-center justify-between">
           <RouteSearchInput placeholder="Search by description" />
         </div>
+        {usersAccounts.length > 0 && (
+          <div className="flex items-center gap-2">
+            <div className="flex flex-col gap-1">
+              <Label>Filter by account</Label>
+              <RouteSelectFilter
+                dataset={accountsFilterDataset}
+                queryStringKey="accountId"
+                selectLabel="Filter by account"
+              />
+            </div>
+            <div className="flex flex-col gap-1">
+              <Label>Filter by category</Label>
+              <RouteSelectFilter
+                dataset={categoryFilterDataset}
+                queryStringKey="category"
+                selectLabel="Filter by category"
+              />
+            </div>
+          </div>
+        )}
         <div>
           {result.transactions && result.transactions.length > 0 ? (
             <TransactionList transactions={result.transactions || []} />
