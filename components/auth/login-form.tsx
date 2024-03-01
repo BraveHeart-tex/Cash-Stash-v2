@@ -13,8 +13,8 @@ import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import loginSchema, { LoginSchemaType } from "@/schemas/login-schema";
-import { useState, useTransition } from "react";
-import { login } from "@/data/auth";
+import { useRef, useState, useTransition } from "react";
+import { login, validateReCAPTCHAToken } from "@/data/auth";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -33,6 +33,7 @@ import TwoFactorAuthenticationForm from "@/components/auth/TwoFactorAuthenticati
 import ReCAPTCHA from "react-google-recaptcha";
 
 const LoginForm = () => {
+  const captchaRef = useRef<ReCAPTCHA>(null);
   let [isPending, startTransition] = useTransition();
   const [showTwoFactorForm, setShowTwoFactorForm] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
@@ -44,6 +45,23 @@ const LoginForm = () => {
 
   const handleLoginFormSubmit = (data: LoginSchemaType) => {
     startTransition(async () => {
+      const captchaToken = captchaRef.current?.getValue();
+      if (!captchaToken)
+        return showErrorToast(
+          "Captcha validation failed.",
+          "Please complete the captcha."
+        );
+
+      const isCaptchaTokenValid = await validateReCAPTCHAToken(captchaToken);
+
+      if (!isCaptchaTokenValid) {
+        showErrorToast(
+          "Captcha validation failed.",
+          "Please complete the captcha."
+        );
+        return;
+      }
+
       const result = await login(data);
 
       if (result.twoFactorAuthenticationRequired) {
@@ -156,10 +174,7 @@ const LoginForm = () => {
                       </FormItem>
                     )}
                   />
-                  <ReCAPTCHA
-                    sitekey={CAPTCHA_SITE_KEY}
-                    onChange={console.log}
-                  />
+                  <ReCAPTCHA sitekey={CAPTCHA_SITE_KEY} ref={captchaRef} />
                 </div>
                 <Button
                   loading={isPending}
