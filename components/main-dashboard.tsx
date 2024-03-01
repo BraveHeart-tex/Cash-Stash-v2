@@ -1,4 +1,3 @@
-"use client";
 import { InsightsData, TransactionWithAccount } from "@/data/types";
 import AccountSummaries from "@/components/account-summaries";
 import BudgetStatus from "@/components/budget-status";
@@ -10,8 +9,8 @@ import BarChartComponent from "@/components/charts/bar-chart";
 import { MonthlyData } from "@/components/reports/report-table";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { SerializedReminder } from "@/data/types";
-import { motion } from "framer-motion";
 import { Budget, Goal, Account } from "@prisma/client";
+import MotionDiv from "@/components/animations/motion-div";
 
 interface IDashboardProps {
   monthlyTransactionsData: MonthlyData["monthlyTransactionsData"];
@@ -95,7 +94,7 @@ const Dashboard = ({
   };
 
   return (
-    <motion.div
+    <MotionDiv
       initial="hidden"
       animate="visible"
       variants={dashboardVariants}
@@ -116,7 +115,7 @@ const Dashboard = ({
           ))}
         </div>
       </div>
-    </motion.div>
+    </MotionDiv>
   );
 };
 

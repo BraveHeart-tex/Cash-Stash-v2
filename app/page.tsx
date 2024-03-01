@@ -64,7 +64,7 @@ export default async function Home() {
           accounts={accountsResult?.accounts}
           monthlyTransactionsData={monthlyTransactions.data || []}
           insightsData={insightsDataResult}
-          transactions={[]}
+          transactions={result.transactions}
           goals={goalsResult.goals}
           reminders={remindersResult?.data || []}
         />
