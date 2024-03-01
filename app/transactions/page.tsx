@@ -3,6 +3,8 @@ import TransactionList from "@/components/transactions/transaction-list";
 import CreateTransactionButton from "@/components/create-buttons/create-transaction-button";
 import TransactionsNotFound from "@/components/transactions-not-found";
 import RouteSearchInput from "@/components/route-search-input";
+import { FaCalendar, FaMoneyBill } from "react-icons/fa";
+
 import {
   createGetPaginatedTransactionsParams,
   generateReadbleEnumLabels,
@@ -11,6 +13,8 @@ import RouteSelectFilter from "@/components/route-select-filter";
 import { getCurrentUserAccounts } from "@/data/account";
 import { TransactionCategory } from "@prisma/client";
 import { Label } from "@/components/ui/label";
+import RouteFiltersPopover from "@/components/route-filters-popover";
+import { FaPiggyBank } from "react-icons/fa";
 
 export interface ITransactionPageSearchParams {
   transactionType?: string;
@@ -80,6 +84,44 @@ const TransactionsPage = async ({
                 selectLabel="Filter by category"
               />
             </div>
+            <RouteFiltersPopover
+              triggerLabel="Sort By"
+              options={[
+                {
+                  label: "Sort by Amount (Low to High)",
+                  icon: <FaMoneyBill className="mr-2" />,
+                  data: {
+                    sortBy: "amount",
+                    sortDirection: "asc",
+                  },
+                },
+                {
+                  label: "Sort by Amount (High to Low)",
+                  icon: <FaMoneyBill className="mr-2" />,
+                  data: {
+                    sortBy: "amount",
+                    sortDirection: "desc",
+                  },
+                },
+                {
+                  label: "Sort by Newest to Oldest",
+                  icon: <FaCalendar className="mr-2" />,
+                  data: {
+                    sortBy: "createdAt",
+                    sortDirection: "desc",
+                  },
+                },
+                {
+                  label: "Sort by Oldest to Newest",
+                  icon: <FaCalendar className="mr-2" />,
+                  data: {
+                    sortBy: "createdAt",
+                    sortDirection: "asc",
+                  },
+                },
+              ]}
+              queryKeys={["sortBy", "sortDirection"]}
+            />
           </div>
         )}
         <div>
