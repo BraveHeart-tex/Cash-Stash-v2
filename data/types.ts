@@ -160,3 +160,10 @@ export interface IPage {
   icon: IconType;
   link: string;
 }
+
+export interface IRecaptchaResponse {
+  success: boolean;
+  challenge_ts: string;
+  hostname: string;
+  "error-codes": string[];
+}

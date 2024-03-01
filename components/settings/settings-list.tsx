@@ -59,10 +59,16 @@ const SettingsList = () => {
         Two-Factor Authentication
       </h2>
       <p className="text-muted-foreground w-full lg:w-[70%]">
-        Add an extra layer of security to your account by enabling two-factor
-        authentication. <br />
-        When enabled, you will be required to enter a unique code from your
-        mobile device in addition to your password when signing in.
+        {user?.prefersTwoFactorAuthentication ? (
+          "Two-factor authentication is currently enabled on your account."
+        ) : (
+          <>
+            Add an extra layer of security to your account by enabling
+            two-factor authentication. <br />
+            When enabled, you will be required to enter a unique code from your
+            mobile device in addition to your password when signing in.
+          </>
+        )}
       </p>
       {user?.prefersTwoFactorAuthentication ? (
         <Button

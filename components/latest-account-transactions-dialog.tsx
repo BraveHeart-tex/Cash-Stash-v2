@@ -36,7 +36,7 @@ const LatestAccountTransactionsDialog = ({
   const isMobile = useMediaQuery("(max-width: 768px)");
   const visible = !!selectedAccount;
 
-  const title = `Latest Transactions For : ${selectedAccount?.name}`;
+  const title = `Latest Transactions For : ${selectedAccount?.name || ""}`;
   const description = `You can see the last ${transactions.length} transactions for this
   account below.`;
 
@@ -79,9 +79,7 @@ const LatestAccountTransactionsDialog = ({
             <DrawerDescription>{description}</DrawerDescription>
           </DrawerHeader>
           <div className="px-4">
-            {isPending && renderLoadingState()}
-            {!isPending && transactions.length === 0 && renderEmptyState()}
-            {!isPending && selectedAccount && (
+            {selectedAccount && (
               <>
                 <AccountCard showPopover={false} account={selectedAccount} />
                 <div className="max-h-[400px] overflow-auto">
@@ -99,6 +97,8 @@ const LatestAccountTransactionsDialog = ({
                 </div>
               </>
             )}
+            {isPending && renderLoadingState()}
+            {!isPending && transactions.length === 0 && renderEmptyState()}
           </div>
           <DrawerFooter className="pt-2">
             <Button variant="ghost" onClick={onClose}>
@@ -122,9 +122,8 @@ const LatestAccountTransactionsDialog = ({
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
-        {isPending && renderLoadingState()}
-        {!isPending && transactions.length === 0 && renderEmptyState()}
-        {!isPending && selectedAccount && (
+
+        {selectedAccount && (
           <>
             <AccountCard showPopover={false} account={selectedAccount} />
             <div className="max-h-[400px] overflow-auto">
@@ -142,6 +141,8 @@ const LatestAccountTransactionsDialog = ({
             </div>
           </>
         )}
+        {isPending && renderLoadingState()}
+        {!isPending && transactions.length === 0 && renderEmptyState()}
       </DialogContent>
     </Dialog>
   );

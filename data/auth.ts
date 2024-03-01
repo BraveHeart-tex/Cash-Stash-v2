@@ -41,6 +41,7 @@ import {
 } from "@/lib/auth/authUtils";
 import { revalidatePath } from "next/cache";
 import { isWithinExpirationDate } from "oslo";
+import { IRecaptchaResponse } from "@/data/types";
 
 export const login = async (values: LoginSchemaType) => {
   const header = headers();
@@ -657,5 +658,27 @@ export const disableTwoFactorAuthentication = async () => {
         "Something went wrong while processing your request. Please try again later.",
       successMessage: null,
     };
+  }
+};
+
+export const validateReCAPTCHAToken = async (token: string) => {
+  try {
+    const validationUrl = "https://www.google.com/recaptcha/api/siteverify";
+    const responseBody = `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${token}`;
+
+    const response = await fetch(validationUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: responseBody,
+    });
+
+    const data = (await response.json()) as IRecaptchaResponse;
+
+    return data.success;
+  } catch (error) {
+    console.error(error);
+    return false;
   }
 };
