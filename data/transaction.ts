@@ -4,6 +4,7 @@ import {
   generateCachePrefixWithUserId,
   getAccountKey,
   getAccountTransactionsKey,
+  getPaginatedTransactionsKey,
   getTransactionKey,
   invalidateKeysByPrefix,
 } from "@/lib/redis/redisUtils";
@@ -16,7 +17,11 @@ import transactionSchema, {
 import { Prisma, Transaction } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
-import { IValidatedResponse } from "@/data/types";
+import {
+  IGetPaginatedTransactionsParams,
+  IGetPaginatedTransactionsResponse,
+  IValidatedResponse,
+} from "@/data/types";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 
 export const createTransaction = async (
@@ -71,6 +76,12 @@ export const createTransaction = async (
       invalidateKeysByPrefix(
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_ACCOUNTS,
+          user.id
+        )
+      ),
+      invalidateKeysByPrefix(
+        generateCachePrefixWithUserId(
+          CACHE_PREFIXES.PAGINATED_TRANSACTIONS,
           user.id
         )
       ),
@@ -167,6 +178,12 @@ export const updateTransaction = async (
         )
       ),
       invalidateKeysByPrefix(
+        generateCachePrefixWithUserId(
+          CACHE_PREFIXES.PAGINATED_TRANSACTIONS,
+          user.id
+        )
+      ),
+      invalidateKeysByPrefix(
         getAccountTransactionsKey(validatedData.accountId)
       ),
     ]);
@@ -228,6 +245,12 @@ export const deleteTransactionById = async (
         )
       ),
       invalidateKeysByPrefix(
+        generateCachePrefixWithUserId(
+          CACHE_PREFIXES.PAGINATED_TRANSACTIONS,
+          user.id
+        )
+      ),
+      invalidateKeysByPrefix(
         getAccountTransactionsKey(transactionToDelete.accountId)
       ),
     ]);
@@ -243,27 +266,33 @@ export const deleteTransactionById = async (
   }
 };
 
-// TODO: Change this to the new system
 export const getPaginatedTransactions = async ({
   transactionType,
   accountId,
-  sortBy,
-  sortDirection,
-}: {
-  transactionType: "income" | "expense" | "all";
-  accountId?: string | null;
-  sortBy: "amount" | "createdAt";
-  sortDirection: "asc" | "desc";
-}) => {
+  sortBy = "createdAt",
+  sortDirection = "desc",
+  query,
+  pageNumber,
+  category,
+}: IGetPaginatedTransactionsParams): Promise<IGetPaginatedTransactionsResponse> => {
   const { user } = await getUser();
   if (!user) {
-    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   try {
     const whereCondition: Prisma.TransactionWhereInput = {
       userId: user.id,
+      description: {
+        contains: query,
+      },
     };
+
+    if (category) {
+      whereCondition.category = {
+        equals: category,
+      };
+    }
 
     if (transactionType === "income") {
       whereCondition.amount = {
@@ -281,6 +310,40 @@ export const getPaginatedTransactions = async ({
       whereCondition.accountId = accountId;
     }
 
+    const PAGE_SIZE = 12;
+    const skipAmount = (pageNumber - 1) * PAGE_SIZE;
+
+    const cacheKey = getPaginatedTransactionsKey({
+      userId: user.id,
+      transactionType,
+      accountId,
+      sortBy,
+      sortDirection,
+      query,
+      pageNumber,
+      category,
+    });
+
+    const cachedData = await redis.get(cacheKey);
+
+    if (cachedData) {
+      const parsedData = JSON.parse(cachedData);
+      const cachedResult = parsedData.result;
+      const totalCount = parsedData.totalCount;
+
+      return {
+        transactions: cachedResult.map((result: Transaction) => ({
+          ...result,
+          createdAt: new Date(result.createdAt),
+          updatedAt: new Date(result.updatedAt),
+        })),
+        hasNextPage: totalCount > skipAmount + PAGE_SIZE,
+        hasPreviousPage: pageNumber > 1,
+        totalPages: Math.ceil(totalCount / PAGE_SIZE),
+        currentPage: pageNumber,
+      };
+    }
+
     const result = await prisma.transaction.findMany({
       where: whereCondition,
       orderBy: {
@@ -293,13 +356,39 @@ export const getPaginatedTransactions = async ({
           },
         },
       },
+      take: PAGE_SIZE,
+      skip: skipAmount,
     });
+
+    const totalCount = await prisma.transaction.count({
+      where: whereCondition,
+    });
+
+    await redis.set(
+      cacheKey,
+      JSON.stringify({
+        result,
+        totalCount,
+      }),
+      "EX",
+      60 * 60 * 24
+    );
 
     return {
       transactions: result,
+      hasNextPage: totalCount > skipAmount + PAGE_SIZE,
+      hasPreviousPage: pageNumber > 1,
+      totalPages: Math.ceil(totalCount / PAGE_SIZE),
+      currentPage: pageNumber,
     };
   } catch (error) {
     console.error(error);
-    return { error: "An error occurred." };
+    return {
+      transactions: [],
+      hasNextPage: false,
+      hasPreviousPage: false,
+      totalPages: 1,
+      currentPage: 1,
+    };
   }
 };

@@ -274,6 +274,12 @@ export const deleteAccount = async (accountId: string) => {
           user.id
         )
       ),
+      invalidateKeysByPrefix(
+        generateCachePrefixWithUserId(
+          CACHE_PREFIXES.PAGINATED_TRANSACTIONS,
+          user.id
+        )
+      ),
       redis.del(getAccountKey(accountId)),
     ]);
 
@@ -319,4 +325,22 @@ export const getTransactionsForAccount = async (accountId: string) => {
     console.error("Error fetching transactions for account", error);
     return [];
   }
+};
+
+export const getCurrentUserAccounts = async () => {
+  const { user } = await getUser();
+
+  if (!user) {
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+  }
+
+  return prisma.account.findMany({
+    where: {
+      userId: user.id,
+    },
+    select: {
+      id: true,
+      name: true,
+    },
+  });
 };

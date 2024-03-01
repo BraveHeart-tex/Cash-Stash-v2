@@ -1,7 +1,11 @@
-import { SearchParams } from "../transactions/page";
+import { ITransactionPageSearchParams } from "../transactions/page";
 import ReportsPageClient from "./ReportsPageClient";
 
-const ReportsPage = ({ searchParams }: { searchParams: SearchParams }) => {
+const ReportsPage = ({
+  searchParams,
+}: {
+  searchParams: ITransactionPageSearchParams;
+}) => {
   return (
     <main>
       <ReportsPageClient searchParams={searchParams} />

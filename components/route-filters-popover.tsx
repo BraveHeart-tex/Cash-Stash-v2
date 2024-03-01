@@ -14,11 +14,13 @@ import { v4 as uuidv4 } from "uuid";
 interface IRouteFiltersPopoverProps<T extends Record<string, any>> {
   options: GenericFilterOption<T>[];
   queryKeys: Array<keyof T>;
+  triggerLabel?: string;
 }
 
 const RouteFiltersPopover = <T extends Record<string, any>>({
   options,
   queryKeys,
+  triggerLabel,
 }: IRouteFiltersPopoverProps<T>) => {
   const [key, setKey] = useQueryStates(
     {
@@ -55,7 +57,7 @@ const RouteFiltersPopover = <T extends Record<string, any>>({
           className="w-max flex items-center gap-1 text-md mb-2"
         >
           <BsFilterLeft />
-          Filters
+          {triggerLabel || "Filters"}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-max">
