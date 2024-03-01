@@ -662,19 +662,23 @@ export const disableTwoFactorAuthentication = async () => {
 };
 
 export const validateReCAPTCHAToken = async (token: string) => {
-  const responseBody = `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${token}`;
-  const response = await fetch(
-    "https://www.google.com/recaptcha/api/siteverify",
-    {
+  try {
+    const validationUrl = "https://www.google.com/recaptcha/api/siteverify";
+    const responseBody = `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${token}`;
+
+    const response = await fetch(validationUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
       body: responseBody,
-    }
-  );
+    });
 
-  const data = (await response.json()) as IRecaptchaResponse;
+    const data = (await response.json()) as IRecaptchaResponse;
 
-  return data.success;
+    return data.success;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
 };
