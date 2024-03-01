@@ -37,7 +37,7 @@ const RouteSelectFilter = ({
 
   return (
     <Select defaultValue={"All"} onValueChange={handleValueChange}>
-      <SelectTrigger className="w-[180px]">
+      <SelectTrigger className="w-full lg:w-[180px]">
         <SelectValue>{readableLabel || "All"}</SelectValue>
       </SelectTrigger>
       <SelectContent>

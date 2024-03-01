@@ -250,8 +250,8 @@ export const deleteTransactionById = async (
 export const getPaginatedTransactions = async ({
   transactionType,
   accountId,
-  sortBy,
-  sortDirection,
+  sortBy = "createdAt",
+  sortDirection = "desc",
   query,
   pageNumber,
   category,

@@ -60,23 +60,25 @@ const TransactionsPage = async ({
         </div>
         {usersAccounts.length > 0 && (
           <div className="flex lg:flex-row lg:items-center gap-2 flex-col">
-            <div className="flex flex-col gap-1">
-              <Label>Filter by account</Label>
-              <RouteSelectFilter
-                dataset={accountsFilterDataset}
-                queryStringKey="accountId"
-                selectLabel="Filter by account"
-              />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
+              <div className="flex flex-col gap-1">
+                <Label>Filter by account</Label>
+                <RouteSelectFilter
+                  dataset={accountsFilterDataset}
+                  queryStringKey="accountId"
+                  selectLabel="Filter by account"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <Label>Filter by category</Label>
+                <RouteSelectFilter
+                  dataset={categoryFilterDataset}
+                  queryStringKey="category"
+                  selectLabel="Filter by category"
+                />
+              </div>
             </div>
-            <div className="flex flex-col gap-1">
-              <Label>Filter by category</Label>
-              <RouteSelectFilter
-                dataset={categoryFilterDataset}
-                queryStringKey="category"
-                selectLabel="Filter by category"
-              />
-            </div>
-            <div className="lg:pt-[26px] lg:ml-auto">
+            <div className="lg:pt-[20px] lg:ml-auto">
               <RouteFiltersPopover
                 triggerLabel="Sort By"
                 options={[

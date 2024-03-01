@@ -179,8 +179,8 @@ export function createGetPaginatedTransactionsParams(
   return {
     transactionType,
     accountId,
-    sortBy: sortBy as "amount" | "createdAt",
-    sortDirection: sortDirection as "asc" | "desc",
+    sortBy: (sortBy || "createdAt") as "amount" | "createdAt",
+    sortDirection: (sortDirection || "desc") as "asc" | "desc",
     category: category as TransactionCategory,
     pageNumber: page ? parseInt(page) : 1,
     query,
