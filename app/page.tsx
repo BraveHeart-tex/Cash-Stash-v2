@@ -31,6 +31,7 @@ export default async function Home() {
       transactionType: "all",
       sortBy: "createdAt",
       sortDirection: "desc",
+      pageNumber: 1,
     }),
     getPaginatedAccounts({ pageNumber: 1, query: "" }),
     fetchInsightsDataAction(),

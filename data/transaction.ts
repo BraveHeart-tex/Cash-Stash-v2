@@ -254,12 +254,6 @@ export const getPaginatedTransactions = async ({
   sortDirection,
   query,
   pageNumber,
-  amountStart,
-  amountEnd,
-  amountOperator,
-  createdAtStart,
-  createdAtEnd,
-  createdAtOperator,
   category,
 }: IGetPaginatedTransactionsParams): Promise<IGetPaginatedTransactionsResponse> => {
   const { user } = await getUser();
@@ -295,102 +289,6 @@ export const getPaginatedTransactions = async ({
 
     if (accountId) {
       whereCondition.accountId = accountId;
-    }
-
-    if (amountStart) {
-      if (amountOperator === "equals") {
-        whereCondition.amount = amountStart;
-      }
-
-      if (amountOperator === "lessThan") {
-        whereCondition.amount = {
-          lt: amountStart,
-        };
-      }
-
-      if (amountOperator === "greaterThan") {
-        whereCondition.amount = {
-          gt: amountStart,
-        };
-      }
-
-      if (amountOperator === "range") {
-        whereCondition.amount = {
-          gte: amountStart,
-        };
-      }
-    }
-
-    if (amountEnd) {
-      if (amountOperator === "equals") {
-        whereCondition.amount = amountEnd;
-      }
-
-      if (amountOperator === "lessThan") {
-        whereCondition.amount = {
-          lt: amountEnd,
-        };
-      }
-
-      if (amountOperator === "greaterThan") {
-        whereCondition.amount = {
-          gt: amountEnd,
-        };
-      }
-
-      if (amountOperator === "range") {
-        whereCondition.amount = {
-          lte: amountEnd,
-        };
-      }
-    }
-
-    if (createdAtStart) {
-      if (createdAtOperator === "equals") {
-        whereCondition.createdAt = createdAtStart;
-      }
-
-      if (createdAtOperator === "before") {
-        whereCondition.createdAt = {
-          lt: createdAtStart,
-        };
-      }
-
-      if (createdAtOperator === "after") {
-        whereCondition.createdAt = {
-          gt: createdAtStart,
-        };
-      }
-
-      if (createdAtOperator === "range") {
-        whereCondition.createdAt = {
-          gte: createdAtStart,
-        };
-      }
-    }
-
-    if (createdAtEnd) {
-      if (createdAtOperator === "equals") {
-        whereCondition.createdAt = createdAtEnd;
-      }
-
-      if (createdAtOperator === "before") {
-        whereCondition.createdAt = {
-          lt: createdAtEnd,
-        };
-      }
-
-      if (createdAtOperator === "after") {
-        whereCondition.createdAt = {
-          gt: createdAtEnd,
-        };
-      }
-
-      if (createdAtOperator === "range") {
-        whereCondition.createdAt = {
-          lte: createdAtEnd,
-        };
-      }
     }
 
     const PAGE_SIZE = 12;

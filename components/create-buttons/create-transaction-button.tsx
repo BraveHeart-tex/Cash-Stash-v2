@@ -37,7 +37,7 @@ const CreateTransactionButton = ({ className }: { className?: string }) => {
   return (
     <Button
       className={cn(
-        "font-semibold text-md mt-3 flex items-center gap-[14px]",
+        "font-semibold text-md mt-3 flex items-center gap-[14px] whitespace-nowrap",
         isPending && "opacity-50 cursor-not-allowed",
         className
       )}
@@ -49,7 +49,7 @@ const CreateTransactionButton = ({ className }: { className?: string }) => {
       ) : (
         <>
           <FaExchangeAlt className="text-xl" />
-          Create Transaction
+          Create a Transaction
         </>
       )}
     </Button>

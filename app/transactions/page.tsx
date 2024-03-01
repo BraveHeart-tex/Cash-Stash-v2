@@ -4,7 +4,6 @@ import CreateTransactionButton from "@/components/create-buttons/create-transact
 import TransactionsNotFound from "@/components/transactions-not-found";
 import RouteSearchInput from "@/components/route-search-input";
 import { FaCalendar, FaMoneyBill } from "react-icons/fa";
-
 import {
   createGetPaginatedTransactionsParams,
   generateReadbleEnumLabels,
@@ -14,19 +13,12 @@ import { getCurrentUserAccounts } from "@/data/account";
 import { TransactionCategory } from "@prisma/client";
 import { Label } from "@/components/ui/label";
 import RouteFiltersPopover from "@/components/route-filters-popover";
-import { FaPiggyBank } from "react-icons/fa";
 
 export interface ITransactionPageSearchParams {
   transactionType?: string;
   accountId?: string;
   sortBy?: string;
   sortDirection?: string;
-  amountStart?: number;
-  amountEnd?: number;
-  amountOperator?: "equals" | "lessThan" | "greaterThan" | "range";
-  createdAtStart?: Date;
-  createdAtEnd?: Date;
-  createdAtOperator?: "equals" | "before" | "after" | "range";
   category?: string;
   page?: string;
   query?: string;
@@ -39,7 +31,7 @@ const TransactionsPage = async ({
 }) => {
   const actionParams = createGetPaginatedTransactionsParams(searchParams);
 
-  let result = await getPaginatedTransactions(actionParams);
+  const result = await getPaginatedTransactions(actionParams);
 
   const usersAccounts = await getCurrentUserAccounts();
 
@@ -59,7 +51,7 @@ const TransactionsPage = async ({
   return (
     <main>
       <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
-        <div className="flex items-center gap-2 justify-between mb-4">
+        <div className="flex items-center gap-2 justify-between mb-4 flex-wrap">
           <h3 className="text-4xl text-primary">Transactions</h3>
           <CreateTransactionButton className="mt-0" />
         </div>
@@ -67,7 +59,7 @@ const TransactionsPage = async ({
           <RouteSearchInput placeholder="Search by description" />
         </div>
         {usersAccounts.length > 0 && (
-          <div className="flex items-center gap-2">
+          <div className="flex lg:flex-row lg:items-center gap-2 flex-col">
             <div className="flex flex-col gap-1">
               <Label>Filter by account</Label>
               <RouteSelectFilter
@@ -84,49 +76,51 @@ const TransactionsPage = async ({
                 selectLabel="Filter by category"
               />
             </div>
-            <RouteFiltersPopover
-              triggerLabel="Sort By"
-              options={[
-                {
-                  label: "Sort by Amount (Low to High)",
-                  icon: <FaMoneyBill className="mr-2" />,
-                  data: {
-                    sortBy: "amount",
-                    sortDirection: "asc",
+            <div className="lg:pt-[26px] lg:ml-auto">
+              <RouteFiltersPopover
+                triggerLabel="Sort By"
+                options={[
+                  {
+                    label: "Sort by Amount (Low to High)",
+                    icon: <FaMoneyBill className="mr-2" />,
+                    data: {
+                      sortBy: "amount",
+                      sortDirection: "asc",
+                    },
                   },
-                },
-                {
-                  label: "Sort by Amount (High to Low)",
-                  icon: <FaMoneyBill className="mr-2" />,
-                  data: {
-                    sortBy: "amount",
-                    sortDirection: "desc",
+                  {
+                    label: "Sort by Amount (High to Low)",
+                    icon: <FaMoneyBill className="mr-2" />,
+                    data: {
+                      sortBy: "amount",
+                      sortDirection: "desc",
+                    },
                   },
-                },
-                {
-                  label: "Sort by Newest to Oldest",
-                  icon: <FaCalendar className="mr-2" />,
-                  data: {
-                    sortBy: "createdAt",
-                    sortDirection: "desc",
+                  {
+                    label: "Sort by Newest to Oldest",
+                    icon: <FaCalendar className="mr-2" />,
+                    data: {
+                      sortBy: "createdAt",
+                      sortDirection: "desc",
+                    },
                   },
-                },
-                {
-                  label: "Sort by Oldest to Newest",
-                  icon: <FaCalendar className="mr-2" />,
-                  data: {
-                    sortBy: "createdAt",
-                    sortDirection: "asc",
+                  {
+                    label: "Sort by Oldest to Newest",
+                    icon: <FaCalendar className="mr-2" />,
+                    data: {
+                      sortBy: "createdAt",
+                      sortDirection: "asc",
+                    },
                   },
-                },
-              ]}
-              queryKeys={["sortBy", "sortDirection"]}
-            />
+                ]}
+                queryKeys={["sortBy", "sortDirection"]}
+              />
+            </div>
           </div>
         )}
         <div>
-          {result.transactions && result.transactions.length > 0 ? (
-            <TransactionList transactions={result.transactions || []} />
+          {result.transactions.length > 0 ? (
+            <TransactionList transactions={result.transactions} />
           ) : (
             <TransactionsNotFound pageHasParams={pageHasParams} />
           )}

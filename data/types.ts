@@ -175,9 +175,6 @@ export interface IGetPaginatedTransactionsParams
   accountId?: string;
   sortBy: "amount" | "createdAt";
   sortDirection?: "asc" | "desc";
-  amountStart?: number;
-  amountEnd?: number;
-  amountOperator?: "equals" | "lessThan" | "greaterThan" | "range";
   createdAtStart?: Date;
   createdAtEnd?: Date;
   createdAtOperator?: "equals" | "before" | "after" | "range";
