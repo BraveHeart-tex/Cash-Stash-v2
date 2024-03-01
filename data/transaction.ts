@@ -4,6 +4,7 @@ import {
   generateCachePrefixWithUserId,
   getAccountKey,
   getAccountTransactionsKey,
+  getPaginatedTransactionsKey,
   getTransactionKey,
   invalidateKeysByPrefix,
 } from "@/lib/redis/redisUtils";
@@ -75,6 +76,12 @@ export const createTransaction = async (
       invalidateKeysByPrefix(
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_ACCOUNTS,
+          user.id
+        )
+      ),
+      invalidateKeysByPrefix(
+        generateCachePrefixWithUserId(
+          CACHE_PREFIXES.PAGINATED_TRANSACTIONS,
           user.id
         )
       ),
@@ -171,6 +178,12 @@ export const updateTransaction = async (
         )
       ),
       invalidateKeysByPrefix(
+        generateCachePrefixWithUserId(
+          CACHE_PREFIXES.PAGINATED_TRANSACTIONS,
+          user.id
+        )
+      ),
+      invalidateKeysByPrefix(
         getAccountTransactionsKey(validatedData.accountId)
       ),
     ]);
@@ -228,6 +241,12 @@ export const deleteTransactionById = async (
       invalidateKeysByPrefix(
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_ACCOUNTS,
+          user.id
+        )
+      ),
+      invalidateKeysByPrefix(
+        generateCachePrefixWithUserId(
+          CACHE_PREFIXES.PAGINATED_TRANSACTIONS,
           user.id
         )
       ),
@@ -294,6 +313,37 @@ export const getPaginatedTransactions = async ({
     const PAGE_SIZE = 12;
     const skipAmount = (pageNumber - 1) * PAGE_SIZE;
 
+    const cacheKey = getPaginatedTransactionsKey({
+      userId: user.id,
+      transactionType,
+      accountId,
+      sortBy,
+      sortDirection,
+      query,
+      pageNumber,
+      category,
+    });
+
+    const cachedData = await redis.get(cacheKey);
+
+    if (cachedData) {
+      const parsedData = JSON.parse(cachedData);
+      const cachedResult = parsedData.result;
+      const totalCount = parsedData.totalCount;
+
+      return {
+        transactions: cachedResult.map((result: Transaction) => ({
+          ...result,
+          createdAt: new Date(result.createdAt),
+          updatedAt: new Date(result.updatedAt),
+        })),
+        hasNextPage: totalCount > skipAmount + PAGE_SIZE,
+        hasPreviousPage: pageNumber > 1,
+        totalPages: Math.ceil(totalCount / PAGE_SIZE),
+        currentPage: pageNumber,
+      };
+    }
+
     const result = await prisma.transaction.findMany({
       where: whereCondition,
       orderBy: {
@@ -313,6 +363,16 @@ export const getPaginatedTransactions = async ({
     const totalCount = await prisma.transaction.count({
       where: whereCondition,
     });
+
+    await redis.set(
+      cacheKey,
+      JSON.stringify({
+        result,
+        totalCount,
+      }),
+      "EX",
+      60 * 60 * 24
+    );
 
     return {
       transactions: result,

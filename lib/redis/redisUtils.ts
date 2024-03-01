@@ -152,8 +152,41 @@ export const getPaginatedGoalsKeys = ({
   );
 };
 
-export const invalidateCacheKey = async (key: string) => {
-  await redis.del(key);
+export const getPaginatedTransactionsKey = ({
+  userId,
+  transactionType,
+  accountId,
+  sortBy,
+  sortDirection,
+  query,
+  pageNumber,
+  category,
+}: {
+  userId: string;
+  transactionType?: string;
+  accountId?: string;
+  sortBy?: string;
+  sortDirection?: string;
+  query?: string;
+  pageNumber?: number;
+  category?: string;
+}) => {
+  return (
+    generateCachePrefixWithUserId(
+      CACHE_PREFIXES.PAGINATED_TRANSACTIONS,
+      userId
+    ) +
+    JSON.stringify({
+      userId,
+      transactionType,
+      accountId,
+      sortBy,
+      sortDirection,
+      query,
+      pageNumber,
+      category,
+    })
+  );
 };
 
 export const invalidateKeysByPrefix = async (prefix: string) => {

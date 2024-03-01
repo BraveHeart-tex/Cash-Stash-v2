@@ -274,6 +274,12 @@ export const deleteAccount = async (accountId: string) => {
           user.id
         )
       ),
+      invalidateKeysByPrefix(
+        generateCachePrefixWithUserId(
+          CACHE_PREFIXES.PAGINATED_TRANSACTIONS,
+          user.id
+        )
+      ),
       redis.del(getAccountKey(accountId)),
     ]);
 
@@ -321,7 +327,6 @@ export const getTransactionsForAccount = async (accountId: string) => {
   }
 };
 
-// TODO: Implement caching for this function
 export const getCurrentUserAccounts = async () => {
   const { user } = await getUser();
 
