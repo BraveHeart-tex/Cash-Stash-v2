@@ -2,6 +2,7 @@ import { getPaginatedTransactions } from "@/data/transaction";
 import TransactionList from "@/components/transactions/transaction-list";
 import CreateTransactionButton from "@/components/create-buttons/create-transaction-button";
 import TransactionsNotFound from "@/components/transactions-not-found";
+import RouteSearchInput from "@/components/route-search-input";
 
 export interface SearchParams {
   transactionType?: string;
@@ -63,6 +64,9 @@ const TransactionsPage = async ({
         <div className="flex items-center gap-2 justify-between mb-4">
           <h3 className="text-4xl text-primary">Transactions</h3>
           <CreateTransactionButton className="mt-0" />
+        </div>
+        <div className="flex items-center justify-between">
+          <RouteSearchInput placeholder="Search by description" />
         </div>
         <div>
           {result.transactions && result.transactions.length > 0 ? (
