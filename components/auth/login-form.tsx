@@ -28,8 +28,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { PAGE_ROUTES } from "@/lib/constants";
+import { CAPTCHA_SITE_KEY, PAGE_ROUTES } from "@/lib/constants";
 import TwoFactorAuthenticationForm from "@/components/auth/TwoFactorAuthenticationForm";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const LoginForm = () => {
   let [isPending, startTransition] = useTransition();
@@ -154,6 +155,10 @@ const LoginForm = () => {
                         <FormMessage />
                       </FormItem>
                     )}
+                  />
+                  <ReCAPTCHA
+                    sitekey={CAPTCHA_SITE_KEY}
+                    onChange={console.log}
                   />
                 </div>
                 <Button

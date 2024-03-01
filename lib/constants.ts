@@ -1,9 +1,8 @@
 import { IPage } from "@/data/types";
 import { AiOutlineTransaction } from "react-icons/ai";
-import { FaMoneyBill, FaPiggyBank } from "react-icons/fa";
+import { FaMoneyBill, FaPiggyBank, FaCog } from "react-icons/fa";
 import { MdDashboard, MdOutlineAccountBalanceWallet } from "react-icons/md";
 import { TbReportAnalytics } from "react-icons/tb";
-import { FaCog } from "react-icons/all";
 
 export const PRIMARY_COLOR = "#c4002b" as const;
 export const PRIMARY_FOREGROUND_COLOR = "#fefcfa" as const;
@@ -40,6 +39,9 @@ export const ACCOUNT_VERIFICATION_EXPIRATION_PERIOD_DAYS = 7 as const;
 export const TWO_FACTOR_AUTH_INPUT_TIMEOUT_SECONDS = 180 as const;
 
 export const MAX_TWO_FACTOR_AUTH_ATTEMPTS = 3 as const;
+
+export const CAPTCHA_SITE_KEY =
+  "6LdVvIUpAAAAAFzDF5lHhPqScgNzA2DqhbCV96KI" as const;
 
 export const EMAIL_VERIFICATION_REDIRECTION_PATHS = {
   INVALID_EMAIL: PAGE_ROUTES.LOGIN_ROUTE + "?error=invalid-email",
