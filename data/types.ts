@@ -7,6 +7,7 @@ import {
   BudgetCategory,
   Transaction,
   Reminder,
+  TransactionCategory,
 } from "@prisma/client";
 import { IconType } from "react-icons/lib";
 
@@ -166,4 +167,23 @@ export interface IRecaptchaResponse {
   challenge_ts: string;
   hostname: string;
   "error-codes": string[];
+}
+
+export interface IGetPaginatedTransactionsParams
+  extends IPaginatedActionParams {
+  transactionType?: string;
+  accountId?: string;
+  sortBy: "amount" | "createdAt";
+  sortDirection?: "asc" | "desc";
+  amountStart?: number;
+  amountEnd?: number;
+  amountOperator?: "equals" | "lessThan" | "greaterThan" | "range";
+  createdAtStart?: Date;
+  createdAtEnd?: Date;
+  createdAtOperator?: "equals" | "before" | "after" | "range";
+  category?: TransactionCategory;
+}
+
+export interface IGetPaginatedTransactionsResponse extends IPaginatedResponse {
+  transactions: TransactionWithAccount[];
 }

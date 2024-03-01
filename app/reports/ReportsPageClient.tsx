@@ -3,13 +3,13 @@ import { getPaginatedTransactions } from "@/data/transaction";
 import ReportTable from "../../components/reports/report-table";
 import { getGenericListByCurrentUser } from "@/data/generic";
 import { SerializedUserAccount } from "@/data/types";
-import { SearchParams } from "../transactions/page";
+import { ITransactionPageSearchParams } from "../transactions/page";
 import MotionDiv from "@/components/animations/motion-div";
 
 const ReportsPageClient = async ({
   searchParams,
 }: {
-  searchParams: SearchParams;
+  searchParams: ITransactionPageSearchParams;
 }) => {
   const {
     transactionType = "all",
@@ -30,6 +30,7 @@ const ReportsPageClient = async ({
         accountId,
         sortBy: sortBy as "createdAt" | "amount",
         sortDirection: sortDirection as "asc" | "desc",
+        pageNumber: 1,
       }),
     ]);
 

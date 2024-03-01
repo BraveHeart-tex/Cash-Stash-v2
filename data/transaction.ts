@@ -16,7 +16,11 @@ import transactionSchema, {
 import { Prisma, Transaction } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
-import { IValidatedResponse } from "@/data/types";
+import {
+  IGetPaginatedTransactionsParams,
+  IGetPaginatedTransactionsResponse,
+  IValidatedResponse,
+} from "@/data/types";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 
 export const createTransaction = async (
@@ -243,27 +247,39 @@ export const deleteTransactionById = async (
   }
 };
 
-// TODO: Change this to the new system
 export const getPaginatedTransactions = async ({
   transactionType,
   accountId,
   sortBy,
   sortDirection,
-}: {
-  transactionType: "income" | "expense" | "all";
-  accountId?: string | null;
-  sortBy: "amount" | "createdAt";
-  sortDirection: "asc" | "desc";
-}) => {
+  query,
+  pageNumber,
+  amountStart,
+  amountEnd,
+  amountOperator,
+  createdAtStart,
+  createdAtEnd,
+  createdAtOperator,
+  category,
+}: IGetPaginatedTransactionsParams): Promise<IGetPaginatedTransactionsResponse> => {
   const { user } = await getUser();
   if (!user) {
-    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   try {
     const whereCondition: Prisma.TransactionWhereInput = {
       userId: user.id,
+      description: {
+        contains: query,
+      },
     };
+
+    if (category) {
+      whereCondition.category = {
+        equals: category,
+      };
+    }
 
     if (transactionType === "income") {
       whereCondition.amount = {
@@ -281,6 +297,105 @@ export const getPaginatedTransactions = async ({
       whereCondition.accountId = accountId;
     }
 
+    if (amountStart) {
+      if (amountOperator === "equals") {
+        whereCondition.amount = amountStart;
+      }
+
+      if (amountOperator === "lessThan") {
+        whereCondition.amount = {
+          lt: amountStart,
+        };
+      }
+
+      if (amountOperator === "greaterThan") {
+        whereCondition.amount = {
+          gt: amountStart,
+        };
+      }
+
+      if (amountOperator === "range") {
+        whereCondition.amount = {
+          gte: amountStart,
+        };
+      }
+    }
+
+    if (amountEnd) {
+      if (amountOperator === "equals") {
+        whereCondition.amount = amountEnd;
+      }
+
+      if (amountOperator === "lessThan") {
+        whereCondition.amount = {
+          lt: amountEnd,
+        };
+      }
+
+      if (amountOperator === "greaterThan") {
+        whereCondition.amount = {
+          gt: amountEnd,
+        };
+      }
+
+      if (amountOperator === "range") {
+        whereCondition.amount = {
+          lte: amountEnd,
+        };
+      }
+    }
+
+    if (createdAtStart) {
+      if (createdAtOperator === "equals") {
+        whereCondition.createdAt = createdAtStart;
+      }
+
+      if (createdAtOperator === "before") {
+        whereCondition.createdAt = {
+          lt: createdAtStart,
+        };
+      }
+
+      if (createdAtOperator === "after") {
+        whereCondition.createdAt = {
+          gt: createdAtStart,
+        };
+      }
+
+      if (createdAtOperator === "range") {
+        whereCondition.createdAt = {
+          gte: createdAtStart,
+        };
+      }
+    }
+
+    if (createdAtEnd) {
+      if (createdAtOperator === "equals") {
+        whereCondition.createdAt = createdAtEnd;
+      }
+
+      if (createdAtOperator === "before") {
+        whereCondition.createdAt = {
+          lt: createdAtEnd,
+        };
+      }
+
+      if (createdAtOperator === "after") {
+        whereCondition.createdAt = {
+          gt: createdAtEnd,
+        };
+      }
+
+      if (createdAtOperator === "range") {
+        whereCondition.createdAt = {
+          lte: createdAtEnd,
+        };
+      }
+    }
+
+    const PAGE_SIZE = 12;
+    const skipAmount = (pageNumber - 1) * PAGE_SIZE;
+
     const result = await prisma.transaction.findMany({
       where: whereCondition,
       orderBy: {
@@ -293,13 +408,29 @@ export const getPaginatedTransactions = async ({
           },
         },
       },
+      take: PAGE_SIZE,
+      skip: skipAmount,
+    });
+
+    const totalCount = await prisma.transaction.count({
+      where: whereCondition,
     });
 
     return {
       transactions: result,
+      hasNextPage: totalCount > skipAmount + PAGE_SIZE,
+      hasPreviousPage: pageNumber > 1,
+      totalPages: Math.ceil(totalCount / PAGE_SIZE),
+      currentPage: pageNumber,
     };
   } catch (error) {
     console.error(error);
-    return { error: "An error occurred." };
+    return {
+      transactions: [],
+      hasNextPage: false,
+      hasPreviousPage: false,
+      totalPages: 1,
+      currentPage: 1,
+    };
   }
 };

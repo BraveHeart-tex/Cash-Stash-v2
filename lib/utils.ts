@@ -2,6 +2,9 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { ZodError } from "zod";
 import { MONTHS_OF_THE_YEAR } from "@/lib/constants";
+import { IGetPaginatedTransactionsParams } from "@/data/types";
+import { ITransactionPageSearchParams } from "@/app/transactions/page";
+import { TransactionCategory } from "@prisma/client";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -81,15 +84,13 @@ export const processZodError = (error: ZodError) => {
 
   const errorMessage = errorMessages.join(", ");
 
-  const errorObject = {
+  return {
     error: errorMessage,
     fieldErrors: Object.entries(fieldErrors).map(([field, message]) => ({
       field,
       message: message?.join(", "),
     })),
   };
-
-  return errorObject;
 };
 
 export const formatTransactionDate = (date: Date) => {
@@ -130,15 +131,13 @@ export const generateReadbleEnumLabels = ({
 }) => {
   const keys = Object.keys(enumObj);
 
-  const readableLabels = keys.map((key) => {
+  return keys.map((key) => {
     const label = generateReadableLabelFromEnumValue({ key, separator });
     return {
       label,
       value: key,
     };
   });
-
-  return readableLabels;
 };
 
 /**
@@ -163,3 +162,39 @@ export const validateEnumValue = (value: any, enumObj: Record<string, any>) => {
 export const getResetPasswordUrl = (email: string, token: string) => {
   return `${process.env.NEXT_PUBLIC_BASE_URL}/auth/reset-password/${email}?token=${token}`;
 };
+
+export function createGetPaginatedTransactionsParams(
+  searchParams: ITransactionPageSearchParams
+): IGetPaginatedTransactionsParams {
+  const {
+    transactionType,
+    accountId,
+    sortBy,
+    sortDirection,
+    amountStart,
+    amountEnd,
+    amountOperator,
+    createdAtStart,
+    createdAtEnd,
+    createdAtOperator,
+    category,
+    page,
+    query,
+  } = searchParams;
+
+  return {
+    transactionType,
+    accountId,
+    sortBy: sortBy as "amount" | "createdAt",
+    sortDirection: sortDirection as "asc" | "desc",
+    amountStart,
+    amountEnd,
+    amountOperator,
+    createdAtStart,
+    createdAtEnd,
+    createdAtOperator,
+    category: category as TransactionCategory,
+    pageNumber: page ? parseInt(page) : 1,
+    query,
+  };
+}

@@ -3,8 +3,9 @@ import TransactionList from "@/components/transactions/transaction-list";
 import CreateTransactionButton from "@/components/create-buttons/create-transaction-button";
 import TransactionsNotFound from "@/components/transactions-not-found";
 import RouteSearchInput from "@/components/route-search-input";
+import { createGetPaginatedTransactionsParams } from "@/lib/utils";
 
-export interface SearchParams {
+export interface ITransactionPageSearchParams {
   transactionType?: string;
   accountId?: string;
   sortBy?: string;
@@ -23,34 +24,9 @@ export interface SearchParams {
 const TransactionsPage = async ({
   searchParams,
 }: {
-  searchParams: SearchParams;
+  searchParams: ITransactionPageSearchParams;
 }) => {
-  const actionParams = {
-    transactionType: searchParams.transactionType as
-      | "all"
-      | "income"
-      | "expense",
-    accountId: searchParams.accountId,
-    sortBy: searchParams.sortBy as "createdAt" | "amount",
-    sortDirection: searchParams.sortDirection as "asc" | "desc",
-    amountStart: searchParams.amountStart,
-    amountEnd: searchParams.amountEnd,
-    amountOperator: searchParams.amountOperator as
-      | "equals"
-      | "lessThan"
-      | "greaterThan"
-      | "range",
-    createdAtStart: searchParams.createdAtStart,
-    createdAtEnd: searchParams.createdAtEnd,
-    createdAtOperator: searchParams.createdAtOperator as
-      | "equals"
-      | "before"
-      | "after"
-      | "range",
-    category: searchParams.category,
-    page: searchParams.page,
-    query: searchParams.query,
-  };
+  const actionParams = createGetPaginatedTransactionsParams(searchParams);
 
   let result = await getPaginatedTransactions(actionParams);
 
