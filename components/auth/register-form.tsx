@@ -12,7 +12,7 @@ import logo from "@/components/Logo.svg";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { register as registerUser } from "@/data/auth";
+import { register as registerUser, validateReCAPTCHAToken } from "@/data/auth";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import Link from "next/link";
 import registerSchema, { RegisterSchemaType } from "@/schemas/register-schema";
@@ -28,16 +28,38 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import PasswordRequirements from "@/components/auth/password-requirements";
-import { PAGE_ROUTES } from "@/lib/constants";
+import { CAPTCHA_SITE_KEY, PAGE_ROUTES } from "@/lib/constants";
 import { useRouter } from "next/navigation";
+import ReCAPTCHA from "react-google-recaptcha";
+import { useRef } from "react";
 
 const RegisterForm = () => {
+  const captchaRef = useRef<ReCAPTCHA>(null);
   const form = useForm<RegisterSchemaType>({
     resolver: zodResolver(registerSchema),
   });
   const router = useRouter();
 
   const handleRegisterFormSubmit = async (data: RegisterSchemaType) => {
+    const captchaToken = captchaRef.current?.getValue();
+    if (!captchaToken) {
+      showErrorToast(
+        "Captcha validation failed.",
+        "Please complete the captcha."
+      );
+      return;
+    }
+
+    const isCaptchaTokenValid = await validateReCAPTCHAToken(captchaToken);
+
+    if (!isCaptchaTokenValid) {
+      showErrorToast(
+        "Captcha validation failed.",
+        "Please complete the captcha."
+      );
+      return;
+    }
+
     const result = await registerUser(data);
 
     if (result.error || result.fieldErrors.length) {
@@ -158,6 +180,7 @@ const RegisterForm = () => {
                     </FormItem>
                   )}
                 />
+                <ReCAPTCHA sitekey={CAPTCHA_SITE_KEY} ref={captchaRef} />
               </div>
               <Button
                 type="submit"

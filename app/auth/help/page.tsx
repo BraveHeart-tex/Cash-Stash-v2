@@ -2,6 +2,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -81,6 +82,9 @@ const SignInHelpPage = ({
                 <Link href={PAGE_ROUTES.VERIFICATION_TOKEN_ROUTE}>
                   I need a new verification token
                 </Link>
+              </Button>
+              <Button variant="link" className="underline">
+                <Link href={PAGE_ROUTES.LOGIN_ROUTE}>Back to sign in</Link>
               </Button>
             </>
           )}
