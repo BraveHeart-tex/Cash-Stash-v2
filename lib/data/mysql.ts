@@ -14,6 +14,7 @@ const connection = mysql.createPool({
   enableKeepAlive: true,
   keepAliveInitialDelay: 0,
   namedPlaceholders: true,
+  multipleStatements: true,
 });
 
 export default connection;

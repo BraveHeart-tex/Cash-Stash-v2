@@ -7,6 +7,7 @@ import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import { IValidatedResponse, IGetPaginatedAccountsParams } from "@/data/types";
 import redis from "@/lib/redis";
+import { createId } from "@paralleldrive/cuid2";
 import {
   generateCachePrefixWithUserId,
   getAccountKey,
@@ -33,14 +34,22 @@ export const registerBankAccount = async ({
   try {
     const validatedData = accountSchema.parse({ balance, category, name });
 
-    const createdAccount = await prisma.account.create({
-      data: {
-        ...validatedData,
-        userId: user.id,
-      },
-    });
+    const accountDto = {
+      id: createId(),
+      name: validatedData.name,
+      balance: validatedData.balance,
+      category: validatedData.category,
+      userId: user.id,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
 
-    if (!createdAccount) {
+    const [createdAccount] = await connection.query<ResultSetHeader>(
+      `INSERT INTO ACCOUNT (id, name, balance, category, userId, createdAt, updatedAt) values (:id, :name, :balance, :category, :userId, :createdAt, :updatedAt);`,
+      accountDto
+    );
+
+    if (createdAccount?.affectedRows === 0) {
       return { error: "Error creating account.", fieldErrors: [] };
     }
 
@@ -51,14 +60,15 @@ export const registerBankAccount = async ({
           user.id
         )
       ),
-      redis.hset(getAccountKey(createdAccount.id), createdAccount),
+      redis.hset(getAccountKey(accountDto.id), accountDto),
     ]);
 
     return {
-      data: createdAccount,
+      data: accountDto,
       fieldErrors: [],
     };
   } catch (error) {
+    console.error("Error registering bank account", error);
     if (error instanceof ZodError) {
       return processZodError(error);
     }
@@ -91,15 +101,21 @@ export const updateBankAccount = async ({
 
   try {
     const validatedData = accountSchema.parse(rest);
+    const updateDto = {
+      ...validatedData,
+      id: accountId,
+      updatedAt: new Date(),
+    };
 
-    const updatedAccount = await prisma.account.update({
-      where: {
-        id: accountId,
-      },
-      data: validatedData,
-    });
+    const [updatedAccountResult] = await connection.query<RowDataPacket[]>(
+      `UPDATE ACCOUNT set name = :name, balance = :balance, category = :category, updatedAt = :updatedAt where id = :id; SELECT * from ACCOUNT where id = :id;`,
+      updateDto
+    );
 
-    if (!updatedAccount) {
+    const affectedRows = updatedAccountResult?.[0]?.affectedRows;
+    const updatedAccount = updatedAccountResult?.[1]?.[0];
+
+    if (affectedRows === 0 || !updatedAccount) {
       return {
         error:
           "An error occurred while updating your bank account. Please try again later.",
@@ -114,7 +130,7 @@ export const updateBankAccount = async ({
           user.id
         )
       ),
-      redis.hset(getAccountKey(updatedAccount.id), updatedAccount),
+      redis.hset(getAccountKey(accountId), updatedAccount),
     ]);
 
     return {
