@@ -343,23 +343,18 @@ export const getTransactionsForAccount = async (accountId: string) => {
       return JSON.parse(cachedData);
     }
 
-    const transactions = await prisma.transaction.findMany({
-      where: {
-        accountId,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-      take: 10,
-    });
+    const [transactionsResult] = await connection.query<RowDataPacket[]>(
+      `SELECT * FROM TRANSACTION where accountId = :accountId order by createdAt desc limit 10`,
+      { accountId }
+    );
 
-    if (transactions.length === 0) {
+    if (transactionsResult.length === 0) {
       return [];
     }
 
-    await redis.set(key, JSON.stringify(transactions), "EX", 5 * 60);
+    await redis.set(key, JSON.stringify(transactionsResult), "EX", 5 * 60);
 
-    return transactions;
+    return transactionsResult;
   } catch (error) {
     console.error("Error fetching transactions for account", error);
     return [];
