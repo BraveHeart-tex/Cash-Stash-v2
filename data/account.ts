@@ -5,11 +5,7 @@ import { processZodError, validateEnumValue } from "@/lib/utils";
 import { Account, AccountCategory } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
-import {
-  IValidatedResponse,
-  IGetPaginatedAccountsParams,
-  IGetPaginatedAccountsResponse,
-} from "@/data/types";
+import { IValidatedResponse, IGetPaginatedAccountsParams } from "@/data/types";
 import redis from "@/lib/redis";
 import {
   generateCachePrefixWithUserId,
@@ -21,7 +17,7 @@ import {
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import accountSchema, { AccountSchemaType } from "@/schemas/account-schema";
 import connection from "@/lib/data/mysql";
-import { RowDataPacket } from "mysql2";
+import { ResultSetHeader, RowDataPacket } from "mysql2";
 
 export const registerBankAccount = async ({
   balance,
@@ -285,13 +281,12 @@ export const deleteAccount = async (accountId: string) => {
   }
 
   try {
-    const deletedAccount = await prisma.account.delete({
-      where: {
-        id: accountId,
-      },
-    });
+    const [deletedAccount] = await connection.query<ResultSetHeader>(
+      "DELETE FROM ACCOUNT WHERE id = ?",
+      [accountId]
+    );
 
-    if (!deletedAccount) {
+    if (deletedAccount.affectedRows === 0) {
       return { error: "An error occurred while deleting the account." };
     }
 
@@ -311,7 +306,7 @@ export const deleteAccount = async (accountId: string) => {
       redis.del(getAccountKey(accountId)),
     ]);
 
-    return { data: deletedAccount };
+    return { data: "Account deleted successfully." };
   } catch (error) {
     return { error: "An error occurred while deleting the account." };
   }
