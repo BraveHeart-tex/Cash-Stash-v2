@@ -2,7 +2,6 @@ import { RegisterConfirmEmail } from "@/emails/register-confirm-email";
 import { TimeSpan, createDate, isWithinExpirationDate } from "oslo";
 import { generateRandomString, alphabet } from "oslo/crypto";
 import prisma from "@/lib/data/db";
-import nodemailer from "nodemailer";
 import { render } from "@react-email/render";
 import { User } from "@prisma/client";
 import {
@@ -13,6 +12,7 @@ import {
 } from "@/lib/constants";
 import { generateId } from "lucia";
 import ForgotPasswordEmail from "@/emails/forgot-password-email";
+import emailService from "@/lib/services/emailService";
 
 export const generateEmailVerificationCode = async (
   userId: string,
@@ -46,16 +46,6 @@ export const sendEmailVerificationCode = async (
   email: string,
   code: string
 ) => {
-  const transporter = nodemailer.createTransport({
-    host: process.env.EMAIL_HOST,
-    port: parseInt(process.env.EMAIL_PORT!),
-    secure: true,
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASSWORD,
-    },
-  });
-
   const emailHTML = render(
     RegisterConfirmEmail({
       validationCode: code,
@@ -64,26 +54,16 @@ export const sendEmailVerificationCode = async (
   );
 
   const options = {
-    from: process.env.EMAIL_USER,
+    from: process.env.EMAIL_USER!,
     to: email,
     subject: "Confirm your email address",
     html: emailHTML,
   };
 
-  await transporter.sendMail(options);
+  await emailService.sendEmail(options);
 };
 
 export const sendResetPasswordLink = async (email: string, url: string) => {
-  const transporter = nodemailer.createTransport({
-    host: process.env.EMAIL_HOST,
-    port: parseInt(process.env.EMAIL_PORT!),
-    secure: true,
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASSWORD,
-    },
-  });
-
   const emailHTML = render(
     ForgotPasswordEmail({
       url,
@@ -91,13 +71,13 @@ export const sendResetPasswordLink = async (email: string, url: string) => {
   );
 
   const options = {
-    from: process.env.EMAIL_USER,
+    from: process.env.EMAIL_USER!,
     to: email,
     subject: "Reset your password",
     html: emailHTML,
   };
 
-  await transporter.sendMail(options);
+  await emailService.sendEmail(options);
 };
 
 export const verifyVerificationCode = async (user: User, code: string) => {
