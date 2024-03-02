@@ -20,6 +20,8 @@ import {
 } from "@/lib/redis/redisUtils";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import accountSchema, { AccountSchemaType } from "@/schemas/account-schema";
+import connection from "@/lib/data/mysql";
+import { RowDataPacket } from "mysql2";
 
 export const registerBankAccount = async ({
   balance,
@@ -142,7 +144,8 @@ export const getPaginatedAccounts = async ({
   category,
   sortBy,
   sortDirection,
-}: IGetPaginatedAccountsParams): Promise<IGetPaginatedAccountsResponse> => {
+}: IGetPaginatedAccountsParams) => {
+  // TODO: Make this HOF
   const { user } = await getUser();
 
   if (!user) {
@@ -162,68 +165,108 @@ export const getPaginatedAccounts = async ({
     };
   }
 
-  let orderByCondition;
-  if (sortBy && sortDirection) {
-    orderByCondition = {
-      orderBy: {
-        [sortBy]: sortDirection,
-      },
-    };
+  let accountsQuery = `SELECT * FROM ACCOUNT where userId = :userId and name like :query`;
+  let totalCountQuery = `SELECT COUNT(*) as totalCount FROM ACCOUNT where userId = :userId and name like :query`;
+
+  let accountsQueryParams: {
+    userId: string;
+    query: string;
+    category?: AccountCategory;
+    limit?: number;
+    offset?: number;
+  } = {
+    userId: user.id,
+    query: `%${query}%`,
+  };
+
+  let totalCountQueryParams: {
+    userId: string;
+    query: string;
+    category?: AccountCategory;
+  } = {
+    userId: user.id,
+    query: `%${query}%`,
+  };
+
+  if (category) {
+    accountsQuery += ` and category = :category`;
+    totalCountQuery += ` and category = :category`;
+    accountsQueryParams.category = category;
+    totalCountQueryParams.category = category;
   }
 
-  const categoryQuery = category ? { category } : {};
+  if (sortBy && sortDirection) {
+    const validSortDirection =
+      sortDirection.toUpperCase() === "DESC" ? "DESC" : "ASC";
+    accountsQuery += ` ORDER BY balance ${validSortDirection}`;
+  }
 
-  const cacheKey = getPaginatedAccountsKey({
-    userId: user.id,
-    pageNumber,
-    query,
-    category,
-    sortBy,
-    sortDirection,
-    orderByCondition: orderByCondition?.orderBy
-      ? JSON.stringify(orderByCondition)
-      : "",
-  });
+  accountsQuery += ` LIMIT :limit OFFSET :offset`;
+  accountsQueryParams.limit = PAGE_SIZE;
+  accountsQueryParams.offset = skipAmount;
 
-  const cachedData = await redis.get(cacheKey);
-  if (cachedData) {
-    console.info("CACHE HIT");
-    const parsedData = JSON.parse(cachedData);
+  try {
+    const cacheKey = getPaginatedAccountsKey({
+      userId: user.id,
+      pageNumber,
+      query,
+      category,
+      sortBy,
+      sortDirection,
+    });
+
+    const cachedData = await redis.get(cacheKey);
+
+    if (cachedData) {
+      console.info("CACHE HIT");
+      const parsedData = JSON.parse(cachedData);
+      return {
+        accounts: parsedData.accounts,
+        hasNextPage: parsedData.totalCount > skipAmount + PAGE_SIZE,
+        hasPreviousPage: pageNumber > 1,
+        totalPages: Math.ceil(parsedData.totalCount / PAGE_SIZE),
+        currentPage: pageNumber,
+      };
+    }
+
+    const [accounts] = await connection.query<RowDataPacket[]>(
+      accountsQuery,
+      accountsQueryParams
+    );
+
+    const [totalCountResult] = await connection.query<RowDataPacket[]>(
+      totalCountQuery,
+      totalCountQueryParams
+    );
+
+    const totalCount = totalCountResult[0].totalCount;
+
+    await redis.set(
+      cacheKey,
+      JSON.stringify({ accounts, totalCount }),
+      "EX",
+      5 * 60
+    );
+
+    if (accounts.length === 0) {
+      return {
+        accounts: [],
+        hasNextPage: false,
+        hasPreviousPage: false,
+        currentPage: 1,
+        totalPages: 1,
+      };
+    }
+
     return {
-      accounts: parsedData.accounts,
-      hasNextPage: parsedData.totalCount > skipAmount + PAGE_SIZE,
+      accounts,
+      hasNextPage: totalCount > skipAmount + PAGE_SIZE,
       hasPreviousPage: pageNumber > 1,
-      totalPages: Math.ceil(parsedData.totalCount / PAGE_SIZE),
+      totalPages: Math.ceil(totalCount / PAGE_SIZE),
       currentPage: pageNumber,
     };
-  }
-  console.info("CACHE MISS");
-
-  const [accounts, totalCount] = await Promise.all([
-    prisma.account.findMany({
-      skip: skipAmount,
-      take: PAGE_SIZE,
-      where: {
-        userId: user?.id,
-        name: {
-          contains: query,
-        },
-        ...categoryQuery,
-      },
-      ...orderByCondition,
-    }),
-    prisma.account.count({
-      where: {
-        userId: user?.id,
-        name: {
-          contains: query,
-        },
-        ...categoryQuery,
-      },
-    }),
-  ]);
-
-  if (accounts.length === 0) {
+  } catch (e) {
+    console.error("Error fetching paginated accounts", e);
     return {
       accounts: [],
       hasNextPage: false,
@@ -232,21 +275,6 @@ export const getPaginatedAccounts = async ({
       totalPages: 1,
     };
   }
-
-  await redis.set(
-    cacheKey,
-    JSON.stringify({ accounts, totalCount }),
-    "EX",
-    5 * 60
-  );
-
-  return {
-    accounts,
-    hasNextPage: totalCount > skipAmount + PAGE_SIZE,
-    hasPreviousPage: pageNumber > 1,
-    totalPages: Math.ceil(totalCount / PAGE_SIZE),
-    currentPage: pageNumber,
-  };
 };
 
 export const deleteAccount = async (accountId: string) => {
