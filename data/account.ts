@@ -1,5 +1,4 @@
 "use server";
-import prisma from "@/lib/data/db";
 import { getUser } from "@/lib/auth/session";
 import { processZodError, validateEnumValue } from "@/lib/utils";
 import { Account, AccountCategory } from "@prisma/client";
@@ -368,13 +367,10 @@ export const getCurrentUserAccounts = async () => {
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
-  return prisma.account.findMany({
-    where: {
-      userId: user.id,
-    },
-    select: {
-      id: true,
-      name: true,
-    },
-  });
+  const [accounts] = await connection.query<RowDataPacket[]>(
+    "SELECT id, name from ACCOUNT where userId = ?",
+    [user.id]
+  );
+
+  return accounts;
 };
