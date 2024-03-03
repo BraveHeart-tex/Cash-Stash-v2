@@ -19,7 +19,7 @@ import {
   mapRedisHashToBudget,
 } from "@/lib/redis/redisUtils";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
-import connection from "@/lib/data/mysql";
+import pool from "@/lib/data/mysql";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { createId } from "@paralleldrive/cuid2";
 
@@ -41,7 +41,7 @@ export const createBudget = async (
       updatedAt: new Date(),
     };
 
-    const [createBudgetResponse] = await connection.query<ResultSetHeader>(
+    const [createBudgetResponse] = await pool.query<ResultSetHeader>(
       "INSERT INTO BUDGET (id, userId, name, category, budgetAmount, spentAmount, progress, createdAt, updatedAt) VALUES (:id, :userId, :name, :category, :budgetAmount, :spentAmount,:progress, :createdAt, :updatedAt)",
       createBudgetDto
     );
@@ -97,7 +97,7 @@ export const updateBudget = async (
     budgetToBeUpdated = mapRedisHashToBudget(budgetFromCache);
   } else {
     console.log("UPDATE Budget CACHE MISS");
-    const [budgetResponse] = await connection.query<RowDataPacket[]>(
+    const [budgetResponse] = await pool.query<RowDataPacket[]>(
       "SELECT * FROM budget where id = ?",
       [budgetId]
     );
@@ -111,7 +111,7 @@ export const updateBudget = async (
   try {
     const validatedData = budgetSchema.parse(values);
 
-    const [updateBudgetResponse] = await connection.query<RowDataPacket[]>(
+    const [updateBudgetResponse] = await pool.query<RowDataPacket[]>(
       "UPDATE BUDGET SET name = :name, category = :category, budgetAmount = :budgetAmount, spentAmount = :spentAmount, progress = :progress, updatedAt = :updatedAt WHERE id = :id; SELECT * FROM BUDGET WHERE id = :id",
       {
         ...validatedData,
@@ -254,8 +254,8 @@ export const getPaginatedBudgets = async ({
 
   // Must extend the RowDataPacket with the Budget type
   const [[budgets], [totalCountResult]] = await Promise.all([
-    connection.query<RowDataPacket[]>(budgetsQuery, budgetsQueryParams),
-    connection.query<RowDataPacket[]>(totalCountQuery, totalCountQueryParams),
+    pool.query<RowDataPacket[]>(budgetsQuery, budgetsQueryParams),
+    pool.query<RowDataPacket[]>(totalCountQuery, totalCountQueryParams),
   ]);
 
   const totalCount = totalCountResult[0].totalCount;
@@ -288,7 +288,7 @@ export const deleteBudget = async (id: string) => {
   }
 
   try {
-    const [deleteBudgetResponse] = await connection.query<ResultSetHeader>(
+    const [deleteBudgetResponse] = await pool.query<ResultSetHeader>(
       "DELETE FROM Budget WHERE id = ?",
       [id]
     );

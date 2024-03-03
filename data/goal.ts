@@ -10,7 +10,6 @@ import {
   IGetPaginatedGoalsParams,
   IGetPaginatedGoalsResponse,
 } from "@/data/types";
-import prisma from "@/lib/data/db";
 import redis from "@/lib/redis";
 import {
   generateCachePrefixWithUserId,
@@ -21,7 +20,7 @@ import {
 } from "@/lib/redis/redisUtils";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import { createId } from "@paralleldrive/cuid2";
-import connection from "@/lib/data/mysql";
+import pool from "@/lib/data/mysql";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 
 export const createGoal = async (
@@ -42,7 +41,7 @@ export const createGoal = async (
       updatedAt: new Date(),
     };
 
-    const [createGoalResponse] = await connection.query<ResultSetHeader>(
+    const [createGoalResponse] = await pool.query<ResultSetHeader>(
       "INSERT INTO GOAL (id, name, goalAmount, currentAmount, progress,userId, createdAt, updatedAt) VALUES(:id , :name, :goalAmount, :currentAmount, :progress, :userId, :createdAt, :updatedAt)",
       createGoalDto
     );
@@ -95,7 +94,7 @@ export const updateGoal = async (
   if (goalFromCache) {
     goalToBeUpdated = mapRedisHashToGoal(goalFromCache);
   } else {
-    const [goalResponse] = await connection.query<RowDataPacket[]>(
+    const [goalResponse] = await pool.query<RowDataPacket[]>(
       "SELECT * FROM GOAL WHERE id = :id",
       { id: goalId }
     );
@@ -114,7 +113,7 @@ export const updateGoal = async (
       updatedAt: new Date(),
     } as Goal;
 
-    const [updateGoalResult] = await connection.query<ResultSetHeader>(
+    const [updateGoalResult] = await pool.query<ResultSetHeader>(
       "UPDATE GOAL set name = :name, goalAmount = :goalAmount, currentAmount = :currentAmount, progress = :progress, updatedAt = :updatedAt WHERE id = :id",
       updatedGoalDto
     );
@@ -220,8 +219,8 @@ export const getPaginatedGoals = async ({
     goalsQueryParam.offset = skipAmount;
 
     const [[goals], [totalCountResult]] = await Promise.all([
-      connection.query<RowDataPacket[]>(goalsQuery, goalsQueryParam),
-      connection.query<RowDataPacket[]>(totalCountQuery, totalCountQueryParams),
+      pool.query<RowDataPacket[]>(goalsQuery, goalsQueryParam),
+      pool.query<RowDataPacket[]>(totalCountQuery, totalCountQueryParams),
     ]);
 
     const totalCount = totalCountResult[0].totalCount;
@@ -265,7 +264,7 @@ export const deleteGoal = async (goalId: string) => {
   }
 
   try {
-    const [deleteGoalResponse] = await connection.query<ResultSetHeader>(
+    const [deleteGoalResponse] = await pool.query<ResultSetHeader>(
       "DELETE FROM GOAL WHERE id = :id",
       { id: goalId }
     );

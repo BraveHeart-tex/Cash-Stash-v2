@@ -23,6 +23,9 @@ import {
   IValidatedResponse,
 } from "@/data/types";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
+import pool from "@/lib/data/mysql";
+import { ResultSetHeader, RowDataPacket } from "mysql2";
+import { createId } from "@paralleldrive/cuid2";
 
 export const createTransaction = async (
   values: TransactionSchemaType
@@ -33,44 +36,61 @@ export const createTransaction = async (
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
+  const connection = await pool.getConnection();
+  await connection.beginTransaction();
+
   try {
     const validatedData = transactionSchema.parse(values);
-    const account = await prisma.account.findUnique({
-      where: {
-        id: validatedData.accountId,
-      },
-    });
 
-    if (!account) {
+    // get the account balance
+    const [accountResponse] = await connection.query<RowDataPacket[]>(
+      "SELECT balance FROM Account WHERE id = ?",
+      [validatedData.accountId]
+    );
+
+    if (accountResponse.length === 0) {
       return {
         error: "Account not found",
         fieldErrors: [],
       };
     }
 
-    const balance = account.balance + validatedData.amount;
+    const balance = accountResponse[0].balance + validatedData.amount;
 
-    const newTransaction = prisma.transaction.create({
-      data: {
-        ...validatedData,
-        userId: user.id,
-      },
-    });
+    const createTransactionDto = {
+      ...validatedData,
+      id: createId(),
+      userId: user.id,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
 
-    const updatedAccount = prisma.account.update({
-      where: {
-        id: validatedData.accountId,
-      },
-      data: {
+    const [createTransactionResponse] = await connection.query<ResultSetHeader>(
+      "INSERT INTO `Transaction` SET ?",
+      [createTransactionDto]
+    );
+
+    if (createTransactionResponse.affectedRows === 0) {
+      throw new Error("Failed to create transaction");
+    }
+
+    const [updateAccountResponse] = await connection.query<RowDataPacket[]>(
+      "UPDATE Account SET balance = :balance WHERE id = :accountId; SELECT * FROM Account WHERE id = :accountId;",
+      {
         balance,
-      },
-    });
+        accountId: validatedData.accountId,
+      }
+    );
 
-    // eslint-disable-next-line no-unused-vars
-    const [_, transaction] = await prisma.$transaction([
-      updatedAccount,
-      newTransaction,
-    ]);
+    const affectedRows = updateAccountResponse[0].affectedRows;
+
+    if (affectedRows === 0) {
+      throw new Error("Failed to update account balance");
+    }
+
+    const updatedAccount = updateAccountResponse[1][0];
+
+    await connection.commit();
 
     await Promise.all([
       invalidateKeysByPrefix(
@@ -88,15 +108,21 @@ export const createTransaction = async (
       invalidateKeysByPrefix(
         getAccountTransactionsKey(validatedData.accountId)
       ),
-      redis.hset(getTransactionKey(transaction.id), newTransaction),
+      redis.hset(
+        getTransactionKey(createTransactionDto.id),
+        createTransactionDto
+      ),
       redis.hset(getAccountKey(validatedData.accountId), updatedAccount),
     ]);
 
     return {
-      data: transaction,
+      data: createTransactionDto,
       fieldErrors: [],
     };
   } catch (error) {
+    console.error(error);
+    await connection.rollback();
+
     if (error instanceof ZodError) {
       return processZodError(error);
     }

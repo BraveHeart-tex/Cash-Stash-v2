@@ -2,14 +2,14 @@
 import { Lucia } from "lucia";
 import { PrismaClient } from "@prisma/client";
 import { Mysql2Adapter } from "@lucia-auth/adapter-mysql";
-import connection from "@/lib/data/mysql";
+import pool from "@/lib/data/mysql";
 
 declare global {
   var client: PrismaClient | undefined;
 }
 
 const prisma = globalThis.client || new PrismaClient();
-const adapter = new Mysql2Adapter(connection, {
+const adapter = new Mysql2Adapter(pool, {
   user: "User",
   session: "Session",
 });
