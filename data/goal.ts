@@ -89,15 +89,18 @@ export const updateGoal = async (
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
-  let goalToBeUpdated: Goal | null = null;
+  let goalToBeUpdated: Goal | null;
 
   const goalFromCache = await redis.hgetall(getGoalKey(goalId));
   if (goalFromCache) {
     goalToBeUpdated = mapRedisHashToGoal(goalFromCache);
   } else {
-    goalToBeUpdated = await prisma.goal.findUnique({
-      where: { id: goalId },
-    });
+    const [goalResponse] = await connection.query<RowDataPacket[]>(
+      "SELECT * FROM GOAL WHERE id = :id",
+      { id: goalId }
+    );
+
+    goalToBeUpdated = goalResponse[0] as Goal;
   }
 
   if (!goalToBeUpdated)
@@ -105,13 +108,18 @@ export const updateGoal = async (
 
   try {
     const validatedData = goalSchema.parse(values);
+    const updatedGoalDto = {
+      ...validatedData,
+      id: goalId,
+      updatedAt: new Date(),
+    } as Goal;
 
-    const updatedGoal = await prisma.goal.update({
-      where: { id: goalId, userId: goalToBeUpdated.userId },
-      data: validatedData,
-    });
+    const [updateGoalResult] = await connection.query<ResultSetHeader>(
+      "UPDATE GOAL set name = :name, goalAmount = :goalAmount, currentAmount = :currentAmount, progress = :progress, updatedAt = :updatedAt WHERE id = :id",
+      updatedGoalDto
+    );
 
-    if (!updatedGoal)
+    if (updateGoalResult.affectedRows === 0)
       return {
         error:
           "There was a problem while trying to update your goal. Please try again later.",
@@ -122,10 +130,10 @@ export const updateGoal = async (
       invalidateKeysByPrefix(
         generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_GOALS, user.id)
       ),
-      redis.hset(getGoalKey(updatedGoal.id), updatedGoal),
+      redis.hset(getGoalKey(updatedGoalDto.id), updatedGoalDto),
     ]);
 
-    return { data: updatedGoal, fieldErrors: [] };
+    return { data: updatedGoalDto, fieldErrors: [] };
   } catch (error) {
     if (error instanceof ZodError) {
       return processZodError(error);
@@ -139,6 +147,7 @@ export const updateGoal = async (
     };
   }
 };
+
 export const getPaginatedGoals = async ({
   pageNumber,
   query,
