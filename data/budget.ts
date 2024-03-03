@@ -1,5 +1,4 @@
 "use server";
-import prisma from "@/lib/data/db";
 import { getUser } from "@/lib/auth/session";
 import { processZodError, validateEnumValue } from "@/lib/utils";
 import budgetSchema, { BudgetSchemaType } from "@/schemas/budget-schema";
@@ -89,7 +88,7 @@ export const updateBudget = async (
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
-  let budgetToBeUpdated: Budget | null = null;
+  let budgetToBeUpdated: Budget | null;
 
   const budgetFromCache = await redis.hgetall(getBudgetKey(budgetId));
 
@@ -98,9 +97,12 @@ export const updateBudget = async (
     budgetToBeUpdated = mapRedisHashToBudget(budgetFromCache);
   } else {
     console.log("UPDATE Budget CACHE MISS");
-    budgetToBeUpdated = await prisma.budget.findUnique({
-      where: { id: budgetId },
-    });
+    const [budgetResponse] = await connection.query<RowDataPacket[]>(
+      "SELECT * FROM budget where id = ?",
+      [budgetId]
+    );
+
+    budgetToBeUpdated = budgetResponse[0] as Budget;
   }
 
   if (!budgetToBeUpdated)
@@ -109,17 +111,25 @@ export const updateBudget = async (
   try {
     const validatedData = budgetSchema.parse(values);
 
-    const updatedBudget = await prisma.budget.update({
-      where: { id: budgetId, userId: user.id },
-      data: validatedData,
-    });
+    const [updateBudgetResponse] = await connection.query<RowDataPacket[]>(
+      "UPDATE BUDGET SET name = :name, category = :category, budgetAmount = :budgetAmount, spentAmount = :spentAmount, progress = :progress, updatedAt = :updatedAt WHERE id = :id; SELECT * FROM BUDGET WHERE id = :id",
+      {
+        ...validatedData,
+        id: budgetId,
+        updatedAt: new Date(),
+      }
+    );
+    const affectedRows = updateBudgetResponse[0].affectedRows;
 
-    if (!updatedBudget)
+    if (affectedRows === 0) {
       return {
         error:
           "There was a problem while trying to update your budget. Please try again later.",
         fieldErrors: [],
       };
+    }
+
+    const updatedBudget = updateBudgetResponse?.[1]?.[0];
 
     await Promise.all([
       invalidateKeysByPrefix(
@@ -142,6 +152,7 @@ export const updateBudget = async (
     };
   }
 };
+
 export const getPaginatedBudgets = async ({
   pageNumber,
   query,
