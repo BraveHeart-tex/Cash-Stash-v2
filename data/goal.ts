@@ -20,6 +20,9 @@ import {
   mapRedisHashToGoal,
 } from "@/lib/redis/redisUtils";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
+import { createId } from "@paralleldrive/cuid2";
+import connection from "@/lib/data/mysql";
+import { ResultSetHeader, RowDataPacket } from "mysql2";
 
 export const createGoal = async (
   values: GoalSchemaType
@@ -31,15 +34,20 @@ export const createGoal = async (
 
   try {
     const validatedData = goalSchema.parse(values);
+    const createGoalDto = {
+      ...validatedData,
+      id: createId(),
+      userId: user.id,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
 
-    const createdGoal = await prisma.goal.create({
-      data: {
-        ...validatedData,
-        userId: user.id,
-      },
-    });
+    const [createGoalResponse] = await connection.query<ResultSetHeader>(
+      "INSERT INTO GOAL (id, name, goalAmount, currentAmount, progress,userId, createdAt, updatedAt) VALUES(:id , :name, :goalAmount, :currentAmount, :progress, :userId, :createdAt, :updatedAt)",
+      createGoalDto
+    );
 
-    if (!createdGoal) {
+    if (createGoalResponse.affectedRows === 0) {
       return {
         error:
           "There was a problem while creating your goal. Please try again later.",
@@ -51,11 +59,11 @@ export const createGoal = async (
       invalidateKeysByPrefix(
         generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_GOALS, user.id)
       ),
-      redis.hset(getGoalKey(createdGoal.id), createdGoal),
+      redis.hset(getGoalKey(createGoalDto.id), createGoalDto),
     ]);
 
     return {
-      data: createdGoal,
+      data: createGoalDto,
       fieldErrors: [],
     };
   } catch (error) {
