@@ -13,13 +13,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { deleteTransactionById } from "@/data/transaction";
+import { deleteTransactionById } from "@/actions/transaction";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import DataLabel from "@/components/data-label";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import useGenericModalStore from "@/store/genericModalStore";
-import { TransactionResponse, TransactionWithAccount } from "@/data/types";
+import { TransactionResponse, TransactionWithAccount } from "@/actions/types";
 import ActionPopover from "@/components/action-popover";
 import { RxCross1, RxPencil2 } from "react-icons/rx";
 import { Transaction } from "@prisma/client";

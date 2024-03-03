@@ -2,7 +2,7 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { ZodError } from "zod";
 import { MONTHS_OF_THE_YEAR } from "@/lib/constants";
-import { IGetPaginatedTransactionsParams } from "@/data/types";
+import { IGetPaginatedTransactionsParams } from "@/actions/types";
 import { ITransactionPageSearchParams } from "@/app/transactions/page";
 import { TransactionCategory } from "@prisma/client";
 
@@ -186,3 +186,9 @@ export function createGetPaginatedTransactionsParams(
     query,
   };
 }
+
+export const getPageSizeAndSkipAmount = (pageNumber: number) => {
+  const PAGE_SIZE = 12;
+  const skipAmount = (pageNumber - 1) * PAGE_SIZE;
+  return { pageSize: PAGE_SIZE, skipAmount };
+};

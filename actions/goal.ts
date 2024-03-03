@@ -9,7 +9,7 @@ import {
   IValidatedResponse,
   IGetPaginatedGoalsParams,
   IGetPaginatedGoalsResponse,
-} from "@/data/types";
+} from "@/actions/types";
 import redis from "@/lib/redis";
 import {
   generateCachePrefixWithUserId,
@@ -20,7 +20,7 @@ import {
 } from "@/lib/redis/redisUtils";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import { createId } from "@paralleldrive/cuid2";
-import pool from "@/lib/data/mysql";
+import pool from "@/lib/database/connection";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 
 export const createGoal = async (

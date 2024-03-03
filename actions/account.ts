@@ -1,12 +1,13 @@
 "use server";
 import { getUser } from "@/lib/auth/session";
 import { processZodError, validateEnumValue } from "@/lib/utils";
-import { Account, AccountCategory } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
-import { IValidatedResponse, IGetPaginatedAccountsParams } from "@/data/types";
+import {
+  IGetPaginatedAccountsParams,
+  IValidatedResponse,
+} from "@/actions/types";
 import redis from "@/lib/redis";
-import { createId } from "@paralleldrive/cuid2";
 import {
   generateCachePrefixWithUserId,
   getAccountKey,
@@ -16,8 +17,10 @@ import {
 } from "@/lib/redis/redisUtils";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import accountSchema, { AccountSchemaType } from "@/schemas/account-schema";
-import asyncPool from "@/lib/data/mysql";
-import { ResultSetHeader, RowDataPacket } from "mysql2";
+import { createAccountDto } from "@/lib/database/dto/accountDto";
+import accountRepository from "@/lib/database/accounts";
+import { Account, AccountCategory } from "@/entities/account";
+import transactionRepository from "@/lib/database/transactions";
 
 export const registerBankAccount = async ({
   balance,
@@ -33,22 +36,11 @@ export const registerBankAccount = async ({
   try {
     const validatedData = accountSchema.parse({ balance, category, name });
 
-    const accountDto = {
-      id: createId(),
-      name: validatedData.name,
-      balance: validatedData.balance,
-      category: validatedData.category,
-      userId: user.id,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+    const accountDto = createAccountDto(validatedData, user.id);
 
-    const [createdAccount] = await asyncPool.query<ResultSetHeader>(
-      `INSERT INTO ACCOUNT (id, name, balance, category, userId, createdAt, updatedAt) values (:id, :name, :balance, :category, :userId, :createdAt, :updatedAt);`,
-      accountDto
-    );
+    const affectedRows = await accountRepository.create(accountDto);
 
-    if (createdAccount?.affectedRows === 0) {
+    if (affectedRows === 0) {
       return { error: "Error creating account.", fieldErrors: [] };
     }
 
@@ -63,7 +55,7 @@ export const registerBankAccount = async ({
     ]);
 
     return {
-      data: accountDto,
+      data: accountDto as Account,
       fieldErrors: [],
     };
   } catch (error) {
@@ -106,13 +98,8 @@ export const updateBankAccount = async ({
       updatedAt: new Date(),
     };
 
-    const [updatedAccountResult] = await asyncPool.query<RowDataPacket[]>(
-      `UPDATE ACCOUNT set name = :name, balance = :balance, category = :category, updatedAt = :updatedAt where id = :id; SELECT * from ACCOUNT where id = :id;`,
-      updateDto
-    );
-
-    const affectedRows = updatedAccountResult?.[0]?.affectedRows;
-    const updatedAccount = updatedAccountResult?.[1]?.[0];
+    const { affectedRows, updatedAccount } =
+      await accountRepository.update(updateDto);
 
     if (affectedRows === 0 || !updatedAccount) {
       return {
@@ -133,7 +120,7 @@ export const updateBankAccount = async ({
     ]);
 
     return {
-      data: updatedAccount,
+      data: updatedAccount as Account,
       fieldErrors: [],
     };
   } catch (error) {
@@ -175,46 +162,6 @@ export const getPaginatedAccounts = async ({
     };
   }
 
-  let accountsQuery = `SELECT * FROM ACCOUNT where userId = :userId and name like :query`;
-  let totalCountQuery = `SELECT COUNT(*) as totalCount FROM ACCOUNT where userId = :userId and name like :query`;
-
-  let accountsQueryParams: {
-    userId: string;
-    query: string;
-    category?: AccountCategory;
-    limit?: number;
-    offset?: number;
-  } = {
-    userId: user.id,
-    query: `%${query}%`,
-  };
-
-  let totalCountQueryParams: {
-    userId: string;
-    query: string;
-    category?: AccountCategory;
-  } = {
-    userId: user.id,
-    query: `%${query}%`,
-  };
-
-  if (category) {
-    accountsQuery += ` and category = :category`;
-    totalCountQuery += ` and category = :category`;
-    accountsQueryParams.category = category;
-    totalCountQueryParams.category = category;
-  }
-
-  if (sortBy && sortDirection) {
-    const validSortDirection =
-      sortDirection.toUpperCase() === "DESC" ? "DESC" : "ASC";
-    accountsQuery += ` ORDER BY balance ${validSortDirection}`;
-  }
-
-  accountsQuery += ` LIMIT :limit OFFSET :offset`;
-  accountsQueryParams.limit = PAGE_SIZE;
-  accountsQueryParams.offset = skipAmount;
-
   try {
     const cacheKey = getPaginatedAccountsKey({
       userId: user.id,
@@ -226,6 +173,7 @@ export const getPaginatedAccounts = async ({
     });
 
     const cachedData = await redis.get(cacheKey);
+    console.log("cachedData", cachedData);
 
     if (cachedData) {
       console.info("CACHE HIT");
@@ -239,22 +187,14 @@ export const getPaginatedAccounts = async ({
       };
     }
 
-    const [accountsPromise, totalCountResultPromise] = await Promise.all([
-      asyncPool.query<RowDataPacket[]>(accountsQuery, accountsQueryParams),
-      asyncPool.query<RowDataPacket[]>(totalCountQuery, totalCountQueryParams),
-    ]);
-
-    const [accounts] = accountsPromise;
-    const [totalCountResult] = totalCountResultPromise;
-
-    const totalCount = totalCountResult[0].totalCount;
-
-    await redis.set(
-      cacheKey,
-      JSON.stringify({ accounts, totalCount }),
-      "EX",
-      5 * 60
-    );
+    const { accounts, totalCount } = await accountRepository.getMultiple({
+      userId: user.id,
+      page: pageNumber,
+      query,
+      category,
+      sortBy,
+      sortDirection,
+    });
 
     if (accounts.length === 0) {
       return {
@@ -265,6 +205,13 @@ export const getPaginatedAccounts = async ({
         totalPages: 1,
       };
     }
+
+    await redis.set(
+      cacheKey,
+      JSON.stringify({ accounts, totalCount }),
+      "EX",
+      5 * 60
+    );
 
     return {
       accounts: accounts as Account[],
@@ -293,12 +240,9 @@ export const deleteAccount = async (accountId: string) => {
   }
 
   try {
-    const [deletedAccount] = await asyncPool.query<ResultSetHeader>(
-      "DELETE FROM ACCOUNT WHERE id = ?",
-      [accountId]
-    );
+    const affectedRows = await accountRepository.deleteById(accountId);
 
-    if (deletedAccount.affectedRows === 0) {
+    if (affectedRows === 0) {
       return { error: "An error occurred while deleting the account." };
     }
 
@@ -339,18 +283,15 @@ export const getTransactionsForAccount = async (accountId: string) => {
       return JSON.parse(cachedData);
     }
 
-    const [transactionsResult] = await asyncPool.query<RowDataPacket[]>(
-      `SELECT * FROM TRANSACTION where accountId = :accountId order by createdAt desc limit 10`,
-      { accountId }
-    );
+    const transactions = await transactionRepository.getByAccountId(accountId);
 
-    if (transactionsResult.length === 0) {
+    if (transactions.length === 0) {
       return [];
     }
 
-    await redis.set(key, JSON.stringify(transactionsResult), "EX", 5 * 60);
+    await redis.set(key, JSON.stringify(transactions), "EX", 5 * 60);
 
-    return transactionsResult;
+    return transactions;
   } catch (error) {
     console.error("Error fetching transactions for account", error);
     return [];
@@ -364,10 +305,5 @@ export const getCurrentUserAccounts = async () => {
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
-  const [accounts] = await asyncPool.query<RowDataPacket[]>(
-    "SELECT id, name from ACCOUNT where userId = ?",
-    [user.id]
-  );
-
-  return accounts;
+  return await accountRepository.getByUserId(user.id);
 };

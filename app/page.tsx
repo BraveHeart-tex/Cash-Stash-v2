@@ -1,11 +1,11 @@
 import Dashboard from "@/components/main-dashboard";
-import { fetchInsightsDataAction, getChartData } from "@/data";
-import { getPaginatedTransactions } from "@/data/transaction";
-import { getPaginatedAccounts } from "@/data/account";
-import { getPaginatedBudgets } from "@/data/budget";
-import { getPaginatedGoals } from "@/data/goal";
-import { getGenericListByCurrentUser } from "@/data/generic";
-import { SerializedReminder } from "@/data/types";
+import { fetchInsightsDataAction, getChartData } from "../actions";
+import { getPaginatedTransactions } from "@/actions/transaction";
+import { getPaginatedAccounts } from "@/actions/account";
+import { getPaginatedBudgets } from "@/actions/budget";
+import { getPaginatedGoals } from "@/actions/goal";
+import { getGenericListByCurrentUser } from "@/actions/generic";
+import { SerializedReminder } from "@/actions/types";
 import DashboardSkeleton from "@/components/dashboard-skeleton";
 import { Suspense } from "react";
 import { getUser } from "@/lib/auth/session";

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import AutoProgressInput from "@/components/auto-progress-input";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { handleEmailVerification } from "@/data/auth";
+import { handleEmailVerification } from "@/actions/auth";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { EMAIL_VERIFICATION_CODE_LENGTH } from "@/lib/constants";
 import { useRouter } from "next/navigation";

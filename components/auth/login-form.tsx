@@ -14,7 +14,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import loginSchema, { LoginSchemaType } from "@/schemas/login-schema";
 import { useRef, useState, useTransition } from "react";
-import { login, validateReCAPTCHAToken } from "@/data/auth";
+import { login, validateReCAPTCHAToken } from "@/actions/auth";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";

@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import useGenericModalStore from "@/store/genericModalStore";
-import { deleteAccount } from "@/data/account";
+import { deleteAccount } from "@/actions/account";
 import ActionPopover from "@/components/action-popover";
 import { RxCross1, RxPencil2 } from "react-icons/rx";
 import { GiTakeMyMoney } from "react-icons/gi";

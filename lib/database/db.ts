@@ -2,7 +2,7 @@
 import { Lucia } from "lucia";
 import { PrismaClient } from "@prisma/client";
 import { Mysql2Adapter } from "@lucia-auth/adapter-mysql";
-import asyncPool from "@/lib/data/mysql";
+import asyncPool from "@/lib/database/connection";
 
 declare global {
   var client: PrismaClient | undefined;

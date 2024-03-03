@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import useGenericModalStore from "@/store/genericModalStore";
-import { deleteBudget } from "@/data/budget";
+import { deleteBudget } from "@/actions/budget";
 import ActionPopover from "@/components/action-popover";
 import { RxCross1, RxPencil2 } from "react-icons/rx";
 

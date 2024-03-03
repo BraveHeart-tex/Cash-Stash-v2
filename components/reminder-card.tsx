@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Pencil1Icon } from "@radix-ui/react-icons";
 
-import { SerializedReminder } from "@/data/types";
+import { SerializedReminder } from "@/actions/types";
 import MotionDiv from "./animations/motion-div";
 import useGenericModalStore from "@/store/genericModalStore";
 

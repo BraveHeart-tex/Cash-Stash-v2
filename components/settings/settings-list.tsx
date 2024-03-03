@@ -7,7 +7,7 @@ import { useTransition } from "react";
 import {
   disableTwoFactorAuthentication,
   enableTwoFactorAuthentication,
-} from "@/data/auth";
+} from "@/actions/auth";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 
 const SettingsList = () => {

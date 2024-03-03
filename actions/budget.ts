@@ -2,14 +2,14 @@
 import { getUser } from "@/lib/auth/session";
 import { processZodError, validateEnumValue } from "@/lib/utils";
 import budgetSchema, { BudgetSchemaType } from "@/schemas/budget-schema";
-import { Budget, BudgetCategory } from "@prisma/client";
+import { Budget } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import {
   IValidatedResponse,
   IGetPaginatedBudgetsParams,
   IGetPaginatedBudgetsResponse,
-} from "@/data/types";
+} from "@/actions/types";
 import redis from "@/lib/redis";
 import {
   generateCachePrefixWithUserId,
@@ -19,9 +19,9 @@ import {
   mapRedisHashToBudget,
 } from "@/lib/redis/redisUtils";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
-import asyncPool from "@/lib/data/mysql";
-import { ResultSetHeader, RowDataPacket } from "mysql2";
-import { createId } from "@paralleldrive/cuid2";
+import { createBudgetDto } from "@/lib/database/dto/budgetDto";
+import budgetRepository from "@/lib/database/budget";
+import { BudgetCategory } from "@/entities/budget";
 
 export const createBudget = async (
   data: BudgetSchemaType
@@ -33,20 +33,11 @@ export const createBudget = async (
 
   try {
     const validatedData = budgetSchema.parse(data);
-    const createBudgetDto = {
-      ...validatedData,
-      id: createId(),
-      userId: user.id,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+    const budgetDto = createBudgetDto(validatedData, user.id);
 
-    const [createBudgetResponse] = await asyncPool.query<ResultSetHeader>(
-      "INSERT INTO BUDGET (id, userId, name, category, budgetAmount, spentAmount, progress, createdAt, updatedAt) VALUES (:id, :userId, :name, :category, :budgetAmount, :spentAmount,:progress, :createdAt, :updatedAt)",
-      createBudgetDto
-    );
+    const affectedRows = await budgetRepository.create(budgetDto);
 
-    if (createBudgetResponse.affectedRows === 0) {
+    if (affectedRows === 0) {
       return {
         error:
           "There was a problem while creating your budget. Please try again later.",
@@ -58,11 +49,11 @@ export const createBudget = async (
       invalidateKeysByPrefix(
         generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_BUDGETS, user.id)
       ),
-      redis.hset(getBudgetKey(createBudgetDto.id), createBudgetDto),
+      redis.hset(getBudgetKey(budgetDto.id), budgetDto),
     ]);
 
     return {
-      data: createBudgetDto,
+      data: budgetDto,
       fieldErrors: [],
     };
   } catch (error) {
@@ -97,12 +88,8 @@ export const updateBudget = async (
     budgetToBeUpdated = mapRedisHashToBudget(budgetFromCache);
   } else {
     console.log("UPDATE Budget CACHE MISS");
-    const [budgetResponse] = await asyncPool.query<RowDataPacket[]>(
-      "SELECT * FROM budget where id = ?",
-      [budgetId]
-    );
-
-    budgetToBeUpdated = budgetResponse[0] as Budget;
+    const budget = await budgetRepository.getById(budgetId);
+    budgetToBeUpdated = budget;
   }
 
   if (!budgetToBeUpdated)
@@ -111,25 +98,22 @@ export const updateBudget = async (
   try {
     const validatedData = budgetSchema.parse(values);
 
-    const [updateBudgetResponse] = await asyncPool.query<RowDataPacket[]>(
-      "UPDATE BUDGET SET name = :name, category = :category, budgetAmount = :budgetAmount, spentAmount = :spentAmount, progress = :progress, updatedAt = :updatedAt WHERE id = :id; SELECT * FROM BUDGET WHERE id = :id",
-      {
-        ...validatedData,
-        id: budgetId,
-        updatedAt: new Date(),
-      }
-    );
-    const affectedRows = updateBudgetResponse[0].affectedRows;
+    const updateBudgetDto = {
+      ...validatedData,
+      id: budgetId,
+      updatedAt: new Date(),
+    };
 
-    if (affectedRows === 0) {
+    const { affectedRows, updatedBudget } =
+      await budgetRepository.update(updateBudgetDto);
+
+    if (affectedRows === 0 || !updatedBudget) {
       return {
         error:
           "There was a problem while trying to update your budget. Please try again later.",
         fieldErrors: [],
       };
     }
-
-    const updatedBudget = updateBudgetResponse?.[1]?.[0];
 
     await Promise.all([
       invalidateKeysByPrefix(
@@ -179,14 +163,6 @@ export const getPaginatedBudgets = async ({
     };
   }
 
-  const validBudgetSortByOptions: {
-    [key: string]: boolean;
-  } = {
-    progress: true,
-    spentAmount: true,
-    budgetAmount: true,
-  };
-
   const cacheKey = getPaginatedBudgetsKey({
     userId: user.id,
     pageNumber,
@@ -210,55 +186,14 @@ export const getPaginatedBudgets = async ({
 
   console.log("Budgets CACHE MISS");
 
-  let budgetsQuery = `SELECT * FROM Budget where userId = :userId and name like :query`;
-  let totalCountQuery = `SELECT COUNT(*) as totalCount FROM Budget where userId = :userId and name like :query`;
-
-  let budgetsQueryParams: {
-    userId: string;
-    query: string;
-    category?: BudgetCategory;
-    limit?: number;
-    offset?: number;
-  } = {
+  const { budgets, totalCount } = await budgetRepository.getMultiple({
     userId: user.id,
-    query: `%${query}%`,
-  };
-
-  let totalCountQueryParams: {
-    userId: string;
-    query: string;
-    category?: BudgetCategory;
-  } = {
-    userId: user.id,
-    query: `%${query}%`,
-  };
-
-  if (category) {
-    budgetsQuery += ` and category = :category`;
-    totalCountQuery += ` and category = :category`;
-    budgetsQueryParams.category = category;
-    totalCountQueryParams.category = category;
-  }
-
-  if (sortBy && sortDirection) {
-    const validSortDirection =
-      sortDirection.toUpperCase() === "DESC" ? "DESC" : "ASC";
-    const validSortBy = validBudgetSortByOptions[sortBy] ? sortBy : "id";
-
-    budgetsQuery += ` ORDER BY ${validSortBy} ${validSortDirection}`;
-  }
-
-  budgetsQuery += ` LIMIT :limit OFFSET :offset`;
-  budgetsQueryParams.limit = PAGE_SIZE;
-  budgetsQueryParams.offset = skipAmount;
-
-  // Must extend the RowDataPacket with the Budget type
-  const [[budgets], [totalCountResult]] = await Promise.all([
-    asyncPool.query<RowDataPacket[]>(budgetsQuery, budgetsQueryParams),
-    asyncPool.query<RowDataPacket[]>(totalCountQuery, totalCountQueryParams),
-  ]);
-
-  const totalCount = totalCountResult[0].totalCount;
+    query,
+    category,
+    sortBy,
+    sortDirection,
+    page: pageNumber,
+  });
 
   if (budgets.length === 0) {
     return {
@@ -273,7 +208,7 @@ export const getPaginatedBudgets = async ({
   await redis.set(cacheKey, JSON.stringify({ budgets, totalCount }));
 
   return {
-    budgets: budgets as Budget[],
+    budgets: budgets,
     hasNextPage: totalCount > skipAmount + PAGE_SIZE,
     hasPreviousPage: pageNumber > 1,
     totalPages: Math.ceil(totalCount / PAGE_SIZE),
@@ -288,12 +223,9 @@ export const deleteBudget = async (id: string) => {
   }
 
   try {
-    const [deleteBudgetResponse] = await asyncPool.query<ResultSetHeader>(
-      "DELETE FROM Budget WHERE id = ?",
-      [id]
-    );
+    const affectedRows = await budgetRepository.deleteById(id);
 
-    if (deleteBudgetResponse.affectedRows === 0) {
+    if (affectedRows === 0) {
       return {
         error: "We encountered a problem while deleting the budget.",
       };

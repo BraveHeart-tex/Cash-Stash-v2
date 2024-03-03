@@ -5,7 +5,8 @@ import { showErrorToast } from "@/components/ui/use-toast";
 import { FaExchangeAlt } from "react-icons/fa";
 import { cn } from "@/lib/utils";
 import useGenericModalStore from "@/store/genericModalStore";
-import { getPaginatedAccounts } from "@/data/account";
+import { getPaginatedAccounts } from "@/actions/account";
+import { userCanCreateTransaction } from "@/actions/transaction";
 
 const CreateTransactionButton = ({ className }: { className?: string }) => {
   let [isPending, startTransition] = useTransition();
@@ -14,11 +15,9 @@ const CreateTransactionButton = ({ className }: { className?: string }) => {
   );
   const handleCreateTransactionClick = async () => {
     startTransition(async () => {
-      const response = await getPaginatedAccounts({
-        pageNumber: 1,
-      });
+      const canCreateTransaction = await userCanCreateTransaction();
 
-      if (response.accounts.length === 0) {
+      if (!canCreateTransaction) {
         return showErrorToast(
           "No accounts found.",
           "You need to create an account before you can create a transaction."

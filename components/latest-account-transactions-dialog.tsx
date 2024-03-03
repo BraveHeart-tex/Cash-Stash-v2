@@ -17,7 +17,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { getTransactionsForAccount } from "@/data/account";
+import { getTransactionsForAccount } from "@/actions/account";
 import AccountCard from "@/components/account-card";
 import TransactionCard from "@/components/transactions/transaction-card";
 import { FaSpinner } from "react-icons/fa";

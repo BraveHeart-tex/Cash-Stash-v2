@@ -1,5 +1,5 @@
 import CreateAccountButton from "@/components/create-buttons/create-account-button";
-import { getPaginatedAccounts } from "@/data/account";
+import { getPaginatedAccounts } from "@/actions/account";
 import RoutePaginationControls from "@/components/route-pagination-controls";
 import RouteSearchInput from "@/components/route-search-input";
 import AccountCard from "@/components/account-card";

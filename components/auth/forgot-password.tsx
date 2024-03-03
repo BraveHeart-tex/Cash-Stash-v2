@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
-import { sendPasswordResetEmail } from "@/data/auth";
+import { sendPasswordResetEmail } from "@/actions/auth";
 
 const ForgotPassword = () => {
   let [isPending, startTransition] = useTransition();

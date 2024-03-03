@@ -8,7 +8,7 @@ import {
   getTransactionKey,
   invalidateKeysByPrefix,
 } from "@/lib/redis/redisUtils";
-import prisma from "@/lib/data/db";
+import prisma from "@/lib/database/db";
 import { getUser } from "@/lib/auth/session";
 import { processZodError } from "@/lib/utils";
 import transactionSchema, {
@@ -22,9 +22,9 @@ import {
   IGetPaginatedTransactionsResponse,
   IValidatedResponse,
   TransactionResponse,
-} from "@/data/types";
+} from "@/actions/types";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
-import asyncPool from "@/lib/data/mysql";
+import asyncPool from "@/lib/database/connection";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { createId } from "@paralleldrive/cuid2";
 
@@ -473,4 +473,18 @@ export const getPaginatedTransactions = async ({
       currentPage: 1,
     };
   }
+};
+
+export const userCanCreateTransaction = async () => {
+  const { user } = await getUser();
+  if (!user) {
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
+  }
+
+  const [accounts] = await asyncPool.query<RowDataPacket[]>(
+    "SELECT id FROM Account WHERE userId = :userId limit 1",
+    { userId: user.id }
+  );
+
+  return accounts.length > 0;
 };

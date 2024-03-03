@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { MdPhonelinkSetup } from "react-icons/md";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import { useTransition } from "react";
-import { enableTwoFactorAuthentication } from "@/data/auth";
+import { enableTwoFactorAuthentication } from "@/actions/auth";
 import useAuthStore from "@/store/auth/authStore";
 
 const UserSettings = () => {

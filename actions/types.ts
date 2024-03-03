@@ -1,15 +1,15 @@
-import prisma from "@/lib/data/db";
+import prisma from "@/lib/database/db";
 import {
   Budget,
   Account,
-  AccountCategory,
   Goal,
-  BudgetCategory,
   Transaction,
   Reminder,
   TransactionCategory,
 } from "@prisma/client";
 import { IconType } from "react-icons/lib";
+import { AccountCategory } from "@/entities/account";
+import { BudgetCategory } from "@/entities/budget";
 
 interface IPaginatedResponse {
   hasNextPage: boolean;

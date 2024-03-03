@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { cn, formatMoney } from "@/lib/utils";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import useGenericModalStore from "@/store/genericModalStore";
-import { deleteGoal } from "@/data/goal";
+import { deleteGoal } from "@/actions/goal";
 import ActionPopover from "@/components/action-popover";
 import { RxCross1, RxPencil2 } from "react-icons/rx";
 

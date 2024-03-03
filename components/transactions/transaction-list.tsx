@@ -1,4 +1,4 @@
-import { TransactionWithAccount } from "@/data/types";
+import { TransactionWithAccount } from "@/actions/types";
 import TransactionCard from "./transaction-card";
 
 const TransactionList = ({

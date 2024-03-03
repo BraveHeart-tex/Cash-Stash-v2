@@ -2,7 +2,7 @@ import TransactionCard from "./transactions/transaction-card";
 import CreateTransactionButton from "./create-buttons/create-transaction-button";
 import AnimatePresenceClient from "@/components/animations/animate-presence";
 import MotionDiv from "@/components/animations/motion-div";
-import { TransactionWithAccount } from "@/data/types";
+import { TransactionWithAccount } from "@/actions/types";
 
 interface ITransactionHistoryProps {
   transactions: TransactionWithAccount[] | null;

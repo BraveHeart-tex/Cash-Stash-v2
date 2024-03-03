@@ -3,7 +3,7 @@ import { FormEvent, useRef, useTransition } from "react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { resendEmailVerificationCode } from "@/data/auth";
+import { resendEmailVerificationCode } from "@/actions/auth";
 import { showErrorToast, showSuccessToast } from "./ui/use-toast";
 
 const ResendNotificationInput = () => {
