@@ -22,6 +22,7 @@ import {
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import connection from "@/lib/data/mysql";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
+import { createId } from "@paralleldrive/cuid2";
 
 export const createBudget = async (
   data: BudgetSchemaType
@@ -33,15 +34,20 @@ export const createBudget = async (
 
   try {
     const validatedData = budgetSchema.parse(data);
+    const createBudgetDto = {
+      ...validatedData,
+      id: createId(),
+      userId: user.id,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
 
-    const createdBudget = await prisma.budget.create({
-      data: {
-        ...validatedData,
-        userId: user.id,
-      },
-    });
+    const [createBudgetResponse] = await connection.query<ResultSetHeader>(
+      "INSERT INTO BUDGET (id, userId, name, category, budgetAmount, spentAmount, progress, createdAt, updatedAt) VALUES (:id, :userId, :name, :category, :budgetAmount, :spentAmount,:progress, :createdAt, :updatedAt)",
+      createBudgetDto
+    );
 
-    if (!createdBudget) {
+    if (createBudgetResponse.affectedRows === 0) {
       return {
         error:
           "There was a problem while creating your budget. Please try again later.",
@@ -53,11 +59,11 @@ export const createBudget = async (
       invalidateKeysByPrefix(
         generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_BUDGETS, user.id)
       ),
-      redis.hset(getBudgetKey(createdBudget.id), createdBudget),
+      redis.hset(getBudgetKey(createBudgetDto.id), createBudgetDto),
     ]);
 
     return {
-      data: createdBudget,
+      data: createBudgetDto,
       fieldErrors: [],
     };
   } catch (error) {
