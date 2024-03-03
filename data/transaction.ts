@@ -146,55 +146,45 @@ export const updateTransaction = async (
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
+  const connection = await pool.getConnection();
+  await connection.beginTransaction();
+
   try {
     const { amount: oldAmount, accountId: oldAccountId } = oldTransaction;
 
     const validatedData = transactionSchema.parse(values);
 
-    let dbTransactions: any[] = [];
+    const [updateAccountResponse] = await connection.query<RowDataPacket[]>(
+      `UPDATE Account SET balance = balance - :oldAmount WHERE id = :oldAccountId; UPDATE Account SET balance = balance + :amount WHERE id = :accountId;`,
+      {
+        oldAmount,
+        oldAccountId,
+        amount: validatedData.amount,
+        accountId: validatedData.accountId,
+      }
+    );
 
-    if (oldAccountId !== validatedData.accountId) {
-      dbTransactions.push(
-        prisma.account.update({
-          where: {
-            id: oldAccountId,
-          },
-          data: {
-            balance: {
-              decrement: oldAmount,
-            },
-          },
-        })
-      );
+    const affectedRows = updateAccountResponse[0].affectedRows;
+
+    if (affectedRows === 0) {
+      throw new Error("Failed to update account balance");
     }
 
-    dbTransactions.push(
-      prisma.transaction.update({
-        where: {
-          id: transactionId,
-        },
-        data: {
-          ...validatedData,
-        },
-      })
+    const [transactionUpdateResponse] = await connection.query<RowDataPacket[]>(
+      "UPDATE Transaction SET :validatedData WHERE id = :transactionId; SELECT * FROM Transaction WHERE id = :transactionId;",
+      {
+        validatedData,
+        transactionId,
+      }
     );
 
-    dbTransactions.push(
-      prisma.account.update({
-        where: {
-          id: validatedData.accountId,
-        },
-        data: {
-          balance: {
-            increment: validatedData.amount,
-          },
-        },
-      })
-    );
+    if (transactionUpdateResponse[0].affectedRows === 0) {
+      throw new Error("Failed to update transaction");
+    }
 
-    // eslint-disable-next-line no-unused-vars
-    const [oldAccount, updatedTransaction, newAccount] =
-      await prisma.$transaction(dbTransactions);
+    const updatedTransaction = transactionUpdateResponse[1][0];
+
+    await connection.commit();
 
     await Promise.all([
       invalidateKeysByPrefix(
@@ -215,10 +205,13 @@ export const updateTransaction = async (
     ]);
 
     return {
-      data: updatedTransaction,
+      data: updatedTransaction as Transaction,
       fieldErrors: [],
     };
   } catch (error) {
+    console.error(error);
+    await connection.rollback();
+
     if (error instanceof ZodError) {
       return processZodError(error);
     }
