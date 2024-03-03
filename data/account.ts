@@ -232,7 +232,7 @@ export const getPaginatedAccounts = async ({
       console.info("CACHE HIT");
       const parsedData = JSON.parse(cachedData);
       return {
-        accounts: parsedData.accounts,
+        accounts: parsedData.accounts as Account[],
         hasNextPage: parsedData.totalCount > skipAmount + PAGE_SIZE,
         hasPreviousPage: pageNumber > 1,
         totalPages: Math.ceil(parsedData.totalCount / PAGE_SIZE),
@@ -270,7 +270,7 @@ export const getPaginatedAccounts = async ({
     }
 
     return {
-      accounts,
+      accounts: accounts as Account[],
       hasNextPage: totalCount > skipAmount + PAGE_SIZE,
       hasPreviousPage: pageNumber > 1,
       totalPages: Math.ceil(totalCount / PAGE_SIZE),

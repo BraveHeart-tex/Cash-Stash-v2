@@ -163,14 +163,6 @@ export const getPaginatedGoals = async ({
   try {
     const PAGE_SIZE = 12;
     const skipAmount = (pageNumber - 1) * PAGE_SIZE;
-    const orderByCondition =
-      sortBy && sortDirection
-        ? {
-            orderBy: {
-              [sortBy]: sortDirection,
-            },
-          }
-        : {};
 
     const cacheKey = getPaginatedGoalsKeys({
       userId: user.id,
@@ -179,6 +171,30 @@ export const getPaginatedGoals = async ({
       sortBy,
       sortDirection,
     });
+
+    let goalsQuery =
+      "SELECT * FROM GOAL WHERE userId = :userId and name like :query";
+    let totalCountQuery =
+      "SELECT COUNT(*) as totalCount FROM GOAL WHERE userId = :userId and name like :query";
+
+    let goalsQueryParam: {
+      userId: string;
+      query: string;
+      limit?: number;
+      offset?: number;
+    } = {
+      userId: user.id,
+      query: `%${query}%`,
+    };
+    let totalCountQueryParams: {
+      userId: string;
+      query: string;
+    } = {
+      userId: user.id,
+      query: `%${query}%`,
+    };
+
+    const validSortByValues = ["currentAmount", "goalAmount"];
 
     const cachedGoals = await redis.get(cacheKey);
     if (cachedGoals) {
@@ -193,27 +209,22 @@ export const getPaginatedGoals = async ({
       };
     }
 
-    const [goals, totalCount] = await Promise.all([
-      prisma.goal.findMany({
-        skip: skipAmount,
-        take: PAGE_SIZE,
-        where: {
-          userId: user?.id,
-          name: {
-            contains: query,
-          },
-        },
-        orderBy: orderByCondition?.orderBy,
-      }),
-      prisma.goal.count({
-        where: {
-          userId: user?.id,
-          name: {
-            contains: query,
-          },
-        },
-      }),
+    if (sortBy && sortDirection && validSortByValues.includes(sortBy)) {
+      const validSortDirection =
+        sortDirection.toUpperCase() === "DESC" ? "DESC" : "ASC";
+      goalsQuery += ` ORDER BY ${sortBy} ${validSortDirection}`;
+    }
+
+    goalsQuery += " LIMIT :limit OFFSET :offset";
+    goalsQueryParam.limit = PAGE_SIZE;
+    goalsQueryParam.offset = skipAmount;
+
+    const [[goals], [totalCountResult]] = await Promise.all([
+      connection.query<RowDataPacket[]>(goalsQuery, goalsQueryParam),
+      connection.query<RowDataPacket[]>(totalCountQuery, totalCountQueryParams),
     ]);
+
+    const totalCount = totalCountResult[0].totalCount;
 
     if (goals.length === 0) {
       return {
@@ -228,7 +239,7 @@ export const getPaginatedGoals = async ({
     await redis.set(cacheKey, JSON.stringify({ goals, totalCount }));
 
     return {
-      goals,
+      goals: goals as Goal[],
       hasNextPage: totalCount > skipAmount + PAGE_SIZE,
       hasPreviousPage: pageNumber > 1,
       totalPages: Math.ceil(totalCount / PAGE_SIZE),

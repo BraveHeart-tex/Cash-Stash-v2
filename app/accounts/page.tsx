@@ -91,8 +91,8 @@ const AccountPage = async ({
 
           <div className="h-[500px] lg:pr-4 col-span-5 mt-2 lg:mt-0 overflow-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 pb-4">
-              {result.accounts.map((budget) => (
-                <AccountCard key={budget.id} account={budget} />
+              {result.accounts.map((account) => (
+                <AccountCard key={account.id} account={account} />
               ))}
             </div>
           </div>
