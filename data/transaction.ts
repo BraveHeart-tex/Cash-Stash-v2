@@ -23,7 +23,7 @@ import {
   IValidatedResponse,
 } from "@/data/types";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
-import pool from "@/lib/data/mysql";
+import asyncPool from "@/lib/data/mysql";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { createId } from "@paralleldrive/cuid2";
 
@@ -36,19 +36,19 @@ export const createTransaction = async (
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
-  const connection = await pool.getConnection();
-  await connection.beginTransaction();
-
   try {
+    await asyncPool.query("START TRANSACTION;");
+
     const validatedData = transactionSchema.parse(values);
 
     // get the account balance
-    const [accountResponse] = await connection.query<RowDataPacket[]>(
+    const [accountResponse] = await asyncPool.query<RowDataPacket[]>(
       "SELECT balance FROM Account WHERE id = ?",
       [validatedData.accountId]
     );
 
     if (accountResponse.length === 0) {
+      await asyncPool.query("ROLLBACK;");
       return {
         error: "Account not found",
         fieldErrors: [],
@@ -65,16 +65,20 @@ export const createTransaction = async (
       updatedAt: new Date(),
     };
 
-    const [createTransactionResponse] = await connection.query<ResultSetHeader>(
+    const [createTransactionResponse] = await asyncPool.query<ResultSetHeader>(
       "INSERT INTO `Transaction` SET ?",
       [createTransactionDto]
     );
 
     if (createTransactionResponse.affectedRows === 0) {
-      throw new Error("Failed to create transaction");
+      await asyncPool.query("ROLLBACK;");
+      return {
+        error: "Failed to create transaction",
+        fieldErrors: [],
+      };
     }
 
-    const [updateAccountResponse] = await connection.query<RowDataPacket[]>(
+    const [updateAccountResponse] = await asyncPool.query<RowDataPacket[]>(
       "UPDATE Account SET balance = :balance WHERE id = :accountId; SELECT * FROM Account WHERE id = :accountId;",
       {
         balance,
@@ -85,12 +89,16 @@ export const createTransaction = async (
     const affectedRows = updateAccountResponse[0].affectedRows;
 
     if (affectedRows === 0) {
-      throw new Error("Failed to update account balance");
+      await asyncPool.query("ROLLBACK;");
+      return {
+        error: "Failed to update account balance",
+        fieldErrors: [],
+      };
     }
 
     const updatedAccount = updateAccountResponse[1][0];
 
-    await connection.commit();
+    await asyncPool.query("COMMIT;");
 
     await Promise.all([
       invalidateKeysByPrefix(
@@ -121,7 +129,7 @@ export const createTransaction = async (
     };
   } catch (error) {
     console.error(error);
-    await connection.rollback();
+    await asyncPool.query("ROLLBACK;");
 
     if (error instanceof ZodError) {
       return processZodError(error);
@@ -146,15 +154,14 @@ export const updateTransaction = async (
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
-  const connection = await pool.getConnection();
-  await connection.beginTransaction();
-
   try {
+    await asyncPool.query("START TRANSACTION;");
+
     const { amount: oldAmount, accountId: oldAccountId } = oldTransaction;
 
     const validatedData = transactionSchema.parse(values);
 
-    const [updateAccountResponse] = await connection.query<RowDataPacket[]>(
+    const [updateAccountResponse] = await asyncPool.query<RowDataPacket[]>(
       `UPDATE Account SET balance = balance - :oldAmount WHERE id = :oldAccountId; UPDATE Account SET balance = balance + :amount WHERE id = :accountId;`,
       {
         oldAmount,
@@ -167,10 +174,14 @@ export const updateTransaction = async (
     const affectedRows = updateAccountResponse[0].affectedRows;
 
     if (affectedRows === 0) {
-      throw new Error("Failed to update account balance");
+      await asyncPool.query("ROLLBACK;");
+      return {
+        error: "Failed to update account balance",
+        fieldErrors: [],
+      };
     }
 
-    const [transactionUpdateResponse] = await connection.query<RowDataPacket[]>(
+    const [transactionUpdateResponse] = await asyncPool.query<RowDataPacket[]>(
       "UPDATE Transaction SET :validatedData WHERE id = :transactionId; SELECT * FROM Transaction WHERE id = :transactionId;",
       {
         validatedData,
@@ -179,12 +190,16 @@ export const updateTransaction = async (
     );
 
     if (transactionUpdateResponse[0].affectedRows === 0) {
-      throw new Error("Failed to update transaction");
+      await asyncPool.query("ROLLBACK;");
+      return {
+        error: "Failed to update transaction",
+        fieldErrors: [],
+      };
     }
 
     const updatedTransaction = transactionUpdateResponse[1][0];
 
-    await connection.commit();
+    await asyncPool.query("COMMIT;");
 
     await Promise.all([
       invalidateKeysByPrefix(
@@ -210,7 +225,7 @@ export const updateTransaction = async (
     };
   } catch (error) {
     console.error(error);
-    await connection.rollback();
+    await asyncPool.query("ROLLBACK;");
 
     if (error instanceof ZodError) {
       return processZodError(error);
@@ -233,28 +248,37 @@ export const deleteTransactionById = async (
   }
 
   try {
-    const deletedTransaction = prisma.transaction.delete({
-      where: {
-        id: transactionToDelete.id,
-      },
-    });
+    await asyncPool.query("START TRANSACTION;");
+    const [deleteTransactionResult] = await asyncPool.query<ResultSetHeader>(
+      "DELETE FROM Transaction WHERE id = :transactionId;",
+      {
+        transactionId: transactionToDelete.id,
+      }
+    );
 
-    const updatedAccount = prisma.account.update({
-      where: {
-        id: transactionToDelete.accountId,
-      },
-      data: {
-        balance: {
-          decrement: transactionToDelete.amount,
-        },
-      },
-    });
+    if (deleteTransactionResult.affectedRows === 0) {
+      await asyncPool.query("ROLLBACK;");
+      return {
+        error: "Failed to delete transaction",
+      };
+    }
 
-    // eslint-disable-next-line no-unused-vars
-    const [_, deleteTransactionResult] = await prisma.$transaction([
-      updatedAccount,
-      deletedTransaction,
-    ]);
+    const [accountUpdateResult] = await asyncPool.query<ResultSetHeader>(
+      "UPDATE Account SET balance = balance - :amount WHERE id = :accountId;",
+      {
+        amount: transactionToDelete.amount,
+        accountId: transactionToDelete.accountId,
+      }
+    );
+
+    if (accountUpdateResult.affectedRows === 0) {
+      await asyncPool.query("ROLLBACK;");
+      return {
+        error: "Failed to update account balance",
+      };
+    }
+
+    await asyncPool.query("COMMIT;");
 
     await Promise.all([
       invalidateKeysByPrefix(
@@ -275,9 +299,11 @@ export const deleteTransactionById = async (
     ]);
 
     return {
-      transaction: deleteTransactionResult,
+      data: "Transaction deleted successfully",
     };
   } catch (error) {
+    console.error(error);
+    await asyncPool.query("ROLLBACK;");
     return {
       error:
         "We encountered a problem while deleting the transaction. Please try again later.",

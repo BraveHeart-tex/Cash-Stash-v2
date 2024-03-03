@@ -42,8 +42,8 @@ export const createGoal = async (
     };
 
     const [createGoalResponse] = await pool.query<ResultSetHeader>(
-      "INSERT INTO GOAL (id, name, goalAmount, currentAmount, progress,userId, createdAt, updatedAt) VALUES(:id , :name, :goalAmount, :currentAmount, :progress, :userId, :createdAt, :updatedAt)",
-      createGoalDto
+      "INSERT INTO GOAL SET :createGoalDto",
+      { createGoalDto }
     );
 
     if (createGoalResponse.affectedRows === 0) {

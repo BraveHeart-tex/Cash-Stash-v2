@@ -1,6 +1,6 @@
-import mysql from "mysql2/promise";
+import mysql from "mysql2";
 
-const pool = mysql.createPool({
+export const pool = mysql.createPool({
   host: "127.0.0.1",
   user: "root",
   password: "password123",
@@ -10,11 +10,12 @@ const pool = mysql.createPool({
   connectionLimit: 10,
   maxIdle: 10,
   idleTimeout: 60000,
-  queueLimit: 0,
   enableKeepAlive: true,
   keepAliveInitialDelay: 0,
   namedPlaceholders: true,
   multipleStatements: true,
 });
 
-export default pool;
+const asyncPool = pool.promise();
+
+export default asyncPool;

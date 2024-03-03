@@ -16,7 +16,7 @@ import {
 } from "@/lib/redis/redisUtils";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import accountSchema, { AccountSchemaType } from "@/schemas/account-schema";
-import pool from "@/lib/data/mysql";
+import asyncPool from "@/lib/data/mysql";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 
 export const registerBankAccount = async ({
@@ -43,7 +43,7 @@ export const registerBankAccount = async ({
       updatedAt: new Date(),
     };
 
-    const [createdAccount] = await pool.query<ResultSetHeader>(
+    const [createdAccount] = await asyncPool.query<ResultSetHeader>(
       `INSERT INTO ACCOUNT (id, name, balance, category, userId, createdAt, updatedAt) values (:id, :name, :balance, :category, :userId, :createdAt, :updatedAt);`,
       accountDto
     );
@@ -106,7 +106,7 @@ export const updateBankAccount = async ({
       updatedAt: new Date(),
     };
 
-    const [updatedAccountResult] = await pool.query<RowDataPacket[]>(
+    const [updatedAccountResult] = await asyncPool.query<RowDataPacket[]>(
       `UPDATE ACCOUNT set name = :name, balance = :balance, category = :category, updatedAt = :updatedAt where id = :id; SELECT * from ACCOUNT where id = :id;`,
       updateDto
     );
@@ -156,7 +156,6 @@ export const getPaginatedAccounts = async ({
   sortBy,
   sortDirection,
 }: IGetPaginatedAccountsParams) => {
-  // TODO: Make this HOF
   const { user } = await getUser();
 
   if (!user) {
@@ -240,15 +239,13 @@ export const getPaginatedAccounts = async ({
       };
     }
 
-    const [accounts] = await pool.query<RowDataPacket[]>(
-      accountsQuery,
-      accountsQueryParams
-    );
+    const [accountsPromise, totalCountResultPromise] = await Promise.all([
+      asyncPool.query<RowDataPacket[]>(accountsQuery, accountsQueryParams),
+      asyncPool.query<RowDataPacket[]>(totalCountQuery, totalCountQueryParams),
+    ]);
 
-    const [totalCountResult] = await pool.query<RowDataPacket[]>(
-      totalCountQuery,
-      totalCountQueryParams
-    );
+    const [accounts] = accountsPromise;
+    const [totalCountResult] = totalCountResultPromise;
 
     const totalCount = totalCountResult[0].totalCount;
 
@@ -296,7 +293,7 @@ export const deleteAccount = async (accountId: string) => {
   }
 
   try {
-    const [deletedAccount] = await pool.query<ResultSetHeader>(
+    const [deletedAccount] = await asyncPool.query<ResultSetHeader>(
       "DELETE FROM ACCOUNT WHERE id = ?",
       [accountId]
     );
@@ -342,7 +339,7 @@ export const getTransactionsForAccount = async (accountId: string) => {
       return JSON.parse(cachedData);
     }
 
-    const [transactionsResult] = await pool.query<RowDataPacket[]>(
+    const [transactionsResult] = await asyncPool.query<RowDataPacket[]>(
       `SELECT * FROM TRANSACTION where accountId = :accountId order by createdAt desc limit 10`,
       { accountId }
     );
@@ -367,7 +364,7 @@ export const getCurrentUserAccounts = async () => {
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
-  const [accounts] = await pool.query<RowDataPacket[]>(
+  const [accounts] = await asyncPool.query<RowDataPacket[]>(
     "SELECT id, name from ACCOUNT where userId = ?",
     [user.id]
   );
