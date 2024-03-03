@@ -181,6 +181,18 @@ export interface IGetPaginatedTransactionsParams
   category?: TransactionCategory;
 }
 
+export type TransactionResponse = {
+  id: string;
+  amount: number;
+  description: string;
+  createdAt: Date;
+  category: TransactionCategory;
+  updatedAt: Date;
+  accountId: string;
+  userId: string;
+  accountName: string;
+};
+
 export interface IGetPaginatedTransactionsResponse extends IPaginatedResponse {
-  transactions: TransactionWithAccount[];
+  transactions: TransactionResponse[];
 }

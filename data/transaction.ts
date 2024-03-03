@@ -21,6 +21,7 @@ import {
   IGetPaginatedTransactionsParams,
   IGetPaginatedTransactionsResponse,
   IValidatedResponse,
+  TransactionResponse,
 } from "@/data/types";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import asyncPool from "@/lib/data/mysql";
@@ -325,39 +326,79 @@ export const getPaginatedTransactions = async ({
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
+  const PAGE_SIZE = 12;
+  const skipAmount = (pageNumber - 1) * PAGE_SIZE;
+
+  let transactionsQuery = `SELECT t.*, a.name as accountName FROM Transaction t join Account a on t.accountId = a.id WHERE t.userId = :userId AND description LIKE :query `;
+  let totalTransactionsCountQuery = `SELECT COUNT(*) FROM Transaction WHERE userId = :userId AND description LIKE :query`;
+
+  let transactionsQueryParams: {
+    userId: string;
+    query: string;
+    transactionType?: string;
+    accountId?: string;
+    sortBy?: string;
+    sortDirection?: string;
+    category?: string;
+    limit?: number;
+    offset?: number;
+  } = {
+    userId: user.id,
+    query: `%${query}%`,
+  };
+
+  let totalTransactionsCountQueryParams: {
+    userId: string;
+    query: string;
+    transactionType?: string;
+    accountId?: string;
+    category?: string;
+  } = {
+    userId: user.id,
+    query: `%${query}%`,
+  };
+
+  if (category) {
+    transactionsQuery += ` AND category = :category`;
+    totalTransactionsCountQuery += ` AND category = :category`;
+    transactionsQueryParams.category = category;
+    totalTransactionsCountQueryParams.category = category;
+  }
+
+  if (sortBy && sortDirection) {
+    const sortByOptions = ["createdAt", "amount"];
+    const sortDirections = ["asc", "desc"];
+
+    const validSortBy = sortByOptions.includes(sortBy) ? sortBy : "createdAt";
+    const validSortDirection = sortDirections.includes(sortDirection)
+      ? sortDirection
+      : "desc";
+
+    transactionsQuery += ` ORDER BY ${validSortBy} ${validSortDirection}`;
+  }
+
+  if (transactionType === "income") {
+    transactionsQuery += ` AND amount > 0`;
+    totalTransactionsCountQuery += ` AND amount > 0`;
+  }
+
+  if (transactionType === "expense") {
+    transactionsQuery += ` AND amount < 0`;
+    totalTransactionsCountQuery += ` AND amount < 0`;
+  }
+
+  if (accountId) {
+    transactionsQuery += ` AND accountId = :accountId`;
+    totalTransactionsCountQuery += ` AND accountId = :accountId`;
+    transactionsQueryParams.accountId = accountId;
+    totalTransactionsCountQueryParams.accountId = accountId;
+  }
+
+  transactionsQuery += ` LIMIT :limit OFFSET :offset`;
+  transactionsQueryParams.limit = PAGE_SIZE;
+  transactionsQueryParams.offset = skipAmount;
+
   try {
-    const whereCondition: Prisma.TransactionWhereInput = {
-      userId: user.id,
-      description: {
-        contains: query,
-      },
-    };
-
-    if (category) {
-      whereCondition.category = {
-        equals: category,
-      };
-    }
-
-    if (transactionType === "income") {
-      whereCondition.amount = {
-        gt: 0,
-      };
-    }
-
-    if (transactionType === "expense") {
-      whereCondition.amount = {
-        lt: 0,
-      };
-    }
-
-    if (accountId) {
-      whereCondition.accountId = accountId;
-    }
-
-    const PAGE_SIZE = 12;
-    const skipAmount = (pageNumber - 1) * PAGE_SIZE;
-
     const cacheKey = getPaginatedTransactionsKey({
       userId: user.id,
       transactionType,
@@ -373,7 +414,7 @@ export const getPaginatedTransactions = async ({
 
     if (cachedData) {
       const parsedData = JSON.parse(cachedData);
-      const cachedResult = parsedData.result;
+      const cachedResult = parsedData.transactions;
       const totalCount = parsedData.totalCount;
 
       return {
@@ -389,30 +430,26 @@ export const getPaginatedTransactions = async ({
       };
     }
 
-    const result = await prisma.transaction.findMany({
-      where: whereCondition,
-      orderBy: {
-        [sortBy]: sortDirection,
-      },
-      include: {
-        account: {
-          select: {
-            name: true,
-          },
-        },
-      },
-      take: PAGE_SIZE,
-      skip: skipAmount,
-    });
+    const [transactionsPromise, totalCountPromise] = await Promise.all([
+      asyncPool.query<RowDataPacket[]>(
+        transactionsQuery,
+        transactionsQueryParams
+      ),
+      asyncPool.query<RowDataPacket[]>(
+        totalTransactionsCountQuery,
+        totalTransactionsCountQueryParams
+      ),
+    ]);
 
-    const totalCount = await prisma.transaction.count({
-      where: whereCondition,
-    });
+    const [transactions] = transactionsPromise;
+    const [totalCountResult] = totalCountPromise;
+
+    const totalCount = totalCountResult[0].totalCount;
 
     await redis.set(
       cacheKey,
       JSON.stringify({
-        result,
+        transactions,
         totalCount,
       }),
       "EX",
@@ -420,7 +457,7 @@ export const getPaginatedTransactions = async ({
     );
 
     return {
-      transactions: result,
+      transactions: transactions as TransactionResponse[],
       hasNextPage: totalCount > skipAmount + PAGE_SIZE,
       hasPreviousPage: pageNumber > 1,
       totalPages: Math.ceil(totalCount / PAGE_SIZE),
