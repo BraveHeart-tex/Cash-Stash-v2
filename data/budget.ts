@@ -20,6 +20,8 @@ import {
   mapRedisHashToBudget,
 } from "@/lib/redis/redisUtils";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
+import connection from "@/lib/data/mysql";
+import { ResultSetHeader } from "mysql2";
 
 export const createBudget = async (
   data: BudgetSchemaType
@@ -239,11 +241,12 @@ export const deleteBudget = async (id: string) => {
   }
 
   try {
-    const response = await prisma.budget.delete({
-      where: { id },
-    });
+    const [deleteBudgetResponse] = await connection.query<ResultSetHeader>(
+      "DELETE FROM Budget WHERE id = ?",
+      [id]
+    );
 
-    if (!response) {
+    if (deleteBudgetResponse.affectedRows === 0) {
       return {
         error: "We encountered a problem while deleting the budget.",
       };
@@ -257,7 +260,7 @@ export const deleteBudget = async (id: string) => {
     ]);
 
     return {
-      data: response,
+      data: "Budget deleted successfully.",
     };
   } catch (error) {
     console.error(error);
