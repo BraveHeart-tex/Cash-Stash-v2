@@ -20,7 +20,7 @@ import {
 } from "@/lib/redis/redisUtils";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import { createBudgetDto } from "@/lib/database/dto/budgetDto";
-import budgetRepository from "@/lib/database/budget";
+import budgetRepository from "@/lib/database/budgetRepository";
 import { BudgetCategory } from "@/entities/budget";
 
 export const createBudget = async (

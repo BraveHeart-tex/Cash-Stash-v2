@@ -19,9 +19,8 @@ import {
   mapRedisHashToGoal,
 } from "@/lib/redis/redisUtils";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
-import { createId } from "@paralleldrive/cuid2";
-import pool from "@/lib/database/connection";
-import { ResultSetHeader, RowDataPacket } from "mysql2";
+import { createGoalDto } from "@/lib/database/dto/goalDto";
+import goalRepository from "@/lib/database/goalRepository";
 
 export const createGoal = async (
   values: GoalSchemaType
@@ -33,20 +32,11 @@ export const createGoal = async (
 
   try {
     const validatedData = goalSchema.parse(values);
-    const createGoalDto = {
-      ...validatedData,
-      id: createId(),
-      userId: user.id,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+    const goalDto = createGoalDto(validatedData, user.id);
 
-    const [createGoalResponse] = await pool.query<ResultSetHeader>(
-      "INSERT INTO GOAL SET :createGoalDto",
-      { createGoalDto }
-    );
+    const affectedRows = await goalRepository.create(goalDto);
 
-    if (createGoalResponse.affectedRows === 0) {
+    if (affectedRows === 0) {
       return {
         error:
           "There was a problem while creating your goal. Please try again later.",
@@ -58,11 +48,11 @@ export const createGoal = async (
       invalidateKeysByPrefix(
         generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_GOALS, user.id)
       ),
-      redis.hset(getGoalKey(createGoalDto.id), createGoalDto),
+      redis.hset(getGoalKey(goalDto.id), goalDto),
     ]);
 
     return {
-      data: createGoalDto,
+      data: goalDto,
       fieldErrors: [],
     };
   } catch (error) {
@@ -94,12 +84,9 @@ export const updateGoal = async (
   if (goalFromCache) {
     goalToBeUpdated = mapRedisHashToGoal(goalFromCache);
   } else {
-    const [goalResponse] = await pool.query<RowDataPacket[]>(
-      "SELECT * FROM GOAL WHERE id = :id",
-      { id: goalId }
-    );
+    const goal = await goalRepository.getById(goalId);
 
-    goalToBeUpdated = goalResponse[0] as Goal;
+    goalToBeUpdated = goal;
   }
 
   if (!goalToBeUpdated)
@@ -113,12 +100,10 @@ export const updateGoal = async (
       updatedAt: new Date(),
     } as Goal;
 
-    const [updateGoalResult] = await pool.query<ResultSetHeader>(
-      "UPDATE GOAL set name = :name, goalAmount = :goalAmount, currentAmount = :currentAmount, progress = :progress, updatedAt = :updatedAt WHERE id = :id",
-      updatedGoalDto
-    );
+    const { affectedRows, updatedGoal } =
+      await goalRepository.update(updatedGoalDto);
 
-    if (updateGoalResult.affectedRows === 0)
+    if (affectedRows === 0 || !updatedGoal)
       return {
         error:
           "There was a problem while trying to update your goal. Please try again later.",
@@ -171,30 +156,6 @@ export const getPaginatedGoals = async ({
       sortDirection,
     });
 
-    let goalsQuery =
-      "SELECT * FROM GOAL WHERE userId = :userId and name like :query";
-    let totalCountQuery =
-      "SELECT COUNT(*) as totalCount FROM GOAL WHERE userId = :userId and name like :query";
-
-    let goalsQueryParam: {
-      userId: string;
-      query: string;
-      limit?: number;
-      offset?: number;
-    } = {
-      userId: user.id,
-      query: `%${query}%`,
-    };
-    let totalCountQueryParams: {
-      userId: string;
-      query: string;
-    } = {
-      userId: user.id,
-      query: `%${query}%`,
-    };
-
-    const validSortByValues = ["currentAmount", "goalAmount"];
-
     const cachedGoals = await redis.get(cacheKey);
     if (cachedGoals) {
       console.log("PAGINATED GOALS CACHE HIT");
@@ -208,22 +169,13 @@ export const getPaginatedGoals = async ({
       };
     }
 
-    if (sortBy && sortDirection && validSortByValues.includes(sortBy)) {
-      const validSortDirection =
-        sortDirection.toUpperCase() === "DESC" ? "DESC" : "ASC";
-      goalsQuery += ` ORDER BY ${sortBy} ${validSortDirection}`;
-    }
-
-    goalsQuery += " LIMIT :limit OFFSET :offset";
-    goalsQueryParam.limit = PAGE_SIZE;
-    goalsQueryParam.offset = skipAmount;
-
-    const [[goals], [totalCountResult]] = await Promise.all([
-      pool.query<RowDataPacket[]>(goalsQuery, goalsQueryParam),
-      pool.query<RowDataPacket[]>(totalCountQuery, totalCountQueryParams),
-    ]);
-
-    const totalCount = totalCountResult[0].totalCount;
+    const { goals, totalCount } = await goalRepository.getMultiple({
+      page: pageNumber,
+      userId: user.id,
+      query,
+      sortBy,
+      sortDirection,
+    });
 
     if (goals.length === 0) {
       return {
@@ -238,7 +190,7 @@ export const getPaginatedGoals = async ({
     await redis.set(cacheKey, JSON.stringify({ goals, totalCount }));
 
     return {
-      goals: goals as Goal[],
+      goals: goals,
       hasNextPage: totalCount > skipAmount + PAGE_SIZE,
       hasPreviousPage: pageNumber > 1,
       totalPages: Math.ceil(totalCount / PAGE_SIZE),
@@ -264,12 +216,9 @@ export const deleteGoal = async (goalId: string) => {
   }
 
   try {
-    const [deleteGoalResponse] = await pool.query<ResultSetHeader>(
-      "DELETE FROM GOAL WHERE id = :id",
-      { id: goalId }
-    );
+    const affectedRows = await goalRepository.deleteById(goalId);
 
-    if (deleteGoalResponse.affectedRows === 0) {
+    if (affectedRows === 0) {
       return {
         error:
           "There was a problem while deleting your goal. Please try again later.",

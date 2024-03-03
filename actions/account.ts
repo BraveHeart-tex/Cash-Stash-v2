@@ -18,9 +18,9 @@ import {
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import accountSchema, { AccountSchemaType } from "@/schemas/account-schema";
 import { createAccountDto } from "@/lib/database/dto/accountDto";
-import accountRepository from "@/lib/database/accounts";
+import accountRepository from "@/lib/database/accountRepository";
 import { Account, AccountCategory } from "@/entities/account";
-import transactionRepository from "@/lib/database/transactions";
+import transactionRepository from "@/lib/database/transactionRepository";
 
 export const registerBankAccount = async ({
   balance,
