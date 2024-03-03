@@ -21,7 +21,7 @@ import {
 } from "@/lib/redis/redisUtils";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import connection from "@/lib/data/mysql";
-import { ResultSetHeader } from "mysql2";
+import { ResultSetHeader, RowDataPacket } from "mysql2";
 
 export const createBudget = async (
   data: BudgetSchemaType
@@ -162,10 +162,13 @@ export const getPaginatedBudgets = async ({
     };
   }
 
-  const categoryCondition = category ? { category } : {};
-  const sortByCondition = sortBy
-    ? { orderBy: { [sortBy]: sortDirection || "asc" } }
-    : {};
+  const validBudgetSortByOptions: {
+    [key: string]: boolean;
+  } = {
+    progress: true,
+    spentAmount: true,
+    budgetAmount: true,
+  };
 
   const cacheKey = getPaginatedBudgetsKey({
     userId: user.id,
@@ -187,31 +190,58 @@ export const getPaginatedBudgets = async ({
       currentPage: pageNumber,
     };
   }
+
   console.log("Budgets CACHE MISS");
 
-  const [budgets, totalCount] = await Promise.all([
-    prisma.budget.findMany({
-      skip: skipAmount,
-      take: PAGE_SIZE,
-      where: {
-        userId: user?.id,
-        name: {
-          contains: query,
-        },
-        ...categoryCondition,
-      },
-      orderBy: sortByCondition?.orderBy,
-    }),
-    prisma.budget.count({
-      where: {
-        userId: user?.id,
-        name: {
-          contains: query,
-        },
-        ...categoryCondition,
-      },
-    }),
+  let budgetsQuery = `SELECT * FROM Budget where userId = :userId and name like :query`;
+  let totalCountQuery = `SELECT COUNT(*) as totalCount FROM Budget where userId = :userId and name like :query`;
+
+  let budgetsQueryParams: {
+    userId: string;
+    query: string;
+    category?: BudgetCategory;
+    limit?: number;
+    offset?: number;
+  } = {
+    userId: user.id,
+    query: `%${query}%`,
+  };
+
+  let totalCountQueryParams: {
+    userId: string;
+    query: string;
+    category?: BudgetCategory;
+  } = {
+    userId: user.id,
+    query: `%${query}%`,
+  };
+
+  if (category) {
+    budgetsQuery += ` and category = :category`;
+    totalCountQuery += ` and category = :category`;
+    budgetsQueryParams.category = category;
+    totalCountQueryParams.category = category;
+  }
+
+  if (sortBy && sortDirection) {
+    const validSortDirection =
+      sortDirection.toUpperCase() === "DESC" ? "DESC" : "ASC";
+    const validSortBy = validBudgetSortByOptions[sortBy] ? sortBy : "id";
+
+    budgetsQuery += ` ORDER BY ${validSortBy} ${validSortDirection}`;
+  }
+
+  budgetsQuery += ` LIMIT :limit OFFSET :offset`;
+  budgetsQueryParams.limit = PAGE_SIZE;
+  budgetsQueryParams.offset = skipAmount;
+
+  // Must extend the RowDataPacket with the Budget type
+  const [[budgets], [totalCountResult]] = await Promise.all([
+    connection.query<RowDataPacket[]>(budgetsQuery, budgetsQueryParams),
+    connection.query<RowDataPacket[]>(totalCountQuery, totalCountQueryParams),
   ]);
+
+  const totalCount = totalCountResult[0].totalCount;
 
   if (budgets.length === 0) {
     return {
@@ -226,7 +256,7 @@ export const getPaginatedBudgets = async ({
   await redis.set(cacheKey, JSON.stringify({ budgets, totalCount }));
 
   return {
-    budgets,
+    budgets: budgets as Budget[],
     hasNextPage: totalCount > skipAmount + PAGE_SIZE,
     hasPreviousPage: pageNumber > 1,
     totalPages: Math.ceil(totalCount / PAGE_SIZE),
