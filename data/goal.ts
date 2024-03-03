@@ -265,11 +265,12 @@ export const deleteGoal = async (goalId: string) => {
   }
 
   try {
-    const deletedGoal = await prisma.goal.delete({
-      where: { id: goalId },
-    });
+    const [deleteGoalResponse] = await connection.query<ResultSetHeader>(
+      "DELETE FROM GOAL WHERE id = :id",
+      { id: goalId }
+    );
 
-    if (!deletedGoal) {
+    if (deleteGoalResponse.affectedRows === 0) {
       return {
         error:
           "There was a problem while deleting your goal. Please try again later.",
@@ -283,7 +284,7 @@ export const deleteGoal = async (goalId: string) => {
       redis.del(getGoalKey(goalId)),
     ]);
 
-    return { data: deletedGoal };
+    return { data: "Goal deleted successfully." };
   } catch (error) {
     console.error(error);
     return {
