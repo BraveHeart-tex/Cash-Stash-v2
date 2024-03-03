@@ -1,14 +1,18 @@
 /* eslint-disable no-unused-vars */
 import { Lucia } from "lucia";
-import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
 import { PrismaClient } from "@prisma/client";
+import { Mysql2Adapter } from "@lucia-auth/adapter-mysql";
+import connection from "@/lib/data/mysql";
 
 declare global {
   var client: PrismaClient | undefined;
 }
 
 const prisma = globalThis.client || new PrismaClient();
-const adapter = new PrismaAdapter(prisma.session, prisma.user);
+const adapter = new Mysql2Adapter(connection, {
+  user: "User",
+  session: "Session",
+});
 
 export const lucia = new Lucia(adapter, {
   sessionCookie: {
