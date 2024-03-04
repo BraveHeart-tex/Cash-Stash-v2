@@ -19,7 +19,7 @@ interface IGetMultipleBudgetsParams {
 const getById = async (id: string) => {
   try {
     const budget = await SelectQuery<Budget>(
-      "SELECT * FROM BUDGET WHERE id = :id",
+      "SELECT * FROM Budget WHERE id = :id",
       { id }
     );
 
@@ -117,7 +117,7 @@ const getMultiple = async ({
 const create = async (budgetDto: BudgetDto) => {
   try {
     const createBudgetResponse = await ModifyQuery(
-      `INSERT INTO BUDGET SET :budgetDto`,
+      `INSERT INTO Budget SET :budgetDto`,
       { budgetDto }
     );
 
@@ -131,7 +131,7 @@ const create = async (budgetDto: BudgetDto) => {
 const update = async (budgetDto: Partial<BudgetDto>) => {
   try {
     const updatedBudgetResponse = await ModifyQueryWithSelect<Budget>(
-      "UPDATE BUDGET SET name = :name, category = :category, budgetAmount = :budgetAmount, spentAmount = :spentAmount, progress = :progress, updatedAt = :updatedAt WHERE id = :id; SELECT * FROM BUDGET WHERE id = :id",
+      "UPDATE Budget SET name = :name, category = :category, budgetAmount = :budgetAmount, spentAmount = :spentAmount, progress = :progress, updatedAt = :updatedAt WHERE id = :id; SELECT * FROM Budget WHERE id = :id",
       budgetDto
     );
 
@@ -152,7 +152,7 @@ const update = async (budgetDto: Partial<BudgetDto>) => {
 const deleteById = async (id: string) => {
   try {
     const deleteBudgetResponse = await ModifyQuery(
-      "DELETE FROM BUDGET WHERE id = :id",
+      "DELETE FROM Budget WHERE id = :id",
       { id }
     );
 

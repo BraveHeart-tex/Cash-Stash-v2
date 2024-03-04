@@ -102,7 +102,7 @@ const update = async (
     }
 
     const updateTransactionResponse = await ModifyQueryWithSelect<Transaction>(
-      "UPDATE Transaction SET :validatedData WHERE id = :transactionId; SELECT * FROM Transaction WHERE id = :transactionId;",
+      "UPDATE `Transaction` SET :validatedData WHERE id = :transactionId; SELECT * FROM `Transaction` WHERE id = :transactionId;",
       {
         validatedData: transactionDto,
         transactionId: transactionDto.id,
@@ -137,7 +137,7 @@ const getByAccountId = async (accountId: string) => {
   try {
     return await SelectQuery<Transaction>(
       `SELECT *
-       FROM TRANSACTION
+       FROM Transaction
        where accountId = :accountId
        order by createdAt desc
        limit 10`,

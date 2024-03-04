@@ -27,8 +27,10 @@ const getMultiple = async ({
 }: IGetMultipleAccountsParams) => {
   const { pageSize, skipAmount } = getPageSizeAndSkipAmount(page);
 
-  let accountsQuery = `SELECT * FROM ACCOUNT where userId = :userId and name like :query`;
-  let totalCountQuery = `SELECT COUNT(*) as totalCount FROM ACCOUNT where userId = :userId and name like :query`;
+  let accountsQuery =
+    "SELECT * FROM Account where userId = :userId and name like :query";
+  let totalCountQuery =
+    "SELECT COUNT(*) as totalCount FROM Account where userId = :userId and name like :query";
 
   let accountsQueryParams: {
     userId: string;
@@ -91,7 +93,7 @@ const getMultiple = async ({
 const create = async (accountDto: AccountDto) => {
   try {
     const createdAccount = await ModifyQuery(
-      "INSERT INTO ACCOUNT (id, name, balance, category, userId, createdAt, updatedAt) values (:id, :name, :balance, :category, :userId, :createdAt, :updatedAt);",
+      "INSERT INTO Account (id, name, balance, category, userId, createdAt, updatedAt) values (:id, :name, :balance, :category, :userId, :createdAt, :updatedAt);",
       accountDto
     );
 
@@ -105,7 +107,7 @@ const create = async (accountDto: AccountDto) => {
 const update = async (accountDto: Partial<AccountDto>) => {
   try {
     const updateResult = await ModifyQueryWithSelect<Account>(
-      "UPDATE ACCOUNT set name = :name, balance = :balance, category = :category, updatedAt = :updatedAt where id = :id; SELECT * from ACCOUNT where id = :id;",
+      "UPDATE Account set name = :name, balance = :balance, category = :category, updatedAt = :updatedAt where id = :id; SELECT * from Account where id = :id;",
       accountDto
     );
 

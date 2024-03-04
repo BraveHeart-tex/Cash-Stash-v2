@@ -10,7 +10,7 @@ import { getPageSizeAndSkipAmount } from "@/lib/utils";
 const create = async (goalDto: GoalDto) => {
   try {
     const createGoalResponse = await ModifyQuery(
-      "INSERT INTO GOAL SET :goalDto",
+      "INSERT INTO Goal SET :goalDto",
       { goalDto }
     );
 
@@ -23,7 +23,7 @@ const create = async (goalDto: GoalDto) => {
 
 const getById = async (id: string) => {
   try {
-    const goal = await SelectQuery<Goal>("SELECT * FROM GOAL where id = :id", {
+    const goal = await SelectQuery<Goal>("SELECT * FROM Goal where id = :id", {
       id,
     });
 
@@ -52,9 +52,9 @@ const getMultiple = async ({
   const { pageSize, skipAmount } = getPageSizeAndSkipAmount(page);
 
   let goalsQuery =
-    "SELECT * FROM GOAL WHERE userId = :userId and name like :query";
+    "SELECT * FROM Goal WHERE userId = :userId and name like :query";
   let totalCountQuery =
-    "SELECT COUNT(*) as totalCount FROM GOAL WHERE userId = :userId and name like :query";
+    "SELECT COUNT(*) as totalCount FROM Goal WHERE userId = :userId and name like :query";
 
   let goalsQueryParam: {
     userId: string;
@@ -110,7 +110,7 @@ const getMultiple = async ({
 
 const deleteById = async (id: string) => {
   try {
-    const deletedGoal = await ModifyQuery("DELETE FROM GOAL WHERE id = :id", {
+    const deletedGoal = await ModifyQuery("DELETE FROM Goal WHERE id = :id", {
       id,
     });
 
@@ -124,7 +124,7 @@ const deleteById = async (id: string) => {
 const update = async (goalDto: Partial<GoalDto>) => {
   try {
     const updateResult = await ModifyQueryWithSelect<Goal>(
-      "UPDATE GOAL set name = :name, goalAmount = :goalAmount, currentAmount = :currentAmount, progress = :progress, updatedAt = :updatedAt WHERE id = :id; SELECT * from GOAL where id = :id;",
+      "UPDATE Goal set name = :name, goalAmount = :goalAmount, currentAmount = :currentAmount, progress = :progress, updatedAt = :updatedAt WHERE id = :id; SELECT * from Goal where id = :id;",
       goalDto
     );
 
