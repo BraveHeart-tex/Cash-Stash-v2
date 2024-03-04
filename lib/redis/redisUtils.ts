@@ -1,6 +1,6 @@
-import { redis } from ".";
 import { CACHE_PREFIXES } from "@/lib/constants";
 import { Budget, BudgetCategory, Goal } from "@prisma/client";
+import redis from "@/lib/redis/redisConnection";
 
 interface Entity {
   [key: string]: any;

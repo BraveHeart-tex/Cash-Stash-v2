@@ -6,11 +6,11 @@ import { Budget } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import {
-  IValidatedResponse,
   IGetPaginatedBudgetsParams,
   IGetPaginatedBudgetsResponse,
+  IValidatedResponse,
 } from "@/actions/types";
-import redis from "@/lib/redis";
+import redis from "@/lib/redis/redisConnection";
 import {
   generateCachePrefixWithUserId,
   getBudgetKey,
@@ -20,7 +20,7 @@ import {
 } from "@/lib/redis/redisUtils";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import { createBudgetDto } from "@/lib/database/dto/budgetDto";
-import budgetRepository from "@/lib/database/budgetRepository";
+import budgetRepository from "@/lib/database/repository/budgetRepository";
 import { BudgetCategory } from "@/entities/budget";
 
 export const createBudget = async (
@@ -88,8 +88,7 @@ export const updateBudget = async (
     budgetToBeUpdated = mapRedisHashToBudget(budgetFromCache);
   } else {
     console.log("UPDATE Budget CACHE MISS");
-    const budget = await budgetRepository.getById(budgetId);
-    budgetToBeUpdated = budget;
+    budgetToBeUpdated = await budgetRepository.getById(budgetId);
   }
 
   if (!budgetToBeUpdated)

@@ -7,7 +7,7 @@ import {
   IGetPaginatedAccountsParams,
   IValidatedResponse,
 } from "@/actions/types";
-import redis from "@/lib/redis";
+import redis from "@/lib/redis/redisConnection";
 import {
   generateCachePrefixWithUserId,
   getAccountKey,
@@ -18,9 +18,9 @@ import {
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import accountSchema, { AccountSchemaType } from "@/schemas/account-schema";
 import { createAccountDto } from "@/lib/database/dto/accountDto";
-import accountRepository from "@/lib/database/accountRepository";
+import accountRepository from "@/lib/database/repository/accountRepository";
 import { Account, AccountCategory } from "@/entities/account";
-import transactionRepository from "@/lib/database/transactionRepository";
+import transactionRepository from "@/lib/database/repository/transactionRepository";
 
 export const registerBankAccount = async ({
   balance,
@@ -173,7 +173,6 @@ export const getPaginatedAccounts = async ({
     });
 
     const cachedData = await redis.get(cacheKey);
-    console.log("cachedData", cachedData);
 
     if (cachedData) {
       console.info("CACHE HIT");

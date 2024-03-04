@@ -6,11 +6,11 @@ import { Goal } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import {
-  IValidatedResponse,
   IGetPaginatedGoalsParams,
   IGetPaginatedGoalsResponse,
+  IValidatedResponse,
 } from "@/actions/types";
-import redis from "@/lib/redis";
+import redis from "@/lib/redis/redisConnection";
 import {
   generateCachePrefixWithUserId,
   getGoalKey,
@@ -20,7 +20,7 @@ import {
 } from "@/lib/redis/redisUtils";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import { createGoalDto } from "@/lib/database/dto/goalDto";
-import goalRepository from "@/lib/database/goalRepository";
+import goalRepository from "@/lib/database/repository/goalRepository";
 
 export const createGoal = async (
   values: GoalSchemaType
@@ -84,9 +84,7 @@ export const updateGoal = async (
   if (goalFromCache) {
     goalToBeUpdated = mapRedisHashToGoal(goalFromCache);
   } else {
-    const goal = await goalRepository.getById(goalId);
-
-    goalToBeUpdated = goal;
+    goalToBeUpdated = await goalRepository.getById(goalId);
   }
 
   if (!goalToBeUpdated)
