@@ -10,17 +10,16 @@ import {
   IGetPaginatedGoalsResponse,
   IValidatedResponse,
 } from "@/actions/types";
-import redis from "@/lib/redis/redisConnection";
 import {
   generateCachePrefixWithUserId,
   getGoalKey,
   getPaginatedGoalsKeys,
-  invalidateKeysByPrefix,
   mapRedisHashToGoal,
 } from "@/lib/redis/redisUtils";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import { createGoalDto } from "@/lib/database/dto/goalDto";
 import goalRepository from "@/lib/database/repository/goalRepository";
+import redisService from "@/lib/redis/redisService";
 
 export const createGoal = async (
   values: GoalSchemaType
@@ -45,10 +44,10 @@ export const createGoal = async (
     }
 
     await Promise.all([
-      invalidateKeysByPrefix(
+      redisService.invalidateKeysByPrefix(
         generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_GOALS, user.id)
       ),
-      redis.hset(getGoalKey(goalDto.id), goalDto),
+      redisService.hset(getGoalKey(goalDto.id), goalDto),
     ]);
 
     return {
@@ -80,7 +79,7 @@ export const updateGoal = async (
 
   let goalToBeUpdated: Goal | null;
 
-  const goalFromCache = await redis.hgetall(getGoalKey(goalId));
+  const goalFromCache = await redisService.hgetall(getGoalKey(goalId));
   if (goalFromCache) {
     goalToBeUpdated = mapRedisHashToGoal(goalFromCache);
   } else {
@@ -109,10 +108,10 @@ export const updateGoal = async (
       };
 
     await Promise.all([
-      invalidateKeysByPrefix(
+      redisService.invalidateKeysByPrefix(
         generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_GOALS, user.id)
       ),
-      redis.hset(getGoalKey(updatedGoalDto.id), updatedGoalDto),
+      redisService.hset(getGoalKey(updatedGoalDto.id), updatedGoalDto),
     ]);
 
     return { data: updatedGoalDto, fieldErrors: [] };
@@ -154,7 +153,7 @@ export const getPaginatedGoals = async ({
       sortDirection,
     });
 
-    const cachedGoals = await redis.get(cacheKey);
+    const cachedGoals = await redisService.get(cacheKey);
     if (cachedGoals) {
       console.log("PAGINATED GOALS CACHE HIT");
       const parsedCacheData = JSON.parse(cachedGoals);
@@ -185,7 +184,7 @@ export const getPaginatedGoals = async ({
       };
     }
 
-    await redis.set(cacheKey, JSON.stringify({ goals, totalCount }));
+    await redisService.set(cacheKey, JSON.stringify({ goals, totalCount }));
 
     return {
       goals: goals,
@@ -224,10 +223,10 @@ export const deleteGoal = async (goalId: string) => {
     }
 
     await Promise.all([
-      invalidateKeysByPrefix(
+      redisService.invalidateKeysByPrefix(
         generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_GOALS, user.id)
       ),
-      redis.del(getGoalKey(goalId)),
+      redisService.del(getGoalKey(goalId)),
     ]);
 
     return { data: "Goal deleted successfully." };
