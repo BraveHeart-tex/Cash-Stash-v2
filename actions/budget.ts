@@ -10,12 +10,10 @@ import {
   IGetPaginatedBudgetsResponse,
   IValidatedResponse,
 } from "@/actions/types";
-import redis from "@/lib/redis/redisConnection";
 import {
   generateCachePrefixWithUserId,
   getBudgetKey,
   getPaginatedBudgetsKey,
-  invalidateKeysByPrefix,
   mapRedisHashToBudget,
 } from "@/lib/redis/redisUtils";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";

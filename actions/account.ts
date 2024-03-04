@@ -7,13 +7,11 @@ import {
   IGetPaginatedAccountsParams,
   IValidatedResponse,
 } from "@/actions/types";
-import redis from "@/lib/redis/redisConnection";
 import {
   generateCachePrefixWithUserId,
   getAccountKey,
   getAccountTransactionsKey,
   getPaginatedAccountsKey,
-  invalidateKeysByPrefix,
 } from "@/lib/redis/redisUtils";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import accountSchema, { AccountSchemaType } from "@/schemas/account-schema";
@@ -275,7 +273,7 @@ export const getTransactionsForAccount = async (accountId: string) => {
 
   try {
     const key = getAccountTransactionsKey(accountId);
-    const cachedData = await redis.get(key);
+    const cachedData = await redisService.get(key);
     if (cachedData) {
       console.info("getTransactionsForAccount CACHE HIT");
       return JSON.parse(cachedData);
