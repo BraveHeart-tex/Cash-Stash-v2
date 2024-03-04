@@ -1,4 +1,4 @@
-import { checkEmailValidityBeforeVerification } from "@/data/auth";
+import { checkEmailValidityBeforeVerification } from "@/actions/auth";
 import EmailVerificationInput from "@/components/auth/email-verification-input";
 import EmailVerificationTimer from "@/components/auth/email-verification-timer";
 import logo from "@/components/Logo.svg";

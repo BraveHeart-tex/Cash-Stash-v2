@@ -17,7 +17,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { getTransactionsForAccount } from "@/data/account";
+import { getTransactionsForAccount } from "@/actions/account";
 import AccountCard from "@/components/account-card";
 import TransactionCard from "@/components/transactions/transaction-card";
 import { FaSpinner } from "react-icons/fa";
@@ -90,7 +90,7 @@ const LatestAccountTransactionsDialog = ({
                         ...transaction,
                         createdAt: new Date(transaction.createdAt),
                         updatedAt: new Date(transaction.updatedAt),
-                        account: selectedAccount!,
+                        accountName: selectedAccount.name,
                       }}
                     />
                   ))}
@@ -134,7 +134,7 @@ const LatestAccountTransactionsDialog = ({
                     ...transaction,
                     createdAt: new Date(transaction.createdAt),
                     updatedAt: new Date(transaction.updatedAt),
-                    account: selectedAccount!,
+                    accountName: selectedAccount.name,
                   }}
                 />
               ))}

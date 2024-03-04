@@ -1,15 +1,15 @@
 import CreateAccountButton from "@/components/create-buttons/create-account-button";
-import { getPaginatedAccounts } from "@/data/account";
+import { getPaginatedAccounts } from "@/actions/account";
 import RoutePaginationControls from "@/components/route-pagination-controls";
 import RouteSearchInput from "@/components/route-search-input";
 import AccountCard from "@/components/account-card";
 import RouteSelectFilter from "@/components/route-select-filter";
-import { AccountCategory } from "@prisma/client";
 import MotionDiv from "@/components/animations/motion-div";
 import AccountsNotFound from "@/components/accounts-not-found";
 import RouteFiltersPopover from "@/components/route-filters-popover";
 import { BsSortDown, BsSortUp } from "react-icons/bs";
 import { generateReadbleEnumLabels } from "@/lib/utils";
+import { AccountCategory } from "@/entities/account";
 
 const AccountPage = async ({
   searchParams,
@@ -40,7 +40,7 @@ const AccountPage = async ({
 
   return (
     <main>
-      <div className="p-1 lg:p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px] mb-2">
+      <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px] mb-2">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-4xl text-primary">Accounts</h3>
           <CreateAccountButton className="self-start mt-0" />
@@ -91,8 +91,8 @@ const AccountPage = async ({
 
           <div className="h-[500px] lg:pr-4 col-span-5 mt-2 lg:mt-0 overflow-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 pb-4">
-              {result.accounts.map((budget) => (
-                <AccountCard key={budget.id} account={budget} />
+              {result.accounts.map((account) => (
+                <AccountCard key={account.id} account={account} />
               ))}
             </div>
           </div>

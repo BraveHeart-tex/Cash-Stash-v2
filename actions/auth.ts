@@ -1,5 +1,5 @@
 "use server";
-import prisma, { lucia } from "@/lib/data/db";
+import prisma from "@/lib/database/db";
 import { getUser } from "@/lib/auth/session";
 import { Argon2id } from "oslo/password";
 import loginSchema, { LoginSchemaType } from "@/schemas/login-schema";
@@ -41,7 +41,8 @@ import {
 } from "@/lib/auth/authUtils";
 import { revalidatePath } from "next/cache";
 import { isWithinExpirationDate } from "oslo";
-import { IRecaptchaResponse } from "@/data/types";
+import { IRecaptchaResponse } from "@/actions/types";
+import { lucia } from "@/lib/database/connection";
 
 export const login = async (values: LoginSchemaType) => {
   const header = headers();

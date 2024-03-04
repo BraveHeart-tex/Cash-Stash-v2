@@ -1,10 +1,10 @@
-import { TransactionWithAccount } from "@/data/types";
+import { TransactionResponse } from "@/actions/types";
 import TransactionCard from "./transaction-card";
 
 const TransactionList = ({
   transactions,
 }: {
-  transactions: TransactionWithAccount[];
+  transactions: TransactionResponse[];
 }) => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">

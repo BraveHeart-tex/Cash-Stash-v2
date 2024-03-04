@@ -1,25 +1,25 @@
 "use server";
-import prisma from "@/lib/data/db";
 import { getUser } from "@/lib/auth/session";
 import { processZodError, validateEnumValue } from "@/lib/utils";
-import { Account, AccountCategory } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import {
-  IValidatedResponse,
   IGetPaginatedAccountsParams,
-  IGetPaginatedAccountsResponse,
-} from "@/data/types";
-import redis from "@/lib/redis";
+  IValidatedResponse,
+} from "@/actions/types";
 import {
   generateCachePrefixWithUserId,
   getAccountKey,
   getAccountTransactionsKey,
   getPaginatedAccountsKey,
-  invalidateKeysByPrefix,
 } from "@/lib/redis/redisUtils";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import accountSchema, { AccountSchemaType } from "@/schemas/account-schema";
+import { createAccountDto } from "@/lib/database/dto/accountDto";
+import accountRepository from "@/lib/database/repository/accountRepository";
+import { Account, AccountCategory } from "@/entities/account";
+import transactionRepository from "@/lib/database/repository/transactionRepository";
+import redisService from "@/lib/redis/redisService";
 
 export const registerBankAccount = async ({
   balance,
@@ -35,32 +35,30 @@ export const registerBankAccount = async ({
   try {
     const validatedData = accountSchema.parse({ balance, category, name });
 
-    const createdAccount = await prisma.account.create({
-      data: {
-        ...validatedData,
-        userId: user.id,
-      },
-    });
+    const accountDto = createAccountDto(validatedData, user.id);
 
-    if (!createdAccount) {
+    const affectedRows = await accountRepository.create(accountDto);
+
+    if (affectedRows === 0) {
       return { error: "Error creating account.", fieldErrors: [] };
     }
 
     await Promise.all([
-      invalidateKeysByPrefix(
+      redisService.invalidateKeysByPrefix(
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_ACCOUNTS,
           user.id
         )
       ),
-      redis.hset(getAccountKey(createdAccount.id), createdAccount),
+      redisService.hset(getAccountKey(accountDto.id), accountDto),
     ]);
 
     return {
-      data: createdAccount,
+      data: accountDto as Account,
       fieldErrors: [],
     };
   } catch (error) {
+    console.error("Error registering bank account", error);
     if (error instanceof ZodError) {
       return processZodError(error);
     }
@@ -93,15 +91,16 @@ export const updateBankAccount = async ({
 
   try {
     const validatedData = accountSchema.parse(rest);
+    const updateDto = {
+      ...validatedData,
+      id: accountId,
+      updatedAt: new Date(),
+    };
 
-    const updatedAccount = await prisma.account.update({
-      where: {
-        id: accountId,
-      },
-      data: validatedData,
-    });
+    const { affectedRows, updatedAccount } =
+      await accountRepository.update(updateDto);
 
-    if (!updatedAccount) {
+    if (affectedRows === 0 || !updatedAccount) {
       return {
         error:
           "An error occurred while updating your bank account. Please try again later.",
@@ -110,17 +109,17 @@ export const updateBankAccount = async ({
     }
 
     await Promise.all([
-      invalidateKeysByPrefix(
+      redisService.invalidateKeysByPrefix(
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_ACCOUNTS,
           user.id
         )
       ),
-      redis.hset(getAccountKey(updatedAccount.id), updatedAccount),
+      redisService.hset(getAccountKey(accountId), updatedAccount),
     ]);
 
     return {
-      data: updatedAccount,
+      data: updatedAccount as Account,
       fieldErrors: [],
     };
   } catch (error) {
@@ -142,7 +141,7 @@ export const getPaginatedAccounts = async ({
   category,
   sortBy,
   sortDirection,
-}: IGetPaginatedAccountsParams): Promise<IGetPaginatedAccountsResponse> => {
+}: IGetPaginatedAccountsParams) => {
   const { user } = await getUser();
 
   if (!user) {
@@ -162,68 +161,65 @@ export const getPaginatedAccounts = async ({
     };
   }
 
-  let orderByCondition;
-  if (sortBy && sortDirection) {
-    orderByCondition = {
-      orderBy: {
-        [sortBy]: sortDirection,
-      },
-    };
-  }
+  try {
+    const cacheKey = getPaginatedAccountsKey({
+      userId: user.id,
+      pageNumber,
+      query,
+      category,
+      sortBy,
+      sortDirection,
+    });
 
-  const categoryQuery = category ? { category } : {};
+    const cachedData = await redisService.get(cacheKey);
 
-  const cacheKey = getPaginatedAccountsKey({
-    userId: user.id,
-    pageNumber,
-    query,
-    category,
-    sortBy,
-    sortDirection,
-    orderByCondition: orderByCondition?.orderBy
-      ? JSON.stringify(orderByCondition)
-      : "",
-  });
+    if (cachedData) {
+      console.info("CACHE HIT");
+      const parsedData = JSON.parse(cachedData);
+      return {
+        accounts: parsedData.accounts as Account[],
+        hasNextPage: parsedData.totalCount > skipAmount + PAGE_SIZE,
+        hasPreviousPage: pageNumber > 1,
+        totalPages: Math.ceil(parsedData.totalCount / PAGE_SIZE),
+        currentPage: pageNumber,
+      };
+    }
 
-  const cachedData = await redis.get(cacheKey);
-  if (cachedData) {
-    console.info("CACHE HIT");
-    const parsedData = JSON.parse(cachedData);
+    const { accounts, totalCount } = await accountRepository.getMultiple({
+      userId: user.id,
+      page: pageNumber,
+      query,
+      category,
+      sortBy,
+      sortDirection,
+    });
+
+    if (accounts.length === 0) {
+      return {
+        accounts: [],
+        hasNextPage: false,
+        hasPreviousPage: false,
+        currentPage: 1,
+        totalPages: 1,
+      };
+    }
+
+    await redisService.set(
+      cacheKey,
+      JSON.stringify({ accounts, totalCount }),
+      "EX",
+      5 * 60
+    );
+
     return {
-      accounts: parsedData.accounts,
-      hasNextPage: parsedData.totalCount > skipAmount + PAGE_SIZE,
+      accounts: accounts as Account[],
+      hasNextPage: totalCount > skipAmount + PAGE_SIZE,
       hasPreviousPage: pageNumber > 1,
-      totalPages: Math.ceil(parsedData.totalCount / PAGE_SIZE),
+      totalPages: Math.ceil(totalCount / PAGE_SIZE),
       currentPage: pageNumber,
     };
-  }
-  console.info("CACHE MISS");
-
-  const [accounts, totalCount] = await Promise.all([
-    prisma.account.findMany({
-      skip: skipAmount,
-      take: PAGE_SIZE,
-      where: {
-        userId: user?.id,
-        name: {
-          contains: query,
-        },
-        ...categoryQuery,
-      },
-      ...orderByCondition,
-    }),
-    prisma.account.count({
-      where: {
-        userId: user?.id,
-        name: {
-          contains: query,
-        },
-        ...categoryQuery,
-      },
-    }),
-  ]);
-
-  if (accounts.length === 0) {
+  } catch (e) {
+    console.error("Error fetching paginated accounts", e);
     return {
       accounts: [],
       hasNextPage: false,
@@ -232,21 +228,6 @@ export const getPaginatedAccounts = async ({
       totalPages: 1,
     };
   }
-
-  await redis.set(
-    cacheKey,
-    JSON.stringify({ accounts, totalCount }),
-    "EX",
-    5 * 60
-  );
-
-  return {
-    accounts,
-    hasNextPage: totalCount > skipAmount + PAGE_SIZE,
-    hasPreviousPage: pageNumber > 1,
-    totalPages: Math.ceil(totalCount / PAGE_SIZE),
-    currentPage: pageNumber,
-  };
 };
 
 export const deleteAccount = async (accountId: string) => {
@@ -257,33 +238,27 @@ export const deleteAccount = async (accountId: string) => {
   }
 
   try {
-    const deletedAccount = await prisma.account.delete({
-      where: {
-        id: accountId,
-      },
-    });
+    const affectedRows = await accountRepository.deleteById(accountId);
 
-    if (!deletedAccount) {
+    if (affectedRows === 0) {
       return { error: "An error occurred while deleting the account." };
     }
 
     await Promise.all([
-      invalidateKeysByPrefix(
+      redisService.invalidateMultipleKeysByPrefix([
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_ACCOUNTS,
           user.id
-        )
-      ),
-      invalidateKeysByPrefix(
+        ),
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_TRANSACTIONS,
           user.id
-        )
-      ),
-      redis.del(getAccountKey(accountId)),
+        ),
+      ]),
+      redisService.del(getAccountKey(accountId)),
     ]);
 
-    return { data: deletedAccount };
+    return { data: "Account deleted successfully." };
   } catch (error) {
     return { error: "An error occurred while deleting the account." };
   }
@@ -298,27 +273,19 @@ export const getTransactionsForAccount = async (accountId: string) => {
 
   try {
     const key = getAccountTransactionsKey(accountId);
-    const cachedData = await redis.get(key);
+    const cachedData = await redisService.get(key);
     if (cachedData) {
       console.info("getTransactionsForAccount CACHE HIT");
       return JSON.parse(cachedData);
     }
 
-    const transactions = await prisma.transaction.findMany({
-      where: {
-        accountId,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-      take: 10,
-    });
+    const transactions = await transactionRepository.getByAccountId(accountId);
 
     if (transactions.length === 0) {
       return [];
     }
 
-    await redis.set(key, JSON.stringify(transactions), "EX", 5 * 60);
+    await redisService.set(key, JSON.stringify(transactions), "EX", 5 * 60);
 
     return transactions;
   } catch (error) {
@@ -334,13 +301,5 @@ export const getCurrentUserAccounts = async () => {
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
-  return prisma.account.findMany({
-    where: {
-      userId: user.id,
-    },
-    select: {
-      id: true,
-      name: true,
-    },
-  });
+  return await accountRepository.getByUserId(user.id);
 };

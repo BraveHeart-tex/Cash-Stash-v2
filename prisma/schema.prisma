@@ -60,12 +60,12 @@ model EmailVerificationCode {
 }
 
 model Session {
-  id        String   @id
-  userId    String
-  expiresAt DateTime
-  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
+  id         String   @id
+  user_id    String
+  expires_at DateTime
+  user       User     @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
-  @@index([userId], map: "sessions_userId_fkey")
+  @@index([user_id], map: "sessions_userId_fkey")
 }
 
 model Account {

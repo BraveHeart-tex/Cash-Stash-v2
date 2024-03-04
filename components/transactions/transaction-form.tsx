@@ -19,17 +19,18 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { generateReadbleEnumLabels } from "@/lib/utils";
-import { Account, Transaction, TransactionCategory } from "@prisma/client";
-import { IValidatedResponse } from "@/data/types";
+import { IValidatedResponse } from "@/actions/types";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import transactionSchema, {
   TransactionSchemaType,
 } from "@/schemas/transaction-schema";
-import { getPaginatedAccounts } from "@/data/account";
-import { createTransaction, updateTransaction } from "@/data/transaction";
+import { getCurrentUserAccounts } from "@/actions/account";
+import { createTransaction, updateTransaction } from "@/actions/transaction";
 import useGenericModalStore from "@/store/genericModalStore";
+import { Account } from "@/entities/account";
+import { Transaction, TransactionCategory } from "@/entities/transaction";
 
 interface ITransactionFormProps {
   data?: Transaction;
@@ -57,18 +58,16 @@ const TransactionForm: React.FC<ITransactionFormProps> = ({
 
   useEffect(() => {
     const fetchAccounts = async () => {
-      const response = await getPaginatedAccounts({
-        pageNumber: 1,
-      });
+      const accounts = await getCurrentUserAccounts();
 
-      if (response.accounts.length === 0) {
+      if (accounts.length === 0) {
         return showErrorToast(
           "No accounts found.",
           "Please create an account first to create a transaction."
         );
       }
 
-      setAccounts(response.accounts);
+      setAccounts(accounts);
     };
 
     fetchAccounts();

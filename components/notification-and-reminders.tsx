@@ -1,5 +1,5 @@
 "use client";
-import { SerializedReminder } from "@/data/types";
+import { SerializedReminder } from "@/actions/types";
 import { Button } from "@/components/ui/button";
 import { FaRegClock } from "react-icons/fa";
 import ReminderCard from "@/components/reminder-card";

@@ -1,5 +1,5 @@
-import { TransactionCategory } from "@prisma/client";
 import { z } from "zod";
+import { TransactionCategory } from "@/entities/transaction";
 
 const transactionSchema = z.object({
   amount: z.coerce.number({

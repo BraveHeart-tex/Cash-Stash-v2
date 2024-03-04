@@ -1,4 +1,4 @@
-import { getPaginatedTransactions } from "@/data/transaction";
+import { getPaginatedTransactions } from "@/actions/transaction";
 import TransactionList from "@/components/transactions/transaction-list";
 import CreateTransactionButton from "@/components/create-buttons/create-transaction-button";
 import TransactionsNotFound from "@/components/transactions-not-found";
@@ -9,7 +9,7 @@ import {
   generateReadbleEnumLabels,
 } from "@/lib/utils";
 import RouteSelectFilter from "@/components/route-select-filter";
-import { getCurrentUserAccounts } from "@/data/account";
+import { getCurrentUserAccounts } from "@/actions/account";
 import { TransactionCategory } from "@prisma/client";
 import { Label } from "@/components/ui/label";
 import RouteFiltersPopover from "@/components/route-filters-popover";

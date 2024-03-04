@@ -12,7 +12,10 @@ import logo from "@/components/Logo.svg";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { register as registerUser, validateReCAPTCHAToken } from "@/data/auth";
+import {
+  register as registerUser,
+  validateReCAPTCHAToken,
+} from "@/actions/auth";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import Link from "next/link";
 import registerSchema, { RegisterSchemaType } from "@/schemas/register-schema";

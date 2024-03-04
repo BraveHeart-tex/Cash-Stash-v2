@@ -1,5 +1,5 @@
-import { BudgetCategory } from "@prisma/client";
 import { z } from "zod";
+import { BudgetCategory } from "@/entities/budget";
 
 const budgetSchema = z
   .object({

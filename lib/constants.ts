@@ -1,4 +1,4 @@
-import { IPage } from "@/data/types";
+import { IPage } from "@/actions/types";
 import { AiOutlineTransaction } from "react-icons/ai";
 import { FaMoneyBill, FaPiggyBank, FaCog } from "react-icons/fa";
 import { MdDashboard, MdOutlineAccountBalanceWallet } from "react-icons/md";

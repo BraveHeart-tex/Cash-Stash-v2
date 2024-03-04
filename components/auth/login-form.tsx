@@ -14,7 +14,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import loginSchema, { LoginSchemaType } from "@/schemas/login-schema";
 import { useRef, useState, useTransition } from "react";
-import { login, validateReCAPTCHAToken } from "@/data/auth";
+import { login, validateReCAPTCHAToken } from "@/actions/auth";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -31,8 +31,10 @@ import { Input } from "@/components/ui/input";
 import { CAPTCHA_SITE_KEY, PAGE_ROUTES } from "@/lib/constants";
 import TwoFactorAuthenticationForm from "@/components/auth/TwoFactorAuthenticationForm";
 import ReCAPTCHA from "react-google-recaptcha";
+import { useTheme } from "next-themes";
 
 const LoginForm = () => {
+  const theme = useTheme();
   const captchaRef = useRef<ReCAPTCHA>(null);
   let [isPending, startTransition] = useTransition();
   const [showTwoFactorForm, setShowTwoFactorForm] = useState(false);
@@ -55,6 +57,7 @@ const LoginForm = () => {
       const isCaptchaTokenValid = await validateReCAPTCHAToken(captchaToken);
 
       if (!isCaptchaTokenValid) {
+        captchaRef.current?.reset();
         showErrorToast(
           "Captcha validation failed.",
           "Please complete the captcha."
@@ -174,7 +177,11 @@ const LoginForm = () => {
                       </FormItem>
                     )}
                   />
-                  <ReCAPTCHA sitekey={CAPTCHA_SITE_KEY} ref={captchaRef} />
+                  <ReCAPTCHA
+                    sitekey={CAPTCHA_SITE_KEY}
+                    ref={captchaRef}
+                    theme={theme.resolvedTheme === "dark" ? "dark" : "light"}
+                  />
                 </div>
                 <Button
                   loading={isPending}

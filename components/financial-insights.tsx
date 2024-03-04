@@ -1,5 +1,5 @@
 "use client";
-import { InsightsData } from "@/data/types";
+import { InsightsData } from "@/actions/types";
 import { Button } from "@/components/ui/button";
 import { cn, thousandSeparator } from "@/lib/utils";
 import { FaMoneyBill } from "react-icons/fa";

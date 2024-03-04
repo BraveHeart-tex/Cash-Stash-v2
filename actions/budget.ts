@@ -1,25 +1,26 @@
 "use server";
-import prisma from "@/lib/data/db";
 import { getUser } from "@/lib/auth/session";
 import { processZodError, validateEnumValue } from "@/lib/utils";
 import budgetSchema, { BudgetSchemaType } from "@/schemas/budget-schema";
-import { Budget, BudgetCategory } from "@prisma/client";
+import { Budget } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import {
-  IValidatedResponse,
   IGetPaginatedBudgetsParams,
   IGetPaginatedBudgetsResponse,
-} from "@/data/types";
-import redis from "@/lib/redis";
+  IValidatedResponse,
+} from "@/actions/types";
 import {
   generateCachePrefixWithUserId,
   getBudgetKey,
   getPaginatedBudgetsKey,
-  invalidateKeysByPrefix,
   mapRedisHashToBudget,
 } from "@/lib/redis/redisUtils";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
+import { createBudgetDto } from "@/lib/database/dto/budgetDto";
+import budgetRepository from "@/lib/database/repository/budgetRepository";
+import { BudgetCategory } from "@/entities/budget";
+import redisService from "@/lib/redis/redisService";
 
 export const createBudget = async (
   data: BudgetSchemaType
@@ -31,15 +32,11 @@ export const createBudget = async (
 
   try {
     const validatedData = budgetSchema.parse(data);
+    const budgetDto = createBudgetDto(validatedData, user.id);
 
-    const createdBudget = await prisma.budget.create({
-      data: {
-        ...validatedData,
-        userId: user.id,
-      },
-    });
+    const affectedRows = await budgetRepository.create(budgetDto);
 
-    if (!createdBudget) {
+    if (affectedRows === 0) {
       return {
         error:
           "There was a problem while creating your budget. Please try again later.",
@@ -48,14 +45,14 @@ export const createBudget = async (
     }
 
     await Promise.all([
-      invalidateKeysByPrefix(
+      redisService.invalidateKeysByPrefix(
         generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_BUDGETS, user.id)
       ),
-      redis.hset(getBudgetKey(createdBudget.id), createdBudget),
+      redisService.hset(getBudgetKey(budgetDto.id), budgetDto),
     ]);
 
     return {
-      data: createdBudget,
+      data: budgetDto,
       fieldErrors: [],
     };
   } catch (error) {
@@ -81,18 +78,16 @@ export const updateBudget = async (
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
-  let budgetToBeUpdated: Budget | null = null;
+  let budgetToBeUpdated: Budget | null;
 
-  const budgetFromCache = await redis.hgetall(getBudgetKey(budgetId));
+  const budgetFromCache = await redisService.hgetall(getBudgetKey(budgetId));
 
   if (budgetFromCache) {
     console.log("UPDATE Budget CACHE HIT");
     budgetToBeUpdated = mapRedisHashToBudget(budgetFromCache);
   } else {
     console.log("UPDATE Budget CACHE MISS");
-    budgetToBeUpdated = await prisma.budget.findUnique({
-      where: { id: budgetId },
-    });
+    budgetToBeUpdated = await budgetRepository.getById(budgetId);
   }
 
   if (!budgetToBeUpdated)
@@ -101,23 +96,28 @@ export const updateBudget = async (
   try {
     const validatedData = budgetSchema.parse(values);
 
-    const updatedBudget = await prisma.budget.update({
-      where: { id: budgetId, userId: user.id },
-      data: validatedData,
-    });
+    const updateBudgetDto = {
+      ...validatedData,
+      id: budgetId,
+      updatedAt: new Date(),
+    };
 
-    if (!updatedBudget)
+    const { affectedRows, updatedBudget } =
+      await budgetRepository.update(updateBudgetDto);
+
+    if (affectedRows === 0 || !updatedBudget) {
       return {
         error:
           "There was a problem while trying to update your budget. Please try again later.",
         fieldErrors: [],
       };
+    }
 
     await Promise.all([
-      invalidateKeysByPrefix(
+      redisService.invalidateKeysByPrefix(
         generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_BUDGETS, user.id)
       ),
-      redis.hset(getBudgetKey(updatedBudget.id), updatedBudget),
+      redisService.hset(getBudgetKey(updatedBudget.id), updatedBudget),
     ]);
 
     return { data: updatedBudget, fieldErrors: [] };
@@ -134,6 +134,7 @@ export const updateBudget = async (
     };
   }
 };
+
 export const getPaginatedBudgets = async ({
   pageNumber,
   query,
@@ -160,11 +161,6 @@ export const getPaginatedBudgets = async ({
     };
   }
 
-  const categoryCondition = category ? { category } : {};
-  const sortByCondition = sortBy
-    ? { orderBy: { [sortBy]: sortDirection || "asc" } }
-    : {};
-
   const cacheKey = getPaginatedBudgetsKey({
     userId: user.id,
     pageNumber,
@@ -174,7 +170,7 @@ export const getPaginatedBudgets = async ({
     sortDirection,
   });
 
-  const cachedData = await redis.get(cacheKey);
+  const cachedData = await redisService.get(cacheKey);
   if (cachedData) {
     console.log("Budgets CACHE HIT");
     return {
@@ -185,31 +181,17 @@ export const getPaginatedBudgets = async ({
       currentPage: pageNumber,
     };
   }
+
   console.log("Budgets CACHE MISS");
 
-  const [budgets, totalCount] = await Promise.all([
-    prisma.budget.findMany({
-      skip: skipAmount,
-      take: PAGE_SIZE,
-      where: {
-        userId: user?.id,
-        name: {
-          contains: query,
-        },
-        ...categoryCondition,
-      },
-      orderBy: sortByCondition?.orderBy,
-    }),
-    prisma.budget.count({
-      where: {
-        userId: user?.id,
-        name: {
-          contains: query,
-        },
-        ...categoryCondition,
-      },
-    }),
-  ]);
+  const { budgets, totalCount } = await budgetRepository.getMultiple({
+    userId: user.id,
+    query,
+    category,
+    sortBy,
+    sortDirection,
+    page: pageNumber,
+  });
 
   if (budgets.length === 0) {
     return {
@@ -221,10 +203,10 @@ export const getPaginatedBudgets = async ({
     };
   }
 
-  await redis.set(cacheKey, JSON.stringify({ budgets, totalCount }));
+  await redisService.set(cacheKey, JSON.stringify({ budgets, totalCount }));
 
   return {
-    budgets,
+    budgets: budgets,
     hasNextPage: totalCount > skipAmount + PAGE_SIZE,
     hasPreviousPage: pageNumber > 1,
     totalPages: Math.ceil(totalCount / PAGE_SIZE),
@@ -239,25 +221,23 @@ export const deleteBudget = async (id: string) => {
   }
 
   try {
-    const response = await prisma.budget.delete({
-      where: { id },
-    });
+    const affectedRows = await budgetRepository.deleteById(id);
 
-    if (!response) {
+    if (affectedRows === 0) {
       return {
         error: "We encountered a problem while deleting the budget.",
       };
     }
 
     await Promise.all([
-      invalidateKeysByPrefix(
+      redisService.invalidateKeysByPrefix(
         generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_BUDGETS, user.id)
       ),
-      redis.del(getBudgetKey(id)),
+      redisService.del(getBudgetKey(id)),
     ]);
 
     return {
-      data: response,
+      data: "Budget deleted successfully.",
     };
   } catch (error) {
     console.error(error);

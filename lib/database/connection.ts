@@ -1,14 +1,23 @@
-/* eslint-disable no-unused-vars */
+import mysql from "mysql2";
+import { Mysql2Adapter } from "@lucia-auth/adapter-mysql";
 import { Lucia } from "lucia";
-import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
-import { PrismaClient } from "@prisma/client";
 
-declare global {
-  var client: PrismaClient | undefined;
-}
+export const pool = mysql.createPool({
+  host: process.env.DATABASE_HOST,
+  user: process.env.DATABASE_USER,
+  password: process.env.DATABASE_PASSWORD,
+  port: 3306,
+  database: process.env.DATABASE_NAME,
+  namedPlaceholders: true,
+  multipleStatements: true,
+});
 
-const prisma = globalThis.client || new PrismaClient();
-const adapter = new PrismaAdapter(prisma.session, prisma.user);
+const asyncPool = pool.promise();
+
+export const adapter = new Mysql2Adapter(asyncPool, {
+  user: "User",
+  session: "Session",
+});
 
 export const lucia = new Lucia(adapter, {
   sessionCookie: {
@@ -29,10 +38,6 @@ export const lucia = new Lucia(adapter, {
   },
 });
 
-if (process.env.NODE_ENV === "development") {
-  globalThis.client = prisma;
-}
-
 declare module "lucia" {
   interface Register {
     Lucia: typeof lucia;
@@ -48,4 +53,4 @@ interface DatabaseUserAttributes {
   prefersTwoFactorAuthentication: boolean;
 }
 
-export default prisma;
+export default asyncPool;

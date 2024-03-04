@@ -7,7 +7,7 @@ import {
   TableName,
   UpdateGenericInput,
 } from "./types";
-import prisma from "@/lib/data/db";
+import prisma from "@/lib/database/db";
 import { Prisma } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
 import { getUser } from "@/lib/auth/session";

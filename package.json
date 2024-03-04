@@ -19,7 +19,9 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
+    "@lucia-auth/adapter-mysql": "^3.0.0",
     "@lucia-auth/adapter-prisma": "^4.0.0",
+    "@paralleldrive/cuid2": "^2.2.2",
     "@prisma/client": "^5.10.2",
     "@radix-ui/react-alert-dialog": "^1.0.4",
     "@radix-ui/react-avatar": "^1.0.3",
@@ -55,6 +57,7 @@
     "ioredis": "^5.3.2",
     "jest-mock-extended": "^3.0.5",
     "lucia": "^3.0.1",
+    "mysql2": "^3.9.2",
     "next": "^14.1.0",
     "next-themes": "^0.2.1",
     "nodemailer": "^6.9.10",

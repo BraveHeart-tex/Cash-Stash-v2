@@ -6,7 +6,7 @@ import RouteSearchInput from "@/components/route-search-input";
 import RouteFiltersPopover from "@/components/route-filters-popover";
 import { GiPayMoney } from "react-icons/gi";
 import { FaPiggyBank } from "react-icons/fa";
-import { getPaginatedGoals } from "@/data/goal";
+import { getPaginatedGoals } from "@/actions/goal";
 
 const GoalsPage = async ({
   searchParams,
@@ -27,7 +27,7 @@ const GoalsPage = async ({
 
   const result = await getPaginatedGoals(actionParams);
 
-  const pageHasParams = !!Object.values(searchParams)
+  const pageHasParams = Object.values(searchParams)
     .filter((param) => param !== searchParams.page)
     .some((param) => param);
 
@@ -41,45 +41,43 @@ const GoalsPage = async ({
 
         <div className="flex items-center justify-between gap-2">
           <RouteSearchInput placeholder="Search goals by name" />
-          {result.goals.length > 1 && (
-            <RouteFiltersPopover
-              options={[
-                {
-                  label: "Sort by Current (High to Low)",
-                  icon: <GiPayMoney className="mr-auto" />,
-                  data: {
-                    sortBy: "currentAmount",
-                    sortDirection: "desc",
-                  },
+          <RouteFiltersPopover
+            options={[
+              {
+                label: "Sort by Current (High to Low)",
+                icon: <GiPayMoney className="mr-auto" />,
+                data: {
+                  sortBy: "currentAmount",
+                  sortDirection: "desc",
                 },
-                {
-                  label: "Sort by Current (Low to High)",
-                  icon: <GiPayMoney className="mr-auto" />,
-                  data: {
-                    sortBy: "currentAmount",
-                    sortDirection: "asc",
-                  },
+              },
+              {
+                label: "Sort by Current (Low to High)",
+                icon: <GiPayMoney className="mr-auto" />,
+                data: {
+                  sortBy: "currentAmount",
+                  sortDirection: "asc",
                 },
-                {
-                  label: "Sort by Target (High to Low)",
-                  icon: <FaPiggyBank className="mr-2" />,
-                  data: {
-                    sortBy: "goalAmount",
-                    sortDirection: "desc",
-                  },
+              },
+              {
+                label: "Sort by Target (High to Low)",
+                icon: <FaPiggyBank className="mr-2" />,
+                data: {
+                  sortBy: "goalAmount",
+                  sortDirection: "desc",
                 },
-                {
-                  label: "Sort by Target (Low to High)",
-                  icon: <FaPiggyBank className="mr-2" />,
-                  data: {
-                    sortBy: "goalAmount",
-                    sortDirection: "asc",
-                  },
+              },
+              {
+                label: "Sort by Target (Low to High)",
+                icon: <FaPiggyBank className="mr-2" />,
+                data: {
+                  sortBy: "goalAmount",
+                  sortDirection: "asc",
                 },
-              ]}
-              queryKeys={["sortBy", "sortDirection"]}
-            />
-          )}
+              },
+            ]}
+            queryKeys={["sortBy", "sortDirection"]}
+          />
         </div>
         <div className="h-[500px] lg:pr-4 mt-2 lg:mt-0 overflow-auto w-full">
           {result.goals.length > 0 ? (

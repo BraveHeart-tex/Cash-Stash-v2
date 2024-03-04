@@ -1,5 +1,5 @@
-import { AccountCategory } from "@prisma/client";
 import { z } from "zod";
+import { AccountCategory } from "@/entities/account";
 
 const accountSchema = z.object({
   balance: z.coerce.number().default(0),

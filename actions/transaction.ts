@@ -1,28 +1,30 @@
 "use server";
-import redis from "@/lib/redis";
 import {
   generateCachePrefixWithUserId,
   getAccountKey,
   getAccountTransactionsKey,
   getPaginatedTransactionsKey,
   getTransactionKey,
-  invalidateKeysByPrefix,
 } from "@/lib/redis/redisUtils";
-import prisma from "@/lib/data/db";
 import { getUser } from "@/lib/auth/session";
 import { processZodError } from "@/lib/utils";
 import transactionSchema, {
   TransactionSchemaType,
 } from "@/schemas/transaction-schema";
-import { Prisma, Transaction } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import {
   IGetPaginatedTransactionsParams,
   IGetPaginatedTransactionsResponse,
   IValidatedResponse,
-} from "@/data/types";
+  TransactionResponse,
+} from "@/actions/types";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
+import { Transaction } from "@/entities/transaction";
+import redisService from "@/lib/redis/redisService";
+import transactionRepository from "@/lib/database/repository/transactionRepository";
+import { createTransactionDto } from "@/lib/database/dto/transactionDto";
+import accountRepository from "@/lib/database/repository/accountRepository";
 
 export const createTransaction = async (
   values: TransactionSchemaType
@@ -35,68 +37,43 @@ export const createTransaction = async (
 
   try {
     const validatedData = transactionSchema.parse(values);
-    const account = await prisma.account.findUnique({
-      where: {
-        id: validatedData.accountId,
-      },
-    });
 
-    if (!account) {
+    const transactionDto = createTransactionDto(validatedData, user.id);
+
+    const { affectedRows, updatedAccount } =
+      await transactionRepository.create(transactionDto);
+
+    if (affectedRows === 0 || !updatedAccount) {
       return {
-        error: "Account not found",
+        error:
+          "We encountered a problem while creating the transaction. Please try again later.",
         fieldErrors: [],
       };
     }
 
-    const balance = account.balance + validatedData.amount;
-
-    const newTransaction = prisma.transaction.create({
-      data: {
-        ...validatedData,
-        userId: user.id,
-      },
-    });
-
-    const updatedAccount = prisma.account.update({
-      where: {
-        id: validatedData.accountId,
-      },
-      data: {
-        balance,
-      },
-    });
-
-    // eslint-disable-next-line no-unused-vars
-    const [_, transaction] = await prisma.$transaction([
-      updatedAccount,
-      newTransaction,
-    ]);
-
     await Promise.all([
-      invalidateKeysByPrefix(
+      redisService.invalidateMultipleKeysByPrefix([
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_ACCOUNTS,
           user.id
-        )
-      ),
-      invalidateKeysByPrefix(
+        ),
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_TRANSACTIONS,
           user.id
-        )
-      ),
-      invalidateKeysByPrefix(
-        getAccountTransactionsKey(validatedData.accountId)
-      ),
-      redis.hset(getTransactionKey(transaction.id), newTransaction),
-      redis.hset(getAccountKey(validatedData.accountId), updatedAccount),
+        ),
+        getAccountTransactionsKey(validatedData.accountId),
+      ]),
+      redisService.hset(getTransactionKey(transactionDto.id), transactionDto),
+      redisService.hset(getAccountKey(validatedData.accountId), updatedAccount),
     ]);
 
     return {
-      data: transaction,
+      data: transactionDto,
       fieldErrors: [],
     };
   } catch (error) {
+    console.error(error);
+
     if (error instanceof ZodError) {
       return processZodError(error);
     }
@@ -125,74 +102,52 @@ export const updateTransaction = async (
 
     const validatedData = transactionSchema.parse(values);
 
-    let dbTransactions: any[] = [];
+    const oldAccountData = {
+      oldAmount,
+      oldAccountId,
+      amount: validatedData.amount,
+      accountId: validatedData.accountId,
+    };
 
-    if (oldAccountId !== validatedData.accountId) {
-      dbTransactions.push(
-        prisma.account.update({
-          where: {
-            id: oldAccountId,
-          },
-          data: {
-            balance: {
-              decrement: oldAmount,
-            },
-          },
-        })
-      );
+    const transactionDto = {
+      ...validatedData,
+      id: transactionId,
+    };
+
+    const { affectedRows, updatedRow } = await transactionRepository.update(
+      oldAccountData,
+      transactionDto
+    );
+
+    if (affectedRows === 0 || !updatedRow) {
+      return {
+        error:
+          "We encountered a problem while updating the transaction. Please try again later.",
+        fieldErrors: [],
+      };
     }
 
-    dbTransactions.push(
-      prisma.transaction.update({
-        where: {
-          id: transactionId,
-        },
-        data: {
-          ...validatedData,
-        },
-      })
-    );
-
-    dbTransactions.push(
-      prisma.account.update({
-        where: {
-          id: validatedData.accountId,
-        },
-        data: {
-          balance: {
-            increment: validatedData.amount,
-          },
-        },
-      })
-    );
-
-    // eslint-disable-next-line no-unused-vars
-    const [oldAccount, updatedTransaction, newAccount] =
-      await prisma.$transaction(dbTransactions);
-
     await Promise.all([
-      invalidateKeysByPrefix(
+      redisService.invalidateMultipleKeysByPrefix([
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_ACCOUNTS,
           user.id
-        )
-      ),
-      invalidateKeysByPrefix(
+        ),
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_TRANSACTIONS,
           user.id
-        )
-      ),
-      invalidateKeysByPrefix(
-        getAccountTransactionsKey(validatedData.accountId)
-      ),
+        ),
+        getAccountTransactionsKey(validatedData.accountId),
+      ]),
     ]);
 
     return {
-      data: updatedTransaction,
+      data: updatedRow,
       fieldErrors: [],
     };
   } catch (error) {
+    console.error(error);
+
     if (error instanceof ZodError) {
       return processZodError(error);
     }
@@ -206,7 +161,7 @@ export const updateTransaction = async (
 };
 
 export const deleteTransactionById = async (
-  transactionToDelete: Transaction
+  transactionToDelete: TransactionResponse
 ) => {
   const { user } = await getUser();
   if (!user) {
@@ -214,51 +169,35 @@ export const deleteTransactionById = async (
   }
 
   try {
-    const deletedTransaction = prisma.transaction.delete({
-      where: {
-        id: transactionToDelete.id,
-      },
-    });
+    const { affectedRows } =
+      await transactionRepository.deleteById(transactionToDelete);
 
-    const updatedAccount = prisma.account.update({
-      where: {
-        id: transactionToDelete.accountId,
-      },
-      data: {
-        balance: {
-          decrement: transactionToDelete.amount,
-        },
-      },
-    });
-
-    // eslint-disable-next-line no-unused-vars
-    const [_, deleteTransactionResult] = await prisma.$transaction([
-      updatedAccount,
-      deletedTransaction,
-    ]);
+    if (affectedRows === 0) {
+      return {
+        error:
+          "We encountered a problem while deleting the transaction. Please try again later.",
+      };
+    }
 
     await Promise.all([
-      invalidateKeysByPrefix(
+      redisService.invalidateMultipleKeysByPrefix([
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_ACCOUNTS,
           user.id
-        )
-      ),
-      invalidateKeysByPrefix(
+        ),
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_TRANSACTIONS,
           user.id
-        )
-      ),
-      invalidateKeysByPrefix(
-        getAccountTransactionsKey(transactionToDelete.accountId)
-      ),
+        ),
+        getAccountTransactionsKey(transactionToDelete.accountId),
+      ]),
     ]);
 
     return {
-      transaction: deleteTransactionResult,
+      data: "Transaction deleted successfully",
     };
   } catch (error) {
+    console.error(error);
     return {
       error:
         "We encountered a problem while deleting the transaction. Please try again later.",
@@ -280,39 +219,10 @@ export const getPaginatedTransactions = async ({
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
+  const PAGE_SIZE = 12;
+  const skipAmount = (pageNumber - 1) * PAGE_SIZE;
+
   try {
-    const whereCondition: Prisma.TransactionWhereInput = {
-      userId: user.id,
-      description: {
-        contains: query,
-      },
-    };
-
-    if (category) {
-      whereCondition.category = {
-        equals: category,
-      };
-    }
-
-    if (transactionType === "income") {
-      whereCondition.amount = {
-        gt: 0,
-      };
-    }
-
-    if (transactionType === "expense") {
-      whereCondition.amount = {
-        lt: 0,
-      };
-    }
-
-    if (accountId) {
-      whereCondition.accountId = accountId;
-    }
-
-    const PAGE_SIZE = 12;
-    const skipAmount = (pageNumber - 1) * PAGE_SIZE;
-
     const cacheKey = getPaginatedTransactionsKey({
       userId: user.id,
       transactionType,
@@ -324,11 +234,11 @@ export const getPaginatedTransactions = async ({
       category,
     });
 
-    const cachedData = await redis.get(cacheKey);
+    const cachedData = await redisService.get(cacheKey);
 
     if (cachedData) {
       const parsedData = JSON.parse(cachedData);
-      const cachedResult = parsedData.result;
+      const cachedResult = parsedData.transactions;
       const totalCount = parsedData.totalCount;
 
       return {
@@ -344,30 +254,32 @@ export const getPaginatedTransactions = async ({
       };
     }
 
-    const result = await prisma.transaction.findMany({
-      where: whereCondition,
-      orderBy: {
-        [sortBy]: sortDirection,
-      },
-      include: {
-        account: {
-          select: {
-            name: true,
-          },
-        },
-      },
-      take: PAGE_SIZE,
-      skip: skipAmount,
-    });
+    const { transactions, totalCount } =
+      await transactionRepository.getMultiple({
+        userId: user.id,
+        transactionType,
+        accountId,
+        sortBy,
+        sortDirection,
+        query,
+        page: pageNumber,
+        category,
+      });
 
-    const totalCount = await prisma.transaction.count({
-      where: whereCondition,
-    });
+    if (transactions.length === 0) {
+      return {
+        transactions: [],
+        hasNextPage: false,
+        hasPreviousPage: false,
+        totalPages: 1,
+        currentPage: 1,
+      };
+    }
 
-    await redis.set(
+    await redisService.set(
       cacheKey,
       JSON.stringify({
-        result,
+        transactions,
         totalCount,
       }),
       "EX",
@@ -375,7 +287,7 @@ export const getPaginatedTransactions = async ({
     );
 
     return {
-      transactions: result,
+      transactions: transactions as TransactionResponse[],
       hasNextPage: totalCount > skipAmount + PAGE_SIZE,
       hasPreviousPage: pageNumber > 1,
       totalPages: Math.ceil(totalCount / PAGE_SIZE),
@@ -391,4 +303,13 @@ export const getPaginatedTransactions = async ({
       currentPage: 1,
     };
   }
+};
+
+export const userCanCreateTransaction = async () => {
+  const { user } = await getUser();
+  if (!user) {
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
+  }
+
+  return await accountRepository.checkIfUserHasAccount(user.id);
 };

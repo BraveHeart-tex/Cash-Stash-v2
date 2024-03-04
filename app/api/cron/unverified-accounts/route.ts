@@ -1,5 +1,5 @@
 import { ACCOUNT_VERIFICATION_EXPIRATION_PERIOD_DAYS } from "@/lib/constants";
-import prisma from "@/lib/data/db";
+import prisma from "@/lib/database/db";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {

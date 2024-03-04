@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/select";
 import { formHasChanged, generateReadbleEnumLabels } from "@/lib/utils";
 import { Budget, BudgetCategory } from "@prisma/client";
-import { IValidatedResponse } from "@/data/types";
+import { IValidatedResponse } from "@/actions/types";
 import {
   showDefaultToast,
   showErrorToast,
@@ -29,7 +29,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import budgetSchema, { BudgetSchemaType } from "@/schemas/budget-schema";
-import { createBudget, updateBudget } from "@/data/budget";
+import { createBudget, updateBudget } from "@/actions/budget";
 import useGenericModalStore from "@/store/genericModalStore";
 
 interface IBudgetFormProps {
@@ -142,7 +142,12 @@ const BudgetForm: React.FC<IBudgetFormProps> = ({
             <FormItem>
               <FormLabel>Budget Amount</FormLabel>
               <FormControl>
-                <Input type="number" step="0.01" {...field} />
+                <Input
+                  type="number"
+                  step="0.01"
+                  placeholder="Enter the budget amount"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -155,7 +160,12 @@ const BudgetForm: React.FC<IBudgetFormProps> = ({
             <FormItem>
               <FormLabel>Spent Amount</FormLabel>
               <FormControl>
-                <Input type="number" step="0.01" {...field} />
+                <Input
+                  type="number"
+                  placeholder="Enter the spent amount (optional)"
+                  step="0.01"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

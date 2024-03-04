@@ -1,8 +1,9 @@
 "use server";
 
-import { BudgetCategory, AccountCategory } from "@prisma/client";
-import prisma from "../lib/data/db";
+import { BudgetCategory, AccountCategory, PrismaClient } from "@prisma/client";
 import { faker } from "@faker-js/faker";
+
+const prisma = new PrismaClient();
 
 const createAccount = async (userId: string) => {
   const accountOptions = Object.keys(AccountCategory);
@@ -49,21 +50,13 @@ const createGoal = async (userId: string) => {
 };
 
 async function main() {
-  const user = await prisma.user.findUnique({
-    where: {
-      email: "testUser@email.com",
-    },
-  });
-  const userId = user?.id;
-  if (!userId) {
-    throw new Error("User not found");
-  }
+  const userId = "clt9rtgxm0003dz6poaf1oshv";
 
   await prisma.account.deleteMany();
   await prisma.budget.deleteMany();
   await prisma.goal.deleteMany();
 
-  for (let i = 0; i < 40; i++) {
+  for (let i = 0; i < 1000000; i++) {
     await Promise.all([
       createAccount(userId),
       createBudget(userId),

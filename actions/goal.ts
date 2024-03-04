@@ -6,20 +6,20 @@ import { Goal } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import {
-  IValidatedResponse,
   IGetPaginatedGoalsParams,
   IGetPaginatedGoalsResponse,
-} from "@/data/types";
-import prisma from "@/lib/data/db";
-import redis from "@/lib/redis";
+  IValidatedResponse,
+} from "@/actions/types";
 import {
   generateCachePrefixWithUserId,
   getGoalKey,
   getPaginatedGoalsKeys,
-  invalidateKeysByPrefix,
   mapRedisHashToGoal,
 } from "@/lib/redis/redisUtils";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
+import { createGoalDto } from "@/lib/database/dto/goalDto";
+import goalRepository from "@/lib/database/repository/goalRepository";
+import redisService from "@/lib/redis/redisService";
 
 export const createGoal = async (
   values: GoalSchemaType
@@ -31,15 +31,11 @@ export const createGoal = async (
 
   try {
     const validatedData = goalSchema.parse(values);
+    const goalDto = createGoalDto(validatedData, user.id);
 
-    const createdGoal = await prisma.goal.create({
-      data: {
-        ...validatedData,
-        userId: user.id,
-      },
-    });
+    const affectedRows = await goalRepository.create(goalDto);
 
-    if (!createdGoal) {
+    if (affectedRows === 0) {
       return {
         error:
           "There was a problem while creating your goal. Please try again later.",
@@ -48,14 +44,14 @@ export const createGoal = async (
     }
 
     await Promise.all([
-      invalidateKeysByPrefix(
+      redisService.invalidateKeysByPrefix(
         generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_GOALS, user.id)
       ),
-      redis.hset(getGoalKey(createdGoal.id), createdGoal),
+      redisService.hset(getGoalKey(goalDto.id), goalDto),
     ]);
 
     return {
-      data: createdGoal,
+      data: goalDto,
       fieldErrors: [],
     };
   } catch (error) {
@@ -81,15 +77,13 @@ export const updateGoal = async (
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
-  let goalToBeUpdated: Goal | null = null;
+  let goalToBeUpdated: Goal | null;
 
-  const goalFromCache = await redis.hgetall(getGoalKey(goalId));
+  const goalFromCache = await redisService.hgetall(getGoalKey(goalId));
   if (goalFromCache) {
     goalToBeUpdated = mapRedisHashToGoal(goalFromCache);
   } else {
-    goalToBeUpdated = await prisma.goal.findUnique({
-      where: { id: goalId },
-    });
+    goalToBeUpdated = await goalRepository.getById(goalId);
   }
 
   if (!goalToBeUpdated)
@@ -97,13 +91,16 @@ export const updateGoal = async (
 
   try {
     const validatedData = goalSchema.parse(values);
+    const updatedGoalDto = {
+      ...validatedData,
+      id: goalId,
+      updatedAt: new Date(),
+    } as Goal;
 
-    const updatedGoal = await prisma.goal.update({
-      where: { id: goalId, userId: goalToBeUpdated.userId },
-      data: validatedData,
-    });
+    const { affectedRows, updatedGoal } =
+      await goalRepository.update(updatedGoalDto);
 
-    if (!updatedGoal)
+    if (affectedRows === 0 || !updatedGoal)
       return {
         error:
           "There was a problem while trying to update your goal. Please try again later.",
@@ -111,13 +108,13 @@ export const updateGoal = async (
       };
 
     await Promise.all([
-      invalidateKeysByPrefix(
+      redisService.invalidateKeysByPrefix(
         generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_GOALS, user.id)
       ),
-      redis.hset(getGoalKey(updatedGoal.id), updatedGoal),
+      redisService.hset(getGoalKey(updatedGoalDto.id), updatedGoalDto),
     ]);
 
-    return { data: updatedGoal, fieldErrors: [] };
+    return { data: updatedGoalDto, fieldErrors: [] };
   } catch (error) {
     if (error instanceof ZodError) {
       return processZodError(error);
@@ -131,6 +128,7 @@ export const updateGoal = async (
     };
   }
 };
+
 export const getPaginatedGoals = async ({
   pageNumber,
   query,
@@ -146,14 +144,6 @@ export const getPaginatedGoals = async ({
   try {
     const PAGE_SIZE = 12;
     const skipAmount = (pageNumber - 1) * PAGE_SIZE;
-    const orderByCondition =
-      sortBy && sortDirection
-        ? {
-            orderBy: {
-              [sortBy]: sortDirection,
-            },
-          }
-        : {};
 
     const cacheKey = getPaginatedGoalsKeys({
       userId: user.id,
@@ -163,7 +153,7 @@ export const getPaginatedGoals = async ({
       sortDirection,
     });
 
-    const cachedGoals = await redis.get(cacheKey);
+    const cachedGoals = await redisService.get(cacheKey);
     if (cachedGoals) {
       console.log("PAGINATED GOALS CACHE HIT");
       const parsedCacheData = JSON.parse(cachedGoals);
@@ -176,27 +166,13 @@ export const getPaginatedGoals = async ({
       };
     }
 
-    const [goals, totalCount] = await Promise.all([
-      prisma.goal.findMany({
-        skip: skipAmount,
-        take: PAGE_SIZE,
-        where: {
-          userId: user?.id,
-          name: {
-            contains: query,
-          },
-        },
-        orderBy: orderByCondition?.orderBy,
-      }),
-      prisma.goal.count({
-        where: {
-          userId: user?.id,
-          name: {
-            contains: query,
-          },
-        },
-      }),
-    ]);
+    const { goals, totalCount } = await goalRepository.getMultiple({
+      page: pageNumber,
+      userId: user.id,
+      query,
+      sortBy,
+      sortDirection,
+    });
 
     if (goals.length === 0) {
       return {
@@ -208,10 +184,10 @@ export const getPaginatedGoals = async ({
       };
     }
 
-    await redis.set(cacheKey, JSON.stringify({ goals, totalCount }));
+    await redisService.set(cacheKey, JSON.stringify({ goals, totalCount }));
 
     return {
-      goals,
+      goals: goals,
       hasNextPage: totalCount > skipAmount + PAGE_SIZE,
       hasPreviousPage: pageNumber > 1,
       totalPages: Math.ceil(totalCount / PAGE_SIZE),
@@ -237,11 +213,9 @@ export const deleteGoal = async (goalId: string) => {
   }
 
   try {
-    const deletedGoal = await prisma.goal.delete({
-      where: { id: goalId },
-    });
+    const affectedRows = await goalRepository.deleteById(goalId);
 
-    if (!deletedGoal) {
+    if (affectedRows === 0) {
       return {
         error:
           "There was a problem while deleting your goal. Please try again later.",
@@ -249,13 +223,13 @@ export const deleteGoal = async (goalId: string) => {
     }
 
     await Promise.all([
-      invalidateKeysByPrefix(
+      redisService.invalidateKeysByPrefix(
         generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_GOALS, user.id)
       ),
-      redis.del(getGoalKey(goalId)),
+      redisService.del(getGoalKey(goalId)),
     ]);
 
-    return { data: deletedGoal };
+    return { data: "Goal deleted successfully." };
   } catch (error) {
     console.error(error);
     return {
