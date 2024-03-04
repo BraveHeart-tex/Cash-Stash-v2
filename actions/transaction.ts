@@ -21,7 +21,7 @@ import {
 } from "@/actions/types";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import asyncPool from "@/lib/database/connection";
-import { ResultSetHeader, RowDataPacket } from "mysql2";
+import { RowDataPacket } from "mysql2";
 import { Transaction } from "@/entities/transaction";
 import redisService from "@/lib/redis/redisService";
 import transactionRepository from "@/lib/database/repository/transactionRepository";
@@ -170,37 +170,15 @@ export const deleteTransactionById = async (
   }
 
   try {
-    await asyncPool.query("START TRANSACTION;");
-    const [deleteTransactionResult] = await asyncPool.query<ResultSetHeader>(
-      "DELETE FROM Transaction WHERE id = :transactionId;",
-      {
-        transactionId: transactionToDelete.id,
-      }
-    );
+    const { affectedRows } =
+      await transactionRepository.deleteById(transactionToDelete);
 
-    if (deleteTransactionResult.affectedRows === 0) {
-      await asyncPool.query("ROLLBACK;");
+    if (affectedRows === 0) {
       return {
-        error: "Failed to delete transaction",
+        error:
+          "We encountered a problem while deleting the transaction. Please try again later.",
       };
     }
-
-    const [accountUpdateResult] = await asyncPool.query<ResultSetHeader>(
-      "UPDATE Account SET balance = balance - :amount WHERE id = :accountId;",
-      {
-        amount: transactionToDelete.amount,
-        accountId: transactionToDelete.accountId,
-      }
-    );
-
-    if (accountUpdateResult.affectedRows === 0) {
-      await asyncPool.query("ROLLBACK;");
-      return {
-        error: "Failed to update account balance",
-      };
-    }
-
-    await asyncPool.query("COMMIT;");
 
     await Promise.all([
       redisService.invalidateMultipleKeysByPrefix([

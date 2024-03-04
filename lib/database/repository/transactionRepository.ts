@@ -142,9 +142,57 @@ const getByAccountId = async (accountId: string) => {
       { accountId }
     );
   } catch (error) {
-    console.error("Error getting account by id", error);
     await asyncPool.query("ROLLBACK;");
+    console.error("Error getting account by id", error);
     return [];
+  }
+};
+
+const deleteById = async (transaction: Transaction) => {
+  try {
+    await asyncPool.query("START TRANSACTION;");
+    const deleteTransactionResult = await ModifyQuery(
+      "DELETE FROM Transaction WHERE id = :id;",
+      {
+        id: transaction.id,
+      }
+    );
+
+    if (deleteTransactionResult.affectedRows === 0) {
+      await asyncPool.query("ROLLBACK;");
+      return {
+        affectedRows: 0,
+      };
+    }
+
+    const updatedAccountResult = await ModifyQuery(
+      "UPDATE Account SET balance = balance - :amount WHERE id = :accountId;",
+      {
+        amount: transaction.amount,
+        accountId: transaction.accountId,
+      }
+    );
+
+    if (updatedAccountResult.affectedRows === 0) {
+      await asyncPool.query("ROLLBACK;");
+      return {
+        affectedRows: 0,
+      };
+    }
+
+    await asyncPool.query("COMMIT;");
+
+    const { affectedRows } = deleteTransactionResult;
+
+    return {
+      affectedRows,
+    };
+  } catch (error) {
+    await asyncPool.query("ROLLBACK;");
+    console.error("Error getting account by id", error);
+    return {
+      affectedRows: 0,
+    };
   }
 };
 
@@ -152,6 +200,7 @@ const transactionRepository = {
   getByAccountId,
   create,
   update,
+  deleteById,
 };
 
 export default transactionRepository;
