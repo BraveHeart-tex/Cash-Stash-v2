@@ -1,20 +1,16 @@
 "use server";
-import redis from "@/lib/redis/redisConnection";
 import {
   generateCachePrefixWithUserId,
   getAccountKey,
   getAccountTransactionsKey,
   getPaginatedTransactionsKey,
   getTransactionKey,
-  invalidateKeysByPrefix,
 } from "@/lib/redis/redisUtils";
-import prisma from "@/lib/database/db";
 import { getUser } from "@/lib/auth/session";
 import { processZodError } from "@/lib/utils";
 import transactionSchema, {
   TransactionSchemaType,
 } from "@/schemas/transaction-schema";
-import { Prisma, Transaction } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import {
@@ -27,6 +23,8 @@ import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import asyncPool from "@/lib/database/connection";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { createId } from "@paralleldrive/cuid2";
+import { Transaction } from "@/entities/transaction";
+import redisService from "@/lib/redis/redisService";
 
 export const createTransaction = async (
   values: TransactionSchemaType
@@ -102,26 +100,22 @@ export const createTransaction = async (
     await asyncPool.query("COMMIT;");
 
     await Promise.all([
-      invalidateKeysByPrefix(
+      redisService.invalidateMultipleKeysByPrefix([
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_ACCOUNTS,
           user.id
-        )
-      ),
-      invalidateKeysByPrefix(
+        ),
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_TRANSACTIONS,
           user.id
-        )
-      ),
-      invalidateKeysByPrefix(
-        getAccountTransactionsKey(validatedData.accountId)
-      ),
-      redis.hset(
+        ),
+        getAccountTransactionsKey(validatedData.accountId),
+      ]),
+      redisService.hset(
         getTransactionKey(createTransactionDto.id),
         createTransactionDto
       ),
-      redis.hset(getAccountKey(validatedData.accountId), updatedAccount),
+      redisService.hset(getAccountKey(validatedData.accountId), updatedAccount),
     ]);
 
     return {
@@ -203,21 +197,17 @@ export const updateTransaction = async (
     await asyncPool.query("COMMIT;");
 
     await Promise.all([
-      invalidateKeysByPrefix(
+      redisService.invalidateMultipleKeysByPrefix([
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_ACCOUNTS,
           user.id
-        )
-      ),
-      invalidateKeysByPrefix(
+        ),
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_TRANSACTIONS,
           user.id
-        )
-      ),
-      invalidateKeysByPrefix(
-        getAccountTransactionsKey(validatedData.accountId)
-      ),
+        ),
+        getAccountTransactionsKey(validatedData.accountId),
+      ]),
     ]);
 
     return {
@@ -282,21 +272,17 @@ export const deleteTransactionById = async (
     await asyncPool.query("COMMIT;");
 
     await Promise.all([
-      invalidateKeysByPrefix(
+      redisService.invalidateMultipleKeysByPrefix([
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_ACCOUNTS,
           user.id
-        )
-      ),
-      invalidateKeysByPrefix(
+        ),
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_TRANSACTIONS,
           user.id
-        )
-      ),
-      invalidateKeysByPrefix(
-        getAccountTransactionsKey(transactionToDelete.accountId)
-      ),
+        ),
+        getAccountTransactionsKey(transactionToDelete.accountId),
+      ]),
     ]);
 
     return {
@@ -410,7 +396,7 @@ export const getPaginatedTransactions = async ({
       category,
     });
 
-    const cachedData = await redis.get(cacheKey);
+    const cachedData = await redisService.get(cacheKey);
 
     if (cachedData) {
       const parsedData = JSON.parse(cachedData);
@@ -446,7 +432,7 @@ export const getPaginatedTransactions = async ({
 
     const totalCount = totalCountResult[0].totalCount;
 
-    await redis.set(
+    await redisService.set(
       cacheKey,
       JSON.stringify({
         transactions,
