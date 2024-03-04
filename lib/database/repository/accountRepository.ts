@@ -154,12 +154,29 @@ const getByUserId = async (userId: string) => {
   }
 };
 
+const checkIfUserHasAccount = async (userId: string) => {
+  try {
+    const accounts = await SelectQuery<Account>(
+      "SELECT id FROM Account WHERE userId = :userId limit 1",
+      {
+        userId,
+      }
+    );
+
+    return accounts.length > 0;
+  } catch (error) {
+    console.error("Error checking if user has account", error);
+    return false;
+  }
+};
+
 const accountRepository = {
   create,
   update,
   getMultiple,
   deleteById,
   getByUserId,
+  checkIfUserHasAccount,
 };
 
 export default accountRepository;

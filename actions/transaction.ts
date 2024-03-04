@@ -20,12 +20,11 @@ import {
   TransactionResponse,
 } from "@/actions/types";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
-import asyncPool from "@/lib/database/connection";
-import { RowDataPacket } from "mysql2";
 import { Transaction } from "@/entities/transaction";
 import redisService from "@/lib/redis/redisService";
 import transactionRepository from "@/lib/database/repository/transactionRepository";
 import { createTransactionDto } from "@/lib/database/dto/transactionDto";
+import accountRepository from "@/lib/database/repository/accountRepository";
 
 export const createTransaction = async (
   values: TransactionSchemaType
@@ -199,7 +198,6 @@ export const deleteTransactionById = async (
     };
   } catch (error) {
     console.error(error);
-    await asyncPool.query("ROLLBACK;");
     return {
       error:
         "We encountered a problem while deleting the transaction. Please try again later.",
@@ -313,10 +311,5 @@ export const userCanCreateTransaction = async () => {
     return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
-  const [accounts] = await asyncPool.query<RowDataPacket[]>(
-    "SELECT id FROM Account WHERE userId = :userId limit 1",
-    { userId: user.id }
-  );
-
-  return accounts.length > 0;
+  return await accountRepository.checkIfUserHasAccount(user.id);
 };
