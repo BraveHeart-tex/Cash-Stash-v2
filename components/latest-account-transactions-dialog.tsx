@@ -90,7 +90,7 @@ const LatestAccountTransactionsDialog = ({
                         ...transaction,
                         createdAt: new Date(transaction.createdAt),
                         updatedAt: new Date(transaction.updatedAt),
-                        account: selectedAccount!,
+                        accountName: selectedAccount.name,
                       }}
                     />
                   ))}
@@ -134,7 +134,7 @@ const LatestAccountTransactionsDialog = ({
                     ...transaction,
                     createdAt: new Date(transaction.createdAt),
                     updatedAt: new Date(transaction.updatedAt),
-                    account: selectedAccount!,
+                    accountName: selectedAccount.name,
                   }}
                 />
               ))}

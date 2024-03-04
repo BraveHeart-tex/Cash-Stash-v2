@@ -161,7 +161,7 @@ export const updateTransaction = async (
 };
 
 export const deleteTransactionById = async (
-  transactionToDelete: Transaction
+  transactionToDelete: TransactionResponse
 ) => {
   const { user } = await getUser();
   if (!user) {

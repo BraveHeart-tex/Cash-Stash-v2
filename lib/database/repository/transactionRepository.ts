@@ -8,6 +8,7 @@ import { TransactionDto } from "@/lib/database/dto/transactionDto";
 import asyncPool from "@/lib/database/connection";
 import { Account } from "@/entities/account";
 import { getPageSizeAndSkipAmount } from "@/lib/utils";
+import { TransactionResponse } from "@/actions/types";
 
 interface ICreateTransactionReturnType {
   affectedRows: number;
@@ -268,7 +269,7 @@ const getMultiple = async ({
   }
 };
 
-const deleteById = async (transaction: Transaction) => {
+const deleteById = async (transaction: TransactionResponse) => {
   try {
     await asyncPool.query("START TRANSACTION;");
     const deleteTransactionResult = await ModifyQuery(

@@ -19,7 +19,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { generateReadbleEnumLabels } from "@/lib/utils";
-import { Transaction, TransactionCategory } from "@prisma/client";
 import { IValidatedResponse } from "@/actions/types";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
@@ -31,6 +30,7 @@ import { getCurrentUserAccounts } from "@/actions/account";
 import { createTransaction, updateTransaction } from "@/actions/transaction";
 import useGenericModalStore from "@/store/genericModalStore";
 import { Account } from "@/entities/account";
+import { Transaction, TransactionCategory } from "@/entities/transaction";
 
 interface ITransactionFormProps {
   data?: Transaction;
