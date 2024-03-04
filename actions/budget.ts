@@ -22,6 +22,7 @@ import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import { createBudgetDto } from "@/lib/database/dto/budgetDto";
 import budgetRepository from "@/lib/database/repository/budgetRepository";
 import { BudgetCategory } from "@/entities/budget";
+import redisService from "@/lib/redis/redisService";
 
 export const createBudget = async (
   data: BudgetSchemaType
@@ -46,10 +47,10 @@ export const createBudget = async (
     }
 
     await Promise.all([
-      invalidateKeysByPrefix(
+      redisService.invalidateKeysByPrefix(
         generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_BUDGETS, user.id)
       ),
-      redis.hset(getBudgetKey(budgetDto.id), budgetDto),
+      redisService.hset(getBudgetKey(budgetDto.id), budgetDto),
     ]);
 
     return {
@@ -81,7 +82,7 @@ export const updateBudget = async (
 
   let budgetToBeUpdated: Budget | null;
 
-  const budgetFromCache = await redis.hgetall(getBudgetKey(budgetId));
+  const budgetFromCache = await redisService.hgetall(getBudgetKey(budgetId));
 
   if (budgetFromCache) {
     console.log("UPDATE Budget CACHE HIT");
@@ -115,10 +116,10 @@ export const updateBudget = async (
     }
 
     await Promise.all([
-      invalidateKeysByPrefix(
+      redisService.invalidateKeysByPrefix(
         generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_BUDGETS, user.id)
       ),
-      redis.hset(getBudgetKey(updatedBudget.id), updatedBudget),
+      redisService.hset(getBudgetKey(updatedBudget.id), updatedBudget),
     ]);
 
     return { data: updatedBudget, fieldErrors: [] };
@@ -171,7 +172,7 @@ export const getPaginatedBudgets = async ({
     sortDirection,
   });
 
-  const cachedData = await redis.get(cacheKey);
+  const cachedData = await redisService.get(cacheKey);
   if (cachedData) {
     console.log("Budgets CACHE HIT");
     return {
@@ -204,7 +205,7 @@ export const getPaginatedBudgets = async ({
     };
   }
 
-  await redis.set(cacheKey, JSON.stringify({ budgets, totalCount }));
+  await redisService.set(cacheKey, JSON.stringify({ budgets, totalCount }));
 
   return {
     budgets: budgets,
@@ -231,10 +232,10 @@ export const deleteBudget = async (id: string) => {
     }
 
     await Promise.all([
-      invalidateKeysByPrefix(
+      redisService.invalidateKeysByPrefix(
         generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_BUDGETS, user.id)
       ),
-      redis.del(getBudgetKey(id)),
+      redisService.del(getBudgetKey(id)),
     ]);
 
     return {

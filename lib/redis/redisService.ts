@@ -5,6 +5,10 @@ const redisService = {
     return redis.hset(key, object);
   },
 
+  hgetall: async (key: string) => {
+    return redis.hgetall(key);
+  },
+
   get: async (key: string) => {
     return redis.get(key);
   },
@@ -16,9 +20,13 @@ const redisService = {
   set: async (
     key: string,
     data: string,
-    secondsToken: "EX" | "PX" | "NX" | "XX",
-    seconds: number
+    secondsToken?: "EX" | "PX" | "NX" | "XX",
+    seconds?: number
   ) => {
+    if (!secondsToken || !seconds) {
+      return redis.set(key, data);
+    }
+
     return redis.set(key, data, secondsToken as any, seconds);
   },
 
