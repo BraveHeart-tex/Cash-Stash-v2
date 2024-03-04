@@ -22,9 +22,10 @@ import {
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import asyncPool from "@/lib/database/connection";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
-import { createId } from "@paralleldrive/cuid2";
 import { Transaction } from "@/entities/transaction";
 import redisService from "@/lib/redis/redisService";
+import transactionRepository from "@/lib/database/repository/transactionRepository";
+import { createTransactionDto } from "@/lib/database/dto/transactionDto";
 
 export const createTransaction = async (
   values: TransactionSchemaType
@@ -36,68 +37,20 @@ export const createTransaction = async (
   }
 
   try {
-    await asyncPool.query("START TRANSACTION;");
-
     const validatedData = transactionSchema.parse(values);
 
-    // get the account balance
-    const [accountResponse] = await asyncPool.query<RowDataPacket[]>(
-      "SELECT balance FROM Account WHERE id = ?",
-      [validatedData.accountId]
-    );
+    const transactionDto = createTransactionDto(validatedData, user.id);
 
-    if (accountResponse.length === 0) {
-      await asyncPool.query("ROLLBACK;");
+    const { affectedRows, updatedAccount } =
+      await transactionRepository.create(transactionDto);
+
+    if (affectedRows === 0 || !updatedAccount) {
       return {
-        error: "Account not found",
+        error:
+          "We encountered a problem while creating the transaction. Please try again later.",
         fieldErrors: [],
       };
     }
-
-    const balance = accountResponse[0].balance + validatedData.amount;
-
-    const createTransactionDto = {
-      ...validatedData,
-      id: createId(),
-      userId: user.id,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-
-    const [createTransactionResponse] = await asyncPool.query<ResultSetHeader>(
-      "INSERT INTO `Transaction` SET ?",
-      [createTransactionDto]
-    );
-
-    if (createTransactionResponse.affectedRows === 0) {
-      await asyncPool.query("ROLLBACK;");
-      return {
-        error: "Failed to create transaction",
-        fieldErrors: [],
-      };
-    }
-
-    const [updateAccountResponse] = await asyncPool.query<RowDataPacket[]>(
-      "UPDATE Account SET balance = :balance WHERE id = :accountId; SELECT * FROM Account WHERE id = :accountId;",
-      {
-        balance,
-        accountId: validatedData.accountId,
-      }
-    );
-
-    const affectedRows = updateAccountResponse[0].affectedRows;
-
-    if (affectedRows === 0) {
-      await asyncPool.query("ROLLBACK;");
-      return {
-        error: "Failed to update account balance",
-        fieldErrors: [],
-      };
-    }
-
-    const updatedAccount = updateAccountResponse[1][0];
-
-    await asyncPool.query("COMMIT;");
 
     await Promise.all([
       redisService.invalidateMultipleKeysByPrefix([
@@ -111,15 +64,12 @@ export const createTransaction = async (
         ),
         getAccountTransactionsKey(validatedData.accountId),
       ]),
-      redisService.hset(
-        getTransactionKey(createTransactionDto.id),
-        createTransactionDto
-      ),
+      redisService.hset(getTransactionKey(transactionDto.id), transactionDto),
       redisService.hset(getAccountKey(validatedData.accountId), updatedAccount),
     ]);
 
     return {
-      data: createTransactionDto,
+      data: transactionDto,
       fieldErrors: [],
     };
   } catch (error) {
