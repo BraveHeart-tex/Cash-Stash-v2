@@ -144,7 +144,7 @@ const getByAccountId = async (accountId: string) => {
     );
   } catch (error) {
     await asyncPool.query("ROLLBACK;");
-    console.error("Error getting account by id", error);
+    console.error("Error transactionRepository.getByAccountId", error);
     return [];
   }
 };
