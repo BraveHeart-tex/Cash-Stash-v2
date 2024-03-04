@@ -76,6 +76,61 @@ const create = async (
   }
 };
 
+const update = async (
+  oldAccountData: {
+    oldAccountId: string;
+    oldAmount: number;
+    accountId: string;
+    amount: number;
+  },
+  transactionDto: Partial<TransactionDto>
+) => {
+  try {
+    await asyncPool.query("START TRANSACTION;");
+    const updatedAccountResponse = await ModifyQuery(
+      `UPDATE Account SET balance = balance - :oldAmount WHERE id = :oldAccountId; UPDATE Account SET balance = balance + :amount WHERE id = :accountId;`,
+      oldAccountData
+    );
+
+    if (updatedAccountResponse.affectedRows === 0) {
+      await asyncPool.query("ROLLBACK;");
+      return {
+        affectedRows: 0,
+      };
+    }
+
+    const updateTransactionResponse = await ModifyQueryWithSelect<Transaction>(
+      "UPDATE Transaction SET :validatedData WHERE id = :transactionId; SELECT * FROM Transaction WHERE id = :transactionId;",
+      {
+        validatedData: transactionDto,
+        transactionId: transactionDto.id,
+      }
+    );
+
+    if (updateTransactionResponse.affectedRows === 0) {
+      await asyncPool.query("ROLLBACK;");
+      return {
+        affectedRows: 0,
+      };
+    }
+
+    await asyncPool.query("COMMIT;");
+
+    const { affectedRows, updatedRow } = updateTransactionResponse;
+
+    return {
+      affectedRows,
+      updatedRow,
+    };
+  } catch (error) {
+    await asyncPool.query("ROLLBACK;");
+    console.error(error);
+    return {
+      affectedRows: 0,
+    };
+  }
+};
+
 const getByAccountId = async (accountId: string) => {
   try {
     const transactions = await SelectQuery<Transaction>(
@@ -86,6 +141,7 @@ const getByAccountId = async (accountId: string) => {
     return transactions;
   } catch (error) {
     console.error("Error getting account by id", error);
+    await asyncPool.query("ROLLBACK;");
     return [];
   }
 };
@@ -93,6 +149,7 @@ const getByAccountId = async (accountId: string) => {
 const transactionRepository = {
   getByAccountId,
   create,
+  update,
 };
 
 export default transactionRepository;

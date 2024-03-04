@@ -74,7 +74,6 @@ export const createTransaction = async (
     };
   } catch (error) {
     console.error(error);
-    await asyncPool.query("ROLLBACK;");
 
     if (error instanceof ZodError) {
       return processZodError(error);
@@ -100,51 +99,34 @@ export const updateTransaction = async (
   }
 
   try {
-    await asyncPool.query("START TRANSACTION;");
-
     const { amount: oldAmount, accountId: oldAccountId } = oldTransaction;
 
     const validatedData = transactionSchema.parse(values);
 
-    const [updateAccountResponse] = await asyncPool.query<RowDataPacket[]>(
-      `UPDATE Account SET balance = balance - :oldAmount WHERE id = :oldAccountId; UPDATE Account SET balance = balance + :amount WHERE id = :accountId;`,
-      {
-        oldAmount,
-        oldAccountId,
-        amount: validatedData.amount,
-        accountId: validatedData.accountId,
-      }
+    const oldAccountData = {
+      oldAmount,
+      oldAccountId,
+      amount: validatedData.amount,
+      accountId: validatedData.accountId,
+    };
+
+    const transactionDto = {
+      ...validatedData,
+      id: transactionId,
+    };
+
+    const { affectedRows, updatedRow } = await transactionRepository.update(
+      oldAccountData,
+      transactionDto
     );
 
-    const affectedRows = updateAccountResponse[0].affectedRows;
-
-    if (affectedRows === 0) {
-      await asyncPool.query("ROLLBACK;");
+    if (affectedRows === 0 || !updatedRow) {
       return {
-        error: "Failed to update account balance",
+        error:
+          "We encountered a problem while updating the transaction. Please try again later.",
         fieldErrors: [],
       };
     }
-
-    const [transactionUpdateResponse] = await asyncPool.query<RowDataPacket[]>(
-      "UPDATE Transaction SET :validatedData WHERE id = :transactionId; SELECT * FROM Transaction WHERE id = :transactionId;",
-      {
-        validatedData,
-        transactionId,
-      }
-    );
-
-    if (transactionUpdateResponse[0].affectedRows === 0) {
-      await asyncPool.query("ROLLBACK;");
-      return {
-        error: "Failed to update transaction",
-        fieldErrors: [],
-      };
-    }
-
-    const updatedTransaction = transactionUpdateResponse[1][0];
-
-    await asyncPool.query("COMMIT;");
 
     await Promise.all([
       redisService.invalidateMultipleKeysByPrefix([
@@ -161,12 +143,11 @@ export const updateTransaction = async (
     ]);
 
     return {
-      data: updatedTransaction as Transaction,
+      data: updatedRow,
       fieldErrors: [],
     };
   } catch (error) {
     console.error(error);
-    await asyncPool.query("ROLLBACK;");
 
     if (error instanceof ZodError) {
       return processZodError(error);
