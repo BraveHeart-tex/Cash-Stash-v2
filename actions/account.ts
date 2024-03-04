@@ -21,6 +21,7 @@ import { createAccountDto } from "@/lib/database/dto/accountDto";
 import accountRepository from "@/lib/database/repository/accountRepository";
 import { Account, AccountCategory } from "@/entities/account";
 import transactionRepository from "@/lib/database/repository/transactionRepository";
+import redisService from "@/lib/redis/redisService";
 
 export const registerBankAccount = async ({
   balance,
@@ -45,13 +46,13 @@ export const registerBankAccount = async ({
     }
 
     await Promise.all([
-      invalidateKeysByPrefix(
+      redisService.invalidateKeysByPrefix(
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_ACCOUNTS,
           user.id
         )
       ),
-      redis.hset(getAccountKey(accountDto.id), accountDto),
+      redisService.hset(getAccountKey(accountDto.id), accountDto),
     ]);
 
     return {
@@ -110,13 +111,13 @@ export const updateBankAccount = async ({
     }
 
     await Promise.all([
-      invalidateKeysByPrefix(
+      redisService.invalidateKeysByPrefix(
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_ACCOUNTS,
           user.id
         )
       ),
-      redis.hset(getAccountKey(accountId), updatedAccount),
+      redisService.hset(getAccountKey(accountId), updatedAccount),
     ]);
 
     return {
@@ -172,7 +173,7 @@ export const getPaginatedAccounts = async ({
       sortDirection,
     });
 
-    const cachedData = await redis.get(cacheKey);
+    const cachedData = await redisService.get(cacheKey);
 
     if (cachedData) {
       console.info("CACHE HIT");
@@ -205,7 +206,7 @@ export const getPaginatedAccounts = async ({
       };
     }
 
-    await redis.set(
+    await redisService.set(
       cacheKey,
       JSON.stringify({ accounts, totalCount }),
       "EX",
@@ -246,19 +247,17 @@ export const deleteAccount = async (accountId: string) => {
     }
 
     await Promise.all([
-      invalidateKeysByPrefix(
+      redisService.invalidateMultipleKeysByPrefix([
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_ACCOUNTS,
           user.id
-        )
-      ),
-      invalidateKeysByPrefix(
+        ),
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_TRANSACTIONS,
           user.id
-        )
-      ),
-      redis.del(getAccountKey(accountId)),
+        ),
+      ]),
+      redisService.del(getAccountKey(accountId)),
     ]);
 
     return { data: "Account deleted successfully." };
@@ -288,7 +287,7 @@ export const getTransactionsForAccount = async (accountId: string) => {
       return [];
     }
 
-    await redis.set(key, JSON.stringify(transactions), "EX", 5 * 60);
+    await redisService.set(key, JSON.stringify(transactions), "EX", 5 * 60);
 
     return transactions;
   } catch (error) {

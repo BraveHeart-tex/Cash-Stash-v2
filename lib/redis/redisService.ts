@@ -9,9 +9,31 @@ const redisService = {
     return redis.get(key);
   },
 
+  del: async (key: string) => {
+    return redis.del(key);
+  },
+
+  set: async (
+    key: string,
+    data: string,
+    secondsToken: "EX" | "PX" | "NX" | "XX",
+    seconds: number
+  ) => {
+    return redis.set(key, data, secondsToken as any, seconds);
+  },
+
   invalidateKeysByPrefix: async (prefix: string) => {
     const keys = await redis.keys("*");
     const keysToDelete = keys.filter((key) => key.startsWith(prefix));
+    if (keysToDelete.length === 0) return;
+    return redis.del(keysToDelete);
+  },
+
+  invalidateMultipleKeysByPrefix: async (prefixes: string[]) => {
+    const keys = await redis.keys("*");
+    const keysToDelete = keys.filter((key) =>
+      prefixes.some((prefix) => key.startsWith(prefix))
+    );
     if (keysToDelete.length === 0) return;
     return redis.del(keysToDelete);
   },
