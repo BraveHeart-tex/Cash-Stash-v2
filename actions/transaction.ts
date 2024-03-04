@@ -224,75 +224,6 @@ export const getPaginatedTransactions = async ({
   const PAGE_SIZE = 12;
   const skipAmount = (pageNumber - 1) * PAGE_SIZE;
 
-  let transactionsQuery = `SELECT t.*, a.name as accountName FROM Transaction t join Account a on t.accountId = a.id WHERE t.userId = :userId AND description LIKE :query `;
-  let totalTransactionsCountQuery = `SELECT COUNT(*) FROM Transaction WHERE userId = :userId AND description LIKE :query`;
-
-  let transactionsQueryParams: {
-    userId: string;
-    query: string;
-    transactionType?: string;
-    accountId?: string;
-    sortBy?: string;
-    sortDirection?: string;
-    category?: string;
-    limit?: number;
-    offset?: number;
-  } = {
-    userId: user.id,
-    query: `%${query}%`,
-  };
-
-  let totalTransactionsCountQueryParams: {
-    userId: string;
-    query: string;
-    transactionType?: string;
-    accountId?: string;
-    category?: string;
-  } = {
-    userId: user.id,
-    query: `%${query}%`,
-  };
-
-  if (category) {
-    transactionsQuery += ` AND category = :category`;
-    totalTransactionsCountQuery += ` AND category = :category`;
-    transactionsQueryParams.category = category;
-    totalTransactionsCountQueryParams.category = category;
-  }
-
-  if (sortBy && sortDirection) {
-    const sortByOptions = ["createdAt", "amount"];
-    const sortDirections = ["asc", "desc"];
-
-    const validSortBy = sortByOptions.includes(sortBy) ? sortBy : "createdAt";
-    const validSortDirection = sortDirections.includes(sortDirection)
-      ? sortDirection
-      : "desc";
-
-    transactionsQuery += ` ORDER BY ${validSortBy} ${validSortDirection}`;
-  }
-
-  if (transactionType === "income") {
-    transactionsQuery += ` AND amount > 0`;
-    totalTransactionsCountQuery += ` AND amount > 0`;
-  }
-
-  if (transactionType === "expense") {
-    transactionsQuery += ` AND amount < 0`;
-    totalTransactionsCountQuery += ` AND amount < 0`;
-  }
-
-  if (accountId) {
-    transactionsQuery += ` AND accountId = :accountId`;
-    totalTransactionsCountQuery += ` AND accountId = :accountId`;
-    transactionsQueryParams.accountId = accountId;
-    totalTransactionsCountQueryParams.accountId = accountId;
-  }
-
-  transactionsQuery += ` LIMIT :limit OFFSET :offset`;
-  transactionsQueryParams.limit = PAGE_SIZE;
-  transactionsQueryParams.offset = skipAmount;
-
   try {
     const cacheKey = getPaginatedTransactionsKey({
       userId: user.id,
@@ -325,21 +256,27 @@ export const getPaginatedTransactions = async ({
       };
     }
 
-    const [transactionsPromise, totalCountPromise] = await Promise.all([
-      asyncPool.query<RowDataPacket[]>(
-        transactionsQuery,
-        transactionsQueryParams
-      ),
-      asyncPool.query<RowDataPacket[]>(
-        totalTransactionsCountQuery,
-        totalTransactionsCountQueryParams
-      ),
-    ]);
+    const { transactions, totalCount } =
+      await transactionRepository.getMultiple({
+        userId: user.id,
+        transactionType,
+        accountId,
+        sortBy,
+        sortDirection,
+        query,
+        page: pageNumber,
+        category,
+      });
 
-    const [transactions] = transactionsPromise;
-    const [totalCountResult] = totalCountPromise;
-
-    const totalCount = totalCountResult[0].totalCount;
+    if (transactions.length === 0) {
+      return {
+        transactions: [],
+        hasNextPage: false,
+        hasPreviousPage: false,
+        totalPages: 1,
+        currentPage: 1,
+      };
+    }
 
     await redisService.set(
       cacheKey,

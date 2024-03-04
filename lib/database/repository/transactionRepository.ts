@@ -7,6 +7,7 @@ import { Transaction } from "@/entities/transaction";
 import { TransactionDto } from "@/lib/database/dto/transactionDto";
 import asyncPool from "@/lib/database/connection";
 import { Account } from "@/entities/account";
+import { getPageSizeAndSkipAmount } from "@/lib/utils";
 
 interface ICreateTransactionReturnType {
   affectedRows: number;
@@ -148,6 +149,125 @@ const getByAccountId = async (accountId: string) => {
   }
 };
 
+interface IGetMultipleTransactionsParams {
+  page: number;
+  userId: string;
+  query?: string;
+  category?: string;
+  sortBy?: string;
+  sortDirection?: string;
+  transactionType?: string;
+  accountId?: string;
+}
+
+const getMultiple = async ({
+  page,
+  userId,
+  query,
+  category,
+  sortBy,
+  sortDirection,
+  transactionType,
+  accountId,
+}: IGetMultipleTransactionsParams) => {
+  const { pageSize, skipAmount } = getPageSizeAndSkipAmount(page);
+
+  let transactionsQuery = `SELECT t.*, a.name as accountName FROM Transaction t join Account a on t.accountId = a.id WHERE t.userId = :userId AND description LIKE :query `;
+
+  let totalTransactionsCountQuery = `SELECT COUNT(*) FROM Transaction WHERE userId = :userId AND description LIKE :query`;
+
+  let transactionsQueryParams: {
+    userId: string;
+    query: string;
+    transactionType?: string;
+    accountId?: string;
+    sortBy?: string;
+    sortDirection?: string;
+    category?: string;
+    limit?: number;
+    offset?: number;
+  } = {
+    userId,
+    query: `%${query}%`,
+  };
+
+  let totalTransactionsCountQueryParams: {
+    userId: string;
+    query: string;
+    transactionType?: string;
+    accountId?: string;
+    category?: string;
+  } = {
+    userId,
+    query: `%${query}%`,
+  };
+
+  if (category) {
+    transactionsQuery += ` AND t.category = :category`;
+    totalTransactionsCountQuery += ` AND category = :category`;
+    transactionsQueryParams.category = category;
+    totalTransactionsCountQueryParams.category = category;
+  }
+
+  if (accountId) {
+    transactionsQuery += ` AND accountId = :accountId`;
+    totalTransactionsCountQuery += ` AND accountId = :accountId`;
+    transactionsQueryParams.accountId = accountId;
+    totalTransactionsCountQueryParams.accountId = accountId;
+  }
+
+  if (sortBy && sortDirection) {
+    const sortByOptions = ["createdAt", "amount"];
+    const sortDirections = ["asc", "desc"];
+
+    const validSortBy = sortByOptions.includes(sortBy) ? sortBy : "createdAt";
+    const validSortDirection = sortDirections.includes(sortDirection)
+      ? sortDirection
+      : "desc";
+
+    transactionsQuery += ` ORDER BY ${validSortBy} ${validSortDirection}`;
+  }
+
+  if (transactionType === "income") {
+    transactionsQuery += ` AND amount > 0`;
+    totalTransactionsCountQuery += ` AND amount > 0`;
+  }
+
+  if (transactionType === "expense") {
+    transactionsQuery += ` AND amount < 0`;
+    totalTransactionsCountQuery += ` AND amount < 0`;
+  }
+
+  transactionsQuery += ` LIMIT :limit OFFSET :offset`;
+  transactionsQueryParams.limit = pageSize;
+  transactionsQueryParams.offset = skipAmount;
+
+  try {
+    const [transactions, totalCountResponse] = await Promise.all([
+      SelectQuery<Transaction>(transactionsQuery, transactionsQueryParams),
+      SelectQuery<{ totalCount: number }>(
+        totalTransactionsCountQuery,
+        totalTransactionsCountQueryParams
+      ),
+    ]);
+
+    console.log("transactions", transactions);
+
+    const totalCount = totalCountResponse[0].totalCount;
+
+    return {
+      transactions,
+      totalCount,
+    };
+  } catch (error) {
+    console.error("Error getting transactions", error);
+    return {
+      transactions: [],
+      totalCount: 0,
+    };
+  }
+};
+
 const deleteById = async (transaction: Transaction) => {
   try {
     await asyncPool.query("START TRANSACTION;");
@@ -201,6 +321,7 @@ const transactionRepository = {
   create,
   update,
   deleteById,
+  getMultiple,
 };
 
 export default transactionRepository;
