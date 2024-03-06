@@ -29,7 +29,7 @@ import {
   showSuccessToast,
 } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useTransition } from "react";
 import useGenericModalStore from "@/store/genericModalStore";
 import accountSchema, { AccountSchemaType } from "@/schemas/account-schema";
 
@@ -37,9 +37,8 @@ interface IAccountFormProps {
   data?: Account;
 }
 
-const AccountForm: React.FC<IAccountFormProps> = ({
-  data: accountToBeUpdated,
-}) => {
+const AccountForm = ({ data: accountToBeUpdated }: IAccountFormProps) => {
+  const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const closeGenericModal = useGenericModalStore(
     (state) => state.closeGenericModal
@@ -69,17 +68,20 @@ const AccountForm: React.FC<IAccountFormProps> = ({
       return;
     }
 
-    let result;
-    if (entityId) {
-      result = await updateBankAccount({
-        ...values,
-        accountId: entityId,
-      });
-    } else {
-      result = await registerBankAccount(values);
-    }
+    startTransition(async () => {
+      let result;
 
-    processFormErrors(result);
+      if (entityId) {
+        result = await updateBankAccount({
+          ...values,
+          accountId: entityId,
+        });
+      } else {
+        result = await registerBankAccount(values);
+      }
+
+      processFormErrors(result);
+    });
   };
 
   const processFormErrors = (result: IValidatedResponse<Account>) => {
@@ -111,7 +113,7 @@ const AccountForm: React.FC<IAccountFormProps> = ({
   const selectOptions = generateReadbleEnumLabels({ enumObj: AccountCategory });
 
   const renderSubmitButtonContent = () => {
-    if (form.formState.isSubmitting) {
+    if (form.formState.isSubmitting || isPending) {
       return "Submitting...";
     }
 
@@ -180,7 +182,7 @@ const AccountForm: React.FC<IAccountFormProps> = ({
         <Button
           className="w-full"
           type="submit"
-          disabled={form.formState.isSubmitting}
+          disabled={form.formState.isSubmitting || isPending}
         >
           {renderSubmitButtonContent()}
         </Button>
