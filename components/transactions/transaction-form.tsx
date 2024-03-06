@@ -18,9 +18,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { generateReadbleEnumLabels } from "@/lib/utils";
+import { formHasChanged, generateReadbleEnumLabels } from "@/lib/utils";
 import { IValidatedResponse } from "@/actions/types";
-import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
+import {
+  showDefaultToast,
+  showErrorToast,
+  showSuccessToast,
+} from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState, useTransition } from "react";
 import transactionSchema, {
@@ -58,7 +62,7 @@ const TransactionForm = ({
   }, [transactionToBeUpdated]);
 
   useEffect(() => {
-    const fetchAccounts = async () => {
+    startTransition(async () => {
       const accounts = await getCurrentUserAccounts();
 
       if (accounts.length === 0) {
@@ -69,9 +73,7 @@ const TransactionForm = ({
       }
 
       setAccounts(accounts);
-    };
-
-    fetchAccounts();
+    });
   }, []);
 
   const setDefaultFormValues = (transactionToBeUpdated: Transaction) => {
@@ -86,18 +88,28 @@ const TransactionForm = ({
   };
 
   const handleFormSubmit = async (values: TransactionSchemaType) => {
-    let result;
-    if (entityId) {
-      result = await updateTransaction(
-        entityId,
-        values,
-        transactionToBeUpdated
+    if (entityId && formHasChanged(transactionToBeUpdated, values)) {
+      showDefaultToast(
+        "No changes detected.",
+        "You haven't made any changes to the transaction."
       );
-    } else {
-      result = await createTransaction(values);
+      return;
     }
 
-    processFormErrors(result);
+    startTransition(async () => {
+      let result;
+      if (entityId) {
+        result = await updateTransaction(
+          entityId,
+          values,
+          transactionToBeUpdated
+        );
+      } else {
+        result = await createTransaction(values);
+      }
+
+      processFormErrors(result);
+    });
   };
 
   const processFormErrors = (result: IValidatedResponse<Transaction>) => {
@@ -239,7 +251,7 @@ const TransactionForm = ({
         <Button
           className="w-full"
           type="submit"
-          disabled={form.formState.isSubmitting || !isPending}
+          disabled={form.formState.isSubmitting || isPending}
         >
           {renderSubmitButtonContent()}
         </Button>
