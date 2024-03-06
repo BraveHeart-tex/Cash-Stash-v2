@@ -22,7 +22,7 @@ import { generateReadbleEnumLabels } from "@/lib/utils";
 import { IValidatedResponse } from "@/actions/types";
 import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import transactionSchema, {
   TransactionSchemaType,
 } from "@/schemas/transaction-schema";
@@ -36,9 +36,10 @@ interface ITransactionFormProps {
   data?: Transaction;
 }
 
-const TransactionForm: React.FC<ITransactionFormProps> = ({
+const TransactionForm = ({
   data: transactionToBeUpdated,
-}) => {
+}: ITransactionFormProps) => {
+  const [isPending, startTransition] = useTransition();
   const closeGenericModal = useGenericModalStore(
     (state) => state.closeGenericModal
   );
@@ -136,6 +137,14 @@ const TransactionForm: React.FC<ITransactionFormProps> = ({
     enumObj: TransactionCategory,
   });
 
+  const renderSubmitButtonContent = () => {
+    if (isPending || form.formState.isSubmitting) {
+      return "Submitting...";
+    }
+
+    return !entityId ? "Create" : "Update";
+  };
+
   return (
     <Form {...form}>
       <form
@@ -227,8 +236,12 @@ const TransactionForm: React.FC<ITransactionFormProps> = ({
             </FormItem>
           )}
         />
-        <Button className="w-full" type="submit">
-          {!entityId ? "Create" : "Update"}
+        <Button
+          className="w-full"
+          type="submit"
+          disabled={form.formState.isSubmitting || !isPending}
+        >
+          {renderSubmitButtonContent()}
         </Button>
       </form>
     </Form>
