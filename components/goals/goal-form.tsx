@@ -19,8 +19,7 @@ import {
   showSuccessToast,
 } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
-
-import { useEffect } from "react";
+import { useEffect, useTransition } from "react";
 import goalSchema, { GoalSchemaType } from "@/schemas/goal-schema";
 import { createGoal, updateGoal } from "@/actions/goal";
 import { formHasChanged } from "@/lib/utils";
@@ -30,7 +29,8 @@ interface IGoalFormProps {
   data?: Goal;
 }
 
-const GoalForm: React.FC<IGoalFormProps> = ({ data: goalToBeUpdated }) => {
+const GoalForm = ({ data: goalToBeUpdated }: IGoalFormProps) => {
+  const [isPending, startTransition] = useTransition();
   const closeGenericModal = useGenericModalStore(
     (state) => state.closeGenericModal
   );
@@ -63,14 +63,16 @@ const GoalForm: React.FC<IGoalFormProps> = ({ data: goalToBeUpdated }) => {
       return;
     }
 
-    let result;
-    if (entityId) {
-      result = await updateGoal(entityId, values);
-    } else {
-      result = await createGoal(values);
-    }
+    startTransition(async () => {
+      let result;
+      if (entityId) {
+        result = await updateGoal(entityId, values);
+      } else {
+        result = await createGoal(values);
+      }
 
-    processFormErrors(result);
+      processFormErrors(result);
+    });
   };
 
   const processFormErrors = (result: IValidatedResponse<Goal>) => {
@@ -100,7 +102,7 @@ const GoalForm: React.FC<IGoalFormProps> = ({ data: goalToBeUpdated }) => {
   };
 
   const renderSubmitButtonContent = () => {
-    if (form.formState.isSubmitting) {
+    if (form.formState.isSubmitting || isPending) {
       return "Submitting...";
     }
 
@@ -165,7 +167,7 @@ const GoalForm: React.FC<IGoalFormProps> = ({ data: goalToBeUpdated }) => {
         <Button
           className="w-full"
           type="submit"
-          disabled={form.formState.isSubmitting}
+          disabled={form.formState.isSubmitting || isPending}
         >
           {renderSubmitButtonContent()}
         </Button>
