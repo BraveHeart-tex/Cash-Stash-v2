@@ -34,16 +34,17 @@ import PasswordRequirements from "@/components/auth/password-requirements";
 import { CAPTCHA_SITE_KEY, PAGE_ROUTES } from "@/lib/constants";
 import { useRouter } from "next/navigation";
 import ReCAPTCHA from "react-google-recaptcha";
-import { useRef } from "react";
+import { useRef, useTransition } from "react";
 
 const RegisterForm = () => {
+  const [isPending, startTransition] = useTransition();
   const captchaRef = useRef<ReCAPTCHA>(null);
   const form = useForm<RegisterSchemaType>({
     resolver: zodResolver(registerSchema),
   });
   const router = useRouter();
 
-  const handleRegisterFormSubmit = async (data: RegisterSchemaType) => {
+  const handleRegisterFormSubmit = (data: RegisterSchemaType) => {
     const captchaToken = captchaRef.current?.getValue();
     if (!captchaToken) {
       showErrorToast(
@@ -53,29 +54,31 @@ const RegisterForm = () => {
       return;
     }
 
-    const isCaptchaTokenValid = await validateReCAPTCHAToken(captchaToken);
+    startTransition(async () => {
+      const isCaptchaTokenValid = await validateReCAPTCHAToken(captchaToken);
 
-    if (!isCaptchaTokenValid) {
-      showErrorToast(
-        "Captcha validation failed.",
-        "Please complete the captcha."
+      if (!isCaptchaTokenValid) {
+        showErrorToast(
+          "Captcha validation failed.",
+          "Please complete the captcha."
+        );
+        return;
+      }
+
+      const result = await registerUser(data);
+
+      if (result.error || result.fieldErrors.length) {
+        processFormErrors(result);
+        return;
+      }
+
+      router.push(PAGE_ROUTES.EMAIL_VERIFICATION_ROUTE + `/${data.email}`);
+
+      showSuccessToast(
+        "Account created successfully",
+        "Please check your email to verify your account."
       );
-      return;
-    }
-
-    const result = await registerUser(data);
-
-    if (result.error || result.fieldErrors.length) {
-      processFormErrors(result);
-      return;
-    }
-
-    router.push(PAGE_ROUTES.EMAIL_VERIFICATION_ROUTE + `/${data.email}`);
-
-    showSuccessToast(
-      "Account created successfully",
-      "Please check your email to verify your account."
-    );
+    });
   };
 
   const processFormErrors = (
@@ -188,9 +191,11 @@ const RegisterForm = () => {
               <Button
                 type="submit"
                 className="font-semibold"
-                disabled={form.formState.isSubmitting}
+                disabled={form.formState.isSubmitting || isPending}
               >
-                {form.formState.isSubmitting ? "Signing up..." : "Sign Up"}
+                {form.formState.isSubmitting || isPending
+                  ? "Signing up..."
+                  : "Sign Up"}
               </Button>
             </form>
           </Form>
@@ -201,6 +206,7 @@ const RegisterForm = () => {
               Already have an account?{" "}
               <Button
                 variant="link"
+                disabled={form.formState.isSubmitting || isPending}
                 aria-label="Sign up for a new account."
                 className="p-0 underline text-md"
               >

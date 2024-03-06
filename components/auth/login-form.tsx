@@ -201,6 +201,7 @@ const LoginForm = () => {
               <p>
                 Don't have an account?{" "}
                 <Button
+                  disabled={isPending}
                   variant="link"
                   aria-label="Sign up for a new account."
                   className="p-0 underline text-md"
@@ -214,6 +215,7 @@ const LoginForm = () => {
                 </Button>
               </p>
               <Button
+                disabled={isPending}
                 variant="link"
                 aria-label="Sign up for a new account."
                 className="w-max p-0 underline"
