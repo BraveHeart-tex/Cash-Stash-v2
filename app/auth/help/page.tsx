@@ -2,7 +2,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -13,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import ForgotPassword from "@/components/auth/forgot-password";
 import { PAGE_ROUTES } from "@/lib/constants";
 import ResendNotificationInput from "@/components/resend-verification-token-input";
+import { FaArrowLeft } from "react-icons/fa6";
 
 const SignInHelpPage = ({
   searchParams,
@@ -83,11 +83,14 @@ const SignInHelpPage = ({
                   I need a new verification token
                 </Link>
               </Button>
-              <Button variant="link" className="underline">
-                <Link href={PAGE_ROUTES.LOGIN_ROUTE}>Back to sign in</Link>
-              </Button>
             </>
           )}
+          <div className="w-full flex items-center justify-end mt-2">
+            <Button variant="link" className="underline p-0">
+              <FaArrowLeft className="mr-1" />
+              <Link href={PAGE_ROUTES.LOGIN_ROUTE}>Back to sign in</Link>
+            </Button>
+          </div>
         </CardContent>
       </Card>
     </div>
