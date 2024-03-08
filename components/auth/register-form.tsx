@@ -16,7 +16,6 @@ import {
   register as registerUser,
   validateReCAPTCHAToken,
 } from "@/actions/auth";
-import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import Link from "next/link";
 import registerSchema, { RegisterSchemaType } from "@/schemas/register-schema";
 import { motion } from "framer-motion";
@@ -36,6 +35,7 @@ import { useRouter } from "next/navigation";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useRef, useTransition } from "react";
 import PasswordInput from "@/components/auth/password-input";
+import { toast } from "sonner";
 
 const RegisterForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -48,10 +48,9 @@ const RegisterForm = () => {
   const handleRegisterFormSubmit = (data: RegisterSchemaType) => {
     const captchaToken = captchaRef.current?.getValue();
     if (!captchaToken) {
-      showErrorToast(
-        "Captcha validation failed.",
-        "Please complete the captcha."
-      );
+      toast.error("Captcha validation failed.", {
+        description: "Please complete the captcha.",
+      });
       return;
     }
 
@@ -59,10 +58,9 @@ const RegisterForm = () => {
       const isCaptchaTokenValid = await validateReCAPTCHAToken(captchaToken);
 
       if (!isCaptchaTokenValid) {
-        showErrorToast(
-          "Captcha validation failed.",
-          "Please complete the captcha."
-        );
+        toast.error("Captcha validation failed.", {
+          description: "Please complete the captcha.",
+        });
         captchaRef.current?.reset();
         return;
       }
@@ -76,10 +74,9 @@ const RegisterForm = () => {
 
       router.push(PAGE_ROUTES.EMAIL_VERIFICATION_ROUTE + `/${data.email}`);
 
-      showSuccessToast(
-        "Account created successfully",
-        "Please check your email to verify your account."
-      );
+      toast.success("Account created successfully", {
+        description: "Please check your email to verify your account.",
+      });
     });
   };
 
@@ -96,7 +93,9 @@ const RegisterForm = () => {
     }
 
     if (result.error) {
-      showErrorToast("An error occurred.", result.error);
+      toast.error("An error occurred.", {
+        description: result.error,
+      });
     }
   };
 
