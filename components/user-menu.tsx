@@ -52,7 +52,7 @@ const UserMenu = () => {
           onClick={() => handleLogout()}
           disabled={isPending}
         >
-          Logout
+          {isPending ? "Logging out..." : "Logout"}
         </Button>
       </DropdownMenuContent>
     </DropdownMenu>

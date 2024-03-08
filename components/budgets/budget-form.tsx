@@ -27,7 +27,7 @@ import {
   showSuccessToast,
 } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useTransition } from "react";
 import budgetSchema, { BudgetSchemaType } from "@/schemas/budget-schema";
 import { createBudget, updateBudget } from "@/actions/budget";
 import useGenericModalStore from "@/store/genericModalStore";
@@ -36,9 +36,8 @@ interface IBudgetFormProps {
   data?: Budget;
 }
 
-const BudgetForm: React.FC<IBudgetFormProps> = ({
-  data: budgetToBeUpdated,
-}) => {
+const BudgetForm = ({ data: budgetToBeUpdated }: IBudgetFormProps) => {
+  const [isPending, startTransition] = useTransition();
   const closeGenericModal = useGenericModalStore(
     (state) => state.closeGenericModal
   );
@@ -70,14 +69,16 @@ const BudgetForm: React.FC<IBudgetFormProps> = ({
       return;
     }
 
-    let result;
-    if (entityId) {
-      result = await updateBudget(entityId, values);
-    } else {
-      result = await createBudget(values);
-    }
+    startTransition(async () => {
+      let result;
+      if (entityId) {
+        result = await updateBudget(entityId, values);
+      } else {
+        result = await createBudget(values);
+      }
 
-    processFormErrors(result);
+      processFormErrors(result);
+    });
   };
 
   const processFormErrors = (result: IValidatedResponse<Budget>) => {
@@ -109,7 +110,7 @@ const BudgetForm: React.FC<IBudgetFormProps> = ({
   const selectOptions = generateReadbleEnumLabels({ enumObj: BudgetCategory });
 
   const renderSubmitButtonContent = () => {
-    if (form.formState.isSubmitting) {
+    if (form.formState.isSubmitting || isPending) {
       return "Submitting...";
     }
 
@@ -201,7 +202,7 @@ const BudgetForm: React.FC<IBudgetFormProps> = ({
         <Button
           className="w-full"
           type="submit"
-          disabled={form.formState.isSubmitting}
+          disabled={form.formState.isSubmitting || isPending}
         >
           {renderSubmitButtonContent()}
         </Button>

@@ -29,9 +29,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { CAPTCHA_SITE_KEY, PAGE_ROUTES } from "@/lib/constants";
-import TwoFactorAuthenticationForm from "@/components/auth/TwoFactorAuthenticationForm";
+import TwoFactorAuthenticationForm from "@/components/auth/two-factor-authentication-form";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useTheme } from "next-themes";
+import PasswordInput from "@/components/auth/password-input";
 
 const LoginForm = () => {
   const theme = useTheme();
@@ -164,17 +165,7 @@ const LoginForm = () => {
                     control={form.control}
                     name="password"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Password</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="password"
-                            placeholder="Enter your password"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
+                      <PasswordInput<LoginSchemaType> field={field} />
                     )}
                   />
                   <ReCAPTCHA
@@ -201,6 +192,7 @@ const LoginForm = () => {
               <p>
                 Don't have an account?{" "}
                 <Button
+                  disabled={isPending}
                   variant="link"
                   aria-label="Sign up for a new account."
                   className="p-0 underline text-md"
@@ -214,6 +206,7 @@ const LoginForm = () => {
                 </Button>
               </p>
               <Button
+                disabled={isPending}
                 variant="link"
                 aria-label="Sign up for a new account."
                 className="w-max p-0 underline"
