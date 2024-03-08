@@ -1,5 +1,3 @@
-import CreateReminderForm from "@/components/reminders/forms/create-reminder-form";
-import EditReminderForm from "@/components/reminders/forms/edit-reminder-form";
 import { createElement } from "react";
 import AccountForm from "@/components/accounts/account-form";
 import BudgetForm from "@/components/budgets/budget-form";
@@ -20,10 +18,6 @@ const ContentMap: {
   budget: BudgetForm,
   goal: GoalForm,
   transaction: TransactionForm,
-  reminder: {
-    create: CreateReminderForm,
-    edit: EditReminderForm,
-  },
   account: AccountForm,
 };
 
