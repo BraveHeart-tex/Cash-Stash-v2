@@ -7,18 +7,21 @@ import React, {
   HTMLInputTypeAttribute,
 } from "react";
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 
 interface IAutoProgressInputProps {
   length: number;
   // eslint-disable-next-line no-unused-vars
   onChange: (value: string) => void;
   type?: HTMLInputTypeAttribute;
+  loading?: boolean;
 }
 
 const AutoProgressInput = ({
   length,
   onChange,
   type = "text",
+  loading,
 }: IAutoProgressInputProps) => {
   const [values, setValues] = useState(new Array(length).fill(""));
   const refs: RefObject<HTMLInputElement>[] = Array.from({ length }, () =>
@@ -65,10 +68,14 @@ const AutoProgressInput = ({
     <div className="flex items-center">
       {values.map((value, index) => (
         <Input
-          className="w-[3em] mr-[0.5em] text-center"
+          className={cn(
+            "w-[3em] mr-[0.5em] text-center",
+            loading && "opacity-50 animate-pulse"
+          )}
           key={index}
           ref={refs[index]}
           type={type}
+          disabled={loading}
           maxLength={1}
           onPaste={handlePaste}
           value={value}
