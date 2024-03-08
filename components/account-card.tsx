@@ -1,5 +1,4 @@
 "use client";
-import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import {
   cn,
   formatMoney,
@@ -16,6 +15,7 @@ import { RxCross1, RxPencil2 } from "react-icons/rx";
 import { GiTakeMyMoney } from "react-icons/gi";
 import LatestAccountTransactionsDialog from "./latest-account-transactions-dialog";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface IAccountCardProps {
   account: Account;
@@ -50,13 +50,14 @@ const AccountCard = ({
         const result = await deleteAccount(id);
 
         if (result?.error) {
-          showErrorToast("An error occurred.", result.error);
+          toast.error("An error occurred.", {
+            description: result.error,
+          });
         } else {
           router.refresh();
-          showSuccessToast(
-            "Account deleted.",
-            "Selected account has been deleted."
-          );
+          toast.success("Account deleted.", {
+            description: "Selected account has been deleted.",
+          });
         }
       },
     });
