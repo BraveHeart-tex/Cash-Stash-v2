@@ -35,6 +35,7 @@ import { CAPTCHA_SITE_KEY, PAGE_ROUTES } from "@/lib/constants";
 import { useRouter } from "next/navigation";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useRef, useTransition } from "react";
+import PasswordInput from "@/components/auth/password-input";
 
 const RegisterForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -62,6 +63,7 @@ const RegisterForm = () => {
           "Captcha validation failed.",
           "Please complete the captcha."
         );
+        captchaRef.current?.reset();
         return;
       }
 
@@ -172,18 +174,10 @@ const RegisterForm = () => {
                   control={form.control}
                   name="password"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Password</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="password"
-                          placeholder="Enter a strong password"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
+                    <div className="space-y-2">
+                      <PasswordInput field={field} />
                       <PasswordRequirements password={field.value} />
-                    </FormItem>
+                    </div>
                   )}
                 />
                 <ReCAPTCHA sitekey={CAPTCHA_SITE_KEY} ref={captchaRef} />
