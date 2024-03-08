@@ -1,12 +1,12 @@
 "use client";
 import { FormEvent, useRef, useTransition } from "react";
-import { Label } from "./ui/label";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { resendEmailVerificationCode } from "@/actions/auth";
-import { showErrorToast, showSuccessToast } from "./ui/use-toast";
+import { toast } from "sonner";
 
-const ResendNotificationInput = () => {
+const ResendVerificationEmailInput = () => {
   let [isPending, startTransition] = useTransition();
   const ref = useRef<HTMLInputElement>(null);
 
@@ -17,12 +17,13 @@ const ResendNotificationInput = () => {
 
     startTransition(async () => {
       const response = await resendEmailVerificationCode(email);
+      ref.current!.value = "";
       if (response.isError) {
-        showErrorToast(response.message);
+        toast.error(response.message);
+        return;
       }
 
-      showSuccessToast(response.message);
-      ref.current!.value = "";
+      toast.success(response.message);
     });
   };
 
@@ -50,4 +51,4 @@ const ResendNotificationInput = () => {
   );
 };
 
-export default ResendNotificationInput;
+export default ResendVerificationEmailInput;
