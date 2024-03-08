@@ -5,7 +5,6 @@ import {
   formatTransactionDate,
   generateReadableLabelFromEnumValue,
 } from "@/lib/utils";
-import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import {
   Card,
   CardContent,
@@ -19,10 +18,10 @@ import { motion } from "framer-motion";
 import DataLabel from "@/components/data-label";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import useGenericModalStore from "@/store/genericModalStore";
-import { TransactionResponse, TransactionWithAccount } from "@/actions/types";
+import { TransactionResponse } from "@/actions/types";
 import ActionPopover from "@/components/action-popover";
 import { RxCross1, RxPencil2 } from "react-icons/rx";
-import { Transaction } from "@prisma/client";
+import { toast } from "sonner";
 
 interface ITransactionCardProps {
   transaction: TransactionResponse;
@@ -45,13 +44,14 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
       onConfirm: async () => {
         const response = await deleteTransactionById(transaction);
         if (response?.error) {
-          showErrorToast("An error occurred.", response.error);
+          toast.error("An error occurred.", {
+            description: response.error,
+          });
         } else {
           router.refresh();
-          showSuccessToast(
-            "Transaction deleted.",
-            "Selected transaction has been deleted."
-          );
+          toast.success("Transaction deleted.", {
+            description: "Selected transaction has been deleted.",
+          });
         }
       },
     });
