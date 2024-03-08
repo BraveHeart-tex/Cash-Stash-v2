@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { CAPTCHA_SITE_KEY, PAGE_ROUTES } from "@/lib/constants";
-import TwoFactorAuthenticationForm from "@/components/auth/TwoFactorAuthenticationForm";
+import TwoFactorAuthenticationForm from "@/components/auth/two-factor-authentication-form";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useTheme } from "next-themes";
 

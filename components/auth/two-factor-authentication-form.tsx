@@ -18,7 +18,7 @@ import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { redirect } from "next/navigation";
 
 const TwoFactorAuthenticationForm = ({ email }: { email: string }) => {
-  const [, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
   const [code, setCode] = useState("");
 
   useEffect(() => {
@@ -60,7 +60,11 @@ const TwoFactorAuthenticationForm = ({ email }: { email: string }) => {
         <div className="w-full flex items-center justify-center mt-4">
           <div>
             <Label>Your 6-digit code</Label>
-            <AutoProgressInput length={6} onChange={setCode} />
+            <AutoProgressInput
+              loading={isPending}
+              length={6}
+              onChange={setCode}
+            />
           </div>
         </div>
       </CardContent>
