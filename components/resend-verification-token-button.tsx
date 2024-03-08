@@ -2,7 +2,7 @@
 import { resendEmailVerificationCode } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import { useTransition } from "react";
-import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 
 const ResendVerificationTokenButton = ({ email }: { email: string }) => {
   let [isPending, startTransition] = useTransition();
@@ -12,9 +12,11 @@ const ResendVerificationTokenButton = ({ email }: { email: string }) => {
       const response = await resendEmailVerificationCode(email);
 
       if (response.isError) {
-        showErrorToast("Failed to send verification code", response.message);
+        toast.error("Failed to send verification code", {
+          description: response.message,
+        });
       } else {
-        showSuccessToast(response.message);
+        toast.success(response.message);
       }
     });
   };
