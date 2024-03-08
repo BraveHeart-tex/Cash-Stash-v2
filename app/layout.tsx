@@ -1,6 +1,5 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
-import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
 import GenericModal from "@/components/generic-modal";
 import NavigationTabs from "@/components/navigation-tabs";
@@ -81,7 +80,6 @@ export default async function RootLayout({ children }: ILayoutProps) {
           <RedirectionPathToaster />
           <SonnerToaster />
         </ThemeProvider>
-        <Toaster />
       </body>
     </html>
   );
