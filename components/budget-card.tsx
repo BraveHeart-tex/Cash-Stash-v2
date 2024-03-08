@@ -1,7 +1,6 @@
 "use client";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import {
   cn,
   formatMoney,
@@ -15,6 +14,7 @@ import useGenericModalStore from "@/store/genericModalStore";
 import { deleteBudget } from "@/actions/budget";
 import ActionPopover from "@/components/action-popover";
 import { RxCross1, RxPencil2 } from "react-icons/rx";
+import { toast } from "sonner";
 
 interface IBudgetCardProps {
   budget: Budget;
@@ -38,13 +38,15 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
         const response = await deleteBudget(id);
 
         if (response?.error) {
-          showErrorToast("An error occurred.", response.error);
+          toast.error("An error occurred.", {
+            description: response.error,
+          });
         } else {
           router.refresh();
-          showSuccessToast(
-            "Budget deleted.",
-            "Selected budget has been deleted."
-          );
+
+          toast.success("Budget deleted.", {
+            description: "Selected budget has been deleted.",
+          });
         }
       },
     });
