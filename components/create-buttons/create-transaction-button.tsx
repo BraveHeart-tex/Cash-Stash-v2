@@ -1,12 +1,11 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { useTransition } from "react";
-import { showErrorToast } from "@/components/ui/use-toast";
 import { FaExchangeAlt } from "react-icons/fa";
 import { cn } from "@/lib/utils";
 import useGenericModalStore from "@/store/genericModalStore";
-import { getPaginatedAccounts } from "@/actions/account";
 import { userCanCreateTransaction } from "@/actions/transaction";
+import { toast } from "sonner";
 
 const CreateTransactionButton = ({ className }: { className?: string }) => {
   let [isPending, startTransition] = useTransition();
@@ -18,10 +17,11 @@ const CreateTransactionButton = ({ className }: { className?: string }) => {
       const canCreateTransaction = await userCanCreateTransaction();
 
       if (!canCreateTransaction) {
-        return showErrorToast(
-          "No accounts found.",
-          "You need to create an account before you can create a transaction."
-        );
+        toast.error("No accounts found.", {
+          description:
+            "You need to create an account before you can create a transaction.",
+        });
+        return;
       } else {
         openGenericModal({
           dialogTitle: "Create Transaction",

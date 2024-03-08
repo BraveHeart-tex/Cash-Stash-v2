@@ -5,9 +5,9 @@ import AutoProgressInput from "@/components/auto-progress-input";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { handleEmailVerification } from "@/actions/auth";
-import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { EMAIL_VERIFICATION_CODE_LENGTH } from "@/lib/constants";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const EmailVerificationInput = ({ email }: { email: string }) => {
   const router = useRouter();
@@ -20,7 +20,7 @@ const EmailVerificationInput = ({ email }: { email: string }) => {
     const result = await handleEmailVerification(email, verificationCode);
     if (result?.error) {
       setLoading(false);
-      showErrorToast("Error verifying email", result.error);
+      toast.error(result.error);
       setErrorMessage(result.error);
 
       if (result?.redirectPath) {
@@ -30,7 +30,7 @@ const EmailVerificationInput = ({ email }: { email: string }) => {
 
     if (result?.successMessage) {
       setLoading(false);
-      showSuccessToast(result.successMessage);
+      toast.success(result.successMessage);
     }
   }, [email, verificationCode, router]);
 

@@ -13,7 +13,7 @@ import {
 import QRCode from "react-qr-code";
 import { FaCopy } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
-import { showSuccessToast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 
 const UriBarcodeDialog = () => {
   const uri = useAuthStore((state) => state.uri);
@@ -29,7 +29,7 @@ const UriBarcodeDialog = () => {
 
   const handleCopyToClipBoard = async () => {
     await navigator.clipboard.writeText(secret!);
-    showSuccessToast("Copied to clipboard.");
+    toast.info("Code copied to clipboard.");
   };
 
   return (

@@ -1,7 +1,6 @@
 "use client";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { Goal } from "@prisma/client";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
@@ -11,6 +10,7 @@ import useGenericModalStore from "@/store/genericModalStore";
 import { deleteGoal } from "@/actions/goal";
 import ActionPopover from "@/components/action-popover";
 import { RxCross1, RxPencil2 } from "react-icons/rx";
+import { toast } from "sonner";
 
 interface IGoalCardProps {
   goal: Goal;
@@ -34,10 +34,14 @@ const GoalCard = ({ goal }: IGoalCardProps) => {
         const response = await deleteGoal(id);
 
         if (response?.error) {
-          showErrorToast("An error occurred.", response.error);
+          toast.error("An error occurred.", {
+            description: response.error,
+          });
         } else {
           router.refresh();
-          showSuccessToast("Goal deleted.", "Selected goal has been deleted.");
+          toast.success("Goal deleted.", {
+            description: "Selected goal has been deleted.",
+          });
         }
       },
     });

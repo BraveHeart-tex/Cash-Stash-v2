@@ -14,8 +14,8 @@ import Image from "next/image";
 import logo from "@/components/Logo.svg";
 import { Label } from "@/components/ui/label";
 import TwoFactorAuthenticationTimer from "@/components/two-factor-authentication-timer";
-import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { redirect } from "next/navigation";
+import { toast } from "sonner";
 
 const TwoFactorAuthenticationForm = ({ email }: { email: string }) => {
   const [isPending, startTransition] = useTransition();
@@ -27,14 +27,14 @@ const TwoFactorAuthenticationForm = ({ email }: { email: string }) => {
         const response = await validateOTP(code, email);
 
         if (response.error) {
-          showErrorToast(response.error);
+          toast.error(response.error);
           if (response.redirectPath) {
             redirect(response.redirectPath);
           }
         }
 
         if (response.successMessage) {
-          showSuccessToast("You have been logged in successfully.");
+          toast.success(response.successMessage);
         }
       });
     }

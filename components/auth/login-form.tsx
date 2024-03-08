@@ -15,7 +15,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import loginSchema, { LoginSchemaType } from "@/schemas/login-schema";
 import { useRef, useState, useTransition } from "react";
 import { login, validateReCAPTCHAToken } from "@/actions/auth";
-import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -33,6 +32,7 @@ import TwoFactorAuthenticationForm from "@/components/auth/two-factor-authentica
 import ReCAPTCHA from "react-google-recaptcha";
 import { useTheme } from "next-themes";
 import PasswordInput from "@/components/auth/password-input";
+import { toast } from "sonner";
 
 const LoginForm = () => {
   const theme = useTheme();
@@ -49,20 +49,20 @@ const LoginForm = () => {
   const handleLoginFormSubmit = (data: LoginSchemaType) => {
     startTransition(async () => {
       const captchaToken = captchaRef.current?.getValue();
-      if (!captchaToken)
-        return showErrorToast(
-          "Captcha validation failed.",
-          "Please complete the captcha."
-        );
+      if (!captchaToken) {
+        toast.error("Captcha validation failed.", {
+          description: "Please complete the captcha.",
+        });
+        return;
+      }
 
       const isCaptchaTokenValid = await validateReCAPTCHAToken(captchaToken);
 
       if (!isCaptchaTokenValid) {
         captchaRef.current?.reset();
-        showErrorToast(
-          "Captcha validation failed.",
-          "Please complete the captcha."
-        );
+        toast.error("Captcha validation failed.", {
+          description: "Please complete the captcha.",
+        });
         return;
       }
 
@@ -80,7 +80,7 @@ const LoginForm = () => {
 
       router.push(PAGE_ROUTES.HOME_PAGE);
       setLoggedIn(true);
-      showSuccessToast("Logged in.", "You have been logged in.");
+      toast.success("Logged in successfully.");
     });
   };
 
@@ -95,7 +95,9 @@ const LoginForm = () => {
     }
 
     if (result.error) {
-      showErrorToast("An error occurred.", result.error);
+      toast.error("An error occurred.", {
+        description: result.error,
+      });
     }
   };
 

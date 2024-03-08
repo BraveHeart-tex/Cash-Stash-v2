@@ -21,16 +21,12 @@ import {
 import { formHasChanged, generateReadbleEnumLabels } from "@/lib/utils";
 import { Budget, BudgetCategory } from "@prisma/client";
 import { IValidatedResponse } from "@/actions/types";
-import {
-  showDefaultToast,
-  showErrorToast,
-  showSuccessToast,
-} from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { useEffect, useTransition } from "react";
 import budgetSchema, { BudgetSchemaType } from "@/schemas/budget-schema";
 import { createBudget, updateBudget } from "@/actions/budget";
 import useGenericModalStore from "@/store/genericModalStore";
+import { toast } from "sonner";
 
 interface IBudgetFormProps {
   data?: Budget;
@@ -62,10 +58,9 @@ const BudgetForm = ({ data: budgetToBeUpdated }: IBudgetFormProps) => {
 
   const handleFormSubmit = async (values: BudgetSchemaType) => {
     if (entityId && formHasChanged(budgetToBeUpdated, values)) {
-      showDefaultToast(
-        "No changes detected.",
-        "You haven't made any changes to the budget."
-      );
+      toast.info("No changes detected.", {
+        description: "You haven't made any changes to the budget.",
+      });
       return;
     }
 
@@ -92,17 +87,18 @@ const BudgetForm = ({ data: budgetToBeUpdated }: IBudgetFormProps) => {
     }
 
     if (result.error) {
-      showErrorToast("An error occurred.", result.error);
+      toast.error("An error occurred.", {
+        description: result.error,
+      });
     } else {
       const successMessage = {
         create: "Your budget has been created.",
         update: "Your budget has been updated.",
       };
       router.refresh();
-      showSuccessToast(
-        "Success!",
-        successMessage[entityId ? "update" : "create"]
-      );
+      toast.success("Success!", {
+        description: successMessage[entityId ? "update" : "create"],
+      });
       closeGenericModal();
     }
   };

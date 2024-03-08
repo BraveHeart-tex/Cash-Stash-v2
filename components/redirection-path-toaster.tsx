@@ -1,13 +1,13 @@
 "use client";
 import { EMAIL_VERIFICATION_REDIRECTION_PATHS } from "@/lib/constants";
-import { showErrorToast } from "./ui/use-toast";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const RedirectionPathToaster = () => {
   const [path, setPath] = useState("");
 
   const showErrorToastByPath = (message: string) => {
-    showErrorToast("Error", message);
+    toast.error(message);
   };
 
   useEffect(() => {

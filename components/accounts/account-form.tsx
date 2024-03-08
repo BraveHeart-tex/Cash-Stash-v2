@@ -23,15 +23,11 @@ import { formHasChanged, generateReadbleEnumLabels } from "@/lib/utils";
 import { Account, AccountCategory } from "@prisma/client";
 import { registerBankAccount, updateBankAccount } from "@/actions/account";
 import { IValidatedResponse } from "@/actions/types";
-import {
-  showDefaultToast,
-  showErrorToast,
-  showSuccessToast,
-} from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { useEffect, useTransition } from "react";
 import useGenericModalStore from "@/store/genericModalStore";
 import accountSchema, { AccountSchemaType } from "@/schemas/account-schema";
+import { toast } from "sonner";
 
 interface IAccountFormProps {
   data?: Account;
@@ -64,7 +60,10 @@ const AccountForm = ({ data: accountToBeUpdated }: IAccountFormProps) => {
 
   const handleFormSubmit = async (values: AccountSchemaType) => {
     if (entityId && formHasChanged(accountToBeUpdated, values)) {
-      showDefaultToast("No changes detected.", "You haven't made any changes.");
+      // showDefaultToast("No changes detected.", "You haven't made any changes.");
+      toast.info("No changes detected.", {
+        description: "You haven't made any changes.",
+      });
       return;
     }
 
@@ -95,17 +94,18 @@ const AccountForm = ({ data: accountToBeUpdated }: IAccountFormProps) => {
     }
 
     if (result.error) {
-      showErrorToast("An error occurred.", result.error);
+      toast.error("An error occurred.", {
+        description: result.error,
+      });
     } else {
       const successMessage = {
         create: "Your account has been created.",
         update: "Your account has been updated.",
       };
       router.refresh();
-      showSuccessToast(
-        "Success!",
-        successMessage[entityId ? "update" : "create"]
-      );
+      toast.success("Success!", {
+        description: successMessage[entityId ? "update" : "create"],
+      });
       closeGenericModal();
     }
   };

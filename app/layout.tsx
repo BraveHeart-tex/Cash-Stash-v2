@@ -1,6 +1,5 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
-import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
 import GenericModal from "@/components/generic-modal";
 import NavigationTabs from "@/components/navigation-tabs";
@@ -11,6 +10,7 @@ import GenericConfirmDialog from "./generic-confirm-dialog";
 import RedirectionPathToaster from "@/components/redirection-path-toaster";
 import UriBarcodeDialog from "@/components/uri-barcode-dialog";
 import { ReactNode } from "react";
+import SonnerToaster from "@/components/ui/sonner";
 
 const InterFont = Inter({
   weight: ["300", "400", "500", "600", "700"],
@@ -78,8 +78,8 @@ export default async function RootLayout({ children }: ILayoutProps) {
           <UriBarcodeDialog />
           <GenericConfirmDialog />
           <RedirectionPathToaster />
+          <SonnerToaster />
         </ThemeProvider>
-        <Toaster />
       </body>
     </html>
   );

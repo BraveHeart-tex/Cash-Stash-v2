@@ -3,8 +3,8 @@ import { FormEvent, useRef, useTransition } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
 import { sendPasswordResetEmail } from "@/actions/auth";
+import { toast } from "sonner";
 
 const ForgotPassword = () => {
   let [isPending, startTransition] = useTransition();
@@ -14,18 +14,18 @@ const ForgotPassword = () => {
     e.preventDefault();
     const email = inputRef.current?.value;
     if (!email) {
-      showErrorToast("Error", "Please enter your email");
+      toast.error("Please enter your email");
       return;
     }
 
     startTransition(async () => {
       const response = await sendPasswordResetEmail(email);
       if (response?.isError) {
-        showErrorToast("Error", response.message);
+        toast.error(response.message);
         return;
       }
 
-      showSuccessToast(response.message);
+      toast.success(response.message);
     });
   };
 

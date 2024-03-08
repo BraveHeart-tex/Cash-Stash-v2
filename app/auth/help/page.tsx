@@ -11,7 +11,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import ForgotPassword from "@/components/auth/forgot-password";
 import { PAGE_ROUTES } from "@/lib/constants";
-import ResendNotificationInput from "@/components/resend-verification-token-input";
+import ResendVerificationEmailInput from "@/components/resend-verification-token-input";
 import { FaArrowLeft } from "react-icons/fa6";
 
 const SignInHelpPage = ({
@@ -28,7 +28,7 @@ const SignInHelpPage = ({
       return <ForgotPassword />;
     }
 
-    return <ResendNotificationInput />;
+    return <ResendVerificationEmailInput />;
   };
 
   const renderTitle = () => {

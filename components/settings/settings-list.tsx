@@ -8,7 +8,7 @@ import {
   disableTwoFactorAuthentication,
   enableTwoFactorAuthentication,
 } from "@/actions/auth";
-import { showErrorToast, showSuccessToast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 
 const SettingsList = () => {
   const [isPending, startTransition] = useTransition();
@@ -27,11 +27,11 @@ const SettingsList = () => {
           const response = await disableTwoFactorAuthentication();
           if (response.successMessage) {
             setUser({ ...user!, prefersTwoFactorAuthentication: false });
-            showSuccessToast(response.successMessage);
+            toast.success(response.successMessage);
           }
 
           if (response.error) {
-            showErrorToast(response.error);
+            toast.error(response.error);
           }
         });
       },

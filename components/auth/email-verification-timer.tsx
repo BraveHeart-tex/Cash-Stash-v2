@@ -5,14 +5,14 @@ import {
   EMAIL_VERIFICATION_CODE_EXPIRY_SECONDS,
   EMAIL_VERIFICATION_REDIRECTION_PATHS,
 } from "@/lib/constants";
-import { showErrorToast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 
 const EmailVerificationTimer = ({ time }: { time: number }) => {
   const handleTimerEnd = () => {
-    showErrorToast(
-      "Verification time expired",
-      "Please request a new verification code."
-    );
+    toast.error("Verification time expired.", {
+      description:
+        "You waited too long to verify your email. Please request a new verification code.",
+    });
     redirect(EMAIL_VERIFICATION_REDIRECTION_PATHS.VERIFICATION_TIMEOUT);
   };
 

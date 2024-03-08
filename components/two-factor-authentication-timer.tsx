@@ -2,15 +2,14 @@
 import CountDownTimer from "@/components/countdown-timer";
 import {
   EMAIL_VERIFICATION_REDIRECTION_PATHS,
-  PAGE_ROUTES,
   TWO_FACTOR_AUTH_INPUT_TIMEOUT_SECONDS,
 } from "@/lib/constants";
 import { redirect } from "next/navigation";
-import { showErrorToast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 
 const TwoFactorAuthenticationTimer = () => {
   const onCountDownEnd = () => {
-    showErrorToast("Verification timeout. Please try logging in again.");
+    toast.error("Verification timeout. Please try logging in again.");
     redirect(EMAIL_VERIFICATION_REDIRECTION_PATHS.VERIFICATION_TIMEOUT);
   };
 

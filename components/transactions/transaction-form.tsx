@@ -20,11 +20,7 @@ import {
 } from "@/components/ui/select";
 import { formHasChanged, generateReadbleEnumLabels } from "@/lib/utils";
 import { IValidatedResponse } from "@/actions/types";
-import {
-  showDefaultToast,
-  showErrorToast,
-  showSuccessToast,
-} from "@/components/ui/use-toast";
+
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState, useTransition } from "react";
 import transactionSchema, {
@@ -35,6 +31,7 @@ import { createTransaction, updateTransaction } from "@/actions/transaction";
 import useGenericModalStore from "@/store/genericModalStore";
 import { Account } from "@/entities/account";
 import { Transaction, TransactionCategory } from "@/entities/transaction";
+import { toast } from "sonner";
 
 interface ITransactionFormProps {
   data?: Transaction;
@@ -66,10 +63,11 @@ const TransactionForm = ({
       const accounts = await getCurrentUserAccounts();
 
       if (accounts.length === 0) {
-        return showErrorToast(
-          "No accounts found.",
-          "Please create an account first to create a transaction."
-        );
+        toast.error("No accounts found.", {
+          description:
+            " Please create an account first to create a transaction.",
+        });
+        return;
       }
 
       setAccounts(accounts);
@@ -89,10 +87,9 @@ const TransactionForm = ({
 
   const handleFormSubmit = async (values: TransactionSchemaType) => {
     if (entityId && formHasChanged(transactionToBeUpdated, values)) {
-      showDefaultToast(
-        "No changes detected.",
-        "You haven't made any changes to the transaction."
-      );
+      toast.info("No changes detected.", {
+        description: "You haven't made any changes to the transaction.",
+      });
       return;
     }
 
@@ -123,17 +120,18 @@ const TransactionForm = ({
     }
 
     if (result.error) {
-      showErrorToast("An error occurred.", result.error);
+      toast.error("An error occurred.", {
+        description: result.error,
+      });
     } else {
       const successMessage = {
         create: "Transaction has been created.",
         update: "Transaction has been updated.",
       };
       router.refresh();
-      showSuccessToast(
-        "Success!",
-        successMessage[entityId ? "update" : "create"]
-      );
+      toast.success("Success!", {
+        description: successMessage[entityId ? "update" : "create"],
+      });
       closeGenericModal();
     }
   };
