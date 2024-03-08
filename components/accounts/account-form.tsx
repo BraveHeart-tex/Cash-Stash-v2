@@ -23,11 +23,6 @@ import { formHasChanged, generateReadbleEnumLabels } from "@/lib/utils";
 import { Account, AccountCategory } from "@prisma/client";
 import { registerBankAccount, updateBankAccount } from "@/actions/account";
 import { IValidatedResponse } from "@/actions/types";
-import {
-  showDefaultToast,
-  showErrorToast,
-  showSuccessToast,
-} from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { useEffect, useTransition } from "react";
 import useGenericModalStore from "@/store/genericModalStore";
@@ -99,17 +94,18 @@ const AccountForm = ({ data: accountToBeUpdated }: IAccountFormProps) => {
     }
 
     if (result.error) {
-      showErrorToast("An error occurred.", result.error);
+      toast.error("An error occurred.", {
+        description: result.error,
+      });
     } else {
       const successMessage = {
         create: "Your account has been created.",
         update: "Your account has been updated.",
       };
       router.refresh();
-      showSuccessToast(
-        "Success!",
-        successMessage[entityId ? "update" : "create"]
-      );
+      toast.success("Success!", {
+        description: successMessage[entityId ? "update" : "create"],
+      });
       closeGenericModal();
     }
   };
