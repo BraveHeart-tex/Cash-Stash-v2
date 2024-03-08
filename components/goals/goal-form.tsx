@@ -13,17 +13,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Goal } from "@prisma/client";
 import { IValidatedResponse } from "@/actions/types";
-import {
-  showDefaultToast,
-  showErrorToast,
-  showSuccessToast,
-} from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { useEffect, useTransition } from "react";
 import goalSchema, { GoalSchemaType } from "@/schemas/goal-schema";
 import { createGoal, updateGoal } from "@/actions/goal";
 import { formHasChanged } from "@/lib/utils";
 import useGenericModalStore from "@/store/genericModalStore";
+import { toast } from "sonner";
 
 interface IGoalFormProps {
   data?: Goal;
@@ -56,10 +52,9 @@ const GoalForm = ({ data: goalToBeUpdated }: IGoalFormProps) => {
 
   const handleFormSubmit = async (values: GoalSchemaType) => {
     if (entityId && formHasChanged(goalToBeUpdated, values)) {
-      showDefaultToast(
-        "No changes detected.",
-        "You haven't made any changes to your goal."
-      );
+      toast.info("No changes detected.", {
+        description: "You haven't made any changes to your goal.",
+      });
       return;
     }
 
@@ -86,17 +81,18 @@ const GoalForm = ({ data: goalToBeUpdated }: IGoalFormProps) => {
     }
 
     if (result.error) {
-      showErrorToast("An error occurred.", result.error);
+      toast.error("An error occurred.", {
+        description: result.error,
+      });
     } else {
       const successMessage = {
         create: "Your goal has been created.",
         update: "Your goal has been updated.",
       };
       router.refresh();
-      showSuccessToast(
-        "Success!",
-        successMessage[entityId ? "update" : "create"]
-      );
+      toast.success("Success!", {
+        description: successMessage[entityId ? "update" : "create"],
+      });
       closeGenericModal();
     }
   };
