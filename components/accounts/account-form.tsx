@@ -32,6 +32,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useTransition } from "react";
 import useGenericModalStore from "@/store/genericModalStore";
 import accountSchema, { AccountSchemaType } from "@/schemas/account-schema";
+import { toast } from "sonner";
 
 interface IAccountFormProps {
   data?: Account;
@@ -64,7 +65,10 @@ const AccountForm = ({ data: accountToBeUpdated }: IAccountFormProps) => {
 
   const handleFormSubmit = async (values: AccountSchemaType) => {
     if (entityId && formHasChanged(accountToBeUpdated, values)) {
-      showDefaultToast("No changes detected.", "You haven't made any changes.");
+      // showDefaultToast("No changes detected.", "You haven't made any changes.");
+      toast.info("No changes detected.", {
+        description: "You haven't made any changes.",
+      });
       return;
     }
 

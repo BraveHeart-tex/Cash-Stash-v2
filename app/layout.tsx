@@ -11,6 +11,7 @@ import GenericConfirmDialog from "./generic-confirm-dialog";
 import RedirectionPathToaster from "@/components/redirection-path-toaster";
 import UriBarcodeDialog from "@/components/uri-barcode-dialog";
 import { ReactNode } from "react";
+import SonnerToaster from "@/components/sonner-toaster";
 
 const InterFont = Inter({
   weight: ["300", "400", "500", "600", "700"],
@@ -78,6 +79,7 @@ export default async function RootLayout({ children }: ILayoutProps) {
           <UriBarcodeDialog />
           <GenericConfirmDialog />
           <RedirectionPathToaster />
+          <SonnerToaster />
         </ThemeProvider>
         <Toaster />
       </body>
