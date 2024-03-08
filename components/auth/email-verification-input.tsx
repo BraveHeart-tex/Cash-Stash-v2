@@ -11,12 +11,15 @@ import { useRouter } from "next/navigation";
 
 const EmailVerificationInput = ({ email }: { email: string }) => {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
 
   const verifyEmail = useCallback(async () => {
+    setLoading(true);
     const result = await handleEmailVerification(email, verificationCode);
     if (result?.error) {
+      setLoading(false);
       showErrorToast("Error verifying email", result.error);
       setErrorMessage(result.error);
 
@@ -26,6 +29,7 @@ const EmailVerificationInput = ({ email }: { email: string }) => {
     }
 
     if (result?.successMessage) {
+      setLoading(false);
       showSuccessToast(result.successMessage);
     }
   }, [email, verificationCode, router]);
@@ -43,6 +47,7 @@ const EmailVerificationInput = ({ email }: { email: string }) => {
         <AutoProgressInput
           length={EMAIL_VERIFICATION_CODE_LENGTH}
           onChange={setVerificationCode}
+          loading={loading}
         />
       </div>
       <div className="lg:hidden w-full">
@@ -50,8 +55,9 @@ const EmailVerificationInput = ({ email }: { email: string }) => {
         <Label htmlFor="verificationCode">Verification Code</Label>
         <Input
           className="w-full"
-          maxLength={8}
+          maxLength={EMAIL_VERIFICATION_CODE_LENGTH}
           name="verificationCode"
+          disabled={loading}
           value={verificationCode}
           onChange={(e) => setVerificationCode(e.target.value)}
         />
