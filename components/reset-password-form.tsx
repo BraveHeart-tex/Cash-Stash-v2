@@ -18,9 +18,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useTransition } from "react";
 import { resetPassword } from "@/actions/auth";
-import { showErrorToast, showSuccessToast } from "./ui/use-toast";
 import { useRouter } from "next/navigation";
 import { PAGE_ROUTES } from "@/lib/constants";
+import { toast } from "sonner";
+import PasswordInput from "@/components/auth/password-input";
+import PasswordRequirements from "@/components/auth/password-requirements";
 
 interface ResetPasswordFormProps {
   email: string;
@@ -43,13 +45,11 @@ const ResetPasswordForm = ({ email, token }: ResetPasswordFormProps) => {
       });
 
       if (response.error) {
-        showErrorToast(response.error);
+        toast.error(response.error);
         router.push(PAGE_ROUTES.LOGIN_ROUTE);
       }
 
-      showSuccessToast(
-        response.successMessage ?? "Password reset successfully"
-      );
+      toast.success(response.successMessage ?? "Password reset successfully");
     });
   };
 
@@ -63,18 +63,10 @@ const ResetPasswordForm = ({ email, token }: ResetPasswordFormProps) => {
           control={form.control}
           name="password"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input
-                  type="password"
-                  placeholder="Enter your password"
-                  {...field}
-                />
-              </FormControl>
-              <FormDescription />
-              <FormMessage />
-            </FormItem>
+            <div>
+              <PasswordInput field={field} />
+              <PasswordRequirements password={field.value} />
+            </div>
           )}
         />
         <FormField
