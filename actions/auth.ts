@@ -10,7 +10,6 @@ import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createTOTPKeyURI, TOTPController } from "oslo/otp";
 import { decodeHex, encodeHex } from "oslo/encoding";
-
 import {
   checkRateLimit,
   checkIPBasedSendVerificationCodeRateLimit,
@@ -43,6 +42,8 @@ import { revalidatePath } from "next/cache";
 import { isWithinExpirationDate } from "oslo";
 import { IRecaptchaResponse } from "@/actions/types";
 import { lucia } from "@/lib/database/connection";
+import userRepository from "@/lib/database/repository/userRepository";
+import emailVerificationCodeRepository from "@/lib/database/repository/emailVerificationCodeRepository";
 
 export const login = async (values: LoginSchemaType) => {
   const header = headers();
@@ -63,11 +64,7 @@ export const login = async (values: LoginSchemaType) => {
   try {
     const data = loginSchema.parse(values);
 
-    const existingUser = await prisma.user.findUnique({
-      where: {
-        email: data.email,
-      },
-    });
+    const existingUser = await userRepository.getByEmail(data.email);
 
     if (!existingUser) {
       return {
@@ -135,13 +132,9 @@ export const register = async (values: RegisterSchemaType) => {
   try {
     const data = registerSchema.parse(values);
 
-    const userExists = await prisma.user.findUnique({
-      where: {
-        email: data.email,
-      },
-    });
+    const userExists = await userRepository.getByEmail(data.email);
 
-    if (userExists && userExists.email_verified === false) {
+    if (userExists && !userExists.emailVerified) {
       const header = headers();
       const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
         ","
@@ -181,16 +174,18 @@ export const register = async (values: RegisterSchemaType) => {
     }
 
     const hashedPassword = await new Argon2id().hash(data.password);
-    const user = await prisma.user.create({
-      data: {
+    const createUserResponse = await userRepository.createUser(
+      {
         name: data.name,
         email: data.email,
         hashedPassword,
-        email_verified: false,
       },
-    });
+      true
+    );
 
-    if (!user) {
+    const { affectedRows, user } = createUserResponse;
+
+    if (!user || affectedRows === 0) {
       return {
         error:
           "There was a problem while processing your request. Please try again later.",
@@ -202,6 +197,8 @@ export const register = async (values: RegisterSchemaType) => {
       user.id,
       user.email
     );
+
+    console.log("Verification code: ", verificationCode);
 
     await sendEmailVerificationCode(user.email, verificationCode);
 
@@ -253,12 +250,7 @@ export const logout = async () => {
 
 export const checkEmailValidityBeforeVerification = async (email: string) => {
   try {
-    const userWithEmail = await prisma.user.findUnique({
-      where: {
-        email,
-        email_verified: false,
-      },
-    });
+    const userWithEmail = await userRepository.getUnverifiedUserByEmail(email);
 
     if (!userWithEmail) {
       return {
@@ -267,20 +259,25 @@ export const checkEmailValidityBeforeVerification = async (email: string) => {
       };
     }
 
-    const verificationCode = await prisma.emailVerificationCode.findFirst({
-      where: {
-        userId: userWithEmail.id,
+    const verificationCode =
+      await emailVerificationCodeRepository.getByEmailAndUserId(
         email,
-        expiresAt: {
-          gt: new Date(),
-        },
-      },
-    });
+        userWithEmail.id
+      );
+
+    if (!verificationCode) {
+      return {
+        hasValidVerificationCode: false,
+        timeLeft: 0,
+      };
+    }
 
     return {
       hasValidVerificationCode: !!verificationCode,
       timeLeft: verificationCode?.expiresAt
-        ? Math.floor((verificationCode.expiresAt.getTime() - Date.now()) / 1000)
+        ? Math.floor(
+            (new Date(verificationCode.expiresAt).getTime() - Date.now()) / 1000
+          )
         : 0,
     };
   } catch (error) {

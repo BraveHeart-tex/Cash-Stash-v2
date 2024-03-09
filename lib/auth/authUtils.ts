@@ -13,30 +13,33 @@ import {
 import { generateId } from "lucia";
 import ForgotPasswordEmail from "@/emails/forgot-password-email";
 import emailService from "@/lib/services/emailService";
+import { db } from "@/lib/database/connection";
+import { emailVerificationCode } from "@/lib/database/schema";
+import { eq } from "drizzle-orm";
+import { convertIsoToMysqlDatetime } from "@/lib/utils";
 
 export const generateEmailVerificationCode = async (
   userId: string,
   email: string
 ): Promise<string> => {
-  await prisma.emailVerificationCode.deleteMany({
-    where: {
-      userId,
-    },
-  });
+  await db
+    .delete(emailVerificationCode)
+    .where(eq(emailVerificationCode.userId, userId));
 
   const code = generateRandomString(
     EMAIL_VERIFICATION_CODE_LENGTH,
     alphabet("0-9")
   );
-  await prisma.emailVerificationCode.create({
-    data: {
-      userId,
-      email,
-      code,
-      expiresAt: createDate(
+
+  await db.insert(emailVerificationCode).values({
+    userId,
+    email,
+    code,
+    expiresAt: convertIsoToMysqlDatetime(
+      createDate(
         new TimeSpan(EMAIL_VERIFICATION_CODE_EXPIRY_MINUTES, "m")
-      ),
-    },
+      ).toISOString()
+    ),
   });
 
   return code;

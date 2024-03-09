@@ -1,8 +1,11 @@
-import mysql from "mysql2";
-import { Mysql2Adapter } from "@lucia-auth/adapter-mysql";
 import { Lucia } from "lucia";
+import { DrizzleMySQLAdapter } from "@lucia-auth/adapter-drizzle";
+import mysql from "mysql2";
+import { drizzle } from "drizzle-orm/mysql2";
+import { sessions, users } from "@/lib/database/schema";
+import * as schema from "@/lib/database/schema";
 
-export const pool = mysql.createPool({
+const connection = mysql.createConnection({
   host: process.env.DATABASE_HOST,
   user: process.env.DATABASE_USER,
   password: process.env.DATABASE_PASSWORD,
@@ -12,12 +15,11 @@ export const pool = mysql.createPool({
   multipleStatements: true,
 });
 
-const asyncPool = pool.promise();
-
-export const adapter = new Mysql2Adapter(asyncPool, {
-  user: "User",
-  session: "Session",
+export const db = drizzle(connection, {
+  schema: schema,
+  mode: "default",
 });
+export const adapter = new DrizzleMySQLAdapter(db, sessions, users);
 
 export const lucia = new Lucia(adapter, {
   sessionCookie: {
@@ -52,5 +54,3 @@ interface DatabaseUserAttributes {
   email_verified: boolean;
   prefersTwoFactorAuthentication: boolean;
 }
-
-export default asyncPool;

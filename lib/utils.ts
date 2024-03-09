@@ -192,3 +192,25 @@ export const getPageSizeAndSkipAmount = (pageNumber: number) => {
   const skipAmount = (pageNumber - 1) * PAGE_SIZE;
   return { pageSize: PAGE_SIZE, skipAmount };
 };
+
+export const getDateStringWithOffset = (date: Date) => {
+  return new Date(
+    date.getTime() - date.getTimezoneOffset() * 60000
+  ).toISOString();
+};
+
+export function convertIsoToMysqlDatetime(isoDatetimeString: string) {
+  // Create a new Date object from the ISO datetime string
+  const isoDatetime = new Date(isoDatetimeString);
+
+  // Extract the date components
+  const year = isoDatetime.getFullYear();
+  const month = ("0" + (isoDatetime.getMonth() + 1)).slice(-2); // Months are zero-based
+  const day = ("0" + isoDatetime.getDate()).slice(-2);
+  const hours = ("0" + isoDatetime.getHours()).slice(-2);
+  const minutes = ("0" + isoDatetime.getMinutes()).slice(-2);
+  const seconds = ("0" + isoDatetime.getSeconds()).slice(-2);
+
+  // Format the datetime string in MySQL format
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}

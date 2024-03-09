@@ -12,6 +12,9 @@ dependencies:
   "@hookform/resolvers":
     specifier: ^3.3.4
     version: 3.3.4(react-hook-form@7.51.0)
+  "@lucia-auth/adapter-drizzle":
+    specifier: ^1.0.3
+    version: 1.0.3(lucia@3.0.1)
   "@lucia-auth/adapter-mysql":
     specifier: ^3.0.0
     version: 3.0.0(lucia@3.0.1)(mysql2@3.9.2)
@@ -2050,6 +2053,17 @@ packages:
     dependencies:
       "@jridgewell/resolve-uri": 3.1.2
       "@jridgewell/sourcemap-codec": 1.4.15
+
+  /@lucia-auth/adapter-drizzle@1.0.3(lucia@3.0.1):
+    resolution:
+      {
+        integrity: sha512-5C3O5PGV9IpGTM8cr5trE9+Pr3FM8LXOUPusQWD3svGW/S7vNebQit7uEfDUxFAuUhutoLoXTr7SQ1jZWjaBoA==,
+      }
+    peerDependencies:
+      lucia: 3.x
+    dependencies:
+      lucia: 3.0.1
+    dev: false
 
   /@lucia-auth/adapter-mysql@3.0.0(lucia@3.0.1)(mysql2@3.9.2):
     resolution:
