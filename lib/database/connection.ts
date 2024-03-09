@@ -4,6 +4,7 @@ import mysql from "mysql2";
 import { drizzle } from "drizzle-orm/mysql2";
 import { sessions, users } from "@/lib/database/schema";
 import * as schema from "@/lib/database/schema";
+import { Logger } from "drizzle-orm/logger";
 
 const connection = mysql.createConnection({
   host: process.env.DATABASE_HOST,
@@ -15,10 +16,18 @@ const connection = mysql.createConnection({
   multipleStatements: true,
 });
 
+class MyLogger implements Logger {
+  logQuery(query: string, params: unknown[]): void {
+    console.log({ query, params });
+  }
+}
+
 export const db = drizzle(connection, {
   schema: schema,
   mode: "default",
+  logger: new MyLogger(),
 });
+
 export const adapter = new DrizzleMySQLAdapter(db, sessions, users);
 
 export const lucia = new Lucia(adapter, {

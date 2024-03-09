@@ -41,9 +41,11 @@ import {
 import { revalidatePath } from "next/cache";
 import { isWithinExpirationDate } from "oslo";
 import { IRecaptchaResponse } from "@/actions/types";
-import { lucia } from "@/lib/database/connection";
+import { db, lucia } from "@/lib/database/connection";
 import userRepository from "@/lib/database/repository/userRepository";
 import emailVerificationCodeRepository from "@/lib/database/repository/emailVerificationCodeRepository";
+import { users } from "@/lib/database/schema";
+import { eq } from "drizzle-orm";
 
 export const login = async (values: LoginSchemaType) => {
   const header = headers();
@@ -134,6 +136,8 @@ export const register = async (values: RegisterSchemaType) => {
 
     const userExists = await userRepository.getByEmail(data.email);
 
+    console.log("User exists: ", userExists);
+
     if (userExists && !userExists.emailVerified) {
       const header = headers();
       const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
@@ -192,6 +196,8 @@ export const register = async (values: RegisterSchemaType) => {
         fieldErrors: [],
       };
     }
+
+    console.log("User: ", user);
 
     const verificationCode = await generateEmailVerificationCode(
       user.id,
@@ -290,11 +296,7 @@ export const checkEmailValidityBeforeVerification = async (email: string) => {
 };
 
 export const handleEmailVerification = async (email: string, code: string) => {
-  const user = await prisma.user.findUnique({
-    where: {
-      email,
-    },
-  });
+  const user = await userRepository.getByEmail(email);
 
   if (!user) {
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
@@ -326,14 +328,12 @@ export const handleEmailVerification = async (email: string, code: string) => {
     };
   }
 
-  await prisma.user.update({
-    where: {
-      id: user.id,
-    },
-    data: {
-      email_verified: true,
-    },
-  });
+  await db
+    .update(users)
+    .set({
+      emailVerified: 1,
+    })
+    .where(eq(users.id, user.id));
 
   const session = await lucia.createSession(user.id, {});
   const sessionCookie = lucia.createSessionCookie(session.id);
@@ -363,12 +363,7 @@ export const resendEmailVerificationCode = async (email: string) => {
     };
   }
 
-  const user = await prisma.user.findUnique({
-    where: {
-      email,
-      email_verified: false,
-    },
-  });
+  const user = await userRepository.getUnverifiedUserByEmail(email);
 
   if (!user) {
     return {

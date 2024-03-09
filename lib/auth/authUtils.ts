@@ -2,7 +2,6 @@ import { RegisterConfirmEmail } from "@/emails/register-confirm-email";
 import { TimeSpan, createDate, isWithinExpirationDate } from "oslo";
 import { generateRandomString, alphabet } from "oslo/crypto";
 import { render } from "@react-email/render";
-import { User } from "@prisma/client";
 import {
   PAGE_ROUTES,
   EMAIL_VERIFICATION_CODE_EXPIRY_MINUTES,
@@ -16,6 +15,7 @@ import { db } from "@/lib/database/connection";
 import {
   emailVerificationCode,
   passwordResetTokens,
+  UserSelectModel,
 } from "@/lib/database/schema";
 import { and, eq } from "drizzle-orm";
 import { convertIsoToMysqlDatetime } from "@/lib/utils";
@@ -85,7 +85,10 @@ export const sendResetPasswordLink = async (email: string, url: string) => {
   await emailService.sendEmail(options);
 };
 
-export const verifyVerificationCode = async (user: User, code: string) => {
+export const verifyVerificationCode = async (
+  user: UserSelectModel,
+  code: string
+) => {
   const [verificationCode] = await db
     .select()
     .from(emailVerificationCode)
@@ -96,7 +99,7 @@ export const verifyVerificationCode = async (user: User, code: string) => {
       )
     );
 
-  if (!emailVerificationCode) {
+  if (!verificationCode) {
     return false;
   }
 
