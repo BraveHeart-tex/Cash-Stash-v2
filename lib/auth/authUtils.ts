@@ -1,7 +1,6 @@
 import { RegisterConfirmEmail } from "@/emails/register-confirm-email";
 import { TimeSpan, createDate, isWithinExpirationDate } from "oslo";
 import { generateRandomString, alphabet } from "oslo/crypto";
-import prisma from "@/lib/database/db";
 import { render } from "@react-email/render";
 import { User } from "@prisma/client";
 import {
@@ -14,8 +13,11 @@ import { generateId } from "lucia";
 import ForgotPasswordEmail from "@/emails/forgot-password-email";
 import emailService from "@/lib/services/emailService";
 import { db } from "@/lib/database/connection";
-import { emailVerificationCode } from "@/lib/database/schema";
-import { eq } from "drizzle-orm";
+import {
+  emailVerificationCode,
+  passwordResetTokens,
+} from "@/lib/database/schema";
+import { and, eq } from "drizzle-orm";
 import { convertIsoToMysqlDatetime } from "@/lib/utils";
 
 export const generateEmailVerificationCode = async (
@@ -84,52 +86,47 @@ export const sendResetPasswordLink = async (email: string, url: string) => {
 };
 
 export const verifyVerificationCode = async (user: User, code: string) => {
-  const emailVerificationCode = await prisma.emailVerificationCode.findFirst({
-    where: {
-      userId: user.id,
-      code,
-    },
-  });
+  const [verificationCode] = await db
+    .select()
+    .from(emailVerificationCode)
+    .where(
+      and(
+        eq(emailVerificationCode.userId, user.id),
+        eq(emailVerificationCode.code, code)
+      )
+    );
 
   if (!emailVerificationCode) {
     return false;
   }
 
-  if (!isWithinExpirationDate(emailVerificationCode.expiresAt)) {
+  if (!isWithinExpirationDate(new Date(verificationCode.expiresAt))) {
     return false;
   }
 
-  if (emailVerificationCode.email !== user.email) {
-    return false;
-  }
-
-  return true;
+  return verificationCode.email === user.email;
 };
 
 export const deleteEmailVerificationCode = async (userId: string) => {
-  await prisma.emailVerificationCode.deleteMany({
-    where: {
-      userId,
-    },
-  });
+  return db
+    .delete(emailVerificationCode)
+    .where(eq(emailVerificationCode.userId, userId));
 };
 
 export const createPasswordResetToken = async (userId: string) => {
-  await prisma.passwordResetToken.deleteMany({
-    where: {
-      user_id: userId,
-    },
-  });
+  await db
+    .delete(passwordResetTokens)
+    .where(eq(passwordResetTokens.userId, userId));
 
   const tokenId = generateId(40);
-  await prisma.passwordResetToken.create({
-    data: {
-      id: tokenId,
-      user_id: userId,
-      expires_At: createDate(
+  await db.insert(passwordResetTokens).values({
+    id: tokenId,
+    userId,
+    expiresAt: convertIsoToMysqlDatetime(
+      createDate(
         new TimeSpan(FORGOT_PASSWORD_LINK_EXPIRATION_MINUTES, "m")
-      ),
-    },
+      ).toISOString()
+    ),
   });
 
   return tokenId;
