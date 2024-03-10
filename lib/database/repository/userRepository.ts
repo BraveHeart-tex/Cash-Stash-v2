@@ -33,13 +33,26 @@ const getUnverifiedUserByEmail = async (email: string) => {
   }
 };
 
+const getVerifiedUserByEmail = async (email: string) => {
+  try {
+    const [user] = await db
+      .select()
+      .from(users)
+      .where(and(eq(users.email, email), eq(users.emailVerified, 1)));
+
+    return user;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
 const getByEmail = async (email: string) => {
   try {
     const [user] = await db
       .select()
       .from(users)
-      .where(eq(users.email, email))
-      .execute();
+      .where(and(eq(users.email, email), eq(users.emailVerified, 1)));
 
     return user;
   } catch (e) {
@@ -75,12 +88,18 @@ const createUser = async (data: UserInsertModel, withReturning?: boolean) => {
   }
 };
 
+const updateUser = async (userId: string, data: Partial<UserInsertModel>) => {
+  return db.update(users).set(data).where(eq(users.id, userId));
+};
+
 const userRepository = {
   deleteExpiredUsers,
   getByEmail,
   getById,
   createUser,
   getUnverifiedUserByEmail,
+  getVerifiedUserByEmail,
+  updateUser,
 };
 
 export default userRepository;

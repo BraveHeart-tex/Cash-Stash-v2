@@ -149,9 +149,7 @@ export const goals = mysqlTable(
 export const passwordResetTokens = mysqlTable(
   "PasswordResetToken",
   {
-    id: varchar("id", { length: 191 })
-      .notNull()
-      .$defaultFn(() => createId()),
+    id: varchar("id", { length: 191 }).notNull(),
     userId: varchar("user_id", { length: 191 })
       .notNull()
       .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),

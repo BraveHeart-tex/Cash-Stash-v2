@@ -1,4 +1,6 @@
 import { db } from "@/lib/database/connection";
+import { emailVerificationCode } from "@/lib/database/schema";
+import { eq } from "drizzle-orm";
 
 const getByEmailAndUserId = async (email: string, userId: string) => {
   try {
@@ -17,8 +19,15 @@ const getByEmailAndUserId = async (email: string, userId: string) => {
   }
 };
 
+const deleteByUserId = async (userId: string) => {
+  return db
+    .delete(emailVerificationCode)
+    .where(eq(emailVerificationCode.userId, userId));
+};
+
 const emailVerificationCodeRepository = {
   getByEmailAndUserId,
+  deleteByUserId,
 };
 
 export default emailVerificationCodeRepository;

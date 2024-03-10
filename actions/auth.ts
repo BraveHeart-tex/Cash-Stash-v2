@@ -1,5 +1,4 @@
 "use server";
-import prisma from "@/lib/database/db";
 import { getUser } from "@/lib/auth/session";
 import { Argon2id } from "oslo/password";
 import loginSchema, { LoginSchemaType } from "@/schemas/login-schema";
@@ -32,7 +31,6 @@ import {
 } from "@/lib/constants";
 import {
   createPasswordResetToken,
-  deleteEmailVerificationCode,
   generateEmailVerificationCode,
   sendEmailVerificationCode,
   sendResetPasswordLink,
@@ -41,11 +39,11 @@ import {
 import { revalidatePath } from "next/cache";
 import { isWithinExpirationDate } from "oslo";
 import { IRecaptchaResponse } from "@/actions/types";
-import { db, lucia } from "@/lib/database/connection";
+import { lucia } from "@/lib/database/connection";
 import userRepository from "@/lib/database/repository/userRepository";
 import emailVerificationCodeRepository from "@/lib/database/repository/emailVerificationCodeRepository";
-import { users } from "@/lib/database/schema";
-import { eq } from "drizzle-orm";
+import passwordResetTokenRepository from "@/lib/database/repository/passwordResetTokenRepository";
+import twoFactorAuthenticationSecretRepository from "@/lib/database/repository/twoFactorAuthenticationSecretRepository";
 
 export const login = async (values: LoginSchemaType) => {
   const header = headers();
@@ -197,14 +195,10 @@ export const register = async (values: RegisterSchemaType) => {
       };
     }
 
-    console.log("User: ", user);
-
     const verificationCode = await generateEmailVerificationCode(
       user.id,
       user.email
     );
-
-    console.log("Verification code: ", verificationCode);
 
     await sendEmailVerificationCode(user.email, verificationCode);
 
@@ -312,7 +306,7 @@ export const handleEmailVerification = async (email: string, code: string) => {
     const verificationCount = await verifyVerificationCodeRateLimit(ipAddress);
 
     if (verificationCount >= MAX_VERIFICATION_CODE_ATTEMPTS) {
-      await deleteEmailVerificationCode(user.id);
+      await emailVerificationCodeRepository.deleteByUserId(user.id);
       return {
         error: "Too many attempts. Please wait before trying again.",
         successMessage: null,
@@ -328,12 +322,9 @@ export const handleEmailVerification = async (email: string, code: string) => {
     };
   }
 
-  await db
-    .update(users)
-    .set({
-      emailVerified: 1,
-    })
-    .where(eq(users.id, user.id));
+  await userRepository.updateUser(user.id, {
+    emailVerified: 1,
+  });
 
   const session = await lucia.createSession(user.id, {});
   const sessionCookie = lucia.createSessionCookie(session.id);
@@ -343,13 +334,14 @@ export const handleEmailVerification = async (email: string, code: string) => {
     sessionCookie.attributes
   );
 
-  await deleteEmailVerificationCode(user.id);
+  await emailVerificationCodeRepository.deleteByUserId(user.id);
 
   return {
     error: null,
     successMessage: "Email verified successfully. You are being redirected...",
   };
 };
+
 export const resendEmailVerificationCode = async (email: string) => {
   const header = headers();
   const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
@@ -413,12 +405,7 @@ export const sendPasswordResetEmail = async (email: string) => {
     };
   }
 
-  const user = await prisma.user.findUnique({
-    where: {
-      email,
-      email_verified: true,
-    },
-  });
+  const user = await userRepository.getVerifiedUserByEmail(email);
 
   if (!user) {
     return {
@@ -449,12 +436,7 @@ export const resetPassword = async ({
   token: string;
   password: string;
 }) => {
-  const user = await prisma.user.findUnique({
-    where: {
-      email,
-      email_verified: true,
-    },
-  });
+  const user = await userRepository.getVerifiedUserByEmail(email);
 
   if (!user) {
     return {
@@ -463,34 +445,24 @@ export const resetPassword = async ({
     };
   }
 
-  const resetToken = await prisma.passwordResetToken.findUnique({
-    where: {
-      id: token,
-    },
-  });
+  const resetToken = await passwordResetTokenRepository.getByToken(token);
 
-  if (!resetToken || !isWithinExpirationDate(resetToken.expires_At)) {
+  if (!resetToken || !isWithinExpirationDate(new Date(resetToken.expiresAt))) {
     return {
       error: "Invalid request",
       successMessage: null,
     };
   }
 
-  await prisma.passwordResetToken.delete({
-    where: {
-      id: token,
-    },
-  });
+  await passwordResetTokenRepository.deleteByToken(token);
+
   await lucia.invalidateUserSessions(user.id);
   const hashedPassword = await new Argon2id().hash(password);
-  await prisma.user.update({
-    where: {
-      id: user.id,
-    },
-    data: {
-      hashedPassword,
-    },
+
+  await userRepository.updateUser(user.id, {
+    hashedPassword,
   });
+
   const session = await lucia.createSession(user.id, {});
   const sessionCookie = lucia.createSessionCookie(session.id);
   cookies().set(
@@ -512,21 +484,15 @@ export const enableTwoFactorAuthentication = async () => {
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
-  await prisma.user.update({
-    where: {
-      id: user.id,
-    },
-    data: {
-      prefersTwoFactorAuthentication: true,
-    },
+  await userRepository.updateUser(user.id, {
+    prefersTwoFactorAuthentication: 1,
   });
 
   const twoFactorSecret = crypto.getRandomValues(new Uint8Array(20));
-  await prisma.twoFactorAuthenticationSecret.create({
-    data: {
-      secret: encodeHex(twoFactorSecret),
-      userId: user.id,
-    },
+
+  await twoFactorAuthenticationSecretRepository.create({
+    secret: encodeHex(twoFactorSecret),
+    userId: user.id,
   });
 
   return createTOTPKeyURI("CashStash", user.email, twoFactorSecret);
@@ -547,14 +513,9 @@ export const validateOTP = async (otp: string, email: string) => {
     };
   }
 
-  const user = await prisma.user.findUnique({
-    where: {
-      email,
-      prefersTwoFactorAuthentication: true,
-    },
-  });
+  const user = await userRepository.getByEmail(email);
 
-  if (!user) {
+  if (!user || !user?.prefersTwoFactorAuthentication) {
     return {
       error: "Invalid request",
       successMessage: null,
@@ -574,11 +535,9 @@ export const validateOTP = async (otp: string, email: string) => {
     };
   }
 
-  const result = await prisma.twoFactorAuthenticationSecret.findFirst({
-    where: {
-      userId: user.id,
-    },
-  });
+  const result = await twoFactorAuthenticationSecretRepository.getByUserId(
+    user.id
+  );
 
   if (!result) {
     return {
@@ -624,21 +583,9 @@ export const disableTwoFactorAuthentication = async () => {
   }
 
   try {
-    await prisma.$transaction([
-      prisma.user.update({
-        where: {
-          id: user.id,
-        },
-        data: {
-          prefersTwoFactorAuthentication: false,
-        },
-      }),
-      prisma.twoFactorAuthenticationSecret.deleteMany({
-        where: {
-          userId: user.id,
-        },
-      }),
-    ]);
+    await twoFactorAuthenticationSecretRepository.removeTwoFactorAuthenticationSecret(
+      user.id
+    );
 
     return {
       error: null,
