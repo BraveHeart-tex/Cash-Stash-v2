@@ -68,7 +68,7 @@ const createUser = async (data: UserInsertModel, withReturning?: boolean) => {
     const affectedRows = insertResult.affectedRows;
 
     if (withReturning && affectedRows) {
-      const user = await getByEmail(data.email);
+      const user = await getUnverifiedUserByEmail(data.email);
       return {
         affectedRows,
         user,

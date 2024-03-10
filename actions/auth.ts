@@ -134,8 +134,6 @@ export const register = async (values: RegisterSchemaType) => {
 
     const userExists = await userRepository.getByEmail(data.email);
 
-    console.log("User exists: ", userExists);
-
     if (userExists && !userExists.emailVerified) {
       const header = headers();
       const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
@@ -290,7 +288,7 @@ export const checkEmailValidityBeforeVerification = async (email: string) => {
 };
 
 export const handleEmailVerification = async (email: string, code: string) => {
-  const user = await userRepository.getByEmail(email);
+  const user = await userRepository.getUnverifiedUserByEmail(email);
 
   if (!user) {
     redirect(PAGE_ROUTES.LOGIN_ROUTE);

@@ -5,7 +5,6 @@ import { lucia } from "@/lib/database/connection";
 
 export const getUser = cache(async () => {
   const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
-  console.log("sessionId", sessionId);
   if (!sessionId) return { user: null, session: null };
   const { user, session } = await lucia.validateSession(sessionId);
   try {
