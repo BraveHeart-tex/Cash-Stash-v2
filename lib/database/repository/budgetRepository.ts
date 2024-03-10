@@ -1,11 +1,11 @@
-import { BudgetDto } from "@/lib/database/dto/budgetDto";
-import {
-  ModifyQuery,
-  ModifyQueryWithSelect,
-  SelectQuery,
-} from "@/lib/database/queryUtils";
+import { SelectQuery } from "@/lib/database/queryUtils";
 import { Budget, BudgetCategory } from "@/entities/budget";
 import { getPageSizeAndSkipAmount } from "@/lib/utils";
+import { db } from "@/lib/database/connection";
+import { budgets } from "@/lib/database/schema";
+import { eq, InferInsertModel } from "drizzle-orm";
+
+type BudgetInsertModel = InferInsertModel<typeof budgets>;
 
 interface IGetMultipleBudgetsParams {
   page: number;
@@ -16,14 +16,11 @@ interface IGetMultipleBudgetsParams {
   sortDirection?: string;
 }
 
-const getById = async (id: string) => {
+const getById = async (id: number) => {
   try {
-    const budget = await SelectQuery<Budget>(
-      "SELECT * FROM Budget WHERE id = :id",
-      { id }
-    );
+    const [budget] = await db.select().from(budgets).where(eq(budgets.id, id));
 
-    return budget[0];
+    return budget;
   } catch (error) {
     console.error("Error getting budget by id", error);
     return null;
@@ -114,30 +111,31 @@ const getMultiple = async ({
   }
 };
 
-const create = async (budgetDto: BudgetDto) => {
+const create = async (budgetDto: BudgetInsertModel) => {
   try {
-    const createBudgetResponse = await ModifyQuery(
-      `INSERT INTO Budget SET :budgetDto`,
-      { budgetDto }
-    );
+    const [insertResult] = await db.insert(budgets).values(budgetDto);
 
-    return createBudgetResponse.affectedRows;
+    return insertResult.affectedRows;
   } catch (error) {
     console.error(error);
     return 0;
   }
 };
 
-const update = async (budgetDto: Partial<BudgetDto>) => {
+const update = async (
+  budgetId: number,
+  budgetDto: Partial<BudgetInsertModel>
+) => {
   try {
-    const updatedBudgetResponse = await ModifyQueryWithSelect<Budget>(
-      "UPDATE Budget SET name = :name, category = :category, budgetAmount = :budgetAmount, spentAmount = :spentAmount, progress = :progress, updatedAt = :updatedAt WHERE id = :id; SELECT * FROM Budget WHERE id = :id",
-      budgetDto
-    );
+    const [budgetBugetResponse] = await db
+      .update(budgets)
+      .set(budgetDto)
+      .where(eq(budgets.id, budgetId));
 
-    const { affectedRows, updatedRow: updatedBudget } = updatedBudgetResponse;
+    const updatedBudget = await getById(budgetId);
+
     return {
-      affectedRows,
+      affectedRows: budgetBugetResponse.affectedRows,
       updatedBudget,
     };
   } catch (error) {
@@ -149,12 +147,11 @@ const update = async (budgetDto: Partial<BudgetDto>) => {
   }
 };
 
-const deleteById = async (id: string) => {
+const deleteById = async (id: number) => {
   try {
-    const deleteBudgetResponse = await ModifyQuery(
-      "DELETE FROM Budget WHERE id = :id",
-      { id }
-    );
+    const [deleteBudgetResponse] = await db
+      .delete(budgets)
+      .where(eq(budgets.id, id));
 
     return deleteBudgetResponse.affectedRows;
   } catch (error) {

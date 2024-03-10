@@ -1,7 +1,8 @@
 import { db } from "@/lib/database/connection";
 import { UserInsertModel, users } from "@/lib/database/schema";
-import { and, eq } from "drizzle-orm";
+import { and, eq, InferSelectModel } from "drizzle-orm";
 
+export type UserSelectModel = InferSelectModel<typeof users>;
 const deleteExpiredUsers = () => {};
 
 const getById = async (id: string) => {

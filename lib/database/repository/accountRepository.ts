@@ -12,8 +12,8 @@ import {
   sql,
 } from "drizzle-orm";
 
-type AccountInsertModel = InferInsertModel<typeof accounts>;
-type AccountSelectModel = InferSelectModel<typeof accounts>;
+export type AccountInsertModel = InferInsertModel<typeof accounts>;
+export type AccountSelectModel = InferSelectModel<typeof accounts>;
 
 interface IGetMultipleAccountsParams {
   userId: string;
@@ -98,14 +98,14 @@ const create = async (accountDto: AccountInsertModel) => {
   }
 };
 
-const update = async (accountId: string, data: Partial<AccountInsertModel>) => {
+const update = async (accountId: number, data: Partial<AccountInsertModel>) => {
   try {
     const [updateResult] = await db
       .update(accounts)
       .set(data)
       .where(eq(accounts.id, accountId));
 
-    const updatedRow = await getBankAccountByUserId(accountId);
+    const updatedRow = await getBankAccountById(accountId);
 
     return {
       affectedRows: updateResult.affectedRows,
@@ -120,7 +120,7 @@ const update = async (accountId: string, data: Partial<AccountInsertModel>) => {
   }
 };
 
-const deleteById = async (accountId: string) => {
+const deleteById = async (accountId: number) => {
   try {
     const [result] = await db
       .delete(accounts)
@@ -133,7 +133,7 @@ const deleteById = async (accountId: string) => {
   }
 };
 
-const getBankAccountByUserId = async (accountId: string) => {
+const getBankAccountById = async (accountId: number) => {
   try {
     const [account] = await db
       .select()

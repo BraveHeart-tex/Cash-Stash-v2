@@ -16,7 +16,9 @@ import {
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import accountSchema, { AccountSchemaType } from "@/schemas/account-schema";
 import { createAccountDto } from "@/lib/database/dto/accountDto";
-import accountRepository from "@/lib/database/repository/accountRepository";
+import accountRepository, {
+  AccountSelectModel,
+} from "@/lib/database/repository/accountRepository";
 import { Account, AccountCategory } from "@/entities/account";
 import transactionRepository from "@/lib/database/repository/transactionRepository";
 import redisService from "@/lib/redis/redisService";
@@ -50,11 +52,10 @@ export const registerBankAccount = async ({
           user.id
         )
       ),
-      redisService.hset(getAccountKey(accountDto.id), accountDto),
     ]);
 
     return {
-      data: accountDto as Account,
+      data: "Account created successfully.",
       fieldErrors: [],
     };
   } catch (error) {
@@ -75,7 +76,7 @@ export const updateBankAccount = async ({
   accountId,
   ...rest
 }: AccountSchemaType & { accountId: string }): Promise<
-  IValidatedResponse<Account>
+  IValidatedResponse<AccountSelectModel>
 > => {
   const { user } = await getUser();
   if (!user) {
@@ -94,11 +95,12 @@ export const updateBankAccount = async ({
     const updateDto = {
       ...validatedData,
       id: accountId,
-      updatedAt: new Date(),
     };
 
-    const { affectedRows, updatedAccount } =
-      await accountRepository.update(updateDto);
+    const { affectedRows, updatedAccount } = await accountRepository.update(
+      accountId,
+      updateDto
+    );
 
     if (affectedRows === 0 || !updatedAccount) {
       return {
@@ -119,7 +121,7 @@ export const updateBankAccount = async ({
     ]);
 
     return {
-      data: updatedAccount as Account,
+      data: updatedAccount,
       fieldErrors: [],
     };
   } catch (error) {

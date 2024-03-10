@@ -8,19 +8,25 @@ import {
   datetime,
   unique,
   tinyint,
+  int,
 } from "drizzle-orm/mysql-core";
-import { InferInsertModel, InferSelectModel, sql } from "drizzle-orm";
+import {
+  InferInsertModel,
+  InferSelectModel,
+  relations,
+  sql,
+} from "drizzle-orm";
 import { createId } from "@paralleldrive/cuid2";
 
 export const accounts = mysqlTable(
   "Account",
   {
-    id: varchar("id", { length: 191 })
-      .notNull()
-      .$defaultFn(() => createId()),
+    id: int("id").autoincrement().primaryKey(),
     name: varchar("name", { length: 191 }).notNull(),
     balance: double("balance").notNull(),
-    userId: varchar("userId", { length: 191 })
+    userId: varchar("id", {
+      length: 128,
+    })
       .notNull()
       .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
     category: mysqlEnum("category", [
@@ -36,28 +42,37 @@ export const accounts = mysqlTable(
     createdAt: datetime("createdAt", { mode: "string", fsp: 3 })
       .default(sql`CURRENT_TIMESTAMP(3)`)
       .notNull(),
-    updatedAt: datetime("updatedAt", { mode: "string", fsp: 3 }).notNull(),
+    updatedAt: datetime("updatedAt", { mode: "string", fsp: 3 })
+      .default(sql`CURRENT_TIMESTAMP(3)`)
+      .notNull(),
   },
   (table) => {
     return {
       userAccountsUserIdFkey: index("userAccounts_userId_fkey").on(
         table.userId
       ),
-      accountId: primaryKey({ columns: [table.id], name: "Account_id" }),
     };
   }
 );
 
+export const accountRelations = relations(accounts, ({ one, many }) => ({
+  user: one(users, {
+    fields: [accounts.userId],
+    references: [users.id],
+  }),
+  // transactions: many(transactions),
+}));
+
 export const budgets = mysqlTable(
   "Budget",
   {
-    id: varchar("id", { length: 191 })
-      .notNull()
-      .$defaultFn(() => createId()),
+    id: int("id").autoincrement().primaryKey(),
     name: varchar("name", { length: 191 }).notNull(),
     budgetAmount: double("budgetAmount").notNull(),
     spentAmount: double("spentAmount").notNull(),
-    userId: varchar("userId", { length: 191 })
+    userId: varchar("id", {
+      length: 128,
+    })
       .notNull()
       .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
     progress: double("progress").notNull(),
@@ -85,14 +100,21 @@ export const budgets = mysqlTable(
   }
 );
 
+export const budgetRelations = relations(budgets, ({ one }) => ({
+  user: one(users, {
+    fields: [budgets.userId],
+    references: [users.id],
+  }),
+}));
+
 export const emailVerificationCode = mysqlTable(
   "EmailVerificationCode",
   {
-    id: varchar("id", { length: 191 })
-      .notNull()
-      .$defaultFn(() => createId()),
+    id: int("id").autoincrement().primaryKey(),
     code: varchar("code", { length: 191 }).notNull(),
-    userId: varchar("userId", { length: 191 })
+    userId: varchar("id", {
+      length: 128,
+    })
       .notNull()
       .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
     email: varchar("email", { length: 191 }).notNull(),
@@ -120,17 +142,27 @@ export const emailVerificationCode = mysqlTable(
   }
 );
 
+export const emailVerificationCodeRelations = relations(
+  emailVerificationCode,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [emailVerificationCode.userId],
+      references: [users.id],
+    }),
+  })
+);
+
 export const goals = mysqlTable(
   "Goal",
   {
-    id: varchar("id", { length: 191 })
-      .notNull()
-      .$defaultFn(() => createId()),
+    id: int("id").autoincrement().primaryKey(),
     name: varchar("name", { length: 191 }).notNull(),
     goalAmount: double("goalAmount").notNull(),
     currentAmount: double("currentAmount").notNull(),
     progress: double("progress").notNull(),
-    userId: varchar("userId", { length: 191 })
+    userId: varchar("id", {
+      length: 128,
+    })
       .notNull()
       .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
     createdAt: datetime("createdAt", { mode: "string", fsp: 3 })
@@ -146,11 +178,20 @@ export const goals = mysqlTable(
   }
 );
 
+export const goalRelations = relations(goals, ({ one }) => ({
+  user: one(users, {
+    fields: [goals.userId],
+    references: [users.id],
+  }),
+}));
+
 export const passwordResetTokens = mysqlTable(
   "PasswordResetToken",
   {
     id: varchar("id", { length: 191 }).notNull(),
-    userId: varchar("user_id", { length: 191 })
+    userId: varchar("id", {
+      length: 128,
+    })
       .notNull()
       .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
     expiresAt: datetime("expires_At", { mode: "string", fsp: 3 }).notNull(),
@@ -171,19 +212,29 @@ export const passwordResetTokens = mysqlTable(
   }
 );
 
+export const passwordResetTokenRelations = relations(
+  passwordResetTokens,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [passwordResetTokens.userId],
+      references: [users.id],
+    }),
+  })
+);
+
 export const reminders = mysqlTable(
   "Reminder",
   {
-    id: varchar("id", { length: 191 })
-      .notNull()
-      .$defaultFn(() => createId()),
+    id: int("id").autoincrement().primaryKey(),
     title: varchar("title", { length: 191 }).notNull(),
     description: varchar("description", { length: 191 }).notNull(),
     reminderDate: datetime("reminderDate", {
       mode: "string",
       fsp: 3,
     }).notNull(),
-    userId: varchar("userId", { length: 191 })
+    userId: varchar("id", {
+      length: 128,
+    })
       .notNull()
       .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
     createdAt: datetime("createdAt", { mode: "string", fsp: 3 })
@@ -200,11 +251,22 @@ export const reminders = mysqlTable(
   }
 );
 
+export const reminderRelations = relations(reminders, ({ one }) => ({
+  user: one(users, {
+    fields: [reminders.userId],
+    references: [users.id],
+  }),
+}));
+
 export const sessions = mysqlTable(
   "Session",
   {
-    id: varchar("id", { length: 191 }).primaryKey(),
-    userId: varchar("user_id", { length: 191 })
+    id: varchar("id", {
+      length: 255,
+    }).primaryKey(),
+    userId: varchar("id", {
+      length: 128,
+    })
       .notNull()
       .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
     expiresAt: datetime("expires_at").notNull(),
@@ -217,12 +279,17 @@ export const sessions = mysqlTable(
   }
 );
 
+export const sessionRelations = relations(sessions, ({ one }) => ({
+  user: one(users, {
+    fields: [sessions.userId],
+    references: [users.id],
+  }),
+}));
+
 export const transactions = mysqlTable(
   "Transaction",
   {
-    id: varchar("id", { length: 191 })
-      .notNull()
-      .$defaultFn(() => createId()),
+    id: int("id").autoincrement().primaryKey(),
     amount: double("amount").notNull(),
     createdAt: datetime("createdAt", { mode: "string", fsp: 3 })
       .default(sql`CURRENT_TIMESTAMP(3)`)
@@ -240,23 +307,25 @@ export const transactions = mysqlTable(
     ])
       .default("OTHER")
       .notNull(),
-    accountId: varchar("accountId", { length: 191 })
+    accountId: int("accountId")
       .notNull()
       .references(() => accounts.id, {
         onDelete: "cascade",
         onUpdate: "cascade",
       }),
-    userId: varchar("userId", { length: 191 })
+    userId: varchar("id", {
+      length: 128,
+    })
       .notNull()
       .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
   },
   (table) => {
     return {
-      transactionsAccountIdFkey: index("transactions_accountId_fkey").on(
-        table.accountId
-      ),
       transactionsUserIdFkey: index("transactions_userId_fkey").on(
         table.userId
+      ),
+      transactionsAccountIdFkey: index("transaction_account_id_fkey").on(
+        table.accountId
       ),
       transactionId: primaryKey({
         columns: [table.id],
@@ -266,6 +335,17 @@ export const transactions = mysqlTable(
   }
 );
 
+export const transactionRelations = relations(transactions, ({ one }) => ({
+  account: one(accounts, {
+    fields: [transactions.accountId],
+    references: [accounts.id],
+  }),
+  user: one(users, {
+    fields: [transactions.userId],
+    references: [users.id],
+  }),
+}));
+
 export const twoFactorAuthenticationSecrets = mysqlTable(
   "TwoFactorAuthenticationSecret",
   {
@@ -273,7 +353,9 @@ export const twoFactorAuthenticationSecrets = mysqlTable(
       .notNull()
       .$defaultFn(() => createId()),
     secret: varchar("secret", { length: 191 }).notNull(),
-    userId: varchar("userId", { length: 191 })
+    userId: varchar("id", {
+      length: 128,
+    })
       .notNull()
       .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
     createdAt: datetime("createdAt", { mode: "string", fsp: 3 })
@@ -296,12 +378,24 @@ export const twoFactorAuthenticationSecrets = mysqlTable(
   }
 );
 
+export const twoFactorAuthenticationSecretRelations = relations(
+  twoFactorAuthenticationSecrets,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [twoFactorAuthenticationSecrets.userId],
+      references: [users.id],
+    }),
+  })
+);
+
 export const users = mysqlTable(
   "User",
   {
-    id: varchar("id", { length: 191 })
-      .notNull()
-      .$defaultFn(() => createId()),
+    id: varchar("id", {
+      length: 128,
+    })
+      .$defaultFn(() => createId())
+      .primaryKey(),
     name: varchar("name", { length: 191 }).notNull(),
     email: varchar("email", { length: 191 }).notNull(),
     hashedPassword: varchar("hashedPassword", { length: 191 }).notNull(),
@@ -323,6 +417,18 @@ export const users = mysqlTable(
     };
   }
 );
+
+export const userRelations = relations(users, ({ one, many }) => ({
+  twoFactorAuthenticationSecret: one(twoFactorAuthenticationSecrets),
+  passwordResetToken: one(passwordResetTokens),
+  emailVerificationCode: one(emailVerificationCode),
+  sessions: many(sessions),
+  accounts: many(accounts),
+  // transactions: many(transactions),
+  budgets: many(budgets),
+  goals: many(goals),
+  reminders: many(reminders),
+}));
 
 export type UserInsertModel = InferInsertModel<typeof users>;
 export type UserSelectModel = InferSelectModel<typeof users>;
