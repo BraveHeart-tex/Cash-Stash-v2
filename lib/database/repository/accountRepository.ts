@@ -1,17 +1,24 @@
-import {
-  ModifyQuery,
-  ModifyQueryWithSelect,
-  SelectQuery,
-} from "@/lib/database/queryUtils";
-import { Account } from "@/entities/account";
-import { AccountCategory } from "@prisma/client";
 import { getPageSizeAndSkipAmount } from "@/lib/utils";
-import { AccountDto } from "@/lib/database/dto/accountDto";
+import { db } from "@/lib/database/connection";
+import { accounts } from "@/lib/database/schema";
+import {
+  and,
+  asc,
+  desc,
+  eq,
+  InferInsertModel,
+  InferSelectModel,
+  like,
+  sql,
+} from "drizzle-orm";
+
+type AccountInsertModel = InferInsertModel<typeof accounts>;
+type AccountSelectModel = InferSelectModel<typeof accounts>;
 
 interface IGetMultipleAccountsParams {
   userId: string;
   query?: string;
-  category?: AccountCategory;
+  category?: AccountSelectModel["category"];
   sortBy?: string;
   sortDirection?: string;
   page: number;
@@ -27,59 +34,49 @@ const getMultiple = async ({
 }: IGetMultipleAccountsParams) => {
   const { pageSize, skipAmount } = getPageSizeAndSkipAmount(page);
 
-  let accountsQuery =
-    "SELECT * FROM Account where userId = :userId and name like :query";
-  let totalCountQuery =
-    "SELECT COUNT(*) as totalCount FROM Account where userId = :userId and name like :query";
+  const categoryCondition = category
+    ? eq(accounts.category, category)
+    : undefined;
 
-  let accountsQueryParams: {
-    userId: string;
-    query: string;
-    category?: AccountCategory;
-    limit?: number;
-    offset?: number;
-  } = {
-    userId: userId,
-    query: `%${query}%`,
-  };
-
-  let totalCountQueryParams: {
-    userId: string;
-    query: string;
-    category?: AccountCategory;
-  } = {
-    userId: userId,
-    query: `%${query}%`,
-  };
-
-  if (category) {
-    accountsQuery += ` and category = :category`;
-    totalCountQuery += ` and category = :category`;
-    accountsQueryParams.category = category;
-    totalCountQueryParams.category = category;
-  }
-
-  if (sortBy && sortDirection) {
-    const validSortDirection =
-      sortDirection.toUpperCase() === "DESC" ? "DESC" : "ASC";
-    accountsQuery += ` ORDER BY balance ${validSortDirection}`;
-  }
-
-  accountsQuery += ` LIMIT :limit OFFSET :offset`;
-  accountsQueryParams.limit = pageSize;
-  accountsQueryParams.offset = skipAmount;
+  const orderByCondition =
+    sortBy && sortDirection
+      ? sortDirection.toUpperCase() === "DESC"
+        ? desc(accounts.balance)
+        : asc(accounts.balance)
+      : accounts.balance;
 
   try {
-    const [accounts, totalCount] = await Promise.all([
-      SelectQuery<Account>(accountsQuery, accountsQueryParams),
-      SelectQuery<{
-        totalCount: number;
-      }>(totalCountQuery, totalCountQueryParams),
+    const [userBankAccounts, [totalCount]] = await Promise.all([
+      db
+        .select()
+        .from(accounts)
+        .where(
+          and(
+            eq(accounts.userId, userId),
+            like(accounts.name, `%${query}%`),
+            categoryCondition
+          )
+        )
+        .orderBy(orderByCondition)
+        .limit(pageSize)
+        .offset(skipAmount),
+      db
+        .select({
+          count: sql<number>`count(*)`,
+        })
+        .from(accounts)
+        .where(
+          and(
+            eq(accounts.userId, userId),
+            like(accounts.name, `%${query}%`),
+            categoryCondition
+          )
+        ),
     ]);
 
     return {
-      accounts,
-      totalCount: totalCount[0].totalCount as number,
+      accounts: userBankAccounts,
+      totalCount: totalCount.count,
     };
   } catch (e) {
     console.error("Error fetching accounts", e);
@@ -90,30 +87,29 @@ const getMultiple = async ({
   }
 };
 
-const create = async (accountDto: AccountDto) => {
+const create = async (accountDto: AccountInsertModel) => {
   try {
-    const createdAccount = await ModifyQuery(
-      "INSERT INTO Account (id, name, balance, category, userId, createdAt, updatedAt) values (:id, :name, :balance, :category, :userId, :createdAt, :updatedAt);",
-      accountDto
-    );
+    const [result] = await db.insert(accounts).values(accountDto);
 
-    return createdAccount.affectedRows;
+    return result.affectedRows;
   } catch (error) {
     console.error("Error creating account.", error);
     return 0;
   }
 };
 
-const update = async (accountDto: Partial<AccountDto>) => {
+const update = async (accountId: string, data: Partial<AccountInsertModel>) => {
   try {
-    const updateResult = await ModifyQueryWithSelect<Account>(
-      "UPDATE Account set name = :name, balance = :balance, category = :category, updatedAt = :updatedAt where id = :id; SELECT * from Account where id = :id;",
-      accountDto
-    );
+    const [updateResult] = await db
+      .update(accounts)
+      .set(data)
+      .where(eq(accounts.id, accountId));
+
+    const updatedRow = await getBankAccountByUserId(accountId);
 
     return {
       affectedRows: updateResult.affectedRows,
-      updatedAccount: updateResult.updatedRow,
+      updatedAccount: updatedRow,
     };
   } catch (error) {
     console.error("Error updating account.", error);
@@ -126,46 +122,49 @@ const update = async (accountDto: Partial<AccountDto>) => {
 
 const deleteById = async (accountId: string) => {
   try {
-    const deletedAccount = await ModifyQuery(
-      "DELETE FROM Account WHERE id = :id",
-      {
-        id: accountId,
-      }
-    );
+    const [result] = await db
+      .delete(accounts)
+      .where(eq(accounts.id, accountId));
 
-    return deletedAccount.affectedRows;
+    return result.affectedRows;
   } catch (e) {
     console.error("Error deleting account", e);
     return 0;
   }
 };
 
-const getByUserId = async (userId: string) => {
+const getBankAccountByUserId = async (accountId: string) => {
   try {
-    const accounts = await SelectQuery<Account>(
-      "SELECT * FROM Account WHERE userId = :userId",
-      {
-        userId,
-      }
-    );
+    const [account] = await db
+      .select()
+      .from(accounts)
+      .where(eq(accounts.id, accountId));
+    return account;
+  } catch (error) {
+    console.error("Error fetching account by id", error);
+    return null;
+  }
+};
 
-    return accounts;
+const getBankAccountsByUserId = async (userId: string) => {
+  try {
+    return await db.select().from(accounts).where(eq(accounts.userId, userId));
   } catch (error) {
     console.error("Error fetching accounts by user id", error);
     return [];
   }
 };
 
-const checkIfUserHasAccount = async (userId: string) => {
+const checkIfUserHasBankAccount = async (userId: string) => {
   try {
-    const accounts = await SelectQuery<Account>(
-      "SELECT id FROM Account WHERE userId = :userId limit 1",
-      {
-        userId,
-      }
-    );
+    const userAccounts = await db
+      .select({
+        id: accounts.id,
+      })
+      .from(accounts)
+      .where(eq(accounts.userId, userId));
 
-    return accounts.length > 0;
+    return userAccounts.length > 0;
   } catch (error) {
     console.error("Error checking if user has account", error);
     return false;
@@ -177,8 +176,8 @@ const accountRepository = {
   update,
   getMultiple,
   deleteById,
-  getByUserId,
-  checkIfUserHasAccount,
+  getByUserId: getBankAccountsByUserId,
+  checkIfUserHasAccount: checkIfUserHasBankAccount,
 };
 
 export default accountRepository;
