@@ -24,7 +24,7 @@ export const accounts = mysqlTable(
     id: int("id").autoincrement().primaryKey(),
     name: varchar("name", { length: 191 }).notNull(),
     balance: double("balance").notNull(),
-    userId: varchar("id", {
+    userId: varchar("userId", {
       length: 128,
     })
       .notNull()
@@ -70,7 +70,7 @@ export const budgets = mysqlTable(
     name: varchar("name", { length: 191 }).notNull(),
     budgetAmount: double("budgetAmount").notNull(),
     spentAmount: double("spentAmount").notNull(),
-    userId: varchar("id", {
+    userId: varchar("userId", {
       length: 128,
     })
       .notNull()
@@ -112,7 +112,7 @@ export const emailVerificationCode = mysqlTable(
   {
     id: int("id").autoincrement().primaryKey(),
     code: varchar("code", { length: 191 }).notNull(),
-    userId: varchar("id", {
+    userId: varchar("userId", {
       length: 128,
     })
       .notNull()
@@ -160,7 +160,7 @@ export const goals = mysqlTable(
     goalAmount: double("goalAmount").notNull(),
     currentAmount: double("currentAmount").notNull(),
     progress: double("progress").notNull(),
-    userId: varchar("id", {
+    userId: varchar("userId", {
       length: 128,
     })
       .notNull()
@@ -189,7 +189,7 @@ export const passwordResetTokens = mysqlTable(
   "PasswordResetToken",
   {
     id: varchar("id", { length: 191 }).notNull(),
-    userId: varchar("id", {
+    userId: varchar("userId", {
       length: 128,
     })
       .notNull()
@@ -232,7 +232,7 @@ export const reminders = mysqlTable(
       mode: "string",
       fsp: 3,
     }).notNull(),
-    userId: varchar("id", {
+    userId: varchar("userId", {
       length: 128,
     })
       .notNull()
@@ -262,9 +262,9 @@ export const sessions = mysqlTable(
   "Session",
   {
     id: varchar("id", {
-      length: 255,
+      length: 128,
     }).primaryKey(),
-    userId: varchar("id", {
+    userId: varchar("user_id", {
       length: 128,
     })
       .notNull()
@@ -313,7 +313,7 @@ export const transactions = mysqlTable(
         onDelete: "cascade",
         onUpdate: "cascade",
       }),
-    userId: varchar("id", {
+    userId: varchar("userId", {
       length: 128,
     })
       .notNull()
@@ -353,7 +353,7 @@ export const twoFactorAuthenticationSecrets = mysqlTable(
       .notNull()
       .$defaultFn(() => createId()),
     secret: varchar("secret", { length: 191 }).notNull(),
-    userId: varchar("id", {
+    userId: varchar("userId", {
       length: 128,
     })
       .notNull()
@@ -424,7 +424,7 @@ export const userRelations = relations(users, ({ one, many }) => ({
   emailVerificationCode: one(emailVerificationCode),
   sessions: many(sessions),
   accounts: many(accounts),
-  // transactions: many(transactions),
+  transactions: many(transactions),
   budgets: many(budgets),
   goals: many(goals),
   reminders: many(reminders),

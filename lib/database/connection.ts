@@ -6,7 +6,7 @@ import { sessions, users } from "@/lib/database/schema";
 import * as schema from "@/lib/database/schema";
 import { Logger } from "drizzle-orm/logger";
 
-const connection = mysql.createConnection({
+export const pool = mysql.createPool({
   host: process.env.DATABASE_HOST,
   user: process.env.DATABASE_USER,
   password: process.env.DATABASE_PASSWORD,
@@ -16,13 +16,15 @@ const connection = mysql.createConnection({
   multipleStatements: true,
 });
 
+const asyncPool = pool.promise();
+
 class MyLogger implements Logger {
   logQuery(query: string, params: unknown[]): void {
     console.log({ query, params });
   }
 }
 
-export const db = drizzle(connection, {
+export const db = drizzle(asyncPool, {
   schema: schema,
   mode: "default",
   logger: new MyLogger(),

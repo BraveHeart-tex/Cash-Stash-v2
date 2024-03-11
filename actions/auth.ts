@@ -288,56 +288,68 @@ export const checkEmailValidityBeforeVerification = async (email: string) => {
 };
 
 export const handleEmailVerification = async (email: string, code: string) => {
-  const user = await userRepository.getUnverifiedUserByEmail(email);
+  try {
+    const user = await userRepository.getUnverifiedUserByEmail(email);
 
-  if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
-  }
+    if (!user) {
+      redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    }
 
-  const isValid = await verifyVerificationCode(user, code);
+    const isValid = await verifyVerificationCode(user, code);
 
-  if (!isValid) {
-    const header = headers();
-    const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
-      ","
-    )[0];
-    const verificationCount = await verifyVerificationCodeRateLimit(ipAddress);
+    if (!isValid) {
+      const header = headers();
+      const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
+        ","
+      )[0];
+      const verificationCount =
+        await verifyVerificationCodeRateLimit(ipAddress);
 
-    if (verificationCount >= MAX_VERIFICATION_CODE_ATTEMPTS) {
-      await emailVerificationCodeRepository.deleteByUserId(user.id);
+      if (verificationCount >= MAX_VERIFICATION_CODE_ATTEMPTS) {
+        await emailVerificationCodeRepository.deleteByUserId(user.id);
+        return {
+          error: "Too many attempts. Please wait before trying again.",
+          successMessage: null,
+          redirectPath: EMAIL_VERIFICATION_REDIRECTION_PATHS.TOO_MANY_REQUESTS,
+        };
+      }
+
+      const triesLeft = MAX_VERIFICATION_CODE_ATTEMPTS - verificationCount;
+
       return {
-        error: "Too many attempts. Please wait before trying again.",
+        error:
+          "Invalid verification code. You have " + triesLeft + " tries left",
         successMessage: null,
-        redirectPath: EMAIL_VERIFICATION_REDIRECTION_PATHS.TOO_MANY_REQUESTS,
       };
     }
 
-    const triesLeft = MAX_VERIFICATION_CODE_ATTEMPTS - verificationCount;
+    await userRepository.updateUser(user.id, {
+      emailVerified: 1,
+    });
+
+    const session = await lucia.createSession(user.id, {});
+    const sessionCookie = lucia.createSessionCookie(session.id);
+    cookies().set(
+      sessionCookie.name,
+      sessionCookie.value,
+      sessionCookie.attributes
+    );
+
+    await emailVerificationCodeRepository.deleteByUserId(user.id);
 
     return {
-      error: "Invalid verification code. You have " + triesLeft + " tries left",
+      error: null,
+      successMessage:
+        "Email verified successfully. You are being redirected...",
+    };
+  } catch (error) {
+    console.error("Error while verifying email", error);
+    return {
+      error:
+        "Something went wrong while processing your request. Please try again later.",
       successMessage: null,
     };
   }
-
-  await userRepository.updateUser(user.id, {
-    emailVerified: 1,
-  });
-
-  const session = await lucia.createSession(user.id, {});
-  const sessionCookie = lucia.createSessionCookie(session.id);
-  cookies().set(
-    sessionCookie.name,
-    sessionCookie.value,
-    sessionCookie.attributes
-  );
-
-  await emailVerificationCodeRepository.deleteByUserId(user.id);
-
-  return {
-    error: null,
-    successMessage: "Email verified successfully. You are being redirected...",
-  };
 };
 
 export const resendEmailVerificationCode = async (email: string) => {
