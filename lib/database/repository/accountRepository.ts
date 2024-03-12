@@ -45,33 +45,37 @@ const getMultiple = async ({
         : asc(accounts.balance)
       : accounts.balance;
 
+  const accountsQuery = db
+    .select()
+    .from(accounts)
+    .where(
+      and(
+        eq(accounts.userId, userId),
+        like(accounts.name, `%${query}%`),
+        categoryCondition
+      )
+    )
+    .orderBy(orderByCondition)
+    .limit(pageSize)
+    .offset(skipAmount);
+
+  const accountCountQuery = db
+    .select({
+      count: sql<number>`count(*)`,
+    })
+    .from(accounts)
+    .where(
+      and(
+        eq(accounts.userId, userId),
+        like(accounts.name, `%${query}%`),
+        categoryCondition
+      )
+    );
+
   try {
     const [userBankAccounts, [totalCount]] = await Promise.all([
-      db
-        .select()
-        .from(accounts)
-        .where(
-          and(
-            eq(accounts.userId, userId),
-            like(accounts.name, `%${query}%`),
-            categoryCondition
-          )
-        )
-        .orderBy(orderByCondition)
-        .limit(pageSize)
-        .offset(skipAmount),
-      db
-        .select({
-          count: sql<number>`count(*)`,
-        })
-        .from(accounts)
-        .where(
-          and(
-            eq(accounts.userId, userId),
-            like(accounts.name, `%${query}%`),
-            categoryCondition
-          )
-        ),
+      accountsQuery,
+      accountCountQuery,
     ]);
 
     return {
@@ -87,14 +91,31 @@ const getMultiple = async ({
   }
 };
 
-const create = async (accountDto: AccountInsertModel) => {
+const create = async (accountDto: AccountInsertModel, withReturning?: true) => {
   try {
     const [result] = await db.insert(accounts).values(accountDto);
 
-    return result.affectedRows;
+    if (withReturning && result.affectedRows) {
+      const account = await getBankAccountById(result.insertId);
+      return {
+        affectedRows: result.affectedRows,
+        insertId: result.insertId,
+        account,
+      };
+    }
+
+    return {
+      affectedRows: result.affectedRows,
+      insertId: result.insertId,
+      account: null,
+    };
   } catch (error) {
     console.error("Error creating account.", error);
-    return 0;
+    return {
+      affectedRows: 0,
+      insertId: 0,
+      account: null,
+    };
   }
 };
 

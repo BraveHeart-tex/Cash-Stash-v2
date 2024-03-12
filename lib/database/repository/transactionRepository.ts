@@ -133,7 +133,7 @@ const update = async (
   }
 };
 
-const getByAccountId = async (accountId: string) => {
+const getByAccountId = async (accountId: number) => {
   try {
     return await SelectQuery<Transaction>(
       `SELECT *
@@ -144,7 +144,6 @@ const getByAccountId = async (accountId: string) => {
       { accountId }
     );
   } catch (error) {
-    await asyncPool.query("ROLLBACK;");
     console.error("Error transactionRepository.getByAccountId", error);
     return [];
   }

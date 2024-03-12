@@ -40,7 +40,7 @@ export const getSendVerificationCodeRateLimitKey = (ipAdress: string) => {
   return `${CACHE_PREFIXES.SEND_VERIFICATION_CODE_RATE_LIMIT}:${ipAdress}`;
 };
 
-export const getAccountKey = (accountId: string) =>
+export const getAccountKey = (accountId: number) =>
   `${CACHE_PREFIXES.ACCOUNT}:${accountId}`;
 
 export const getTransactionKey = (transactionId: string) => {
@@ -63,7 +63,7 @@ export const getSignUpRateLimitKey = (userId: string, ipAddress: string) => {
   return `${CACHE_PREFIXES.SIGN_UP_RATE_LIMIT}:${userId}:${ipAddress}`;
 };
 
-export const getAccountTransactionsKey = (accountId: string) => {
+export const getAccountTransactionsKey = (accountId: number) => {
   return `${CACHE_PREFIXES.ACCOUNT_TRANSACTIONS}:${accountId}`;
 };
 

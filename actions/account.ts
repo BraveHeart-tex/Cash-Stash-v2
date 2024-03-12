@@ -27,7 +27,7 @@ export const registerBankAccount = async ({
   balance,
   category,
   name,
-}: AccountSchemaType): Promise<IValidatedResponse<Account>> => {
+}: AccountSchemaType): Promise<IValidatedResponse<AccountSelectModel>> => {
   const { user } = await getUser();
 
   if (!user) {
@@ -39,9 +39,12 @@ export const registerBankAccount = async ({
 
     const accountDto = createAccountDto(validatedData, user.id);
 
-    const affectedRows = await accountRepository.create(accountDto);
+    const { affectedRows, account } = await accountRepository.create(
+      accountDto,
+      true
+    );
 
-    if (affectedRows === 0) {
+    if (affectedRows === 0 || !account) {
       return { error: "Error creating account.", fieldErrors: [] };
     }
 
@@ -52,10 +55,11 @@ export const registerBankAccount = async ({
           user.id
         )
       ),
+      redisService.hset(getAccountKey(account.id), account),
     ]);
 
     return {
-      data: "Account created successfully.",
+      data: account,
       fieldErrors: [],
     };
   } catch (error) {
@@ -75,7 +79,7 @@ export const registerBankAccount = async ({
 export const updateBankAccount = async ({
   accountId,
   ...rest
-}: AccountSchemaType & { accountId: string }): Promise<
+}: AccountSchemaType & { accountId: number }): Promise<
   IValidatedResponse<AccountSelectModel>
 > => {
   const { user } = await getUser();
@@ -214,7 +218,7 @@ export const getPaginatedAccounts = async ({
     );
 
     return {
-      accounts: accounts as Account[],
+      accounts: accounts,
       hasNextPage: totalCount > skipAmount + PAGE_SIZE,
       hasPreviousPage: pageNumber > 1,
       totalPages: Math.ceil(totalCount / PAGE_SIZE),
@@ -232,7 +236,7 @@ export const getPaginatedAccounts = async ({
   }
 };
 
-export const deleteAccount = async (accountId: string) => {
+export const deleteAccount = async (accountId: number) => {
   const { user } = await getUser();
 
   if (!user) {
@@ -266,7 +270,7 @@ export const deleteAccount = async (accountId: string) => {
   }
 };
 
-export const getTransactionsForAccount = async (accountId: string) => {
+export const getTransactionsForAccount = async (accountId: number) => {
   const { user } = await getUser();
 
   if (!user) {
