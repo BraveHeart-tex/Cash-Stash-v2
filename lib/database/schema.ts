@@ -434,3 +434,5 @@ export type UserInsertModel = InferInsertModel<typeof users>;
 export type UserSelectModel = InferSelectModel<typeof users>;
 export type AccountInsertModel = InferInsertModel<typeof accounts>;
 export type AccountSelectModel = InferSelectModel<typeof accounts>;
+export type BudgetInsertModel = InferInsertModel<typeof budgets>;
+export type BudgetSelectModel = InferSelectModel<typeof budgets>;
