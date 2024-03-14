@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import {
   IGetPaginatedAccountsParams,
+  IGetPaginatedAccountsResponse,
   IValidatedResponse,
 } from "@/actions/types";
 import {
@@ -16,12 +17,11 @@ import {
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import accountSchema, { AccountSchemaType } from "@/schemas/account-schema";
 import { createAccountDto } from "@/lib/database/dto/accountDto";
-import accountRepository, {
-  AccountSelectModel,
-} from "@/lib/database/repository/accountRepository";
+import accountRepository from "@/lib/database/repository/accountRepository";
 import { Account, AccountCategory } from "@/entities/account";
 import transactionRepository from "@/lib/database/repository/transactionRepository";
 import redisService from "@/lib/redis/redisService";
+import { AccountSelectModel } from "@/lib/database/schema";
 
 export const registerBankAccount = async ({
   balance,
@@ -147,7 +147,7 @@ export const getPaginatedAccounts = async ({
   category,
   sortBy,
   sortDirection,
-}: IGetPaginatedAccountsParams) => {
+}: IGetPaginatedAccountsParams): Promise<IGetPaginatedAccountsResponse> => {
   const { user } = await getUser();
 
   if (!user) {
@@ -183,7 +183,7 @@ export const getPaginatedAccounts = async ({
       console.info("CACHE HIT");
       const parsedData = JSON.parse(cachedData);
       return {
-        accounts: parsedData.accounts as Account[],
+        accounts: parsedData.accounts as AccountSelectModel[],
         hasNextPage: parsedData.totalCount > skipAmount + PAGE_SIZE,
         hasPreviousPage: pageNumber > 1,
         totalPages: Math.ceil(parsedData.totalCount / PAGE_SIZE),

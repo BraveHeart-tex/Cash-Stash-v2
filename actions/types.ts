@@ -10,7 +10,7 @@ import {
 import { IconType } from "react-icons/lib";
 import { AccountCategory } from "@/entities/account";
 import { BudgetCategory } from "@/entities/budget";
-import { BudgetSelectModel } from "@/lib/database/schema";
+import { AccountSelectModel, BudgetSelectModel } from "@/lib/database/schema";
 
 interface IPaginatedResponse {
   hasNextPage: boolean;
@@ -44,7 +44,7 @@ export interface IGetPaginatedAccountsParams extends IPaginatedActionParams {
 }
 
 export interface IGetPaginatedAccountsResponse extends IPaginatedResponse {
-  accounts: Account[];
+  accounts: AccountSelectModel[];
 }
 
 export interface IGetPaginatedBudgetsParams extends IPaginatedActionParams {
