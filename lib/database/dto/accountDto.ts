@@ -1,7 +1,8 @@
 import { createId } from "@paralleldrive/cuid2";
 import { AccountSchemaType } from "@/schemas/account-schema";
 import { AccountCategory } from "@/entities/account";
-import { AccountInsertModel } from "@/lib/database/repository/accountRepository";
+
+import { AccountInsertModel } from "@/lib/database/schema";
 
 export interface AccountDto {
   id: string;

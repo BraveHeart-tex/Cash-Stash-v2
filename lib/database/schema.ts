@@ -1,14 +1,14 @@
 import {
-  mysqlTable,
-  index,
-  primaryKey,
-  varchar,
-  double,
-  mysqlEnum,
   datetime,
-  unique,
-  tinyint,
+  double,
+  index,
   int,
+  mysqlEnum,
+  mysqlTable,
+  primaryKey,
+  tinyint,
+  unique,
+  varchar,
 } from "drizzle-orm/mysql-core";
 import {
   InferInsertModel,
@@ -432,3 +432,5 @@ export const userRelations = relations(users, ({ one, many }) => ({
 
 export type UserInsertModel = InferInsertModel<typeof users>;
 export type UserSelectModel = InferSelectModel<typeof users>;
+export type AccountInsertModel = InferInsertModel<typeof accounts>;
+export type AccountSelectModel = InferSelectModel<typeof accounts>;
