@@ -1,7 +1,7 @@
 import { CACHE_PREFIXES } from "@/lib/constants";
 import { Budget, BudgetCategory, Goal } from "@prisma/client";
 import redis from "@/lib/redis/redisConnection";
-import { BudgetSelectModel } from "@/lib/database/schema";
+import { BudgetSelectModel, GoalSelectModel } from "@/lib/database/schema";
 
 interface Entity {
   [key: string]: any;
@@ -52,7 +52,7 @@ export const getBudgetKey = (budgetId: number) => {
   return `${CACHE_PREFIXES.BUDGET}:${budgetId}`;
 };
 
-export const getGoalKey = (goalId: string) => {
+export const getGoalKey = (goalId: number) => {
   return `${CACHE_PREFIXES.GOAL}:${goalId}`;
 };
 
@@ -220,19 +220,19 @@ export const mapRedisHashToBudget = (
 
 export const mapRedisHashToGoal = (
   goalFromCache: Record<string, string> | null
-): Goal | null => {
+): GoalSelectModel | null => {
   const mappingConfig = {
-    id: (value: string) => value,
+    id: (value: string) => Number(value),
     name: (value: string) => value,
     goalAmount: (value: string) => Number(value),
     currentAmount: (value: string) => Number(value),
     userId: (value: string) => value,
-    createdAt: (value: string) => new Date(value),
-    updatedAt: (value: string) => new Date(value),
+    createdAt: (value: string) => new Date(value).toISOString(),
+    updatedAt: (value: string) => new Date(value).toISOString(),
     progress: (value: string) => Number(value),
   };
 
-  return mapRedisHashToEntity<Goal>(goalFromCache, mappingConfig);
+  return mapRedisHashToEntity<GoalSelectModel>(goalFromCache, mappingConfig);
 };
 
 export const checkRateLimit = async (ipAdress: string) => {

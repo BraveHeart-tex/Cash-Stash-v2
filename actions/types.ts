@@ -10,7 +10,11 @@ import {
 import { IconType } from "react-icons/lib";
 import { AccountCategory } from "@/entities/account";
 import { BudgetCategory } from "@/entities/budget";
-import { AccountSelectModel, BudgetSelectModel } from "@/lib/database/schema";
+import {
+  AccountSelectModel,
+  BudgetSelectModel,
+  GoalSelectModel,
+} from "@/lib/database/schema";
 
 interface IPaginatedResponse {
   hasNextPage: boolean;
@@ -63,7 +67,7 @@ export interface IGetPaginatedGoalsParams extends IPaginatedActionParams {
 }
 
 export interface IGetPaginatedGoalsResponse extends IPaginatedResponse {
-  goals: Goal[];
+  goals: GoalSelectModel[];
 }
 
 export type SerializedUserAccount = Omit<Account, "createdAt" | "updatedAt"> & {

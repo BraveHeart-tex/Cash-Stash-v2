@@ -1,26 +1,13 @@
 import { GoalSchemaType } from "@/schemas/goal-schema";
-import { createId } from "@paralleldrive/cuid2";
-
-export interface GoalDto {
-  id: string;
-  name: string;
-  goalAmount: number;
-  currentAmount: number;
-  progress: number;
-  userId: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { GoalInsertModel } from "@/lib/database/schema";
 
 export const createGoalDto = (
   data: GoalSchemaType,
   userId: string
-): GoalDto => {
+): GoalInsertModel => {
   return {
     ...data,
-    id: createId(),
     userId,
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    updatedAt: new Date().toISOString(),
   };
 };
