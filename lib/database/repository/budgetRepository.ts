@@ -91,44 +91,36 @@ const budgetRepository = {
       ? eq(budgets.category, category)
       : undefined;
 
-    let orderByCondition;
+    let orderByCondition = desc(budgets.id);
 
-    // TODO: Refactor this
     if (sortBy && sortDirection) {
       const validSortDirection =
         sortDirection.toLowerCase() === "desc" ? "desc" : "asc";
 
       const validSortBy = validBudgetSortByOptions[sortBy] ? sortBy : "id";
 
-      if (validSortBy === "progress") {
-        if (validSortDirection === "desc") {
-          orderByCondition = desc(budgets.progress);
-        }
-        if (validSortDirection === "asc") {
-          orderByCondition = asc(budgets.progress);
-        }
-      }
-
-      if (validSortBy === "spentAmount") {
-        if (validSortDirection === "desc") {
-          orderByCondition = desc(budgets.spentAmount);
-        }
-        if (validSortDirection === "asc") {
-          orderByCondition = asc(budgets.spentAmount);
-        }
-      }
-
-      if (validSortBy === "budgetAmount") {
-        if (validSortDirection === "desc") {
-          orderByCondition = desc(budgets.budgetAmount);
-        }
-        if (validSortDirection === "asc") {
-          orderByCondition = asc(budgets.budgetAmount);
-        }
-      }
-
-      if (!orderByCondition) {
-        orderByCondition = desc(budgets.id);
+      switch (validSortBy) {
+        case "progress":
+          orderByCondition =
+            validSortDirection === "desc"
+              ? desc(budgets.progress)
+              : asc(budgets.progress);
+          break;
+        case "spentAmount":
+          orderByCondition =
+            validSortDirection === "desc"
+              ? desc(budgets.spentAmount)
+              : asc(budgets.spentAmount);
+          break;
+        case "budgetAmount":
+          orderByCondition =
+            validSortDirection === "desc"
+              ? desc(budgets.budgetAmount)
+              : asc(budgets.budgetAmount);
+          break;
+        default:
+          orderByCondition = desc(budgets.id);
+          break;
       }
     }
 
