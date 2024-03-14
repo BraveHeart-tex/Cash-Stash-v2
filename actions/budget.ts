@@ -2,7 +2,7 @@
 import { getUser } from "@/lib/auth/session";
 import { processZodError, validateEnumValue } from "@/lib/utils";
 import budgetSchema, { BudgetSchemaType } from "@/schemas/budget-schema";
-import { Budget } from "@prisma/client";
+import { BudgetSelectModel } from "@/lib/database/schema";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import {
@@ -24,7 +24,7 @@ import redisService from "@/lib/redis/redisService";
 
 export const createBudget = async (
   data: BudgetSchemaType
-): Promise<IValidatedResponse<Budget>> => {
+): Promise<IValidatedResponse<BudgetSelectModel>> => {
   const { user } = await getUser();
   if (!user) {
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
@@ -34,9 +34,9 @@ export const createBudget = async (
     const validatedData = budgetSchema.parse(data);
     const budgetDto = createBudgetDto(validatedData, user.id);
 
-    const affectedRows = await budgetRepository.create(budgetDto);
+    const { affectedRows, budget } = await budgetRepository.create(budgetDto);
 
-    if (affectedRows === 0) {
+    if (!affectedRows || !budget) {
       return {
         error:
           "There was a problem while creating your budget. Please try again later.",
@@ -48,11 +48,11 @@ export const createBudget = async (
       redisService.invalidateKeysByPrefix(
         generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_BUDGETS, user.id)
       ),
-      redisService.hset(getBudgetKey(budgetDto.id), budgetDto),
+      redisService.hset(getBudgetKey(budget.id), budget),
     ]);
 
     return {
-      data: budgetDto,
+      data: budget,
       fieldErrors: [],
     };
   } catch (error) {
@@ -70,15 +70,15 @@ export const createBudget = async (
 };
 
 export const updateBudget = async (
-  budgetId: string,
+  budgetId: number,
   values: BudgetSchemaType
-): Promise<IValidatedResponse<Budget>> => {
+): Promise<IValidatedResponse<BudgetSelectModel>> => {
   const { user } = await getUser();
   if (!user) {
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
-  let budgetToBeUpdated: Budget | null;
+  let budgetToBeUpdated: BudgetSelectModel | null;
 
   const budgetFromCache = await redisService.hgetall(getBudgetKey(budgetId));
 
@@ -98,12 +98,13 @@ export const updateBudget = async (
 
     const updateBudgetDto = {
       ...validatedData,
-      id: budgetId,
-      updatedAt: new Date(),
+      updatedAt: new Date().toISOString(),
     };
 
-    const { affectedRows, updatedBudget } =
-      await budgetRepository.update(updateBudgetDto);
+    const { affectedRows, updatedBudget } = await budgetRepository.update(
+      budgetId,
+      updateBudgetDto
+    );
 
     if (affectedRows === 0 || !updatedBudget) {
       return {
@@ -214,14 +215,14 @@ export const getPaginatedBudgets = async ({
   };
 };
 
-export const deleteBudget = async (id: string) => {
+export const deleteBudget = async (budgetId: number) => {
   const { user } = await getUser();
   if (!user) {
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   try {
-    const affectedRows = await budgetRepository.deleteById(id);
+    const affectedRows = await budgetRepository.deleteById(budgetId);
 
     if (affectedRows === 0) {
       return {
@@ -233,7 +234,7 @@ export const deleteBudget = async (id: string) => {
       redisService.invalidateKeysByPrefix(
         generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_BUDGETS, user.id)
       ),
-      redisService.del(getBudgetKey(id)),
+      redisService.del(getBudgetKey(budgetId)),
     ]);
 
     return {

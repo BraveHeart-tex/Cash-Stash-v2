@@ -10,6 +10,7 @@ import {
 import { IconType } from "react-icons/lib";
 import { AccountCategory } from "@/entities/account";
 import { BudgetCategory } from "@/entities/budget";
+import { BudgetSelectModel } from "@/lib/database/schema";
 
 interface IPaginatedResponse {
   hasNextPage: boolean;
@@ -53,7 +54,7 @@ export interface IGetPaginatedBudgetsParams extends IPaginatedActionParams {
 }
 
 export interface IGetPaginatedBudgetsResponse extends IPaginatedResponse {
-  budgets: Budget[];
+  budgets: BudgetSelectModel[];
 }
 
 export interface IGetPaginatedGoalsParams extends IPaginatedActionParams {

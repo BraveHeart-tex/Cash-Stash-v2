@@ -1,6 +1,7 @@
 import { CACHE_PREFIXES } from "@/lib/constants";
 import { Budget, BudgetCategory, Goal } from "@prisma/client";
 import redis from "@/lib/redis/redisConnection";
+import { BudgetSelectModel } from "@/lib/database/schema";
 
 interface Entity {
   [key: string]: any;
@@ -47,7 +48,7 @@ export const getTransactionKey = (transactionId: string) => {
   return `${CACHE_PREFIXES.TRANSACTION}:${transactionId}`;
 };
 
-export const getBudgetKey = (budgetId: string) => {
+export const getBudgetKey = (budgetId: number) => {
   return `${CACHE_PREFIXES.BUDGET}:${budgetId}`;
 };
 
@@ -198,20 +199,23 @@ export const invalidateKeysByPrefix = async (prefix: string) => {
 
 export const mapRedisHashToBudget = (
   budgetFromCache: Record<string, string> | null
-): Budget | null => {
+): BudgetSelectModel | null => {
   const mappingConfig = {
-    id: (value: string) => value,
+    id: (value: string) => Number(value),
     name: (value: string) => value,
     budgetAmount: (value: string) => Number(value),
     spentAmount: (value: string) => Number(value),
     userId: (value: string) => value,
     progress: (value: string) => Number(value),
     category: (value: string) => value as BudgetCategory,
-    createdAt: (value: string) => new Date(value),
-    updatedAt: (value: string) => new Date(value),
+    createdAt: (value: string) => new Date(value).toISOString(),
+    updatedAt: (value: string) => new Date(value).toISOString(),
   };
 
-  return mapRedisHashToEntity<Budget>(budgetFromCache, mappingConfig);
+  return mapRedisHashToEntity<BudgetSelectModel>(
+    budgetFromCache,
+    mappingConfig
+  );
 };
 
 export const mapRedisHashToGoal = (

@@ -31,10 +31,28 @@ const budgetRepository = {
     try {
       const [insertResult] = await db.insert(budgets).values(budgetDto);
 
-      return insertResult.affectedRows;
+      if (insertResult.affectedRows && insertResult.insertId) {
+        const [budget] = await db
+          .select()
+          .from(budgets)
+          .where(eq(budgets.id, insertResult.insertId));
+
+        return {
+          affectedRows: insertResult.affectedRows,
+          budget,
+        };
+      }
+
+      return {
+        affectedRows: insertResult.affectedRows,
+        budget: null,
+      };
     } catch (error) {
       console.error(error);
-      return 0;
+      return {
+        affectedRows: 0,
+        budget: null,
+      };
     }
   },
   async update(budgetId: number, budgetDto: Partial<BudgetInsertModel>) {
