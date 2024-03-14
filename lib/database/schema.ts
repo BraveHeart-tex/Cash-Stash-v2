@@ -441,3 +441,6 @@ export type BudgetSelectModel = InferSelectModel<typeof budgets>;
 
 export type GoalInsertModel = InferInsertModel<typeof goals>;
 export type GoalSelectModel = InferSelectModel<typeof goals>;
+
+export type TransactionInsertModel = InferInsertModel<typeof transactions>;
+export type TransactionSelectModel = InferSelectModel<typeof transactions>;

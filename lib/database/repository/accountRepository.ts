@@ -181,6 +181,22 @@ const accountRepository = {
       return false;
     }
   },
+
+  async getAccountBalance(accountId: number) {
+    try {
+      const [account] = await db
+        .select({
+          balance: accounts.balance,
+        })
+        .from(accounts)
+        .where(eq(accounts.id, accountId));
+
+      return account?.balance ?? 0;
+    } catch (e) {
+      console.error("Error getting account balance", e);
+      return 0;
+    }
+  },
 };
 
 export default accountRepository;

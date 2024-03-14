@@ -1,7 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { ZodError } from "zod";
-import { MONTHS_OF_THE_YEAR } from "@/lib/constants";
 import { IGetPaginatedTransactionsParams } from "@/actions/types";
 import { ITransactionPageSearchParams } from "@/app/transactions/page";
 import { TransactionCategory } from "@prisma/client";
@@ -9,17 +8,6 @@ import { TransactionCategory } from "@prisma/client";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
-
-export const processDate = (date: Date) => {
-  const day = date.getDate().toString().padStart(2, "0");
-  const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Months are zero-based
-  const year = date.getFullYear();
-  const hours = date.getHours().toString().padStart(2, "0");
-  const minutes = date.getMinutes().toString().padStart(2, "0");
-  const seconds = date.getSeconds().toString().padStart(2, "0");
-
-  return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
-};
 
 export const thousandSeparator = (value: number) => {
   return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -91,13 +79,6 @@ export const processZodError = (error: ZodError) => {
       message: message?.join(", "),
     })),
   };
-};
-
-export const formatTransactionDate = (date: Date) => {
-  const formattedDate = processDate(date).split(" ");
-  const [day, month, year] = formattedDate[0].split("/");
-  const [hours, minutes, seconds] = formattedDate[1].split(":");
-  return `${day} ${MONTHS_OF_THE_YEAR[parseInt(month) - 1]} ${year}, ${hours}:${minutes}:${seconds}`;
 };
 
 export const generateReadableLabelFromEnumValue = ({
@@ -178,7 +159,7 @@ export function createGetPaginatedTransactionsParams(
 
   return {
     transactionType,
-    accountId,
+    accountId: accountId ? parseInt(accountId) : undefined,
     sortBy: (sortBy || "createdAt") as "amount" | "createdAt",
     sortDirection: (sortDirection || "desc") as "asc" | "desc",
     category: category as TransactionCategory,
@@ -191,12 +172,6 @@ export const getPageSizeAndSkipAmount = (pageNumber: number) => {
   const PAGE_SIZE = 12;
   const skipAmount = (pageNumber - 1) * PAGE_SIZE;
   return { pageSize: PAGE_SIZE, skipAmount };
-};
-
-export const getDateStringWithOffset = (date: Date) => {
-  return new Date(
-    date.getTime() - date.getTimezoneOffset() * 60000
-  ).toISOString();
 };
 
 export function convertIsoToMysqlDatetime(isoDatetimeString: string) {

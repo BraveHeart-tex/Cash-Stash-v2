@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 interface GenericModalState {
-  entityId: string;
+  entityId: string | number;
   isGenericModalOpen: boolean;
   dialogTitle?: string;
   dialogDescription?: string;

@@ -18,7 +18,7 @@ import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import accountSchema, { AccountSchemaType } from "@/schemas/account-schema";
 import { createAccountDto } from "@/lib/database/dto/accountDto";
 import accountRepository from "@/lib/database/repository/accountRepository";
-import { Account, AccountCategory } from "@/entities/account";
+import { AccountCategory } from "@/entities/account";
 import transactionRepository from "@/lib/database/repository/transactionRepository";
 import redisService from "@/lib/redis/redisService";
 import { AccountSelectModel } from "@/lib/database/schema";

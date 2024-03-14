@@ -1,5 +1,14 @@
 import { z } from "zod";
-import { TransactionCategory } from "@/entities/transaction";
+
+enum TransactionCategory {
+  "FOOD" = "FOOD",
+  "TRANSPORTATION" = "TRANSPORTATION",
+  "ENTERTAINMENT" = "ENTERTAINMENT",
+  "UTILITIES" = "UTILITIES",
+  "SHOPPING" = "SHOPPING",
+  "HOUSING" = "HOUSING",
+  "OTHER" = "OTHER",
+}
 
 const transactionSchema = z.object({
   amount: z.coerce.number({
@@ -19,7 +28,7 @@ const transactionSchema = z.object({
       });
     }
   }),
-  accountId: z.string().min(1, "Please select an account"),
+  accountId: z.coerce.number().min(1, "Please select an account"),
 });
 
 export type TransactionSchemaType = z.infer<typeof transactionSchema>;

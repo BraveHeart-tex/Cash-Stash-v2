@@ -27,7 +27,7 @@ class MyLogger implements Logger {
 export const db = drizzle(asyncPool, {
   schema: schema,
   mode: "default",
-  logger: new MyLogger(),
+  // logger: new MyLogger(),
 });
 
 export const adapter = new DrizzleMySQLAdapter(db, sessions, users);

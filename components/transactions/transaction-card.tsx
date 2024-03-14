@@ -2,7 +2,6 @@
 import {
   cn,
   formatMoney,
-  formatTransactionDate,
   generateReadableLabelFromEnumValue,
 } from "@/lib/utils";
 import {
@@ -18,13 +17,15 @@ import { motion } from "framer-motion";
 import DataLabel from "@/components/data-label";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import useGenericModalStore from "@/store/genericModalStore";
-import { TransactionResponse } from "@/actions/types";
+
 import ActionPopover from "@/components/action-popover";
 import { RxCross1, RxPencil2 } from "react-icons/rx";
 import { toast } from "sonner";
+import { TransactionSelectModel } from "@/lib/database/schema";
+import { format } from "date-fns";
 
 interface ITransactionCardProps {
-  transaction: TransactionResponse;
+  transaction: TransactionSelectModel & { accountName: string };
 }
 
 const TransactionCard = ({ transaction }: ITransactionCardProps) => {
@@ -69,6 +70,10 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
       key: "transaction",
       data: transaction,
     });
+  };
+
+  const formatTransactionDate = (date: string) => {
+    return format(new Date(date), "dd/MM/yyyy HH:mm");
   };
 
   return (

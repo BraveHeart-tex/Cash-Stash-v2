@@ -44,7 +44,7 @@ export const getSendVerificationCodeRateLimitKey = (ipAdress: string) => {
 export const getAccountKey = (accountId: number) =>
   `${CACHE_PREFIXES.ACCOUNT}:${accountId}`;
 
-export const getTransactionKey = (transactionId: string) => {
+export const getTransactionKey = (transactionId: number) => {
   return `${CACHE_PREFIXES.TRANSACTION}:${transactionId}`;
 };
 
@@ -165,7 +165,7 @@ export const getPaginatedTransactionsKey = ({
 }: {
   userId: string;
   transactionType?: string;
-  accountId?: string;
+  accountId?: number;
   sortBy?: string;
   sortDirection?: string;
   query?: string;

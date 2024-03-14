@@ -1,12 +1,5 @@
 import prisma from "@/lib/database/db";
-import {
-  Budget,
-  Account,
-  Goal,
-  Transaction,
-  Reminder,
-  TransactionCategory,
-} from "@prisma/client";
+import { Budget, Account, Transaction, Reminder } from "@prisma/client";
 import { IconType } from "react-icons/lib";
 import { AccountCategory } from "@/entities/account";
 import { BudgetCategory } from "@/entities/budget";
@@ -14,6 +7,7 @@ import {
   AccountSelectModel,
   BudgetSelectModel,
   GoalSelectModel,
+  TransactionSelectModel,
 } from "@/lib/database/schema";
 
 interface IPaginatedResponse {
@@ -177,27 +171,15 @@ export interface IRecaptchaResponse {
 export interface IGetPaginatedTransactionsParams
   extends IPaginatedActionParams {
   transactionType?: string;
-  accountId?: string;
+  accountId?: number;
   sortBy: "amount" | "createdAt";
   sortDirection?: "asc" | "desc";
   createdAtStart?: Date;
   createdAtEnd?: Date;
   createdAtOperator?: "equals" | "before" | "after" | "range";
-  category?: TransactionCategory;
+  category?: TransactionSelectModel["category"];
 }
 
-export type TransactionResponse = {
-  id: string;
-  amount: number;
-  description: string;
-  createdAt: Date;
-  category: TransactionCategory;
-  updatedAt: Date;
-  accountId: string;
-  userId: string;
-  accountName: string;
-};
-
 export interface IGetPaginatedTransactionsResponse extends IPaginatedResponse {
-  transactions: TransactionResponse[];
+  transactions: TransactionSelectModel[];
 }
