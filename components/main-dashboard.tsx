@@ -6,14 +6,12 @@ import NotificationsAndReminders from "@/components/notification-and-reminders";
 import TransactionHistory from "@/components/transaction-history";
 import BarChartComponent from "@/components/charts/bar-chart";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { SerializedReminder } from "@/actions/types";
 import MotionDiv from "@/components/animations/motion-div";
 import { getPaginatedTransactions } from "@/actions/transaction";
 import { getPaginatedAccounts } from "@/actions/account";
 import { fetchInsightsDataAction, getChartData } from "@/actions";
 import { getPaginatedBudgets } from "@/actions/budget";
 import { getPaginatedGoals } from "@/actions/goal";
-import { getGenericListByCurrentUser } from "@/actions/generic";
 
 const Dashboard = async () => {
   let [
@@ -23,7 +21,6 @@ const Dashboard = async () => {
     monthlyTransactions,
     budgetsResult,
     goalsResult,
-    remindersResult,
   ] = await Promise.all([
     getPaginatedTransactions({
       transactionType: "all",
@@ -36,10 +33,7 @@ const Dashboard = async () => {
     getChartData(),
     getPaginatedBudgets({ pageNumber: 1, query: "" }),
     getPaginatedGoals({ pageNumber: 1, query: "" }),
-    getGenericListByCurrentUser<SerializedReminder>({
-      tableName: "reminder",
-      whereCondition: { markedAsReadAt: null },
-    }),
+    // Reminders
   ]);
 
   const { totalIncome, totalExpense, netIncome, savingsRate } =
@@ -109,9 +103,7 @@ const Dashboard = async () => {
     {
       title: "Notifications and Reminders",
       description: "View your notifications, set bill reminders here.",
-      data: (
-        <NotificationsAndReminders reminders={remindersResult?.data || []} />
-      ),
+      data: <NotificationsAndReminders reminders={[]} />,
     },
   ];
 

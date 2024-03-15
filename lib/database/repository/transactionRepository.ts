@@ -37,7 +37,7 @@ const transactionRepository = {
         .limit(10)
         .orderBy(desc(transactions.createdAt));
     } catch (e) {
-      console.error(e);
+      console.error("getByAccountId error", e);
       return [];
     }
   },
@@ -112,12 +112,32 @@ const transactionRepository = {
   ) {
     try {
       return await db.transaction(async (trx) => {
-        const [updateAccountsResponse] = await db.execute(
-          sql`UPDATE ${accounts} SET ${accounts.balance} = ${accounts.balance} - ${oldAccountData.oldAmount} WHERE ${accounts.id} = ${oldAccountData.oldAccountId}; UPDATE ${accounts} SET ${accounts.balance} = ${accounts.balance} + ${oldAccountData.amount} WHERE ${accounts.id} = ${oldAccountData.accountId};`
-        );
+        const [updateOldAccountResponse] = await trx
+          .update(accounts)
+          .set({
+            balance: sql`${accounts.balance} - ${oldAccountData.oldAmount}`,
+          })
+          .where(eq(accounts.id, oldAccountData.oldAccountId));
 
-        if (!updateAccountsResponse.affectedRows) {
-          await trx.rollback();
+        if (!updateOldAccountResponse.affectedRows) {
+          console.error("Error updating old account", updateOldAccountResponse);
+          trx.rollback();
+          return {
+            affectedRows: 0,
+            updatedTransaction: null,
+          };
+        }
+
+        const [updateNewAccountResponse] = await trx
+          .update(accounts)
+          .set({
+            balance: sql`${accounts.balance} + ${oldAccountData.amount}`,
+          })
+          .where(eq(accounts.id, oldAccountData.accountId));
+
+        if (!updateNewAccountResponse.affectedRows) {
+          console.error("Error updating new account", updateNewAccountResponse);
+          trx.rollback();
           return {
             affectedRows: 0,
             updatedTransaction: null,
@@ -130,6 +150,7 @@ const transactionRepository = {
           .where(eq(transactions.id, transactionDto.id));
 
         if (!updateTransactionResponse.affectedRows) {
+          console.error("Error updating transaction");
           await trx.rollback();
           return {
             affectedRows: 0,

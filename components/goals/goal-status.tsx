@@ -2,12 +2,12 @@ import GoalCard from "@/components/goals/goal-card";
 import CreateGoalButton from "@/components/create-buttons/create-goal-button";
 import AnimatePresenceClient from "@/components/animations/animate-presence";
 import MotionDiv from "@/components/animations/motion-div";
-import { Goal } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { PAGE_ROUTES } from "@/lib/constants";
+import { GoalSelectModel } from "@/lib/database/schema";
 
-const GoalStatus = ({ goals }: { goals: Goal[] }) => {
+const GoalStatus = ({ goals }: { goals: GoalSelectModel[] }) => {
   if (goals.length === 0) {
     return (
       <article className="flex h-[300px] items-center justify-center">

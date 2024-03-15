@@ -6,7 +6,6 @@ import {
   formatMoney,
   generateReadableLabelFromEnumValue,
 } from "@/lib/utils";
-import { Budget } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
@@ -15,9 +14,10 @@ import { deleteBudget } from "@/actions/budget";
 import ActionPopover from "@/components/action-popover";
 import { RxCross1, RxPencil2 } from "react-icons/rx";
 import { toast } from "sonner";
+import { BudgetSelectModel } from "@/lib/database/schema";
 
 interface IBudgetCardProps {
-  budget: Budget;
+  budget: BudgetSelectModel;
 }
 
 const BudgetCard = ({ budget }: IBudgetCardProps) => {
@@ -29,7 +29,7 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
   );
   const router = useRouter();
 
-  const handleDeleteClick = (id: string) => {
+  const handleDeleteClick = (id: number) => {
     showGenericConfirm({
       title: "Delete Budget",
       message: "Are you sure you want to delete this budget?",

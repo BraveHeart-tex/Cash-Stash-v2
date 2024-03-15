@@ -29,6 +29,20 @@
       "when": 1710138411775,
       "tag": "0003_red_hercules",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1710513466762,
+      "tag": "0004_lonely_famine",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1710514328282,
+      "tag": "0005_military_paper_doll",
+      "breakpoints": true
     }
   ]
 }

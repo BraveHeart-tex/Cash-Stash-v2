@@ -1,7 +1,4 @@
 "use client";
-import { SerializedTransaction } from "@/actions/types";
-import { SerializedUserAccount } from "@/actions/types";
-
 import {
   Table,
   TableBody,
@@ -14,6 +11,10 @@ import {
 import { cn, thousandSeparator } from "@/lib/utils";
 import ResponsiveChartContainer from "@/app/chart-container";
 import { useEffect, useState } from "react";
+import {
+  AccountSelectModel,
+  TransactionSelectModel,
+} from "@/lib/database/schema";
 
 export interface MonthlyData {
   monthlyTransactionsData: {
@@ -21,8 +22,8 @@ export interface MonthlyData {
     income: number;
     expense: number;
   }[];
-  transactions: SerializedTransaction[];
-  currentUserAccounts: SerializedUserAccount[];
+  transactions: TransactionSelectModel[];
+  currentUserAccounts: AccountSelectModel[];
 }
 
 const ReportTable = ({

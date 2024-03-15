@@ -31,13 +31,12 @@ const TransactionsPage = async ({
 }) => {
   const actionParams = createGetPaginatedTransactionsParams(searchParams);
 
-  const result = await getPaginatedTransactions(actionParams);
-
+  const transactionsResponse = await getPaginatedTransactions(actionParams);
   const usersAccounts = await getCurrentUserAccounts();
 
   const accountsFilterDataset = usersAccounts.map((account) => ({
     label: account.name,
-    value: account.id,
+    value: account.id.toString(),
   }));
 
   const categoryFilterDataset = generateReadbleEnumLabels({
@@ -121,8 +120,8 @@ const TransactionsPage = async ({
           </div>
         )}
         <div>
-          {result.transactions.length > 0 ? (
-            <TransactionList transactions={result.transactions} />
+          {transactionsResponse.transactions.length > 0 ? (
+            <TransactionList transactions={transactionsResponse.transactions} />
           ) : (
             <TransactionsNotFound pageHasParams={pageHasParams} />
           )}

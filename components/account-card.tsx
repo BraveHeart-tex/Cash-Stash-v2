@@ -4,7 +4,6 @@ import {
   formatMoney,
   generateReadableLabelFromEnumValue,
 } from "@/lib/utils";
-import { Account } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
@@ -16,9 +15,10 @@ import { GiTakeMyMoney } from "react-icons/gi";
 import LatestAccountTransactionsDialog from "./latest-account-transactions-dialog";
 import { useState } from "react";
 import { toast } from "sonner";
+import { AccountSelectModel } from "@/lib/database/schema";
 
 interface IAccountCardProps {
-  account: Account;
+  account: AccountSelectModel;
   className?: string;
   showPopover?: boolean;
 }
@@ -28,7 +28,8 @@ const AccountCard = ({
   className,
   showPopover = true,
 }: IAccountCardProps) => {
-  const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
+  const [selectedAccount, setSelectedAccount] =
+    useState<AccountSelectModel | null>(null);
   const router = useRouter();
   const openGenericModal = useGenericModalStore(
     (state) => state.openGenericModal
@@ -40,7 +41,7 @@ const AccountCard = ({
   const accountCategory =
     generateReadableLabelFromEnumValue({ key: account.category }) + " Account";
 
-  const handleDeleteAccount = (id: string) => {
+  const handleDeleteAccount = (id: number) => {
     showGenericConfirm({
       title: "Are you sure you want to delete this account?",
       message:

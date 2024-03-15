@@ -1,7 +1,6 @@
 "use client";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Goal } from "@prisma/client";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { cn, formatMoney } from "@/lib/utils";
@@ -11,9 +10,10 @@ import { deleteGoal } from "@/actions/goal";
 import ActionPopover from "@/components/action-popover";
 import { RxCross1, RxPencil2 } from "react-icons/rx";
 import { toast } from "sonner";
+import { GoalSelectModel } from "@/lib/database/schema";
 
 interface IGoalCardProps {
-  goal: Goal;
+  goal: GoalSelectModel;
 }
 
 const GoalCard = ({ goal }: IGoalCardProps) => {
@@ -25,7 +25,7 @@ const GoalCard = ({ goal }: IGoalCardProps) => {
   );
   const router = useRouter();
 
-  const handleDeleteGoal = (id: string) => {
+  const handleDeleteGoal = (id: number) => {
     showGenericConfirm({
       title: "Delete Goal",
       message: "Are you sure you want to delete this goal?",
