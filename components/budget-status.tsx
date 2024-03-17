@@ -2,12 +2,12 @@ import BudgetCard from "@/components/budget-card";
 import CreateBudgetButton from "@/components/create-buttons/create-budget-button";
 import AnimatePresenceClient from "@/components/animations/animate-presence";
 import MotionDiv from "@/components/animations/motion-div";
-import { Budget } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { PAGE_ROUTES } from "@/lib/constants";
+import { BudgetSelectModel } from "@/lib/database/schema";
 
-const BudgetStatus = ({ budgets }: { budgets: Budget[] }) => {
+const BudgetStatus = ({ budgets }: { budgets: BudgetSelectModel[] }) => {
   if (!budgets || budgets.length === 0) {
     return (
       <article className="flex h-[300px] items-center justify-center">

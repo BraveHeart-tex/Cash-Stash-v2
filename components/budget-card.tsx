@@ -1,12 +1,6 @@
 "use client";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import {
-  cn,
-  formatMoney,
-  generateReadableLabelFromEnumValue,
-} from "@/lib/utils";
-import { Budget } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
@@ -15,9 +9,13 @@ import { deleteBudget } from "@/actions/budget";
 import ActionPopover from "@/components/action-popover";
 import { RxCross1, RxPencil2 } from "react-icons/rx";
 import { toast } from "sonner";
+import { BudgetSelectModel } from "@/lib/database/schema";
+import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
+import { cn } from "@/lib/utils/stringUtils/cn";
+import { generateLabelFromEnumValue } from "@/lib/utils/stringUtils/generateLabelFromEnumValue";
 
 interface IBudgetCardProps {
-  budget: Budget;
+  budget: BudgetSelectModel;
 }
 
 const BudgetCard = ({ budget }: IBudgetCardProps) => {
@@ -29,7 +27,7 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
   );
   const router = useRouter();
 
-  const handleDeleteClick = (id: string) => {
+  const handleDeleteClick = (id: number) => {
     showGenericConfirm({
       title: "Delete Budget",
       message: "Are you sure you want to delete this budget?",
@@ -90,7 +88,7 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
           {budget.name}
         </span>
         <span className="text-muted-foreground">
-          {generateReadableLabelFromEnumValue({ key: budget.category })}
+          {generateLabelFromEnumValue(budget.category)}
         </span>
       </div>
       <div className="absolute top-5 right-1 mb-2">

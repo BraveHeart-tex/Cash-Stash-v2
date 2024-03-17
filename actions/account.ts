@@ -1,10 +1,10 @@
 "use server";
 import { getUser } from "@/lib/auth/session";
-import { processZodError, validateEnumValue } from "@/lib/utils";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import {
   IGetPaginatedAccountsParams,
+  IGetPaginatedAccountsResponse,
   IValidatedResponse,
 } from "@/actions/types";
 import {
@@ -17,15 +17,18 @@ import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import accountSchema, { AccountSchemaType } from "@/schemas/account-schema";
 import { createAccountDto } from "@/lib/database/dto/accountDto";
 import accountRepository from "@/lib/database/repository/accountRepository";
-import { Account, AccountCategory } from "@/entities/account";
+import { AccountCategory } from "@/entities/account";
 import transactionRepository from "@/lib/database/repository/transactionRepository";
 import redisService from "@/lib/redis/redisService";
+import { AccountSelectModel } from "@/lib/database/schema";
+import { processZodError } from "@/lib/utils/objectUtils/processZodError";
+import { validateEnumValue } from "@/lib/utils/objectUtils/validateEnumValue";
 
 export const registerBankAccount = async ({
   balance,
   category,
   name,
-}: AccountSchemaType): Promise<IValidatedResponse<Account>> => {
+}: AccountSchemaType): Promise<IValidatedResponse<AccountSelectModel>> => {
   const { user } = await getUser();
 
   if (!user) {
@@ -37,9 +40,12 @@ export const registerBankAccount = async ({
 
     const accountDto = createAccountDto(validatedData, user.id);
 
-    const affectedRows = await accountRepository.create(accountDto);
+    const { affectedRows, account } = await accountRepository.create(
+      accountDto,
+      true
+    );
 
-    if (affectedRows === 0) {
+    if (affectedRows === 0 || !account) {
       return { error: "Error creating account.", fieldErrors: [] };
     }
 
@@ -50,11 +56,11 @@ export const registerBankAccount = async ({
           user.id
         )
       ),
-      redisService.hset(getAccountKey(accountDto.id), accountDto),
+      redisService.hset(getAccountKey(account.id), account),
     ]);
 
     return {
-      data: accountDto as Account,
+      data: account,
       fieldErrors: [],
     };
   } catch (error) {
@@ -74,8 +80,8 @@ export const registerBankAccount = async ({
 export const updateBankAccount = async ({
   accountId,
   ...rest
-}: AccountSchemaType & { accountId: string }): Promise<
-  IValidatedResponse<Account>
+}: AccountSchemaType & { accountId: number }): Promise<
+  IValidatedResponse<AccountSelectModel>
 > => {
   const { user } = await getUser();
   if (!user) {
@@ -94,11 +100,12 @@ export const updateBankAccount = async ({
     const updateDto = {
       ...validatedData,
       id: accountId,
-      updatedAt: new Date(),
     };
 
-    const { affectedRows, updatedAccount } =
-      await accountRepository.update(updateDto);
+    const { affectedRows, updatedAccount } = await accountRepository.update(
+      accountId,
+      updateDto
+    );
 
     if (affectedRows === 0 || !updatedAccount) {
       return {
@@ -119,7 +126,7 @@ export const updateBankAccount = async ({
     ]);
 
     return {
-      data: updatedAccount as Account,
+      data: updatedAccount,
       fieldErrors: [],
     };
   } catch (error) {
@@ -141,7 +148,7 @@ export const getPaginatedAccounts = async ({
   category,
   sortBy,
   sortDirection,
-}: IGetPaginatedAccountsParams) => {
+}: IGetPaginatedAccountsParams): Promise<IGetPaginatedAccountsResponse> => {
   const { user } = await getUser();
 
   if (!user) {
@@ -177,7 +184,7 @@ export const getPaginatedAccounts = async ({
       console.info("CACHE HIT");
       const parsedData = JSON.parse(cachedData);
       return {
-        accounts: parsedData.accounts as Account[],
+        accounts: parsedData.accounts as AccountSelectModel[],
         hasNextPage: parsedData.totalCount > skipAmount + PAGE_SIZE,
         hasPreviousPage: pageNumber > 1,
         totalPages: Math.ceil(parsedData.totalCount / PAGE_SIZE),
@@ -212,7 +219,7 @@ export const getPaginatedAccounts = async ({
     );
 
     return {
-      accounts: accounts as Account[],
+      accounts: accounts,
       hasNextPage: totalCount > skipAmount + PAGE_SIZE,
       hasPreviousPage: pageNumber > 1,
       totalPages: Math.ceil(totalCount / PAGE_SIZE),
@@ -230,7 +237,7 @@ export const getPaginatedAccounts = async ({
   }
 };
 
-export const deleteAccount = async (accountId: string) => {
+export const deleteAccount = async (accountId: number) => {
   const { user } = await getUser();
 
   if (!user) {
@@ -264,7 +271,7 @@ export const deleteAccount = async (accountId: string) => {
   }
 };
 
-export const getTransactionsForAccount = async (accountId: string) => {
+export const getTransactionsForAccount = async (accountId: number) => {
   const { user } = await getUser();
 
   if (!user) {

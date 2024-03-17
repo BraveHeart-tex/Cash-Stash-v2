@@ -2,6 +2,8 @@ import { createId } from "@paralleldrive/cuid2";
 import { AccountSchemaType } from "@/schemas/account-schema";
 import { AccountCategory } from "@/entities/account";
 
+import { AccountInsertModel } from "@/lib/database/schema";
+
 export interface AccountDto {
   id: string;
   name: string;
@@ -15,14 +17,11 @@ export interface AccountDto {
 export const createAccountDto = (
   validatedData: AccountSchemaType,
   userId: string
-): AccountDto => {
+): AccountInsertModel => {
   return {
-    id: createId(),
     name: validatedData.name,
     balance: validatedData.balance,
     category: validatedData.category,
     userId: userId,
-    createdAt: new Date(),
-    updatedAt: new Date(),
   };
 };

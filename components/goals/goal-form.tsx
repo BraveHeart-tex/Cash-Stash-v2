@@ -11,18 +11,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Goal } from "@prisma/client";
 import { IValidatedResponse } from "@/actions/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useTransition } from "react";
 import goalSchema, { GoalSchemaType } from "@/schemas/goal-schema";
 import { createGoal, updateGoal } from "@/actions/goal";
-import { formHasChanged } from "@/lib/utils";
 import useGenericModalStore from "@/store/genericModalStore";
 import { toast } from "sonner";
+import { GoalSelectModel } from "@/lib/database/schema";
+import { formHasChanged } from "@/lib/utils/objectUtils/formHasChanged";
 
 interface IGoalFormProps {
-  data?: Goal;
+  data?: GoalSelectModel;
 }
 
 const GoalForm = ({ data: goalToBeUpdated }: IGoalFormProps) => {
@@ -70,7 +70,7 @@ const GoalForm = ({ data: goalToBeUpdated }: IGoalFormProps) => {
     });
   };
 
-  const processFormErrors = (result: IValidatedResponse<Goal>) => {
+  const processFormErrors = (result: IValidatedResponse<GoalSelectModel>) => {
     if (result.fieldErrors.length) {
       result.fieldErrors.forEach((fieldError) => {
         form.setError(fieldError.field as any, {

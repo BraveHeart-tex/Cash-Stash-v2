@@ -8,23 +8,14 @@ datasource db {
 }
 
 model User {
-  id                             String                         @id @default(cuid())
+  id                             String   @id @default(cuid())
   name                           String
-  email                          String                         @unique
+  email                          String   @unique
   hashedPassword                 String
-  email_verified                 Boolean                        @default(false)
-  createdAt                      DateTime                       @default(now())
-  updatedAt                      DateTime                       @updatedAt
-  budgets                        Budget[]
-  goals                          Goal[]
-  reminders                      Reminder[]
-  transactions                   Transaction[]
-  userAccounts                   Account[]
-  Session                        Session[]
-  EmailVerificationCode          EmailVerificationCode?
-  PasswordResetToken             PasswordResetToken?
-  prefersTwoFactorAuthentication Boolean                        @default(false)
-  TwoFactorAuthenticationSecret  TwoFactorAuthenticationSecret?
+  email_verified                 Boolean  @default(false)
+  createdAt                      DateTime @default(now())
+  updatedAt                      DateTime @updatedAt
+  prefersTwoFactorAuthentication Boolean  @default(false)
 }
 
 model TwoFactorAuthenticationSecret {
@@ -32,7 +23,6 @@ model TwoFactorAuthenticationSecret {
   secret    String
   userId    String   @unique
   createdAt DateTime @default(now())
-  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId], map: "twoFactorAuthenticationSecrets_userId_fkey")
 }
@@ -41,7 +31,6 @@ model PasswordResetToken {
   id         String   @id @default(cuid())
   user_id    String   @unique
   expires_At DateTime
-  User       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@index([user_id], map: "passwordResetTokens_user_id_fkey")
 }
@@ -53,8 +42,6 @@ model EmailVerificationCode {
   email     String   @unique
   expiresAt DateTime
 
-  User User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
   @@index([userId], map: "emailVerificationCodes_userId_fkey")
   @@index([email], map: "emailVerificationCodes_email_fkey")
 }
@@ -63,21 +50,18 @@ model Session {
   id         String   @id
   user_id    String
   expires_at DateTime
-  user       User     @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
   @@index([user_id], map: "sessions_userId_fkey")
 }
 
 model Account {
-  id           String          @id @default(cuid())
-  name         String
-  balance      Float
-  userId       String
-  category     AccountCategory @default(CHECKING)
-  createdAt    DateTime        @default(now())
-  updatedAt    DateTime        @updatedAt
-  transactions Transaction[]
-  user         User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        String          @id @default(cuid())
+  name      String
+  balance   Float
+  userId    String
+  category  AccountCategory @default(CHECKING)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
 
   @@index([userId], map: "userAccounts_userId_fkey")
 }
@@ -91,8 +75,6 @@ model Transaction {
   category    TransactionCategory @default(OTHER)
   accountId   String
   userId      String
-  account     Account             @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  user        User                @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([accountId], map: "transactions_accountId_fkey")
   @@index([userId], map: "transactions_userId_fkey")
@@ -108,7 +90,6 @@ model Budget {
   category     BudgetCategory @default(OTHER)
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
-  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId], map: "budgets_userId_fkey")
 }
@@ -122,7 +103,6 @@ model Goal {
   userId        String
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId], map: "goals_userId_fkey")
 }
@@ -136,7 +116,6 @@ model Reminder {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
   markedAsReadAt DateTime?
-  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId], map: "reminders_userId_fkey")
 }
@@ -152,16 +131,6 @@ enum BudgetCategory {
 }
 
 enum TransactionCategory {
-  FOOD
-  TRANSPORTATION
-  ENTERTAINMENT
-  UTILITIES
-  SHOPPING
-  HOUSING
-  OTHER
-}
-
-enum NotificationCategory {
   FOOD
   TRANSPORTATION
   ENTERTAINMENT

@@ -7,7 +7,6 @@ import {
   getTransactionKey,
 } from "@/lib/redis/redisUtils";
 import { getUser } from "@/lib/auth/session";
-import { processZodError } from "@/lib/utils";
 import transactionSchema, {
   TransactionSchemaType,
 } from "@/schemas/transaction-schema";
@@ -17,18 +16,18 @@ import {
   IGetPaginatedTransactionsParams,
   IGetPaginatedTransactionsResponse,
   IValidatedResponse,
-  TransactionResponse,
 } from "@/actions/types";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
-import { Transaction } from "@/entities/transaction";
 import redisService from "@/lib/redis/redisService";
 import transactionRepository from "@/lib/database/repository/transactionRepository";
 import { createTransactionDto } from "@/lib/database/dto/transactionDto";
 import accountRepository from "@/lib/database/repository/accountRepository";
+import { TransactionSelectModel } from "@/lib/database/schema";
+import { processZodError } from "@/lib/utils/objectUtils/processZodError";
 
 export const createTransaction = async (
   values: TransactionSchemaType
-): Promise<IValidatedResponse<Transaction>> => {
+): Promise<IValidatedResponse<TransactionSelectModel>> => {
   const { user } = await getUser();
 
   if (!user) {
@@ -40,10 +39,10 @@ export const createTransaction = async (
 
     const transactionDto = createTransactionDto(validatedData, user.id);
 
-    const { affectedRows, updatedAccount } =
+    const { affectedRows, updatedAccount, createdTransaction } =
       await transactionRepository.create(transactionDto);
 
-    if (affectedRows === 0 || !updatedAccount) {
+    if (affectedRows === 0 || !createdTransaction || !updatedAccount) {
       return {
         error:
           "We encountered a problem while creating the transaction. Please try again later.",
@@ -63,12 +62,15 @@ export const createTransaction = async (
         ),
         getAccountTransactionsKey(validatedData.accountId),
       ]),
-      redisService.hset(getTransactionKey(transactionDto.id), transactionDto),
+      redisService.hset(
+        getTransactionKey(createdTransaction.id),
+        createdTransaction
+      ),
       redisService.hset(getAccountKey(validatedData.accountId), updatedAccount),
     ]);
 
     return {
-      data: transactionDto,
+      data: createdTransaction,
       fieldErrors: [],
     };
   } catch (error) {
@@ -87,10 +89,10 @@ export const createTransaction = async (
 };
 
 export const updateTransaction = async (
-  transactionId: string,
+  transactionId: number,
   values: TransactionSchemaType,
-  oldTransaction: Transaction
-): Promise<IValidatedResponse<Transaction>> => {
+  oldTransaction: TransactionSelectModel
+): Promise<IValidatedResponse<TransactionSelectModel>> => {
   const { user } = await getUser();
 
   if (!user) {
@@ -109,17 +111,13 @@ export const updateTransaction = async (
       accountId: validatedData.accountId,
     };
 
-    const transactionDto = {
-      ...validatedData,
-      id: transactionId,
-    };
+    const { affectedRows, updatedTransaction } =
+      await transactionRepository.update(oldAccountData, {
+        ...validatedData,
+        id: transactionId,
+      });
 
-    const { affectedRows, updatedRow } = await transactionRepository.update(
-      oldAccountData,
-      transactionDto
-    );
-
-    if (affectedRows === 0 || !updatedRow) {
+    if (affectedRows === 0 || !updatedTransaction) {
       return {
         error:
           "We encountered a problem while updating the transaction. Please try again later.",
@@ -142,7 +140,7 @@ export const updateTransaction = async (
     ]);
 
     return {
-      data: updatedRow,
+      data: updatedTransaction,
       fieldErrors: [],
     };
   } catch (error) {
@@ -161,7 +159,7 @@ export const updateTransaction = async (
 };
 
 export const deleteTransactionById = async (
-  transactionToDelete: TransactionResponse
+  transactionToDelete: TransactionSelectModel
 ) => {
   const { user } = await getUser();
   if (!user) {
@@ -210,7 +208,7 @@ export const getPaginatedTransactions = async ({
   accountId,
   sortBy = "createdAt",
   sortDirection = "desc",
-  query,
+  query = "",
   pageNumber,
   category,
 }: IGetPaginatedTransactionsParams): Promise<IGetPaginatedTransactionsResponse> => {
@@ -237,16 +235,13 @@ export const getPaginatedTransactions = async ({
     const cachedData = await redisService.get(cacheKey);
 
     if (cachedData) {
+      console.log("Using cached data", cachedData);
       const parsedData = JSON.parse(cachedData);
       const cachedResult = parsedData.transactions;
       const totalCount = parsedData.totalCount;
 
       return {
-        transactions: cachedResult.map((result: Transaction) => ({
-          ...result,
-          createdAt: new Date(result.createdAt),
-          updatedAt: new Date(result.updatedAt),
-        })),
+        transactions: cachedResult,
         hasNextPage: totalCount > skipAmount + PAGE_SIZE,
         hasPreviousPage: pageNumber > 1,
         totalPages: Math.ceil(totalCount / PAGE_SIZE),
@@ -287,7 +282,7 @@ export const getPaginatedTransactions = async ({
     );
 
     return {
-      transactions: transactions as TransactionResponse[],
+      transactions,
       hasNextPage: totalCount > skipAmount + PAGE_SIZE,
       hasPreviousPage: pageNumber > 1,
       totalPages: Math.ceil(totalCount / PAGE_SIZE),

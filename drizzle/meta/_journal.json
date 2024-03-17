@@ -1,0 +1,55 @@
+{
+  "version": "5",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1710097522501,
+      "tag": "0000_lazy_puck",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1710097583670,
+      "tag": "0001_soft_luckman",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1710138073800,
+      "tag": "0002_panoramic_squadron_sinister",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1710138411775,
+      "tag": "0003_red_hercules",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1710513466762,
+      "tag": "0004_lonely_famine",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1710514328282,
+      "tag": "0005_military_paper_doll",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1710660397982,
+      "tag": "0006_mute_mister_fear",
+      "breakpoints": true
+    }
+  ]
+}

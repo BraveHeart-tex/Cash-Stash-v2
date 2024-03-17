@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/popover";
 import { IconType } from "react-icons/lib";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/stringUtils/cn";
 
 type PopoverActionOption = {
   icon: IconType;

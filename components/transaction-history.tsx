@@ -2,10 +2,13 @@ import TransactionCard from "./transactions/transaction-card";
 import CreateTransactionButton from "./create-buttons/create-transaction-button";
 import AnimatePresenceClient from "@/components/animations/animate-presence";
 import MotionDiv from "@/components/animations/motion-div";
-import { TransactionResponse, TransactionWithAccount } from "@/actions/types";
+import { TransactionSelectModel } from "@/lib/database/schema";
+import { Button } from "./ui/button";
+import Link from "next/link";
+import { PAGE_ROUTES } from "@/lib/constants";
 
 interface ITransactionHistoryProps {
-  transactions: TransactionResponse[] | null;
+  transactions: (TransactionSelectModel & { accountName: string })[] | null;
 }
 
 const TransactionHistory = ({ transactions }: ITransactionHistoryProps) => {
@@ -25,13 +28,18 @@ const TransactionHistory = ({ transactions }: ITransactionHistoryProps) => {
   }
 
   return (
-    <div className="p-2 min-h-[500px] max-h-[500px] overflow-y-scroll scrollbar-hide">
+    <div className="p-2 min-h-[500px] max-h-[500px] overflow-y-auto">
       <div className="grid grid-cols-1 gap-4">
         <AnimatePresenceClient>
           {transactions.map((transaction) => (
             <TransactionCard key={transaction.id} transaction={transaction} />
           ))}
         </AnimatePresenceClient>
+        <Button className="w-max ml-auto">
+          <Link href={PAGE_ROUTES.TRANSACTIONS_ROUTE}>
+            View All Transactions
+          </Link>
+        </Button>
       </div>
     </div>
   );

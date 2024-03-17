@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { useTransition } from "react";
 import { FaExchangeAlt } from "react-icons/fa";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/stringUtils/cn";
 import useGenericModalStore from "@/store/genericModalStore";
 import { userCanCreateTransaction } from "@/actions/transaction";
 import { toast } from "sonner";

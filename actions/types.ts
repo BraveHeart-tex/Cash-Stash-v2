@@ -1,15 +1,13 @@
-import prisma from "@/lib/database/db";
-import {
-  Budget,
-  Account,
-  Goal,
-  Transaction,
-  Reminder,
-  TransactionCategory,
-} from "@prisma/client";
 import { IconType } from "react-icons/lib";
 import { AccountCategory } from "@/entities/account";
 import { BudgetCategory } from "@/entities/budget";
+import {
+  AccountSelectModel,
+  BudgetSelectModel,
+  GoalSelectModel,
+  ReminderSelectModel,
+  TransactionSelectModel,
+} from "@/lib/database/schema";
 
 interface IPaginatedResponse {
   hasNextPage: boolean;
@@ -23,8 +21,8 @@ interface IPaginatedActionParams {
   query?: string;
 }
 
-export interface TransactionWithAccount extends Transaction {
-  account: Partial<Account>;
+export interface TransactionWithAccount extends TransactionSelectModel {
+  account: Partial<AccountSelectModel>;
 }
 
 export interface IValidatedResponse<T> {
@@ -43,7 +41,7 @@ export interface IGetPaginatedAccountsParams extends IPaginatedActionParams {
 }
 
 export interface IGetPaginatedAccountsResponse extends IPaginatedResponse {
-  accounts: Account[];
+  accounts: AccountSelectModel[];
 }
 
 export interface IGetPaginatedBudgetsParams extends IPaginatedActionParams {
@@ -53,7 +51,7 @@ export interface IGetPaginatedBudgetsParams extends IPaginatedActionParams {
 }
 
 export interface IGetPaginatedBudgetsResponse extends IPaginatedResponse {
-  budgets: Budget[];
+  budgets: BudgetSelectModel[];
 }
 
 export interface IGetPaginatedGoalsParams extends IPaginatedActionParams {
@@ -62,10 +60,13 @@ export interface IGetPaginatedGoalsParams extends IPaginatedActionParams {
 }
 
 export interface IGetPaginatedGoalsResponse extends IPaginatedResponse {
-  goals: Goal[];
+  goals: GoalSelectModel[];
 }
 
-export type SerializedUserAccount = Omit<Account, "createdAt" | "updatedAt"> & {
+export type SerializedUserAccount = Omit<
+  AccountSelectModel,
+  "createdAt" | "updatedAt"
+> & {
   createdAt: string;
   updatedAt: string;
 };
@@ -77,7 +78,7 @@ export interface GenericFilterOption<T> {
 }
 
 export type UpdateBudgetResponse = {
-  budget?: Budget;
+  budget?: BudgetSelectModel;
   error?: string;
   fieldErrors: {
     field: string;
@@ -93,59 +94,22 @@ export interface InsightsData {
 }
 
 export type SerializedTransaction = Omit<
-  Transaction,
+  TransactionSelectModel,
   "createdAt" | "updatedAt"
 > & {
   createdAt: string;
   updatedAt: string;
-  account?: Partial<Account>;
+  account?: Partial<AccountSelectModel>;
 };
 
 export type SerializedReminder = Omit<
-  Reminder,
+  ReminderSelectModel,
   "createdAt" | "updatedAt" | "reminderDate"
 > & {
   createdAt: string;
   updatedAt: string;
   reminderDate: string;
 };
-
-export type TableMap = {
-  [key in TableName]: (typeof prisma)[key];
-};
-
-export type WhereCondition<T> = {
-  [key in keyof T]?: T[key];
-};
-
-export type SelectCondition<T> = {
-  [key in keyof T]?: boolean;
-};
-
-export interface IGenericParams<T> {
-  tableName: TableName;
-  whereCondition?: WhereCondition<T>;
-  selectCondition?: SelectCondition<T>;
-}
-
-export type CreateGenericInput<T> = {
-  [key in keyof Omit<T, "id" | "createdAt" | "updatedAt">]: T[key];
-};
-
-export type CreateGenericWithCurrentUserInput<T> = {
-  [key in keyof Omit<T, "id" | "createdAt" | "updatedAt" | "userId">]: T[key];
-};
-
-export type UpdateGenericInput<T> = {
-  [key in keyof Partial<T>]: T[key];
-};
-
-export type TableName =
-  | "account"
-  | "transaction"
-  | "budget"
-  | "goal"
-  | "reminder";
 
 export type Page =
   | "Dashboard"
@@ -172,27 +136,15 @@ export interface IRecaptchaResponse {
 export interface IGetPaginatedTransactionsParams
   extends IPaginatedActionParams {
   transactionType?: string;
-  accountId?: string;
+  accountId?: number;
   sortBy: "amount" | "createdAt";
   sortDirection?: "asc" | "desc";
   createdAtStart?: Date;
   createdAtEnd?: Date;
   createdAtOperator?: "equals" | "before" | "after" | "range";
-  category?: TransactionCategory;
+  category?: TransactionSelectModel["category"];
 }
 
-export type TransactionResponse = {
-  id: string;
-  amount: number;
-  description: string;
-  createdAt: Date;
-  category: TransactionCategory;
-  updatedAt: Date;
-  accountId: string;
-  userId: string;
-  accountName: string;
-};
-
 export interface IGetPaginatedTransactionsResponse extends IPaginatedResponse {
-  transactions: TransactionResponse[];
+  transactions: (TransactionSelectModel & { accountName: string })[];
 }

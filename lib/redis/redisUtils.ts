@@ -1,6 +1,6 @@
 import { CACHE_PREFIXES } from "@/lib/constants";
-import { Budget, BudgetCategory, Goal } from "@prisma/client";
 import redis from "@/lib/redis/redisConnection";
+import { BudgetSelectModel, GoalSelectModel } from "@/lib/database/schema";
 
 interface Entity {
   [key: string]: any;
@@ -40,18 +40,18 @@ export const getSendVerificationCodeRateLimitKey = (ipAdress: string) => {
   return `${CACHE_PREFIXES.SEND_VERIFICATION_CODE_RATE_LIMIT}:${ipAdress}`;
 };
 
-export const getAccountKey = (accountId: string) =>
+export const getAccountKey = (accountId: number) =>
   `${CACHE_PREFIXES.ACCOUNT}:${accountId}`;
 
-export const getTransactionKey = (transactionId: string) => {
+export const getTransactionKey = (transactionId: number) => {
   return `${CACHE_PREFIXES.TRANSACTION}:${transactionId}`;
 };
 
-export const getBudgetKey = (budgetId: string) => {
+export const getBudgetKey = (budgetId: number) => {
   return `${CACHE_PREFIXES.BUDGET}:${budgetId}`;
 };
 
-export const getGoalKey = (goalId: string) => {
+export const getGoalKey = (goalId: number) => {
   return `${CACHE_PREFIXES.GOAL}:${goalId}`;
 };
 
@@ -63,7 +63,7 @@ export const getSignUpRateLimitKey = (userId: string, ipAddress: string) => {
   return `${CACHE_PREFIXES.SIGN_UP_RATE_LIMIT}:${userId}:${ipAddress}`;
 };
 
-export const getAccountTransactionsKey = (accountId: string) => {
+export const getAccountTransactionsKey = (accountId: number) => {
   return `${CACHE_PREFIXES.ACCOUNT_TRANSACTIONS}:${accountId}`;
 };
 
@@ -164,7 +164,7 @@ export const getPaginatedTransactionsKey = ({
 }: {
   userId: string;
   transactionType?: string;
-  accountId?: string;
+  accountId?: number;
   sortBy?: string;
   sortDirection?: string;
   query?: string;
@@ -198,37 +198,40 @@ export const invalidateKeysByPrefix = async (prefix: string) => {
 
 export const mapRedisHashToBudget = (
   budgetFromCache: Record<string, string> | null
-): Budget | null => {
+): BudgetSelectModel | null => {
   const mappingConfig = {
-    id: (value: string) => value,
+    id: (value: string) => Number(value),
     name: (value: string) => value,
     budgetAmount: (value: string) => Number(value),
     spentAmount: (value: string) => Number(value),
     userId: (value: string) => value,
     progress: (value: string) => Number(value),
-    category: (value: string) => value as BudgetCategory,
-    createdAt: (value: string) => new Date(value),
-    updatedAt: (value: string) => new Date(value),
+    category: (value: string) => value as BudgetSelectModel["category"],
+    createdAt: (value: string) => new Date(value).toISOString(),
+    updatedAt: (value: string) => new Date(value).toISOString(),
   };
 
-  return mapRedisHashToEntity<Budget>(budgetFromCache, mappingConfig);
+  return mapRedisHashToEntity<BudgetSelectModel>(
+    budgetFromCache,
+    mappingConfig
+  );
 };
 
 export const mapRedisHashToGoal = (
   goalFromCache: Record<string, string> | null
-): Goal | null => {
+): GoalSelectModel | null => {
   const mappingConfig = {
-    id: (value: string) => value,
+    id: (value: string) => Number(value),
     name: (value: string) => value,
     goalAmount: (value: string) => Number(value),
     currentAmount: (value: string) => Number(value),
     userId: (value: string) => value,
-    createdAt: (value: string) => new Date(value),
-    updatedAt: (value: string) => new Date(value),
+    createdAt: (value: string) => new Date(value).toISOString(),
+    updatedAt: (value: string) => new Date(value).toISOString(),
     progress: (value: string) => Number(value),
   };
 
-  return mapRedisHashToEntity<Goal>(goalFromCache, mappingConfig);
+  return mapRedisHashToEntity<GoalSelectModel>(goalFromCache, mappingConfig);
 };
 
 export const checkRateLimit = async (ipAdress: string) => {

@@ -1,25 +1,16 @@
-import { ACCOUNT_VERIFICATION_EXPIRATION_PERIOD_DAYS } from "@/lib/constants";
-import prisma from "@/lib/database/db";
+import cronService from "@/lib/services/cronService";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
-  const token = request.headers.get("Authorization");
-  if (token !== process.env.CRON_API_KEY) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-  }
-
   try {
-    await prisma.user.deleteMany({
-      where: {
-        email_verified: false,
-        createdAt: {
-          lte: new Date(
-            new Date().getTime() -
-              ACCOUNT_VERIFICATION_EXPIRATION_PERIOD_DAYS * 24 * 60 * 60 * 1000
-          ),
-        },
-      },
-    });
+    const cronJobStatus = await cronService.deleteUnverifiedAccounts();
+
+    if (!cronJobStatus) {
+      return NextResponse.json(
+        { message: "Error running cron job" },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json({ message: "Cron job ran successfully!" });
   } catch (error) {

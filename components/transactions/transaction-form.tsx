@@ -18,9 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { formHasChanged, generateReadbleEnumLabels } from "@/lib/utils";
 import { IValidatedResponse } from "@/actions/types";
-
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState, useTransition } from "react";
 import transactionSchema, {
@@ -29,12 +27,17 @@ import transactionSchema, {
 import { getCurrentUserAccounts } from "@/actions/account";
 import { createTransaction, updateTransaction } from "@/actions/transaction";
 import useGenericModalStore from "@/store/genericModalStore";
-import { Account } from "@/entities/account";
-import { Transaction, TransactionCategory } from "@/entities/transaction";
 import { toast } from "sonner";
+import {
+  AccountSelectModel,
+  TransactionSelectModel,
+  transactions,
+} from "@/lib/database/schema";
+import { formHasChanged } from "@/lib/utils/objectUtils/formHasChanged";
+import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
 
 interface ITransactionFormProps {
-  data?: Transaction;
+  data?: TransactionSelectModel;
 }
 
 const TransactionForm = ({
@@ -44,7 +47,7 @@ const TransactionForm = ({
   const closeGenericModal = useGenericModalStore(
     (state) => state.closeGenericModal
   );
-  const [accounts, setAccounts] = useState<Account[]>([]);
+  const [accounts, setAccounts] = useState<AccountSelectModel[]>([]);
   const router = useRouter();
   const form = useForm<TransactionSchemaType>({
     resolver: zodResolver(transactionSchema),
@@ -74,7 +77,9 @@ const TransactionForm = ({
     });
   }, []);
 
-  const setDefaultFormValues = (transactionToBeUpdated: Transaction) => {
+  const setDefaultFormValues = (
+    transactionToBeUpdated: TransactionSelectModel
+  ) => {
     const keys = Object.keys(
       transactionToBeUpdated ?? {}
     ) as (keyof TransactionSchemaType)[];
@@ -109,7 +114,9 @@ const TransactionForm = ({
     });
   };
 
-  const processFormErrors = (result: IValidatedResponse<Transaction>) => {
+  const processFormErrors = (
+    result: IValidatedResponse<TransactionSelectModel>
+  ) => {
     if (result.fieldErrors.length) {
       result.fieldErrors.forEach((fieldError) => {
         form.setError(fieldError.field as any, {
@@ -143,12 +150,16 @@ const TransactionForm = ({
     }));
   }, [accounts]);
 
-  const categorySelectOptions = generateReadbleEnumLabels({
-    enumObj: TransactionCategory,
-  });
+  const transactionCategorySelectOptions = generateOptionsFromEnums(
+    transactions.category.enumValues
+  );
 
   const renderSubmitButtonContent = () => {
-    if (isPending || form.formState.isSubmitting) {
+    if (isPending && accounts.length === 0) {
+      return "Loading...";
+    }
+
+    if (isPending && accounts.length > 0) {
       return "Submitting...";
     }
 
@@ -168,8 +179,14 @@ const TransactionForm = ({
             <FormItem>
               <FormLabel>Account</FormLabel>
               <Select
-                onValueChange={field.onChange}
-                defaultValue={transactionToBeUpdated?.accountId || field.value}
+                onValueChange={(value) => {
+                  console.log(value);
+                  field.onChange(value);
+                }}
+                defaultValue={
+                  transactionToBeUpdated?.accountId.toString() ||
+                  field.value?.toString()
+                }
               >
                 <FormControl>
                   <SelectTrigger>
@@ -178,7 +195,10 @@ const TransactionForm = ({
                 </FormControl>
                 <SelectContent>
                   {selectOptions.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
+                    <SelectItem
+                      key={option.value}
+                      value={option.value.toString()}
+                    >
                       {option.label}
                     </SelectItem>
                   ))}
@@ -204,7 +224,7 @@ const TransactionForm = ({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {categorySelectOptions.map((option) => (
+                  {transactionCategorySelectOptions.map((option) => (
                     <SelectItem key={option.value} value={option.value}>
                       {option.label}
                     </SelectItem>

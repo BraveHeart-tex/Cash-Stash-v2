@@ -1,10 +1,9 @@
 import { getChartData } from "../../actions";
 import { getPaginatedTransactions } from "@/actions/transaction";
 import ReportTable from "../../components/reports/report-table";
-import { getGenericListByCurrentUser } from "@/actions/generic";
-import { SerializedUserAccount } from "@/actions/types";
 import { ITransactionPageSearchParams } from "../transactions/page";
 import MotionDiv from "@/components/animations/motion-div";
+import { getCurrentUserAccounts } from "@/actions/account";
 
 const ReportsPageClient = async ({
   searchParams,
@@ -18,25 +17,19 @@ const ReportsPageClient = async ({
     sortDirection = "desc",
   } = searchParams;
 
-  const [chartDataResponse, userAccountsResponse, userTransactionsResponse] =
-    await Promise.all([
-      getChartData(),
-      getGenericListByCurrentUser<SerializedUserAccount>({
-        tableName: "account",
-        serialize: true,
-      }),
-      getPaginatedTransactions({
-        transactionType: transactionType as "all" | "income" | "expense",
-        accountId,
-        sortBy: sortBy as "createdAt" | "amount",
-        sortDirection: sortDirection as "asc" | "desc",
-        pageNumber: 1,
-      }),
-    ]);
+  const [chartDataResponse, userAccounts] = await Promise.all([
+    getChartData(),
+    getCurrentUserAccounts(),
+    getPaginatedTransactions({
+      transactionType: transactionType as "all" | "income" | "expense",
+      accountId: parseInt(accountId),
+      sortBy: sortBy as "createdAt" | "amount",
+      sortDirection: sortDirection as "asc" | "desc",
+      pageNumber: 1,
+    }),
+  ]);
 
   const data = chartDataResponse.data || [];
-  let userAccountsResult = userAccountsResponse?.data || [];
-  let userTransactionsResult = userTransactionsResponse?.transactions || [];
 
   return (
     <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
@@ -49,7 +42,7 @@ const ReportsPageClient = async ({
         <h3 className="text-4xl mb-4 text-primary">Reports</h3>
         <ReportTable
           monthlyTransactionsData={data}
-          currentUserAccounts={userAccountsResult}
+          currentUserAccounts={userAccounts}
           // TODO:
           transactions={[]}
         />

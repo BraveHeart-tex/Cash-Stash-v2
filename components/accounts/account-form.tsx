@@ -19,8 +19,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { formHasChanged, generateReadbleEnumLabels } from "@/lib/utils";
-import { Account, AccountCategory } from "@prisma/client";
 import { registerBankAccount, updateBankAccount } from "@/actions/account";
 import { IValidatedResponse } from "@/actions/types";
 import { useRouter } from "next/navigation";
@@ -28,9 +26,12 @@ import { useEffect, useTransition } from "react";
 import useGenericModalStore from "@/store/genericModalStore";
 import accountSchema, { AccountSchemaType } from "@/schemas/account-schema";
 import { toast } from "sonner";
+import { AccountSelectModel, accounts } from "@/lib/database/schema";
+import { formHasChanged } from "@/lib/utils/objectUtils/formHasChanged";
+import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
 
 interface IAccountFormProps {
-  data?: Account;
+  data?: AccountSelectModel;
 }
 
 const AccountForm = ({ data: accountToBeUpdated }: IAccountFormProps) => {
@@ -83,7 +84,9 @@ const AccountForm = ({ data: accountToBeUpdated }: IAccountFormProps) => {
     });
   };
 
-  const processFormErrors = (result: IValidatedResponse<Account>) => {
+  const processFormErrors = (
+    result: IValidatedResponse<AccountSelectModel>
+  ) => {
     if (result.fieldErrors.length) {
       result.fieldErrors.forEach((fieldError) => {
         form.setError(fieldError.field as any, {
@@ -110,7 +113,7 @@ const AccountForm = ({ data: accountToBeUpdated }: IAccountFormProps) => {
     }
   };
 
-  const selectOptions = generateReadbleEnumLabels({ enumObj: AccountCategory });
+  const selectOptions = generateOptionsFromEnums(accounts.category.enumValues);
 
   const renderSubmitButtonContent = () => {
     if (form.formState.isSubmitting || isPending) {

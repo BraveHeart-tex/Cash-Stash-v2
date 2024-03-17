@@ -1,5 +1,5 @@
 "use client";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/stringUtils/cn";
 import { useEffect, useState } from "react";
 
 export type ICountDownTimerOptions = {

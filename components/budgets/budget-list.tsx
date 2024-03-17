@@ -1,6 +1,5 @@
 import CreateBudgetButton from "@/components/create-buttons/create-budget-button";
 import MotionDiv from "@/components/animations/motion-div";
-import { Budget, BudgetCategory } from "@prisma/client";
 import RouteSearchInput from "@/components/route-search-input";
 import BudgetCard from "@/components/budget-card";
 import RouteSelectFilter from "@/components/route-select-filter";
@@ -8,16 +7,22 @@ import RouteFiltersPopover from "@/components/route-filters-popover";
 import { GiPayMoney } from "react-icons/gi";
 import { FaPiggyBank } from "react-icons/fa";
 import BudgetsNotFoundMessage from "./budgets-not-found";
-import { generateReadbleEnumLabels } from "@/lib/utils";
+import {
+  BudgetSelectModel,
+  budgets as budgetDatabaseSchema,
+} from "@/lib/database/schema";
+import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
 
 const BudgetList = ({
   budgets,
   pageHasParams,
 }: {
-  budgets: Budget[];
+  budgets: BudgetSelectModel[];
   pageHasParams: boolean;
 }) => {
-  const selectDataset = generateReadbleEnumLabels({ enumObj: BudgetCategory });
+  const budgetCategorySelectOptions = generateOptionsFromEnums(
+    budgetDatabaseSchema.category.enumValues
+  );
 
   return (
     <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
@@ -85,7 +90,7 @@ const BudgetList = ({
       </div>
       <div className={"grid lg:grid-cols-6"}>
         <RouteSelectFilter
-          dataset={selectDataset}
+          dataset={budgetCategorySelectOptions}
           queryStringKey="category"
           selectLabel="Budget Category"
         />

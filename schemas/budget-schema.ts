@@ -1,5 +1,5 @@
+import { budgets } from "@/lib/database/schema";
 import { z } from "zod";
-import { BudgetCategory } from "@/entities/budget";
 
 const budgetSchema = z
   .object({
@@ -11,7 +11,7 @@ const budgetSchema = z
       })
       .positive("Budget amount must be positive"),
     category: z
-      .nativeEnum(BudgetCategory, {
+      .enum(budgets.category.enumValues, {
         required_error: "Budget Category is required",
         invalid_type_error: "Invalid budget category",
       })

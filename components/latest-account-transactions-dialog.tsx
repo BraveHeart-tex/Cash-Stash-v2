@@ -8,7 +8,6 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
-import { Account, Transaction } from "@prisma/client";
 import { useEffect, useState, useTransition } from "react";
 import {
   Dialog,
@@ -21,9 +20,13 @@ import { getTransactionsForAccount } from "@/actions/account";
 import AccountCard from "@/components/account-card";
 import TransactionCard from "@/components/transactions/transaction-card";
 import { FaSpinner } from "react-icons/fa";
+import {
+  AccountSelectModel,
+  TransactionSelectModel,
+} from "@/lib/database/schema";
 
 interface ILatestAccountTransactionsDialogProps {
-  selectedAccount: Account | null;
+  selectedAccount: AccountSelectModel | null;
   onClose: () => void;
 }
 
@@ -32,7 +35,9 @@ const LatestAccountTransactionsDialog = ({
   selectedAccount,
 }: ILatestAccountTransactionsDialogProps) => {
   let [isPending, startTransition] = useTransition();
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [transactions, setTransactions] = useState<TransactionSelectModel[]>(
+    []
+  );
   const isMobile = useMediaQuery("(max-width: 768px)");
   const visible = !!selectedAccount;
 
@@ -88,8 +93,6 @@ const LatestAccountTransactionsDialog = ({
                       key={transaction.id}
                       transaction={{
                         ...transaction,
-                        createdAt: new Date(transaction.createdAt),
-                        updatedAt: new Date(transaction.updatedAt),
                         accountName: selectedAccount.name,
                       }}
                     />
@@ -132,8 +135,6 @@ const LatestAccountTransactionsDialog = ({
                   key={transaction.id}
                   transaction={{
                     ...transaction,
-                    createdAt: new Date(transaction.createdAt),
-                    updatedAt: new Date(transaction.updatedAt),
                     accountName: selectedAccount.name,
                   }}
                 />

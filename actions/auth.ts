@@ -1,16 +1,13 @@
 "use server";
-import prisma from "@/lib/database/db";
 import { getUser } from "@/lib/auth/session";
 import { Argon2id } from "oslo/password";
 import loginSchema, { LoginSchemaType } from "@/schemas/login-schema";
 import registerSchema, { RegisterSchemaType } from "@/schemas/register-schema";
 import { ZodError } from "zod";
-import { getResetPasswordUrl, processZodError } from "@/lib/utils";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createTOTPKeyURI, TOTPController } from "oslo/otp";
 import { decodeHex, encodeHex } from "oslo/encoding";
-
 import {
   checkRateLimit,
   checkIPBasedSendVerificationCodeRateLimit,
@@ -30,10 +27,10 @@ import {
   MAX_VERIFICATION_CODE_ATTEMPTS,
   PAGE_ROUTES,
   SEND_VERIFICATION_CODE_RATE_LIMIT,
+  getResetPasswordUrl,
 } from "@/lib/constants";
 import {
   createPasswordResetToken,
-  deleteEmailVerificationCode,
   generateEmailVerificationCode,
   sendEmailVerificationCode,
   sendResetPasswordLink,
@@ -43,6 +40,11 @@ import { revalidatePath } from "next/cache";
 import { isWithinExpirationDate } from "oslo";
 import { IRecaptchaResponse } from "@/actions/types";
 import { lucia } from "@/lib/database/connection";
+import userRepository from "@/lib/database/repository/userRepository";
+import emailVerificationCodeRepository from "@/lib/database/repository/emailVerificationCodeRepository";
+import passwordResetTokenRepository from "@/lib/database/repository/passwordResetTokenRepository";
+import twoFactorAuthenticationSecretRepository from "@/lib/database/repository/twoFactorAuthenticationSecretRepository";
+import { processZodError } from "@/lib/utils/objectUtils/processZodError";
 
 export const login = async (values: LoginSchemaType) => {
   const header = headers();
@@ -63,11 +65,7 @@ export const login = async (values: LoginSchemaType) => {
   try {
     const data = loginSchema.parse(values);
 
-    const existingUser = await prisma.user.findUnique({
-      where: {
-        email: data.email,
-      },
-    });
+    const existingUser = await userRepository.getByEmail(data.email);
 
     if (!existingUser) {
       return {
@@ -135,13 +133,9 @@ export const register = async (values: RegisterSchemaType) => {
   try {
     const data = registerSchema.parse(values);
 
-    const userExists = await prisma.user.findUnique({
-      where: {
-        email: data.email,
-      },
-    });
+    const userExists = await userRepository.getByEmail(data.email);
 
-    if (userExists && userExists.email_verified === false) {
+    if (userExists && !userExists.emailVerified) {
       const header = headers();
       const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
         ","
@@ -181,16 +175,18 @@ export const register = async (values: RegisterSchemaType) => {
     }
 
     const hashedPassword = await new Argon2id().hash(data.password);
-    const user = await prisma.user.create({
-      data: {
+    const createUserResponse = await userRepository.createUser(
+      {
         name: data.name,
         email: data.email,
         hashedPassword,
-        email_verified: false,
       },
-    });
+      true
+    );
 
-    if (!user) {
+    const { affectedRows, user } = createUserResponse;
+
+    if (!user || affectedRows === 0) {
       return {
         error:
           "There was a problem while processing your request. Please try again later.",
@@ -253,12 +249,7 @@ export const logout = async () => {
 
 export const checkEmailValidityBeforeVerification = async (email: string) => {
   try {
-    const userWithEmail = await prisma.user.findUnique({
-      where: {
-        email,
-        email_verified: false,
-      },
-    });
+    const userWithEmail = await userRepository.getUnverifiedUserByEmail(email);
 
     if (!userWithEmail) {
       return {
@@ -267,20 +258,25 @@ export const checkEmailValidityBeforeVerification = async (email: string) => {
       };
     }
 
-    const verificationCode = await prisma.emailVerificationCode.findFirst({
-      where: {
-        userId: userWithEmail.id,
+    const verificationCode =
+      await emailVerificationCodeRepository.getByEmailAndUserId(
         email,
-        expiresAt: {
-          gt: new Date(),
-        },
-      },
-    });
+        userWithEmail.id
+      );
+
+    if (!verificationCode) {
+      return {
+        hasValidVerificationCode: false,
+        timeLeft: 0,
+      };
+    }
 
     return {
       hasValidVerificationCode: !!verificationCode,
       timeLeft: verificationCode?.expiresAt
-        ? Math.floor((verificationCode.expiresAt.getTime() - Date.now()) / 1000)
+        ? Math.floor(
+            (new Date(verificationCode.expiresAt).getTime() - Date.now()) / 1000
+          )
         : 0,
     };
   } catch (error) {
@@ -293,66 +289,70 @@ export const checkEmailValidityBeforeVerification = async (email: string) => {
 };
 
 export const handleEmailVerification = async (email: string, code: string) => {
-  const user = await prisma.user.findUnique({
-    where: {
-      email,
-    },
-  });
+  try {
+    const user = await userRepository.getUnverifiedUserByEmail(email);
 
-  if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
-  }
+    if (!user) {
+      redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    }
 
-  const isValid = await verifyVerificationCode(user, code);
+    const isValid = await verifyVerificationCode(user, code);
 
-  if (!isValid) {
-    const header = headers();
-    const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
-      ","
-    )[0];
-    const verificationCount = await verifyVerificationCodeRateLimit(ipAddress);
+    if (!isValid) {
+      const header = headers();
+      const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
+        ","
+      )[0];
+      const verificationCount =
+        await verifyVerificationCodeRateLimit(ipAddress);
 
-    if (verificationCount >= MAX_VERIFICATION_CODE_ATTEMPTS) {
-      await deleteEmailVerificationCode(user.id);
+      if (verificationCount >= MAX_VERIFICATION_CODE_ATTEMPTS) {
+        await emailVerificationCodeRepository.deleteByUserId(user.id);
+        return {
+          error: "Too many attempts. Please wait before trying again.",
+          successMessage: null,
+          redirectPath: EMAIL_VERIFICATION_REDIRECTION_PATHS.TOO_MANY_REQUESTS,
+        };
+      }
+
+      const triesLeft = MAX_VERIFICATION_CODE_ATTEMPTS - verificationCount;
+
       return {
-        error: "Too many attempts. Please wait before trying again.",
+        error:
+          "Invalid verification code. You have " + triesLeft + " tries left",
         successMessage: null,
-        redirectPath: EMAIL_VERIFICATION_REDIRECTION_PATHS.TOO_MANY_REQUESTS,
       };
     }
 
-    const triesLeft = MAX_VERIFICATION_CODE_ATTEMPTS - verificationCount;
+    await userRepository.updateUser(user.id, {
+      emailVerified: 1,
+    });
+
+    const session = await lucia.createSession(user.id, {});
+    const sessionCookie = lucia.createSessionCookie(session.id);
+    cookies().set(
+      sessionCookie.name,
+      sessionCookie.value,
+      sessionCookie.attributes
+    );
+
+    await emailVerificationCodeRepository.deleteByUserId(user.id);
 
     return {
-      error: "Invalid verification code. You have " + triesLeft + " tries left",
+      error: null,
+      successMessage:
+        "Email verified successfully. You are being redirected...",
+    };
+  } catch (error) {
+    console.error("Error while verifying email", error);
+    return {
+      error:
+        "Something went wrong while processing your request. Please try again later.",
       successMessage: null,
     };
   }
-
-  await prisma.user.update({
-    where: {
-      id: user.id,
-    },
-    data: {
-      email_verified: true,
-    },
-  });
-
-  const session = await lucia.createSession(user.id, {});
-  const sessionCookie = lucia.createSessionCookie(session.id);
-  cookies().set(
-    sessionCookie.name,
-    sessionCookie.value,
-    sessionCookie.attributes
-  );
-
-  await deleteEmailVerificationCode(user.id);
-
-  return {
-    error: null,
-    successMessage: "Email verified successfully. You are being redirected...",
-  };
 };
+
 export const resendEmailVerificationCode = async (email: string) => {
   const header = headers();
   const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
@@ -366,12 +366,7 @@ export const resendEmailVerificationCode = async (email: string) => {
     };
   }
 
-  const user = await prisma.user.findUnique({
-    where: {
-      email,
-      email_verified: false,
-    },
-  });
+  const user = await userRepository.getUnverifiedUserByEmail(email);
 
   if (!user) {
     return {
@@ -421,12 +416,7 @@ export const sendPasswordResetEmail = async (email: string) => {
     };
   }
 
-  const user = await prisma.user.findUnique({
-    where: {
-      email,
-      email_verified: true,
-    },
-  });
+  const user = await userRepository.getVerifiedUserByEmail(email);
 
   if (!user) {
     return {
@@ -457,12 +447,7 @@ export const resetPassword = async ({
   token: string;
   password: string;
 }) => {
-  const user = await prisma.user.findUnique({
-    where: {
-      email,
-      email_verified: true,
-    },
-  });
+  const user = await userRepository.getVerifiedUserByEmail(email);
 
   if (!user) {
     return {
@@ -471,34 +456,24 @@ export const resetPassword = async ({
     };
   }
 
-  const resetToken = await prisma.passwordResetToken.findUnique({
-    where: {
-      id: token,
-    },
-  });
+  const resetToken = await passwordResetTokenRepository.getByToken(token);
 
-  if (!resetToken || !isWithinExpirationDate(resetToken.expires_At)) {
+  if (!resetToken || !isWithinExpirationDate(new Date(resetToken.expiresAt))) {
     return {
       error: "Invalid request",
       successMessage: null,
     };
   }
 
-  await prisma.passwordResetToken.delete({
-    where: {
-      id: token,
-    },
-  });
+  await passwordResetTokenRepository.deleteByToken(token);
+
   await lucia.invalidateUserSessions(user.id);
   const hashedPassword = await new Argon2id().hash(password);
-  await prisma.user.update({
-    where: {
-      id: user.id,
-    },
-    data: {
-      hashedPassword,
-    },
+
+  await userRepository.updateUser(user.id, {
+    hashedPassword,
   });
+
   const session = await lucia.createSession(user.id, {});
   const sessionCookie = lucia.createSessionCookie(session.id);
   cookies().set(
@@ -520,21 +495,15 @@ export const enableTwoFactorAuthentication = async () => {
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
-  await prisma.user.update({
-    where: {
-      id: user.id,
-    },
-    data: {
-      prefersTwoFactorAuthentication: true,
-    },
+  await userRepository.updateUser(user.id, {
+    prefersTwoFactorAuthentication: 1,
   });
 
   const twoFactorSecret = crypto.getRandomValues(new Uint8Array(20));
-  await prisma.twoFactorAuthenticationSecret.create({
-    data: {
-      secret: encodeHex(twoFactorSecret),
-      userId: user.id,
-    },
+
+  await twoFactorAuthenticationSecretRepository.create({
+    secret: encodeHex(twoFactorSecret),
+    userId: user.id,
   });
 
   return createTOTPKeyURI("CashStash", user.email, twoFactorSecret);
@@ -555,14 +524,9 @@ export const validateOTP = async (otp: string, email: string) => {
     };
   }
 
-  const user = await prisma.user.findUnique({
-    where: {
-      email,
-      prefersTwoFactorAuthentication: true,
-    },
-  });
+  const user = await userRepository.getByEmail(email);
 
-  if (!user) {
+  if (!user || !user?.prefersTwoFactorAuthentication) {
     return {
       error: "Invalid request",
       successMessage: null,
@@ -582,11 +546,9 @@ export const validateOTP = async (otp: string, email: string) => {
     };
   }
 
-  const result = await prisma.twoFactorAuthenticationSecret.findFirst({
-    where: {
-      userId: user.id,
-    },
-  });
+  const result = await twoFactorAuthenticationSecretRepository.getByUserId(
+    user.id
+  );
 
   if (!result) {
     return {
@@ -632,21 +594,9 @@ export const disableTwoFactorAuthentication = async () => {
   }
 
   try {
-    await prisma.$transaction([
-      prisma.user.update({
-        where: {
-          id: user.id,
-        },
-        data: {
-          prefersTwoFactorAuthentication: false,
-        },
-      }),
-      prisma.twoFactorAuthenticationSecret.deleteMany({
-        where: {
-          userId: user.id,
-        },
-      }),
-    ]);
+    await twoFactorAuthenticationSecretRepository.removeTwoFactorAuthenticationSecret(
+      user.id
+    );
 
     return {
       error: null,

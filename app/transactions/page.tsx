@@ -4,15 +4,13 @@ import CreateTransactionButton from "@/components/create-buttons/create-transact
 import TransactionsNotFound from "@/components/transactions-not-found";
 import RouteSearchInput from "@/components/route-search-input";
 import { FaCalendar, FaMoneyBill } from "react-icons/fa";
-import {
-  createGetPaginatedTransactionsParams,
-  generateReadbleEnumLabels,
-} from "@/lib/utils";
 import RouteSelectFilter from "@/components/route-select-filter";
 import { getCurrentUserAccounts } from "@/actions/account";
-import { TransactionCategory } from "@prisma/client";
 import { Label } from "@/components/ui/label";
 import RouteFiltersPopover from "@/components/route-filters-popover";
+import { createGetPaginatedTransactionsParams } from "@/lib/utils/misc";
+import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
+import { transactions } from "@/lib/database/schema";
 
 export interface ITransactionPageSearchParams {
   transactionType?: string;
@@ -31,18 +29,17 @@ const TransactionsPage = async ({
 }) => {
   const actionParams = createGetPaginatedTransactionsParams(searchParams);
 
-  const result = await getPaginatedTransactions(actionParams);
-
+  const transactionsResponse = await getPaginatedTransactions(actionParams);
   const usersAccounts = await getCurrentUserAccounts();
 
   const accountsFilterDataset = usersAccounts.map((account) => ({
     label: account.name,
-    value: account.id,
+    value: account.id.toString(),
   }));
 
-  const categoryFilterDataset = generateReadbleEnumLabels({
-    enumObj: TransactionCategory,
-  });
+  const categoryFilterDataset = generateOptionsFromEnums(
+    transactions.category.enumValues
+  );
 
   const pageHasParams = Object.keys(actionParams)
     .filter((key) => key !== "page")
@@ -121,8 +118,8 @@ const TransactionsPage = async ({
           </div>
         )}
         <div>
-          {result.transactions.length > 0 ? (
-            <TransactionList transactions={result.transactions} />
+          {transactionsResponse.transactions.length > 0 ? (
+            <TransactionList transactions={transactionsResponse.transactions} />
           ) : (
             <TransactionsNotFound pageHasParams={pageHasParams} />
           )}

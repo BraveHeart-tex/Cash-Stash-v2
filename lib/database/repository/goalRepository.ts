@@ -1,38 +1,7 @@
-import {
-  ModifyQuery,
-  ModifyQueryWithSelect,
-  SelectQuery,
-} from "@/lib/database/queryUtils";
-import { GoalDto } from "@/lib/database/dto/goalDto";
-import { Goal } from "@/entities/goal";
-import { getPageSizeAndSkipAmount } from "@/lib/utils";
-
-const create = async (goalDto: GoalDto) => {
-  try {
-    const createGoalResponse = await ModifyQuery(
-      "INSERT INTO Goal SET :goalDto",
-      { goalDto }
-    );
-
-    return createGoalResponse.affectedRows;
-  } catch (error) {
-    console.error("Error creating goal", error);
-    return 0;
-  }
-};
-
-const getById = async (id: string) => {
-  try {
-    const goal = await SelectQuery<Goal>("SELECT * FROM Goal where id = :id", {
-      id,
-    });
-
-    return goal[0];
-  } catch (error) {
-    console.error("Error getting goal by id", error);
-    return null;
-  }
-};
+import { getPageSizeAndSkipAmount } from "@/lib/constants";
+import { db } from "@/lib/database/connection";
+import { GoalInsertModel, goals } from "@/lib/database/schema";
+import { and, asc, desc, eq, like, sql } from "drizzle-orm";
 
 interface IGetMultipleGoalsParams {
   page: number;
@@ -42,111 +11,151 @@ interface IGetMultipleGoalsParams {
   sortDirection?: string;
 }
 
-const getMultiple = async ({
-  page,
-  userId,
-  query,
-  sortBy,
-  sortDirection,
-}: IGetMultipleGoalsParams) => {
-  const { pageSize, skipAmount } = getPageSizeAndSkipAmount(page);
-
-  let goalsQuery =
-    "SELECT * FROM Goal WHERE userId = :userId and name like :query";
-  let totalCountQuery =
-    "SELECT COUNT(*) as totalCount FROM Goal WHERE userId = :userId and name like :query";
-
-  let goalsQueryParam: {
-    userId: string;
-    query: string;
-    limit?: number;
-    offset?: number;
-  } = {
-    userId,
-    query: `%${query}%`,
-  };
-  let totalCountQueryParams: {
-    userId: string;
-    query: string;
-  } = {
-    userId,
-    query: `%${query}%`,
-  };
-
-  const validSortByValues = ["currentAmount", "goalAmount"];
-
-  if (sortBy && sortDirection && validSortByValues.includes(sortBy)) {
-    const validSortDirection =
-      sortDirection.toUpperCase() === "DESC" ? "DESC" : "ASC";
-    goalsQuery += ` ORDER BY ${sortBy} ${validSortDirection}`;
-  }
-
-  goalsQuery += " LIMIT :limit OFFSET :offset";
-  goalsQueryParam.limit = pageSize;
-  goalsQueryParam.offset = skipAmount;
-
-  try {
-    const [goals, totalCountResponse] = await Promise.all([
-      SelectQuery<Goal>(goalsQuery, goalsQueryParam),
-      SelectQuery<{ totalCount: number }>(
-        totalCountQuery,
-        totalCountQueryParams
-      ),
-    ]);
-
-    const totalCount = totalCountResponse[0].totalCount;
-
-    return {
-      goals,
-      totalCount,
-    };
-  } catch (error) {
-    return {
-      goals: [],
-      totalCount: 0,
-    };
-  }
-};
-
-const deleteById = async (id: string) => {
-  try {
-    const deletedGoal = await ModifyQuery("DELETE FROM Goal WHERE id = :id", {
-      id,
-    });
-
-    return deletedGoal.affectedRows;
-  } catch (e) {
-    console.error("Error deleting goal", e);
-    return 0;
-  }
-};
-
-const update = async (goalDto: Partial<GoalDto>) => {
-  try {
-    const updateResult = await ModifyQueryWithSelect<Goal>(
-      "UPDATE Goal set name = :name, goalAmount = :goalAmount, currentAmount = :currentAmount, progress = :progress, updatedAt = :updatedAt WHERE id = :id; SELECT * from Goal where id = :id;",
-      goalDto
-    );
-
-    return {
-      affectedRows: updateResult.affectedRows,
-      updatedGoal: updateResult.updatedRow,
-    };
-  } catch (error) {
-    console.error("Error updating goal", error);
-    return {
-      affectedRows: 0,
-      updatedGoal: null,
-    };
-  }
-};
-
 const goalRepository = {
-  create,
-  deleteById,
-  getById,
-  update,
-  getMultiple,
+  async create(goalDto: GoalInsertModel) {
+    try {
+      const [createGoalResponse] = await db.insert(goals).values(goalDto);
+
+      if (createGoalResponse.affectedRows && createGoalResponse.insertId) {
+        const goal = await this.getById(createGoalResponse.insertId);
+
+        return {
+          affectedRows: createGoalResponse.affectedRows,
+          goal,
+        };
+      }
+
+      return {
+        affectedRows: 0,
+        goal: null,
+      };
+    } catch (error) {
+      console.error("Error creating goal", error);
+      return {
+        affectedRows: 0,
+        goal: null,
+      };
+    }
+  },
+  async deleteById(id: number) {
+    try {
+      const [deleteGoalResponse] = await db
+        .delete(goals)
+        .where(eq(goals.id, id));
+
+      return deleteGoalResponse.affectedRows;
+    } catch (e) {
+      console.error("Error deleting goal", e);
+      return 0;
+    }
+  },
+  async getById(id: number) {
+    try {
+      const [goal] = await db.select().from(goals).where(eq(goals.id, id));
+
+      return goal;
+    } catch (error) {
+      console.error("Error getting goal by id", error);
+      return null;
+    }
+  },
+  async update(goalId: number, goalDto: Partial<GoalInsertModel>) {
+    try {
+      const [updateResult] = await db
+        .update(goals)
+        .set(goalDto)
+        .where(eq(goals.id, goalId));
+
+      if (!updateResult.affectedRows) {
+        return {
+          affectedRows: 0,
+          updatedGoal: null,
+        };
+      }
+
+      const updatedGoal = await this.getById(goalId);
+      return {
+        affectedRows: updateResult.affectedRows,
+        updatedGoal,
+      };
+    } catch (error) {
+      console.error("Error updating goal", error);
+      return {
+        affectedRows: 0,
+        updatedGoal: null,
+      };
+    }
+  },
+  async getMultiple({
+    page,
+    userId,
+    query,
+    sortBy,
+    sortDirection,
+  }: IGetMultipleGoalsParams) {
+    const { pageSize, skipAmount } = getPageSizeAndSkipAmount(page);
+
+    let orderByCondition = desc(goals.id);
+
+    const validSortByValues = ["currentAmount", "goalAmount"];
+
+    if (sortBy && sortDirection && validSortByValues.includes(sortBy)) {
+      const validSortDirection =
+        sortDirection.toLowerCase() === "desc" ? "desc" : "asc";
+
+      switch (sortBy) {
+        case "currentAmount":
+          orderByCondition =
+            validSortDirection === "desc"
+              ? desc(goals.currentAmount)
+              : asc(goals.currentAmount);
+          break;
+        case "goalAmount":
+          orderByCondition =
+            validSortDirection === "desc"
+              ? desc(goals.goalAmount)
+              : asc(goals.goalAmount);
+          break;
+        default:
+          orderByCondition = desc(goals.id);
+          break;
+      }
+    }
+
+    const budgetsQuery = db
+      .select()
+      .from(goals)
+      .where(and(eq(goals.userId, userId), like(goals.name, `%${query}%`)))
+      .orderBy(orderByCondition!)
+      .limit(pageSize)
+      .offset(skipAmount);
+
+    const budgetsCountQuery = db
+      .select({
+        count: sql<number>`count(*)`,
+      })
+      .from(goals)
+      .where(and(eq(goals.userId, userId), like(goals.name, `%${query}%`)));
+
+    try {
+      const [goals, totalCountResponse] = await Promise.all([
+        budgetsQuery,
+        budgetsCountQuery,
+      ]);
+
+      const totalCount = totalCountResponse[0].count;
+
+      return {
+        goals,
+        totalCount,
+      };
+    } catch (error) {
+      return {
+        goals: [],
+        totalCount: 0,
+      };
+    }
+  },
 };
 
 export default goalRepository;

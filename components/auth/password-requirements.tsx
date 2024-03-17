@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/stringUtils/cn";
 import { MdCheck, MdClear, MdPassword } from "react-icons/md";
 
 const PasswordRequirements = ({ password = "" }: { password: string }) => {

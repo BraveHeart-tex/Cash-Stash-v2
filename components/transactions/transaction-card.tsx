@@ -1,11 +1,5 @@
 "use client";
 import {
-  cn,
-  formatMoney,
-  formatTransactionDate,
-  generateReadableLabelFromEnumValue,
-} from "@/lib/utils";
-import {
   Card,
   CardContent,
   CardDescription,
@@ -18,13 +12,17 @@ import { motion } from "framer-motion";
 import DataLabel from "@/components/data-label";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import useGenericModalStore from "@/store/genericModalStore";
-import { TransactionResponse } from "@/actions/types";
 import ActionPopover from "@/components/action-popover";
 import { RxCross1, RxPencil2 } from "react-icons/rx";
 import { toast } from "sonner";
+import { TransactionSelectModel } from "@/lib/database/schema";
+import { format } from "date-fns";
+import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
+import { cn } from "@/lib/utils/stringUtils/cn";
+import { generateLabelFromEnumValue } from "@/lib/utils/stringUtils/generateLabelFromEnumValue";
 
 interface ITransactionCardProps {
-  transaction: TransactionResponse;
+  transaction: TransactionSelectModel & { accountName: string };
 }
 
 const TransactionCard = ({ transaction }: ITransactionCardProps) => {
@@ -71,6 +69,14 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
     });
   };
 
+  const formatTransactionDate = (date: string) => {
+    return format(new Date(date), "dd/MM/yyyy HH:mm");
+  };
+
+  const transactionCategoryLabel = generateLabelFromEnumValue(
+    transaction.category
+  );
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -83,9 +89,7 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
       <Card className={"mt-4 cursor-pointer relative"}>
         <CardHeader className={"border-b h-[100px]"}>
           <CardTitle>{transaction.description}</CardTitle>
-          <CardDescription>
-            {generateReadableLabelFromEnumValue({ key: transaction.category })}
-          </CardDescription>
+          <CardDescription>{transactionCategoryLabel}</CardDescription>
         </CardHeader>
         <CardContent className="py-2">
           <div className="grid grid-cols-1 gap-1">
@@ -93,12 +97,7 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
               label="Date"
               value={formatTransactionDate(transaction.createdAt)}
             />
-            <DataLabel
-              label={"Category"}
-              value={generateReadableLabelFromEnumValue({
-                key: transaction.category,
-              })}
-            />
+            <DataLabel label={"Category"} value={transactionCategoryLabel} />
             <DataLabel label={"Account Name"} value={transaction.accountName} />
 
             <DataLabel

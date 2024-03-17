@@ -1,8 +1,6 @@
 "use server";
 import { getUser } from "@/lib/auth/session";
-import { processZodError } from "@/lib/utils";
 import goalSchema, { GoalSchemaType } from "@/schemas/goal-schema";
-import { Goal } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import {
@@ -20,10 +18,12 @@ import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import { createGoalDto } from "@/lib/database/dto/goalDto";
 import goalRepository from "@/lib/database/repository/goalRepository";
 import redisService from "@/lib/redis/redisService";
+import { GoalSelectModel } from "@/lib/database/schema";
+import { processZodError } from "@/lib/utils/objectUtils/processZodError";
 
 export const createGoal = async (
   values: GoalSchemaType
-): Promise<IValidatedResponse<Goal>> => {
+): Promise<IValidatedResponse<GoalSelectModel>> => {
   const { user } = await getUser();
   if (!user) {
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
@@ -33,9 +33,9 @@ export const createGoal = async (
     const validatedData = goalSchema.parse(values);
     const goalDto = createGoalDto(validatedData, user.id);
 
-    const affectedRows = await goalRepository.create(goalDto);
+    const { affectedRows, goal } = await goalRepository.create(goalDto);
 
-    if (affectedRows === 0) {
+    if (!affectedRows || !goal) {
       return {
         error:
           "There was a problem while creating your goal. Please try again later.",
@@ -47,11 +47,11 @@ export const createGoal = async (
       redisService.invalidateKeysByPrefix(
         generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_GOALS, user.id)
       ),
-      redisService.hset(getGoalKey(goalDto.id), goalDto),
+      redisService.hset(getGoalKey(goal.id), goal),
     ]);
 
     return {
-      data: goalDto,
+      data: goal,
       fieldErrors: [],
     };
   } catch (error) {
@@ -69,15 +69,15 @@ export const createGoal = async (
 };
 
 export const updateGoal = async (
-  goalId: string,
+  goalId: number,
   values: GoalSchemaType
-): Promise<IValidatedResponse<Goal>> => {
+): Promise<IValidatedResponse<GoalSelectModel>> => {
   const { user } = await getUser();
   if (!user) {
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
-  let goalToBeUpdated: Goal | null;
+  let goalToBeUpdated: GoalSelectModel | null;
 
   const goalFromCache = await redisService.hgetall(getGoalKey(goalId));
   if (goalFromCache) {
@@ -91,14 +91,11 @@ export const updateGoal = async (
 
   try {
     const validatedData = goalSchema.parse(values);
-    const updatedGoalDto = {
-      ...validatedData,
-      id: goalId,
-      updatedAt: new Date(),
-    } as Goal;
 
-    const { affectedRows, updatedGoal } =
-      await goalRepository.update(updatedGoalDto);
+    const { affectedRows, updatedGoal } = await goalRepository.update(
+      goalId,
+      validatedData
+    );
 
     if (affectedRows === 0 || !updatedGoal)
       return {
@@ -111,10 +108,10 @@ export const updateGoal = async (
       redisService.invalidateKeysByPrefix(
         generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_GOALS, user.id)
       ),
-      redisService.hset(getGoalKey(updatedGoalDto.id), updatedGoalDto),
+      redisService.hset(getGoalKey(updatedGoal.id), updatedGoal),
     ]);
 
-    return { data: updatedGoalDto, fieldErrors: [] };
+    return { data: updatedGoal, fieldErrors: [] };
   } catch (error) {
     if (error instanceof ZodError) {
       return processZodError(error);
@@ -205,7 +202,7 @@ export const getPaginatedGoals = async ({
   }
 };
 
-export const deleteGoal = async (goalId: string) => {
+export const deleteGoal = async (goalId: number) => {
   const { user } = await getUser();
 
   if (!user) {

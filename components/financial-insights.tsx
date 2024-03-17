@@ -1,11 +1,12 @@
 "use client";
 import { InsightsData } from "@/actions/types";
 import { Button } from "@/components/ui/button";
-import { cn, thousandSeparator } from "@/lib/utils";
 import { FaMoneyBill } from "react-icons/fa";
 import Link from "next/link";
 import MotionDiv from "@/components/animations/motion-div";
 import { PAGE_ROUTES } from "@/lib/constants";
+import { thousandSeparator } from "@/lib/utils/numberUtils/thousandSeparator";
+import { cn } from "@/lib/utils/stringUtils/cn";
 
 interface IFinancialInsightsProps {
   insightsData: InsightsData | null;

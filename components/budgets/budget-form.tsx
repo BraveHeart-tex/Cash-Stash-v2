@@ -18,8 +18,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { formHasChanged, generateReadbleEnumLabels } from "@/lib/utils";
-import { Budget, BudgetCategory } from "@prisma/client";
 import { IValidatedResponse } from "@/actions/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useTransition } from "react";
@@ -27,9 +25,12 @@ import budgetSchema, { BudgetSchemaType } from "@/schemas/budget-schema";
 import { createBudget, updateBudget } from "@/actions/budget";
 import useGenericModalStore from "@/store/genericModalStore";
 import { toast } from "sonner";
+import { BudgetSelectModel, budgets } from "@/lib/database/schema";
+import { formHasChanged } from "@/lib/utils/objectUtils/formHasChanged";
+import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
 
 interface IBudgetFormProps {
-  data?: Budget;
+  data?: BudgetSelectModel;
 }
 
 const BudgetForm = ({ data: budgetToBeUpdated }: IBudgetFormProps) => {
@@ -76,7 +77,7 @@ const BudgetForm = ({ data: budgetToBeUpdated }: IBudgetFormProps) => {
     });
   };
 
-  const processFormErrors = (result: IValidatedResponse<Budget>) => {
+  const processFormErrors = (result: IValidatedResponse<BudgetSelectModel>) => {
     if (result.fieldErrors.length) {
       result.fieldErrors.forEach((fieldError) => {
         form.setError(fieldError.field as any, {
@@ -103,7 +104,9 @@ const BudgetForm = ({ data: budgetToBeUpdated }: IBudgetFormProps) => {
     }
   };
 
-  const selectOptions = generateReadbleEnumLabels({ enumObj: BudgetCategory });
+  const budgetCategorySelectOptions = generateOptionsFromEnums(
+    budgets.category.enumValues
+  );
 
   const renderSubmitButtonContent = () => {
     if (form.formState.isSubmitting || isPending) {
@@ -184,7 +187,7 @@ const BudgetForm = ({ data: budgetToBeUpdated }: IBudgetFormProps) => {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {selectOptions.map((option) => (
+                  {budgetCategorySelectOptions.map((option) => (
                     <SelectItem key={option.value} value={option.value}>
                       {option.label}
                     </SelectItem>

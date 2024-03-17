@@ -2,7 +2,7 @@ import FormError from "@/components/form-error";
 import { UseFormRegister } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/stringUtils/cn";
 
 interface IFormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   name: string;

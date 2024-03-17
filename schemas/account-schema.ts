@@ -1,10 +1,10 @@
+import { accounts } from "@/lib/database/schema";
 import { z } from "zod";
-import { AccountCategory } from "@/entities/account";
 
 const accountSchema = z.object({
   balance: z.coerce.number().default(0),
   category: z
-    .nativeEnum(AccountCategory, {
+    .enum(accounts.category.enumValues, {
       required_error: "Account Category is required",
       invalid_type_error: "Invalid account category",
     })
