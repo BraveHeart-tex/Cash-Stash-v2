@@ -14,6 +14,15 @@ import QRCode from "react-qr-code";
 import { FaCopy } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { useMediaQuery } from "usehooks-ts";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
 
 const UriBarcodeDialog = () => {
   const uri = useAuthStore((state) => state.uri);
@@ -21,8 +30,13 @@ const UriBarcodeDialog = () => {
   const regex = /[?&]secret=([^&]+)/;
   const secretMatch = regex.exec(uri);
   const secret = secretMatch ? secretMatch[1] : null;
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   const open = !!uri;
+  const title = "Scan the QR code with your authenticator app";
+  const description =
+    "Use the following QR code to enable Two-Factor authentication on your authenticator app. You can also manually enter the following code:";
+
   const onClose = () => {
     setUri("");
   };
@@ -31,6 +45,62 @@ const UriBarcodeDialog = () => {
     await navigator.clipboard.writeText(secret!);
     toast.info("Code copied to clipboard.");
   };
+
+  const renderContent = () => {
+    return (
+      <div className="w-full flex items-center justify-center flex-col gap-4">
+        {secret && (
+          <div className="flex items-center gap-2">
+            <Button size="icon" onClick={handleCopyToClipBoard}>
+              <FaCopy />
+            </Button>
+            <span className="border border-primary rounded-md p-2 text-primary">
+              {secret}
+            </span>
+          </div>
+        )}
+        <QRCode value={uri} />
+      </div>
+    );
+  };
+
+  if (isMobile) {
+    return (
+      <Drawer
+        open={open}
+        onOpenChange={(isOpen) => {
+          if (!isOpen) {
+            onClose();
+          }
+        }}
+      >
+        <DrawerContent>
+          <DrawerHeader className="text-left">
+            <DrawerTitle>{title}</DrawerTitle>
+            <DrawerDescription>{description}</DrawerDescription>
+          </DrawerHeader>
+          <div className="px-4">{renderContent()}</div>
+          <DrawerFooter className="pt-2">
+            <Button
+              onClick={() => {
+                onClose();
+              }}
+            >
+              I've scanned the QR code / entered the code
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => {
+                onClose();
+              }}
+            >
+              Cancel
+            </Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+    );
+  }
 
   return (
     <AlertDialog
@@ -42,35 +112,11 @@ const UriBarcodeDialog = () => {
       }}
     >
       <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>
-            Scan the QR code with your authenticator app
-          </AlertDialogTitle>
-          <AlertDialogDescription>
-            Use the following QR code to enable Two-Factor authentication on
-            your authenticator app. You can also manually enter the following
-            code:
-          </AlertDialogDescription>
+        <AlertDialogHeader className="text-left">
+          <AlertDialogTitle>{title}</AlertDialogTitle>
+          <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
-        {uri && (
-          <div className="w-full flex items-center justify-center flex-col gap-4">
-            {secret && (
-              <div className="flex items-center gap-2">
-                <Button size="icon" onClick={handleCopyToClipBoard}>
-                  <FaCopy />
-                </Button>
-                <span
-                  className={
-                    "border border-primary rounded-md p-2 text-primary"
-                  }
-                >
-                  {secret}
-                </span>
-              </div>
-            )}
-            <QRCode value={uri} />
-          </div>
-        )}
+        {renderContent()}
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction>
