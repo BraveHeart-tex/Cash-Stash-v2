@@ -19,7 +19,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { AccountCategory } from "@prisma/client";
 import { registerBankAccount, updateBankAccount } from "@/actions/account";
 import { IValidatedResponse } from "@/actions/types";
 import { useRouter } from "next/navigation";
@@ -27,9 +26,9 @@ import { useEffect, useTransition } from "react";
 import useGenericModalStore from "@/store/genericModalStore";
 import accountSchema, { AccountSchemaType } from "@/schemas/account-schema";
 import { toast } from "sonner";
-import { AccountSelectModel } from "@/lib/database/schema";
+import { AccountSelectModel, accounts } from "@/lib/database/schema";
 import { formHasChanged } from "@/lib/utils/objectUtils/formHasChanged";
-import { generateReadbleEnumLabels } from "@/lib/utils/stringUtils/generateReadbleEnumLabels";
+import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
 
 interface IAccountFormProps {
   data?: AccountSelectModel;
@@ -114,7 +113,7 @@ const AccountForm = ({ data: accountToBeUpdated }: IAccountFormProps) => {
     }
   };
 
-  const selectOptions = generateReadbleEnumLabels({ enumObj: AccountCategory });
+  const selectOptions = generateOptionsFromEnums(accounts.category.enumValues);
 
   const renderSubmitButtonContent = () => {
     if (form.formState.isSubmitting || isPending) {
