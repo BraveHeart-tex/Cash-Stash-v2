@@ -417,6 +417,9 @@ export const users = mysqlTable(
     prefersTwoFactorAuthentication: tinyint("prefersTwoFactorAuthentication")
       .default(0)
       .notNull(),
+    activatedTwoFactorAuthentication: tinyint(
+      "activatedTwoFactorAuthentication"
+    ).default(0),
   },
   (table) => {
     return {

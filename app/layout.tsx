@@ -75,7 +75,6 @@ export default async function RootLayout({ children }: ILayoutProps) {
           {/* Padding bottom is the same as the height of the navigation bar */}
           <main className="pb-16 lg:pb-0">{children}</main>
           <GenericModal />
-          <UriBarcodeDialog />
           <GenericConfirmDialog />
           <RedirectionPathToaster />
           <SonnerToaster />

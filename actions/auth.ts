@@ -39,12 +39,14 @@ import {
 import { revalidatePath } from "next/cache";
 import { isWithinExpirationDate } from "oslo";
 import { IRecaptchaResponse } from "@/actions/types";
-import { lucia } from "@/lib/database/connection";
+import { db, lucia } from "@/lib/database/connection";
 import userRepository from "@/lib/database/repository/userRepository";
 import emailVerificationCodeRepository from "@/lib/database/repository/emailVerificationCodeRepository";
 import passwordResetTokenRepository from "@/lib/database/repository/passwordResetTokenRepository";
 import twoFactorAuthenticationSecretRepository from "@/lib/database/repository/twoFactorAuthenticationSecretRepository";
 import { processZodError } from "@/lib/utils/objectUtils/processZodError";
+import { twoFactorAuthenticationSecrets } from "@/lib/database/schema";
+import { eq } from "drizzle-orm";
 
 export const login = async (values: LoginSchemaType) => {
   const header = headers();
@@ -88,7 +90,10 @@ export const login = async (values: LoginSchemaType) => {
       };
     }
 
-    if (existingUser.prefersTwoFactorAuthentication) {
+    if (
+      existingUser.prefersTwoFactorAuthentication &&
+      existingUser.activatedTwoFactorAuthentication
+    ) {
       return {
         error: null,
         fieldErrors: [],
@@ -509,6 +514,45 @@ export const enableTwoFactorAuthentication = async () => {
   return createTOTPKeyURI("CashStash", user.email, twoFactorSecret);
 };
 
+export const activateTwoFactorAuthentication = async (otp: string) => {
+  const { user } = await getUser();
+  if (!user) {
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+  }
+
+  const result = await twoFactorAuthenticationSecretRepository.getByUserId(
+    user.id
+  );
+
+  if (!result) {
+    return {
+      error: "Invalid request",
+      successMessage: null,
+    };
+  }
+
+  const isValid = await new TOTPController().verify(
+    otp,
+    decodeHex(result.secret)
+  );
+
+  if (!isValid) {
+    return {
+      error: "Invalid verification code",
+      successMessage: null,
+    };
+  }
+
+  await userRepository.updateUser(user.id, {
+    activatedTwoFactorAuthentication: 1,
+  });
+
+  return {
+    error: null,
+    successMessage: "Two-factor authentication enabled successfully.",
+  };
+};
+
 export const validateOTP = async (otp: string, email: string) => {
   const header = headers();
   const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
@@ -598,6 +642,11 @@ export const disableTwoFactorAuthentication = async () => {
       user.id
     );
 
+    await userRepository.updateUser(user.id, {
+      prefersTwoFactorAuthentication: 0,
+      activatedTwoFactorAuthentication: 0,
+    });
+
     return {
       error: null,
       successMessage: "Two-factor authentication disabled successfully.",
@@ -632,4 +681,28 @@ export const validateReCAPTCHAToken = async (token: string) => {
     console.error(error);
     return false;
   }
+};
+export const getTwoFactorAuthURI = async () => {
+  const { user } = await getUser();
+
+  if (!user) {
+    return null;
+  }
+
+  const [twoFactorAuthenticationSecret] = await db
+    .select({
+      secret: twoFactorAuthenticationSecrets.secret,
+    })
+    .from(twoFactorAuthenticationSecrets)
+    .where(eq(twoFactorAuthenticationSecrets.userId, user.id));
+
+  if (!twoFactorAuthenticationSecret) {
+    return null;
+  }
+
+  return createTOTPKeyURI(
+    "CashStash",
+    user.email,
+    decodeHex(twoFactorAuthenticationSecret.secret)
+  );
 };

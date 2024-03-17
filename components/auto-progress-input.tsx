@@ -69,7 +69,7 @@ const AutoProgressInput = ({
       {values.map((value, index) => (
         <Input
           className={cn(
-            "w-[3em] mr-[0.5em] text-center",
+            "w-[3em] mr-[0.5em] text-center bg-background",
             loading && "opacity-50 animate-pulse"
           )}
           key={index}

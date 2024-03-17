@@ -7,8 +7,9 @@ import useAuthStore from "@/store/auth/authStore";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import { useTransition } from "react";
 import { toast } from "sonner";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { MdOutlineScreenLockPortrait } from "react-icons/md";
+import TwoFactorAuthenticationActivation from "./two-factor-authentication-activation";
 
 const TwoFactorAuthenticationSettings = () => {
   const user = useAuthStore((state) => state.user);
@@ -43,7 +44,7 @@ const TwoFactorAuthenticationSettings = () => {
     showConfirm({
       title: "Are you sure you want to enable two-factor authentication?",
       message:
-        "Upon enabling two-factor authentication, you will be required to enter a unique code from your mobile device in addition to your password when signing in. Are you sure you want to enable it?",
+        "Upon enabling two-factor authentication, you will be required to enter a unique code from your mobile device in addition to your password when signing in.",
       primaryActionLabel: "Enable",
       onConfirm: () => {
         startTransition(async () => {
@@ -55,33 +56,37 @@ const TwoFactorAuthenticationSettings = () => {
     });
   };
 
+  const shouldShowActiviationForm =
+    !user?.activatedTwoFactorAuthentication &&
+    user?.prefersTwoFactorAuthentication;
+
+  const shouldShowEnableButton =
+    !user?.prefersTwoFactorAuthentication &&
+    !user?.activatedTwoFactorAuthentication;
+
+  const shouldShowDisableButton =
+    user?.prefersTwoFactorAuthentication &&
+    user?.activatedTwoFactorAuthentication;
+
   return (
     <div>
       <h2 className="text-xl font-semibold text-primary">
         Two-Factor Authentication
       </h2>
       <p className="text-muted-foreground w-full lg:w-[70%]">
-        {user?.prefersTwoFactorAuthentication ? (
+        {user?.prefersTwoFactorAuthentication &&
+        user.activatedTwoFactorAuthentication ? (
           "Two-factor authentication is currently enabled on your account."
         ) : (
           <>
-            Add an extra layer of security to your account by enabling
-            two-factor authentication. <br />
-            When enabled, you will be required to enter a unique code from your
-            mobile device in addition to your password when signing in.
+            Enhance your account security with two-factor authentication. <br />
+            Once enabled, simply enter a unique code from your mobile device
+            along with your password during sign-in for added protection.
           </>
         )}
       </p>
-      {user?.prefersTwoFactorAuthentication ? (
-        <Button
-          className="w-max text-md flex items-center gap-2 mt-2"
-          onClick={handleDisabledTwoFactorAuth}
-          disabled={isPending}
-        >
-          <MdOutlineScreenLockPortrait />
-          {isPending ? "Disabling..." : "Disable Two-Factor Authentication"}
-        </Button>
-      ) : (
+      {shouldShowActiviationForm ? <TwoFactorAuthenticationActivation /> : null}
+      {shouldShowEnableButton ? (
         <Button
           className="w-max text-md flex items-center gap-2 mt-2"
           onClick={handleEnableTwoFactorAuth}
@@ -90,7 +95,18 @@ const TwoFactorAuthenticationSettings = () => {
           <MdOutlineScreenLockPortrait />
           {isPending ? "Enabling..." : "Enable Two-Factor Authentication"}
         </Button>
-      )}
+      ) : null}
+
+      {shouldShowDisableButton ? (
+        <Button
+          className="w-max text-md flex items-center gap-2 mt-2"
+          onClick={handleDisabledTwoFactorAuth}
+          disabled={isPending}
+        >
+          <MdOutlineScreenLockPortrait />
+          {isPending ? "Disabling..." : "Disable Two-Factor Authentication"}
+        </Button>
+      ) : null}
     </div>
   );
 };
