@@ -18,7 +18,7 @@ import {
   UserSelectModel,
 } from "@/lib/database/schema";
 import { and, eq } from "drizzle-orm";
-import { convertIsoToMysqlDatetime } from "../utils/dateUtils/convertIsoToMysqlDatetime";
+import { convertISOToMysqlDatetime } from "../utils/dateUtils/convertISOToMysqlDatetime";
 
 export const generateEmailVerificationCode = async (
   userId: string,
@@ -37,7 +37,7 @@ export const generateEmailVerificationCode = async (
     userId,
     email,
     code,
-    expiresAt: convertIsoToMysqlDatetime(
+    expiresAt: convertISOToMysqlDatetime(
       createDate(
         new TimeSpan(EMAIL_VERIFICATION_CODE_EXPIRY_MINUTES, "m")
       ).toISOString()
@@ -125,7 +125,7 @@ export const createPasswordResetToken = async (userId: string) => {
   await db.insert(passwordResetTokens).values({
     id: tokenId,
     userId,
-    expiresAt: convertIsoToMysqlDatetime(
+    expiresAt: convertISOToMysqlDatetime(
       createDate(
         new TimeSpan(FORGOT_PASSWORD_LINK_EXPIRATION_MINUTES, "m")
       ).toISOString()

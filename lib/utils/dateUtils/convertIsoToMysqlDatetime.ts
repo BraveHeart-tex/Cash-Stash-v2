@@ -1,4 +1,4 @@
-export function convertIsoToMysqlDatetime(isoDatetimeString: string) {
+export function convertISOToMysqlDatetime(isoDatetimeString: string) {
   const isoDatetime = new Date(isoDatetimeString);
 
   const year = isoDatetime.getFullYear();
