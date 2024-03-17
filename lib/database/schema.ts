@@ -445,6 +445,7 @@ export type AccountInsertModel = InferInsertModel<typeof accounts>;
 export type AccountSelectModel = InferSelectModel<typeof accounts>;
 
 export type BudgetInsertModel = InferInsertModel<typeof budgets>;
+
 export type BudgetSelectModel = InferSelectModel<typeof budgets>;
 
 export type GoalInsertModel = InferInsertModel<typeof goals>;
@@ -452,3 +453,33 @@ export type GoalSelectModel = InferSelectModel<typeof goals>;
 
 export type TransactionInsertModel = InferInsertModel<typeof transactions>;
 export type TransactionSelectModel = InferSelectModel<typeof transactions>;
+
+export type ReminderInsertModel = InferInsertModel<typeof reminders>;
+export type ReminderSelectModel = InferSelectModel<typeof reminders>;
+
+export type SessionInsertModel = InferInsertModel<typeof sessions>;
+export type SessionSelectModel = InferSelectModel<typeof sessions>;
+
+export type EmailVerificationCodeInsertModel = InferInsertModel<
+  typeof emailVerificationCode
+>;
+
+export type EmailVerificationCodeSelectModel = InferSelectModel<
+  typeof emailVerificationCode
+>;
+
+export type PasswordResetTokenInsertModel = InferInsertModel<
+  typeof passwordResetTokens
+>;
+
+export type PasswordResetTokenSelectModel = InferSelectModel<
+  typeof passwordResetTokens
+>;
+
+export type TwoFactorAuthenticationSecretInsertModel = InferInsertModel<
+  typeof twoFactorAuthenticationSecrets
+>;
+
+export type TwoFactorAuthenticationSecretSelectModel = InferSelectModel<
+  typeof twoFactorAuthenticationSecrets
+>;
