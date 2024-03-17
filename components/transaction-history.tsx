@@ -3,6 +3,9 @@ import CreateTransactionButton from "./create-buttons/create-transaction-button"
 import AnimatePresenceClient from "@/components/animations/animate-presence";
 import MotionDiv from "@/components/animations/motion-div";
 import { TransactionSelectModel } from "@/lib/database/schema";
+import { Button } from "./ui/button";
+import Link from "next/link";
+import { PAGE_ROUTES } from "@/lib/constants";
 
 interface ITransactionHistoryProps {
   transactions: (TransactionSelectModel & { accountName: string })[] | null;
@@ -32,6 +35,11 @@ const TransactionHistory = ({ transactions }: ITransactionHistoryProps) => {
             <TransactionCard key={transaction.id} transaction={transaction} />
           ))}
         </AnimatePresenceClient>
+        <Button className="w-max ml-auto">
+          <Link href={PAGE_ROUTES.TRANSACTIONS_ROUTE}>
+            View All Transactions
+          </Link>
+        </Button>
       </div>
     </div>
   );

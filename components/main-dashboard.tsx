@@ -80,8 +80,7 @@ const Dashboard = async () => {
     },
     {
       title: "Transaction History",
-      description:
-        "Check out your transaction history here. Click on the transaction card to view the transaction details.",
+      description: "Check out your transaction history here.",
       data: (
         <TransactionHistory transactions={transactionsResult.transactions} />
       ),
