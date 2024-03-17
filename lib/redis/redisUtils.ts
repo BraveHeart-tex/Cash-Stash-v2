@@ -1,5 +1,4 @@
 import { CACHE_PREFIXES } from "@/lib/constants";
-import { BudgetCategory } from "@prisma/client";
 import redis from "@/lib/redis/redisConnection";
 import { BudgetSelectModel, GoalSelectModel } from "@/lib/database/schema";
 
@@ -207,7 +206,7 @@ export const mapRedisHashToBudget = (
     spentAmount: (value: string) => Number(value),
     userId: (value: string) => value,
     progress: (value: string) => Number(value),
-    category: (value: string) => value as BudgetCategory,
+    category: (value: string) => value as BudgetSelectModel["category"],
     createdAt: (value: string) => new Date(value).toISOString(),
     updatedAt: (value: string) => new Date(value).toISOString(),
   };

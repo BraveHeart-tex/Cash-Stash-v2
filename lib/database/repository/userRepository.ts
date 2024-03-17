@@ -5,7 +5,6 @@ import { and, eq, InferSelectModel } from "drizzle-orm";
 export type UserSelectModel = InferSelectModel<typeof users>;
 
 const userRepository = {
-  deleteExpiredUsers() {},
   async getByEmail(email: string) {
     try {
       const [user] = await db
