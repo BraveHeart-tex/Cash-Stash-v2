@@ -29,6 +29,6 @@ You can check out the live of of this application from this [link](https://cashs
   - Recharts
   - React Hook Form and Zod for form validation
 - The back end of the application is built with
-  - Next.js 13 App Directory with Server Actions
-  - Prisma with MySQL
-  - JWT for authentication and auhtorization middleware
+  - Next.js 14 App Directory with Server Actions
+  - Drizzle ORM with MySQL
+  - Session based authentication and authorization with Lucia.
