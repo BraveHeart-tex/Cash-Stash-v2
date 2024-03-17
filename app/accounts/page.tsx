@@ -9,7 +9,8 @@ import AccountsNotFound from "@/components/accounts-not-found";
 import RouteFiltersPopover from "@/components/route-filters-popover";
 import { BsSortDown, BsSortUp } from "react-icons/bs";
 import { AccountCategory } from "@/entities/account";
-import { generateReadbleEnumLabels } from "@/lib/utils/stringUtils/generateReadbleEnumLabels";
+import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
+import { accounts } from "@/lib/database/schema";
 
 const AccountPage = async ({
   searchParams,
@@ -36,7 +37,7 @@ const AccountPage = async ({
     sortDirection,
   });
 
-  const selectDataset = generateReadbleEnumLabels({ enumObj: AccountCategory });
+  const selectDataset = generateOptionsFromEnums(accounts.category.enumValues);
 
   return (
     <main>

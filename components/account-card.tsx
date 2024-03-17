@@ -1,5 +1,4 @@
 "use client";
-
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
@@ -14,7 +13,7 @@ import { toast } from "sonner";
 import { AccountSelectModel } from "@/lib/database/schema";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import { cn } from "@/lib/utils/stringUtils/cn";
-import { generateReadableLabelFromEnumValue } from "@/lib/utils/stringUtils/generateReadableLabelFromEnumValue";
+import { generateLabelFromEnumValue } from "@/lib/utils/stringUtils/generateLabelFromEnumValue";
 
 interface IAccountCardProps {
   account: AccountSelectModel;
@@ -38,7 +37,7 @@ const AccountCard = ({
   );
 
   const accountCategory =
-    generateReadableLabelFromEnumValue({ key: account.category }) + " Account";
+    generateLabelFromEnumValue(account.category) + " Account";
 
   const handleDeleteAccount = (id: number) => {
     showGenericConfirm({

@@ -1,5 +1,4 @@
 "use client";
-
 import {
   Card,
   CardContent,
@@ -20,7 +19,7 @@ import { TransactionSelectModel } from "@/lib/database/schema";
 import { format } from "date-fns";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import { cn } from "@/lib/utils/stringUtils/cn";
-import { generateReadableLabelFromEnumValue } from "@/lib/utils/stringUtils/generateReadableLabelFromEnumValue";
+import { generateLabelFromEnumValue } from "@/lib/utils/stringUtils/generateLabelFromEnumValue";
 
 interface ITransactionCardProps {
   transaction: TransactionSelectModel & { accountName: string };
@@ -74,6 +73,10 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
     return format(new Date(date), "dd/MM/yyyy HH:mm");
   };
 
+  const transactionCategoryLabel = generateLabelFromEnumValue(
+    transaction.category
+  );
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -86,9 +89,7 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
       <Card className={"mt-4 cursor-pointer relative"}>
         <CardHeader className={"border-b h-[100px]"}>
           <CardTitle>{transaction.description}</CardTitle>
-          <CardDescription>
-            {generateReadableLabelFromEnumValue({ key: transaction.category })}
-          </CardDescription>
+          <CardDescription>{transactionCategoryLabel}</CardDescription>
         </CardHeader>
         <CardContent className="py-2">
           <div className="grid grid-cols-1 gap-1">
@@ -96,12 +97,7 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
               label="Date"
               value={formatTransactionDate(transaction.createdAt)}
             />
-            <DataLabel
-              label={"Category"}
-              value={generateReadableLabelFromEnumValue({
-                key: transaction.category,
-              })}
-            />
+            <DataLabel label={"Category"} value={transactionCategoryLabel} />
             <DataLabel label={"Account Name"} value={transaction.accountName} />
 
             <DataLabel

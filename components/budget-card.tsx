@@ -10,9 +10,9 @@ import ActionPopover from "@/components/action-popover";
 import { RxCross1, RxPencil2 } from "react-icons/rx";
 import { toast } from "sonner";
 import { BudgetSelectModel } from "@/lib/database/schema";
-import { generateReadableLabelFromEnumValue } from "@/lib/utils/stringUtils/generateReadableLabelFromEnumValue";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import { cn } from "@/lib/utils/stringUtils/cn";
+import { generateLabelFromEnumValue } from "@/lib/utils/stringUtils/generateLabelFromEnumValue";
 
 interface IBudgetCardProps {
   budget: BudgetSelectModel;
@@ -88,7 +88,7 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
           {budget.name}
         </span>
         <span className="text-muted-foreground">
-          {generateReadableLabelFromEnumValue({ key: budget.category })}
+          {generateLabelFromEnumValue(budget.category)}
         </span>
       </div>
       <div className="absolute top-5 right-1 mb-2">

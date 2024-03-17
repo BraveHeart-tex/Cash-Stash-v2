@@ -27,14 +27,14 @@ import transactionSchema, {
 import { getCurrentUserAccounts } from "@/actions/account";
 import { createTransaction, updateTransaction } from "@/actions/transaction";
 import useGenericModalStore from "@/store/genericModalStore";
-import { TransactionCategory } from "@/entities/transaction";
 import { toast } from "sonner";
 import {
   AccountSelectModel,
   TransactionSelectModel,
+  transactions,
 } from "@/lib/database/schema";
 import { formHasChanged } from "@/lib/utils/objectUtils/formHasChanged";
-import { generateReadbleEnumLabels } from "@/lib/utils/stringUtils/generateReadbleEnumLabels";
+import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
 
 interface ITransactionFormProps {
   data?: TransactionSelectModel;
@@ -150,9 +150,9 @@ const TransactionForm = ({
     }));
   }, [accounts]);
 
-  const categorySelectOptions = generateReadbleEnumLabels({
-    enumObj: TransactionCategory,
-  });
+  const transactionCategorySelectOptions = generateOptionsFromEnums(
+    transactions.category.enumValues
+  );
 
   const renderSubmitButtonContent = () => {
     if (isPending && accounts.length === 0) {
@@ -224,7 +224,7 @@ const TransactionForm = ({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {categorySelectOptions.map((option) => (
+                  {transactionCategorySelectOptions.map((option) => (
                     <SelectItem key={option.value} value={option.value}>
                       {option.label}
                     </SelectItem>
