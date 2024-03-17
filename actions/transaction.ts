@@ -208,7 +208,7 @@ export const getPaginatedTransactions = async ({
   accountId,
   sortBy = "createdAt",
   sortDirection = "desc",
-  query,
+  query = "",
   pageNumber,
   category,
 }: IGetPaginatedTransactionsParams): Promise<IGetPaginatedTransactionsResponse> => {

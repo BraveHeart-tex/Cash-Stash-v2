@@ -23,10 +23,9 @@ const Dashboard = async () => {
     goalsResult,
   ] = await Promise.all([
     getPaginatedTransactions({
-      transactionType: "all",
       sortBy: "createdAt",
-      sortDirection: "desc",
       pageNumber: 1,
+      query: "",
     }),
     getPaginatedAccounts({ pageNumber: 1, query: "" }),
     fetchInsightsDataAction(),
