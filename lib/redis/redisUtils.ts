@@ -1,5 +1,5 @@
 import { CACHE_PREFIXES } from "@/lib/constants";
-import { Budget, BudgetCategory, Goal } from "@prisma/client";
+import { BudgetCategory } from "@prisma/client";
 import redis from "@/lib/redis/redisConnection";
 import { BudgetSelectModel, GoalSelectModel } from "@/lib/database/schema";
 
