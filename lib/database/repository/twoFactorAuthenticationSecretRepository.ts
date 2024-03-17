@@ -7,39 +7,32 @@ type TwoFactorAuthenticationSecretInsertModel = InferInsertModel<
   typeof twoFactorAuthenticationSecrets
 >;
 
-const create = async (data: TwoFactorAuthenticationSecretInsertModel) => {
-  return db.insert(twoFactorAuthenticationSecrets).values(data);
-};
-
-const deleteTwoFactorSecretByUserId = async (userId: string) => {
-  return db
-    .delete(twoFactorAuthenticationSecrets)
-    .where(eq(twoFactorAuthenticationSecrets.userId, userId));
-};
-
-const getByUserId = async (userId: string) => {
-  const [secret] = await db
-    .select()
-    .from(twoFactorAuthenticationSecrets)
-    .where(eq(twoFactorAuthenticationSecrets.userId, userId))
-    .limit(1);
-
-  return secret;
-};
-
-const removeTwoFactorAuthenticationSecret = async (userId: string) => {
-  await db.transaction(async (trx) => {
-    await userRepository.updateUser(userId, {
-      prefersTwoFactorAuthentication: 0,
-    });
-    await deleteTwoFactorSecretByUserId(userId);
-  });
-};
-
 const twoFactorAuthenticationSecretRepository = {
-  create,
-  getByUserId,
-  removeTwoFactorAuthenticationSecret,
+  async create(data: TwoFactorAuthenticationSecretInsertModel) {
+    return db.insert(twoFactorAuthenticationSecrets).values(data);
+  },
+  async getByUserId(userId: string) {
+    const [secret] = await db
+      .select()
+      .from(twoFactorAuthenticationSecrets)
+      .where(eq(twoFactorAuthenticationSecrets.userId, userId))
+      .limit(1);
+
+    return secret;
+  },
+  async removeTwoFactorAuthenticationSecret(userId: string) {
+    await db.transaction(async (trx) => {
+      await userRepository.updateUser(userId, {
+        prefersTwoFactorAuthentication: 0,
+      });
+      await this.deleteByUserId(userId);
+    });
+  },
+  async deleteByUserId(userId: string) {
+    return db
+      .delete(twoFactorAuthenticationSecrets)
+      .where(eq(twoFactorAuthenticationSecrets.userId, userId));
+  },
 };
 
 export default twoFactorAuthenticationSecretRepository;
