@@ -154,7 +154,11 @@ const TransactionForm = ({
   });
 
   const renderSubmitButtonContent = () => {
-    if (isPending || form.formState.isSubmitting) {
+    if (isPending && accounts.length === 0) {
+      return "Loading...";
+    }
+
+    if (isPending && accounts.length > 0) {
       return "Submitting...";
     }
 

@@ -39,11 +39,11 @@ export const accounts = mysqlTable(
     ])
       .default("CHECKING")
       .notNull(),
-    createdAt: datetime("createdAt", { mode: "string", fsp: 3 }).default(
-      sql`CURRENT_TIMESTAMP(3)`
-    ),
+    createdAt: datetime("createdAt", { mode: "string", fsp: 3 })
+      .default(sql`CURRENT_TIMESTAMP(3)`)
+      .notNull(),
     updatedAt: datetime("updatedAt", { mode: "string", fsp: 3 }).default(
-      sql`CURRENT_TIMESTAMP(3)`
+      sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`
     ),
   },
   (table) => {
@@ -87,10 +87,12 @@ export const budgets = mysqlTable(
     ])
       .default("OTHER")
       .notNull(),
-    createdAt: datetime("createdAt", { mode: "string", fsp: 3 }).default(
-      sql`CURRENT_TIMESTAMP(3)`
+    createdAt: datetime("createdAt", { mode: "string", fsp: 3 })
+      .default(sql`CURRENT_TIMESTAMP(3)`)
+      .notNull(),
+    updatedAt: datetime("updatedAt", { mode: "string", fsp: 3 }).default(
+      sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`
     ),
-    updatedAt: datetime("updatedAt", { mode: "string", fsp: 3 }),
   },
   (table) => {
     return {
@@ -165,10 +167,12 @@ export const goals = mysqlTable(
     })
       .notNull()
       .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
-    createdAt: datetime("createdAt", { mode: "string", fsp: 3 }).default(
-      sql`CURRENT_TIMESTAMP(3)`
+    createdAt: datetime("createdAt", { mode: "string", fsp: 3 })
+      .default(sql`CURRENT_TIMESTAMP(3)`)
+      .notNull(),
+    updatedAt: datetime("updatedAt", { mode: "string", fsp: 3 }).default(
+      sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`
     ),
-    updatedAt: datetime("updatedAt", { mode: "string", fsp: 3 }),
   },
   (table) => {
     return {
@@ -237,10 +241,12 @@ export const reminders = mysqlTable(
     })
       .notNull()
       .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
-    createdAt: datetime("createdAt", { mode: "string", fsp: 3 }).default(
-      sql`CURRENT_TIMESTAMP(3)`
+    createdAt: datetime("createdAt", { mode: "string", fsp: 3 })
+      .default(sql`CURRENT_TIMESTAMP(3)`)
+      .notNull(),
+    updatedAt: datetime("updatedAt", { mode: "string", fsp: 3 }).default(
+      sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`
     ),
-    updatedAt: datetime("updatedAt", { mode: "string", fsp: 3 }),
     markedAsReadAt: datetime("markedAsReadAt", { mode: "string", fsp: 3 }),
   },
   (table) => {
@@ -291,10 +297,12 @@ export const transactions = mysqlTable(
   {
     id: int("id").autoincrement().primaryKey(),
     amount: double("amount").notNull(),
-    createdAt: datetime("createdAt", { mode: "string", fsp: 3 }).default(
-      sql`CURRENT_TIMESTAMP(3)`
+    createdAt: datetime("createdAt", { mode: "string", fsp: 3 })
+      .default(sql`CURRENT_TIMESTAMP(3)`)
+      .notNull(),
+    updatedAt: datetime("updatedAt", { mode: "string", fsp: 3 }).default(
+      sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`
     ),
-    updatedAt: datetime("updatedAt", { mode: "string", fsp: 3 }),
     description: varchar("description", { length: 191 }).notNull(),
     category: mysqlEnum("category", [
       "FOOD",
@@ -400,11 +408,11 @@ export const users = mysqlTable(
     email: varchar("email", { length: 191 }).notNull(),
     hashedPassword: varchar("hashedPassword", { length: 191 }).notNull(),
     emailVerified: tinyint("email_verified").default(0).notNull(),
-    createdAt: datetime("createdAt", { mode: "string", fsp: 3 }).default(
-      sql`CURRENT_TIMESTAMP(3)`
-    ),
+    createdAt: datetime("createdAt", { mode: "string", fsp: 3 })
+      .default(sql`CURRENT_TIMESTAMP(3)`)
+      .notNull(),
     updatedAt: datetime("updatedAt", { mode: "string", fsp: 3 }).default(
-      sql`CURRENT_TIMESTAMP(3)`
+      sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`
     ),
     prefersTwoFactorAuthentication: tinyint("prefersTwoFactorAuthentication")
       .default(0)

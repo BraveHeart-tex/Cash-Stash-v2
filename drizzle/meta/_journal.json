@@ -43,6 +43,13 @@
       "when": 1710514328282,
       "tag": "0005_military_paper_doll",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1710660397982,
+      "tag": "0006_mute_mister_fear",
+      "breakpoints": true
     }
   ]
 }
