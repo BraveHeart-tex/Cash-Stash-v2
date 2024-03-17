@@ -18,7 +18,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { formHasChanged, generateReadbleEnumLabels } from "@/lib/utils";
 import { IValidatedResponse } from "@/actions/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState, useTransition } from "react";
@@ -34,6 +33,8 @@ import {
   AccountSelectModel,
   TransactionSelectModel,
 } from "@/lib/database/schema";
+import { formHasChanged } from "@/lib/utils/objectUtils/formHasChanged";
+import { generateReadbleEnumLabels } from "@/lib/utils/stringUtils/generateReadbleEnumLabels";
 
 interface ITransactionFormProps {
   data?: TransactionSelectModel;

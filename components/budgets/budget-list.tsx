@@ -1,6 +1,6 @@
 import CreateBudgetButton from "@/components/create-buttons/create-budget-button";
 import MotionDiv from "@/components/animations/motion-div";
-import { Budget, BudgetCategory } from "@prisma/client";
+import { BudgetCategory } from "@prisma/client";
 import RouteSearchInput from "@/components/route-search-input";
 import BudgetCard from "@/components/budget-card";
 import RouteSelectFilter from "@/components/route-select-filter";
@@ -8,13 +8,14 @@ import RouteFiltersPopover from "@/components/route-filters-popover";
 import { GiPayMoney } from "react-icons/gi";
 import { FaPiggyBank } from "react-icons/fa";
 import BudgetsNotFoundMessage from "./budgets-not-found";
-import { generateReadbleEnumLabels } from "@/lib/utils";
+import { BudgetSelectModel } from "@/lib/database/schema";
+import { generateReadbleEnumLabels } from "@/lib/utils/stringUtils/generateReadbleEnumLabels";
 
 const BudgetList = ({
   budgets,
   pageHasParams,
 }: {
-  budgets: Budget[];
+  budgets: BudgetSelectModel[];
   pageHasParams: boolean;
 }) => {
   const selectDataset = generateReadbleEnumLabels({ enumObj: BudgetCategory });

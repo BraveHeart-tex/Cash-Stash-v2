@@ -1,11 +1,6 @@
 "use client";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import {
-  cn,
-  formatMoney,
-  generateReadableLabelFromEnumValue,
-} from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
@@ -15,6 +10,9 @@ import ActionPopover from "@/components/action-popover";
 import { RxCross1, RxPencil2 } from "react-icons/rx";
 import { toast } from "sonner";
 import { BudgetSelectModel } from "@/lib/database/schema";
+import { generateReadableLabelFromEnumValue } from "@/lib/utils/stringUtils/generateReadableLabelFromEnumValue";
+import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
+import { cn } from "@/lib/utils/stringUtils/cn";
 
 interface IBudgetCardProps {
   budget: BudgetSelectModel;

@@ -7,7 +7,7 @@ import TransactionForm from "@/components/transactions/transaction-form";
 interface IGetGenericDialogContentParams {
   mode: "create" | "edit";
   key: "budget" | "goal" | "transaction" | "reminder" | "account" | "";
-  entityId: string;
+  entityId: string | number;
   props?: Record<string, any>;
   data?: any;
 }

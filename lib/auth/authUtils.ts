@@ -18,7 +18,7 @@ import {
   UserSelectModel,
 } from "@/lib/database/schema";
 import { and, eq } from "drizzle-orm";
-import { convertIsoToMysqlDatetime } from "@/lib/utils";
+import { convertIsoToMysqlDatetime } from "../utils/dateUtils/convertIsoToMysqlDatetime";
 
 export const generateEmailVerificationCode = async (
   userId: string,

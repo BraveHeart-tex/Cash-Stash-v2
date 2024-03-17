@@ -122,3 +122,13 @@ export const CACHE_PREFIXES = {
     "reset_password_link_request_rate_limit",
   TWO_FACTOR_AUTH_RATE_LIMIT: "two_factor_auth_rate_limit",
 } as const;
+
+export const getPageSizeAndSkipAmount = (pageNumber: number) => {
+  const PAGE_SIZE = 12;
+  const skipAmount = (pageNumber - 1) * PAGE_SIZE;
+  return { pageSize: PAGE_SIZE, skipAmount };
+};
+
+export const getResetPasswordUrl = (email: string, token: string) => {
+  return `${process.env.NEXT_PUBLIC_BASE_URL}/auth/reset-password/${email}?token=${token}`;
+};

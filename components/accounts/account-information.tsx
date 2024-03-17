@@ -1,10 +1,10 @@
 "use client";
 import AccountCard from "../account-card";
 import { motion } from "framer-motion";
-import { Account } from "@prisma/client";
+import { AccountSelectModel } from "@/lib/database/schema";
 
 interface IAccountInformationProps {
-  userAccounts: Account[];
+  userAccounts: AccountSelectModel[];
 }
 
 const AccountInformation = ({ userAccounts }: IAccountInformationProps) => {

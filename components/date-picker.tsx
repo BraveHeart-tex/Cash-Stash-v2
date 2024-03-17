@@ -1,7 +1,6 @@
 "use client";
 import { format } from "date-fns";
 import { CalendarIcon } from "@radix-ui/react-icons";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -13,6 +12,7 @@ import { UseFormRegister } from "react-hook-form";
 import FormError from "./form-error";
 import { Label } from "./ui/label";
 import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils/stringUtils/cn";
 
 interface IDatePickerProps {
   name: string;

@@ -1,4 +1,3 @@
-import { getPageSizeAndSkipAmount } from "@/lib/utils";
 import {
   accounts,
   AccountSelectModel,
@@ -9,6 +8,7 @@ import {
 import { db } from "@/lib/database/connection";
 import accountRepository from "@/lib/database/repository/accountRepository";
 import { and, asc, desc, eq, gt, like, lt, sql } from "drizzle-orm";
+import { getPageSizeAndSkipAmount } from "@/lib/constants";
 
 interface ICreateTransactionReturnType {
   affectedRows: number;

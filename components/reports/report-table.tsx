@@ -8,13 +8,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { cn, thousandSeparator } from "@/lib/utils";
 import ResponsiveChartContainer from "@/app/chart-container";
 import { useEffect, useState } from "react";
 import {
   AccountSelectModel,
   TransactionSelectModel,
 } from "@/lib/database/schema";
+import { cn } from "@/lib/utils/stringUtils/cn";
+import { thousandSeparator } from "@/lib/utils/numberUtils/thousandSeparator";
 
 export interface MonthlyData {
   monthlyTransactionsData: {

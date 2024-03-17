@@ -1,6 +1,5 @@
 "use server";
 import { getUser } from "@/lib/auth/session";
-import { processZodError, validateEnumValue } from "@/lib/utils";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import {
@@ -22,6 +21,8 @@ import { AccountCategory } from "@/entities/account";
 import transactionRepository from "@/lib/database/repository/transactionRepository";
 import redisService from "@/lib/redis/redisService";
 import { AccountSelectModel } from "@/lib/database/schema";
+import { processZodError } from "@/lib/utils/objectUtils/processZodError";
+import { validateEnumValue } from "@/lib/utils/objectUtils/validateEnumValue";
 
 export const registerBankAccount = async ({
   balance,

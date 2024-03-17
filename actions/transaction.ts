@@ -7,7 +7,6 @@ import {
   getTransactionKey,
 } from "@/lib/redis/redisUtils";
 import { getUser } from "@/lib/auth/session";
-import { processZodError } from "@/lib/utils";
 import transactionSchema, {
   TransactionSchemaType,
 } from "@/schemas/transaction-schema";
@@ -24,6 +23,7 @@ import transactionRepository from "@/lib/database/repository/transactionReposito
 import { createTransactionDto } from "@/lib/database/dto/transactionDto";
 import accountRepository from "@/lib/database/repository/accountRepository";
 import { TransactionSelectModel } from "@/lib/database/schema";
+import { processZodError } from "@/lib/utils/objectUtils/processZodError";
 
 export const createTransaction = async (
   values: TransactionSchemaType

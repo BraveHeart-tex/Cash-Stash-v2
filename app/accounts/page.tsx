@@ -8,8 +8,8 @@ import MotionDiv from "@/components/animations/motion-div";
 import AccountsNotFound from "@/components/accounts-not-found";
 import RouteFiltersPopover from "@/components/route-filters-popover";
 import { BsSortDown, BsSortUp } from "react-icons/bs";
-import { generateReadbleEnumLabels } from "@/lib/utils";
 import { AccountCategory } from "@/entities/account";
+import { generateReadbleEnumLabels } from "@/lib/utils/stringUtils/generateReadbleEnumLabels";
 
 const AccountPage = async ({
   searchParams,

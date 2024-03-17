@@ -1,5 +1,5 @@
 import { BudgetCategory } from "@/entities/budget";
-import { getPageSizeAndSkipAmount } from "@/lib/utils";
+import { getPageSizeAndSkipAmount } from "@/lib/constants";
 import { db } from "@/lib/database/connection";
 import { budgets, BudgetInsertModel } from "@/lib/database/schema";
 import { and, asc, desc, eq, like, sql } from "drizzle-orm";

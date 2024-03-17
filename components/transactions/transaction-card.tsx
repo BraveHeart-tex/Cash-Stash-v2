@@ -1,9 +1,5 @@
 "use client";
-import {
-  cn,
-  formatMoney,
-  generateReadableLabelFromEnumValue,
-} from "@/lib/utils";
+
 import {
   Card,
   CardContent,
@@ -17,12 +13,14 @@ import { motion } from "framer-motion";
 import DataLabel from "@/components/data-label";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import useGenericModalStore from "@/store/genericModalStore";
-
 import ActionPopover from "@/components/action-popover";
 import { RxCross1, RxPencil2 } from "react-icons/rx";
 import { toast } from "sonner";
 import { TransactionSelectModel } from "@/lib/database/schema";
 import { format } from "date-fns";
+import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
+import { cn } from "@/lib/utils/stringUtils/cn";
+import { generateReadableLabelFromEnumValue } from "@/lib/utils/stringUtils/generateReadableLabelFromEnumValue";
 
 interface ITransactionCardProps {
   transaction: TransactionSelectModel & { accountName: string };

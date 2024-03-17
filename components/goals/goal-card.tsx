@@ -3,7 +3,6 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { cn, formatMoney } from "@/lib/utils";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import useGenericModalStore from "@/store/genericModalStore";
 import { deleteGoal } from "@/actions/goal";
@@ -11,6 +10,8 @@ import ActionPopover from "@/components/action-popover";
 import { RxCross1, RxPencil2 } from "react-icons/rx";
 import { toast } from "sonner";
 import { GoalSelectModel } from "@/lib/database/schema";
+import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
+import { cn } from "@/lib/utils/stringUtils/cn";
 
 interface IGoalCardProps {
   goal: GoalSelectModel;

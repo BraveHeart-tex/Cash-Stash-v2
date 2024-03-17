@@ -1,6 +1,5 @@
 "use server";
 import { getUser } from "@/lib/auth/session";
-import { processZodError } from "@/lib/utils";
 import goalSchema, { GoalSchemaType } from "@/schemas/goal-schema";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
@@ -20,6 +19,7 @@ import { createGoalDto } from "@/lib/database/dto/goalDto";
 import goalRepository from "@/lib/database/repository/goalRepository";
 import redisService from "@/lib/redis/redisService";
 import { GoalSelectModel } from "@/lib/database/schema";
+import { processZodError } from "@/lib/utils/objectUtils/processZodError";
 
 export const createGoal = async (
   values: GoalSchemaType

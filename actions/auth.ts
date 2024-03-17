@@ -4,7 +4,6 @@ import { Argon2id } from "oslo/password";
 import loginSchema, { LoginSchemaType } from "@/schemas/login-schema";
 import registerSchema, { RegisterSchemaType } from "@/schemas/register-schema";
 import { ZodError } from "zod";
-import { getResetPasswordUrl, processZodError } from "@/lib/utils";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createTOTPKeyURI, TOTPController } from "oslo/otp";
@@ -28,6 +27,7 @@ import {
   MAX_VERIFICATION_CODE_ATTEMPTS,
   PAGE_ROUTES,
   SEND_VERIFICATION_CODE_RATE_LIMIT,
+  getResetPasswordUrl,
 } from "@/lib/constants";
 import {
   createPasswordResetToken,
@@ -44,6 +44,7 @@ import userRepository from "@/lib/database/repository/userRepository";
 import emailVerificationCodeRepository from "@/lib/database/repository/emailVerificationCodeRepository";
 import passwordResetTokenRepository from "@/lib/database/repository/passwordResetTokenRepository";
 import twoFactorAuthenticationSecretRepository from "@/lib/database/repository/twoFactorAuthenticationSecretRepository";
+import { processZodError } from "@/lib/utils/objectUtils/processZodError";
 
 export const login = async (values: LoginSchemaType) => {
   const header = headers();

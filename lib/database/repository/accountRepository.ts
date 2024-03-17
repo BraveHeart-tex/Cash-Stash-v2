@@ -1,4 +1,4 @@
-import { getPageSizeAndSkipAmount } from "@/lib/utils";
+import { getPageSizeAndSkipAmount } from "@/lib/constants";
 import { db } from "@/lib/database/connection";
 import {
   AccountInsertModel,

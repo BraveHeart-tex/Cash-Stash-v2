@@ -1,9 +1,5 @@
 "use client";
-import {
-  cn,
-  formatMoney,
-  generateReadableLabelFromEnumValue,
-} from "@/lib/utils";
+
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
@@ -16,6 +12,9 @@ import LatestAccountTransactionsDialog from "./latest-account-transactions-dialo
 import { useState } from "react";
 import { toast } from "sonner";
 import { AccountSelectModel } from "@/lib/database/schema";
+import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
+import { cn } from "@/lib/utils/stringUtils/cn";
+import { generateReadableLabelFromEnumValue } from "@/lib/utils/stringUtils/generateReadableLabelFromEnumValue";
 
 interface IAccountCardProps {
   account: AccountSelectModel;
