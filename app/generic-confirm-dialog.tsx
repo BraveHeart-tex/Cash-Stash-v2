@@ -14,6 +14,7 @@ import { useMediaQuery } from "usehooks-ts";
 import {
   Drawer,
   DrawerContent,
+  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
@@ -68,8 +69,8 @@ const GenericConfirmDialog = () => {
         <DrawerContent>
           <DrawerHeader className="text-left">
             <DrawerTitle>{title}</DrawerTitle>
+            <DrawerDescription>{message}</DrawerDescription>
           </DrawerHeader>
-          <div className="px-4">{message}</div>
           <DrawerFooter className="pt-2">
             {primaryActionLabel && (
               <Button

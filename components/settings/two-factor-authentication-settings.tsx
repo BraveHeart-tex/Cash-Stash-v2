@@ -19,8 +19,9 @@ const TwoFactorAuthenticationSettings = () => {
 
   const handleDisabledTwoFactorAuth = () => {
     showConfirm({
-      title: "Disable Two-Factor Authentication",
-      message: "Are you sure you want to disable two-factor authentication?",
+      title: "Are you sure you want to disable two-factor authentication?",
+      message:
+        "Two-factor authentication increases the security of your account. Are you sure you want to disable it? You can enable it again at any time.",
       primaryActionLabel: "Disable",
       onConfirm: () => {
         startTransition(async () => {
@@ -40,8 +41,9 @@ const TwoFactorAuthenticationSettings = () => {
 
   const handleEnableTwoFactorAuth = () => {
     showConfirm({
-      title: "Enable Two-Factor Authentication",
-      message: "Are you sure you want to enable two-factor authentication?",
+      title: "Are you sure you want to enable two-factor authentication?",
+      message:
+        "Upon enabling two-factor authentication, you will be required to enter a unique code from your mobile device in addition to your password when signing in. Are you sure you want to enable it?",
       primaryActionLabel: "Enable",
       onConfirm: () => {
         startTransition(async () => {
