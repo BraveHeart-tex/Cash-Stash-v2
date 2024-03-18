@@ -66,11 +66,13 @@ const GoalForm = ({ data: goalToBeUpdated }: IGoalFormProps) => {
         result = await createGoal(values);
       }
 
-      processFormErrors(result);
+      processFormSubmissionResult(result);
     });
   };
 
-  const processFormErrors = (result: IValidatedResponse<GoalSelectModel>) => {
+  const processFormSubmissionResult = (
+    result: IValidatedResponse<GoalSelectModel>
+  ) => {
     if (result.fieldErrors.length) {
       result.fieldErrors.forEach((fieldError) => {
         form.setError(fieldError.field as any, {

@@ -110,11 +110,11 @@ const TransactionForm = ({
         result = await createTransaction(values);
       }
 
-      processFormErrors(result);
+      processFormSubmissionResult(result);
     });
   };
 
-  const processFormErrors = (
+  const processFormSubmissionResult = (
     result: IValidatedResponse<TransactionSelectModel>
   ) => {
     if (result.fieldErrors.length) {

@@ -68,7 +68,7 @@ const RegisterForm = () => {
       const result = await registerUser(data);
 
       if (result.error || result.fieldErrors.length) {
-        processFormErrors(result);
+        processFormSubmissionResult(result);
         return;
       }
 
@@ -80,7 +80,7 @@ const RegisterForm = () => {
     });
   };
 
-  const processFormErrors = (
+  const processFormSubmissionResult = (
     result: Awaited<ReturnType<typeof registerUser>>
   ) => {
     if (result.fieldErrors.length) {

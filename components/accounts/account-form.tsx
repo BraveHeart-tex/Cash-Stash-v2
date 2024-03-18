@@ -80,11 +80,11 @@ const AccountForm = ({ data: accountToBeUpdated }: IAccountFormProps) => {
         result = await registerBankAccount(values);
       }
 
-      processFormErrors(result);
+      processFormSubmissionResult(result);
     });
   };
 
-  const processFormErrors = (
+  const processFormSubmissionResult = (
     result: IValidatedResponse<AccountSelectModel>
   ) => {
     if (result.fieldErrors.length) {

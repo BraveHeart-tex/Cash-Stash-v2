@@ -73,11 +73,13 @@ const BudgetForm = ({ data: budgetToBeUpdated }: IBudgetFormProps) => {
         result = await createBudget(values);
       }
 
-      processFormErrors(result);
+      processFormSubmissionResult(result);
     });
   };
 
-  const processFormErrors = (result: IValidatedResponse<BudgetSelectModel>) => {
+  const processFormSubmissionResult = (
+    result: IValidatedResponse<BudgetSelectModel>
+  ) => {
     if (result.fieldErrors.length) {
       result.fieldErrors.forEach((fieldError) => {
         form.setError(fieldError.field as any, {

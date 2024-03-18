@@ -77,11 +77,11 @@ const ReminderForm = ({ data: reminderToBeUpdated }: IReminderFormProps) => {
         result = await createReminder(values);
       }
 
-      processFormErrors(result);
+      processFormSubmissionResult(result);
     });
   };
 
-  const processFormErrors = (
+  const processFormSubmissionResult = (
     result: IValidatedResponse<ReminderSelectModel>
   ) => {
     if (result.fieldErrors.length) {

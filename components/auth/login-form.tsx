@@ -74,7 +74,7 @@ const LoginForm = () => {
       }
 
       if (result.error) {
-        processFormErrors(result);
+        processFormSubmissionResult(result);
         return;
       }
 
@@ -84,7 +84,9 @@ const LoginForm = () => {
     });
   };
 
-  const processFormErrors = (result: Awaited<ReturnType<typeof login>>) => {
+  const processFormSubmissionResult = (
+    result: Awaited<ReturnType<typeof login>>
+  ) => {
     if (result.fieldErrors.length) {
       result.fieldErrors.forEach((fieldError) => {
         form.setError(fieldError.field as any, {
