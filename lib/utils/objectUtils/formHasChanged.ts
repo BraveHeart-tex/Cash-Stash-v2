@@ -9,5 +9,14 @@ export const formHasChanged = (initialValues: any, values: any): boolean => {
     (key) => key in values
   );
 
-  return !matchingKeys.some((key) => values[key] !== initialValues[key]);
+  return !matchingKeys.some((key) => {
+    if (initialValues[key] instanceof Date || values[key] instanceof Date) {
+      return (
+        new Date(initialValues[key]).toISOString() !==
+        new Date(values[key]).toISOString()
+      );
+    }
+
+    return values[key] !== initialValues[key];
+  });
 };
