@@ -11,10 +11,9 @@ const nextConfig = {
     domains: ["res.cloudinary.com"],
   },
   webpack: (config) => {
-    return {
-      ...config,
-      externals: [...config.externals, "@node-rs/argon2", "@node-rs/bcrypt"],
-    };
+    config.externals.push("@node-rs/argon2");
+    config.externals.push("@node-rs/bcrypt");
+    return config;
   },
 };
 
