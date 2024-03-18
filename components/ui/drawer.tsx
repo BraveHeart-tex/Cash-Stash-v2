@@ -28,7 +28,7 @@ const DrawerOverlay = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DrawerPrimitive.Overlay
     ref={ref}
-    className={cn("fixed inset-0 z-50 bg-black/80", className)}
+    className={cn("fixed inset-0 z-[60] bg-black/80", className)}
     {...props}
   />
 ));
@@ -41,9 +41,21 @@ const DrawerContent = React.forwardRef<
   <DrawerPortal>
     <DrawerOverlay />
     <DrawerPrimitive.Content
+      onInteractOutside={(event) => {
+        console.log("onInteractOutside");
+
+        const { originalEvent } = event.detail;
+
+        if (
+          originalEvent.target instanceof Element &&
+          originalEvent.target.closest(".group.toast")
+        ) {
+          event.preventDefault();
+        }
+      }}
       ref={ref}
       className={cn(
-        "fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-[10px] border bg-background",
+        "fixed inset-x-0 bottom-0 z-[60] mt-24 flex h-auto flex-col rounded-t-[10px] border bg-background",
         className
       )}
       {...props}
