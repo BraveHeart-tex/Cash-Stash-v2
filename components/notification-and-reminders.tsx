@@ -26,7 +26,6 @@ const NotificationsAndReminders = ({
       >
         <p className="text-primary">No reminders were found.</p>
         <Button
-          disabled
           className="mt-3 text-md font-semibold flex items-center gap-[14px]"
           onClick={() => {
             openGenericModal({
@@ -34,7 +33,7 @@ const NotificationsAndReminders = ({
               mode: "create",
               dialogTitle: "Create Reminder",
               dialogDescription:
-                "You can create a reminder by using the form below.",
+                "Set a reminder for a specific date and time to help you remember important events.",
               entityId: "",
             });
           }}

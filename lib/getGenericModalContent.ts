@@ -3,6 +3,7 @@ import AccountForm from "@/components/accounts/account-form";
 import BudgetForm from "@/components/budgets/budget-form";
 import GoalForm from "@/components/goals/goal-form";
 import TransactionForm from "@/components/transactions/transaction-form";
+import ReminderForm from "@/components/reminder-form";
 
 interface IGetGenericDialogContentParams {
   mode: "create" | "edit";
@@ -19,6 +20,7 @@ const ContentMap: {
   goal: GoalForm,
   transaction: TransactionForm,
   account: AccountForm,
+  reminder: ReminderForm,
 };
 
 export const getGenericDialogContent = ({

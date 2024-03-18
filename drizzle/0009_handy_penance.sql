@@ -1,0 +1,1 @@
+ALTER TABLE `Reminder` MODIFY COLUMN `description` varchar(512) NOT NULL;

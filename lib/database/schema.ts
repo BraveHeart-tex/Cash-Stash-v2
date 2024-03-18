@@ -231,7 +231,7 @@ export const reminders = mysqlTable(
   {
     id: int("id").autoincrement().primaryKey(),
     title: varchar("title", { length: 191 }).notNull(),
-    description: varchar("description", { length: 191 }).notNull(),
+    description: varchar("description", { length: 512 }).notNull(),
     reminderDate: datetime("reminderDate", {
       mode: "string",
       fsp: 3,
