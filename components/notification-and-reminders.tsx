@@ -1,16 +1,16 @@
 "use client";
-import { SerializedReminder } from "@/actions/types";
 import { Button } from "@/components/ui/button";
 import { FaRegClock } from "react-icons/fa";
 import ReminderCard from "@/components/reminder-card";
 import AnimatePresenceClient from "@/components/animations/animate-presence";
 import MotionDiv from "@/components/animations/motion-div";
 import useGenericModalStore from "@/store/genericModalStore";
+import { ReminderSelectModel } from "@/lib/database/schema";
 
 const NotificationsAndReminders = ({
   reminders,
 }: {
-  reminders: SerializedReminder[];
+  reminders: ReminderSelectModel[];
 }) => {
   const openGenericModal = useGenericModalStore(
     (state) => state.openGenericModal

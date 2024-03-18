@@ -12,6 +12,7 @@ import { getPaginatedAccounts } from "@/actions/account";
 import { fetchInsightsDataAction, getChartData } from "@/actions";
 import { getPaginatedBudgets } from "@/actions/budget";
 import { getPaginatedGoals } from "@/actions/goal";
+import { getPaginatedReminders } from "@/actions/reminder";
 
 const Dashboard = async () => {
   let [
@@ -21,6 +22,7 @@ const Dashboard = async () => {
     monthlyTransactions,
     budgetsResult,
     goalsResult,
+    remindersResult,
   ] = await Promise.all([
     getPaginatedTransactions({
       sortBy: "createdAt",
@@ -33,6 +35,10 @@ const Dashboard = async () => {
     getPaginatedBudgets({ pageNumber: 1, query: "" }),
     getPaginatedGoals({ pageNumber: 1, query: "" }),
     // Reminders
+    getPaginatedReminders({
+      query: "",
+      pageNumber: 1,
+    }),
   ]);
 
   const { totalIncome, totalExpense, netIncome, savingsRate } =
@@ -100,8 +106,8 @@ const Dashboard = async () => {
     },
     {
       title: "Notifications and Reminders",
-      description: "View your notifications, set bill reminders here.",
-      data: <NotificationsAndReminders reminders={[]} />,
+      description: "View your notifications, and reminders here.",
+      data: <NotificationsAndReminders reminders={remindersResult.reminders} />,
     },
   ];
 

@@ -63,6 +63,15 @@ export interface IGetPaginatedGoalsResponse extends IPaginatedResponse {
   goals: GoalSelectModel[];
 }
 
+export interface IGetPaginatedRemindersParams extends IPaginatedActionParams {
+  startDate?: string;
+  endDate?: string;
+}
+
+export interface IGetPaginatedRemindersResponse extends IPaginatedResponse {
+  reminders: ReminderSelectModel[];
+}
+
 export type SerializedUserAccount = Omit<
   AccountSelectModel,
   "createdAt" | "updatedAt"

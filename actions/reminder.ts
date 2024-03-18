@@ -6,7 +6,11 @@ import { ReminderSelectModel } from "@/lib/database/schema";
 import reminderSchema, { ReminderSchemaType } from "@/schemas/reminder-schema";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
-import { IValidatedResponse } from "./types";
+import {
+  IGetPaginatedRemindersParams,
+  IGetPaginatedRemindersResponse,
+  IValidatedResponse,
+} from "./types";
 import reminderRepository from "@/lib/database/repository/reminderRepository";
 import { convertISOToMysqlDatetime } from "@/lib/utils/dateUtils/convertISOToMysqlDatetime";
 
@@ -87,6 +91,49 @@ export const updateReminder = async (
     return {
       error: "An error occurred while updating the reminder.",
       fieldErrors: [],
+    };
+  }
+};
+
+export const getPaginatedReminders = async ({
+  query = "",
+  pageNumber = 1,
+  startDate,
+  endDate,
+}: IGetPaginatedRemindersParams): Promise<IGetPaginatedRemindersResponse> => {
+  try {
+    const { user } = await getUser();
+
+    if (!user) {
+      redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    }
+
+    const PAGE_SIZE = 12;
+    const skipAmount = (pageNumber - 1) * PAGE_SIZE;
+
+    const { reminders, totalCount } = await reminderRepository.getMultiple({
+      query,
+      userId: user.id,
+      page: pageNumber,
+      startDate,
+      endDate,
+    });
+
+    return {
+      reminders,
+      currentPage: pageNumber,
+      totalPages: Math.ceil(totalCount / PAGE_SIZE),
+      hasNextPage: totalCount > skipAmount + PAGE_SIZE,
+      hasPreviousPage: pageNumber > 1,
+    };
+  } catch (error) {
+    console.error("Error fetching paginated reminders", error);
+    return {
+      reminders: [],
+      currentPage: 1,
+      totalPages: 1,
+      hasNextPage: false,
+      hasPreviousPage: false,
     };
   }
 };

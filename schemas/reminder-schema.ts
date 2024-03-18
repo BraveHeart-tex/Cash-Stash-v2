@@ -9,7 +9,7 @@ const reminderSchema = z.object({
     .string()
     .max(512, "Description cannot be longer than 512 characters")
     .default(""),
-  reminderDate: z.date(),
+  reminderDate: z.coerce.date(),
 });
 
 export type ReminderSchemaType = z.infer<typeof reminderSchema>;

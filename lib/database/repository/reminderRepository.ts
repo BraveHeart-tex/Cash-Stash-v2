@@ -1,6 +1,15 @@
-import { eq } from "drizzle-orm";
+import { and, between, eq, like, sql } from "drizzle-orm";
 import { db } from "../connection";
 import { ReminderInsertModel, reminders } from "../schema";
+import { getPageSizeAndSkipAmount } from "@/lib/constants";
+
+interface IGetMultipleRemindersParams {
+  userId: string;
+  query?: string;
+  page: number;
+  startDate?: string;
+  endDate?: string;
+}
 
 const reminderRepository = {
   async create(data: ReminderInsertModel) {
@@ -45,6 +54,63 @@ const reminderRepository = {
     } catch (error) {
       console.error("Delete reminder error", error);
       return 0;
+    }
+  },
+  async getMultiple({
+    userId,
+    query,
+    page,
+    startDate,
+    endDate,
+  }: IGetMultipleRemindersParams) {
+    const { pageSize, skipAmount } = getPageSizeAndSkipAmount(page);
+
+    let dateFilterCondition = undefined;
+    if (startDate && !endDate) {
+      dateFilterCondition = eq(reminders.reminderDate, startDate);
+    }
+
+    if (startDate && endDate) {
+      dateFilterCondition = between(reminders.reminderDate, startDate, endDate);
+    }
+
+    const remindersQuery = db
+      .select()
+      .from(reminders)
+      .where(
+        and(
+          eq(reminders.userId, userId),
+          like(reminders.title, `%${query}%`),
+          dateFilterCondition
+        )
+      )
+      .limit(pageSize)
+      .offset(skipAmount);
+
+    const remindersCountQuery = db
+      .select({
+        count: sql<number>`COUNT(*)`,
+      })
+      .from(reminders)
+      .where(
+        and(eq(reminders.userId, userId), like(reminders.title, `%${query}%`))
+      );
+
+    try {
+      const [reminders, [totalCount]] = await Promise.all([
+        remindersQuery,
+        remindersCountQuery,
+      ]);
+
+      return {
+        reminders,
+        totalCount: totalCount.count,
+      };
+    } catch (error) {
+      return {
+        reminders: [],
+        totalCount: 0,
+      };
     }
   },
 };

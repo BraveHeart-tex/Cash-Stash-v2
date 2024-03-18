@@ -2,12 +2,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Pencil1Icon } from "@radix-ui/react-icons";
 
-import { SerializedReminder } from "@/actions/types";
 import MotionDiv from "./animations/motion-div";
 import useGenericModalStore from "@/store/genericModalStore";
+import { ReminderSelectModel } from "@/lib/database/schema";
 
 interface IReminderCardProps {
-  reminder: SerializedReminder;
+  reminder: ReminderSelectModel;
 }
 
 const ReminderCard = ({ reminder }: IReminderCardProps) => {
@@ -30,25 +30,20 @@ const ReminderCard = ({ reminder }: IReminderCardProps) => {
     >
       <div className="w-full flex flex-row md:items-center justify-between">
         <p className="font-semibold">{reminder.title}</p>
-
         {isPastReminderDate ? (
           <Badge className="w-max mb-2 bg-destructive cursor-pointer select-none">
             Past Reminder Date
           </Badge>
         ) : (
-          <Badge className="ml-2 bg-orange-400 cursor-pointer select-none hover:bg-orange-500">
+          <Badge className="ml-2 bg-tertiary cursor-pointer select-none hover:bg-tertiary/80">
             Reminder
           </Badge>
         )}
       </div>
 
-      <div className="w-full flex items-center gap-1 mt-2">
-        <span>Notes:</span>
-        <p className="text-primary">{reminder.description}</p>
-      </div>
-      <div className="w-full flex flex-col md:flex-row items-start md:items-center justify-between gap-1">
-        <p className="text-md">
-          Date:{" "}
+      <div className="w-full">
+        <p className="text-md text-foreground">
+          <span className="font-semibold text-primary">Reminder Date:</span>{" "}
           {new Date(reminder.reminderDate).toLocaleDateString("tr-TR", {
             year: "numeric",
             month: "numeric",
@@ -56,7 +51,12 @@ const ReminderCard = ({ reminder }: IReminderCardProps) => {
           })}
         </p>
       </div>
+      <div className="w-full flex items-center gap-1 mt-2">
+        <span className="font-semibold text-primary">Notes:</span>
+        <p className="text-foreground">{reminder.description}</p>
+      </div>
       <div className="my-2 h-1 bg-card" />
+      {/* TODO: Replace with ActionPopover */}
       <Button
         variant="ghost"
         size="icon"
@@ -67,9 +67,10 @@ const ReminderCard = ({ reminder }: IReminderCardProps) => {
             key: "reminder",
             mode: "edit",
             entityId: reminder.id,
-            dialogTitle: "Edit Reminder",
+            dialogTitle: "Edit Your Reminder",
+            data: reminder,
             dialogDescription:
-              "You can edit your reminder by using the form below.",
+              "Edit the reminder details and click the save button to save the changes.",
           });
         }}
       >

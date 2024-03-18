@@ -62,7 +62,6 @@ const ReminderForm = ({ data: reminderToBeUpdated }: IReminderFormProps) => {
 
   const handleFormSubmit = async (values: ReminderSchemaType) => {
     if (entityId && formHasChanged(reminderToBeUpdated, values)) {
-      // showDefaultToast("No changes detected.", "You haven't made any changes.");
       toast.info("No changes detected.", {
         description: "You haven't made any changes.",
       });
@@ -162,7 +161,7 @@ const ReminderForm = ({ data: reminderToBeUpdated }: IReminderFormProps) => {
           control={form.control}
           name="reminderDate"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="flex flex-col gap-1">
               <FormLabel>Reminder Date</FormLabel>
               <FormControl>
                 <Popover>
@@ -171,12 +170,12 @@ const ReminderForm = ({ data: reminderToBeUpdated }: IReminderFormProps) => {
                       <Button
                         variant={"outline"}
                         className={cn(
-                          "w-[240px] pl-3 text-left font-normal",
+                          "w-full pl-3 text-left font-normal",
                           !field.value && "text-muted-foreground"
                         )}
                       >
                         {field.value ? (
-                          format(field.value, "PPP")
+                          format(new Date(field.value), "PPP")
                         ) : (
                           <span>Pick a date</span>
                         )}
@@ -189,9 +188,6 @@ const ReminderForm = ({ data: reminderToBeUpdated }: IReminderFormProps) => {
                       mode="single"
                       selected={field.value}
                       onSelect={field.onChange}
-                      disabled={(date) =>
-                        date > new Date() || date < new Date("1900-01-01")
-                      }
                       initialFocus
                     />
                   </PopoverContent>

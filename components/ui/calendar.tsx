@@ -7,12 +7,15 @@ import { DayPicker } from "react-day-picker";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils/stringUtils/cn";
 
-export type CalendarProps = React.ComponentProps<typeof DayPicker>;
+export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
+  disableFutureDays?: boolean;
+};
 
 function Calendar({
   className,
   classNames,
   showOutsideDays = true,
+  disableFutureDays = false,
   ...props
 }: CalendarProps) {
   return (
@@ -58,6 +61,7 @@ function Calendar({
         day_hidden: "invisible",
         ...classNames,
       }}
+      disabled={disableFutureDays ? { after: new Date() } : false}
       components={{
         IconLeft: ({ ...props }) => <ChevronLeftIcon className="h-4 w-4" />,
         IconRight: ({ ...props }) => <ChevronRightIcon className="h-4 w-4" />,
