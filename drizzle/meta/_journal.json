@@ -57,6 +57,13 @@
       "when": 1710700411940,
       "tag": "0007_overconfident_odin",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1710762450048,
+      "tag": "0008_overrated_pretty_boy",
+      "breakpoints": true
     }
   ]
 }

@@ -193,7 +193,7 @@ export const passwordResetTokens = mysqlTable(
   "PasswordResetToken",
   {
     id: varchar("id", { length: 191 }).notNull(),
-    userId: varchar("userId", {
+    userId: varchar("user_id", {
       length: 128,
     })
       .notNull()
