@@ -8,7 +8,6 @@ import Navbar from "@/components/navbar";
 import { getUser } from "@/lib/auth/session";
 import GenericConfirmDialog from "./generic-confirm-dialog";
 import RedirectionPathToaster from "@/components/redirection-path-toaster";
-import UriBarcodeDialog from "@/components/uri-barcode-dialog";
 import { ReactNode } from "react";
 import SonnerToaster from "@/components/ui/sonner";
 
@@ -25,6 +24,35 @@ const APP_DESCRIPTION =
 
 export const metadata: Metadata = {
   manifest: "/manifest.json",
+
+  icons: [
+    {
+      href: "/apple-touch-icon.png",
+      sizes: "180x180",
+      rel: "apple-touch-icon",
+      url: "/apple-touch-icon.png",
+    },
+    {
+      rel: "icon",
+      type: "image/png",
+      sizes: "32x32",
+      href: "/favicon-32x32.png",
+      url: "/favicon-32x32.png",
+    },
+    {
+      rel: "icon",
+      type: "image/png",
+      sizes: "16x16",
+      href: "/favicon-16x16.png",
+      url: "/favicon-16x16.png",
+    },
+    {
+      rel: "mask-icon",
+      href: "/safari-pinned-tab.svg",
+      color: "#5bbad5",
+      url: "/safari-pinned-tab.svg",
+    },
+  ],
   applicationName: APP_NAME,
   metadataBase: new URL("https://cashstash.borakaraca.tech"),
   title: {
@@ -57,6 +85,10 @@ export const metadata: Metadata = {
     },
     description: APP_DESCRIPTION,
   },
+  other: {
+    "msapplication-TileColor": "#b91d47",
+    "msapplication-config": "/browserconfig.xml",
+  },
 };
 
 interface ILayoutProps {
@@ -68,6 +100,9 @@ export default async function RootLayout({ children }: ILayoutProps) {
 
   return (
     <html lang="en">
+      <head>
+        <meta name="msapplication-TileColor" content="#b91d47" />
+      </head>
       <body className={InterFont.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Navbar user={user} />
