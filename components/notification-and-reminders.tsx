@@ -60,7 +60,6 @@ const NotificationsAndReminders = ({
       </div>
       <Button
         className="mt-3"
-        disabled
         onClick={() =>
           openGenericModal({
             key: "reminder",

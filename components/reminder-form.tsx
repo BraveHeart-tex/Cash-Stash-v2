@@ -31,6 +31,13 @@ import { CalendarIcon } from "@radix-ui/react-icons";
 import { Calendar } from "@/components/ui/calendar";
 import { createReminder, updateReminder } from "@/actions/reminder";
 import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface IReminderFormProps {
   data?: ReminderSelectModel;
@@ -123,6 +130,10 @@ const ReminderForm = ({ data: reminderToBeUpdated }: IReminderFormProps) => {
     reminders.recurrence.enumValues
   );
 
+  const reminderTypeOptions = generateOptionsFromEnums(
+    reminders.type.enumValues
+  );
+
   return (
     <Form {...form}>
       <form
@@ -164,45 +175,114 @@ const ReminderForm = ({ data: reminderToBeUpdated }: IReminderFormProps) => {
         />
         <FormField
           control={form.control}
-          name="reminderDate"
+          name="type"
           render={({ field }) => (
-            <FormItem className="flex flex-col gap-1">
-              <FormLabel>Reminder Date</FormLabel>
-              <FormControl>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "w-full pl-3 text-left font-normal",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value ? (
-                          format(new Date(field.value), "PPP")
-                        ) : (
-                          <span>Pick a date</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value!}
-                      onSelect={field.onChange}
-                      disablePastDays
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-              </FormControl>
+            <FormItem>
+              <FormLabel>Reminder Type</FormLabel>
+              <Select
+                onValueChange={(value) => {
+                  field.onChange(value);
+                }}
+                defaultValue={reminderToBeUpdated?.type! || field.value}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a reminder type" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent className="max-h-[200px] overflow-y-auto">
+                  {reminderTypeOptions.map((option) => (
+                    <SelectItem
+                      key={option.value}
+                      value={option.value.toString()}
+                    >
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}
         />
+        {form.watch("type") === "RECURRING" && (
+          <FormField
+            control={form.control}
+            name="recurrence"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Reminder Recurrence</FormLabel>
+                <Select
+                  onValueChange={(value) => {
+                    field.onChange(value);
+                  }}
+                  defaultValue={reminderToBeUpdated?.recurrence! || field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a recurrence period" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent className="max-h-[200px] overflow-y-auto">
+                    {recurrenceOptions.map((option) => (
+                      <SelectItem
+                        key={option.value}
+                        value={option.value.toString()}
+                      >
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+        {form.watch("type") === "ONE_TIME" && (
+          <FormField
+            control={form.control}
+            name="reminderDate"
+            render={({ field }) => (
+              <FormItem className="flex flex-col gap-1">
+                <FormLabel>Reminder Date</FormLabel>
+                <FormControl>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "w-full pl-3 text-left font-normal",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          {field.value ? (
+                            format(new Date(field.value), "PPP")
+                          ) : (
+                            <span>Pick a date</span>
+                          )}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={field.value!}
+                        onSelect={field.onChange}
+                        disablePastDays
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+
         <Button
           className="w-full"
           type="submit"

@@ -180,7 +180,6 @@ const TransactionForm = ({
               <FormLabel>Account</FormLabel>
               <Select
                 onValueChange={(value) => {
-                  console.log(value);
                   field.onChange(value);
                 }}
                 defaultValue={

@@ -258,7 +258,7 @@ export const reminders = mysqlTable(
       "EVERY_5_DAYS",
       "EVERY_6_DAYS",
       "WEEKLY",
-      "EVENT_TWO_WEEKS",
+      "EVERY_TWO_WEEKS",
       "MONTHLY",
       "WEEKDAYS",
       "WEEKENDS",
