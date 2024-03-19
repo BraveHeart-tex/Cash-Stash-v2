@@ -59,7 +59,7 @@ const Dashboard = async () => {
       description:
         "You can view your accounts here. Visit the 'Accounts' page to see all your accounts.",
       data: (
-        <div className="max-h-[330px] min-h-[330px] lg:max-h-[350px] lg:min-h-[350px] overflow-y-scroll scrollbar-hide">
+        <div className="max-h-[330px] min-h-[330px] lg:max-h-[350px] lg:min-h-[350px] overflow-y-auto scrollbar-hide">
           <AccountSummaries accounts={accountsResult.accounts} />
         </div>
       ),
@@ -69,7 +69,7 @@ const Dashboard = async () => {
       description:
         "You can check your budgets here. Click on the budget card to see details or create a new one using the menu button above.",
       data: (
-        <div className="max-h-[300px] min-h-[300px] lg:max-h-[350px] lg:min-h-[350px] overflow-y-scroll scrollbar-hide">
+        <div className="max-h-[300px] min-h-[300px] lg:max-h-[350px] lg:min-h-[350px] overflow-y-auto">
           <BudgetStatus budgets={budgetsResult.budgets} />
         </div>
       ),
@@ -79,7 +79,7 @@ const Dashboard = async () => {
       description:
         "Check your goals here. Click on a goal card to view or edit its details or create a new one by clicking the menu button above.",
       data: (
-        <div className="max-h-[300px] min-h-[300px] lg:max-h-[350px] lg:min-h-[350px] overflow-y-scroll scrollbar-hide">
+        <div className="max-h-[300px] min-h-[300px] lg:max-h-[350px] lg:min-h-[350px] overflow-y-auto">
           <GoalStatus goals={goalsResult.goals} />
         </div>
       ),
@@ -96,7 +96,7 @@ const Dashboard = async () => {
       description:
         "Get a comparison of your expenses vs income and other financial insights here.",
       data: (
-        <div className="p-2 max-h-[500px] min-h-[500px] overflow-y-scroll scrollbar-hide flex flex-col gap-4 items-center justify-center">
+        <div className="p-2 max-h-[500px] min-h-[500px] overflow-y-auto flex flex-col gap-4 items-center justify-center">
           <BarChartComponent
             monthlyTransactionsData={monthlyTransactions.data || []}
           />
