@@ -17,13 +17,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { getTransactionsForAccount } from "@/actions/account";
-import AccountCard from "@/components/account-card";
 import TransactionCard from "@/components/transactions/transaction-card";
 import { FaSpinner } from "react-icons/fa";
 import {
   AccountSelectModel,
   TransactionSelectModel,
 } from "@/lib/database/schema";
+import AccountCardContent from "./account-card-content";
 
 interface ILatestAccountTransactionsDialogProps {
   selectedAccount: AccountSelectModel | null;
@@ -42,7 +42,7 @@ const LatestAccountTransactionsDialog = ({
   const visible = !!selectedAccount;
 
   const title = `Latest Transactions For : ${selectedAccount?.name || ""}`;
-  const description = `You can see the last ${transactions.length} transactions for this
+  const description = `You can see the last ${transactions.length} transaction${transactions.length === 1 ? "" : "s"} for this
   account below.`;
 
   useEffect(() => {
@@ -70,6 +70,8 @@ const LatestAccountTransactionsDialog = ({
     );
   };
 
+  if (!selectedAccount) return null;
+
   if (isMobile) {
     return (
       <Drawer
@@ -84,22 +86,18 @@ const LatestAccountTransactionsDialog = ({
             <DrawerDescription>{description}</DrawerDescription>
           </DrawerHeader>
           <div className="px-4">
-            {selectedAccount && (
-              <>
-                <AccountCard showPopover={false} account={selectedAccount} />
-                <div className="max-h-[400px] overflow-auto">
-                  {transactions.map((transaction) => (
-                    <TransactionCard
-                      key={transaction.id}
-                      transaction={{
-                        ...transaction,
-                        accountName: selectedAccount.name,
-                      }}
-                    />
-                  ))}
-                </div>
-              </>
-            )}
+            <AccountCardContent account={selectedAccount} />
+            <div className="max-h-[400px] overflow-auto">
+              {transactions.map((transaction) => (
+                <TransactionCard
+                  key={transaction.id}
+                  transaction={{
+                    ...transaction,
+                    accountName: selectedAccount.name,
+                  }}
+                />
+              ))}
+            </div>
             {isPending && renderLoadingState()}
             {!isPending && transactions.length === 0 && renderEmptyState()}
           </div>
@@ -120,28 +118,24 @@ const LatestAccountTransactionsDialog = ({
         if (!isOpen) onClose();
       }}
     >
-      <DialogContent>
+      <DialogContent className="flex flex-col">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
 
-        {selectedAccount && (
-          <>
-            <AccountCard showPopover={false} account={selectedAccount} />
-            <div className="max-h-[400px] overflow-auto">
-              {transactions.map((transaction) => (
-                <TransactionCard
-                  key={transaction.id}
-                  transaction={{
-                    ...transaction,
-                    accountName: selectedAccount.name,
-                  }}
-                />
-              ))}
-            </div>
-          </>
-        )}
+        <AccountCardContent account={selectedAccount} />
+        <div className="max-h-[400px] overflow-auto">
+          {transactions.map((transaction) => (
+            <TransactionCard
+              key={transaction.id}
+              transaction={{
+                ...transaction,
+                accountName: selectedAccount.name,
+              }}
+            />
+          ))}
+        </div>
         {isPending && renderLoadingState()}
         {!isPending && transactions.length === 0 && renderEmptyState()}
       </DialogContent>
