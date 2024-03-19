@@ -10,6 +10,7 @@ const Drawer = ({
   ...props
 }: React.ComponentProps<typeof DrawerPrimitive.Root>) => (
   <DrawerPrimitive.Root
+    modal
     shouldScaleBackground={shouldScaleBackground}
     {...props}
   />
@@ -42,10 +43,7 @@ const DrawerContent = React.forwardRef<
     <DrawerOverlay />
     <DrawerPrimitive.Content
       onInteractOutside={(event) => {
-        console.log("onInteractOutside");
-
         const { originalEvent } = event.detail;
-
         if (
           originalEvent.target instanceof Element &&
           originalEvent.target.closest(".group.toast")

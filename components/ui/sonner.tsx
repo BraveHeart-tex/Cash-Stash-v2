@@ -2,11 +2,13 @@
 
 import { useTheme } from "next-themes";
 import { Toaster as Sonner } from "sonner";
+import { useMediaQuery } from "usehooks-ts";
 
 type ToasterProps = React.ComponentProps<typeof Sonner>;
 
 const SonnerToaster = ({ ...props }: ToasterProps) => {
   const { theme = "system" } = useTheme();
+  const isMobile = useMediaQuery("(max-width: 640px)");
 
   return (
     <Sonner
@@ -14,6 +16,7 @@ const SonnerToaster = ({ ...props }: ToasterProps) => {
       richColors
       closeButton
       className="toaster group"
+      position={isMobile ? "top-center" : "bottom-right"}
       toastOptions={{
         classNames: {
           toast:
