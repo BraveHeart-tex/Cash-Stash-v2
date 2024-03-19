@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils/stringUtils/cn";
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
   disableFutureDays?: boolean;
+  disablePastDays?: boolean;
 };
 
 function Calendar({
@@ -16,6 +17,7 @@ function Calendar({
   classNames,
   showOutsideDays = true,
   disableFutureDays = false,
+  disablePastDays = false,
   ...props
 }: CalendarProps) {
   return (
@@ -61,7 +63,13 @@ function Calendar({
         day_hidden: "invisible",
         ...classNames,
       }}
-      disabled={disableFutureDays ? { after: new Date() } : false}
+      disabled={
+        disableFutureDays
+          ? { after: new Date() }
+          : disablePastDays
+            ? { before: new Date() }
+            : undefined
+      }
       components={{
         IconLeft: ({ ...props }) => <ChevronLeftIcon className="h-4 w-4" />,
         IconRight: ({ ...props }) => <ChevronRightIcon className="h-4 w-4" />,
