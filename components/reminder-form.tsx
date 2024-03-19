@@ -191,7 +191,7 @@ const ReminderForm = ({ data: reminderToBeUpdated }: IReminderFormProps) => {
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
                       mode="single"
-                      selected={field.value || new Date()}
+                      selected={field.value!}
                       onSelect={field.onChange}
                       disablePastDays
                       initialFocus
