@@ -249,6 +249,7 @@ export const reminders = mysqlTable(
     ),
     markedAsReadAt: datetime("markedAsReadAt", { mode: "string", fsp: 3 }),
     status: mysqlEnum("status", ["PENDING", "COMPLETED"]).default("PENDING"),
+    type: mysqlEnum("type", ["ONE_TIME", "RECURRING"]).default("ONE_TIME"),
   },
   (table) => {
     return {

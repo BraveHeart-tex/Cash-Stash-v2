@@ -1,0 +1,1 @@
+ALTER TABLE `Reminder` ADD `type` enum('ONE_TIME','RECURRING') DEFAULT 'ONE_TIME';
