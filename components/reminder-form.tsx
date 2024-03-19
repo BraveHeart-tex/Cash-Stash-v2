@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useTransition } from "react";
 import useGenericModalStore from "@/store/genericModalStore";
 import { toast } from "sonner";
-import { ReminderSelectModel } from "@/lib/database/schema";
+import { ReminderSelectModel, reminders } from "@/lib/database/schema";
 import { formHasChanged } from "@/lib/utils/objectUtils/formHasChanged";
 import reminderSchema, { ReminderSchemaType } from "@/schemas/reminder-schema";
 import { Textarea } from "@/components/ui/textarea";
@@ -30,6 +30,7 @@ import { format } from "date-fns";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { Calendar } from "@/components/ui/calendar";
 import { createReminder, updateReminder } from "@/actions/reminder";
+import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
 
 interface IReminderFormProps {
   data?: ReminderSelectModel;
@@ -118,6 +119,10 @@ const ReminderForm = ({ data: reminderToBeUpdated }: IReminderFormProps) => {
     return entityId ? "Update" : "Create";
   };
 
+  const recurrenceOptions = generateOptionsFromEnums(
+    reminders.recurrence.enumValues
+  );
+
   return (
     <Form {...form}>
       <form
@@ -186,7 +191,7 @@ const ReminderForm = ({ data: reminderToBeUpdated }: IReminderFormProps) => {
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
                       mode="single"
-                      selected={field.value}
+                      selected={field.value || new Date()}
                       onSelect={field.onChange}
                       disablePastDays
                       initialFocus

@@ -250,6 +250,20 @@ export const reminders = mysqlTable(
     markedAsReadAt: datetime("markedAsReadAt", { mode: "string", fsp: 3 }),
     status: mysqlEnum("status", ["PENDING", "COMPLETED"]).default("PENDING"),
     type: mysqlEnum("type", ["ONE_TIME", "RECURRING"]).default("ONE_TIME"),
+    recurrence: mysqlEnum("recurrence", [
+      "DAILY",
+      "EVERY_2_DAYS",
+      "EVERY_3_DAYS",
+      "EVERY_4_DAYS",
+      "EVERY_5_DAYS",
+      "EVERY_6_DAYS",
+      "WEEKLY",
+      "EVENT_TWO_WEEKS",
+      "MONTHLY",
+      "WEEKDAYS",
+      "WEEKENDS",
+      "YEARLY",
+    ]).default("DAILY"),
   },
   (table) => {
     return {
