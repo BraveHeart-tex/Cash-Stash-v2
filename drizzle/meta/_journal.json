@@ -71,6 +71,13 @@
       "when": 1710766563215,
       "tag": "0009_handy_penance",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1710853428374,
+      "tag": "0010_late_liz_osborn",
+      "breakpoints": true
     }
   ]
 }

@@ -248,6 +248,7 @@ export const reminders = mysqlTable(
       sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`
     ),
     markedAsReadAt: datetime("markedAsReadAt", { mode: "string", fsp: 3 }),
+    status: mysqlEnum("status", ["PENDING", "COMPLETED"]).default("PENDING"),
   },
   (table) => {
     return {
