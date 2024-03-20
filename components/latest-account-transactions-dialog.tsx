@@ -8,7 +8,6 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState, useTransition } from "react";
 import {
   Dialog,
   DialogContent,
@@ -16,9 +15,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { getTransactionsForAccount } from "@/actions/account";
 import TransactionCard from "@/components/transactions/transaction-card";
-import { FaSpinner } from "react-icons/fa";
 import {
   AccountSelectModel,
   TransactionSelectModel,
@@ -26,7 +23,11 @@ import {
 import AccountCardContent from "./account-card-content";
 
 interface ILatestAccountTransactionsDialogProps {
-  selectedAccount: AccountSelectModel | null;
+  selectedAccount:
+    | (AccountSelectModel & {
+        transactions: TransactionSelectModel[];
+      })
+    | null;
   onClose: () => void;
 }
 
@@ -34,43 +35,17 @@ const LatestAccountTransactionsDialog = ({
   onClose,
   selectedAccount,
 }: ILatestAccountTransactionsDialogProps) => {
-  let [isPending, startTransition] = useTransition();
-  const [transactions, setTransactions] = useState<TransactionSelectModel[]>(
-    []
-  );
   const isMobile = useMediaQuery("(max-width: 768px)");
-  const visible = !!selectedAccount;
-
-  const title = `Latest Transactions For : ${selectedAccount?.name || ""}`;
-  const description = `You can see the last ${transactions.length} transaction${transactions.length === 1 ? "" : "s"} for this
-  account below.`;
-
-  useEffect(() => {
-    if (selectedAccount) {
-      startTransition(async () => {
-        const response = await getTransactionsForAccount(selectedAccount.id);
-        setTransactions(response);
-      });
-    }
-  }, [selectedAccount]);
-
-  const renderLoadingState = () => {
-    return (
-      <div className="flex items-center justify-center h-48">
-        <FaSpinner className="animate-spin" />
-      </div>
-    );
-  };
-
-  const renderEmptyState = () => {
-    return (
-      <div className="flex items-center justify-center h-48">
-        No transactions found for this account.
-      </div>
-    );
-  };
+  const visible = !!(
+    selectedAccount && selectedAccount.transactions.length > 0
+  );
 
   if (!selectedAccount) return null;
+  const { transactions } = selectedAccount;
+
+  const title = `Latest Transactions For : ${selectedAccount.name || ""}`;
+  const description = `You can see the last ${transactions.length} transaction${transactions.length === 1 ? "" : "s"} for this
+  account below.`;
 
   if (isMobile) {
     return (
@@ -98,8 +73,6 @@ const LatestAccountTransactionsDialog = ({
                 />
               ))}
             </div>
-            {isPending && renderLoadingState()}
-            {!isPending && transactions.length === 0 && renderEmptyState()}
           </div>
           <DrawerFooter className="pt-2">
             <Button variant="ghost" onClick={onClose}>
@@ -136,8 +109,6 @@ const LatestAccountTransactionsDialog = ({
             />
           ))}
         </div>
-        {isPending && renderLoadingState()}
-        {!isPending && transactions.length === 0 && renderEmptyState()}
       </DialogContent>
     </Dialog>
   );

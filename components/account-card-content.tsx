@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import useGenericModalStore from "@/store/genericModalStore";
-import { deleteAccount } from "@/actions/account";
+import { deleteAccount, getTransactionsForAccount } from "@/actions/account";
 import ActionPopover from "@/components/action-popover";
 import { RxCross1, RxPencil2 } from "react-icons/rx";
 import { GiTakeMyMoney } from "react-icons/gi";
@@ -11,22 +11,29 @@ import { toast } from "sonner";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import { generateLabelFromEnumValue } from "@/lib/utils/stringUtils/generateLabelFromEnumValue";
-import { AccountSelectModel } from "@/lib/database/schema";
-import { useEffect } from "react";
+import {
+  AccountSelectModel,
+  TransactionSelectModel,
+} from "@/lib/database/schema";
+import { useTransition } from "react";
 
 interface IAccountCardContentProps {
   account: AccountSelectModel;
   className?: string;
   showPopover?: boolean;
-  setSelectedAccount?: (account: AccountSelectModel) => void;
+  setSelectedAccount?: (
+    // eslint-disable-next-line no-unused-vars
+    account: AccountSelectModel & { transactions: TransactionSelectModel[] }
+  ) => void;
 }
 
 const AccountCardContent = ({
   account,
+  setSelectedAccount,
   className,
   showPopover,
-  setSelectedAccount,
 }: IAccountCardContentProps) => {
+  let [isPending, startTransition] = useTransition();
   const router = useRouter();
   const openGenericModal = useGenericModalStore(
     (state) => state.openGenericModal
@@ -34,10 +41,6 @@ const AccountCardContent = ({
   const showGenericConfirm = useGenericConfirmStore(
     (state) => state.showConfirm
   );
-
-  useEffect(() => {
-    console.log("AccountCardContent rendered");
-  }, []);
 
   const accountCategory =
     generateLabelFromEnumValue(account.category) + " Account";
@@ -76,8 +79,31 @@ const AccountCardContent = ({
     });
   };
 
+  const fetchTransactionsForSelectedAccount = () => {
+    return new Promise((resolve, reject) => {
+      startTransition(async () => {
+        const response = await getTransactionsForAccount(account.id);
+        if (response.length === 0) {
+          reject("No transactions found for this account.");
+        }
+
+        setSelectedAccount &&
+          setSelectedAccount({
+            ...account,
+            transactions: response,
+          });
+
+        resolve(response);
+      });
+    });
+  };
+
   const handleShowLatestTransactions = () => {
-    setSelectedAccount && setSelectedAccount(account);
+    toast.promise(fetchTransactionsForSelectedAccount, {
+      loading: "Fetching transactions...",
+      success: "Transactions fetched successfully!",
+      error: "No transactions found for this account.",
+    });
   };
 
   return (
@@ -99,17 +125,26 @@ const AccountCardContent = ({
             {
               icon: GiTakeMyMoney,
               label: "Show Latest Transactions",
-              onClick: () => handleShowLatestTransactions(),
+              onClick: () => {
+                if (isPending) return;
+                handleShowLatestTransactions();
+              },
             },
             {
               icon: RxPencil2,
               label: "Edit",
-              onClick: () => handleEditAccount(),
+              onClick: () => {
+                if (isPending) return;
+                handleEditAccount();
+              },
             },
             {
               icon: RxCross1,
               label: "Delete",
-              onClick: () => handleDeleteAccount(account.id),
+              onClick: () => {
+                if (isPending) return;
+                handleDeleteAccount(account.id);
+              },
             },
           ]}
           positionAbsolute

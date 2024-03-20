@@ -1,7 +1,10 @@
 "use client";
 import LatestAccountTransactionsDialog from "./latest-account-transactions-dialog";
 import { useState } from "react";
-import { AccountSelectModel } from "@/lib/database/schema";
+import {
+  AccountSelectModel,
+  TransactionSelectModel,
+} from "@/lib/database/schema";
 import AccountCardContent from "./account-card-content";
 
 interface IAccountCardProps {
@@ -11,8 +14,9 @@ interface IAccountCardProps {
 }
 
 const AccountCard = ({ account }: IAccountCardProps) => {
-  const [selectedAccount, setSelectedAccount] =
-    useState<AccountSelectModel | null>(null);
+  const [selectedAccount, setSelectedAccount] = useState<
+    (AccountSelectModel & { transactions: TransactionSelectModel[] }) | null
+  >(null);
 
   return (
     <div>
