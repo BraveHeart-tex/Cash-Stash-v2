@@ -235,7 +235,7 @@ export const reminders = mysqlTable(
     reminderDate: datetime("reminderDate", {
       mode: "string",
       fsp: 3,
-    }).notNull(),
+    }),
     userId: varchar("userId", {
       length: 128,
     })

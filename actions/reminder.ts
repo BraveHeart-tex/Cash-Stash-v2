@@ -28,9 +28,9 @@ export const createReminder = async (
 
     const createdReminder = await reminderRepository.create({
       ...validatedData,
-      reminderDate: convertISOToMysqlDatetime(
-        validatedData.reminderDate.toISOString()
-      ),
+      reminderDate: validatedData.reminderDate
+        ? convertISOToMysqlDatetime(validatedData.reminderDate.toISOString())
+        : null,
       userId: user.id,
     });
 
@@ -66,9 +66,9 @@ export const updateReminder = async (
 
     const affectedRows = await reminderRepository.update(reminder.id, {
       ...validatedData,
-      reminderDate: convertISOToMysqlDatetime(
-        validatedData.reminderDate.toISOString()
-      ),
+      reminderDate: validatedData.reminderDate
+        ? convertISOToMysqlDatetime(validatedData.reminderDate.toISOString())
+        : null,
     });
 
     if (!affectedRows) {

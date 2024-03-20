@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Pencil1Icon } from "@radix-ui/react-icons";
 
 import MotionDiv from "./animations/motion-div";
@@ -16,7 +15,9 @@ const ReminderCard = ({ reminder }: IReminderCardProps) => {
   );
   const today = new Date();
 
-  const isPastReminderDate = new Date(reminder.reminderDate) < today;
+  const isPastReminderDate = reminder.reminderDate
+    ? new Date(reminder.reminderDate) < today
+    : false;
 
   return (
     <MotionDiv
@@ -28,29 +29,20 @@ const ReminderCard = ({ reminder }: IReminderCardProps) => {
       className="flex items-center flex-col gap-1 rounded-md bg-card p-4 shadow-xl relative border"
       key={reminder.id}
     >
-      <div className="w-full flex flex-row md:items-center justify-between">
-        <p className="font-semibold">{reminder.title}</p>
-        {isPastReminderDate ? (
-          <Badge className="w-max mb-2 bg-destructive cursor-pointer select-none">
-            Past Reminder Date
-          </Badge>
-        ) : (
-          <Badge className="ml-2 bg-tertiary cursor-pointer select-none hover:bg-tertiary/80">
-            Reminder
-          </Badge>
-        )}
-      </div>
+      <p className="font-semibold">{reminder.title}</p>
 
-      <div className="w-full">
-        <p className="text-md text-foreground">
-          <span className="font-semibold text-primary">Reminder Date:</span>{" "}
-          {new Date(reminder.reminderDate).toLocaleDateString("tr-TR", {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric",
-          })}
-        </p>
-      </div>
+      {reminder.reminderDate && (
+        <div className="w-full">
+          <p className="text-md text-foreground">
+            <span className="font-semibold text-primary">Reminder Date:</span>{" "}
+            {new Date(reminder.reminderDate).toLocaleDateString("tr-TR", {
+              year: "numeric",
+              month: "numeric",
+              day: "numeric",
+            })}
+          </p>
+        </div>
+      )}
       <div className="w-full flex items-center gap-1 mt-2">
         <span className="font-semibold text-primary">Notes:</span>
         <p className="text-foreground">{reminder.description}</p>

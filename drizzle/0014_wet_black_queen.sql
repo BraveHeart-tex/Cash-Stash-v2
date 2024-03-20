@@ -1,0 +1,1 @@
+ALTER TABLE `Reminder` MODIFY COLUMN `reminderDate` datetime(3);
