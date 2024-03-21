@@ -7,12 +7,12 @@ import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import useGenericModalStore from "@/store/genericModalStore";
 import { deleteBudget } from "@/actions/budget";
 import ActionPopover from "@/components/action-popover";
-import { RxCross1, RxPencil2 } from "react-icons/rx";
 import { toast } from "sonner";
 import { BudgetSelectModel } from "@/lib/database/schema";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import { generateLabelFromEnumValue } from "@/lib/utils/stringUtils/generateLabelFromEnumValue";
+import { FaEdit, FaTrash } from "react-icons/fa";
 
 interface IBudgetCardProps {
   budget: BudgetSelectModel;
@@ -98,12 +98,12 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
             triggerClassName="top-0 right-0 mb-0"
             options={[
               {
-                icon: RxPencil2,
+                icon: FaEdit,
                 label: "Edit",
                 onClick: () => handleEditClick(),
               },
               {
-                icon: RxCross1,
+                icon: FaTrash,
                 label: "Delete",
                 onClick: () => handleDeleteClick(budget.id),
               },

@@ -7,11 +7,11 @@ import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import useGenericModalStore from "@/store/genericModalStore";
 import { deleteGoal } from "@/actions/goal";
 import ActionPopover from "@/components/action-popover";
-import { RxCross1, RxPencil2 } from "react-icons/rx";
 import { toast } from "sonner";
 import { GoalSelectModel } from "@/lib/database/schema";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import { cn } from "@/lib/utils/stringUtils/cn";
+import { FaEdit, FaTrash } from "react-icons/fa";
 
 interface IGoalCardProps {
   goal: GoalSelectModel;
@@ -88,12 +88,12 @@ const GoalCard = ({ goal }: IGoalCardProps) => {
             triggerClassName="top-0 right-0 mb-0"
             options={[
               {
-                icon: RxPencil2,
+                icon: FaEdit,
                 label: "Edit",
                 onClick: () => handleEditGoal(),
               },
               {
-                icon: RxCross1,
+                icon: FaTrash,
                 label: "Delete",
                 onClick: () => handleDeleteGoal(goal.id),
               },
