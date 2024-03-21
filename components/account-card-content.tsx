@@ -5,13 +5,12 @@ import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import useGenericModalStore from "@/store/genericModalStore";
 import { deleteAccount } from "@/actions/account";
 import ActionPopover from "@/components/action-popover";
-import { RxCross1, RxPencil2 } from "react-icons/rx";
-import { GiTakeMyMoney } from "react-icons/gi";
 import { toast } from "sonner";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import { generateLabelFromEnumValue } from "@/lib/utils/stringUtils/generateLabelFromEnumValue";
 import { AccountWithTransactions } from "@/actions/types";
+import { FaTrash, FaEdit, FaRegCreditCard } from "react-icons/fa";
 
 interface IAccountCardContentProps {
   account: AccountWithTransactions;
@@ -91,18 +90,18 @@ const AccountCardContent = ({
           heading="Account Actions"
           options={[
             {
-              icon: GiTakeMyMoney,
+              icon: FaRegCreditCard,
               label: "Show Latest Transactions",
               onClick: () => setSelectedAccount?.(account),
               visible: account.transactions.length > 0,
             },
             {
-              icon: RxPencil2,
+              icon: FaEdit,
               label: "Edit",
               onClick: handleEditAccount,
             },
             {
-              icon: RxCross1,
+              icon: FaTrash,
               label: "Delete",
               onClick: handleDeleteAccount,
             },

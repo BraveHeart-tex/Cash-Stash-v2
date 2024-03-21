@@ -1,9 +1,8 @@
-import { Button } from "@/components/ui/button";
-import { Pencil1Icon } from "@radix-ui/react-icons";
-
 import MotionDiv from "./animations/motion-div";
 import useGenericModalStore from "@/store/genericModalStore";
 import { ReminderSelectModel } from "@/lib/database/schema";
+import ActionPopover from "./action-popover";
+import { FaCheck, FaEdit, FaTrash } from "react-icons/fa";
 
 interface IReminderCardProps {
   reminder: ReminderSelectModel;
@@ -13,11 +12,22 @@ const ReminderCard = ({ reminder }: IReminderCardProps) => {
   const openGenericModal = useGenericModalStore(
     (state) => state.openGenericModal
   );
-  const today = new Date();
 
-  const isPastReminderDate = reminder.reminderDate
-    ? new Date(reminder.reminderDate) < today
-    : false;
+  const handleEditReminder = () => {
+    openGenericModal({
+      key: "reminder",
+      mode: "edit",
+      entityId: reminder.id,
+      dialogTitle: "Edit Your Reminder",
+      data: reminder,
+      dialogDescription:
+        "Edit the reminder details and click the save button to save the changes.",
+    });
+  };
+
+  const handleDeleteReminder = () => {};
+
+  const handleMarkAsRead = () => {};
 
   return (
     <MotionDiv
@@ -29,7 +39,7 @@ const ReminderCard = ({ reminder }: IReminderCardProps) => {
       className="flex items-center flex-col gap-1 rounded-md bg-card p-4 shadow-xl relative border"
       key={reminder.id}
     >
-      <p className="font-semibold">{reminder.title}</p>
+      <p className="font-semibold self-start mb-2">{reminder.title}</p>
 
       {reminder.reminderDate && (
         <div className="w-full">
@@ -48,26 +58,28 @@ const ReminderCard = ({ reminder }: IReminderCardProps) => {
         <p className="text-foreground">{reminder.description}</p>
       </div>
       <div className="my-2 h-1 bg-card" />
-      {/* TODO: Replace with ActionPopover */}
-      <Button
-        variant="ghost"
-        size="icon"
-        className="absolute bottom-0 right-1 hover:bg-transparent focus:outline-none outline-none"
-        aria-label="Edit notification"
-        onClick={() => {
-          openGenericModal({
-            key: "reminder",
-            mode: "edit",
-            entityId: reminder.id,
-            dialogTitle: "Edit Your Reminder",
-            data: reminder,
-            dialogDescription:
-              "Edit the reminder details and click the save button to save the changes.",
-          });
-        }}
-      >
-        <Pencil1Icon />
-      </Button>
+      <ActionPopover
+        heading="Reminder Actions"
+        positionAbsolute
+        triggerClassName="absolute top-0 right-1 hover:bg-transparent focus:outline-none outline-none"
+        options={[
+          {
+            label: "Mark as read",
+            icon: FaCheck,
+            onClick: handleMarkAsRead,
+          },
+          {
+            label: "Edit",
+            icon: FaEdit,
+            onClick: handleEditReminder,
+          },
+          {
+            label: "Delete",
+            icon: FaTrash,
+            onClick: handleDeleteReminder,
+          },
+        ]}
+      />
     </MotionDiv>
   );
 };
