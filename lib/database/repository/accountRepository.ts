@@ -5,7 +5,7 @@ import {
   accounts,
   AccountSelectModel,
 } from "@/lib/database/schema";
-import { and, asc, desc, eq, like, sql } from "drizzle-orm";
+import { and, eq, like, sql } from "drizzle-orm";
 
 interface IGetMultipleAccountsParams {
   userId: string;
@@ -79,26 +79,32 @@ const accountRepository = {
       ? eq(accounts.category, category)
       : undefined;
 
-    const orderByCondition =
-      sortBy && sortDirection
-        ? sortDirection.toUpperCase() === "DESC"
-          ? desc(accounts.balance)
-          : asc(accounts.balance)
-        : accounts.balance;
-
-    const accountsQuery = db
-      .select()
-      .from(accounts)
-      .where(
-        and(
-          eq(accounts.userId, userId),
-          like(accounts.name, `%${query}%`),
+    const accountsQuery = db.query.accounts.findMany({
+      with: {
+        transactions: true,
+      },
+      where(fields, operators) {
+        const { eq, like, and } = operators;
+        return and(
+          eq(fields.userId, userId),
+          like(fields.name, `%${query}%`),
           categoryCondition
-        )
-      )
-      .orderBy(orderByCondition)
-      .limit(pageSize)
-      .offset(skipAmount);
+        );
+      },
+      orderBy(fields, operators) {
+        const { desc, asc } = operators;
+        const orderByCondition =
+          sortBy && sortDirection
+            ? sortDirection.toUpperCase() === "DESC"
+              ? desc(fields.balance)
+              : asc(fields.balance)
+            : fields.balance;
+
+        return orderByCondition;
+      },
+      limit: pageSize,
+      offset: skipAmount,
+    });
 
     const accountCountQuery = db
       .select({
