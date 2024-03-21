@@ -41,7 +41,7 @@ export interface IGetPaginatedAccountsParams extends IPaginatedActionParams {
 }
 
 export interface IGetPaginatedAccountsResponse extends IPaginatedResponse {
-  accounts: AccountSelectModel[];
+  accounts: AccountWithTransactions[];
 }
 
 export interface IGetPaginatedBudgetsParams extends IPaginatedActionParams {

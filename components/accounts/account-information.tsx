@@ -1,10 +1,10 @@
 "use client";
 import AccountCard from "../account-card";
 import { motion } from "framer-motion";
-import { AccountSelectModel } from "@/lib/database/schema";
+import { AccountWithTransactions } from "@/actions/types";
 
 interface IAccountInformationProps {
-  userAccounts: AccountSelectModel[];
+  userAccounts: AccountWithTransactions[];
 }
 
 const AccountInformation = ({ userAccounts }: IAccountInformationProps) => {

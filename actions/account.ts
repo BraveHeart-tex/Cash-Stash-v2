@@ -184,7 +184,7 @@ export const getPaginatedAccounts = async ({
       console.info("getPaginatedAccounts CACHE HIT");
       const parsedData = JSON.parse(cachedData);
       return {
-        accounts: parsedData.accounts as AccountSelectModel[],
+        accounts: parsedData.accounts,
         hasNextPage: parsedData.totalCount > skipAmount + PAGE_SIZE,
         hasPreviousPage: pageNumber > 1,
         totalPages: Math.ceil(parsedData.totalCount / PAGE_SIZE),

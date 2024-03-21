@@ -5,9 +5,13 @@ import MotionDiv from "@/components/animations/motion-div";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { PAGE_ROUTES } from "@/lib/constants";
-import { AccountSelectModel } from "@/lib/database/schema";
+import { AccountWithTransactions } from "@/actions/types";
 
-const AccountSummaries = ({ accounts }: { accounts: AccountSelectModel[] }) => {
+const AccountSummaries = ({
+  accounts,
+}: {
+  accounts: AccountWithTransactions[];
+}) => {
   if (accounts.length === 0) {
     return (
       <article className="flex h-[300px] items-center justify-center">
