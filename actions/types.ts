@@ -157,3 +157,7 @@ export interface IGetPaginatedTransactionsParams
 export interface IGetPaginatedTransactionsResponse extends IPaginatedResponse {
   transactions: (TransactionSelectModel & { accountName: string })[];
 }
+
+export interface AccountWithTransactions extends AccountSelectModel {
+  transactions: TransactionSelectModel[];
+}

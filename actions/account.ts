@@ -181,7 +181,7 @@ export const getPaginatedAccounts = async ({
     const cachedData = await redisService.get(cacheKey);
 
     if (cachedData) {
-      console.info("CACHE HIT");
+      console.info("getPaginatedAccounts CACHE HIT");
       const parsedData = JSON.parse(cachedData);
       return {
         accounts: parsedData.accounts as AccountSelectModel[],
