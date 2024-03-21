@@ -13,6 +13,7 @@ type PopoverActionOption = {
   icon: IconType;
   label: string;
   onClick: () => void;
+  visible?: boolean;
 };
 
 interface IActionPopoverProps {
@@ -42,6 +43,10 @@ const ActionPopover = ({
     );
   };
 
+  const visibleOptions = options.filter((option) =>
+    "visible" in option ? option.visible : true
+  );
+
   return (
     <Popover>
       <PopoverTrigger
@@ -56,7 +61,7 @@ const ActionPopover = ({
         <h3 className="text-center font-semibold text-primary">{heading}</h3>
         <hr className="my-2" />
         <div className="grid grid-cols-1 gap-1">
-          {options.map((option) => (
+          {visibleOptions.map((option) => (
             <Button
               key={option.label}
               variant={"ghost"}
