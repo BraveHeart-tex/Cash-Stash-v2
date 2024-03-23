@@ -12,17 +12,6 @@ interface IFinancialInsightsProps {
   insightsData: InsightsData | null;
 }
 
-const NoDataMessage = () => (
-  <MotionDiv
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    transition={{ duration: 0.5 }}
-    className="grid grid-cols-1 gap-4 text-primary"
-  >
-    <p>No data was found to generate financial insights from.</p>
-  </MotionDiv>
-);
-
 const SavingsRate = ({ value }: { value: number }) => (
   <div className="mb-4 flex flex-col">
     <h3 className="font-semibold text-lg">Savings Rate</h3>
@@ -45,6 +34,17 @@ const SavingsRate = ({ value }: { value: number }) => (
 // and add vs last month if data is available
 const FinancialInsights = ({ insightsData }: IFinancialInsightsProps) => {
   const noInsightsData = Object.keys(insightsData || {}).length === 0;
+
+  const NoDataMessage = () => (
+    <MotionDiv
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="grid grid-cols-1 gap-4 text-primary"
+    >
+      <p>No data was found to generate financial insights from.</p>
+    </MotionDiv>
+  );
 
   if (!insightsData) return <NoDataMessage />;
 
