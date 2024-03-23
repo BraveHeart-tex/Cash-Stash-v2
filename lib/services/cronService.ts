@@ -1,8 +1,13 @@
 import { ACCOUNT_VERIFICATION_EXPIRATION_PERIOD_DAYS } from "@/lib/constants";
 import { db } from "@/lib/database/connection";
-import { emailVerificationCode, users } from "@/lib/database/schema";
+import { users } from "@/lib/database/schema";
 import { and, eq, lte } from "drizzle-orm";
 import { convertISOToMysqlDatetime } from "@/lib/utils/dateUtils/convertISOToMysqlDatetime";
+import { isExchangeRateResponse } from "@/lib/utils/typeGuards/isExchangeRateResponse";
+import { isExchangeRateResponseError } from "@/lib/utils/typeGuards/isExchangeRateError";
+import currencyRatesRepository from "../database/repository/currencyRatesRepository";
+import exchangeRatesService from "./exchangeRatesService";
+import emailVerificationCodeRepository from "../database/repository/emailVerificationCodeRepository";
 
 const cronService = {
   async deleteUnverifiedAccounts() {
@@ -32,12 +37,7 @@ const cronService = {
   },
   async deleteExpiredEmailVerificationTokens() {
     try {
-      const now = convertISOToMysqlDatetime(new Date().toISOString());
-
-      await db
-        .delete(emailVerificationCode)
-        .where(lte(emailVerificationCode.expiresAt, now));
-
+      await emailVerificationCodeRepository.deleteExpiredCodes();
       return true;
     } catch (error) {
       console.error("Error deleting expired email verification tokens", error);
@@ -45,7 +45,37 @@ const cronService = {
     }
   },
   async updateCurrencyRates() {
-    return true;
+    try {
+      const data = await exchangeRatesService.getLatestRates();
+
+      if (isExchangeRateResponse(data)) {
+        const mappedRates = Object.entries(data.rates).map(
+          ([currency, rate]) => {
+            return {
+              symbol: currency,
+              rate,
+            };
+          }
+        );
+
+        const upsertPromises = mappedRates.map(({ symbol, rate }) =>
+          currencyRatesRepository.updateCurrencyRate({ symbol, rate })
+        );
+
+        await Promise.all(upsertPromises);
+
+        return true;
+      } else if (isExchangeRateResponseError(data)) {
+        console.log("Error updating currency rates", data.description);
+        return false;
+      } else {
+        console.log("Error updating currency rates");
+        return false;
+      }
+    } catch (error) {
+      console.error("Error updating currency rates", error);
+      return false;
+    }
   },
 };
 

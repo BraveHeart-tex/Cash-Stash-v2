@@ -471,6 +471,24 @@ export const currencies = mysqlTable(
   }
 );
 
+export const currencyRates = mysqlTable(
+  "CurrencyRate",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    rate: double("rate").notNull(),
+    symbol: varchar("symbol", { length: 191 }).notNull(),
+  },
+  (table) => {
+    return {
+      currencyRateSymbolKey: unique("CurrencyRate_symbol_key").on(table.symbol),
+      currencyRateId: primaryKey({
+        columns: [table.id],
+        name: "CurrencyRate_id",
+      }),
+    };
+  }
+);
+
 export type UserInsertModel = InferInsertModel<typeof users>;
 export type UserSelectModel = InferSelectModel<typeof users>;
 
@@ -519,3 +537,6 @@ export type TwoFactorAuthenticationSecretSelectModel = InferSelectModel<
 
 export type CurrencyInsertModel = InferInsertModel<typeof currencies>;
 export type CurrencySelectModel = InferSelectModel<typeof currencies>;
+
+export type CurrencyRateInsertModel = InferInsertModel<typeof currencyRates>;
+export type CurrencyRateSelectModel = InferSelectModel<typeof currencyRates>;
