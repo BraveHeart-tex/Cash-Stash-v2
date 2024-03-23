@@ -161,3 +161,13 @@ export interface IGetPaginatedTransactionsResponse extends IPaginatedResponse {
 export interface AccountWithTransactions extends AccountSelectModel {
   transactions: TransactionSelectModel[];
 }
+
+export interface MonthlyTransactionsData {
+  date: string;
+  income: number;
+  expense: number;
+}
+
+export interface TransactionsWithAccountName extends TransactionSelectModel {
+  accountName: string;
+}

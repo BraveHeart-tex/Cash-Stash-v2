@@ -15,11 +15,11 @@ import useGenericModalStore from "@/store/genericModalStore";
 import ActionPopover from "@/components/action-popover";
 import { toast } from "sonner";
 import { TransactionSelectModel } from "@/lib/database/schema";
-import { format } from "date-fns";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import { generateLabelFromEnumValue } from "@/lib/utils/stringUtils/generateLabelFromEnumValue";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import { format } from "date-fns";
 
 interface ITransactionCardProps {
   transaction: TransactionSelectModel & { accountName: string };
@@ -69,13 +69,13 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
     });
   };
 
-  const formatTransactionDate = (date: string) => {
-    return format(new Date(date), "dd/MM/yyyy HH:mm");
-  };
-
   const transactionCategoryLabel = generateLabelFromEnumValue(
     transaction.category
   );
+
+  const formatTransactionDate = (date: string) => {
+    return format(new Date(date), "dd/MM/yyyy HH:mm");
+  };
 
   return (
     <motion.div

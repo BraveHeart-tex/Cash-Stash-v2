@@ -1,5 +1,5 @@
 "use client";
-import { MonthlyData } from "@/components/reports/report-table";
+import { MonthlyTransactionsData } from "@/actions/types";
 import {
   BarChart,
   Bar,
@@ -32,7 +32,9 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 
 const BarChartComponent = ({
   monthlyTransactionsData,
-}: Pick<MonthlyData, "monthlyTransactionsData">) => {
+}: {
+  monthlyTransactionsData: MonthlyTransactionsData[];
+}) => {
   if (monthlyTransactionsData.length === 0) {
     return null;
   }

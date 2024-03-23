@@ -1,9 +1,11 @@
-import { MonthlyData } from "@/components/reports/report-table";
+import { MonthlyTransactionsData } from "@/actions/types";
 import BarChartComponent from "@/components/charts/bar-chart";
 
 const ResponsiveChartContainer = ({
   monthlyTransactionsData,
-}: Pick<MonthlyData, "monthlyTransactionsData">) => {
+}: {
+  monthlyTransactionsData: MonthlyTransactionsData[];
+}) => {
   return (
     <div className="flex justify-center items-start flex-col gap-4 mt-10">
       <h3 className="text-4xl mb-4 text-primary">Income vs Expenses</h3>
