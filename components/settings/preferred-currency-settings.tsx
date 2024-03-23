@@ -6,8 +6,8 @@ const PreferredCurrencySettings = () => {
           Preffered Currency
         </h2>
         <p className="text-muted-foreground">
-          Select your preferred currency. This will be used to display
-          transactions in your preferred currency.
+          Select your preferred currency. This will be used to display amounts
+          in your preferred currency.
         </p>
       </div>
     </div>

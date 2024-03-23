@@ -1,4 +1,5 @@
-import SettingsList from "@/components/settings/settings-list";
+import PreferredCurrencySettings from "@/components/settings/preferred-currency-settings";
+import TwoFactorAuthenticationSettings from "@/components/settings/two-factor-authentication-settings";
 
 const SettingsPage = () => {
   return (
@@ -7,11 +8,14 @@ const SettingsPage = () => {
         <div className="flex flex-col gap-1">
           <h3 className="text-4xl text-primary">Settings</h3>
           <p className="text-muted-foreground">
-            You manage your preferences and settings here.
+            Customize your Cash Stash settings.
           </p>
         </div>
         <div className="mt-10">
-          <SettingsList />
+          <div className="flex flex-col gap-10">
+            <PreferredCurrencySettings />
+            <TwoFactorAuthenticationSettings />
+          </div>
         </div>
       </div>
     </div>
