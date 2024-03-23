@@ -56,7 +56,7 @@ export const fetchInsightsDataAction = async () => {
       .from(transactions)
       .where(and(eq(transactions.userId, user.id), amountQuery));
 
-    return result.sumAmount || 0;
+    return Math.abs(result.sumAmount);
   };
 
   const totalIncome = await aggregateTransaction(true);
@@ -66,6 +66,7 @@ export const fetchInsightsDataAction = async () => {
     return { error: "Error calculating net income" };
 
   const netIncome = totalIncome - totalExpense;
+
   const savingsRate = ((netIncome / totalIncome) * 100).toFixed(0);
 
   return {
