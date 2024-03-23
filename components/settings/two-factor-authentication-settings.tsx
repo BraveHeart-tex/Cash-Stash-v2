@@ -28,7 +28,11 @@ const TwoFactorAuthenticationSettings = () => {
         startTransition(async () => {
           const response = await disableTwoFactorAuthentication();
           if (response.successMessage) {
-            setUser({ ...user!, prefersTwoFactorAuthentication: false });
+            setUser({
+              ...user!,
+              prefersTwoFactorAuthentication: false,
+              activatedTwoFactorAuthentication: false,
+            });
             toast.success(response.successMessage);
           }
 

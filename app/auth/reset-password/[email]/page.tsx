@@ -49,7 +49,7 @@ const ResetPassword = async ({
           />
           <CardTitle>Reset Your Password</CardTitle>
           <CardDescription>
-            Use the form below to set your new password.
+            Please use the form below to create your new password.
           </CardDescription>
         </CardHeader>
         <CardContent>

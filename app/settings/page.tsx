@@ -1,3 +1,4 @@
+import NotificationSettings from "@/components/settings/notification-settings";
 import PreferredCurrencySettings from "@/components/settings/preferred-currency-settings";
 import TwoFactorAuthenticationSettings from "@/components/settings/two-factor-authentication-settings";
 
@@ -8,12 +9,13 @@ const SettingsPage = () => {
         <div className="flex flex-col gap-1">
           <h3 className="text-4xl text-primary">Settings</h3>
           <p className="text-muted-foreground">
-            Customize your Cash Stash settings.
+            Personalize your CashStash experience.
           </p>
         </div>
         <div className="mt-10">
           <div className="flex flex-col gap-10">
             <PreferredCurrencySettings />
+            <NotificationSettings />
             <TwoFactorAuthenticationSettings />
           </div>
         </div>
