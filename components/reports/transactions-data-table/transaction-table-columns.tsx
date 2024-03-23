@@ -16,8 +16,8 @@ export const transactionTableColumns: ColumnDef<TransactionWithAccount>[] = [
     header: "Date",
     cell: ({ row }) => {
       const formattedDate = format(
-        new Date(row.original.createdAt),
-        "dd/MM/yyyy HH:mm"
+        new Date(row.getValue("createdAt")),
+        "dd MMM yyyy HH:mm"
       );
       return <div>{formattedDate}</div>;
     },
