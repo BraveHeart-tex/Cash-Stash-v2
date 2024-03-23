@@ -457,6 +457,20 @@ export const userRelations = relations(users, ({ one, many }) => ({
   reminders: many(reminders),
 }));
 
+export const currencies = mysqlTable(
+  "Currency",
+  {
+    symbol: varchar("symbol", { length: 191 }).notNull(),
+    name: varchar("name", { length: 191 }).notNull(),
+  },
+  (table) => {
+    return {
+      currencyNameKey: unique("Currency_name_key").on(table.name),
+      currencySymbolKey: unique("Currency_symbol_key").on(table.symbol),
+    };
+  }
+);
+
 export type UserInsertModel = InferInsertModel<typeof users>;
 export type UserSelectModel = InferSelectModel<typeof users>;
 
@@ -502,3 +516,6 @@ export type TwoFactorAuthenticationSecretInsertModel = InferInsertModel<
 export type TwoFactorAuthenticationSecretSelectModel = InferSelectModel<
   typeof twoFactorAuthenticationSecrets
 >;
+
+export type CurrencyInsertModel = InferInsertModel<typeof currencies>;
+export type CurrencySelectModel = InferSelectModel<typeof currencies>;
