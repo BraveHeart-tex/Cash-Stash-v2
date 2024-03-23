@@ -4,7 +4,7 @@ import ResponsiveChartContainer from "../chart-container";
 import { getChartData } from "@/actions";
 import { getPaginatedTransactions } from "@/actions/transaction";
 import { DataTable } from "@/components/ui/data-table";
-import { transactionTableColumns } from "@/components/reports/transactions-data-table/columns";
+import { transactionTableColumns } from "@/components/reports/transactions-data-table/transaction-table-columns";
 
 const ReportsPage = async ({
   searchParams,
