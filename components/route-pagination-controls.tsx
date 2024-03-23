@@ -2,6 +2,7 @@
 import { useQueryState } from "nuqs";
 import { Button } from "./ui/button";
 import { useState } from "react";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 interface IPaginationControlsProps {
   currentPage: number;
@@ -38,19 +39,23 @@ const RoutePaginationControls = ({
       <Button
         onClick={() => handlePageChange("decrement")}
         disabled={!hasPreviousPage || changingPage || currentPage === 1}
-        className="select-none"
+        className="select-none flex items-center gap-1"
+        variant="outline"
       >
+        <FaChevronLeft />
         Previous
       </Button>
-      <div>
+      <span className="font-medium text-foreground text-sm">
         Page {currentPage} of {totalPages}
-      </div>
+      </span>
       <Button
         onClick={() => handlePageChange("increment")}
         disabled={!hasNextPage || changingPage || totalPages === currentPage}
-        className="select-none"
+        className="select-none flex items-center gap-1"
+        variant="outline"
       >
         Next
+        <FaChevronRight />
       </Button>
     </div>
   );

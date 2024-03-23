@@ -11,6 +11,7 @@ import RouteFiltersPopover from "@/components/route-filters-popover";
 import { createGetPaginatedTransactionsParams } from "@/lib/utils/misc";
 import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
 import { transactions } from "@/lib/database/schema";
+import RoutePaginationControls from "@/components/route-pagination-controls";
 
 export interface ITransactionPageSearchParams {
   transactionType?: string;
@@ -117,7 +118,7 @@ const TransactionsPage = async ({
             </div>
           </div>
         )}
-        <div>
+        <div className="h-[500px] lg:pr-4 mt-2 lg:mt-0 overflow-auto w-full">
           {transactionsResponse.transactions.length > 0 ? (
             <TransactionList transactions={transactionsResponse.transactions} />
           ) : (
@@ -125,6 +126,9 @@ const TransactionsPage = async ({
           )}
         </div>
       </div>
+      {transactionsResponse.totalPages > 1 && (
+        <RoutePaginationControls {...transactionsResponse} />
+      )}
     </main>
   );
 };

@@ -235,7 +235,7 @@ export const getPaginatedTransactions = async ({
     const cachedData = await redisService.get(cacheKey);
 
     if (cachedData) {
-      console.log("Using cached data", cachedData);
+      console.log("PAGINATED TRANSACTIONS CACHE HIT");
       const parsedData = JSON.parse(cachedData);
       const cachedResult = parsedData.transactions;
       const totalCount = parsedData.totalCount;

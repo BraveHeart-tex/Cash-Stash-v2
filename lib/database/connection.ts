@@ -5,6 +5,9 @@ import { drizzle } from "drizzle-orm/mysql2";
 import { sessions, users } from "@/lib/database/schema";
 import * as schema from "@/lib/database/schema";
 import { Logger } from "drizzle-orm/logger";
+import * as dotenv from "dotenv";
+
+dotenv.config();
 
 export const pool = mysql.createPool({
   host: process.env.DATABASE_HOST,

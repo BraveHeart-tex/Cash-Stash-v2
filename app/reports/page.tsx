@@ -46,7 +46,7 @@ const ReportsPage = async ({
             spending is doing.
           </p>
         </div>
-        {/* TODO: Filter by account, sort by amount, search via description */}
+        {/* TODO: Filter by account, sort by amount*/}
         <DataTable
           columns={transactionTableColumns}
           data={transactionsResult.transactions}
