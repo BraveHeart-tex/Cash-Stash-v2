@@ -5,8 +5,8 @@ import { FaMoneyBill } from "react-icons/fa";
 import Link from "next/link";
 import MotionDiv from "@/components/animations/motion-div";
 import { PAGE_ROUTES } from "@/lib/constants";
-import { thousandSeparator } from "@/lib/utils/numberUtils/thousandSeparator";
 import { cn } from "@/lib/utils/stringUtils/cn";
+import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 
 interface IFinancialInsightsProps {
   insightsData: InsightsData | null;
@@ -112,7 +112,7 @@ const FinancialInsights = ({ insightsData }: IFinancialInsightsProps) => {
         ) : (
           <div className="mb-4 flex flex-col" key={data.name}>
             <h3 className="font-bold text-lg">{data.name}</h3>
-            <p>{thousandSeparator(data.value as number)}$</p>
+            <p>{formatMoney(+data.value)}</p>
           </div>
         )
       )}
