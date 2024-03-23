@@ -30,7 +30,7 @@ const SavingsRate = ({ value }: { value: number }) => (
     <p
       className={cn(
         "font-semibold",
-        value > 0 ? "text-green-500" : "text-red-500"
+        value > 0 ? "text-success" : "text-destructive"
       )}
     >
       {value > 0
@@ -40,6 +40,9 @@ const SavingsRate = ({ value }: { value: number }) => (
   </div>
 );
 
+// TODO: Refactor majority of the logic to server side
+// only show the stats for this month here
+// and add vs last month if data is available
 const FinancialInsights = ({ insightsData }: IFinancialInsightsProps) => {
   const noInsightsData = Object.keys(insightsData || {}).length === 0;
 

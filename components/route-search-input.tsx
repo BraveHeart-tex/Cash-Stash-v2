@@ -28,7 +28,7 @@ const RouteSearchInput = ({ placeholder }: { placeholder: string }) => {
         onChange={handleInputChange}
         placeholder={placeholder}
       />
-      <FaSearch className="absolute top-1/2 left-2 transform -translate-y-1/2 text-gray-500" />
+      <FaSearch className="absolute top-1/2 left-2 transform -translate-y-1/2 text-foreground/50" />
     </div>
   );
 };
