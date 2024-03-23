@@ -57,7 +57,7 @@ const Dashboard = async () => {
     {
       title: "Accounts Summary",
       description:
-        "You can view your accounts here. Visit the 'Accounts' page to see all your accounts.",
+        "Access your accounts here. Navigate to the 'Accounts' page to see a comprehensive list of all your accounts.",
       data: (
         <div className="max-h-[330px] min-h-[330px] lg:max-h-[350px] lg:min-h-[350px] overflow-y-auto scrollbar-hide">
           <AccountSummaries accounts={accountsResult.accounts} />
@@ -67,7 +67,7 @@ const Dashboard = async () => {
     {
       title: "Budget Status",
       description:
-        "You can check your budgets here. Click on the budget card to see details or create a new one using the menu button above.",
+        "Explore your budgets here. Simply click on a budget card to view its details or create a new one using the menu button above.",
       data: (
         <div className="max-h-[300px] min-h-[300px] lg:max-h-[350px] lg:min-h-[350px] overflow-y-auto">
           <BudgetStatus budgets={budgetsResult.budgets} />
@@ -77,7 +77,7 @@ const Dashboard = async () => {
     {
       title: "Goal Progress",
       description:
-        "Check your goals here. Click on a goal card to view or edit its details or create a new one by clicking the menu button above.",
+        "Explore your goals here. Simply click on a goal card to view or edit its details, or create a new one by clicking the menu button above.",
       data: (
         <div className="max-h-[300px] min-h-[300px] lg:max-h-[350px] lg:min-h-[350px] overflow-y-auto">
           <GoalStatus goals={goalsResult.goals} />
@@ -85,8 +85,8 @@ const Dashboard = async () => {
       ),
     },
     {
-      title: "Transaction History",
-      description: "Check out your transaction history here.",
+      title: "Latest Transactions",
+      description: "Explore your latest transactions here..",
       data: (
         <TransactionHistory transactions={transactionsResult.transactions} />
       ),
@@ -94,7 +94,7 @@ const Dashboard = async () => {
     {
       title: "Financial Insights",
       description:
-        "Get a comparison of your expenses vs income and other financial insights here.",
+        "View a breakdown of your spending versus earnings for this month, along with additional financial insights.",
       data: (
         <div className="p-2 max-h-[500px] min-h-[500px] overflow-y-auto flex flex-col gap-4 items-center justify-center">
           <BarChartComponent

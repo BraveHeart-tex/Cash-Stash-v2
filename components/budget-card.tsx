@@ -125,7 +125,7 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
         indicatorClassName={getProgressColor(budget.progress)}
       />
       <div className="w-full flex flex-col lg:flex-row lg:items-center justify-between mt-2">
-        <span className="dark:text-white/60 text-foreground">
+        <span className="text-foreground">
           Budget: {formatMoney(budget.budgetAmount)} / Spent:{" "}
           {formatMoney(budget.spentAmount)}
         </span>
