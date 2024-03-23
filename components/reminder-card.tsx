@@ -43,7 +43,7 @@ const ReminderCard = ({ reminder }: IReminderCardProps) => {
 
       {reminder.reminderDate && (
         <div className="w-full">
-          <p className="text-md text-foreground">
+          <p className="text-foreground">
             <span className="font-semibold text-primary">Reminder Date:</span>{" "}
             {new Date(reminder.reminderDate).toLocaleDateString("tr-TR", {
               year: "numeric",

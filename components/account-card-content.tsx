@@ -115,7 +115,7 @@ const AccountCardContent = ({
           ({accountCategory})
         </span>
       </p>
-      <p className="text-md">Balance: {formatMoney(account.balance)}</p>
+      <p>Balance: {formatMoney(account.balance)}</p>
     </motion.div>
   );
 };

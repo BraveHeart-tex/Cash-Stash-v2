@@ -26,7 +26,7 @@ const NotificationsAndReminders = ({
       >
         <p className="text-primary">No reminders were found.</p>
         <Button
-          className="mt-3 text-md font-semibold flex items-center gap-[14px]"
+          className="mt-3 font-semibold flex items-center gap-[14px]"
           onClick={() => {
             openGenericModal({
               key: "reminder",

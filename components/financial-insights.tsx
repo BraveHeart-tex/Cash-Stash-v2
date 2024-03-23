@@ -54,7 +54,7 @@ const FinancialInsights = ({ insightsData }: IFinancialInsightsProps) => {
         <div className="my-3">
           <NoDataMessage />
           <Link href={PAGE_ROUTES.TRANSACTIONS_ROUTE}>
-            <Button className="font-semibold text-md mt-3 flex items-center gap-[14px]">
+            <Button className="font-semibold  mt-3 flex items-center gap-[14px]">
               <FaMoneyBill size={18} />
               Go To Transactions
             </Button>
@@ -94,7 +94,7 @@ const FinancialInsights = ({ insightsData }: IFinancialInsightsProps) => {
       <article className="flex h-[300px] items-center justify-center">
         <div className="my-3">
           <NoDataMessage />
-          <Button className="font-semibold text-md mt-3 hover:bg-foreground hover:text-muted">
+          <Button className="font-semibold  mt-3 hover:bg-foreground hover:text-muted">
             <Link href={PAGE_ROUTES.TRANSACTIONS_ROUTE}>
               Go To Transactions
             </Link>

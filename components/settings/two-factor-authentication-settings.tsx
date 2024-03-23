@@ -88,7 +88,7 @@ const TwoFactorAuthenticationSettings = () => {
       {shouldShowActiviationForm ? <TwoFactorAuthenticationActivation /> : null}
       {shouldShowEnableButton ? (
         <Button
-          className="w-max text-md flex items-center gap-2 mt-2"
+          className="w-max flex items-center gap-2 mt-2"
           onClick={handleEnableTwoFactorAuth}
           disabled={isPending}
         >
@@ -99,7 +99,7 @@ const TwoFactorAuthenticationSettings = () => {
 
       {shouldShowDisableButton ? (
         <Button
-          className="w-max text-md flex items-center gap-2 mt-2"
+          className="w-max flex items-center gap-2 mt-2"
           onClick={handleDisabledTwoFactorAuth}
           disabled={isPending}
         >

@@ -110,7 +110,7 @@ const GoalCard = ({ goal }: IGoalCardProps) => {
           value={goal.progress >= 100 ? 100 : goal.progress}
           indicatorClassName={getGoalProgressColor(goal.progress)}
         />
-        <p className="mt-4 text-md text-foreground">
+        <p className="mt-4 text-foreground">
           Current: {formatMoney(goal.currentAmount)} / Target:{" "}
           {formatMoney(goal.goalAmount)}
         </p>

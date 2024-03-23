@@ -15,7 +15,7 @@ const CreateAccountButton = ({ className }: ICreateAccountButtonProps) => {
   return (
     <Button
       className={cn(
-        "font-semibold text-md mt-3 flex items-center gap-[14px]",
+        "font-semibold mt-3 flex items-center gap-[14px]",
         className
       )}
       data-testid="create-account-button"

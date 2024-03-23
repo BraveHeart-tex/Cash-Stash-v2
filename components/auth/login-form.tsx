@@ -192,14 +192,14 @@ const LoginForm = () => {
             </Form>
           </CardContent>
           <CardFooter>
-            <div className="flex flex-col gap-2 lg:flex-row lg:justify-between w-full text-md">
+            <div className="flex flex-col gap-2 lg:flex-row lg:justify-between w-full ">
               <p>
                 Don't have an account?{" "}
                 <Button
                   disabled={isPending}
                   variant="link"
                   aria-label="Sign up for a new account."
-                  className="p-0 underline text-md"
+                  className="p-0 underline"
                 >
                   <Link
                     href={PAGE_ROUTES.SIGN_UP_ROUTE}

@@ -201,7 +201,7 @@ const RegisterForm = () => {
                 variant="link"
                 disabled={form.formState.isSubmitting || isPending}
                 aria-label="Sign up for a new account."
-                className="p-0 underline text-md"
+                className="p-0 underline"
               >
                 <Link href={PAGE_ROUTES.LOGIN_ROUTE}>Log In</Link>
               </Button>
