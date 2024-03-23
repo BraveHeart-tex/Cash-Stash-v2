@@ -50,6 +50,10 @@ const ReportsPage = async ({
         <DataTable
           columns={transactionTableColumns}
           data={transactionsResult.transactions}
+          searchConfig={{
+            column: "description",
+            placeholder: "Search transactions by description...",
+          }}
         />
         <div className="mt-4">
           <ResponsiveChartContainer monthlyTransactionsData={data} />

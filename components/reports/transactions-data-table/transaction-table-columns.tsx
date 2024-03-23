@@ -1,9 +1,11 @@
 "use client";
+import { Button } from "@/components/ui/button";
 import { TransactionSelectModel } from "@/lib/database/schema";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import { generateLabelFromEnumValue } from "@/lib/utils/stringUtils/generateLabelFromEnumValue";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
+import { FaArrowsUpDown } from "react-icons/fa6";
 
 type TransactionWithAccount = Pick<
   TransactionSelectModel,
@@ -24,7 +26,18 @@ export const transactionTableColumns: ColumnDef<TransactionWithAccount>[] = [
   },
   {
     accessorKey: "amount",
-    header: "Amount",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          className="p-0"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Amount
+          <FaArrowsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("amount"));
 
