@@ -6,7 +6,7 @@ import NavigationTabs from "@/components/navigation-tabs";
 import { Metadata } from "next";
 import Navbar from "@/components/navbar";
 import { getUser } from "@/lib/auth/session";
-import GenericConfirmDialog from "./generic-confirm-dialog";
+import GenericConfirmDialog from "../components/ui/generic-confirm-dialog";
 import RedirectionPathToaster from "@/components/redirection-path-toaster";
 import { ReactNode } from "react";
 import SonnerToaster from "@/components/ui/sonner";

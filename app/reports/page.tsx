@@ -1,10 +1,11 @@
 import MotionDiv from "@/components/animations/motion-div";
 import { ITransactionPageSearchParams } from "../transactions/page";
-import ResponsiveChartContainer from "../chart-container";
+import IncomeAndExpenseChart from "../../components/income-expense-chart";
 import { getChartData } from "@/actions";
 import { getPaginatedTransactions } from "@/actions/transaction";
 import { DataTable } from "@/components/ui/data-table";
 import { transactionTableColumns } from "@/components/reports/transactions-data-table/transaction-table-columns";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const ReportsPage = async ({
   searchParams,
@@ -40,24 +41,44 @@ const ReportsPage = async ({
         transition={{ duration: 0.5, type: "just" }}
       >
         <div className="flex flex-col gap-1 mb-4">
-          <h3 className="text-4xl text-primary">Reports</h3>
+          <h1 className="text-4xl text-primary">Reports</h1>
           <p className="text-muted-foreground">
             Take a look at your overall financial performance and see how your
             spending is doing.
           </p>
         </div>
-        {/* TODO: Filter by account, sort by amount*/}
-        <DataTable
-          columns={transactionTableColumns}
-          data={transactionsResult.transactions}
-          searchConfig={{
-            column: "description",
-            placeholder: "Search transactions by description...",
-          }}
-        />
-        <div className="mt-4">
-          <ResponsiveChartContainer monthlyTransactionsData={data} />
-        </div>
+        <Tabs defaultValue="transactions">
+          <TabsList className="rounded-b-none border border-b-0 mr-12 w-full md:w-auto justify-start overflow-x-auto overflow-y-hidden scrollbar-hide">
+            <TabsTrigger value="transactions">Transactions</TabsTrigger>
+            <TabsTrigger value="incomeAndExpenses">
+              Income vs Expenses
+            </TabsTrigger>
+          </TabsList>
+          <div className="lg:p-4 p-2 border rounded-r-lg rounded-bl-lg rounded-tr-none md:rounded-tr-lg">
+            <TabsContent value="transactions">
+              <div>
+                <p className="text-muted-foreground">
+                  Below table shows all your transactions. You can filter by
+                  account, sort by amount and date.
+                </p>
+              </div>
+              {/* TODO: Filter by account, sort by amount*/}
+              <DataTable
+                columns={transactionTableColumns}
+                data={transactionsResult.transactions}
+                searchConfig={{
+                  column: "description",
+                  placeholder: "Search transactions by description...",
+                }}
+              />
+            </TabsContent>
+            <TabsContent value="incomeAndExpenses">
+              <div className="mt-4">
+                <IncomeAndExpenseChart monthlyTransactionsData={data} />
+              </div>
+            </TabsContent>
+          </div>
+        </Tabs>
       </MotionDiv>
     </main>
   );
