@@ -23,9 +23,13 @@ import { format } from "date-fns";
 
 interface ITransactionCardProps {
   transaction: TransactionSelectModel & { accountName: string };
+  showPopover?: boolean;
 }
 
-const TransactionCard = ({ transaction }: ITransactionCardProps) => {
+const TransactionCard = ({
+  transaction,
+  showPopover = true,
+}: ITransactionCardProps) => {
   const showGenericConfirm = useGenericConfirmStore(
     (state) => state.showConfirm
   );
@@ -113,23 +117,25 @@ const TransactionCard = ({ transaction }: ITransactionCardProps) => {
           </div>
         </CardContent>
       </Card>
-      <ActionPopover
-        heading="Transaction Actions"
-        options={[
-          {
-            icon: FaEdit,
-            label: "Edit",
-            onClick: () => handleEditClick(),
-          },
-          {
-            icon: FaTrash,
-            label: "Delete",
-            onClick: () => handleDeleteClick(),
-          },
-        ]}
-        positionAbsolute
-        triggerClassName="mb-0 top-4 right-0"
-      />
+      {showPopover && (
+        <ActionPopover
+          heading="Transaction Actions"
+          options={[
+            {
+              icon: FaEdit,
+              label: "Edit",
+              onClick: () => handleEditClick(),
+            },
+            {
+              icon: FaTrash,
+              label: "Delete",
+              onClick: () => handleDeleteClick(),
+            },
+          ]}
+          positionAbsolute
+          triggerClassName="mb-0 top-4 right-0"
+        />
+      )}
     </motion.div>
   );
 };
