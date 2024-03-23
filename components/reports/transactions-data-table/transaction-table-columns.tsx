@@ -1,6 +1,7 @@
 "use client";
 import { TransactionSelectModel } from "@/lib/database/schema";
 import { cn } from "@/lib/utils/stringUtils/cn";
+import { generateLabelFromEnumValue } from "@/lib/utils/stringUtils/generateLabelFromEnumValue";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 
@@ -55,5 +56,10 @@ export const transactionTableColumns: ColumnDef<TransactionWithAccount>[] = [
   {
     accessorKey: "category",
     header: "Category",
+    cell: ({ row }) => {
+      const value = row.getValue("category") as string;
+
+      return <div>{generateLabelFromEnumValue(value)}</div>;
+    },
   },
 ];
