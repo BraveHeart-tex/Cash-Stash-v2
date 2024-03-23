@@ -44,6 +44,9 @@ const cronService = {
       return false;
     }
   },
+  async updateCurrencyRates() {
+    return true;
+  },
 };
 
 export default cronService;
