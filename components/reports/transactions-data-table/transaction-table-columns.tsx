@@ -1,8 +1,10 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { TransactionSelectModel } from "@/lib/database/schema";
+import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import { generateLabelFromEnumValue } from "@/lib/utils/stringUtils/generateLabelFromEnumValue";
+import useAuthStore from "@/store/auth/authStore";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { FaArrowsUpDown } from "react-icons/fa6";
@@ -39,12 +41,12 @@ export const transactionTableColumns: ColumnDef<TransactionWithAccount>[] = [
       );
     },
     cell: ({ row }) => {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const preferredCurrency = useAuthStore(
+        (state) => state.user?.preferredCurrency
+      );
       const amount = parseFloat(row.getValue("amount"));
-
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount);
+      const formattedMoney = formatMoney(amount, preferredCurrency);
 
       return (
         <div
@@ -53,7 +55,7 @@ export const transactionTableColumns: ColumnDef<TransactionWithAccount>[] = [
             amount > 0 ? "text-success" : "text-destructive"
           )}
         >
-          {formatted}
+          {formattedMoney}
         </div>
       );
     },

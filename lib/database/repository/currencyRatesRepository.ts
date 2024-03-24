@@ -1,3 +1,4 @@
+import { eq } from "drizzle-orm";
 import { db } from "../connection";
 import { CurrencyRateInsertModel, currencyRates } from "../schema";
 
@@ -15,6 +16,14 @@ const currencyRatesRepository = {
           rate,
         },
       });
+  },
+  async getCurrencyRateBySymbol(symbol: string) {
+    const [currencyRate] = await db
+      .select()
+      .from(currencyRates)
+      .where(eq(currencyRates.symbol, symbol));
+
+    return currencyRate;
   },
 };
 

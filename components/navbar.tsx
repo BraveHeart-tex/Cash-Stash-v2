@@ -13,14 +13,11 @@ import { PAGE_ROUTES } from "@/lib/constants";
 // TODO: Refactor rendering of navbar
 const Navbar = ({ user }: { user: User | null }) => {
   const setCurrentUser = useAuthStore((state) => state.setUser);
-  const userInState = useAuthStore((state) => state.user);
 
   useEffect(() => {
     setCurrentUser(user);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
-
-  if (!userInState) return null;
 
   return (
     <div className="mb-6 shadow-lg p-4 bg-primary dark:bg-background dark:border-b">

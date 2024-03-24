@@ -6,7 +6,10 @@ import { Button } from "../ui/button";
 import useAuthStore from "@/store/auth/authStore";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import { toast } from "sonner";
-import { updateUserCurrencyPreference } from "@/actions/user";
+import {
+  convertTransactionsToNewCurrency,
+  updateUserCurrencyPreference,
+} from "@/actions/user";
 
 const CurrencyCombobox = ({
   currencies,
@@ -25,10 +28,7 @@ const CurrencyCombobox = ({
   );
   const userSelectedCurrency = currencies.find(
     (item) => item.value === userPreferredCurrency
-  ) || {
-    label: "United States Dollar (USD)",
-    value: "USD",
-  };
+  );
 
   const handleCurrencySave = () => {
     if (!selectedCurrency) return;
@@ -37,10 +37,10 @@ const CurrencyCombobox = ({
       message: `You will be changing your preferred currency from: ${userSelectedCurrency?.label} to: ${selectedCurrency.label}.`,
       onConfirm() {
         startTransition(async () => {
+          const oldSymbol = userSelectedCurrency?.value!;
           const response = await updateUserCurrencyPreference(
             selectedCurrency.value
           );
-
           if (response?.error) {
             toast.error(response.error);
             return;
@@ -55,11 +55,24 @@ const CurrencyCombobox = ({
             showGenericConfirm({
               title: "Would you like to convert your transactions?",
               message:
-                "Your preferred currency has been updated. If you'd like, your transactions can be converted to your new currency.",
+                "Your preferred currency has been updated. If you'd like, your transactions can be converted to your new currency. This process may take a few seconds.",
               onConfirm() {
-                // TODO: handle conversion here
+                startTransition(async () => {
+                  const response = await convertTransactionsToNewCurrency(
+                    oldSymbol,
+                    selectedCurrency.value
+                  );
+
+                  if (response?.error) {
+                    toast.error(response.error);
+                    return;
+                  }
+
+                  toast.success(response?.success);
+                });
               },
               primaryActionLabel: "Convert",
+              secondaryActionLabel: "Don't Convert",
             });
           }, 100);
         });
@@ -67,6 +80,8 @@ const CurrencyCombobox = ({
       primaryActionLabel: "Confirm",
     });
   };
+
+  if (!userSelectedCurrency) return null;
 
   return (
     <div className="flex flex-col gap-2">
