@@ -358,3 +358,8 @@ export interface ExchangeRateResponseError {
   message: string;
   description: string;
 }
+
+export interface IComboboxOption {
+  label: string | number;
+  value: string;
+}

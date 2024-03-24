@@ -1,4 +1,8 @@
-const PreferredCurrencySettings = () => {
+import { getCurrencies } from "@/actions/currency";
+import CurrencyCombobox from "@/components/settings/currency-combobox";
+
+const PreferredCurrencySettings = async () => {
+  const currencies = await getCurrencies();
   return (
     <div>
       <div>
@@ -9,6 +13,12 @@ const PreferredCurrencySettings = () => {
           Choose your preferred currency for displaying amounts.
         </p>
       </div>
+      <CurrencyCombobox
+        currencies={currencies.map((item) => ({
+          label: item.name + " (" + item.symbol + ")",
+          value: item.symbol,
+        }))}
+      />
     </div>
   );
 };
