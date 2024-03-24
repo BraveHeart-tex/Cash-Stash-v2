@@ -20,6 +20,7 @@ import { cn } from "@/lib/utils/stringUtils/cn";
 import { generateLabelFromEnumValue } from "@/lib/utils/stringUtils/generateLabelFromEnumValue";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { format } from "date-fns";
+import useAuthStore from "@/store/auth/authStore";
 
 interface ITransactionCardProps {
   transaction: TransactionSelectModel & { accountName: string };
@@ -30,6 +31,9 @@ const TransactionCard = ({
   transaction,
   showPopover = true,
 }: ITransactionCardProps) => {
+  const preferredCurrency = useAuthStore(
+    (state) => state.user?.preferredCurrency
+  );
   const showGenericConfirm = useGenericConfirmStore(
     (state) => state.showConfirm
   );
@@ -106,7 +110,7 @@ const TransactionCard = ({
 
             <DataLabel
               label="Amount"
-              value={formatMoney(transaction.amount)}
+              value={formatMoney(transaction.amount, preferredCurrency)}
               classNames={{
                 value: cn(
                   "font-semibold",
