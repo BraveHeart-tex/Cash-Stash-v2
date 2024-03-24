@@ -29,7 +29,6 @@ const TwoFactorAuthenticationSettings = () => {
           const response = await disableTwoFactorAuthentication();
           if (response.successMessage) {
             setUser({
-              ...user!,
               prefersTwoFactorAuthentication: false,
               activatedTwoFactorAuthentication: false,
             });
@@ -54,7 +53,7 @@ const TwoFactorAuthenticationSettings = () => {
         startTransition(async () => {
           const uriResponse = await enableTwoFactorAuthentication();
           setUri(uriResponse);
-          setUser({ ...user!, prefersTwoFactorAuthentication: true });
+          setUser({ prefersTwoFactorAuthentication: true });
         });
       },
     });

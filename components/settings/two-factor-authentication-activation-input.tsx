@@ -1,10 +1,11 @@
 import { useEffect, useState, useTransition } from "react";
 import AutoProgressInput from "../auto-progress-input";
 import { Label } from "../ui/label";
-import { activateTwoFactorAuthentication, validateOTP } from "@/actions/auth";
+import { activateTwoFactorAuthentication } from "@/actions/auth";
 import { toast } from "sonner";
 import useAuthStore from "@/store/auth/authStore";
 
+// TODO: Test again
 const TwoFactorAuthenticationActivationInput = () => {
   const [code, setCode] = useState("");
   let [isPending, startTransition] = useTransition();
@@ -23,14 +24,13 @@ const TwoFactorAuthenticationActivationInput = () => {
         if (response.successMessage) {
           toast.success(response.successMessage);
           setUser({
-            ...user,
             activatedTwoFactorAuthentication: true,
             prefersTwoFactorAuthentication: true,
           });
         }
       });
     }
-  }, [code]);
+  }, [code, user]);
 
   return (
     <div>

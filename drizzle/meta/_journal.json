@@ -127,6 +127,13 @@
       "when": 1711207300948,
       "tag": "0017_luxuriant_vermin",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "5",
+      "when": 1711286702817,
+      "tag": "0018_blue_wolverine",
+      "breakpoints": true
     }
   ]
 }

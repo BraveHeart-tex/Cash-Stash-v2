@@ -52,6 +52,7 @@ export const lucia = new Lucia(adapter, {
         databaseUserAttributes.prefersTwoFactorAuthentication,
       activatedTwoFactorAuthentication:
         databaseUserAttributes.activatedTwoFactorAuthentication,
+      preferredCurrency: databaseUserAttributes.preferredCurrency,
     };
   },
 });
@@ -71,4 +72,5 @@ interface DatabaseUserAttributes {
   email_verified: boolean;
   prefersTwoFactorAuthentication: boolean;
   activatedTwoFactorAuthentication: boolean;
+  preferredCurrency: string;
 }

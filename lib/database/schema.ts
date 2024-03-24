@@ -436,6 +436,9 @@ export const users = mysqlTable(
     activatedTwoFactorAuthentication: tinyint(
       "activatedTwoFactorAuthentication"
     ).default(0),
+    preferredCurrency: varchar("preferredCurrency", { length: 3 })
+      .default("USD")
+      .notNull(),
   },
   (table) => {
     return {

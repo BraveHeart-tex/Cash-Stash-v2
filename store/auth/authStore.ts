@@ -6,7 +6,7 @@ import { devtools } from "zustand/middleware";
 
 interface AuthStoreState {
   user: User | null;
-  setUser: (user: User | null) => void;
+  setUser: (user: Partial<User> | null) => void;
   uri: string;
   setUri: (uri: string) => void;
 }
@@ -15,7 +15,15 @@ const useAuthStore = create<AuthStoreState, [["zustand/devtools", never]]>(
   devtools(
     (set, get) => ({
       user: null,
-      setUser: (user) => set({ user }),
+      setUser: (user) => {
+        set((state) => ({
+          ...state,
+          user: {
+            ...state.user,
+            ...(user as User),
+          },
+        }));
+      },
       uri: "",
       setUri: (uri) => set({ uri }),
     }),
