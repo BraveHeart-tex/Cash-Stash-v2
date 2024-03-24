@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/command";
 import { FaCheck, FaSort } from "react-icons/fa";
 import { IComboboxOption } from "@/actions/types";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface IComboboxProps {
   options: IComboboxOption[];
@@ -82,68 +83,69 @@ const Combobox = ({
         className={cn("p-1 min-w-max", contentClassName)}
       >
         <Command shouldFilter={false} className="w-full">
-          <CommandInput
-            value={searchQuery}
-            onValueChange={(value) => setSearchQuery(value)}
-            placeholder="Search"
-            className="h-9"
-          />
-          <CommandEmpty>
-            {emptyMessage || "No options were found for your search."}
-          </CommandEmpty>
-          <CommandList className="mt-1 w-full">
-            {filteredOptions.map((option) => (
-              <CommandItem
-                key={option.value}
-                value={option.value}
-                onSelect={() => {
-                  handleOptionClick(option);
-                }}
-              >
-                {option.label}
-                <FaCheck
-                  className={cn(
-                    "ml-auto h-4 w-4",
-                    selectedOption?.value === option.value
-                      ? "opacity-100"
-                      : "opacity-0"
-                  )}
-                />
-              </CommandItem>
-            ))}
-          </CommandList>
-        </Command>
-        {/* <AnimatePresence>
-          {isOpen && (
-            <motion.ul
-              ref={comboboxRef}
-              className={cn("w-full ", contentClassName)}
+          <AnimatePresence>
+            <motion.article
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
+              transition={{
+                duration: 0.1,
+                type: "spring",
+                bounce: 0.2,
+                damping: 10,
+                stiffness: 100,
+              }}
             >
-              {options.map((option) => (
-                <motion.li
-                  key={option.value}
-                  className="hover:bg-secondary cursor-pointer flex items-center justify-between rounded-md p-2"
-                  onClick={() => handleOptionClick(option)}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  {option.label}
-                  <CheckIcon
-                    className={cn(
-                      "h-4 w-4",
-                      selectedOption?.value === option.value
-                        ? "opacity-100"
-                        : "opacity-0"
-                    )}
-                  />
-                </motion.li>
-              ))}
-            </motion.ul>
-          )}
-        </AnimatePresence> */}
+              <CommandInput
+                value={searchQuery}
+                onValueChange={(value) => setSearchQuery(value)}
+                placeholder="Search"
+                className="h-9"
+              />
+              <CommandEmpty>
+                {emptyMessage || "No options were found for your search."}
+              </CommandEmpty>
+              <CommandList asChild>
+                <AnimatePresence>
+                  <motion.ul className="mt-1 w-full min-h-[2.2rem] max-h-[400px] overflow-auto overflow-x-hidden">
+                    {filteredOptions.map((option, index) => (
+                      <CommandItem
+                        key={option.value}
+                        value={option.value}
+                        onSelect={() => {
+                          handleOptionClick(option);
+                        }}
+                        asChild
+                      >
+                        <motion.li
+                          whileHover={{
+                            scale: 1.03,
+                          }}
+                          id={`option-${option.value}`}
+                          whileTap={{ scale: 0.97 }}
+                          className={cn(
+                            selectedOption?.value === option.value &&
+                              "font-semibold text-primary"
+                          )}
+                        >
+                          {option.label}
+                          <FaCheck
+                            className={cn(
+                              "ml-auto h-4 w-4",
+                              selectedOption?.value === option.value
+                                ? "opacity-100"
+                                : "opacity-0"
+                            )}
+                          />
+                        </motion.li>
+                      </CommandItem>
+                    ))}
+                  </motion.ul>
+                </AnimatePresence>
+              </CommandList>
+            </motion.article>
+          </AnimatePresence>
+        </Command>
       </PopoverContent>
     </Popover>
   );
