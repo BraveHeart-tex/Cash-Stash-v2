@@ -318,17 +318,10 @@ export const checkUserIdBasedTwoFactorAuthRateLimit = async (
 };
 
 export async function invalidateKeysByUserId(userId: string) {
-  let cursor = "0";
-  do {
-    // Scan for keys matching the pattern
-    const [newCursor, keys] = await redis.scan(cursor, "MATCH", `*${userId}*`);
-
-    // Delete keys matching the pattern
-    if (keys.length > 0) {
-      await redis.del(...keys);
-    }
-
-    // Update the cursor
-    cursor = newCursor;
-  } while (cursor !== "0");
+  const stream = redis.scanStream();
+  stream.on("data", async (keys) => {
+    const keysToDelete = keys.filter((key: string) => key.includes(userId));
+    if (keysToDelete.length === 0) return;
+    await redis.del(keysToDelete);
+  });
 }
