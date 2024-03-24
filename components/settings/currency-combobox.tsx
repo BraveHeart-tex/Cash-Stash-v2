@@ -1,17 +1,19 @@
 "use client";
 import { IComboboxOption } from "@/actions/types";
 import Combobox from "@/components/ui/combobox";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Button } from "../ui/button";
 import useAuthStore from "@/store/auth/authStore";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import { toast } from "sonner";
+import { updateUserCurrencyPreference } from "@/actions/user";
 
 const CurrencyCombobox = ({
   currencies,
 }: {
   currencies: IComboboxOption[];
 }) => {
+  let [isPending, startTransition] = useTransition();
   const [selectedCurrency, setSelectedCurrency] =
     useState<IComboboxOption | null>(null);
   const setUser = useAuthStore((state) => state.setUser);
@@ -34,11 +36,32 @@ const CurrencyCombobox = ({
       title: "Are you sure you want to change your preferred currency?",
       message: `You will be changing your preferred currency from: ${userSelectedCurrency?.label} to: ${selectedCurrency.label}.`,
       onConfirm() {
-        // TODO: do db stuff
+        startTransition(async () => {
+          const response = await updateUserCurrencyPreference(
+            selectedCurrency.value
+          );
 
-        toast.success("Preferred currency changed successfully");
-        setUser({
-          preferredCurrency: selectedCurrency.value,
+          if (response?.error) {
+            toast.error(response.error);
+            return;
+          }
+
+          toast.success("Preferred currency changed successfully");
+          setUser({
+            preferredCurrency: selectedCurrency.value,
+          });
+
+          setTimeout(() => {
+            showGenericConfirm({
+              title: "Would you like to convert your transactions?",
+              message:
+                "Your preferred currency has been updated. If you'd like, your transactions can be converted to your new currency.",
+              onConfirm() {
+                // TODO: handle conversion here
+              },
+              primaryActionLabel: "Convert",
+            });
+          }, 100);
         });
       },
       primaryActionLabel: "Confirm",
@@ -57,8 +80,12 @@ const CurrencyCombobox = ({
       />
       {selectedCurrency &&
         selectedCurrency.value !== userSelectedCurrency.value && (
-          <Button className="w-max" onClick={handleCurrencySave}>
-            Save Changes
+          <Button
+            disabled={isPending}
+            className="w-max"
+            onClick={handleCurrencySave}
+          >
+            {isPending ? "Saving..." : "Save Changes"}
           </Button>
         )}
     </div>

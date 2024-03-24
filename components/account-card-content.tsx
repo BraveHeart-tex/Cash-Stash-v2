@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils/stringUtils/cn";
 import { generateLabelFromEnumValue } from "@/lib/utils/stringUtils/generateLabelFromEnumValue";
 import { AccountWithTransactions } from "@/actions/types";
 import { FaTrash, FaEdit, FaRegCreditCard } from "react-icons/fa";
+import useAuthStore from "@/store/auth/authStore";
 
 interface IAccountCardContentProps {
   account: AccountWithTransactions;
@@ -28,6 +29,9 @@ const AccountCardContent = ({
   className,
   showPopover,
 }: IAccountCardContentProps) => {
+  const preferredCurrency = useAuthStore(
+    (state) => state.user?.preferredCurrency
+  );
   const router = useRouter();
   const openGenericModal = useGenericModalStore(
     (state) => state.openGenericModal
@@ -115,7 +119,7 @@ const AccountCardContent = ({
           ({accountCategory})
         </span>
       </p>
-      <p>Balance: {formatMoney(account.balance)}</p>
+      <p>Balance: {formatMoney(account.balance, preferredCurrency)}</p>
     </motion.div>
   );
 };
