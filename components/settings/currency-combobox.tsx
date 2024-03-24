@@ -1,6 +1,6 @@
 "use client";
 import { IComboboxOption } from "@/actions/types";
-import Combobox from "../ui/combobox";
+import Combobox from "@/components/ui/combobox";
 
 const CurrencyCombobox = ({
   currencies,

@@ -24,6 +24,7 @@ interface IComboboxProps {
   triggerClassName?: string;
   contentClassName?: string;
   emptyMessage?: string;
+  defaultOption?: IComboboxOption;
 }
 
 const Combobox = ({
@@ -32,11 +33,12 @@ const Combobox = ({
   triggerClassName,
   contentClassName,
   emptyMessage,
+  defaultOption,
 }: IComboboxProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedOption, setSelectedOption] = useState<IComboboxOption | null>(
-    null
+    defaultOption || null
   );
 
   const handleOptionClick = (option: IComboboxOption) => {
