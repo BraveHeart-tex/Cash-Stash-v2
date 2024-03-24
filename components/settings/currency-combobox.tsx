@@ -11,7 +11,6 @@ const CurrencyCombobox = ({
   currencies,
 }: {
   currencies: IComboboxOption[];
-  userSelectedCurrency: IComboboxOption | undefined;
 }) => {
   const [selectedCurrency, setSelectedCurrency] =
     useState<IComboboxOption | null>(null);
