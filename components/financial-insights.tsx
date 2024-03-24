@@ -7,6 +7,7 @@ import MotionDiv from "@/components/animations/motion-div";
 import { PAGE_ROUTES } from "@/lib/constants";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
+import useAuthStore from "@/store/auth/authStore";
 
 interface IFinancialInsightsProps {
   insightsData: InsightsData | null;
@@ -33,6 +34,9 @@ const SavingsRate = ({ value }: { value: number }) => (
 // only show the stats for this month here
 // and add vs last month if data is available
 const FinancialInsights = ({ insightsData }: IFinancialInsightsProps) => {
+  const preferredCurrency = useAuthStore(
+    (state) => state.user?.preferredCurrency
+  );
   const noInsightsData = Object.keys(insightsData || {}).length === 0;
 
   const NoDataMessage = () => (
@@ -112,7 +116,7 @@ const FinancialInsights = ({ insightsData }: IFinancialInsightsProps) => {
         ) : (
           <div className="mb-4 flex flex-col" key={data.name}>
             <h3 className="font-bold text-lg">{data.name}</h3>
-            <p>{formatMoney(+data.value)}</p>
+            <p>{formatMoney(+data.value, preferredCurrency)}</p>
           </div>
         )
       )}

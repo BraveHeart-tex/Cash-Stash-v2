@@ -1,6 +1,7 @@
 "use client";
 import { MonthlyTransactionsData } from "@/actions/types";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
+import useAuthStore from "@/store/auth/authStore";
 import {
   BarChart,
   Bar,
@@ -12,17 +13,20 @@ import {
 } from "recharts";
 
 const CustomTooltip = ({ active, payload, label }: any) => {
+  const preferredCurrency = useAuthStore(
+    (state) => state.user?.preferredCurrency
+  );
   if (active && payload && payload.length) {
     return (
       <div className="bg-card shadow-lg rounded-md p-6 grid grid-cols-1 gap-2">
         <p className="text-primary font-semibold">{`${label}`}</p>
         <p className="text-success">
           <span className="font-semibold">Income: </span>
-          {formatMoney(payload[0].value)}
+          {formatMoney(payload[0].value, preferredCurrency)}
         </p>
         <p className="text-destructive">
           <span className="font-semibold">Expense: </span>
-          {formatMoney(payload[1].value)}
+          {formatMoney(payload[1].value, preferredCurrency)}
         </p>
       </div>
     );

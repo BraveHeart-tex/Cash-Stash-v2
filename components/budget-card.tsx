@@ -13,12 +13,16 @@ import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import { generateLabelFromEnumValue } from "@/lib/utils/stringUtils/generateLabelFromEnumValue";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import useAuthStore from "@/store/auth/authStore";
 
 interface IBudgetCardProps {
   budget: BudgetSelectModel;
 }
 
 const BudgetCard = ({ budget }: IBudgetCardProps) => {
+  const preferredCurrency = useAuthStore(
+    (state) => state.user?.preferredCurrency
+  );
   const showGenericConfirm = useGenericConfirmStore(
     (state) => state.showConfirm
   );
@@ -126,8 +130,8 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
       />
       <div className="w-full flex flex-col lg:flex-row lg:items-center justify-between mt-2">
         <span className="text-foreground">
-          Budget: {formatMoney(budget.budgetAmount)} / Spent:{" "}
-          {formatMoney(budget.spentAmount)}
+          Budget: {formatMoney(budget.budgetAmount, preferredCurrency)} / Spent:{" "}
+          {formatMoney(budget.spentAmount, preferredCurrency)}
         </span>
       </div>
     </motion.div>

@@ -12,12 +12,16 @@ import { GoalSelectModel } from "@/lib/database/schema";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import useAuthStore from "@/store/auth/authStore";
 
 interface IGoalCardProps {
   goal: GoalSelectModel;
 }
 
 const GoalCard = ({ goal }: IGoalCardProps) => {
+  const preferredCurrency = useAuthStore(
+    (state) => state.user?.preferredCurrency
+  );
   const showGenericConfirm = useGenericConfirmStore(
     (state) => state.showConfirm
   );
@@ -111,8 +115,8 @@ const GoalCard = ({ goal }: IGoalCardProps) => {
           indicatorClassName={getGoalProgressColor(goal.progress)}
         />
         <p className="mt-4 text-foreground">
-          Current: {formatMoney(goal.currentAmount)} / Target:{" "}
-          {formatMoney(goal.goalAmount)}
+          Current: {formatMoney(goal.currentAmount, preferredCurrency)} /
+          Target: {formatMoney(goal.goalAmount, preferredCurrency)}
         </p>
       </div>
     </motion.div>
