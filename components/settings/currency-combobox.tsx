@@ -7,6 +7,12 @@ const CurrencyCombobox = ({
 }: {
   currencies: IComboboxOption[];
 }) => {
-  return <Combobox options={currencies} onSelect={console.log} />;
+  return (
+    <Combobox
+      triggerClassName="w-full md:w-[400px] whitespace-nowrap"
+      options={currencies}
+      onSelect={console.log}
+    />
+  );
 };
 export default CurrencyCombobox;
