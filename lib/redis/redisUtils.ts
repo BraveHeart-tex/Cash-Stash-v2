@@ -321,6 +321,7 @@ export async function invalidateKeysByUserId(userId: string) {
   const stream = redis.scanStream();
   stream.on("data", async (keys) => {
     const keysToDelete = keys.filter((key: string) => key.includes(userId));
+    console.log("keysToDelete", keysToDelete);
     if (keysToDelete.length === 0) return;
     await redis.del(keysToDelete);
   });

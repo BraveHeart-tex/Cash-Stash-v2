@@ -8,6 +8,7 @@ import userRepository from "@/lib/database/repository/userRepository";
 import { accounts, budgets, goals, transactions } from "@/lib/database/schema";
 import { invalidateKeysByUserId } from "@/lib/redis/redisUtils";
 import { eq, sql } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export const updateUserCurrencyPreference = async (symbol: string) => {
@@ -62,11 +63,10 @@ export const convertTransactionsToNewCurrency = async (
   }
 
   try {
-    const oldRate =
-      await currencyRatesRepository.getCurrencyRateBySymbol(oldSymbol);
-
-    const newCurrencyRate =
-      await currencyRatesRepository.getCurrencyRateBySymbol(newSymbol);
+    const [oldRate, newCurrencyRate] = await Promise.all([
+      currencyRatesRepository.getCurrencyRateBySymbol(oldSymbol),
+      currencyRatesRepository.getCurrencyRateBySymbol(newSymbol),
+    ]);
 
     if (!newCurrencyRate || !oldRate) {
       return {
@@ -109,6 +109,12 @@ export const convertTransactionsToNewCurrency = async (
     });
 
     await invalidateKeysByUserId(user.id);
+    revalidatePath(PAGE_ROUTES.HOME_PAGE);
+    revalidatePath(PAGE_ROUTES.ACCOUNTS_ROUTE);
+    revalidatePath(PAGE_ROUTES.BUDGETS_ROUTE);
+    revalidatePath(PAGE_ROUTES.GOALS_ROUTE);
+    revalidatePath(PAGE_ROUTES.TRANSACTIONS_ROUTE);
+    revalidatePath(PAGE_ROUTES.REPORTS_ROUTE);
 
     return {
       success: "Successfully converted transactions to the new currency rate.",

@@ -81,7 +81,9 @@ const accountRepository = {
 
     const accountsQuery = db.query.accounts.findMany({
       with: {
-        transactions: true,
+        transactions: {
+          limit: 10,
+        },
       },
       where(fields, operators) {
         const { eq, like, and } = operators;
