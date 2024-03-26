@@ -96,8 +96,6 @@ interface ILayoutProps {
 }
 
 export default async function RootLayout({ children }: ILayoutProps) {
-  const { user } = await getUser();
-
   return (
     <html lang="en">
       <head>
@@ -105,13 +103,9 @@ export default async function RootLayout({ children }: ILayoutProps) {
       </head>
       <body className={InterFont.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <Navbar user={user} />
-          <NavigationTabs />
-          <main className="pb-16 lg:pb-0">{children}</main>
-          <GenericModal />
-          <GenericConfirmDialog />
           <RedirectionPathToaster />
           <SonnerToaster />
+          <main className="pb-16 lg:pb-0">{children}</main>
         </ThemeProvider>
       </body>
     </html>

@@ -1,8 +1,17 @@
 import NotificationSettings from "@/components/settings/notification-settings";
 import PreferredCurrencySettings from "@/components/settings/preferred-currency-settings";
 import TwoFactorAuthenticationSettings from "@/components/settings/two-factor-authentication-settings";
+import { getUser } from "@/lib/auth/session";
+import { PAGE_ROUTES } from "@/lib/constants";
+import { redirect } from "next/navigation";
 
-const SettingsPage = () => {
+const SettingsPage = async () => {
+  const { user } = await getUser();
+
+  if (!user) {
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+  }
+
   return (
     <div>
       <div className="rounded-md p-2 lg:p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px] mb-2">
