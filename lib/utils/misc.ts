@@ -1,5 +1,5 @@
 import { IGetPaginatedTransactionsParams } from "@/actions/types";
-import { ITransactionPageSearchParams } from "@/app/transactions/page";
+import { ITransactionPageSearchParams } from "@/app/(dashboard)/transactions/page";
 import { TransactionCategory } from "@/entities/transaction";
 
 export function createGetPaginatedTransactionsParams(

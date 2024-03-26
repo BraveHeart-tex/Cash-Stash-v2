@@ -1,11 +1,11 @@
 import MotionDiv from "@/components/animations/motion-div";
 import { ITransactionPageSearchParams } from "../transactions/page";
-import IncomeAndExpenseChart from "../../components/income-expense-chart";
 import { getChartData } from "@/actions";
 import { getPaginatedTransactions } from "@/actions/transaction";
 import { DataTable } from "@/components/ui/data-table";
 import { transactionTableColumns } from "@/components/reports/transactions-data-table/transaction-table-columns";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import IncomeAndExpenseChart from "@/components/income-expense-chart";
 
 const ReportsPage = async ({
   searchParams,
