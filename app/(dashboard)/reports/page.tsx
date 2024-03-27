@@ -48,7 +48,7 @@ const ReportsPage = async ({
           </p>
         </div>
         <Tabs defaultValue="transactions">
-          <TabsList className="rounded-b-none border border-b-0 mr-12 w-full md:w-auto justify-start overflow-x-auto overflow-y-hidden scrollbar-hide">
+          <TabsList className="rounded-b-none border border-b-0 w-full md:w-auto justify-start overflow-x-auto overflow-y-hidden scrollbar-hide">
             <TabsTrigger value="transactions">Transactions</TabsTrigger>
             <TabsTrigger value="incomeAndExpenses">
               Income vs Expenses
