@@ -12,8 +12,6 @@ const DashboardMainLayout = async ({
 }) => {
   const { user } = await getUser();
 
-  console.log("user from layout", user);
-
   return (
     <main>
       <Navbar user={user} />

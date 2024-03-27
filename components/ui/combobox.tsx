@@ -88,13 +88,6 @@ const Combobox = ({
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              transition={{
-                duration: 0.1,
-                type: "spring",
-                bounce: 0.2,
-                damping: 10,
-                stiffness: 100,
-              }}
             >
               <CommandInput
                 value={searchQuery}
@@ -108,7 +101,7 @@ const Combobox = ({
               <CommandList asChild>
                 <AnimatePresence>
                   <motion.ul className="mt-1 w-full min-h-[2.2rem] max-h-[400px] overflow-auto overflow-x-hidden">
-                    {filteredOptions.map((option, index) => (
+                    {filteredOptions.map((option) => (
                       <CommandItem
                         key={option.value}
                         value={option.value}
@@ -118,9 +111,6 @@ const Combobox = ({
                         asChild
                       >
                         <motion.li
-                          whileHover={{
-                            scale: 1.03,
-                          }}
                           id={`option-${option.value}`}
                           whileTap={{ scale: 0.97 }}
                           className={cn(
