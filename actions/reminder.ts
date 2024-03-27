@@ -101,13 +101,12 @@ export const getPaginatedReminders = async ({
   startDate,
   endDate,
 }: IGetPaginatedRemindersParams): Promise<IGetPaginatedRemindersResponse> => {
+  const { user } = await getUser();
+
+  if (!user) {
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+  }
   try {
-    const { user } = await getUser();
-
-    if (!user) {
-      redirect(PAGE_ROUTES.LOGIN_ROUTE);
-    }
-
     const PAGE_SIZE = 12;
     const skipAmount = (pageNumber - 1) * PAGE_SIZE;
 
