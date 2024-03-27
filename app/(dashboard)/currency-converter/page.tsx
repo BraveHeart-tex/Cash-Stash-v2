@@ -2,7 +2,15 @@ import { getUser } from "@/lib/auth/session";
 import { PAGE_ROUTES } from "@/lib/constants";
 import { redirect } from "next/navigation";
 
-const CurrencyConverterPage = async () => {
+const CurrencyConverterPage = async ({
+  searchParams,
+}: {
+  searchParams: {
+    from: string;
+    to: string;
+    amount: string;
+  };
+}) => {
   const { user } = await getUser();
 
   if (!user) {
