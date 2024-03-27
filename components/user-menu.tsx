@@ -11,6 +11,10 @@ import { Button } from "@/components/ui/button";
 import useAuthStore from "@/store/auth/authStore";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Label } from "@/components/ui/label";
+import Link from "next/link";
+import { PAGE_ROUTES } from "@/lib/constants";
+import { SiConvertio } from "react-icons/si";
+import { FaCog } from "react-icons/fa";
 
 const UserMenu = () => {
   let [isPending, startTransition] = useTransition();
@@ -45,6 +49,28 @@ const UserMenu = () => {
         <div className="block lg:hidden">
           <Label>Color Mode</Label>
           <ModeToggle layoutId="active-colorTheme-pill-userMenu" />
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <Label>Other</Label>
+          <Button variant="link" className="w-max p-0">
+            <Link
+              href={PAGE_ROUTES.CURRENCY_CONVERTER_ROUTE}
+              className="flex items-center gap-1 font-medium text-foreground"
+            >
+              <SiConvertio className="w-6 h-6" />
+              Currency Converter
+            </Link>
+          </Button>
+          <Button variant="link" className="w-max p-0">
+            <Link
+              href={PAGE_ROUTES.SETTINGS_ROUTE}
+              className="flex items-center gap-1 font-medium text-foreground"
+            >
+              <FaCog className="w-6 h-6" />
+              Settings
+            </Link>
+          </Button>
         </div>
 
         <Button
