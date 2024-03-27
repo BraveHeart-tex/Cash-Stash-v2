@@ -30,27 +30,28 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import PasswordRequirements from "@/components/auth/password-requirements";
-import { CAPTCHA_SITE_KEY, PAGE_ROUTES } from "@/lib/constants";
+import { PAGE_ROUTES } from "@/lib/constants";
 import { useRouter } from "next/navigation";
-import ReCAPTCHA from "react-google-recaptcha";
-import { useRef, useTransition } from "react";
+import { useTransition } from "react";
 import PasswordInput from "@/components/auth/password-input";
 import { toast } from "sonner";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 const RegisterForm = () => {
+  const { executeRecaptcha } = useGoogleReCaptcha();
   const [isPending, startTransition] = useTransition();
-  const captchaRef = useRef<ReCAPTCHA>(null);
+
   const form = useForm<RegisterSchemaType>({
     resolver: zodResolver(registerSchema),
   });
   const router = useRouter();
 
-  const handleRegisterFormSubmit = (data: RegisterSchemaType) => {
-    const captchaToken = captchaRef.current?.getValue();
+  const handleRegisterFormSubmit = async (data: RegisterSchemaType) => {
+    if (!executeRecaptcha) return;
+    let captchaToken = await executeRecaptcha();
+
     if (!captchaToken) {
-      toast.error("Captcha validation failed.", {
-        description: "Please complete the captcha.",
-      });
+      toast.error("Captcha validation failed.");
       return;
     }
 
@@ -58,10 +59,7 @@ const RegisterForm = () => {
       const isCaptchaTokenValid = await validateReCAPTCHAToken(captchaToken);
 
       if (!isCaptchaTokenValid) {
-        toast.error("Captcha validation failed.", {
-          description: "Please complete the captcha.",
-        });
-        captchaRef.current?.reset();
+        toast.error("Captcha validation failed.");
         return;
       }
 
@@ -179,7 +177,6 @@ const RegisterForm = () => {
                     </div>
                   )}
                 />
-                <ReCAPTCHA sitekey={CAPTCHA_SITE_KEY} ref={captchaRef} />
               </div>
               <Button
                 type="submit"

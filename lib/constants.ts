@@ -41,7 +41,7 @@ export const TWO_FACTOR_AUTH_INPUT_TIMEOUT_SECONDS = 180 as const;
 export const MAX_TWO_FACTOR_AUTH_ATTEMPTS = 3 as const;
 
 export const CAPTCHA_SITE_KEY =
-  "6LdVvIUpAAAAAFzDF5lHhPqScgNzA2DqhbCV96KI" as const;
+  "6LecwqYpAAAAAEtHM7rnQ8gYCTtI4-fSF6_LK_rs" as const;
 
 export const EMAIL_VERIFICATION_REDIRECTION_PATHS = {
   INVALID_EMAIL: PAGE_ROUTES.LOGIN_ROUTE + "?error=invalid-email",

@@ -13,7 +13,7 @@ import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import loginSchema, { LoginSchemaType } from "@/schemas/login-schema";
-import { useRef, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { login, validateReCAPTCHAToken } from "@/actions/auth";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -27,16 +27,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { CAPTCHA_SITE_KEY, PAGE_ROUTES } from "@/lib/constants";
+import { PAGE_ROUTES } from "@/lib/constants";
 import TwoFactorAuthenticationForm from "@/components/auth/two-factor-authentication-form";
-import ReCAPTCHA from "react-google-recaptcha";
-import { useTheme } from "next-themes";
 import PasswordInput from "@/components/auth/password-input";
 import { toast } from "sonner";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 const LoginForm = () => {
-  const theme = useTheme();
-  const captchaRef = useRef<ReCAPTCHA>(null);
+  const { executeRecaptcha } = useGoogleReCaptcha();
   let [isPending, startTransition] = useTransition();
   const [showTwoFactorForm, setShowTwoFactorForm] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
@@ -46,23 +44,14 @@ const LoginForm = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const handleLoginFormSubmit = (data: LoginSchemaType) => {
+  const handleLoginFormSubmit = async (data: LoginSchemaType) => {
+    if (!executeRecaptcha) return;
     startTransition(async () => {
-      const captchaToken = captchaRef.current?.getValue();
-      if (!captchaToken) {
-        toast.error("Captcha validation failed.", {
-          description: "Please complete the captcha.",
-        });
-        return;
-      }
-
+      let captchaToken = await executeRecaptcha();
       const isCaptchaTokenValid = await validateReCAPTCHAToken(captchaToken);
 
       if (!isCaptchaTokenValid) {
-        captchaRef.current?.reset();
-        toast.error("Captcha validation failed.", {
-          description: "Please complete the captcha.",
-        });
+        toast.error("Captcha validation failed.");
         return;
       }
 
@@ -171,11 +160,6 @@ const LoginForm = () => {
                     render={({ field }) => (
                       <PasswordInput<LoginSchemaType> field={field} />
                     )}
-                  />
-                  <ReCAPTCHA
-                    sitekey={CAPTCHA_SITE_KEY}
-                    ref={captchaRef}
-                    theme={theme.resolvedTheme === "dark" ? "dark" : "light"}
                   />
                 </div>
                 <Button
