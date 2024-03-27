@@ -57,7 +57,7 @@ const ReportsPage = async ({
           <div className="lg:p-4 p-2 border rounded-r-lg rounded-bl-lg rounded-tr-none md:rounded-tr-lg">
             <TabsContent value="transactions">
               <div>
-                <p className="text-muted-foreground">
+                <p className="text-foreground">
                   Below table shows all your transactions. You can filter by
                   account, sort by amount and date.
                 </p>
