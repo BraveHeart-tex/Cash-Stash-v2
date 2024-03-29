@@ -10,7 +10,6 @@ import { User } from "lucia";
 import useAuthStore from "@/store/auth/authStore";
 import { PAGE_ROUTES } from "@/lib/constants";
 
-// TODO: Refactor rendering of navbar
 const Navbar = ({ user }: { user: User | null }) => {
   const setCurrentUser = useAuthStore((state) => state.setUser);
 
