@@ -1,6 +1,6 @@
 import { IPage } from "@/actions/types";
 import { AiOutlineTransaction } from "react-icons/ai";
-import { FaMoneyBill, FaPiggyBank, FaCog } from "react-icons/fa";
+import { FaMoneyBill, FaPiggyBank } from "react-icons/fa";
 import { MdDashboard, MdOutlineAccountBalanceWallet } from "react-icons/md";
 import { TbReportAnalytics } from "react-icons/tb";
 
@@ -97,11 +97,6 @@ export const PAGES: IPage[] = [
     label: "Reports",
     icon: TbReportAnalytics,
     link: PAGE_ROUTES.REPORTS_ROUTE,
-  },
-  {
-    label: "Settings",
-    icon: FaCog,
-    link: PAGE_ROUTES.SETTINGS_ROUTE,
   },
 ];
 
