@@ -12,14 +12,14 @@ const budgetSchema = z
       .positive("Budget amount must be positive"),
     category: z
       .enum(budgets.category.enumValues, {
-        required_error: "Budget Category is required",
+        required_error: "Category is required",
         invalid_type_error: "Invalid budget category",
       })
       .superRefine((val, ctx) => {
         if (!val) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
-            message: "Budget Category is required",
+            message: "Category is required",
             path: ["category"],
           });
         }

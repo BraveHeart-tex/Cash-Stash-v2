@@ -184,7 +184,7 @@ const BudgetForm = ({ data: budgetToBeUpdated }: IBudgetFormProps) => {
                 defaultValue={budgetToBeUpdated?.category || field.value}
               >
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger ref={field.ref}>
                     <SelectValue placeholder="Select an budget category" />
                   </SelectTrigger>
                 </FormControl>
