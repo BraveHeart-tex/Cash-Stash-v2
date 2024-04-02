@@ -100,7 +100,7 @@ const Combobox = ({
               </CommandEmpty>
               <CommandList asChild>
                 <AnimatePresence>
-                  <motion.ul className="mt-1 w-full min-h-[2.2rem] max-h-[400px] overflow-auto overflow-x-hidden">
+                  <motion.ul className="mt-1 w-full min-h-[2.2rem] max-h-[150px] md:max-h-[200px] lg:max-h-[400px] overflow-auto">
                     {filteredOptions.map((option) => (
                       <CommandItem
                         key={option.value}
