@@ -1,0 +1,1 @@
+ALTER TABLE `Currency` DROP COLUMN `flagEmoji`;

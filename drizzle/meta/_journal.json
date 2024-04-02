@@ -141,6 +141,20 @@
       "when": 1712035839012,
       "tag": "0019_optimal_thunderbolt_ross",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "5",
+      "when": 1712046431329,
+      "tag": "0020_fine_speedball",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "5",
+      "when": 1712050731658,
+      "tag": "0021_serious_scarlet_spider",
+      "breakpoints": true
     }
   ]
 }
