@@ -1,5 +1,5 @@
 "use client";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { logout } from "@/actions/auth";
 import {
   DropdownMenu,
@@ -16,6 +16,7 @@ import { PAGE_ROUTES } from "@/lib/constants";
 import { SiConvertio } from "react-icons/si";
 
 const UserMenu = () => {
+  const [isOpen, setIsOpen] = useState(false);
   let [isPending, startTransition] = useTransition();
   const user = useAuthStore((state) => state.user);
 
@@ -28,7 +29,7 @@ const UserMenu = () => {
   };
 
   return (
-    <DropdownMenu>
+    <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger className="outline-none focus:outline-none">
         <Avatar>
           <AvatarImage alt={user?.name} />
@@ -55,6 +56,7 @@ const UserMenu = () => {
           <Button
             variant="link"
             className="w-max p-0 text-foreground/70 dark:text-foreground"
+            onClick={() => setIsOpen(false)}
           >
             <Link
               href={PAGE_ROUTES.CURRENCY_CONVERTER_ROUTE}
