@@ -11,4 +11,5 @@ const DashboardSkeleton = () => {
     </div>
   );
 };
+
 export default DashboardSkeleton;
