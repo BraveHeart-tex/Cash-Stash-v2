@@ -4,8 +4,9 @@ import {
   AccountInsertModel,
   accounts,
   AccountSelectModel,
+  transactions,
 } from "@/lib/database/schema";
-import { and, eq, like, sql } from "drizzle-orm";
+import { and, eq, getTableColumns, like, sql } from "drizzle-orm";
 
 interface IGetMultipleAccountsParams {
   userId: string;
@@ -203,6 +204,23 @@ const accountRepository = {
     } catch (e) {
       console.error("Error getting account balance", e);
       return 0;
+    }
+  },
+  async getAccountsThatHaveTransactions(userId: string) {
+    try {
+      return await db
+        .selectDistinct({
+          ...getTableColumns(accounts),
+        })
+        .from(accounts)
+        .innerJoin(transactions, eq(accounts.id, transactions.accountId))
+        .where(eq(accounts.userId, userId));
+    } catch (error) {
+      console.error(
+        "Error fetching accounts with transactions by user id",
+        error
+      );
+      return [];
     }
   },
 };

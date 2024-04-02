@@ -310,3 +310,13 @@ export const getCurrentUserAccounts = async () => {
 
   return await accountRepository.getByUserId(user.id);
 };
+
+export const getCurrentUserAccountsThatHaveTransactions = async () => {
+  const { user } = await getUser();
+
+  if (!user) {
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+  }
+
+  return await accountRepository.getAccountsThatHaveTransactions(user.id);
+};

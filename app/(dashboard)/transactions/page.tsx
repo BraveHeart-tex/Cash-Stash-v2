@@ -5,7 +5,7 @@ import TransactionsNotFound from "@/components/transactions-not-found";
 import RouteSearchInput from "@/components/route-search-input";
 import { FaCalendar, FaMoneyBill } from "react-icons/fa";
 import RouteSelectFilter from "@/components/route-select-filter";
-import { getCurrentUserAccounts } from "@/actions/account";
+import { getCurrentUserAccountsThatHaveTransactions } from "@/actions/account";
 import { Label } from "@/components/ui/label";
 import RouteFiltersPopover from "@/components/route-filters-popover";
 import { createGetPaginatedTransactionsParams } from "@/lib/utils/misc";
@@ -30,8 +30,10 @@ const TransactionsPage = async ({
 }) => {
   const actionParams = createGetPaginatedTransactionsParams(searchParams);
 
-  const transactionsResponse = await getPaginatedTransactions(actionParams);
-  const usersAccounts = await getCurrentUserAccounts();
+  const [transactionsResponse, usersAccounts] = await Promise.all([
+    getPaginatedTransactions(actionParams),
+    getCurrentUserAccountsThatHaveTransactions(),
+  ]);
 
   const accountsFilterDataset = usersAccounts.map((account) => ({
     label: account.name,
