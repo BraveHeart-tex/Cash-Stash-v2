@@ -166,6 +166,8 @@ const TransactionForm = ({
     return !entityId ? "Create" : "Update";
   };
 
+  const loadingAccounts = isPending && accounts.length === 0;
+
   return (
     <Form {...form}>
       <form
@@ -188,8 +190,12 @@ const TransactionForm = ({
                 }
               >
                 <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select an account" />
+                  <SelectTrigger disabled={loadingAccounts} ref={field.ref}>
+                    <SelectValue
+                      placeholder={
+                        loadingAccounts ? "Loading..." : "Select an account"
+                      }
+                    />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
@@ -218,7 +224,7 @@ const TransactionForm = ({
                 defaultValue={transactionToBeUpdated?.category || field.value}
               >
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger ref={field.ref}>
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
                 </FormControl>
@@ -242,7 +248,7 @@ const TransactionForm = ({
               <FormLabel>Amount</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="Amount"
+                  placeholder="Transaction amount"
                   type="number"
                   step={"0.01"}
                   {...field}
@@ -259,7 +265,10 @@ const TransactionForm = ({
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input
+                  placeholder={"Description to add to this transaction"}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

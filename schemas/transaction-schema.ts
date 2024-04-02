@@ -24,7 +24,12 @@ const transactionSchema = z.object({
         });
       }
     }),
-  accountId: z.coerce.number().min(1, "Please select an account"),
+  accountId: z.coerce
+    .number({
+      required_error: "Account is required",
+      invalid_type_error: "Please select an account",
+    })
+    .min(1, "Please select an account"),
 });
 
 export type TransactionSchemaType = z.infer<typeof transactionSchema>;
