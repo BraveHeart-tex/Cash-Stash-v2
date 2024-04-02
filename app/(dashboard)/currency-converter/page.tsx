@@ -1,3 +1,4 @@
+import ConvertedCurrencyList from "@/components/currency-converter/converted-currency-list";
 import CurrencyConverterInput from "@/components/currency-converter/currency-converter-input";
 import { getUser } from "@/lib/auth/session";
 import { PAGE_ROUTES } from "@/lib/constants";
@@ -18,6 +19,8 @@ const CurrencyConverterPage = async ({
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
+  // TODO: Rates per currency, searching on currency list, etc.
+
   return (
     <main className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
       <div className="flex flex-col gap-1">
@@ -30,6 +33,7 @@ const CurrencyConverterPage = async ({
       <div className="mt-4">
         <CurrencyConverterInput />
       </div>
+      <ConvertedCurrencyList currencyRate={1.2} />
     </main>
   );
 };

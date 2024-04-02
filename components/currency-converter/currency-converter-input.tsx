@@ -40,13 +40,13 @@ const CurrencyConverterInput = () => {
       </div>
       <div className="relative w-full">
         <Input
-          className={cn(currencyAmblem.length > 2 ? "pl-16" : "pl-10")}
+          className={cn(currencyAmblem.length > 2 ? "pl-14" : "pl-6")}
           type="number"
           defaultValue={amount || ""}
           onChange={handleInputChange}
         />
 
-        <div className="bg-primary h-full text-primary-foreground rounded-sm p-1 px-3 w-max absolute top-0 left-0 flex items-center justify-center">
+        <div className="bg-primary h-full text-primary-foreground rounded-sm p-1 w-max absolute top-0 left-0 flex items-center justify-center">
           {currencyAmblem}
         </div>
       </div>

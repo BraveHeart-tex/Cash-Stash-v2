@@ -158,6 +158,7 @@ export const FLAGS_BY_CURRENCY_SYMBOL: {
   BOB: "🇧🇴",
   BRL: "🇧🇷",
   BSD: "🇧🇸",
+  BTC: "₿",
   BTN: "🇧🇹",
   BWP: "🇧🇼",
   BYN: "🇧🇾",
