@@ -54,6 +54,9 @@ const TwoFactorAuthenticationSettings = () => {
           const uriResponse = await enableTwoFactorAuthentication();
           setUri(uriResponse);
           setUser({ prefersTwoFactorAuthentication: true });
+          toast.info(
+            "You can now use the form below to enable two-factor authentication."
+          );
         });
       },
     });

@@ -39,7 +39,7 @@ const TwoFactorAuthenticationActivation = () => {
         }
       });
     }
-  }, [shoudlGetUri]);
+  }, [shoudlGetUri, setUri]);
 
   return (
     <div className="text-foreground bg-secondary/80 rounded-sm p-4 lg:p-10 mt-5">
