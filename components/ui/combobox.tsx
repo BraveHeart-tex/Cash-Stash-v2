@@ -26,6 +26,7 @@ interface IComboboxProps {
   contentClassName?: string;
   emptyMessage?: string;
   defaultOption?: IComboboxOption;
+  trigger?: React.ReactNode;
 }
 
 const Combobox = ({
@@ -35,6 +36,7 @@ const Combobox = ({
   contentClassName,
   emptyMessage,
   defaultOption,
+  trigger,
 }: IComboboxProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -66,17 +68,21 @@ const Combobox = ({
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          id="combobox-trigger"
-          aria-expanded={isOpen}
-          className={cn("w-full justify-between", triggerClassName)}
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          {selectedOption?.label || "Select an option"}
-          <FaSort className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        </Button>
+        {trigger ? (
+          trigger
+        ) : (
+          <Button
+            variant="outline"
+            role="combobox"
+            id="combobox-trigger"
+            aria-expanded={isOpen}
+            className={cn("w-full justify-between", triggerClassName)}
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            {selectedOption?.label || "Select an option"}
+            <FaSort className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          </Button>
+        )}
       </PopoverTrigger>
       <PopoverContent
         align="start"

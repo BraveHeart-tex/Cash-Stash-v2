@@ -1,3 +1,4 @@
+import CurrencyConverterInput from "@/components/currency-converter/currency-converter-input";
 import { getUser } from "@/lib/auth/session";
 import { PAGE_ROUTES } from "@/lib/constants";
 import { redirect } from "next/navigation";
@@ -25,6 +26,9 @@ const CurrencyConverterPage = async ({
           See the current exchange rates and convert between your preferred
           currencies.
         </p>
+      </div>
+      <div className="mt-4">
+        <CurrencyConverterInput />
       </div>
     </main>
   );
