@@ -19,6 +19,7 @@ const CurrencyCombobox = ({
   let [isPending, startTransition] = useTransition();
   const [selectedCurrency, setSelectedCurrency] =
     useState<IComboboxOption | null>(null);
+
   const setUser = useAuthStore((state) => state.setUser);
   const showGenericConfirm = useGenericConfirmStore(
     (state) => state.showConfirm
@@ -30,51 +31,90 @@ const CurrencyCombobox = ({
     (item) => item.value === userPreferredCurrency
   );
 
+  const askCurrencyConversion = (
+    oldSymbol: string,
+    selectedCurrency: IComboboxOption
+  ) => {
+    showGenericConfirm({
+      title: "Would you like to convert your transactions?",
+      message:
+        "Your preferred currency has been updated. If you'd like, your transactions can be converted to your new currency. This process may take a few seconds.",
+      onConfirm() {
+        const updateCurrencyConversion = () => {
+          return new Promise(async (resolve, reject) => {
+            startTransition(async () => {
+              const response = await convertTransactionsToNewCurrency(
+                oldSymbol,
+                selectedCurrency.value
+              );
+
+              if (response?.error) {
+                reject(response.error);
+                return;
+              }
+
+              resolve(response?.success);
+            });
+          });
+        };
+        toast.promise(updateCurrencyConversion, {
+          loading: "Converting...",
+          success:
+            "Successfully converted transactions to the new currency rate.",
+          error(error) {
+            return error;
+          },
+        });
+      },
+      primaryActionLabel: "Convert",
+      secondaryActionLabel: "Don't Convert",
+    });
+  };
+
+  const handleCurrencySaveConfirm = () => {
+    return new Promise(async (resolve, reject) => {
+      if (!selectedCurrency) {
+        reject("No currency selected");
+        return;
+      }
+
+      startTransition(async () => {
+        const oldSymbol = userSelectedCurrency?.value!;
+        const response = await updateUserCurrencyPreference(
+          selectedCurrency.value
+        );
+
+        if (response?.error) {
+          toast.error(response.error);
+          reject(response.error);
+          return;
+        }
+
+        setUser({
+          preferredCurrency: selectedCurrency.value,
+        });
+
+        resolve("Preferred currency changed successfully");
+
+        setTimeout(() => {
+          askCurrencyConversion(oldSymbol, selectedCurrency);
+        }, 100);
+      });
+    });
+  };
+
   const handleCurrencySave = () => {
     if (!selectedCurrency) return;
     showGenericConfirm({
       title: "Are you sure you want to change your preferred currency?",
       message: `You will be changing your preferred currency from: ${userSelectedCurrency?.label} to: ${selectedCurrency.label}.`,
       onConfirm() {
-        startTransition(async () => {
-          const oldSymbol = userSelectedCurrency?.value!;
-          const response = await updateUserCurrencyPreference(
-            selectedCurrency.value
-          );
-          if (response?.error) {
-            toast.error(response.error);
-            return;
-          }
-
-          toast.success("Preferred currency changed successfully");
-          setUser({
-            preferredCurrency: selectedCurrency.value,
-          });
-
-          setTimeout(() => {
-            showGenericConfirm({
-              title: "Would you like to convert your transactions?",
-              message:
-                "Your preferred currency has been updated. If you'd like, your transactions can be converted to your new currency. This process may take a few seconds.",
-              onConfirm() {
-                startTransition(async () => {
-                  const response = await convertTransactionsToNewCurrency(
-                    oldSymbol,
-                    selectedCurrency.value
-                  );
-
-                  if (response?.error) {
-                    toast.error(response.error);
-                    return;
-                  }
-
-                  toast.success(response?.success);
-                });
-              },
-              primaryActionLabel: "Convert",
-              secondaryActionLabel: "Don't Convert",
-            });
-          }, 100);
+        toast.promise(handleCurrencySaveConfirm, {
+          loading: "Saving...",
+          success: "Preferred currency changed successfully",
+          error(error) {
+            return error;
+          },
         });
       },
       primaryActionLabel: "Confirm",
