@@ -1,8 +1,7 @@
-import { getCurrencies } from "@/actions/currency";
 import CurrencyCombobox from "@/components/settings/currency-combobox";
+import { CURRENCIES } from "@/lib/constants";
 
 const PreferredCurrencySettings = async () => {
-  const currencies = await getCurrencies();
   return (
     <div>
       <div>
@@ -14,7 +13,7 @@ const PreferredCurrencySettings = async () => {
         </p>
       </div>
       <CurrencyCombobox
-        currencies={currencies.map((item) => ({
+        currencies={CURRENCIES.map((item) => ({
           label: item.name + " (" + item.symbol + ")",
           value: item.symbol,
         }))}
