@@ -7,6 +7,7 @@ import RouteFiltersPopover from "@/components/route-filters-popover";
 import { GiPayMoney } from "react-icons/gi";
 import { FaPiggyBank } from "react-icons/fa";
 import { getPaginatedGoals } from "@/actions/goal";
+import Loading from "./loading";
 
 const GoalsPage = async ({
   searchParams,
