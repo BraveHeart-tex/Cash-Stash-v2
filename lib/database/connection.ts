@@ -4,7 +4,6 @@ import mysql from "mysql2";
 import { drizzle } from "drizzle-orm/mysql2";
 import { sessions, users } from "@/lib/database/schema";
 import * as schema from "@/lib/database/schema";
-import { Logger } from "drizzle-orm/logger";
 import * as dotenv from "dotenv";
 
 dotenv.config();
@@ -20,12 +19,6 @@ export const pool = mysql.createPool({
 });
 
 const asyncPool = pool.promise();
-
-class MyLogger implements Logger {
-  logQuery(query: string, params: unknown[]): void {
-    console.log({ query, params });
-  }
-}
 
 export const db = drizzle(asyncPool, {
   schema: schema,

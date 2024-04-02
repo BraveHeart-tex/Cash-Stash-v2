@@ -1,4 +1,3 @@
-import { Label } from "../ui/label";
 import { Switch } from "../ui/switch";
 
 const NotificationSettings = () => {

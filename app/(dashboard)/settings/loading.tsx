@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
-const Loading = () => {
+const SettingsPageSkeleton = () => {
   return (
     <div className="p-4 w-full mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
       <div className="flex flex-col gap-2">
@@ -19,4 +19,4 @@ const Loading = () => {
   );
 };
 
-export default Loading;
+export default SettingsPageSkeleton;

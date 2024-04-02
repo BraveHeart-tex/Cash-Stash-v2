@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
-const Loading = () => {
+const LoginPageSkeleton = () => {
   return (
     <div className="flex min-h-screen items-center justify-center p-4 gap-4">
       <div className="w-full md:w-[700px] space-y-2 shadow-sm p-2 rounded-md">
@@ -17,4 +17,4 @@ const Loading = () => {
   );
 };
 
-export default Loading;
+export default LoginPageSkeleton;

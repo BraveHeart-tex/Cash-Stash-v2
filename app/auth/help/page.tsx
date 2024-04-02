@@ -13,7 +13,6 @@ import ForgotPassword from "@/components/auth/forgot-password";
 import { PAGE_ROUTES } from "@/lib/constants";
 import ResendVerificationEmailInput from "@/components/resend-verification-token-input";
 import { FaArrowLeft } from "react-icons/fa6";
-import Loading from "./loading";
 
 const SignInHelpPage = ({
   searchParams,

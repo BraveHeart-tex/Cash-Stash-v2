@@ -1,4 +1,3 @@
-import { createId } from "@paralleldrive/cuid2";
 import { AccountSchemaType } from "@/schemas/account-schema";
 import { AccountCategory } from "@/entities/account";
 

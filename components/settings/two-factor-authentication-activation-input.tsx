@@ -30,7 +30,7 @@ const TwoFactorAuthenticationActivationInput = () => {
         }
       });
     }
-  }, [code, user]);
+  }, [code, setUser, user]);
 
   return (
     <div>
