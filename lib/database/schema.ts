@@ -480,6 +480,9 @@ export const currencyRates = mysqlTable(
     id: int("id").autoincrement().primaryKey(),
     rate: double("rate").notNull(),
     symbol: varchar("symbol", { length: 191 }).notNull(),
+    updatedAt: datetime("updatedAt", { mode: "string", fsp: 3 }).default(
+      sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`
+    ),
   },
   (table) => {
     return {
