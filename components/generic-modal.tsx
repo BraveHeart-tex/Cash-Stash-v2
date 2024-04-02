@@ -14,7 +14,6 @@ import {
   Drawer,
   DrawerContent,
   DrawerDescription,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
@@ -56,17 +55,21 @@ const GenericModal = () => {
           }
         }}
       >
-        <DrawerContent>
+        <DrawerContent className="h-[75vh]">
           <DrawerHeader className="text-left">
             <DrawerTitle>{dialogTitle}</DrawerTitle>
             <DrawerDescription>{dialogDescription}</DrawerDescription>
           </DrawerHeader>
-          <div className="px-4">{dialogContentToBeRendered}</div>
-          <DrawerFooter className="pt-2">
-            <Button variant="ghost" onClick={() => closeGenericModal()}>
+          <div className="px-4">
+            {dialogContentToBeRendered}
+            <Button
+              className="w-full mt-1"
+              variant="outline"
+              onClick={() => closeGenericModal()}
+            >
               Cancel
             </Button>
-          </DrawerFooter>
+          </div>
         </DrawerContent>
       </Drawer>
     );
