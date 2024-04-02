@@ -3,6 +3,7 @@ import { useQueryState } from "nuqs";
 import { CURRENCIES, FLAGS_BY_CURRENCY_SYMBOL } from "@/lib/constants";
 import Combobox from "@/components/ui/combobox";
 import { Button } from "@/components/ui/button";
+import { FaChevronDown } from "react-icons/fa";
 
 const CurrencySelectCombobox = () => {
   const [selectedCurrency, setSelectedCurrency] = useQueryState("currency", {
@@ -26,6 +27,7 @@ const CurrencySelectCombobox = () => {
       trigger={
         <Button variant="ghost" className="text-lg p-1">
           <span className="text-2xl mr-1">{flagEmoji}</span> {selectedCurrency}
+          <FaChevronDown className="ml-1" />
         </Button>
       }
       defaultOption={{
