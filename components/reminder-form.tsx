@@ -186,7 +186,7 @@ const ReminderForm = ({ data: reminderToBeUpdated }: IReminderFormProps) => {
                 defaultValue={reminderToBeUpdated?.type! || field.value}
               >
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger ref={field.ref}>
                     <SelectValue placeholder="Select a reminder type" />
                   </SelectTrigger>
                 </FormControl>
