@@ -11,6 +11,7 @@ import { useQueryStates, parseAsString, UseQueryStatesKeysMap } from "nuqs";
 import { GenericFilterOption } from "@/actions/types";
 import { v4 as uuidv4 } from "uuid";
 import { areObjectsDeepEqual } from "@/lib/utils/objectUtils/deepEqual";
+import { useState } from "react";
 
 interface IRouteFiltersPopoverProps<T extends Record<string, any>> {
   options: GenericFilterOption<T>[];
@@ -23,6 +24,7 @@ const RouteFiltersPopover = <T extends Record<string, any>>({
   queryKeys,
   triggerLabel,
 }: IRouteFiltersPopoverProps<T>) => {
+  const [isOpen, setIsOpen] = useState(false);
   const [key, setKey] = useQueryStates(
     {
       ...queryKeys.reduce((acc, key) => {
@@ -48,10 +50,11 @@ const RouteFiltersPopover = <T extends Record<string, any>>({
         return acc;
       }, {} as UseQueryStatesKeysMap<any>)
     );
+    setIsOpen(false);
   };
 
   return (
-    <Popover>
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
