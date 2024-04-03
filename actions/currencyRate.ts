@@ -30,15 +30,36 @@ export const convertCurrency = async ({
   try {
     const currencyRates = await currencyRatesRepository.getCurrencyRates();
     const convertedAmounts: { [key: string]: number } = {};
-    const mappedAmount = Number(amount || "1");
+    const mappedAmount = parseFloat(amount || "1");
+
+    const getExchangeRate = (symbol: string) => currencyRates[symbol] || null;
+
+    const convertCurrency = (
+      amount: number,
+      fromCurrency: string,
+      toCurrency: string
+    ) => {
+      const fromRate = getExchangeRate(fromCurrency);
+      const toRate = getExchangeRate(toCurrency);
+
+      if (!fromRate || !toRate) {
+        return null;
+      }
+
+      return (amount / fromRate) * toRate;
+    };
 
     for (const currencyRate in currencyRates) {
       if (currencyRates.hasOwnProperty(currencyRate)) {
-        const rate = currencyRates[currencyRate];
+        const convertedAmount = convertCurrency(
+          mappedAmount,
+          currency,
+          currencyRate
+        );
 
-        const convertedAmount =
-          currencyRate === currency ? mappedAmount : mappedAmount * rate;
-        convertedAmounts[currencyRate] = convertedAmount;
+        if (convertedAmount) {
+          convertedAmounts[currencyRate] = convertedAmount;
+        }
       }
     }
 

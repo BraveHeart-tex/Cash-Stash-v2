@@ -7,15 +7,15 @@ import { useEffect } from "react";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import getCurrencyAmblem from "@/lib/utils/stringUtils/getCurrencyAmblem";
 import CurrencySelectCombobox from "./curreny-select-combobox";
+import { format } from "date-fns";
 
-const CurrencyConverterInput = () => {
+const CurrencyConverterInput = ({ updatedAt }: { updatedAt: string }) => {
   const [selectedCurrency] = useQueryState("currency", {
     shallow: false,
     defaultValue: "USD",
   });
   const [amount, setAmount] = useQueryState("amount", {
     shallow: false,
-    defaultValue: "1",
   });
   const [debouncedAmount, setDebouncedAmount] = useDebounceValue("", 300);
 
@@ -38,14 +38,14 @@ const CurrencyConverterInput = () => {
       <div className="flex items-center justify-between text-foreground">
         <CurrencySelectCombobox />
         <span className="text-muted-foreground">
-          Last Updated: {new Date().toLocaleDateString()}
+          Last Updated: {format(new Date(updatedAt), "dd/MM/yyyy HH:mm")}
         </span>
       </div>
       <div className="relative w-full">
         <Input
           className={cn(currencyAmblem.length > 2 ? "pl-14" : "pl-6")}
           type="number"
-          defaultValue={amount || ""}
+          defaultValue={amount || "1"}
           onChange={handleInputChange}
         />
 

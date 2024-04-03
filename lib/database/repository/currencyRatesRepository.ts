@@ -31,7 +31,6 @@ const currencyRatesRepository = {
       return (await db.select().from(currencyRates)).reduce(
         (acc, curr) => {
           acc[curr.symbol] = curr.rate;
-
           return acc;
         },
         {} as Record<string, number>

@@ -21,7 +21,7 @@ const CurrencyConverterPage = async ({
 
   const { currency = "USD", amount } = searchParams;
 
-  const response = await convertCurrency({
+  const { currencies, updatedAt } = await convertCurrency({
     currency,
     amount,
   });
@@ -36,9 +36,9 @@ const CurrencyConverterPage = async ({
         </p>
       </div>
       <div className="mt-4">
-        <CurrencyConverterInput />
+        <CurrencyConverterInput updatedAt={updatedAt} />
       </div>
-      <ConvertedCurrencyList currencyRate={1.2} />
+      <ConvertedCurrencyList currencyList={currencies} />
     </main>
   );
 };
