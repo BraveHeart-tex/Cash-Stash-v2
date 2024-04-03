@@ -13,7 +13,10 @@ const CurrencyConverterInput = () => {
     shallow: false,
     defaultValue: "USD",
   });
-  const [amount, setAmount] = useQueryState("amount", { shallow: false });
+  const [amount, setAmount] = useQueryState("amount", {
+    shallow: false,
+    defaultValue: "1",
+  });
   const [debouncedAmount, setDebouncedAmount] = useDebounceValue("", 300);
 
   useEffect(() => {

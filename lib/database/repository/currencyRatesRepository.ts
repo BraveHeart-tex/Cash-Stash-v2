@@ -25,6 +25,22 @@ const currencyRatesRepository = {
 
     return currencyRate;
   },
+
+  async getCurrencyRates() {
+    try {
+      return (await db.select().from(currencyRates)).reduce(
+        (acc, curr) => {
+          acc[curr.symbol] = curr.rate;
+
+          return acc;
+        },
+        {} as Record<string, number>
+      );
+    } catch (error) {
+      console.error("Error getting currency rates", error);
+      return {};
+    }
+  },
 };
 
 export default currencyRatesRepository;

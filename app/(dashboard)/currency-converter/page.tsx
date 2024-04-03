@@ -1,3 +1,4 @@
+import { convertCurrency } from "@/actions/currencyRate";
 import ConvertedCurrencyList from "@/components/currency-converter/converted-currency-list";
 import CurrencyConverterInput from "@/components/currency-converter/currency-converter-input";
 import { getUser } from "@/lib/auth/session";
@@ -8,8 +9,7 @@ const CurrencyConverterPage = async ({
   searchParams,
 }: {
   searchParams: {
-    from: string;
-    to: string;
+    currency: string;
     amount: string;
   };
 }) => {
@@ -19,7 +19,12 @@ const CurrencyConverterPage = async ({
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
-  // TODO: Rates per currency, searching on currency list, etc.
+  const { currency = "USD", amount } = searchParams;
+
+  const response = await convertCurrency({
+    currency,
+    amount,
+  });
 
   return (
     <main className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">

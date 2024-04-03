@@ -363,3 +363,10 @@ export interface IComboboxOption {
   label: string | number;
   value: string;
 }
+
+export interface ConvertCurrencyType {
+  symbol: string;
+  rate: number;
+  label: string;
+  amount: number;
+}
