@@ -3,19 +3,21 @@
 import { useQueryState } from "nuqs";
 import { Input } from "@/components/ui/input";
 import { useDebounceValue } from "usehooks-ts";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import getCurrencyAmblem from "@/lib/utils/stringUtils/getCurrencyAmblem";
 import CurrencySelectCombobox from "./curreny-select-combobox";
 import { format } from "date-fns";
 
 const CurrencyConverterInput = ({ updatedAt }: { updatedAt: string }) => {
+  const inputRef = useRef<HTMLInputElement>(null);
   const [selectedCurrency] = useQueryState("currency", {
     shallow: false,
     defaultValue: "USD",
   });
   const [amount, setAmount] = useQueryState("amount", {
     shallow: false,
+    defaultValue: "1",
   });
   const [debouncedAmount, setDebouncedAmount] = useDebounceValue("", 300);
 
@@ -29,8 +31,17 @@ const CurrencyConverterInput = ({ updatedAt }: { updatedAt: string }) => {
     : "";
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value || "1";
-    setDebouncedAmount(value);
+    const value = event.target.value;
+
+    if (!value && !amount) return;
+
+    if (Number(value) >= 99999999 && inputRef.current) {
+      inputRef.current.value = "99999999";
+      setDebouncedAmount("99999999");
+      return;
+    }
+
+    setDebouncedAmount(value || "1");
   };
 
   return (
@@ -43,9 +54,10 @@ const CurrencyConverterInput = ({ updatedAt }: { updatedAt: string }) => {
       </div>
       <div className="relative w-full">
         <Input
+          ref={inputRef}
           className={cn(currencyAmblem.length > 2 ? "pl-14" : "pl-6")}
           type="number"
-          defaultValue={amount || "1"}
+          defaultValue={amount}
           onChange={handleInputChange}
         />
 
