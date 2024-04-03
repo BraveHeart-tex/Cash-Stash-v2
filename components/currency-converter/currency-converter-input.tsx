@@ -3,14 +3,13 @@
 import { useQueryState } from "nuqs";
 import { Input } from "@/components/ui/input";
 import { useDebounceValue } from "usehooks-ts";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import getCurrencyAmblem from "@/lib/utils/stringUtils/getCurrencyAmblem";
 import CurrencySelectCombobox from "./curreny-select-combobox";
 import { format } from "date-fns";
 
 const CurrencyConverterInput = ({ updatedAt }: { updatedAt: string }) => {
-  const inputRef = useRef<HTMLInputElement>(null);
   const [selectedCurrency] = useQueryState("currency", {
     shallow: false,
     defaultValue: "USD",
@@ -19,6 +18,7 @@ const CurrencyConverterInput = ({ updatedAt }: { updatedAt: string }) => {
     shallow: false,
     defaultValue: "1",
   });
+  const [inputValue, setInputValue] = useState("");
   const [debouncedAmount, setDebouncedAmount] = useDebounceValue("", 300);
 
   useEffect(() => {
@@ -30,18 +30,26 @@ const CurrencyConverterInput = ({ updatedAt }: { updatedAt: string }) => {
     ? getCurrencyAmblem(selectedCurrency)
     : "";
 
+  const toggleMask = (value: string, mask: boolean) => {
+    if (mask) {
+      return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    } else {
+      return value.replace(/,/g, "");
+    }
+  };
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
+    const unMaskedValue = toggleMask(value, false);
 
-    if (!value && !amount) return;
-
-    if (Number(value) >= 99999999 && inputRef.current) {
-      inputRef.current.value = "99999999";
+    if (Number(unMaskedValue) >= 99999999) {
       setDebouncedAmount("99999999");
+      setInputValue(toggleMask("99999999", true));
       return;
     }
 
-    setDebouncedAmount(value || "1");
+    setDebouncedAmount(unMaskedValue || "1");
+    setInputValue(toggleMask(unMaskedValue, true));
   };
 
   return (
@@ -54,9 +62,8 @@ const CurrencyConverterInput = ({ updatedAt }: { updatedAt: string }) => {
       </div>
       <div className="relative w-full">
         <Input
-          ref={inputRef}
           className={cn(currencyAmblem.length > 2 ? "pl-14" : "pl-6")}
-          type="number"
+          value={inputValue}
           defaultValue={amount}
           onChange={handleInputChange}
         />
