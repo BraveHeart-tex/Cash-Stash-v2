@@ -4,9 +4,14 @@ import { useQueryState } from "nuqs";
 import { Input } from "@/components/ui/input";
 import { useDebounceValue } from "usehooks-ts";
 import { useEffect, useState } from "react";
-import CurrencySelectCombobox from "./curreny-select-combobox";
+import CurrencySelectCombobox from "@/components/currency-converter/curreny-select-combobox";
 import { format } from "date-fns";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
+import { Button } from "@/components/ui/button";
+import {
+  HiOutlineSwitchHorizontal,
+  HiOutlineSwitchVertical,
+} from "react-icons/hi";
 
 const CurrencyConverterInput = ({
   updatedAt,
@@ -15,11 +20,17 @@ const CurrencyConverterInput = ({
   updatedAt: string;
   convertedToCurrencyAmount: number;
 }) => {
+  const [currency, setCurrency] = useQueryState("currency", {
+    shallow: false,
+  });
   const [amount, setAmount] = useQueryState("amount", {
     shallow: false,
     defaultValue: "1",
   });
-  const [toCurrency] = useQueryState("to");
+  const [toCurrency, setToCurrency] = useQueryState("to", {
+    shallow: false,
+    defaultValue: "EUR",
+  });
 
   const [inputValue, setInputValue] = useState("");
   const [debouncedAmount, setDebouncedAmount] = useDebounceValue("", 200);
@@ -53,13 +64,17 @@ const CurrencyConverterInput = ({
 
   const maskedConvertedToCurrencyAmount = formatMoney(
     convertedToCurrencyAmount,
-    toCurrency!
+    toCurrency || "EUR"
   );
+
+  const handleCurrencySwitch = () => {
+    setCurrency(toCurrency);
+    setToCurrency(currency);
+  };
 
   return (
     <div className="flex flex-col w-full">
-      <div className="flex items-center justify-between text-foreground"></div>
-      <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="w-full grid grid-cols-1 lg:grid-cols-2 lg:gap-4">
         <div>
           <div className="flex items-center justify-between">
             <CurrencySelectCombobox queryKey="currency" />
@@ -67,15 +82,31 @@ const CurrencyConverterInput = ({
               Last Updated: {format(new Date(updatedAt), "dd/MM/yyyy HH:mm")}
             </span>
           </div>
-          <Input
-            value={inputValue}
-            defaultValue={amount}
-            onChange={handleInputChange}
-            className="text-base"
-          />
+          <div className="flex items-center flex-col lg:flex-row">
+            <Input
+              value={inputValue}
+              defaultValue={amount}
+              onChange={handleInputChange}
+              className="text-base"
+            />
+            <Button
+              size="icon"
+              variant="ghost"
+              className="mt-4 lg:mt-0 lg:ml-4 flex items-center gap-1"
+              onClick={handleCurrencySwitch}
+            >
+              <HiOutlineSwitchHorizontal className="hidden lg:inline" />
+              <HiOutlineSwitchVertical className="lg:hidden" />
+            </Button>
+          </div>
         </div>
+
         <div className="flex items-center flex-col">
-          <CurrencySelectCombobox queryKey="to" triggerClassName="self-start" />
+          <CurrencySelectCombobox
+            defaultValue="EUR"
+            queryKey="to"
+            triggerClassName="self-start"
+          />
           <Input
             disabled
             value={maskedConvertedToCurrencyAmount}

@@ -9,13 +9,15 @@ import { cn } from "@/lib/utils/stringUtils/cn";
 const CurrencySelectCombobox = ({
   queryKey,
   triggerClassName,
+  defaultValue = "USD",
 }: {
   queryKey: string;
   triggerClassName?: string;
+  defaultValue?: string;
 }) => {
   const [value, setValue] = useQueryState(queryKey, {
     shallow: false,
-    defaultValue: "USD",
+    defaultValue,
   });
 
   const flagEmoji = value ? FLAGS_BY_CURRENCY_SYMBOL[value] : "";
