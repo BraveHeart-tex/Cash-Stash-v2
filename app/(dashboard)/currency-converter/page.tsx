@@ -11,6 +11,7 @@ const CurrencyConverterPage = async ({
   searchParams: {
     currency: string;
     amount: string;
+    to: string;
   };
 }) => {
   const { user } = await getUser();
@@ -19,12 +20,15 @@ const CurrencyConverterPage = async ({
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
-  const { currency = "USD", amount } = searchParams;
+  const { currency = "USD", amount, to } = searchParams;
 
   const { currencies, updatedAt } = await convertCurrency({
     currency,
     amount,
   });
+
+  const convertedToCurrencyAmount =
+    currencies.find((item) => item.symbol === to)?.amount || 0;
 
   return (
     <main className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
@@ -36,7 +40,10 @@ const CurrencyConverterPage = async ({
         </p>
       </div>
       <div className="mt-4">
-        <CurrencyConverterInput updatedAt={updatedAt} />
+        <CurrencyConverterInput
+          updatedAt={updatedAt}
+          convertedToCurrencyAmount={convertedToCurrencyAmount}
+        />
       </div>
       <ConvertedCurrencyList currencyList={currencies} />
     </main>
