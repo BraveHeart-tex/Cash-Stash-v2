@@ -71,6 +71,7 @@ const CurrencyConverterInput = ({
             value={inputValue}
             defaultValue={amount}
             onChange={handleInputChange}
+            className="text-base"
           />
         </div>
         <div className="flex items-center flex-col">
@@ -78,7 +79,7 @@ const CurrencyConverterInput = ({
           <Input
             disabled
             value={maskedConvertedToCurrencyAmount}
-            className="disabled:opacity-75"
+            className="disabled:opacity-75 text-base"
           />
         </div>
       </div>

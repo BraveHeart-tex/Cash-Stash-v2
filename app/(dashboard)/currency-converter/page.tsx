@@ -20,7 +20,7 @@ const CurrencyConverterPage = async ({
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
-  const { currency = "USD", amount, to } = searchParams;
+  const { currency = "USD", amount, to = "EUR" } = searchParams;
 
   const { currencies, updatedAt } = await convertCurrency({
     currency,
