@@ -3,8 +3,7 @@
 import { useQueryState } from "nuqs";
 import { Input } from "@/components/ui/input";
 import { useDebounceValue } from "usehooks-ts";
-import { useEffect, useRef, useState } from "react";
-import { cn } from "@/lib/utils/stringUtils/cn";
+import { useEffect, useState } from "react";
 import getCurrencyAmblem from "@/lib/utils/stringUtils/getCurrencyAmblem";
 import CurrencySelectCombobox from "./curreny-select-combobox";
 import { format } from "date-fns";
@@ -60,17 +59,12 @@ const CurrencyConverterInput = ({ updatedAt }: { updatedAt: string }) => {
           Last Updated: {format(new Date(updatedAt), "dd/MM/yyyy HH:mm")}
         </span>
       </div>
-      <div className="relative w-full">
+      <div className="w-full">
         <Input
-          className={cn(currencyAmblem.length > 2 ? "pl-14" : "pl-6")}
           value={inputValue}
           defaultValue={amount}
           onChange={handleInputChange}
         />
-
-        <div className="bg-primary h-full text-primary-foreground rounded-sm p-1 w-max absolute top-0 left-0 flex items-center justify-center">
-          {currencyAmblem}
-        </div>
       </div>
     </div>
   );

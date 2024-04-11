@@ -87,7 +87,7 @@
 
 ::-webkit-scrollbar {
   width: 8px;
-  background-color: hsl(var(--popover));
+  background-color: hsl(var(--muted));
   transition: background-color 0.5s;
   height: 8px;
 }
