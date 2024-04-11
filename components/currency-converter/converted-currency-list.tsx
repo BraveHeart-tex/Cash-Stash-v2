@@ -28,7 +28,7 @@ const ConvertedCurrencyList = ({
   );
 
   return (
-    <div className="relative border px-2 rounded-md mt-2 max-h-[300px] lg:max-h-[500px] overflow-auto">
+    <div className="relative border px-2 rounded-md mt-2 max-h-[350px] lg:max-h-[500px] overflow-auto">
       <div className="flex flex-col gap-1 sticky top-0 bg-background w-full z-10 rounded-md py-1">
         <Label>Search</Label>
         <div className="relative w-full lg:w-[400px]">

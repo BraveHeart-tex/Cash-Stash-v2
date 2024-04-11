@@ -55,7 +55,7 @@ const UserMenu = () => {
           <Label>Other</Label>
           <Button
             variant="link"
-            className="w-max p-0 text-foreground/70 dark:text-foreground"
+            className="w-max p-0 text-foreground"
             onClick={() => setIsOpen(false)}
           >
             <Link

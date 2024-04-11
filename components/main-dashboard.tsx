@@ -96,7 +96,7 @@ const Dashboard = async () => {
       description:
         "View a breakdown of your spending versus earnings for this month, along with additional financial insights.",
       data: (
-        <div className="p-2 max-h-[500px] min-h-[500px] overflow-y-auto flex flex-col gap-4 items-center justify-center">
+        <div className="p-2 max-h-[500px] min-h-[500px] overflow-y-auto flex flex-col gap-4 items-center justify-center scrollbar-hide">
           <BarChartComponent
             monthlyTransactionsData={monthlyTransactions.data || []}
           />
