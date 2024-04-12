@@ -23,7 +23,10 @@ export const accounts = mysqlTable(
   {
     id: int("id").autoincrement().primaryKey(),
     name: varchar("name", { length: 191 }).notNull(),
-    balance: double("balance").notNull(),
+    balance: double("balance", {
+      precision: 10,
+      scale: 2,
+    }).notNull(),
     userId: varchar("userId", {
       length: 128,
     })
@@ -68,8 +71,14 @@ export const budgets = mysqlTable(
   {
     id: int("id").autoincrement().primaryKey(),
     name: varchar("name", { length: 191 }).notNull(),
-    budgetAmount: double("budgetAmount").notNull(),
-    spentAmount: double("spentAmount").notNull(),
+    budgetAmount: double("budgetAmount", {
+      precision: 10,
+      scale: 2,
+    }).notNull(),
+    spentAmount: double("spentAmount", {
+      precision: 10,
+      scale: 2,
+    }).notNull(),
     userId: varchar("userId", {
       length: 128,
     })
@@ -159,8 +168,14 @@ export const goals = mysqlTable(
   {
     id: int("id").autoincrement().primaryKey(),
     name: varchar("name", { length: 191 }).notNull(),
-    goalAmount: double("goalAmount").notNull(),
-    currentAmount: double("currentAmount").notNull(),
+    goalAmount: double("goalAmount", {
+      precision: 10,
+      scale: 2,
+    }).notNull(),
+    currentAmount: double("currentAmount", {
+      precision: 10,
+      scale: 2,
+    }).notNull(),
     progress: double("progress").notNull(),
     userId: varchar("userId", {
       length: 128,
@@ -312,7 +327,10 @@ export const transactions = mysqlTable(
   "Transaction",
   {
     id: int("id").autoincrement().primaryKey(),
-    amount: double("amount").notNull(),
+    amount: double("amount", {
+      precision: 10,
+      scale: 2,
+    }).notNull(),
     createdAt: datetime("createdAt", { mode: "string", fsp: 3 })
       .default(sql`CURRENT_TIMESTAMP(3)`)
       .notNull(),
