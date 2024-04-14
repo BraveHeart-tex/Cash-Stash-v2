@@ -35,6 +35,7 @@ import {
 } from "@/lib/database/schema";
 import { formHasChanged } from "@/lib/utils/objectUtils/formHasChanged";
 import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
+import CurrencyFormLabel from "../ui/currency-form-label";
 
 interface ITransactionFormProps {
   data?: TransactionSelectModel;
@@ -245,7 +246,7 @@ const TransactionForm = ({
           name="amount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Amount</FormLabel>
+              <CurrencyFormLabel label="Amount" />
               <FormControl>
                 <Input
                   placeholder="Transaction amount"

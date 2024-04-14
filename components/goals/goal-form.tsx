@@ -20,6 +20,7 @@ import useGenericModalStore from "@/store/genericModalStore";
 import { toast } from "sonner";
 import { GoalSelectModel } from "@/lib/database/schema";
 import { formHasChanged } from "@/lib/utils/objectUtils/formHasChanged";
+import CurrencyFormLabel from "../ui/currency-form-label";
 
 interface IGoalFormProps {
   data?: GoalSelectModel;
@@ -131,7 +132,7 @@ const GoalForm = ({ data: goalToBeUpdated }: IGoalFormProps) => {
           name="goalAmount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Goal Amount</FormLabel>
+              <CurrencyFormLabel label="Goal Amount" />
               <FormControl>
                 <Input
                   type="number"
@@ -149,7 +150,7 @@ const GoalForm = ({ data: goalToBeUpdated }: IGoalFormProps) => {
           name="currentAmount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Current Amount</FormLabel>
+              <CurrencyFormLabel label="Current Amount" />
               <FormControl>
                 <Input
                   type="number"

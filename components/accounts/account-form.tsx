@@ -28,6 +28,7 @@ import { toast } from "sonner";
 import { AccountSelectModel, accounts } from "@/lib/database/schema";
 import { formHasChanged } from "@/lib/utils/objectUtils/formHasChanged";
 import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
+import CurrencyFormLabel from "../ui/currency-form-label";
 
 interface IAccountFormProps {
   data?: AccountSelectModel;
@@ -173,7 +174,7 @@ const AccountForm = ({ data: accountToBeUpdated }: IAccountFormProps) => {
           name="balance"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Balance</FormLabel>
+              <CurrencyFormLabel label="Balance" />
               <FormControl>
                 <Input type="number" step="0.01" {...field} />
               </FormControl>

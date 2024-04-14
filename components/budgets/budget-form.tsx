@@ -28,6 +28,7 @@ import { toast } from "sonner";
 import { BudgetSelectModel, budgets } from "@/lib/database/schema";
 import { formHasChanged } from "@/lib/utils/objectUtils/formHasChanged";
 import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
+import CurrencyFormLabel from "../ui/currency-form-label";
 
 interface IBudgetFormProps {
   data?: BudgetSelectModel;
@@ -142,7 +143,7 @@ const BudgetForm = ({ data: budgetToBeUpdated }: IBudgetFormProps) => {
           name="budgetAmount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Budget Amount</FormLabel>
+              <CurrencyFormLabel label="Budget Amount" />
               <FormControl>
                 <Input
                   type="number"
@@ -160,7 +161,7 @@ const BudgetForm = ({ data: budgetToBeUpdated }: IBudgetFormProps) => {
           name="spentAmount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Spent Amount</FormLabel>
+              <CurrencyFormLabel label="Spent Amount" />
               <FormControl>
                 <Input
                   type="number"
