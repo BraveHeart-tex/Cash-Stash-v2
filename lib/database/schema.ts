@@ -499,6 +499,30 @@ export const currencyRates = mysqlTable(
   }
 );
 
+export const categories = mysqlTable("Category", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 50 }).notNull(),
+  createdAt: datetime("createdAt", { mode: "string", fsp: 3 })
+    .default(sql`CURRENT_TIMESTAMP(3)`)
+    .notNull(),
+  updatedAt: datetime("updatedAt", { mode: "string", fsp: 3 })
+    .default(sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`)
+    .notNull(),
+  type: int("type").notNull(),
+  userId: varchar("userId", {
+    length: 128,
+  })
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
+});
+
+export const categoryRelations = relations(categories, ({ one }) => ({
+  user: one(users, {
+    fields: [categories.userId],
+    references: [users.id],
+  }),
+}));
+
 export type UserInsertModel = InferInsertModel<typeof users>;
 export type UserSelectModel = InferSelectModel<typeof users>;
 
@@ -520,6 +544,9 @@ export type ReminderSelectModel = InferSelectModel<typeof reminders>;
 
 export type SessionInsertModel = InferInsertModel<typeof sessions>;
 export type SessionSelectModel = InferSelectModel<typeof sessions>;
+
+export type CategoryInsertModel = InferInsertModel<typeof categories>;
+export type CategorySelectModel = InferSelectModel<typeof categories>;
 
 export type EmailVerificationCodeInsertModel = InferInsertModel<
   typeof emailVerificationCode

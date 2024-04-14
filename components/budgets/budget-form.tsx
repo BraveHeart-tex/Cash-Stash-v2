@@ -18,9 +18,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { IValidatedResponse } from "@/actions/types";
 import { useRouter } from "next/navigation";
-import { useEffect, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import budgetSchema, { BudgetSchemaType } from "@/schemas/budget-schema";
 import { createBudget, updateBudget } from "@/actions/budget";
 import useGenericModalStore from "@/store/genericModalStore";
@@ -29,10 +34,41 @@ import { BudgetSelectModel, budgets } from "@/lib/database/schema";
 import { formHasChanged } from "@/lib/utils/objectUtils/formHasChanged";
 import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
 import CurrencyFormLabel from "../ui/currency-form-label";
+import { FaPlus } from "react-icons/fa";
+import BudgetCategoryForm from "./budget-category-form";
 
 interface IBudgetFormProps {
   data?: BudgetSelectModel;
 }
+
+const CreateCategoryPopover = () => {
+  const [open, setOpen] = useState(false);
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button type="button" size="icon">
+          <FaPlus />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent>
+        <div className="grid gap-4">
+          <div className="space-y-2">
+            <h4 className="font-medium leading-none">Add Budget Category</h4>
+            <p className="text-sm text-muted-foreground">
+              Add a new budget category by using the form below.
+            </p>
+          </div>
+          <BudgetCategoryForm
+            // TODO:
+            afterSave={(values) => {
+              setOpen(false);
+            }}
+          />
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+};
 
 const BudgetForm = ({ data: budgetToBeUpdated }: IBudgetFormProps) => {
   const [isPending, startTransition] = useTransition();
@@ -58,7 +94,13 @@ const BudgetForm = ({ data: budgetToBeUpdated }: IBudgetFormProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [budgetToBeUpdated]);
 
-  const handleFormSubmit = async (values: BudgetSchemaType) => {
+  const handleFormSubmit = async (values: BudgetSchemaType, event: any) => {
+    const targetForm = event.target.closest("form");
+
+    if (targetForm && targetForm.id === "budget-category-form") {
+      return;
+    }
+
     if (entityId && formHasChanged(budgetToBeUpdated, values)) {
       toast.info("No changes detected.", {
         description: "You haven't made any changes to the budget.",
@@ -122,6 +164,10 @@ const BudgetForm = ({ data: budgetToBeUpdated }: IBudgetFormProps) => {
   return (
     <Form {...form}>
       <form
+        id="budget-form"
+        role="form"
+        name="budget-form"
+        aria-label="Budget Form"
         onSubmit={form.handleSubmit(handleFormSubmit)}
         className="grid grid-cols-1 gap-4"
       >
@@ -185,9 +231,12 @@ const BudgetForm = ({ data: budgetToBeUpdated }: IBudgetFormProps) => {
                 defaultValue={budgetToBeUpdated?.category || field.value}
               >
                 <FormControl>
-                  <SelectTrigger ref={field.ref}>
-                    <SelectValue placeholder="Select an budget category" />
-                  </SelectTrigger>
+                  <div className="flex items-center gap-1">
+                    <SelectTrigger ref={field.ref}>
+                      <SelectValue placeholder="Select an budget category" />
+                    </SelectTrigger>
+                    <CreateCategoryPopover />
+                  </div>
                 </FormControl>
                 <SelectContent>
                   {budgetCategorySelectOptions.map((option) => (

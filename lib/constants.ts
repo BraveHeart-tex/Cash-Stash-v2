@@ -26,6 +26,11 @@ export const PAGE_ROUTES = {
   CURRENCY_CONVERTER_ROUTE: "/currency-converter",
 } as const;
 
+export const CATEGORY_TYPES = {
+  TRANSACTION: 1,
+  BUDGET: 2,
+} as const;
+
 export const MAX_VERIFICATION_CODE_ATTEMPTS = 3 as const;
 export const SEND_VERIFICATION_CODE_RATE_LIMIT = 3 as const;
 export const MAX_LOGIN_REQUESTS_PER_MINUTE = 5 as const;
