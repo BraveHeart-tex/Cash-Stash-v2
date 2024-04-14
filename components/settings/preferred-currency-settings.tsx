@@ -3,7 +3,7 @@ import { CURRENCIES } from "@/lib/constants";
 
 const PreferredCurrencySettings = async () => {
   return (
-    <div>
+    <div className="flex flex-col gap-2">
       <div>
         <h2 className="text-xl font-semibold text-primary">
           Preffered Currency
