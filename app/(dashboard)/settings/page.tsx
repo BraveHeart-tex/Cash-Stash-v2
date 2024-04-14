@@ -13,23 +13,24 @@ const SettingsPage = async () => {
   }
 
   return (
-    <div>
-      <div className="rounded-md p-2 lg:p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px] mb-2">
-        <div className="flex flex-col gap-1">
-          <h3 className="text-4xl text-primary">Settings</h3>
-          <p className="text-muted-foreground">
-            Personalize your CashStash experience.
-          </p>
-        </div>
-        <div className="mt-10">
-          <div className="flex flex-col gap-10">
-            <PreferredCurrencySettings />
-            <NotificationSettings />
-            <TwoFactorAuthenticationSettings />
-          </div>
+    <section
+      id="settings"
+      className="rounded-md p-2 lg:p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px] mb-2"
+    >
+      <div className="flex flex-col gap-1">
+        <h3 className="text-4xl text-primary">Settings</h3>
+        <p className="text-muted-foreground">
+          Personalize your CashStash experience.
+        </p>
+      </div>
+      <div className="mt-10">
+        <div className="flex flex-col gap-10">
+          <PreferredCurrencySettings />
+          <NotificationSettings />
+          <TwoFactorAuthenticationSettings />
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
