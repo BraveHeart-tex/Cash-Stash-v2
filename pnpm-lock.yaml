@@ -87,18 +87,6 @@ dependencies:
   "@tanstack/react-table":
     specifier: ^8.15.0
     version: 8.15.0(react-dom@18.2.0)(react@18.2.0)
-  "@types/bcrypt":
-    specifier: ^5.0.2
-    version: 5.0.2
-  "@types/node":
-    specifier: 20.2.3
-    version: 20.2.3
-  "@types/react":
-    specifier: ^18.2.63
-    version: 18.2.63
-  "@types/react-dom":
-    specifier: 18.2.4
-    version: 18.2.4
   class-variance-authority:
     specifier: ^0.7.0
     version: 0.7.0
@@ -215,9 +203,21 @@ devDependencies:
   "@faker-js/faker":
     specifier: ^8.4.1
     version: 8.4.1
+  "@types/bcrypt":
+    specifier: ^5.0.2
+    version: 5.0.2
+  "@types/node":
+    specifier: 20.2.3
+    version: 20.2.3
   "@types/nodemailer":
     specifier: ^6.4.14
     version: 6.4.14
+  "@types/react":
+    specifier: ^18.2.63
+    version: 18.2.63
+  "@types/react-dom":
+    specifier: 18.2.4
+    version: 18.2.4
   "@types/react-google-recaptcha":
     specifier: ^2.1.9
     version: 2.1.9
@@ -4933,7 +4933,7 @@ packages:
       }
     dependencies:
       "@types/node": 20.2.3
-    dev: false
+    dev: true
 
   /@types/cookie@0.4.1:
     resolution:
@@ -5127,7 +5127,6 @@ packages:
       }
     dependencies:
       "@types/react": 18.2.63
-    dev: false
 
   /@types/react-google-recaptcha@2.1.9:
     resolution:

@@ -42,7 +42,7 @@ const TwoFactorAuthenticationActivation = () => {
   }, [shoudlGetUri, setUri]);
 
   return (
-    <div className="text-foreground bg-secondary/80 rounded-sm p-4 lg:p-10 mt-5">
+    <div className="text-foreground bg-card shadow border rounded-sm p-4 lg:p-10 mt-5">
       <div className="flex flex-col gap-2">
         <div>
           <span className="text-primary font-semibold">1.</span> Get an
@@ -63,7 +63,7 @@ const TwoFactorAuthenticationActivation = () => {
             <Button className="p-0" variant="link">
               FreeOTP
             </Button>
-          </Link>{" "}
+          </Link>
         </div>
         <div>
           <span className="text-primary font-semibold">2.</span> Scan the QR
