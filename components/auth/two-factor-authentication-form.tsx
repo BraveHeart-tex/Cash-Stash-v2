@@ -64,6 +64,7 @@ const TwoFactorAuthenticationForm = ({ email }: { email: string }) => {
               loading={isPending}
               length={6}
               onChange={setCode}
+              shouldFocusFirstInput
             />
           </div>
         </div>

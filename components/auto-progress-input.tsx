@@ -5,6 +5,7 @@ import React, {
   KeyboardEvent,
   ClipboardEvent,
   HTMLInputTypeAttribute,
+  useEffect,
 } from "react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils/stringUtils/cn";
@@ -15,6 +16,7 @@ interface IAutoProgressInputProps {
   onChange: (value: string) => void;
   type?: HTMLInputTypeAttribute;
   loading?: boolean;
+  shouldFocusFirstInput?: boolean;
 }
 
 const AutoProgressInput = ({
@@ -22,12 +24,19 @@ const AutoProgressInput = ({
   onChange,
   type = "text",
   loading,
+  shouldFocusFirstInput = false,
 }: IAutoProgressInputProps) => {
   const [values, setValues] = useState(new Array(length).fill(""));
   const refs: RefObject<HTMLInputElement>[] = Array.from({ length }, () =>
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useRef<HTMLInputElement>(null)
   );
+
+  useEffect(() => {
+    if (shouldFocusFirstInput) {
+      refs[0]?.current?.focus();
+    }
+  }, [shouldFocusFirstInput, refs]);
 
   const handleChange = (index: number, value: string) => {
     const newValues = [...values];
