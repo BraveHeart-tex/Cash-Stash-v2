@@ -16,7 +16,7 @@ const AccountCard = ({ account }: IAccountCardProps) => {
     useState<AccountWithTransactions | null>(null);
 
   return (
-    <div>
+    <article>
       <AccountCardContent
         account={account}
         setSelectedAccount={setSelectedAccount}
@@ -26,7 +26,7 @@ const AccountCard = ({ account }: IAccountCardProps) => {
         selectedAccount={selectedAccount}
         onClose={() => setSelectedAccount(null)}
       />
-    </div>
+    </article>
   );
 };
 export default AccountCard;

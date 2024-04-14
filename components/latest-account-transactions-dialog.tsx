@@ -102,6 +102,7 @@ const LatestAccountTransactionsDialog = ({
           {transactions.map((transaction) => (
             <TransactionCard
               key={transaction.id}
+              showPopover={false}
               transaction={{
                 ...transaction,
                 accountName: selectedAccount.name,

@@ -111,6 +111,7 @@ const AccountCardContent = ({
             },
           ]}
           positionAbsolute
+          triggerClassName="top-0 right-0"
         />
       )}
       <p className="font-semibold mb-2 text-primary">
