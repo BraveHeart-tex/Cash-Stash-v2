@@ -38,7 +38,10 @@ const ResetPassword = async ({
   }
 
   return (
-    <div className="flex flex-col justify-center items-center h-screen p-2">
+    <section
+      id="reset-password"
+      className="flex flex-col justify-center items-center h-screen p-2"
+    >
       <Card className="w-full lg:w-[600px]">
         <CardHeader className="text-xl">
           <Image
@@ -56,7 +59,7 @@ const ResetPassword = async ({
           <ResetPasswordForm email={email} token={token} />
         </CardContent>
       </Card>
-    </div>
+    </section>
   );
 };
 export default ResetPassword;

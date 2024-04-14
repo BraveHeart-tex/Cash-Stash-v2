@@ -10,11 +10,14 @@ const LoginPage = async () => {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4 gap-4">
+    <section
+      id="login-page"
+      className="flex min-h-screen items-center justify-center p-4 gap-4"
+    >
       <div className="w-full md:w-[700px]">
         <LoginForm />
       </div>
-    </div>
+    </section>
   );
 };
 

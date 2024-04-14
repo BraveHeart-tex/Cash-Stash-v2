@@ -45,7 +45,10 @@ const EmailVerificationPage = async ({
   }
 
   return (
-    <div className="flex flex-col justify-center items-center h-screen p-2">
+    <section
+      id="email-verification"
+      className="flex flex-col justify-center items-center h-screen p-2"
+    >
       <Card>
         <CardHeader className="text-xl">
           <Image
@@ -77,7 +80,7 @@ const EmailVerificationPage = async ({
           </div>
         </CardFooter>
       </Card>
-    </div>
+    </section>
   );
 };
 export default EmailVerificationPage;

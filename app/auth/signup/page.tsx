@@ -10,11 +10,14 @@ const SignUpPage = async () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <section
+      id="sign-up"
+      className="min-h-screen flex items-center justify-center p-4"
+    >
       <div className="w-full md:w-[700px]">
         <RegisterForm />
       </div>
-    </div>
+    </section>
   );
 };
 

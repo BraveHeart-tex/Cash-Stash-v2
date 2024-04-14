@@ -56,7 +56,10 @@ const SignInHelpPage = ({
   };
 
   return (
-    <div className="flex flex-col justify-center items-center h-screen p-2">
+    <section
+      id="sign-in-help"
+      className="flex flex-col justify-center items-center h-screen p-2"
+    >
       <Card className="min-w-[400px]">
         <CardHeader className="text-xl">
           <Image
@@ -93,7 +96,7 @@ const SignInHelpPage = ({
           </div>
         </CardContent>
       </Card>
-    </div>
+    </section>
   );
 };
 
