@@ -86,7 +86,7 @@ const TransactionCard = ({
   };
 
   return (
-    <motion.div
+    <motion.article
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -94,7 +94,7 @@ const TransactionCard = ({
       className="relative"
       layoutId={`transaction-card-${transaction.id}`}
     >
-      <Card className={"mt-4 cursor-pointer relative"}>
+      <Card className={"mt-4 relative"}>
         <CardHeader className={"border-b h-[100px]"}>
           <CardTitle>{transaction.description}</CardTitle>
           <CardDescription>{transactionCategoryLabel}</CardDescription>
@@ -140,7 +140,7 @@ const TransactionCard = ({
           triggerClassName="mb-0 top-4 right-0"
         />
       )}
-    </motion.div>
+    </motion.article>
   );
 };
 

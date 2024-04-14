@@ -85,7 +85,7 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
       transition={{ duration: 0.5 }}
       layoutId={`budget-card-${budget.id}`}
       key={budget.id}
-      className="flex flex-col gap-2 p-4 pt-6 border-1 shadow-xl rounded-md relative bg-card border cursor-pointer"
+      className="flex flex-col gap-2 p-4 pt-6 border-1 shadow-xl rounded-md relative bg-card border"
     >
       <div className="flex flex-col gap-1 p-0">
         <span className="font-semibold text-foreground text-lg">
@@ -115,7 +115,7 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
           />
           <Badge
             className={cn(
-              "select-none cursor-pointer",
+              "select-none",
               getBadgeColor(budget.spentAmount / budget.budgetAmount)
             )}
           >

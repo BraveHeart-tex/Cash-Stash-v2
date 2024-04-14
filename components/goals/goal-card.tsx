@@ -76,13 +76,13 @@ const GoalCard = ({ goal }: IGoalCardProps) => {
   };
 
   return (
-    <motion.div
+    <motion.article
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
       exit={{ opacity: 0, y: 20 }}
       layoutId={`goal-card-${goal.id}`}
-      className="flex flex-col gap-2 p-4 pt-6 border-1 shadow-xl rounded-md relative bg-card border cursor-pointer"
+      className="flex flex-col gap-2 p-4 pt-6 border-1 shadow-xl rounded-md relative bg-card border"
     >
       <p className="font-semibold text-foreground">{goal.name}</p>
       <div className="absolute top-3 right-1 mb-2">
@@ -119,7 +119,7 @@ const GoalCard = ({ goal }: IGoalCardProps) => {
           Target: {formatMoney(goal.goalAmount, preferredCurrency)}
         </p>
       </div>
-    </motion.div>
+    </motion.article>
   );
 };
 

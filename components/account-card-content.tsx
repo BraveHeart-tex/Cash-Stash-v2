@@ -85,7 +85,7 @@ const AccountCardContent = ({
       layoutId={`account-card-${account.id}`}
       key={account.id}
       className={cn(
-        "flex flex-col gap-2 p-4 border-1 shadow-xl rounded-md relative bg-card border cursor-pointer",
+        "flex flex-col gap-2 p-4 border-1 shadow-xl rounded-md relative bg-card border",
         className
       )}
     >
