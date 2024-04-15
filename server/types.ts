@@ -46,7 +46,7 @@ export interface IGetPaginatedAccountsResponse extends IPaginatedResponse {
 }
 
 export interface IGetPaginatedBudgetsParams extends IPaginatedActionParams {
-  category?: BudgetCategory;
+  category?: string;
   sortBy?: string;
   sortDirection?: string;
 }

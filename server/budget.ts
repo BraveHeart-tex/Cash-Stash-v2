@@ -18,10 +18,8 @@ import {
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import { createBudgetDto } from "@/lib/database/dto/budgetDto";
 import budgetRepository from "@/lib/database/repository/budgetRepository";
-import { BudgetCategory } from "@/entities/budget";
 import redisService from "@/lib/redis/redisService";
 import { processZodError } from "@/lib/utils/objectUtils/processZodError";
-import { validateEnumValue } from "@/lib/utils/objectUtils/validateEnumValue";
 
 export const createBudget = async (
   data: BudgetSchemaType
@@ -152,16 +150,6 @@ export const getPaginatedBudgets = async ({
 
   const PAGE_SIZE = 12;
   const skipAmount = (pageNumber - 1) * PAGE_SIZE;
-
-  if (category && !validateEnumValue(category, BudgetCategory)) {
-    return {
-      budgets: [],
-      hasNextPage: false,
-      hasPreviousPage: false,
-      currentPage: 1,
-      totalPages: 1,
-    };
-  }
 
   const cacheKey = getPaginatedBudgetsKey({
     userId: user.id,

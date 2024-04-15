@@ -1,7 +1,6 @@
 import { getPaginatedBudgets } from "@/server/budget";
 import BudgetList from "@/components/budgets/budget-list";
 import RoutePaginationControls from "@/components/route-pagination-controls";
-import { BudgetCategory } from "@/entities/budget";
 
 const BudgetsPage = async ({
   searchParams,
@@ -17,7 +16,7 @@ const BudgetsPage = async ({
   const actionParams = {
     pageNumber: parseInt(searchParams.page) || 1,
     query: searchParams.query || "",
-    category: searchParams.category as BudgetCategory,
+    category: searchParams.category,
     sortBy: searchParams.sortBy || "",
     sortDirection: searchParams.sortDirection || "",
   };

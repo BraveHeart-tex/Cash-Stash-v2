@@ -7,22 +7,19 @@ import RouteFiltersPopover from "@/components/route-filters-popover";
 import { GiPayMoney } from "react-icons/gi";
 import { FaPiggyBank } from "react-icons/fa";
 import BudgetsNotFoundMessage from "./budgets-not-found";
-import {
-  BudgetSelectModel,
-  budgets as budgetDatabaseSchema,
-} from "@/lib/database/schema";
-import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
+import { BudgetSelectModel } from "@/lib/database/schema";
+import { getCategoriesByType } from "@/server/category";
+import { CATEGORY_TYPES } from "@/lib/constants";
 
-const BudgetList = ({
+const BudgetList = async ({
   budgets,
   pageHasParams,
 }: {
   budgets: BudgetSelectModel[];
   pageHasParams: boolean;
 }) => {
-  const budgetCategorySelectOptions = generateOptionsFromEnums(
-    budgetDatabaseSchema.category.enumValues
-  );
+  const budgetOptions =
+    (await getCategoriesByType(CATEGORY_TYPES.BUDGET)) || [];
 
   return (
     <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
@@ -90,7 +87,10 @@ const BudgetList = ({
       </div>
       <div className={"grid lg:grid-cols-6"}>
         <RouteSelectFilter
-          dataset={budgetCategorySelectOptions}
+          dataset={budgetOptions.map((option) => ({
+            label: option.name,
+            value: option.name,
+          }))}
           queryStringKey="category"
           selectLabel="Budget Category"
         />
