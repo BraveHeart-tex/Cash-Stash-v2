@@ -2,6 +2,7 @@ const isObject = (value: any): boolean => {
   return value !== null && typeof value === "object";
 };
 
+// TODO: Handle edge cases with dates
 export const areObjectsDeepEqual = (obj1: any, obj2: any): boolean => {
   if (obj1 === obj2) return true;
 

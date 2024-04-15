@@ -181,6 +181,8 @@ const BudgetForm = ({ data: budgetToBeUpdated }: IBudgetFormProps) => {
     value: category.name,
   }));
 
+  const isBudgetCategoryListEmpty = budgetCategories.length === 0;
+
   return (
     <Form {...form}>
       <form
@@ -249,21 +251,23 @@ const BudgetForm = ({ data: budgetToBeUpdated }: IBudgetFormProps) => {
               <FormControl>
                 <div className="flex items-center gap-1">
                   <Combobox
-                    key={field.value}
+                    key={JSON.stringify(
+                      form.watch("category") + budgetCategories
+                    )}
                     ref={field.ref}
                     options={budgetCategoryOptions}
                     contentClassName="z-[100]"
                     defaultOption={budgetCategoryOptions.find(
-                      (category) => category.value === field.value
+                      (category) => category.value === form.watch("category")
                     )}
                     triggerClassName={cn(
                       "focus:outline focus:outline-1 focus:outline-offset-1 focus:outline-destructive",
-                      budgetCategories.length === 0 && "hidden"
+                      !isPending && isBudgetCategoryListEmpty && "hidden"
                     )}
                     triggerPlaceholder="Select a budget category"
                     onSelect={(option) => field.onChange(option.value)}
                   />
-                  {budgetCategories.length === 0 && (
+                  {!isPending && isBudgetCategoryListEmpty && (
                     <p className="text-muted-foreground mr-auto">
                       Looks like there are no budget categories yet.
                     </p>

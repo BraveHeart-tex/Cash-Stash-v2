@@ -40,7 +40,7 @@ const RouteSelectFilter = ({
       <SelectTrigger className="w-full lg:w-[180px]">
         <SelectValue>{readableLabel || "All"}</SelectValue>
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className="max-h-[300px] overflow-auto">
         <SelectGroup>
           <SelectLabel>{selectLabel}</SelectLabel>
           <SelectItem value={""}>All</SelectItem>
