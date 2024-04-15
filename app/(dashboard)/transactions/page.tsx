@@ -1,11 +1,11 @@
-import { getPaginatedTransactions } from "@/actions/transaction";
+import { getPaginatedTransactions } from "@/server/transaction";
 import TransactionList from "@/components/transactions/transaction-list";
 import CreateTransactionButton from "@/components/create-buttons/create-transaction-button";
 import TransactionsNotFound from "@/components/transactions-not-found";
 import RouteSearchInput from "@/components/route-search-input";
 import { FaCalendar, FaMoneyBill } from "react-icons/fa";
 import RouteSelectFilter from "@/components/route-select-filter";
-import { getCurrentUserAccountsThatHaveTransactions } from "@/actions/account";
+import { getCurrentUserAccountsThatHaveTransactions } from "@/server/account";
 import { Label } from "@/components/ui/label";
 import RouteFiltersPopover from "@/components/route-filters-popover";
 import { createGetPaginatedTransactionsParams } from "@/lib/utils/misc";

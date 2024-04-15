@@ -1,7 +1,7 @@
 "use client";
 import AccountCard from "../account-card";
 import { motion } from "framer-motion";
-import { AccountWithTransactions } from "@/actions/types";
+import { AccountWithTransactions } from "@/server/types";
 
 interface IAccountInformationProps {
   userAccounts: AccountWithTransactions[];

@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import useGenericModalStore from "@/store/genericModalStore";
-import { deleteGoal } from "@/actions/goal";
+import { deleteGoal } from "@/server/goal";
 import ActionPopover from "@/components/action-popover";
 import { toast } from "sonner";
 import { GoalSelectModel } from "@/lib/database/schema";

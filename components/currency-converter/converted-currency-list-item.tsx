@@ -1,4 +1,4 @@
-import { ConvertCurrencyType } from "@/actions/types";
+import { ConvertCurrencyType } from "@/server/types";
 import { FLAGS_BY_CURRENCY_SYMBOL } from "@/lib/constants";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 

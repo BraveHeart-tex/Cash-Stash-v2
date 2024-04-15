@@ -85,17 +85,9 @@ export const budgets = mysqlTable(
       .notNull()
       .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
     progress: double("progress").notNull(),
-    category: mysqlEnum("category", [
-      "FOOD",
-      "TRANSPORTATION",
-      "ENTERTAINMENT",
-      "UTILITIES",
-      "SHOPPING",
-      "HOUSING",
-      "OTHER",
-    ])
-      .default("OTHER")
-      .notNull(),
+    category: varchar("category", {
+      length: 50,
+    }).notNull(),
     createdAt: datetime("createdAt", { mode: "string", fsp: 3 })
       .default(sql`CURRENT_TIMESTAMP(3)`)
       .notNull(),

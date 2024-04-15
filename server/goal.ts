@@ -7,7 +7,7 @@ import {
   IGetPaginatedGoalsParams,
   IGetPaginatedGoalsResponse,
   IValidatedResponse,
-} from "@/actions/types";
+} from "@/server/types";
 import {
   generateCachePrefixWithUserId,
   getGoalKey,

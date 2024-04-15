@@ -1,7 +1,7 @@
 import { useEffect, useState, useTransition } from "react";
 import AutoProgressInput from "@/components/auto-progress-input";
 import { Label } from "@/components/ui/label";
-import { activateTwoFactorAuthentication } from "@/actions/auth";
+import { activateTwoFactorAuthentication } from "@/server/auth";
 import { toast } from "sonner";
 import useAuthStore from "@/store/auth/authStore";
 

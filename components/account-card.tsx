@@ -3,7 +3,7 @@ import LatestAccountTransactionsDialog from "./latest-account-transactions-dialo
 import { useState } from "react";
 
 import AccountCardContent from "./account-card-content";
-import { AccountWithTransactions } from "@/actions/types";
+import { AccountWithTransactions } from "@/server/types";
 
 interface IAccountCardProps {
   account: AccountWithTransactions;

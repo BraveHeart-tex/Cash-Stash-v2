@@ -1,6 +1,6 @@
 "use client";
 import { useState, useTransition } from "react";
-import { logout } from "@/actions/auth";
+import { logout } from "@/server/auth";
 import {
   DropdownMenu,
   DropdownMenuContent,

@@ -3,13 +3,13 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import useGenericModalStore from "@/store/genericModalStore";
-import { deleteAccount } from "@/actions/account";
+import { deleteAccount } from "@/server/account";
 import ActionPopover from "@/components/action-popover";
 import { toast } from "sonner";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import { generateLabelFromEnumValue } from "@/lib/utils/stringUtils/generateLabelFromEnumValue";
-import { AccountWithTransactions } from "@/actions/types";
+import { AccountWithTransactions } from "@/server/types";
 import { FaTrash, FaEdit, FaRegCreditCard } from "react-icons/fa";
 import useAuthStore from "@/store/auth/authStore";
 

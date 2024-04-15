@@ -1,4 +1,4 @@
-import { IGetPaginatedTransactionsParams } from "@/actions/types";
+import { IGetPaginatedTransactionsParams } from "@/server/types";
 import { ITransactionPageSearchParams } from "@/app/(dashboard)/transactions/page";
 import { TransactionCategory } from "@/entities/transaction";
 

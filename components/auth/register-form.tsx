@@ -15,7 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   register as registerUser,
   validateReCAPTCHAToken,
-} from "@/actions/auth";
+} from "@/server/auth";
 import Link from "next/link";
 import registerSchema, { RegisterSchemaType } from "@/schemas/register-schema";
 import { motion } from "framer-motion";

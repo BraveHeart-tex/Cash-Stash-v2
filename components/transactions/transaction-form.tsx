@@ -18,14 +18,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { IValidatedResponse } from "@/actions/types";
+import { IValidatedResponse } from "@/server/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState, useTransition } from "react";
 import transactionSchema, {
   TransactionSchemaType,
 } from "@/schemas/transaction-schema";
-import { getCurrentUserAccounts } from "@/actions/account";
-import { createTransaction, updateTransaction } from "@/actions/transaction";
+import { getCurrentUserAccounts } from "@/server/account";
+import { createTransaction, updateTransaction } from "@/server/transaction";
 import useGenericModalStore from "@/store/genericModalStore";
 import { toast } from "sonner";
 import {

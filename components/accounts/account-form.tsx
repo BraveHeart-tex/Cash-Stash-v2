@@ -18,8 +18,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { registerBankAccount, updateBankAccount } from "@/actions/account";
-import { IValidatedResponse } from "@/actions/types";
+import { registerBankAccount, updateBankAccount } from "@/server/account";
+import { IValidatedResponse } from "@/server/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useTransition } from "react";
 import useGenericModalStore from "@/store/genericModalStore";

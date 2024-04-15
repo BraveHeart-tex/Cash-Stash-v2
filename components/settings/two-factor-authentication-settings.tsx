@@ -2,7 +2,7 @@
 import {
   disableTwoFactorAuthentication,
   enableTwoFactorAuthentication,
-} from "@/actions/auth";
+} from "@/server/auth";
 import useAuthStore from "@/store/auth/authStore";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import { useTransition } from "react";

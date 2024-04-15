@@ -1,5 +1,5 @@
 "use client";
-import { MonthlyTransactionsData } from "@/actions/types";
+import { MonthlyTransactionsData } from "@/server/types";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import useAuthStore from "@/store/auth/authStore";
 import {

@@ -3,7 +3,7 @@ import { FormEvent, useRef, useTransition } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { sendPasswordResetEmail } from "@/actions/auth";
+import { sendPasswordResetEmail } from "@/server/auth";
 import { toast } from "sonner";
 
 const ForgotPassword = () => {

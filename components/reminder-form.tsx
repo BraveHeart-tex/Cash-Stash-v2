@@ -11,7 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { IValidatedResponse } from "@/actions/types";
+import { IValidatedResponse } from "@/server/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useTransition } from "react";
 import useGenericModalStore from "@/store/genericModalStore";
@@ -29,7 +29,7 @@ import { cn } from "@/lib/utils/stringUtils/cn";
 import { format } from "date-fns";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { Calendar } from "@/components/ui/calendar";
-import { createReminder, updateReminder } from "@/actions/reminder";
+import { createReminder, updateReminder } from "@/server/reminder";
 import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
 import {
   Select,

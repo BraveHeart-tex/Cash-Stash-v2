@@ -7,7 +7,7 @@ import { FaCopy, FaSpinner } from "react-icons/fa";
 import QRCode from "react-qr-code";
 import TwoFactorAuthenticationActivationInput from "./two-factor-authentication-activation-input";
 import { useEffect, useTransition } from "react";
-import { getTwoFactorAuthURI } from "@/actions/auth";
+import { getTwoFactorAuthURI } from "@/server/auth";
 
 const TwoFactorAuthenticationActivation = () => {
   let [isPending, startTransition] = useTransition();

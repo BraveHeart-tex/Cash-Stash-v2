@@ -6,7 +6,7 @@ import {
   IGetPaginatedAccountsParams,
   IGetPaginatedAccountsResponse,
   IValidatedResponse,
-} from "@/actions/types";
+} from "@/server/types";
 import {
   generateCachePrefixWithUserId,
   getAccountKey,

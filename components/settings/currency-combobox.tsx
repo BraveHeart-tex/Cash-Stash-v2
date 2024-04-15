@@ -1,5 +1,5 @@
 "use client";
-import { IComboboxOption } from "@/actions/types";
+import { IComboboxOption } from "@/server/types";
 import Combobox from "@/components/ui/combobox";
 import { useState, useTransition } from "react";
 import { Button } from "../ui/button";
@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import {
   convertTransactionsToNewCurrency,
   updateUserCurrencyPreference,
-} from "@/actions/user";
+} from "@/server/user";
 
 const CurrencyCombobox = ({
   currencies,

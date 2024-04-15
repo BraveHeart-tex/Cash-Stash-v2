@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { BsFilterLeft } from "react-icons/bs";
 import { useQueryStates, parseAsString, UseQueryStatesKeysMap } from "nuqs";
 
-import { GenericFilterOption } from "@/actions/types";
+import { GenericFilterOption } from "@/server/types";
 import { v4 as uuidv4 } from "uuid";
 import { areObjectsDeepEqual } from "@/lib/utils/objectUtils/deepEqual";
 import { useState } from "react";

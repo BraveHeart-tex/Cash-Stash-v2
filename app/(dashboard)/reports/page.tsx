@@ -1,7 +1,7 @@
 import MotionDiv from "@/components/animations/motion-div";
 import { ITransactionPageSearchParams } from "../transactions/page";
-import { getChartData } from "@/actions";
-import { getPaginatedTransactions } from "@/actions/transaction";
+import { getChartData } from "@/server";
+import { getPaginatedTransactions } from "@/server/transaction";
 import { DataTable } from "@/components/ui/data-table";
 import { transactionTableColumns } from "@/components/reports/transactions-data-table/transaction-table-columns";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";

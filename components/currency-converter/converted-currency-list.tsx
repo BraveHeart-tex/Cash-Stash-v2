@@ -1,5 +1,5 @@
 "use client";
-import { ConvertCurrencyType } from "@/actions/types";
+import { ConvertCurrencyType } from "@/server/types";
 import { useQueryState } from "nuqs";
 import CurrencyConverterListItem from "./converted-currency-list-item";
 import { Input } from "../ui/input";

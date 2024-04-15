@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { deleteTransactionById } from "@/actions/transaction";
+import { deleteTransactionById } from "@/server/transaction";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import DataLabel from "@/components/data-label";

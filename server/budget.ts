@@ -8,7 +8,7 @@ import {
   IGetPaginatedBudgetsParams,
   IGetPaginatedBudgetsResponse,
   IValidatedResponse,
-} from "@/actions/types";
+} from "@/server/types";
 import {
   generateCachePrefixWithUserId,
   getBudgetKey,

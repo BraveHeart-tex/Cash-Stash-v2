@@ -13,7 +13,7 @@ import { useTransition } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { CATEGORY_TYPES } from "@/lib/constants";
-import { createCategory } from "@/actions/category";
+import { createCategory } from "@/server/category";
 import { toast } from "sonner";
 import { CategorySelectModel } from "@/lib/database/schema";
 

@@ -16,7 +16,7 @@ import {
   IGetPaginatedTransactionsParams,
   IGetPaginatedTransactionsResponse,
   IValidatedResponse,
-} from "@/actions/types";
+} from "@/server/types";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import redisService from "@/lib/redis/redisService";
 import transactionRepository from "@/lib/database/repository/transactionRepository";

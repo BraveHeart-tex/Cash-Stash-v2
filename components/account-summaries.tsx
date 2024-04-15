@@ -5,7 +5,7 @@ import MotionDiv from "@/components/animations/motion-div";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { PAGE_ROUTES } from "@/lib/constants";
-import { AccountWithTransactions } from "@/actions/types";
+import { AccountWithTransactions } from "@/server/types";
 
 const AccountSummaries = ({
   accounts,

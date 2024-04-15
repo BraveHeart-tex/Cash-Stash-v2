@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import useGenericModalStore from "@/store/genericModalStore";
-import { deleteBudget } from "@/actions/budget";
+import { deleteBudget } from "@/server/budget";
 import ActionPopover from "@/components/action-popover";
 import { toast } from "sonner";
 import { BudgetSelectModel } from "@/lib/database/schema";

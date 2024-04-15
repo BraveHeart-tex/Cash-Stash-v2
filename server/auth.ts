@@ -38,7 +38,7 @@ import {
 } from "@/lib/auth/authUtils";
 import { revalidatePath } from "next/cache";
 import { isWithinExpirationDate } from "oslo";
-import { IRecaptchaResponse } from "@/actions/types";
+import { IRecaptchaResponse } from "@/server/types";
 import { db, lucia } from "@/lib/database/connection";
 import userRepository from "@/lib/database/repository/userRepository";
 import emailVerificationCodeRepository from "@/lib/database/repository/emailVerificationCodeRepository";

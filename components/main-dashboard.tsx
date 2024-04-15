@@ -7,12 +7,12 @@ import TransactionHistory from "@/components/transaction-history";
 import BarChartComponent from "@/components/charts/bar-chart";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import MotionDiv from "@/components/animations/motion-div";
-import { getPaginatedTransactions } from "@/actions/transaction";
-import { getPaginatedAccounts } from "@/actions/account";
-import { fetchInsightsDataAction, getChartData } from "@/actions";
-import { getPaginatedBudgets } from "@/actions/budget";
-import { getPaginatedGoals } from "@/actions/goal";
-import { getPaginatedReminders } from "@/actions/reminder";
+import { getPaginatedTransactions } from "@/server/transaction";
+import { getPaginatedAccounts } from "@/server/account";
+import { fetchInsightsDataAction, getChartData } from "@/server";
+import { getPaginatedBudgets } from "@/server/budget";
+import { getPaginatedGoals } from "@/server/goal";
+import { getPaginatedReminders } from "@/server/reminder";
 
 const Dashboard = async () => {
   let [

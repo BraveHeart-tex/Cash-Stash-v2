@@ -15,7 +15,7 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { FaCheck, FaSort } from "react-icons/fa";
-import { IComboboxOption } from "@/actions/types";
+import { IComboboxOption } from "@/server/types";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface IComboboxProps {

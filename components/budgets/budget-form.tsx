@@ -23,20 +23,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { IValidatedResponse } from "@/actions/types";
+import { IValidatedResponse } from "@/server/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import budgetSchema, { BudgetSchemaType } from "@/schemas/budget-schema";
-import { createBudget, updateBudget } from "@/actions/budget";
+import { createBudget, updateBudget } from "@/server/budget";
 import useGenericModalStore from "@/store/genericModalStore";
 import { toast } from "sonner";
-import {
-  BudgetSelectModel,
-  CategorySelectModel,
-  budgets,
-} from "@/lib/database/schema";
+import { BudgetSelectModel, CategorySelectModel } from "@/lib/database/schema";
 import { formHasChanged } from "@/lib/utils/objectUtils/formHasChanged";
-import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
 import CurrencyFormLabel from "../ui/currency-form-label";
 import { FaPlus } from "react-icons/fa";
 import BudgetCategoryForm from "./budget-category-form";
@@ -48,7 +43,7 @@ interface IBudgetFormProps {
   data?: BudgetSelectModel;
 }
 
-const CreateCategoryPopover = ({
+const CreateBudgetCategoryPopover = ({
   onSave,
 }: {
   // eslint-disable-next-line no-unused-vars
@@ -236,13 +231,16 @@ const BudgetForm = ({ data: budgetToBeUpdated }: IBudgetFormProps) => {
           )}
         />
         <FormField
-          key={budgetCategories.length}
           control={form.control}
           name="category"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Budget Category</FormLabel>
-              <Select onValueChange={field.onChange} value={field.value}>
+              <Select
+                onValueChange={field.onChange}
+                value={field.value}
+                key={form.watch("category")}
+              >
                 <FormControl>
                   <div className="flex items-center gap-1">
                     <SelectTrigger
@@ -256,7 +254,7 @@ const BudgetForm = ({ data: budgetToBeUpdated }: IBudgetFormProps) => {
                         Looks like there are no budget categories yet.
                       </p>
                     )}
-                    <CreateCategoryPopover
+                    <CreateBudgetCategoryPopover
                       onSave={(values) => {
                         field.onChange(values.name);
                       }}

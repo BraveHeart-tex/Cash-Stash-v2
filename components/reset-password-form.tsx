@@ -17,7 +17,7 @@ import resetPasswordSchema, {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useTransition } from "react";
-import { resetPassword } from "@/actions/auth";
+import { resetPassword } from "@/server/auth";
 import { useRouter } from "next/navigation";
 import { PAGE_ROUTES } from "@/lib/constants";
 import { toast } from "sonner";

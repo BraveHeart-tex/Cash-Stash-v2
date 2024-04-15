@@ -2,7 +2,7 @@
 
 import AutoProgressInput from "@/components/auto-progress-input";
 import { useEffect, useState, useTransition } from "react";
-import { validateOTP } from "@/actions/auth";
+import { validateOTP } from "@/server/auth";
 import {
   Card,
   CardContent,

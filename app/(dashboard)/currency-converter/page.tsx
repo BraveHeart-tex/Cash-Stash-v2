@@ -1,4 +1,4 @@
-import { convertCurrency } from "@/actions/currencyRate";
+import { convertCurrency } from "@/server/currencyRate";
 import ConvertedCurrencyList from "@/components/currency-converter/converted-currency-list";
 import CurrencyConverterInput from "@/components/currency-converter/currency-converter-input";
 import { getUser } from "@/lib/auth/session";

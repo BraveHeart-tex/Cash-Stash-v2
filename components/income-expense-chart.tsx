@@ -1,4 +1,4 @@
-import { MonthlyTransactionsData } from "@/actions/types";
+import { MonthlyTransactionsData } from "@/server/types";
 import BarChartComponent from "@/components/charts/bar-chart";
 
 const IncomeAndExpenseChart = ({
