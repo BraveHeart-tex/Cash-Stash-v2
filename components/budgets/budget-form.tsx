@@ -38,6 +38,7 @@ import BudgetCategoryForm from "./budget-category-form";
 import useCategoriesStore from "@/store/categoriesStore";
 import { CATEGORY_TYPES } from "@/lib/constants";
 import { cn } from "@/lib/utils/stringUtils/cn";
+import { getCategoriesByType } from "@/server/category";
 
 interface IBudgetFormProps {
   data?: BudgetSelectModel;
@@ -92,8 +93,22 @@ const BudgetForm = ({ data: budgetToBeUpdated }: IBudgetFormProps) => {
   const budgetCategories = useCategoriesStore(
     (state) => state.categories
   ).filter((category) => category.type === CATEGORY_TYPES.BUDGET);
+  const setCategories = useCategoriesStore((state) => state.setCategories);
 
   const entityId = budgetToBeUpdated?.id;
+
+  useEffect(() => {
+    startTransition(async () => {
+      const budgetCategories = await getCategoriesByType(CATEGORY_TYPES.BUDGET);
+      if (!budgetCategories) {
+        toast.error(
+          "There was an error while getting budget categories. Please try again later."
+        );
+        return;
+      }
+      setCategories(budgetCategories);
+    });
+  }, [setCategories]);
 
   useEffect(() => {
     if (budgetToBeUpdated) {

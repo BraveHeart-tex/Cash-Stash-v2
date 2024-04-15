@@ -11,7 +11,6 @@ import { toast } from "sonner";
 import { BudgetSelectModel } from "@/lib/database/schema";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import { cn } from "@/lib/utils/stringUtils/cn";
-import { generateLabelFromEnumValue } from "@/lib/utils/stringUtils/generateLabelFromEnumValue";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import useAuthStore from "@/store/auth/authStore";
 
@@ -91,9 +90,7 @@ const BudgetCard = ({ budget }: IBudgetCardProps) => {
         <span className="font-semibold text-foreground text-lg">
           {budget.name}
         </span>
-        <span className="text-muted-foreground">
-          {generateLabelFromEnumValue(budget.category)}
-        </span>
+        <span className="text-muted-foreground">{budget.category}</span>
       </div>
       <div className="absolute top-5 right-1 mb-2">
         <div className="flex items-center gap-1">

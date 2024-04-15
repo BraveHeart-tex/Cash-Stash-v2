@@ -8,6 +8,7 @@ import {
   ReminderSelectModel,
   TransactionSelectModel,
 } from "@/lib/database/schema";
+import { CATEGORY_TYPES } from "@/lib/constants";
 
 interface IPaginatedResponse {
   hasNextPage: boolean;
@@ -370,3 +371,6 @@ export interface ConvertCurrencyType {
   label: string;
   amount: number;
 }
+
+export type ICategoryType =
+  (typeof CATEGORY_TYPES)[keyof typeof CATEGORY_TYPES];
