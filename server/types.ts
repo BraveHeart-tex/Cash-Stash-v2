@@ -355,3 +355,8 @@ export type ConvertCurrencyType = {
 export type CategoryType = (typeof CATEGORY_TYPES)[keyof typeof CATEGORY_TYPES];
 
 export type PageLink = (typeof PAGE_ROUTES)[keyof typeof PAGE_ROUTES];
+
+export type FieldError = {
+  field: string;
+  message: string | undefined;
+};

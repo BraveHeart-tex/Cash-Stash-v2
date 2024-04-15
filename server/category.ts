@@ -1,5 +1,4 @@
 "use server";
-
 import { getUser } from "@/lib/auth/session";
 import { PAGE_ROUTES } from "@/lib/constants";
 import { processZodError } from "@/lib/utils/objectUtils/processZodError";
@@ -8,9 +7,10 @@ import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import categoryRepository from "@/lib/database/repository/categoryRepository";
 import { CategoryType } from "./types";
-import { CategorySelectModel } from "@/lib/database/schema";
 
-export const createCategory = async (values: CategorySchemaType) => {
+export const createCategory = async (
+  values: CategorySchemaType
+): CategoryModels.CreateCategoryReturnType => {
   const { user } = await getUser();
 
   if (!user) {
@@ -29,7 +29,6 @@ export const createCategory = async (values: CategorySchemaType) => {
 
     if (!response.insertId) {
       return {
-        data: null,
         error:
           "Something went wrong while creating a category. Please try again later.",
         fieldErrors: [],
@@ -40,23 +39,17 @@ export const createCategory = async (values: CategorySchemaType) => {
 
     return {
       data: category,
-      fieldErrors: [],
-      error: "",
     };
   } catch (error) {
     console.log("ERROR CREATING CATEGORY", error);
 
     if (error instanceof ZodError) {
-      return {
-        ...processZodError(error),
-        data: null,
-      };
+      return processZodError(error);
     }
 
     if (error instanceof Error) {
       if ("code" in error && error.code === "ER_DUP_ENTRY") {
         return {
-          data: null,
           error: `Category: ${values.name} already exists.`,
           fieldErrors: [{ field: "name", message: "Category already exists." }],
         };
@@ -64,7 +57,6 @@ export const createCategory = async (values: CategorySchemaType) => {
     }
 
     return {
-      data: null,
       error:
         "Something went wrong. While creating a category. Please try again later.",
       fieldErrors: [],
@@ -74,7 +66,7 @@ export const createCategory = async (values: CategorySchemaType) => {
 
 export const getCategoriesByType = async (
   type: CategoryType
-): Promise<CategorySelectModel[] | null> => {
+): CategoryModels.GetCategoriesByTypeReturnType => {
   const { user } = await getUser();
   if (!user) {
     redirect(PAGE_ROUTES.LOGIN_ROUTE);

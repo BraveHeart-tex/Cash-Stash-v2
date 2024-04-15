@@ -23,9 +23,6 @@ const BudgetCategoryForm = ({
   // eslint-disable-next-line no-unused-vars
   afterSave?: (values: CategorySelectModel) => void;
 }) => {
-  // TODO: Will Delete after editing functionality
-  const entityId = null;
-
   let [isPending, startTransition] = useTransition();
   const form = useForm<CategorySchemaType>({
     resolver: zodResolver(categorySchema),
@@ -37,7 +34,7 @@ const BudgetCategoryForm = ({
   const handleFormSubmit = (values: CategorySchemaType) => {
     startTransition(async () => {
       const response = await createCategory(values);
-      if (!response.error && response.data) {
+      if ("data" in response) {
         afterSave?.(response.data);
       }
 
@@ -48,28 +45,22 @@ const BudgetCategoryForm = ({
   const processFormSubmissionResult = (
     result: Awaited<ReturnType<typeof createCategory>>
   ) => {
-    if (result.fieldErrors.length) {
+    if ("fieldErrors" in result) {
       result.fieldErrors.forEach((fieldError) => {
         form.setError(fieldError.field as any, {
           type: "manual",
           message: fieldError.message,
         });
       });
-    }
 
-    if (result.error) {
-      toast.error("An error occurred.", {
+      return toast.error("An error occurred.", {
         description: result.error,
       });
-    } else {
-      const successMessage = {
-        create: "Category has been created.",
-        update: "Category budget has been updated.",
-      };
-      toast.success("Success!", {
-        description: successMessage[entityId ? "update" : "create"],
-      });
     }
+
+    toast.success("Success!", {
+      description: "Category has been created.",
+    });
   };
 
   // stops the parent form from submitting
