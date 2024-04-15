@@ -87,11 +87,11 @@ export const metadata: Metadata = {
   },
 };
 
-interface ILayoutProps {
+type LayoutProps = {
   children: ReactNode;
-}
+};
 
-export default async function RootLayout({ children }: ILayoutProps) {
+export default async function RootLayout({ children }: LayoutProps) {
   return (
     <html lang="en">
       <head>

@@ -2,20 +2,20 @@
 import { cn } from "@/lib/utils/stringUtils/cn";
 import { useEffect, useState } from "react";
 
-export type ICountDownTimerOptions = {
+type CountDownTimerOptions = {
   showHours: boolean;
   showMinutes: boolean;
   showSeconds: boolean;
   progressBarType: "linear" | "circular";
 };
 
-interface ICountDownTimerProps {
+type CountDownTimerProps = {
   countDownFrom: number;
   timer: number;
   onTimerEnd?: () => void;
-  options?: Partial<ICountDownTimerOptions>;
+  options?: Partial<CountDownTimerOptions>;
   className?: string;
-}
+};
 
 const CountDownTimer = ({
   timer,
@@ -23,9 +23,9 @@ const CountDownTimer = ({
   options,
   className,
   countDownFrom,
-}: ICountDownTimerProps) => {
+}: CountDownTimerProps) => {
   const [time, setTime] = useState(timer);
-  const timerOptions: Partial<ICountDownTimerOptions> = {
+  const timerOptions: Partial<CountDownTimerOptions> = {
     showHours: false,
     showMinutes: true,
     showSeconds: true,

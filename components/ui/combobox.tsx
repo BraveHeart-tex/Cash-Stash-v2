@@ -15,22 +15,22 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { FaCheck, FaSort } from "react-icons/fa";
-import { IComboboxOption } from "@/server/types";
+import { ComboboxOption } from "@/server/types";
 import { motion, AnimatePresence } from "framer-motion";
 
-interface IComboboxProps {
-  options: IComboboxOption[];
+type ComboboxProps = {
+  options: ComboboxOption[];
   // eslint-disable-next-line no-unused-vars
-  onSelect: (option: IComboboxOption) => void;
+  onSelect: (option: ComboboxOption) => void;
   triggerClassName?: string;
   contentClassName?: string;
   emptyMessage?: string;
-  defaultOption?: IComboboxOption;
+  defaultOption?: ComboboxOption;
   trigger?: React.ReactNode;
   triggerPlaceholder?: string;
-}
+};
 
-const Combobox = forwardRef<HTMLButtonElement, IComboboxProps>(
+const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
   (
     {
       options,
@@ -46,10 +46,11 @@ const Combobox = forwardRef<HTMLButtonElement, IComboboxProps>(
   ) => {
     const [isOpen, setIsOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
-    const [selectedOption, setSelectedOption] =
-      useState<IComboboxOption | null>(defaultOption || null);
+    const [selectedOption, setSelectedOption] = useState<ComboboxOption | null>(
+      defaultOption || null
+    );
 
-    const handleOptionClick = (option: IComboboxOption) => {
+    const handleOptionClick = (option: ComboboxOption) => {
       setSelectedOption(option);
       onSelect(option);
       setIsOpen(false);

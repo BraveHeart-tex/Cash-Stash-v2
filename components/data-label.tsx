@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils/stringUtils/cn";
 
-interface IDataLabelProps {
+type DataLabelProps = {
   label: string;
   value: any;
   classNames?: {
@@ -8,9 +8,9 @@ interface IDataLabelProps {
     label?: string;
     value?: string;
   };
-}
+};
 
-const DataLabel = ({ label, value, classNames }: IDataLabelProps) => {
+const DataLabel = ({ label, value, classNames }: DataLabelProps) => {
   return (
     <div className={cn("flex items-center gap-1", classNames?.container)}>
       <p className={cn("font-semibold", classNames?.label)}>{label}: </p>

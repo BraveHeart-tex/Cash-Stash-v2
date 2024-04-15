@@ -3,14 +3,14 @@ import { db } from "@/lib/database/connection";
 import { budgets, BudgetInsertModel } from "@/lib/database/schema";
 import { and, asc, desc, eq, like, sql } from "drizzle-orm";
 
-interface IGetMultipleBudgetsParams {
+type GetMultipleBudgetsParams = {
   page: number;
   userId: string;
   query?: string;
   category?: string;
   sortBy?: string;
   sortDirection?: string;
-}
+};
 
 const budgetRepository = {
   async getById(id: number) {
@@ -94,7 +94,7 @@ const budgetRepository = {
     category,
     sortBy,
     sortDirection,
-  }: IGetMultipleBudgetsParams) {
+  }: GetMultipleBudgetsParams) {
     const { pageSize, skipAmount } = getPageSizeAndSkipAmount(page);
     const validBudgetSortByOptions: {
       [key: string]: boolean;

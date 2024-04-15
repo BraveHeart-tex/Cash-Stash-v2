@@ -2,16 +2,16 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
-interface GenericConfirmObject {
+type GenericConfirmObject = {
   title: string;
   message: string;
   primaryActionLabel: string;
   secondaryActionLabel?: string;
   onConfirm: () => void;
   onDeny?: () => void;
-}
+};
 
-interface GenericConfirmStoreState {
+type GenericConfirmStoreState = {
   visible: boolean;
   title: string;
   message: string;
@@ -26,7 +26,7 @@ interface GenericConfirmStoreState {
   callSecondaryAction: () => void;
   showConfirm: (confirmObject: GenericConfirmObject) => void;
   cleanUp: () => void;
-}
+};
 
 export const useGenericConfirmStore = create<
   GenericConfirmStoreState,

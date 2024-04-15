@@ -16,13 +16,13 @@ type PopoverActionOption = {
   visible?: boolean;
 };
 
-interface IActionPopoverProps {
+type ActionPopoverProps = {
   heading: string;
   positionAbsolute?: boolean;
   options: PopoverActionOption[];
   trigger?: React.ReactNode;
   triggerClassName?: string;
-}
+};
 
 const ActionPopover = ({
   options,
@@ -30,7 +30,7 @@ const ActionPopover = ({
   heading,
   positionAbsolute,
   triggerClassName = "top-2 right-2 mb-2",
-}: IActionPopoverProps) => {
+}: ActionPopoverProps) => {
   const renderTrigger = () => {
     if (trigger) {
       return trigger;

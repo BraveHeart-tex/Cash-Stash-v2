@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { IValidatedResponse } from "@/server/types";
+import { BaseValidatedResponse } from "@/server/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState, useTransition } from "react";
 import transactionSchema, {
@@ -37,13 +37,13 @@ import { formHasChanged } from "@/lib/utils/objectUtils/formHasChanged";
 import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
 import CurrencyFormLabel from "../ui/currency-form-label";
 
-interface ITransactionFormProps {
+type TransactionFormProps = {
   data?: TransactionSelectModel;
-}
+};
 
 const TransactionForm = ({
   data: transactionToBeUpdated,
-}: ITransactionFormProps) => {
+}: TransactionFormProps) => {
   const [isPending, startTransition] = useTransition();
   const closeGenericModal = useGenericModalStore(
     (state) => state.closeGenericModal
@@ -116,7 +116,7 @@ const TransactionForm = ({
   };
 
   const processFormSubmissionResult = (
-    result: IValidatedResponse<TransactionSelectModel>
+    result: BaseValidatedResponse<TransactionSelectModel>
   ) => {
     if (result.fieldErrors.length) {
       result.fieldErrors.forEach((fieldError) => {

@@ -1,5 +1,5 @@
 "use client";
-import { PAGES } from "@/lib/constants";
+import { NAVIGATION_ITEMS } from "@/lib/constants";
 import { TabsList, TabsTrigger, Tabs } from "./ui/tabs";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -9,10 +9,10 @@ const NavigationTabsList = () => {
   const pathName = usePathname();
 
   return (
-    <Tabs defaultValue={PAGES[0].label}>
+    <Tabs defaultValue={NAVIGATION_ITEMS[0].label}>
       <div className="overflow-scroll scrollbar-hide hidden lg:block">
         <TabsList className="lg:w-auto">
-          {PAGES.map((page) => (
+          {NAVIGATION_ITEMS.map((page) => (
             <TabsTrigger
               key={page.label}
               asChild

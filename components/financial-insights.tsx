@@ -9,9 +9,9 @@ import { cn } from "@/lib/utils/stringUtils/cn";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import useAuthStore from "@/store/auth/authStore";
 
-interface IFinancialInsightsProps {
+type FinancialInsightsProps = {
   insightsData: InsightsData | null;
-}
+};
 
 const SavingsRate = ({ value }: { value: number }) => (
   <div className="mb-4 flex flex-col">
@@ -33,7 +33,7 @@ const SavingsRate = ({ value }: { value: number }) => (
 // TODO: Refactor majority of the logic to server side
 // only show the stats for this month here
 // and add vs last month if data is available
-const FinancialInsights = ({ insightsData }: IFinancialInsightsProps) => {
+const FinancialInsights = ({ insightsData }: FinancialInsightsProps) => {
   const preferredCurrency = useAuthStore(
     (state) => state.user?.preferredCurrency
   );

@@ -4,11 +4,11 @@ import { cn } from "@/lib/utils/stringUtils/cn";
 import useGenericModalStore from "@/store/genericModalStore";
 import { FaBullseye } from "react-icons/fa";
 
-interface ICreateGoalButtonProps {
+type CreateGoalButtonProps = {
   className?: string;
-}
+};
 
-const CreateGoalButton = ({ className }: ICreateGoalButtonProps) => {
+const CreateGoalButton = ({ className }: CreateGoalButtonProps) => {
   const openGenericModal = useGenericModalStore(
     (state) => state.openGenericModal
   );

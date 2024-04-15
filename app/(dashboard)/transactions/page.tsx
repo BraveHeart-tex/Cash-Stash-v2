@@ -13,7 +13,7 @@ import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOption
 import { transactions } from "@/lib/database/schema";
 import RoutePaginationControls from "@/components/route-pagination-controls";
 
-export interface ITransactionPageSearchParams {
+export type TransactionPageSearchParams = {
   transactionType?: string;
   accountId?: string;
   sortBy?: string;
@@ -21,13 +21,13 @@ export interface ITransactionPageSearchParams {
   category?: string;
   page?: string;
   query?: string;
-}
+};
 
-const TransactionsPage = async ({
-  searchParams,
-}: {
-  searchParams: ITransactionPageSearchParams;
-}) => {
+type TransactionsPageProps = {
+  searchParams: TransactionPageSearchParams;
+};
+
+const TransactionsPage = async ({ searchParams }: TransactionsPageProps) => {
   const actionParams = createGetPaginatedTransactionsParams(searchParams);
 
   const [transactionsResponse, usersAccounts] = await Promise.all([

@@ -6,8 +6,8 @@ import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import {
   IGetPaginatedBudgetsParams,
-  IGetPaginatedBudgetsResponse,
-  IValidatedResponse,
+  GetPaginatedBudgetsResponse,
+  BaseValidatedResponse,
 } from "@/server/types";
 import {
   generateCachePrefixWithUserId,
@@ -23,7 +23,7 @@ import { processZodError } from "@/lib/utils/objectUtils/processZodError";
 
 export const createBudget = async (
   data: BudgetSchemaType
-): Promise<IValidatedResponse<BudgetSelectModel>> => {
+): Promise<BaseValidatedResponse<BudgetSelectModel>> => {
   const { user } = await getUser();
   if (!user) {
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
@@ -71,7 +71,7 @@ export const createBudget = async (
 export const updateBudget = async (
   budgetId: number,
   values: BudgetSchemaType
-): Promise<IValidatedResponse<BudgetSelectModel>> => {
+): Promise<BaseValidatedResponse<BudgetSelectModel>> => {
   const { user } = await getUser();
   if (!user) {
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
@@ -141,7 +141,7 @@ export const getPaginatedBudgets = async ({
   category,
   sortBy,
   sortDirection,
-}: IGetPaginatedBudgetsParams): Promise<IGetPaginatedBudgetsResponse> => {
+}: IGetPaginatedBudgetsParams): Promise<GetPaginatedBudgetsResponse> => {
   const { user } = await getUser();
 
   if (!user) {

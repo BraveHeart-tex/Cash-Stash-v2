@@ -16,7 +16,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { IValidatedResponse } from "@/server/types";
+import { BaseValidatedResponse } from "@/server/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import budgetSchema, { BudgetSchemaType } from "@/schemas/budget-schema";
@@ -34,9 +34,9 @@ import { cn } from "@/lib/utils/stringUtils/cn";
 import { getCategoriesByType } from "@/server/category";
 import Combobox from "@/components/ui/combobox";
 
-interface IBudgetFormProps {
+type BudgetFormProps = {
   data?: BudgetSelectModel;
-}
+};
 
 const CreateBudgetCategoryPopover = ({
   onSave,
@@ -75,7 +75,7 @@ const CreateBudgetCategoryPopover = ({
   );
 };
 
-const BudgetForm = ({ data: budgetToBeUpdated }: IBudgetFormProps) => {
+const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
   const [isPending, startTransition] = useTransition();
   const closeGenericModal = useGenericModalStore(
     (state) => state.closeGenericModal
@@ -140,7 +140,7 @@ const BudgetForm = ({ data: budgetToBeUpdated }: IBudgetFormProps) => {
   };
 
   const processFormSubmissionResult = (
-    result: IValidatedResponse<BudgetSelectModel>
+    result: BaseValidatedResponse<BudgetSelectModel>
   ) => {
     if (result.fieldErrors.length) {
       result.fieldErrors.forEach((fieldError) => {

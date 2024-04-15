@@ -11,7 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { IValidatedResponse } from "@/server/types";
+import { BaseValidatedResponse } from "@/server/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useTransition } from "react";
 import useGenericModalStore from "@/store/genericModalStore";
@@ -39,11 +39,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-interface IReminderFormProps {
+type ReminderFormProps = {
   data?: ReminderSelectModel;
-}
+};
 
-const ReminderForm = ({ data: reminderToBeUpdated }: IReminderFormProps) => {
+const ReminderForm = ({ data: reminderToBeUpdated }: ReminderFormProps) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const closeGenericModal = useGenericModalStore(
@@ -90,7 +90,7 @@ const ReminderForm = ({ data: reminderToBeUpdated }: IReminderFormProps) => {
   };
 
   const processFormSubmissionResult = (
-    result: IValidatedResponse<ReminderSelectModel>
+    result: BaseValidatedResponse<ReminderSelectModel>
   ) => {
     if (result.fieldErrors.length) {
       result.fieldErrors.forEach((fieldError) => {

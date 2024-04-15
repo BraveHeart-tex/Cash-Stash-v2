@@ -3,11 +3,11 @@ import AccountCard from "../account-card";
 import { motion } from "framer-motion";
 import { AccountWithTransactions } from "@/server/types";
 
-interface IAccountInformationProps {
+type AccountInformationProps = {
   userAccounts: AccountWithTransactions[];
-}
+};
 
-const AccountInformation = ({ userAccounts }: IAccountInformationProps) => {
+const AccountInformation = ({ userAccounts }: AccountInformationProps) => {
   return (
     <motion.div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 lg:gap-8">
       {userAccounts && userAccounts?.length > 0 ? (

@@ -13,9 +13,9 @@ import transactionSchema, {
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import {
-  IGetPaginatedTransactionsParams,
-  IGetPaginatedTransactionsResponse,
-  IValidatedResponse,
+  GetPaginatedTransactionsParams,
+  GetPaginatedTransactionsResponse,
+  BaseValidatedResponse,
 } from "@/server/types";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import redisService from "@/lib/redis/redisService";
@@ -27,7 +27,7 @@ import { processZodError } from "@/lib/utils/objectUtils/processZodError";
 
 export const createTransaction = async (
   values: TransactionSchemaType
-): Promise<IValidatedResponse<TransactionSelectModel>> => {
+): Promise<BaseValidatedResponse<TransactionSelectModel>> => {
   const { user } = await getUser();
 
   if (!user) {
@@ -92,7 +92,7 @@ export const updateTransaction = async (
   transactionId: number,
   values: TransactionSchemaType,
   oldTransaction: TransactionSelectModel
-): Promise<IValidatedResponse<TransactionSelectModel>> => {
+): Promise<BaseValidatedResponse<TransactionSelectModel>> => {
   const { user } = await getUser();
 
   if (!user) {
@@ -211,7 +211,7 @@ export const getPaginatedTransactions = async ({
   query = "",
   pageNumber,
   category,
-}: IGetPaginatedTransactionsParams): Promise<IGetPaginatedTransactionsResponse> => {
+}: GetPaginatedTransactionsParams): Promise<GetPaginatedTransactionsResponse> => {
   const { user } = await getUser();
   if (!user) {
     redirect(PAGE_ROUTES.LOGIN_ROUTE);

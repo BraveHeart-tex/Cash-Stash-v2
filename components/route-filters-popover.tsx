@@ -7,23 +7,22 @@ import {
 import { Button } from "@/components/ui/button";
 import { BsFilterLeft } from "react-icons/bs";
 import { useQueryStates, parseAsString, UseQueryStatesKeysMap } from "nuqs";
-
 import { GenericFilterOption } from "@/server/types";
 import { v4 as uuidv4 } from "uuid";
 import { areObjectsDeepEqual } from "@/lib/utils/objectUtils/deepEqual";
 import { useState } from "react";
 
-interface IRouteFiltersPopoverProps<T extends Record<string, any>> {
+type RouteFiltersPopoverProps<T extends Record<string, any>> = {
   options: GenericFilterOption<T>[];
   queryKeys: Array<keyof T>;
   triggerLabel?: string;
-}
+};
 
 const RouteFiltersPopover = <T extends Record<string, any>>({
   options,
   queryKeys,
   triggerLabel,
-}: IRouteFiltersPopoverProps<T>) => {
+}: RouteFiltersPopoverProps<T>) => {
   const [isOpen, setIsOpen] = useState(false);
   const [key, setKey] = useQueryStates(
     {

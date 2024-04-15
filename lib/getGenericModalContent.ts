@@ -5,13 +5,13 @@ import GoalForm from "@/components/goals/goal-form";
 import TransactionForm from "@/components/transactions/transaction-form";
 import ReminderForm from "@/components/reminder-form";
 
-interface IGetGenericDialogContentParams {
+type GetGenericDialogContentParams = {
   mode: "create" | "edit";
   key: "budget" | "goal" | "transaction" | "reminder" | "account" | "";
   entityId: string | number;
   props?: Record<string, any>;
   data?: any;
-}
+};
 
 const ContentMap: {
   [key: string]: any;
@@ -28,7 +28,7 @@ export const getGenericDialogContent = ({
   key,
   data,
   props,
-}: IGetGenericDialogContentParams) => {
+}: GetGenericDialogContentParams) => {
   const Component = ContentMap[key];
 
   if (mode === "edit") {

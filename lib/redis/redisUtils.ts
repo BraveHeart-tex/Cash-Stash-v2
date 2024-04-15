@@ -2,14 +2,19 @@ import { CACHE_PREFIXES } from "@/lib/constants";
 import redis from "@/lib/redis/redisConnection";
 import { BudgetSelectModel, GoalSelectModel } from "@/lib/database/schema";
 
-interface Entity {
+type Entity = {
   [key: string]: any;
-}
+};
+
+type MappingConfig<T> = {
+  // eslint-disable-next-line no-unused-vars
+  [K in keyof T]: (value: string) => T[K];
+};
 
 const mapRedisHashToEntity = <T extends Entity>(
   hash: Record<string, string> | null,
   // eslint-disable-next-line no-unused-vars
-  mappingConfig: { [K in keyof T]: (value: string) => T[K] }
+  mappingConfig: MappingConfig<T>
 ): T | null => {
   if (!hash) {
     return null;
@@ -321,7 +326,6 @@ export async function invalidateKeysByUserId(userId: string) {
   const stream = redis.scanStream();
   stream.on("data", async (keys) => {
     const keysToDelete = keys.filter((key: string) => key.includes(userId));
-    console.log("keysToDelete", keysToDelete);
     if (keysToDelete.length === 0) return;
     await redis.del(keysToDelete);
   });

@@ -1,11 +1,11 @@
 import nodemailer, { Transporter } from "nodemailer";
 
-interface ISendEmailOptions {
+type SendEmailOptions = {
   from: string;
   to: string;
   subject: string;
   html: string;
-}
+};
 
 class EmailService {
   private transporter: Transporter;
@@ -24,7 +24,7 @@ class EmailService {
     });
   }
 
-  public async sendEmail(options: ISendEmailOptions) {
+  public async sendEmail(options: SendEmailOptions) {
     await this.transporter.sendMail(options);
   }
 }

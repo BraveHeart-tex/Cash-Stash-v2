@@ -2,7 +2,7 @@ import { CategorySelectModel } from "@/lib/database/schema";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
-interface CategoriesStoreState {
+type CategoriesStoreState = {
   categories: CategorySelectModel[];
   // eslint-disable-next-line no-unused-vars
   setCategories: (categories: CategorySelectModel[]) => void;
@@ -12,7 +12,7 @@ interface CategoriesStoreState {
   removeCategory: (category: CategorySelectModel) => void;
   // eslint-disable-next-line no-unused-vars
   updateCategory: (category: CategorySelectModel) => void;
-}
+};
 
 const useCategoriesStore = create<
   CategoriesStoreState,

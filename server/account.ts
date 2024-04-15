@@ -3,9 +3,9 @@ import { getUser } from "@/lib/auth/session";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import {
-  IGetPaginatedAccountsParams,
+  GetPaginatedAccountsParams,
   IGetPaginatedAccountsResponse,
-  IValidatedResponse,
+  BaseValidatedResponse,
 } from "@/server/types";
 import {
   generateCachePrefixWithUserId,
@@ -17,18 +17,16 @@ import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import accountSchema, { AccountSchemaType } from "@/schemas/account-schema";
 import { createAccountDto } from "@/lib/database/dto/accountDto";
 import accountRepository from "@/lib/database/repository/accountRepository";
-import { AccountCategory } from "@/entities/account";
 import transactionRepository from "@/lib/database/repository/transactionRepository";
 import redisService from "@/lib/redis/redisService";
 import { AccountSelectModel } from "@/lib/database/schema";
 import { processZodError } from "@/lib/utils/objectUtils/processZodError";
-import { validateEnumValue } from "@/lib/utils/objectUtils/validateEnumValue";
 
 export const registerBankAccount = async ({
   balance,
   category,
   name,
-}: AccountSchemaType): Promise<IValidatedResponse<AccountSelectModel>> => {
+}: AccountSchemaType): Promise<BaseValidatedResponse<AccountSelectModel>> => {
   const { user } = await getUser();
 
   if (!user) {
@@ -81,7 +79,7 @@ export const updateBankAccount = async ({
   accountId,
   ...rest
 }: AccountSchemaType & { accountId: number }): Promise<
-  IValidatedResponse<AccountSelectModel>
+  BaseValidatedResponse<AccountSelectModel>
 > => {
   const { user } = await getUser();
   if (!user) {
@@ -148,7 +146,7 @@ export const getPaginatedAccounts = async ({
   category,
   sortBy,
   sortDirection,
-}: IGetPaginatedAccountsParams): Promise<IGetPaginatedAccountsResponse> => {
+}: GetPaginatedAccountsParams): Promise<IGetPaginatedAccountsResponse> => {
   const { user } = await getUser();
 
   if (!user) {
@@ -157,16 +155,6 @@ export const getPaginatedAccounts = async ({
 
   const PAGE_SIZE = 12;
   const skipAmount = (pageNumber - 1) * PAGE_SIZE;
-
-  if (category && !validateEnumValue(category, AccountCategory)) {
-    return {
-      accounts: [],
-      hasNextPage: false,
-      hasPreviousPage: false,
-      currentPage: 1,
-      totalPages: 1,
-    };
-  }
 
   try {
     const cacheKey = getPaginatedAccountsKey({

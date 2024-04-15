@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 import { db } from "../connection";
 import { CategoryInsertModel, categories } from "../schema";
-import { ICategoryType } from "@/server/types";
+import { CategoryType } from "@/server/types";
 
 const categoryRepository = {
   async createCategory(data: CategoryInsertModel) {
@@ -17,7 +17,7 @@ const categoryRepository = {
       .where(eq(categories.id, id))
       .limit(1);
   },
-  async getCategoriesByType(userId: string, type: ICategoryType) {
+  async getCategoriesByType(userId: string, type: CategoryType) {
     return await db
       .select()
       .from(categories)

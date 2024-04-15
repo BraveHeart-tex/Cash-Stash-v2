@@ -22,15 +22,15 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import { format } from "date-fns";
 import useAuthStore from "@/store/auth/authStore";
 
-interface ITransactionCardProps {
+type TransactionCardProps = {
   transaction: TransactionSelectModel & { accountName: string };
   showPopover?: boolean;
-}
+};
 
 const TransactionCard = ({
   transaction,
   showPopover = true,
-}: ITransactionCardProps) => {
+}: TransactionCardProps) => {
   const preferredCurrency = useAuthStore(
     (state) => state.user?.preferredCurrency
   );

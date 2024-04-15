@@ -7,11 +7,11 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import { PAGE_ROUTES } from "@/lib/constants";
 
-interface ITransactionHistoryProps {
+type TransactionHistoryProps = {
   transactions: (TransactionSelectModel & { accountName: string })[] | null;
-}
+};
 
-const TransactionHistory = ({ transactions }: ITransactionHistoryProps) => {
+const TransactionHistory = ({ transactions }: TransactionHistoryProps) => {
   if (!transactions || transactions.length === 0) {
     return (
       <article className="flex h-[500px] items-center justify-center">

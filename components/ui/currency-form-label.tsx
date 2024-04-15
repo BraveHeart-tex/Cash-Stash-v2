@@ -1,10 +1,9 @@
 import useAuthStore from "@/store/auth/authStore";
 import { FormLabel } from "./form";
 
-interface ICurrencyFormLabelProps
-  extends React.ComponentPropsWithoutRef<"label"> {
+type ICurrencyFormLabelProps = React.ComponentPropsWithoutRef<"label"> & {
   label: string;
-}
+};
 
 const CurrencyFormLabel = ({ label, ...props }: ICurrencyFormLabelProps) => {
   const preferredCurrency = useAuthStore(

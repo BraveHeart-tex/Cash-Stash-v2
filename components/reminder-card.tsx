@@ -4,11 +4,11 @@ import { ReminderSelectModel } from "@/lib/database/schema";
 import ActionPopover from "./action-popover";
 import { FaCheck, FaEdit, FaTrash } from "react-icons/fa";
 
-interface IReminderCardProps {
+type ReminderCardProps = {
   reminder: ReminderSelectModel;
-}
+};
 
-const ReminderCard = ({ reminder }: IReminderCardProps) => {
+const ReminderCard = ({ reminder }: ReminderCardProps) => {
   const openGenericModal = useGenericModalStore(
     (state) => state.openGenericModal
   );

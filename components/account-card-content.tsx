@@ -13,7 +13,7 @@ import { AccountWithTransactions } from "@/server/types";
 import { FaTrash, FaEdit, FaRegCreditCard } from "react-icons/fa";
 import useAuthStore from "@/store/auth/authStore";
 
-interface IAccountCardContentProps {
+type AccountCardContentProps = {
   account: AccountWithTransactions;
   className?: string;
   showPopover?: boolean;
@@ -21,14 +21,14 @@ interface IAccountCardContentProps {
     // eslint-disable-next-line no-unused-vars
     account: AccountWithTransactions
   ) => void;
-}
+};
 
 const AccountCardContent = ({
   account,
   setSelectedAccount,
   className,
   showPopover,
-}: IAccountCardContentProps) => {
+}: AccountCardContentProps) => {
   const preferredCurrency = useAuthStore(
     (state) => state.user?.preferredCurrency
   );

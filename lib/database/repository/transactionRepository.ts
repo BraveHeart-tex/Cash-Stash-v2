@@ -10,13 +10,13 @@ import accountRepository from "@/lib/database/repository/accountRepository";
 import { and, asc, desc, eq, gt, like, lt, sql } from "drizzle-orm";
 import { getPageSizeAndSkipAmount } from "@/lib/constants";
 
-interface ICreateTransactionReturnType {
+type CreateTransactionReturnType = {
   affectedRows: number;
   updatedAccount?: AccountSelectModel | null;
   createdTransaction?: TransactionSelectModel | null;
-}
+};
 
-interface IGetMultipleTransactionsParams {
+type GetMultipleTransactionsParams = {
   page: number;
   userId: string;
   query?: string;
@@ -25,7 +25,7 @@ interface IGetMultipleTransactionsParams {
   sortDirection?: string;
   transactionType?: string;
   accountId?: number;
-}
+};
 
 const transactionRepository = {
   async getByAccountId(accountId: number) {
@@ -43,7 +43,7 @@ const transactionRepository = {
   },
   async create(
     data: TransactionInsertModel
-  ): Promise<ICreateTransactionReturnType> {
+  ): Promise<CreateTransactionReturnType> {
     try {
       return await db.transaction(async (trx) => {
         const { amount, accountId } = data;
@@ -221,7 +221,7 @@ const transactionRepository = {
     sortDirection,
     transactionType,
     accountId,
-  }: IGetMultipleTransactionsParams) {
+  }: GetMultipleTransactionsParams) {
     const { pageSize, skipAmount } = getPageSizeAndSkipAmount(page);
 
     let transactionTypeCondition = undefined;

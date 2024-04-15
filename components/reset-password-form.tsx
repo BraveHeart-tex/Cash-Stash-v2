@@ -24,10 +24,10 @@ import { toast } from "sonner";
 import PasswordInput from "@/components/auth/password-input";
 import PasswordRequirements from "@/components/auth/password-requirements";
 
-interface ResetPasswordFormProps {
+type ResetPasswordFormProps = {
   email: string;
   token: string;
-}
+};
 
 const ResetPasswordForm = ({ email, token }: ResetPasswordFormProps) => {
   let [isPending, startTransition] = useTransition();

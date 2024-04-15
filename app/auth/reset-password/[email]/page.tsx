@@ -12,19 +12,19 @@ import { redirect } from "next/navigation";
 import logo from "@/components/Logo.svg";
 import ResetPasswordForm from "@/components/reset-password-form";
 
-interface IResetPasswordPageProps {
+type ResetPasswordPageProps = {
   params: {
     email: string;
   };
   searchParams: {
     token: string;
   };
-}
+};
 
 const ResetPassword = async ({
   params,
   searchParams,
-}: IResetPasswordPageProps) => {
+}: ResetPasswordPageProps) => {
   const { user } = await getUser();
   if (user) {
     redirect(PAGE_ROUTES.HOME_PAGE);

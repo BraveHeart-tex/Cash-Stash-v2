@@ -14,11 +14,11 @@ import { cn } from "@/lib/utils/stringUtils/cn";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import useAuthStore from "@/store/auth/authStore";
 
-interface IBudgetCardProps {
+type BudgetCardProps = {
   budget: BudgetSelectModel;
-}
+};
 
-const BudgetCard = ({ budget }: IBudgetCardProps) => {
+const BudgetCard = ({ budget }: BudgetCardProps) => {
   const preferredCurrency = useAuthStore(
     (state) => state.user?.preferredCurrency
   );

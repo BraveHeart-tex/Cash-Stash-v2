@@ -11,7 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { IValidatedResponse } from "@/server/types";
+import { BaseValidatedResponse } from "@/server/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useTransition } from "react";
 import goalSchema, { GoalSchemaType } from "@/schemas/goal-schema";
@@ -22,11 +22,11 @@ import { GoalSelectModel } from "@/lib/database/schema";
 import { formHasChanged } from "@/lib/utils/objectUtils/formHasChanged";
 import CurrencyFormLabel from "../ui/currency-form-label";
 
-interface IGoalFormProps {
+type GoalFormProps = {
   data?: GoalSelectModel;
-}
+};
 
-const GoalForm = ({ data: goalToBeUpdated }: IGoalFormProps) => {
+const GoalForm = ({ data: goalToBeUpdated }: GoalFormProps) => {
   const [isPending, startTransition] = useTransition();
   const closeGenericModal = useGenericModalStore(
     (state) => state.closeGenericModal
@@ -72,7 +72,7 @@ const GoalForm = ({ data: goalToBeUpdated }: IGoalFormProps) => {
   };
 
   const processFormSubmissionResult = (
-    result: IValidatedResponse<GoalSelectModel>
+    result: BaseValidatedResponse<GoalSelectModel>
   ) => {
     if (result.fieldErrors.length) {
       result.fieldErrors.forEach((fieldError) => {

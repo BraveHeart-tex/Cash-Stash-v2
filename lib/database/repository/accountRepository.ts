@@ -8,14 +8,14 @@ import {
 } from "@/lib/database/schema";
 import { and, eq, getTableColumns, like, sql } from "drizzle-orm";
 
-interface IGetMultipleAccountsParams {
+type GetMultipleAccountsParams = {
   userId: string;
   query?: string;
   category?: AccountSelectModel["category"];
   sortBy?: string;
   sortDirection?: string;
   page: number;
-}
+};
 
 const accountRepository = {
   async create(accountDto: AccountInsertModel, withReturning?: true) {
@@ -73,7 +73,7 @@ const accountRepository = {
     sortBy,
     sortDirection,
     page,
-  }: IGetMultipleAccountsParams) {
+  }: GetMultipleAccountsParams) {
     const { pageSize, skipAmount } = getPageSizeAndSkipAmount(page);
 
     const categoryCondition = category

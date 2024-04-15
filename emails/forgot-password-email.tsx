@@ -18,13 +18,13 @@ import {
 import { Link } from "@react-email/components";
 import * as React from "react";
 
-interface IForgotPasswordEmailProps {
+type ForgotPasswordEmailProps = {
   url: string;
-}
+};
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-export const ForgotPasswordEmail = ({ url }: IForgotPasswordEmailProps) => (
+export const ForgotPasswordEmail = ({ url }: ForgotPasswordEmailProps) => (
   <Html>
     <Head>
       <Font

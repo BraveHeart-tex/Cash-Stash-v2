@@ -4,11 +4,11 @@ import { cn } from "@/lib/utils/stringUtils/cn";
 import useGenericModalStore from "@/store/genericModalStore";
 import { FaMoneyBillAlt } from "react-icons/fa";
 
-interface ICreateBudgetButtonProps {
+type CreateBudgetButtonProps = {
   className?: string;
-}
+};
 
-const CreateBudgetButton = ({ className }: ICreateBudgetButtonProps) => {
+const CreateBudgetButton = ({ className }: CreateBudgetButtonProps) => {
   const openGenericModal = useGenericModalStore(
     (state) => state.openGenericModal
   );

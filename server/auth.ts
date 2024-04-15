@@ -38,7 +38,7 @@ import {
 } from "@/lib/auth/authUtils";
 import { revalidatePath } from "next/cache";
 import { isWithinExpirationDate } from "oslo";
-import { IRecaptchaResponse } from "@/server/types";
+import { RecaptchaResponse } from "@/server/types";
 import { db, lucia } from "@/lib/database/connection";
 import userRepository from "@/lib/database/repository/userRepository";
 import emailVerificationCodeRepository from "@/lib/database/repository/emailVerificationCodeRepository";
@@ -674,7 +674,7 @@ export const validateReCAPTCHAToken = async (token: string) => {
       body: responseBody,
     });
 
-    const data = (await response.json()) as IRecaptchaResponse;
+    const data = (await response.json()) as RecaptchaResponse;
 
     return data.success;
   } catch (error) {

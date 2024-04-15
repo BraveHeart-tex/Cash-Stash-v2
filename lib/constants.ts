@@ -1,4 +1,4 @@
-import { IPage } from "@/server/types";
+import { NavigationItem } from "@/server/types";
 import { AiOutlineTransaction } from "react-icons/ai";
 import { FaCog, FaMoneyBill, FaPiggyBank } from "react-icons/fa";
 import { MdDashboard, MdOutlineAccountBalanceWallet } from "react-icons/md";
@@ -72,7 +72,7 @@ export const MONTHS_OF_THE_YEAR = [
   "Dec",
 ] as const;
 
-export const PAGES: IPage[] = [
+export const NAVIGATION_ITEMS: NavigationItem[] = [
   {
     label: "Dashboard",
     icon: MdDashboard,

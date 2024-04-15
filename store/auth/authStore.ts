@@ -4,12 +4,12 @@ import { User } from "lucia";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
-interface AuthStoreState {
+type AuthStoreState = {
   user: User | null;
   setUser: (user: Partial<User> | null) => void;
   uri: string;
   setUri: (uri: string) => void;
-}
+};
 
 const useAuthStore = create<AuthStoreState, [["zustand/devtools", never]]>(
   devtools(

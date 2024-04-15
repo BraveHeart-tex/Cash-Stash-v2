@@ -10,14 +10,14 @@ import React, {
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils/stringUtils/cn";
 
-interface IAutoProgressInputProps {
+type AutoProgressInputProps = {
   length: number;
   // eslint-disable-next-line no-unused-vars
   onChange: (value: string) => void;
   type?: HTMLInputTypeAttribute;
   loading?: boolean;
   shouldFocusFirstInput?: boolean;
-}
+};
 
 const AutoProgressInput = ({
   length,
@@ -25,7 +25,7 @@ const AutoProgressInput = ({
   type = "text",
   loading,
   shouldFocusFirstInput = false,
-}: IAutoProgressInputProps) => {
+}: AutoProgressInputProps) => {
   const [values, setValues] = useState(new Array(length).fill(""));
   const refs: RefObject<HTMLInputElement>[] = Array.from({ length }, () =>
     // eslint-disable-next-line react-hooks/rules-of-hooks

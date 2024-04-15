@@ -4,9 +4,9 @@ import goalSchema, { GoalSchemaType } from "@/schemas/goal-schema";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import {
-  IGetPaginatedGoalsParams,
-  IGetPaginatedGoalsResponse,
-  IValidatedResponse,
+  GetPaginatedGoalsParams,
+  GetPaginatedGoalsResponse,
+  BaseValidatedResponse,
 } from "@/server/types";
 import {
   generateCachePrefixWithUserId,
@@ -23,7 +23,7 @@ import { processZodError } from "@/lib/utils/objectUtils/processZodError";
 
 export const createGoal = async (
   values: GoalSchemaType
-): Promise<IValidatedResponse<GoalSelectModel>> => {
+): Promise<BaseValidatedResponse<GoalSelectModel>> => {
   const { user } = await getUser();
   if (!user) {
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
@@ -71,7 +71,7 @@ export const createGoal = async (
 export const updateGoal = async (
   goalId: number,
   values: GoalSchemaType
-): Promise<IValidatedResponse<GoalSelectModel>> => {
+): Promise<BaseValidatedResponse<GoalSelectModel>> => {
   const { user } = await getUser();
   if (!user) {
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
@@ -131,7 +131,7 @@ export const getPaginatedGoals = async ({
   query,
   sortBy,
   sortDirection,
-}: IGetPaginatedGoalsParams): Promise<IGetPaginatedGoalsResponse> => {
+}: GetPaginatedGoalsParams): Promise<GetPaginatedGoalsResponse> => {
   const { user } = await getUser();
 
   if (!user) {

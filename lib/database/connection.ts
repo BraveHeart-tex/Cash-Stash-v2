@@ -21,7 +21,7 @@ export const pool = mysql.createPool({
 const asyncPool = pool.promise();
 
 export const db = drizzle(asyncPool, {
-  schema: schema,
+  schema,
   mode: "default",
   // logger: new MyLogger(),
 });
@@ -51,6 +51,7 @@ export const lucia = new Lucia(adapter, {
 });
 
 declare module "lucia" {
+  // eslint-disable-next-line no-unused-vars
   interface Register {
     Lucia: typeof lucia;
     UserId: number;
@@ -58,7 +59,7 @@ declare module "lucia" {
   }
 }
 
-interface DatabaseUserAttributes {
+type DatabaseUserAttributes = {
   id: number;
   name: string;
   email: string;
@@ -66,4 +67,4 @@ interface DatabaseUserAttributes {
   prefersTwoFactorAuthentication: boolean;
   activatedTwoFactorAuthentication: boolean;
   preferredCurrency: string;
-}
+};

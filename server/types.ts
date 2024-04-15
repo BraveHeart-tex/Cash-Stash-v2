@@ -1,6 +1,4 @@
 import { IconType } from "react-icons/lib";
-import { AccountCategory } from "@/entities/account";
-import { BudgetCategory } from "@/entities/budget";
 import {
   AccountSelectModel,
   BudgetSelectModel,
@@ -8,70 +6,66 @@ import {
   ReminderSelectModel,
   TransactionSelectModel,
 } from "@/lib/database/schema";
-import { CATEGORY_TYPES } from "@/lib/constants";
+import { CATEGORY_TYPES, PAGE_ROUTES } from "@/lib/constants";
 
-interface IPaginatedResponse {
+type BasePaginatedResponse = {
   hasNextPage: boolean;
   hasPreviousPage: boolean;
   currentPage: number;
   totalPages: number;
-}
+};
 
-interface IPaginatedActionParams {
+type BasePaginatedActionParams = {
   pageNumber: number;
   query?: string;
-}
+};
 
-export interface TransactionWithAccount extends TransactionSelectModel {
-  account: Partial<AccountSelectModel>;
-}
-
-export interface IValidatedResponse<T> {
+export type BaseValidatedResponse<T> = {
   data?: T;
   error?: string;
   fieldErrors: {
     field: string;
     message: string | undefined;
   }[];
-}
+};
 
-export interface IGetPaginatedAccountsParams extends IPaginatedActionParams {
+export type GetPaginatedAccountsParams = BasePaginatedActionParams & {
   sortBy?: string;
   sortDirection?: string;
-  category?: AccountCategory;
-}
+  category?: AccountSelectModel["category"];
+};
 
-export interface IGetPaginatedAccountsResponse extends IPaginatedResponse {
+export type IGetPaginatedAccountsResponse = BasePaginatedResponse & {
   accounts: AccountWithTransactions[];
-}
+};
 
-export interface IGetPaginatedBudgetsParams extends IPaginatedActionParams {
+export type IGetPaginatedBudgetsParams = BasePaginatedActionParams & {
   category?: string;
   sortBy?: string;
   sortDirection?: string;
-}
+};
 
-export interface IGetPaginatedBudgetsResponse extends IPaginatedResponse {
+export type GetPaginatedBudgetsResponse = BasePaginatedResponse & {
   budgets: BudgetSelectModel[];
-}
+};
 
-export interface IGetPaginatedGoalsParams extends IPaginatedActionParams {
+export type GetPaginatedGoalsParams = BasePaginatedActionParams & {
   sortBy?: string;
   sortDirection?: string;
-}
+};
 
-export interface IGetPaginatedGoalsResponse extends IPaginatedResponse {
+export type GetPaginatedGoalsResponse = BasePaginatedResponse & {
   goals: GoalSelectModel[];
-}
+};
 
-export interface IGetPaginatedRemindersParams extends IPaginatedActionParams {
+export type GetPaginatedRemindersParams = BasePaginatedActionParams & {
   startDate?: string;
   endDate?: string;
-}
+};
 
-export interface IGetPaginatedRemindersResponse extends IPaginatedResponse {
+export type GetPaginatedRemindersResponse = BasePaginatedResponse & {
   reminders: ReminderSelectModel[];
-}
+};
 
 export type SerializedUserAccount = Omit<
   AccountSelectModel,
@@ -81,11 +75,11 @@ export type SerializedUserAccount = Omit<
   updatedAt: string;
 };
 
-export interface GenericFilterOption<T> {
+export type GenericFilterOption<T> = {
   label: string;
   data: T;
   icon: React.JSX.Element;
-}
+};
 
 export type UpdateBudgetResponse = {
   budget?: BudgetSelectModel;
@@ -96,12 +90,12 @@ export type UpdateBudgetResponse = {
   }[];
 };
 
-export interface InsightsData {
+export type InsightsData = {
   totalIncome: number;
   totalExpense: number;
   netIncome: number;
   savingsRate: string;
-}
+};
 
 export type SerializedTransaction = Omit<
   TransactionSelectModel,
@@ -121,30 +115,20 @@ export type SerializedReminder = Omit<
   reminderDate: string;
 };
 
-export type Page =
-  | "Dashboard"
-  | "Accounts"
-  | "Budgets"
-  | "Goals"
-  | "Transactions"
-  | "Reports"
-  | "Settings";
-
-export interface IPage {
-  label: Page;
+export type NavigationItem = {
+  label: string;
   icon: IconType;
-  link: string;
-}
+  link: PageLink;
+};
 
-export interface IRecaptchaResponse {
+export type RecaptchaResponse = {
   success: boolean;
   challenge_ts: string;
   hostname: string;
   "error-codes": string[];
-}
+};
 
-export interface IGetPaginatedTransactionsParams
-  extends IPaginatedActionParams {
+export type GetPaginatedTransactionsParams = BasePaginatedActionParams & {
   transactionType?: string;
   accountId?: number;
   sortBy: "amount" | "createdAt";
@@ -153,35 +137,31 @@ export interface IGetPaginatedTransactionsParams
   createdAtEnd?: Date;
   createdAtOperator?: "equals" | "before" | "after" | "range";
   category?: TransactionSelectModel["category"];
-}
+};
 
-export interface IGetPaginatedTransactionsResponse extends IPaginatedResponse {
+export type GetPaginatedTransactionsResponse = BasePaginatedResponse & {
   transactions: (TransactionSelectModel & { accountName: string })[];
-}
+};
 
-export interface AccountWithTransactions extends AccountSelectModel {
+export type AccountWithTransactions = AccountSelectModel & {
   transactions: TransactionSelectModel[];
-}
+};
 
-export interface MonthlyTransactionsData {
+export type MonthlyTransactionsData = {
   date: string;
   income: number;
   expense: number;
-}
+};
 
-export interface TransactionsWithAccountName extends TransactionSelectModel {
-  accountName: string;
-}
-
-export interface ExchangeRateResponse {
+export type ExchangeRateResponse = {
   disclaimer: string;
   license: string;
   timestamp: number;
   base: string;
   rates: Rates;
-}
+};
 
-export interface Rates {
+export type Rates = {
   AED: number;
   AFN: number;
   ALL: number;
@@ -351,26 +331,27 @@ export interface Rates {
   ZAR: number;
   ZMW: number;
   ZWL: number;
-}
+};
 
-export interface ExchangeRateResponseError {
+export type ExchangeRateResponseError = {
   error: boolean;
   status: number;
   message: string;
   description: string;
-}
+};
 
-export interface IComboboxOption {
+export type ComboboxOption = {
   label: string | number;
   value: string;
-}
+};
 
-export interface ConvertCurrencyType {
+export type ConvertCurrencyType = {
   symbol: string;
   rate: number;
   label: string;
   amount: number;
-}
+};
 
-export type ICategoryType =
-  (typeof CATEGORY_TYPES)[keyof typeof CATEGORY_TYPES];
+export type CategoryType = (typeof CATEGORY_TYPES)[keyof typeof CATEGORY_TYPES];
+
+export type PageLink = (typeof PAGE_ROUTES)[keyof typeof PAGE_ROUTES];

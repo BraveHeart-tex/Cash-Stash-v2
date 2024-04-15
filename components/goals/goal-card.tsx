@@ -14,11 +14,11 @@ import { cn } from "@/lib/utils/stringUtils/cn";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import useAuthStore from "@/store/auth/authStore";
 
-interface IGoalCardProps {
+type GoalCardProps = {
   goal: GoalSelectModel;
-}
+};
 
-const GoalCard = ({ goal }: IGoalCardProps) => {
+const GoalCard = ({ goal }: GoalCardProps) => {
   const preferredCurrency = useAuthStore(
     (state) => state.user?.preferredCurrency
   );

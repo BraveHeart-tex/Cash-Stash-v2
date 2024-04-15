@@ -4,19 +4,19 @@ import { Button } from "./ui/button";
 import { useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-interface IPaginationControlsProps {
+type PaginationControlsProps = {
   currentPage: number;
   totalPages: number;
   hasNextPage: boolean;
   hasPreviousPage: boolean;
-}
+};
 
 const RoutePaginationControls = ({
   currentPage,
   totalPages,
   hasNextPage,
   hasPreviousPage,
-}: IPaginationControlsProps) => {
+}: PaginationControlsProps) => {
   const [changingPage, setChangingPage] = useState(false);
   const [page, setPage] = useQueryState("page", {
     defaultValue: "1",

@@ -4,11 +4,11 @@ import { cn } from "@/lib/utils/stringUtils/cn";
 import useGenericModalStore from "@/store/genericModalStore";
 import { FaPiggyBank } from "react-icons/fa";
 
-interface ICreateAccountButtonProps {
+type CreateAccountButtonProps = {
   className?: string;
-}
+};
 
-const CreateAccountButton = ({ className }: ICreateAccountButtonProps) => {
+const CreateAccountButton = ({ className }: CreateAccountButtonProps) => {
   const openGenericModal = useGenericModalStore(
     (state) => state.openGenericModal
   );

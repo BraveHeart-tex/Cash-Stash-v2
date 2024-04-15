@@ -25,14 +25,14 @@ import { Button } from "./button";
 import { useState } from "react";
 import { Input } from "./input";
 
-interface DataTableProps<TData, TValue> {
+type DataTableProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   searchConfig?: {
     placeholder: string;
     column: keyof TData;
   };
-}
+};
 
 export function DataTable<TData, TValue>({
   columns,

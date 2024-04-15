@@ -1,10 +1,10 @@
-import { IGetPaginatedTransactionsParams } from "@/server/types";
-import { ITransactionPageSearchParams } from "@/app/(dashboard)/transactions/page";
-import { TransactionCategory } from "@/entities/transaction";
+import { GetPaginatedTransactionsParams } from "@/server/types";
+import { TransactionPageSearchParams } from "@/app/(dashboard)/transactions/page";
+import { TransactionSelectModel } from "../database/schema";
 
 export function createGetPaginatedTransactionsParams(
-  searchParams: ITransactionPageSearchParams
-): IGetPaginatedTransactionsParams {
+  searchParams: TransactionPageSearchParams
+): GetPaginatedTransactionsParams {
   const {
     transactionType,
     accountId,
@@ -20,7 +20,7 @@ export function createGetPaginatedTransactionsParams(
     accountId: accountId ? parseInt(accountId) : undefined,
     sortBy: (sortBy || "createdAt") as "amount" | "createdAt",
     sortDirection: (sortDirection || "desc") as "asc" | "desc",
-    category: category as TransactionCategory,
+    category: category as TransactionSelectModel["category"],
     pageNumber: page ? parseInt(page) : 1,
     query,
   };

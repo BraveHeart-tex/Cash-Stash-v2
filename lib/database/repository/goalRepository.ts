@@ -3,13 +3,13 @@ import { db } from "@/lib/database/connection";
 import { GoalInsertModel, goals } from "@/lib/database/schema";
 import { and, asc, desc, eq, like, sql } from "drizzle-orm";
 
-interface IGetMultipleGoalsParams {
+type GetMultipleGoalsParams = {
   page: number;
   userId: string;
   query?: string;
   sortBy?: string;
   sortDirection?: string;
-}
+};
 
 const goalRepository = {
   async create(goalDto: GoalInsertModel) {
@@ -92,7 +92,7 @@ const goalRepository = {
     query,
     sortBy,
     sortDirection,
-  }: IGetMultipleGoalsParams) {
+  }: GetMultipleGoalsParams) {
     const { pageSize, skipAmount } = getPageSizeAndSkipAmount(page);
 
     let orderByCondition = desc(goals.id);

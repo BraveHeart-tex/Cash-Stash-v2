@@ -21,17 +21,17 @@ import { Link } from "@react-email/components";
 
 import * as React from "react";
 
-interface IRegisterConfirmEmailProps {
+type RegisterConfirmEmailProps = {
   validationCode: string;
   validationUrl: string;
-}
+};
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
 export const RegisterConfirmEmail = ({
   validationCode,
   validationUrl,
-}: IRegisterConfirmEmailProps) => (
+}: RegisterConfirmEmailProps) => (
   <Html>
     <Head>
       <Font

@@ -7,7 +7,7 @@ import categorySchema, { CategorySchemaType } from "@/schemas/category-schema";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import categoryRepository from "@/lib/database/repository/categoryRepository";
-import { ICategoryType } from "./types";
+import { CategoryType } from "./types";
 import { CategorySelectModel } from "@/lib/database/schema";
 
 export const createCategory = async (values: CategorySchemaType) => {
@@ -73,7 +73,7 @@ export const createCategory = async (values: CategorySchemaType) => {
 };
 
 export const getCategoriesByType = async (
-  type: ICategoryType
+  type: CategoryType
 ): Promise<CategorySelectModel[] | null> => {
   const { user } = await getUser();
   if (!user) {

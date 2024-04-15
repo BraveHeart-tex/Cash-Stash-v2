@@ -20,15 +20,15 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 import ResendVerificationTokenButton from "@/components/resend-verification-token-button";
 
-interface IEmailVerificationPageProps {
+type EmailVerificationPageProps = {
   params: {
     email: string;
   };
-}
+};
 
 const EmailVerificationPage = async ({
   params,
-}: IEmailVerificationPageProps) => {
+}: EmailVerificationPageProps) => {
   const { user } = await getUser();
 
   if (user) {

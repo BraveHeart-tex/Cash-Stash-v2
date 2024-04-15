@@ -19,7 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { registerBankAccount, updateBankAccount } from "@/server/account";
-import { IValidatedResponse } from "@/server/types";
+import { BaseValidatedResponse } from "@/server/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useTransition } from "react";
 import useGenericModalStore from "@/store/genericModalStore";
@@ -30,11 +30,11 @@ import { formHasChanged } from "@/lib/utils/objectUtils/formHasChanged";
 import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
 import CurrencyFormLabel from "../ui/currency-form-label";
 
-interface IAccountFormProps {
+type AccountFormProps = {
   data?: AccountSelectModel;
-}
+};
 
-const AccountForm = ({ data: accountToBeUpdated }: IAccountFormProps) => {
+const AccountForm = ({ data: accountToBeUpdated }: AccountFormProps) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const closeGenericModal = useGenericModalStore(
@@ -85,7 +85,7 @@ const AccountForm = ({ data: accountToBeUpdated }: IAccountFormProps) => {
   };
 
   const processFormSubmissionResult = (
-    result: IValidatedResponse<AccountSelectModel>
+    result: BaseValidatedResponse<AccountSelectModel>
   ) => {
     if (result.fieldErrors.length) {
       result.fieldErrors.forEach((fieldError) => {

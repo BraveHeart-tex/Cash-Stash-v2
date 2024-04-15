@@ -22,19 +22,19 @@ import {
 } from "@/lib/database/schema";
 import AccountCardContent from "./account-card-content";
 
-interface ILatestAccountTransactionsDialogProps {
+type LatestAccountTransactionsDialogProps = {
   selectedAccount:
     | (AccountSelectModel & {
         transactions: TransactionSelectModel[];
       })
     | null;
   onClose: () => void;
-}
+};
 
 const LatestAccountTransactionsDialog = ({
   onClose,
   selectedAccount,
-}: ILatestAccountTransactionsDialogProps) => {
+}: LatestAccountTransactionsDialogProps) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const visible = !!(
     selectedAccount && selectedAccount.transactions.length > 0

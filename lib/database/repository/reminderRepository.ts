@@ -3,13 +3,13 @@ import { db } from "../connection";
 import { ReminderInsertModel, reminders } from "../schema";
 import { getPageSizeAndSkipAmount } from "@/lib/constants";
 
-interface IGetMultipleRemindersParams {
+type GetMultipleRemindersParams = {
   userId: string;
   query?: string;
   page: number;
   startDate?: string;
   endDate?: string;
-}
+};
 
 const reminderRepository = {
   async create(data: ReminderInsertModel) {
@@ -62,7 +62,7 @@ const reminderRepository = {
     page,
     startDate,
     endDate,
-  }: IGetMultipleRemindersParams) {
+  }: GetMultipleRemindersParams) {
     const { pageSize, skipAmount } = getPageSizeAndSkipAmount(page);
 
     let dateFilterCondition = undefined;

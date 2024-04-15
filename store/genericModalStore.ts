@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-interface GenericModalState {
+type GenericModalState = {
   entityId: string | number;
   isGenericModalOpen: boolean;
   dialogTitle?: string;
@@ -12,7 +12,7 @@ interface GenericModalState {
   // eslint-disable-next-line no-unused-vars
   openGenericModal: (params: Partial<GenericModalState>) => void;
   closeGenericModal: () => void;
-}
+};
 
 const useGenericModalStore = create<GenericModalState>((set) => ({
   entityId: "",

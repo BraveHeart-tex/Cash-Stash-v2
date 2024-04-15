@@ -1,5 +1,5 @@
 "use client";
-import { IComboboxOption } from "@/server/types";
+import { ComboboxOption } from "@/server/types";
 import Combobox from "@/components/ui/combobox";
 import { useState, useTransition } from "react";
 import { Button } from "../ui/button";
@@ -11,14 +11,10 @@ import {
   updateUserCurrencyPreference,
 } from "@/server/user";
 
-const CurrencyCombobox = ({
-  currencies,
-}: {
-  currencies: IComboboxOption[];
-}) => {
+const CurrencyCombobox = ({ currencies }: { currencies: ComboboxOption[] }) => {
   let [isPending, startTransition] = useTransition();
   const [selectedCurrency, setSelectedCurrency] =
-    useState<IComboboxOption | null>(null);
+    useState<ComboboxOption | null>(null);
 
   const setUser = useAuthStore((state) => state.setUser);
   const showGenericConfirm = useGenericConfirmStore(
@@ -33,7 +29,7 @@ const CurrencyCombobox = ({
 
   const askCurrencyConversion = (
     oldSymbol: string,
-    selectedCurrency: IComboboxOption
+    selectedCurrency: ComboboxOption
   ) => {
     showGenericConfirm({
       title: "Would you like to convert your transactions?",

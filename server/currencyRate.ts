@@ -6,21 +6,21 @@ import currencyRatesRepository from "@/lib/database/repository/currencyRatesRepo
 import { redirect } from "next/navigation";
 import { ConvertCurrencyType } from "./types";
 
-interface IConvertCurrencyParams {
+type ConvertCurrencyParams = {
   currency: string;
   amount: string;
-}
+};
 
-interface IConvertCurrencyReturnType {
+type ConvertCurrencyReturnType = {
   currencies: ConvertCurrencyType[];
   updatedAt: string;
   error?: string;
-}
+};
 
 export const convertCurrency = async ({
   currency,
   amount,
-}: IConvertCurrencyParams): Promise<IConvertCurrencyReturnType> => {
+}: ConvertCurrencyParams): Promise<ConvertCurrencyReturnType> => {
   const { user } = await getUser();
 
   if (!user) {

@@ -1,5 +1,5 @@
 import MotionDiv from "@/components/animations/motion-div";
-import { ITransactionPageSearchParams } from "../transactions/page";
+import { TransactionPageSearchParams } from "../transactions/page";
 import { getChartData } from "@/server";
 import { getPaginatedTransactions } from "@/server/transaction";
 import { DataTable } from "@/components/ui/data-table";
@@ -10,7 +10,7 @@ import IncomeAndExpenseChart from "@/components/income-expense-chart";
 const ReportsPage = async ({
   searchParams,
 }: {
-  searchParams: ITransactionPageSearchParams;
+  searchParams: TransactionPageSearchParams;
 }) => {
   const {
     transactionType = "all",
