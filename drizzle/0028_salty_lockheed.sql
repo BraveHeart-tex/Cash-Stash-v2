@@ -1,0 +1,1 @@
+ALTER TABLE `Category` ADD CONSTRAINT `unique_name_user_type` UNIQUE(`name`,`userId`,`type`);

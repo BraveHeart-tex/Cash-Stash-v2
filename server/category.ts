@@ -53,6 +53,16 @@ export const createCategory = async (values: CategorySchemaType) => {
       };
     }
 
+    if (error instanceof Error) {
+      if ("code" in error && error.code === "ER_DUP_ENTRY") {
+        return {
+          data: null,
+          error: `Category: ${values.name} already exists.`,
+          fieldErrors: [{ field: "name", message: "Category already exists." }],
+        };
+      }
+    }
+
     return {
       data: null,
       error:

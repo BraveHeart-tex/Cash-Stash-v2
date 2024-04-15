@@ -491,22 +491,34 @@ export const currencyRates = mysqlTable(
   }
 );
 
-export const categories = mysqlTable("Category", {
-  id: int("id").autoincrement().primaryKey(),
-  name: varchar("name", { length: 50 }).notNull(),
-  createdAt: datetime("createdAt", { mode: "string", fsp: 3 })
-    .default(sql`CURRENT_TIMESTAMP(3)`)
-    .notNull(),
-  updatedAt: datetime("updatedAt", { mode: "string", fsp: 3 })
-    .default(sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`)
-    .notNull(),
-  type: int("type").notNull(),
-  userId: varchar("userId", {
-    length: 128,
-  })
-    .notNull()
-    .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
-});
+export const categories = mysqlTable(
+  "Category",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    name: varchar("name", { length: 50 }).notNull(),
+    createdAt: datetime("createdAt", { mode: "string", fsp: 3 })
+      .default(sql`CURRENT_TIMESTAMP(3)`)
+      .notNull(),
+    updatedAt: datetime("updatedAt", { mode: "string", fsp: 3 })
+      .default(sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`)
+      .notNull(),
+    type: int("type").notNull(),
+    userId: varchar("userId", {
+      length: 128,
+    })
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
+  },
+  (table) => {
+    return {
+      uniqueNameUserType: unique("unique_name_user_type").on(
+        table.name,
+        table.userId,
+        table.type
+      ),
+    };
+  }
+);
 
 export const categoryRelations = relations(categories, ({ one }) => ({
   user: one(users, {
