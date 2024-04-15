@@ -12,13 +12,6 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -39,6 +32,7 @@ import useCategoriesStore from "@/store/categoriesStore";
 import { CATEGORY_TYPES } from "@/lib/constants";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import { getCategoriesByType } from "@/server/category";
+import Combobox from "@/components/ui/combobox";
 
 interface IBudgetFormProps {
   data?: BudgetSelectModel;
@@ -106,6 +100,7 @@ const BudgetForm = ({ data: budgetToBeUpdated }: IBudgetFormProps) => {
         );
         return;
       }
+
       setCategories(budgetCategories);
     });
   }, [setCategories]);
@@ -123,13 +118,8 @@ const BudgetForm = ({ data: budgetToBeUpdated }: IBudgetFormProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [budgetToBeUpdated]);
 
-  const handleFormSubmit = async (values: BudgetSchemaType, event: any) => {
-    const targetForm = event.target.closest("form");
-
-    if (targetForm && targetForm.id === "budget-category-form") {
-      return;
-    }
-
+  const handleFormSubmit = async (values: BudgetSchemaType) => {
+    if (isPending) return;
     if (entityId && formHasChanged(budgetToBeUpdated, values)) {
       toast.info("No changes detected.", {
         description: "You haven't made any changes to the budget.",
@@ -183,8 +173,13 @@ const BudgetForm = ({ data: budgetToBeUpdated }: IBudgetFormProps) => {
       return "Submitting...";
     }
 
-    return entityId ? "Update" : "Create";
+    return entityId ? "Update Budget" : "Create Budget";
   };
+
+  const budgetCategoryOptions = budgetCategories.map((category) => ({
+    label: category.name,
+    value: category.name,
+  }));
 
   return (
     <Form {...form}>
@@ -251,39 +246,35 @@ const BudgetForm = ({ data: budgetToBeUpdated }: IBudgetFormProps) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Budget Category</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                value={field.value}
-                key={form.watch("category")}
-              >
-                <FormControl>
-                  <div className="flex items-center gap-1">
-                    <SelectTrigger
-                      ref={field.ref}
-                      className={cn(budgetCategories.length === 0 && "hidden")}
-                    >
-                      <SelectValue placeholder="Select an budget category" />
-                    </SelectTrigger>
-                    {budgetCategories.length === 0 && (
-                      <p className="text-muted-foreground mr-auto">
-                        Looks like there are no budget categories yet.
-                      </p>
+
+              <FormControl>
+                <div className="flex items-center gap-1">
+                  <Combobox
+                    ref={field.ref}
+                    options={budgetCategoryOptions}
+                    contentClassName="z-[100]"
+                    defaultOption={budgetCategoryOptions.find(
+                      (category) => category.value === field.value
                     )}
-                    <CreateBudgetCategoryPopover
-                      onSave={(values) => {
-                        field.onChange(values.name);
-                      }}
-                    />
-                  </div>
-                </FormControl>
-                <SelectContent>
-                  {budgetCategories.map((category) => (
-                    <SelectItem key={category.id} value={category.name}>
-                      {category.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                    triggerClassName={cn(
+                      "focus:outline focus:outline-1 focus:outline-offset-1 focus:outline-destructive",
+                      budgetCategories.length === 0 && "hidden"
+                    )}
+                    triggerPlaceholder="Select a budget category"
+                    onSelect={(option) => field.onChange(option.value)}
+                  />
+                  {budgetCategories.length === 0 && (
+                    <p className="text-muted-foreground mr-auto">
+                      Looks like there are no budget categories yet.
+                    </p>
+                  )}
+                  <CreateBudgetCategoryPopover
+                    onSave={(values) => {
+                      field.onChange(values.name);
+                    }}
+                  />
+                </div>
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}

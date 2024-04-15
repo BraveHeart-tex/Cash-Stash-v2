@@ -27,6 +27,7 @@ interface IComboboxProps {
   emptyMessage?: string;
   defaultOption?: IComboboxOption;
   trigger?: React.ReactNode;
+  triggerPlaceholder?: string;
 }
 
 const Combobox = forwardRef<HTMLButtonElement, IComboboxProps>(
@@ -39,6 +40,7 @@ const Combobox = forwardRef<HTMLButtonElement, IComboboxProps>(
       emptyMessage,
       defaultOption,
       trigger,
+      triggerPlaceholder,
     },
     ref
   ) => {
@@ -69,7 +71,7 @@ const Combobox = forwardRef<HTMLButtonElement, IComboboxProps>(
     }, [options, searchQuery]);
 
     return (
-      <Popover open={isOpen} onOpenChange={setIsOpen}>
+      <Popover open={isOpen} onOpenChange={setIsOpen} modal>
         <PopoverTrigger asChild ref={ref}>
           {trigger ? (
             trigger
@@ -82,7 +84,9 @@ const Combobox = forwardRef<HTMLButtonElement, IComboboxProps>(
               className={cn("w-full justify-between", triggerClassName)}
               onClick={() => setIsOpen(!isOpen)}
             >
-              {selectedOption?.label || "Select an option"}
+              {selectedOption?.label ||
+                triggerPlaceholder ||
+                "Select an option"}
               <FaSort className="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
           )}
