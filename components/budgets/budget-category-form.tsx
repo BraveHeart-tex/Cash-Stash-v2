@@ -6,23 +6,24 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
+} from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import categorySchema, { CategorySchemaType } from "@/schemas/category-schema";
 import { useTransition } from "react";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { CATEGORY_TYPES } from "@/lib/constants";
 import { createCategory } from "@/actions/category";
 import { toast } from "sonner";
+import { CategorySelectModel } from "@/lib/database/schema";
 
 const BudgetCategoryForm = ({
   afterSave,
 }: {
   // eslint-disable-next-line no-unused-vars
-  afterSave?: (values: CategorySchemaType) => void;
+  afterSave?: (values: CategorySelectModel) => void;
 }) => {
-  // TODO: Delete after editing functionality
+  // TODO: Will Delete after editing functionality
   const entityId = null;
 
   let [isPending, startTransition] = useTransition();
@@ -36,8 +37,8 @@ const BudgetCategoryForm = ({
   const handleFormSubmit = (values: CategorySchemaType) => {
     startTransition(async () => {
       const response = await createCategory(values);
-      if (!response.error) {
-        afterSave?.(values);
+      if (!response.error && response.data) {
+        afterSave?.(response.data);
       }
 
       processFormSubmissionResult(response);
@@ -71,6 +72,21 @@ const BudgetCategoryForm = ({
     }
   };
 
+  // stops the parent form from submitting
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    if (event) {
+      if (typeof event.preventDefault === "function") {
+        event.preventDefault();
+      }
+
+      if (typeof event.stopPropagation === "function") {
+        event.stopPropagation();
+      }
+    }
+
+    return form.handleSubmit(handleFormSubmit)(event);
+  };
+
   return (
     <Form {...form}>
       <form
@@ -78,7 +94,7 @@ const BudgetCategoryForm = ({
         role="form"
         name="budget-category-form"
         aria-label="Budget Form"
-        onSubmit={form.handleSubmit(handleFormSubmit)}
+        onSubmit={onSubmit}
         className="grid grid-cols-1 gap-4"
       >
         <FormField

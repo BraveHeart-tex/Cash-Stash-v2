@@ -1,4 +1,3 @@
-import { budgets } from "@/lib/database/schema";
 import { z } from "zod";
 
 const budgetSchema = z
@@ -10,20 +9,7 @@ const budgetSchema = z
         required_error: "Budget amount is required",
       })
       .positive("Budget amount must be positive"),
-    category: z
-      .enum(budgets.category.enumValues, {
-        required_error: "Category is required",
-        invalid_type_error: "Invalid budget category",
-      })
-      .superRefine((val, ctx) => {
-        if (!val) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "Category is required",
-            path: ["category"],
-          });
-        }
-      }),
+    category: z.string().min(1, "Category cannot be blank"),
     spentAmount: z.coerce
       .number()
       .nonnegative("Spent amount can't be negative")

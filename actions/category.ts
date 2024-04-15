@@ -27,17 +27,17 @@ export const createCategory = async (values: CategorySchemaType) => {
 
     if (!response.insertId) {
       return {
+        data: null,
         error:
           "Something went wrong while creating a category. Please try again later.",
         fieldErrors: [],
       };
     }
 
+    const [category] = await categoryRepository.getCategory(response.insertId);
+
     return {
-      data: {
-        id: response.insertId,
-        ...categoryDto,
-      },
+      data: category,
       fieldErrors: [],
       error: "",
     };
@@ -45,10 +45,14 @@ export const createCategory = async (values: CategorySchemaType) => {
     console.log("ERROR CREATING CATEGORY", error);
 
     if (error instanceof ZodError) {
-      return processZodError(error);
+      return {
+        ...processZodError(error),
+        data: null,
+      };
     }
 
     return {
+      data: null,
       error:
         "Something went wrong. While creating a category. Please try again later.",
       fieldErrors: [],

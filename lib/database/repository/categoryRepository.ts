@@ -9,6 +9,13 @@ const categoryRepository = {
   async deleteCategory(id: number) {
     return await db.delete(categories).where(eq(categories.id, id));
   },
+  async getCategory(id: number) {
+    return await db
+      .select()
+      .from(categories)
+      .where(eq(categories.id, id))
+      .limit(1);
+  },
   async updateCategory(
     data: Required<Pick<CategoryInsertModel, "id">> &
       Partial<Omit<CategoryInsertModel, "id">>

@@ -18,7 +18,7 @@ const MobileTabsList = () => {
   return (
     <nav
       role="navigation"
-      className="fixed bottom-0 left-0 z-50 w-full h-16 bg-background border-t border-border lg:hidden"
+      className="fixed bottom-0 left-0 z-50 w-full h-16 bg-background border-t border-border lg:hidden scrollbar-hide"
     >
       <div className="flex items-center justify-between h-full font-medium overflow-auto scrollbar-hide">
         {PAGES.map((page) => (

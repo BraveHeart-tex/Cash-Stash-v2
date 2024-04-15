@@ -30,19 +30,33 @@ import budgetSchema, { BudgetSchemaType } from "@/schemas/budget-schema";
 import { createBudget, updateBudget } from "@/actions/budget";
 import useGenericModalStore from "@/store/genericModalStore";
 import { toast } from "sonner";
-import { BudgetSelectModel, budgets } from "@/lib/database/schema";
+import {
+  BudgetSelectModel,
+  CategorySelectModel,
+  budgets,
+} from "@/lib/database/schema";
 import { formHasChanged } from "@/lib/utils/objectUtils/formHasChanged";
 import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
 import CurrencyFormLabel from "../ui/currency-form-label";
 import { FaPlus } from "react-icons/fa";
 import BudgetCategoryForm from "./budget-category-form";
+import useCategoriesStore from "@/store/categoriesStore";
+import { CATEGORY_TYPES } from "@/lib/constants";
+import { cn } from "@/lib/utils/stringUtils/cn";
 
 interface IBudgetFormProps {
   data?: BudgetSelectModel;
 }
 
-const CreateCategoryPopover = () => {
+const CreateCategoryPopover = ({
+  onSave,
+}: {
+  // eslint-disable-next-line no-unused-vars
+  onSave: (values: CategorySelectModel) => void;
+}) => {
   const [open, setOpen] = useState(false);
+  const addCategory = useCategoriesStore((state) => state.addCategory);
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -50,18 +64,19 @@ const CreateCategoryPopover = () => {
           <FaPlus />
         </Button>
       </PopoverTrigger>
-      <PopoverContent>
+      <PopoverContent className="z-[500]">
         <div className="grid gap-4">
           <div className="space-y-2">
             <h4 className="font-medium leading-none">Add Budget Category</h4>
             <p className="text-sm text-muted-foreground">
-              Add a new budget category by using the form below.
+              Add a new budget category by using the form below. Category:
             </p>
           </div>
           <BudgetCategoryForm
-            // TODO:
             afterSave={(values) => {
               setOpen(false);
+              addCategory(values);
+              onSave(values);
             }}
           />
         </div>
@@ -79,6 +94,10 @@ const BudgetForm = ({ data: budgetToBeUpdated }: IBudgetFormProps) => {
   const form = useForm<BudgetSchemaType>({
     resolver: zodResolver(budgetSchema),
   });
+  const budgetCategories = useCategoriesStore(
+    (state) => state.categories
+  ).filter((category) => category.type === CATEGORY_TYPES.BUDGET);
+
   const entityId = budgetToBeUpdated?.id;
 
   useEffect(() => {
@@ -149,10 +168,6 @@ const BudgetForm = ({ data: budgetToBeUpdated }: IBudgetFormProps) => {
     }
   };
 
-  const budgetCategorySelectOptions = generateOptionsFromEnums(
-    budgets.category.enumValues
-  );
-
   const renderSubmitButtonContent = () => {
     if (form.formState.isSubmitting || isPending) {
       return "Submitting...";
@@ -221,27 +236,37 @@ const BudgetForm = ({ data: budgetToBeUpdated }: IBudgetFormProps) => {
           )}
         />
         <FormField
+          key={budgetCategories.length}
           control={form.control}
           name="category"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Budget Category</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                defaultValue={budgetToBeUpdated?.category || field.value}
-              >
+              <Select onValueChange={field.onChange} value={field.value}>
                 <FormControl>
                   <div className="flex items-center gap-1">
-                    <SelectTrigger ref={field.ref}>
+                    <SelectTrigger
+                      ref={field.ref}
+                      className={cn(budgetCategories.length === 0 && "hidden")}
+                    >
                       <SelectValue placeholder="Select an budget category" />
                     </SelectTrigger>
-                    <CreateCategoryPopover />
+                    {budgetCategories.length === 0 && (
+                      <p className="text-muted-foreground mr-auto">
+                        Looks like there are no budget categories yet.
+                      </p>
+                    )}
+                    <CreateCategoryPopover
+                      onSave={(values) => {
+                        field.onChange(values.name);
+                      }}
+                    />
                   </div>
                 </FormControl>
                 <SelectContent>
-                  {budgetCategorySelectOptions.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
-                      {option.label}
+                  {budgetCategories.map((category) => (
+                    <SelectItem key={category.id} value={category.name}>
+                      {category.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
