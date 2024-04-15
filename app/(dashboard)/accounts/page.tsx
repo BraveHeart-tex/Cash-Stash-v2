@@ -8,9 +8,8 @@ import MotionDiv from "@/components/animations/motion-div";
 import AccountsNotFound from "@/components/accounts-not-found";
 import RouteFiltersPopover from "@/components/route-filters-popover";
 import { BsSortDown, BsSortUp } from "react-icons/bs";
-import { AccountCategory } from "@/entities/account";
 import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
-import { accounts } from "@/lib/database/schema";
+import { AccountSelectModel, accounts } from "@/lib/database/schema";
 
 const AccountPage = async ({
   searchParams,
@@ -18,14 +17,14 @@ const AccountPage = async ({
   searchParams: {
     page: string;
     query: string;
-    category: string;
+    category: AccountSelectModel["category"];
     sortBy: string;
     sortDirection: string;
   };
 }) => {
   const pageNumber = parseInt(searchParams.page) || 1;
   const query = searchParams.query || "";
-  const category = (searchParams.category || "") as AccountCategory;
+  const category = searchParams.category || "";
   const sortBy = searchParams.sortBy || "";
   const sortDirection = searchParams.sortDirection || "";
 
