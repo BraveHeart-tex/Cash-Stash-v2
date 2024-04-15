@@ -246,10 +246,10 @@ const BudgetForm = ({ data: budgetToBeUpdated }: IBudgetFormProps) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Budget Category</FormLabel>
-
               <FormControl>
                 <div className="flex items-center gap-1">
                   <Combobox
+                    key={field.value}
                     ref={field.ref}
                     options={budgetCategoryOptions}
                     contentClassName="z-[100]"
