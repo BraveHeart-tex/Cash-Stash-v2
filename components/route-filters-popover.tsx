@@ -9,7 +9,7 @@ import { BsFilterLeft } from "react-icons/bs";
 import { useQueryStates, parseAsString, UseQueryStatesKeysMap } from "nuqs";
 import { GenericFilterOption } from "@/server/types";
 import { v4 as uuidv4 } from "uuid";
-import { areObjectsDeepEqual } from "@/lib/utils/objectUtils/deepEqual";
+import { compareDeepObjectEquality } from "@/lib/utils/objectUtils/compareDeepObjectEquality";
 import { useState } from "react";
 
 type RouteFiltersPopoverProps<T extends Record<string, any>> = {
@@ -71,7 +71,9 @@ const RouteFiltersPopover = <T extends Record<string, any>>({
               <Button
                 key={option.id}
                 variant={
-                  areObjectsDeepEqual(key, option.data) ? "default" : "outline"
+                  compareDeepObjectEquality(key, option.data)
+                    ? "default"
+                    : "outline"
                 }
                 className="capitalize font-normal whitespace-nowrap flex items-center gap-1"
                 onClick={() => {

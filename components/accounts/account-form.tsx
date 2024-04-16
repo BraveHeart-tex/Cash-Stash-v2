@@ -26,9 +26,9 @@ import useGenericModalStore from "@/store/genericModalStore";
 import accountSchema, { AccountSchemaType } from "@/schemas/account-schema";
 import { toast } from "sonner";
 import { AccountSelectModel, accounts } from "@/lib/database/schema";
-import { formHasChanged } from "@/lib/utils/objectUtils/formHasChanged";
 import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
 import CurrencyFormLabel from "../ui/currency-form-label";
+import { compareMatchingKeys } from "@/lib/utils/objectUtils/compareMatchingKeys";
 
 type AccountFormProps = {
   data?: AccountSelectModel;
@@ -48,20 +48,17 @@ const AccountForm = ({ data: accountToBeUpdated }: AccountFormProps) => {
   useEffect(() => {
     if (accountToBeUpdated) {
       const keys = Object.keys(
-        accountToBeUpdated ?? {}
+        accountToBeUpdated
       ) as (keyof AccountSchemaType)[];
-      if (keys.length) {
-        keys.forEach((key) => {
-          form.setValue(key, accountToBeUpdated[key]);
-        });
-      }
+      keys.forEach((key) => {
+        form.setValue(key, accountToBeUpdated[key]);
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accountToBeUpdated]);
 
   const handleFormSubmit = async (values: AccountSchemaType) => {
-    if (entityId && formHasChanged(accountToBeUpdated, values)) {
-      // showDefaultToast("No changes detected.", "You haven't made any changes.");
+    if (entityId && compareMatchingKeys(accountToBeUpdated, values)) {
       toast.info("No changes detected.", {
         description: "You haven't made any changes.",
       });
