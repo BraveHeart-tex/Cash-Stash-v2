@@ -19,8 +19,8 @@ import { createGoal, updateGoal } from "@/server/goal";
 import useGenericModalStore from "@/store/genericModalStore";
 import { toast } from "sonner";
 import { GoalSelectModel } from "@/lib/database/schema";
-import { formHasChanged } from "@/lib/utils/objectUtils/formHasChanged";
 import CurrencyFormLabel from "../ui/currency-form-label";
+import { compareMatchingKeys } from "@/lib/utils/objectUtils/compareMatchingKeys";
 
 type GoalFormProps = {
   data?: GoalSelectModel;
@@ -52,7 +52,7 @@ const GoalForm = ({ data: goalToBeUpdated }: GoalFormProps) => {
   }, [goalToBeUpdated]);
 
   const handleFormSubmit = async (values: GoalSchemaType) => {
-    if (entityId && formHasChanged(goalToBeUpdated, values)) {
+    if (entityId && compareMatchingKeys(goalToBeUpdated, values)) {
       toast.info("No changes detected.", {
         description: "You haven't made any changes to your goal.",
       });

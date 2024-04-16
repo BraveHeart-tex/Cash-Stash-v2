@@ -24,7 +24,6 @@ import { createBudget, updateBudget } from "@/server/budget";
 import useGenericModalStore from "@/store/genericModalStore";
 import { toast } from "sonner";
 import { BudgetSelectModel, CategorySelectModel } from "@/lib/database/schema";
-import { formHasChanged } from "@/lib/utils/objectUtils/formHasChanged";
 import CurrencyFormLabel from "../ui/currency-form-label";
 import { FaPlus } from "react-icons/fa";
 import BudgetCategoryForm from "./budget-category-form";
@@ -33,6 +32,7 @@ import { CATEGORY_TYPES } from "@/lib/constants";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import { getCategoriesByType } from "@/server/category";
 import Combobox from "@/components/ui/combobox";
+import { compareMatchingKeys } from "@/lib/utils/objectUtils/compareMatchingKeys";
 
 type BudgetFormProps = {
   data?: BudgetSelectModel;
@@ -120,7 +120,7 @@ const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
 
   const handleFormSubmit = async (values: BudgetSchemaType) => {
     if (isPending) return;
-    if (entityId && formHasChanged(budgetToBeUpdated, values)) {
+    if (entityId && compareMatchingKeys(budgetToBeUpdated, values)) {
       toast.info("No changes detected.", {
         description: "You haven't made any changes to the budget.",
       });

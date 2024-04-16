@@ -17,7 +17,7 @@ import { useEffect, useTransition } from "react";
 import useGenericModalStore from "@/store/genericModalStore";
 import { toast } from "sonner";
 import { ReminderSelectModel, reminders } from "@/lib/database/schema";
-import { formHasChanged } from "@/lib/utils/objectUtils/formHasChanged";
+
 import reminderSchema, { ReminderSchemaType } from "@/schemas/reminder-schema";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -38,6 +38,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { compareMatchingKeys } from "@/lib/utils/objectUtils/compareMatchingKeys";
 
 type ReminderFormProps = {
   data?: ReminderSelectModel;
@@ -69,7 +70,7 @@ const ReminderForm = ({ data: reminderToBeUpdated }: ReminderFormProps) => {
   }, [reminderToBeUpdated]);
 
   const handleFormSubmit = async (values: ReminderSchemaType) => {
-    if (entityId && formHasChanged(reminderToBeUpdated, values)) {
+    if (entityId && compareMatchingKeys(reminderToBeUpdated, values)) {
       toast.info("No changes detected.", {
         description: "You haven't made any changes.",
       });

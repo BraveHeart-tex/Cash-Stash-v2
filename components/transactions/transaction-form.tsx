@@ -33,9 +33,9 @@ import {
   TransactionSelectModel,
   transactions,
 } from "@/lib/database/schema";
-import { formHasChanged } from "@/lib/utils/objectUtils/formHasChanged";
 import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
 import CurrencyFormLabel from "../ui/currency-form-label";
+import { compareMatchingKeys } from "@/lib/utils/objectUtils/compareMatchingKeys";
 
 type TransactionFormProps = {
   data?: TransactionSelectModel;
@@ -92,7 +92,7 @@ const TransactionForm = ({
   };
 
   const handleFormSubmit = async (values: TransactionSchemaType) => {
-    if (entityId && formHasChanged(transactionToBeUpdated, values)) {
+    if (entityId && compareMatchingKeys(transactionToBeUpdated, values)) {
       toast.info("No changes detected.", {
         description: "You haven't made any changes to the transaction.",
       });
