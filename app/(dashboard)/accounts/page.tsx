@@ -45,8 +45,18 @@ const AccountPage = async ({
           <h3 className="text-4xl text-primary">Accounts</h3>
           <CreateAccountButton className="self-start mt-0" />
         </div>
-        <div className="flex items-center justify-between gap-2">
-          <RouteSearchInput placeholder="Search accounts by name" />
+        <div className="flex items-center gap-2 justify-between flex-wrap">
+          <div className="flex items-center gap-2">
+            <RouteSearchInput
+              label="Search"
+              placeholder="Search accounts by name"
+            />
+            <QueryStringComboBox
+              dataset={selectDataset}
+              queryStringKey="category"
+              selectLabel="Account Category"
+            />
+          </div>
           {result.accounts.length > 1 && (
             <RouteFiltersPopover
               options={[
@@ -71,12 +81,7 @@ const AccountPage = async ({
             />
           )}
         </div>
-        <div className={"grid lg:grid-cols-6"}>
-          <QueryStringComboBox
-            dataset={selectDataset}
-            queryStringKey="category"
-            selectLabel="Account Category"
-          />
+        <div className={"grid lg:grid-cols-6 mt-4"}>
           {result.accounts.length === 0 && (
             <MotionDiv
               initial={{ opacity: 0 }}
@@ -88,7 +93,6 @@ const AccountPage = async ({
               <AccountsNotFound pageHasParams={!!(query || category)} />
             </MotionDiv>
           )}
-
           <div className="h-[500px] lg:pr-4 col-span-5 mt-2 lg:mt-0 overflow-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 pb-4">
               {result.accounts.map((account) => (

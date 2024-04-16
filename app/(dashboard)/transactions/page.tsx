@@ -6,7 +6,6 @@ import RouteSearchInput from "@/components/route-search-input";
 import { FaCalendar, FaMoneyBill } from "react-icons/fa";
 import QueryStringComboBox from "@/components/query-string-combobox";
 import { getCurrentUserAccountsThatHaveTransactions } from "@/server/account";
-import { Label } from "@/components/ui/label";
 import RouteFiltersPopover from "@/components/route-filters-popover";
 import { createGetPaginatedTransactionsParams } from "@/lib/utils/misc";
 import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
@@ -52,74 +51,70 @@ const TransactionsPage = async ({ searchParams }: TransactionsPageProps) => {
     <main>
       <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
         <div className="flex items-center gap-2 justify-between mb-4 flex-wrap">
-          <h3 className="text-4xl text-primary">Transactions</h3>
+          <h3 className="scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0 text-primary">
+            Transactions
+          </h3>
           <CreateTransactionButton className="mt-0" />
         </div>
-        <div className="flex items-center justify-between">
-          <RouteSearchInput placeholder="Search by description" />
-        </div>
-        {usersAccounts.length > 0 && (
-          <div className="flex lg:flex-row lg:items-center gap-2 flex-col">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
-              <div className="flex flex-col gap-1">
-                <Label>Filter by account</Label>
-                <QueryStringComboBox
-                  dataset={accountsFilterDataset}
-                  queryStringKey="accountId"
-                  selectLabel="Filter by account"
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <Label>Filter by category</Label>
-                <QueryStringComboBox
-                  dataset={categoryFilterDataset}
-                  queryStringKey="category"
-                  selectLabel="Filter by category"
-                />
-              </div>
-            </div>
-            <div className="lg:pt-[20px] lg:ml-auto">
-              <RouteFiltersPopover
-                triggerLabel="Sort By"
-                options={[
-                  {
-                    label: "Sort by Amount (Low to High)",
-                    icon: <FaMoneyBill className="mr-2" />,
-                    data: {
-                      sortBy: "amount",
-                      sortDirection: "asc",
-                    },
-                  },
-                  {
-                    label: "Sort by Amount (High to Low)",
-                    icon: <FaMoneyBill className="mr-2" />,
-                    data: {
-                      sortBy: "amount",
-                      sortDirection: "desc",
-                    },
-                  },
-                  {
-                    label: "Sort by Newest to Oldest",
-                    icon: <FaCalendar className="mr-2" />,
-                    data: {
-                      sortBy: "createdAt",
-                      sortDirection: "desc",
-                    },
-                  },
-                  {
-                    label: "Sort by Oldest to Newest",
-                    icon: <FaCalendar className="mr-2" />,
-                    data: {
-                      sortBy: "createdAt",
-                      sortDirection: "asc",
-                    },
-                  },
-                ]}
-                queryKeys={["sortBy", "sortDirection"]}
-              />
-            </div>
+        <div className="flex items-center justify-between flex-wrap">
+          <div className="flex items-center gap-2 flex-wrap">
+            <RouteSearchInput
+              label="Search"
+              placeholder="Search by description"
+            />
+            <QueryStringComboBox
+              dataset={accountsFilterDataset}
+              queryStringKey="accountId"
+              selectLabel="Account"
+            />
+            <QueryStringComboBox
+              dataset={categoryFilterDataset}
+              queryStringKey="category"
+              selectLabel="Category"
+            />
           </div>
-        )}
+          {usersAccounts.length > 1 && (
+            <RouteFiltersPopover
+              triggerLabel="Sort By"
+              options={[
+                {
+                  label: "Sort by Amount (Low to High)",
+                  icon: <FaMoneyBill className="mr-2" />,
+                  data: {
+                    sortBy: "amount",
+                    sortDirection: "asc",
+                  },
+                },
+                {
+                  label: "Sort by Amount (High to Low)",
+                  icon: <FaMoneyBill className="mr-2" />,
+                  data: {
+                    sortBy: "amount",
+                    sortDirection: "desc",
+                  },
+                },
+                {
+                  label: "Sort by Newest to Oldest",
+                  icon: <FaCalendar className="mr-2" />,
+                  data: {
+                    sortBy: "createdAt",
+                    sortDirection: "desc",
+                  },
+                },
+                {
+                  label: "Sort by Oldest to Newest",
+                  icon: <FaCalendar className="mr-2" />,
+                  data: {
+                    sortBy: "createdAt",
+                    sortDirection: "asc",
+                  },
+                },
+              ]}
+              queryKeys={["sortBy", "sortDirection"]}
+            />
+          )}
+        </div>
+
         <div className="h-[500px] lg:pr-4 mt-2 lg:mt-0 overflow-auto w-full">
           {transactionsResponse.transactions.length > 0 ? (
             <TransactionList transactions={transactionsResponse.transactions} />

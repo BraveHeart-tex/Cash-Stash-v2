@@ -86,7 +86,7 @@ const Dashboard = async () => {
     },
     {
       title: "Latest Transactions",
-      description: "Explore your latest transactions here..",
+      description: "Explore your latest transactions here.",
       data: (
         <TransactionHistory transactions={transactionsResult.transactions} />
       ),

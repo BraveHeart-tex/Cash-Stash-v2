@@ -40,7 +40,7 @@ const GoalsPage = async ({
         </div>
 
         <div className="flex items-center justify-between gap-2">
-          <RouteSearchInput placeholder="Search goals by name" />
+          <RouteSearchInput label="Search" placeholder="Search goals by name" />
           <RouteFiltersPopover
             options={[
               {
@@ -79,7 +79,7 @@ const GoalsPage = async ({
             queryKeys={["sortBy", "sortDirection"]}
           />
         </div>
-        <div className="h-[500px] lg:pr-4 mt-2 lg:mt-0 overflow-auto w-full">
+        <div className="h-[500px] lg:pr-4 mt-4 overflow-auto w-full">
           {result.goals.length > 0 ? (
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 pb-4 pr-2">
               {result.goals.map((goal) => (
