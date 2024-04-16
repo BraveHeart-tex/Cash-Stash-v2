@@ -1,14 +1,7 @@
 "use client";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectGroup,
-  SelectLabel,
-  SelectItem,
-} from "@/components/ui/select";
 import { useQueryState } from "nuqs";
+import Combobox from "@/components/ui/combobox";
+import { Label } from "@/components/ui/label";
 
 type QueryStringComboboxItem = {
   label: string;
@@ -40,22 +33,23 @@ const QueryStringComboBox = ({
   const readableLabel = dataset.find((item) => item.value === key)?.label;
 
   return (
-    <Select defaultValue={"All"} onValueChange={handleValueChange}>
-      <SelectTrigger className="w-full lg:w-[180px]">
-        <SelectValue>{readableLabel || "All"}</SelectValue>
-      </SelectTrigger>
-      <SelectContent className="max-h-[300px] overflow-auto">
-        <SelectGroup>
-          <SelectLabel>{selectLabel}</SelectLabel>
-          <SelectItem value={""}>All</SelectItem>
-          {dataset.map((item) => (
-            <SelectItem key={item.value} value={item.value}>
-              {item.label}
-            </SelectItem>
-          ))}
-        </SelectGroup>
-      </SelectContent>
-    </Select>
+    <div>
+      <Label>{selectLabel}</Label>
+      <Combobox
+        options={[
+          {
+            label: "All",
+            value: "",
+          },
+          ...dataset,
+        ]}
+        onSelect={(option) => {
+          handleValueChange(option.value);
+        }}
+        contentClassName="w-full"
+        triggerPlaceholder={readableLabel || "All"}
+      />
+    </div>
   );
 };
 

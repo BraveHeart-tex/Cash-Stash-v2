@@ -4,8 +4,15 @@ import { Input } from "@/components/ui/input";
 import { useDebounceValue } from "usehooks-ts";
 import { FaSearch } from "react-icons/fa";
 import { useQueryState } from "nuqs";
+import { Label } from "./ui/label";
 
-const RouteSearchInput = ({ placeholder }: { placeholder: string }) => {
+const RouteSearchInput = ({
+  placeholder,
+  label,
+}: {
+  placeholder: string;
+  label: string;
+}) => {
   const [searchQuery, setSearchQuery] = useQueryState("query", {
     shallow: false,
   });
@@ -22,13 +29,17 @@ const RouteSearchInput = ({ placeholder }: { placeholder: string }) => {
   }, [debouncedQuery]);
 
   return (
-    <div className="relative lg:w-96 mb-2 w-full">
-      <Input
-        className="pl-8"
-        onChange={handleInputChange}
-        placeholder={placeholder}
-      />
-      <FaSearch className="absolute top-1/2 left-2 transform -translate-y-1/2 text-foreground/50" />
+    <div className="lg:w-96 w-full">
+      <Label htmlFor="search">{label}</Label>
+      <div className="relative">
+        <Input
+          id="search"
+          className="pl-7"
+          onChange={handleInputChange}
+          placeholder={placeholder}
+        />
+        <FaSearch className="absolute top-1/2 left-2 transform -translate-y-1/2 text-foreground/50" />
+      </div>
     </div>
   );
 };

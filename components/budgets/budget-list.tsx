@@ -27,8 +27,21 @@ const BudgetList = async ({
         <h3 className="text-4xl text-primary">Budgets</h3>
         <CreateBudgetButton className="mt-0" />
       </div>
-      <div className="flex items-center gap-2 justify-between">
-        <RouteSearchInput placeholder="Search budgets by name" />
+      <div className="flex items-center gap-2 justify-between flex-wrap">
+        <div className="flex items-center gap-2">
+          <RouteSearchInput
+            label="Search"
+            placeholder="Search budgets by name"
+          />
+          <QueryStringComboBox
+            dataset={budgetOptions.map((option) => ({
+              label: option.name,
+              value: option.name,
+            }))}
+            queryStringKey="category"
+            selectLabel="Budget Category"
+          />
+        </div>
         {budgets.length > 1 && (
           <RouteFiltersPopover
             options={[
@@ -85,15 +98,7 @@ const BudgetList = async ({
           />
         )}
       </div>
-      <div className={"grid lg:grid-cols-6"}>
-        <QueryStringComboBox
-          dataset={budgetOptions.map((option) => ({
-            label: option.name,
-            value: option.name,
-          }))}
-          queryStringKey="category"
-          selectLabel="Budget Category"
-        />
+      <div className={"grid lg:grid-cols-6 gap-2 mt-4"}>
         {budgets.length === 0 ? (
           <MotionDiv
             initial={{ opacity: 0 }}

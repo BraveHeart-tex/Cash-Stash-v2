@@ -57,7 +57,7 @@ const RouteFiltersPopover = <T extends Record<string, any>>({
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          className="w-max flex items-center gap-1 mb-2"
+          className="w-max flex items-center gap-1 self-end"
         >
           <BsFilterLeft />
           {triggerLabel || "Filters"}
