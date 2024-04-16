@@ -113,10 +113,17 @@ export const updateBankAccount = async ({
       };
     }
 
+    // TODO: Refactor for better cmd usage
     await Promise.all([
       redisService.invalidateKeysByPrefix(
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_ACCOUNTS,
+          user.id
+        )
+      ),
+      redisService.invalidateKeysByPrefix(
+        generateCachePrefixWithUserId(
+          CACHE_PREFIXES.PAGINATED_TRANSACTIONS,
           user.id
         )
       ),

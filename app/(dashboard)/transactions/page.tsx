@@ -4,7 +4,7 @@ import CreateTransactionButton from "@/components/create-buttons/create-transact
 import TransactionsNotFound from "@/components/transactions-not-found";
 import RouteSearchInput from "@/components/route-search-input";
 import { FaCalendar, FaMoneyBill } from "react-icons/fa";
-import RouteSelectFilter from "@/components/route-select-filter";
+import QueryStringComboBox from "@/components/query-string-combobox";
 import { getCurrentUserAccountsThatHaveTransactions } from "@/server/account";
 import { Label } from "@/components/ui/label";
 import RouteFiltersPopover from "@/components/route-filters-popover";
@@ -63,7 +63,7 @@ const TransactionsPage = async ({ searchParams }: TransactionsPageProps) => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
               <div className="flex flex-col gap-1">
                 <Label>Filter by account</Label>
-                <RouteSelectFilter
+                <QueryStringComboBox
                   dataset={accountsFilterDataset}
                   queryStringKey="accountId"
                   selectLabel="Filter by account"
@@ -71,7 +71,7 @@ const TransactionsPage = async ({ searchParams }: TransactionsPageProps) => {
               </div>
               <div className="flex flex-col gap-1">
                 <Label>Filter by category</Label>
-                <RouteSelectFilter
+                <QueryStringComboBox
                   dataset={categoryFilterDataset}
                   queryStringKey="category"
                   selectLabel="Filter by category"

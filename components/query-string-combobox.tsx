@@ -10,21 +10,24 @@ import {
 } from "@/components/ui/select";
 import { useQueryState } from "nuqs";
 
-// TODO: Rename component and convert to combobox
-const RouteSelectFilter = ({
+type QueryStringComboboxItem = {
+  label: string;
+  value: string;
+};
+
+type QueryStringComboBoxProps = {
+  dataset: QueryStringComboboxItem[];
+  queryStringKey: string;
+  defaultValue?: string;
+  selectLabel?: string;
+};
+
+const QueryStringComboBox = ({
   dataset,
   queryStringKey,
   defaultValue = "",
   selectLabel,
-}: {
-  dataset: {
-    label: string;
-    value: string;
-  }[];
-  queryStringKey: string;
-  defaultValue?: string;
-  selectLabel?: string;
-}) => {
+}: QueryStringComboBoxProps) => {
   const [key, setKey] = useQueryState(queryStringKey, {
     defaultValue,
     shallow: false,
@@ -56,4 +59,4 @@ const RouteSelectFilter = ({
   );
 };
 
-export default RouteSelectFilter;
+export default QueryStringComboBox;

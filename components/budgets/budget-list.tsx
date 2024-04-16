@@ -2,7 +2,7 @@ import CreateBudgetButton from "@/components/create-buttons/create-budget-button
 import MotionDiv from "@/components/animations/motion-div";
 import RouteSearchInput from "@/components/route-search-input";
 import BudgetCard from "@/components/budget-card";
-import RouteSelectFilter from "@/components/route-select-filter";
+import QueryStringComboBox from "@/components/query-string-combobox";
 import RouteFiltersPopover from "@/components/route-filters-popover";
 import { GiPayMoney } from "react-icons/gi";
 import { FaPiggyBank } from "react-icons/fa";
@@ -86,7 +86,7 @@ const BudgetList = async ({
         )}
       </div>
       <div className={"grid lg:grid-cols-6"}>
-        <RouteSelectFilter
+        <QueryStringComboBox
           dataset={budgetOptions.map((option) => ({
             label: option.name,
             value: option.name,

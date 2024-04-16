@@ -3,7 +3,7 @@ import { getPaginatedAccounts } from "@/server/account";
 import RoutePaginationControls from "@/components/route-pagination-controls";
 import RouteSearchInput from "@/components/route-search-input";
 import AccountCard from "@/components/account-card";
-import RouteSelectFilter from "@/components/route-select-filter";
+import QueryStringComboBox from "@/components/query-string-combobox";
 import MotionDiv from "@/components/animations/motion-div";
 import AccountsNotFound from "@/components/accounts-not-found";
 import RouteFiltersPopover from "@/components/route-filters-popover";
@@ -72,7 +72,7 @@ const AccountPage = async ({
           )}
         </div>
         <div className={"grid lg:grid-cols-6"}>
-          <RouteSelectFilter
+          <QueryStringComboBox
             dataset={selectDataset}
             queryStringKey="category"
             selectLabel="Account Category"
