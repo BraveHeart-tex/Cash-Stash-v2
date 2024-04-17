@@ -1,27 +1,25 @@
-import CreateAccountButton from "@/components/create-buttons/create-account-button";
 import { getPaginatedAccounts } from "@/server/account";
 import RoutePaginationControls from "@/components/route-pagination-controls";
-import RouteSearchInput from "@/components/route-search-input";
-import AccountCard from "@/components/account-card";
-import QueryStringComboBox from "@/components/query-string-combobox";
-import MotionDiv from "@/components/animations/motion-div";
-import AccountsNotFound from "@/components/accounts-not-found";
-import RouteFiltersPopover from "@/components/route-filters-popover";
-import { BsSortDown, BsSortUp } from "react-icons/bs";
-import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
-import { AccountSelectModel, accounts } from "@/lib/database/schema";
+import { AccountSelectModel } from "@/lib/database/schema";
 
-const AccountPage = async ({
-  searchParams,
-}: {
-  searchParams: {
-    page: string;
-    query: string;
-    category: AccountSelectModel["category"];
-    sortBy: string;
-    sortDirection: string;
-  };
-}) => {
+import AccountsNotFoundMessage from "@/components/accounts/accounts-not-found-message";
+import AccountsPageHeader from "@/components/accounts/accounts-page-header";
+import AccountsPageFilters from "@/components/accounts/accounts-page-filters";
+import AccountCardsList from "@/components/accounts/account-cards-list";
+
+type AccountsPageSearchParamsType = {
+  page: string;
+  query: string;
+  category: AccountSelectModel["category"];
+  sortBy: string;
+  sortDirection: string;
+};
+
+type AccountPageProps = {
+  searchParams: AccountsPageSearchParamsType;
+};
+
+const AccountsPage = async ({ searchParams }: AccountPageProps) => {
   const pageNumber = parseInt(searchParams.page) || 1;
   const query = searchParams.query || "";
   const category = searchParams.category || "";
@@ -35,76 +33,22 @@ const AccountPage = async ({
     sortBy,
     sortDirection,
   });
-
-  const selectDataset = generateOptionsFromEnums(accounts.category.enumValues);
+  const { accounts, totalPages } = result;
+  const pageHasParams = !!(query || category);
 
   return (
     <main>
       <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px] mb-2">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-4xl text-primary">Accounts</h3>
-          <CreateAccountButton className="self-start mt-0" />
-        </div>
-        <div className="flex items-center gap-2 justify-between flex-wrap">
-          <div className="flex items-center gap-2">
-            <RouteSearchInput
-              label="Search"
-              placeholder="Search accounts by name"
-            />
-            <QueryStringComboBox
-              dataset={selectDataset}
-              queryStringKey="category"
-              selectLabel="Account Category"
-            />
-          </div>
-          {result.accounts.length > 1 && (
-            <RouteFiltersPopover
-              options={[
-                {
-                  label: "Sort by balance (Low to High)",
-                  icon: <BsSortUp />,
-                  data: {
-                    sortBy: "balance",
-                    sortDirection: "asc",
-                  },
-                },
-                {
-                  label: "Sort by balance (High to Low)",
-                  icon: <BsSortDown />,
-                  data: {
-                    sortBy: "balance",
-                    sortDirection: "desc",
-                  },
-                },
-              ]}
-              queryKeys={["sortBy", "sortDirection"]}
-            />
-          )}
-        </div>
-        <div className={"grid lg:grid-cols-6 mt-4"}>
-          {result.accounts.length === 0 && (
-            <MotionDiv
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 1 }}
-              transition={{ duration: 0.5, type: "just" }}
-              className="lg:text-center lg:col-span-6 col-span-6 w-full lg:mt-0"
-            >
-              <AccountsNotFound pageHasParams={!!(query || category)} />
-            </MotionDiv>
-          )}
-          <div className="h-[500px] lg:pr-4 col-span-5 mt-2 lg:mt-0 overflow-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 pb-4">
-              {result.accounts.map((account) => (
-                <AccountCard key={account.id} account={account} />
-              ))}
-            </div>
-          </div>
-        </div>
+        <AccountsPageHeader />
+        <AccountsPageFilters accounts={accounts} />
+        {accounts.length === 0 && (
+          <AccountsNotFoundMessage pageHasParams={pageHasParams} />
+        )}
+        <AccountCardsList accounts={accounts} />
       </div>
-      {result.totalPages > 1 && <RoutePaginationControls {...result} />}
+      {totalPages > 1 && <RoutePaginationControls {...result} />}
     </main>
   );
 };
 
-export default AccountPage;
+export default AccountsPage;
