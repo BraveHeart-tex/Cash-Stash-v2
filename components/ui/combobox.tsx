@@ -73,7 +73,7 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
 
     return (
       <Popover open={isOpen} onOpenChange={setIsOpen} modal>
-        <PopoverTrigger asChild ref={ref}>
+        <PopoverTrigger asChild ref={ref} className="w-full">
           {trigger ? (
             trigger
           ) : (
@@ -82,7 +82,10 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
               role="combobox"
               id="combobox-trigger"
               aria-expanded={isOpen}
-              className={cn("w-full justify-between", triggerClassName)}
+              className={cn(
+                "w-full justify-between truncate",
+                triggerClassName
+              )}
               onClick={() => setIsOpen(!isOpen)}
             >
               {selectedOption?.label ||

@@ -24,7 +24,7 @@ const RouteFiltersPopover = <T extends Record<string, any>>({
   triggerLabel,
 }: RouteFiltersPopoverProps<T>) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [key, setKey] = useQueryStates(
+  const [activeQueryKey, setActiveQueryKey] = useQueryStates(
     {
       ...queryKeys.reduce((acc, key) => {
         acc[key] = parseAsString.withDefault("");
@@ -42,7 +42,7 @@ const RouteFiltersPopover = <T extends Record<string, any>>({
   }));
 
   const handleClearFilters = () => {
-    setKey(
+    setActiveQueryKey(
       queryKeys.reduce((acc, key) => {
         // @ts-ignore
         acc[key] = "";
@@ -52,15 +52,22 @@ const RouteFiltersPopover = <T extends Record<string, any>>({
     setIsOpen(false);
   };
 
+  const hasActiveFilter = Object.keys(activeQueryKey).some(
+    (key) => activeQueryKey[key] !== ""
+  );
+
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          className="w-max flex items-center gap-1 self-end"
+          className="w-max flex items-center gap-1 self-end relative"
         >
           <BsFilterLeft />
           {triggerLabel || "Filters"}
+          {hasActiveFilter ? (
+            <div className="w-2 h-2 rounded-full bg-primary absolute top-0 right-0" />
+          ) : null}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-max">
@@ -71,13 +78,13 @@ const RouteFiltersPopover = <T extends Record<string, any>>({
               <Button
                 key={option.id}
                 variant={
-                  compareDeepObjectEquality(key, option.data)
+                  compareDeepObjectEquality(activeQueryKey, option.data)
                     ? "default"
                     : "outline"
                 }
                 className="capitalize font-normal whitespace-nowrap flex items-center gap-1"
                 onClick={() => {
-                  setKey({ ...option.data });
+                  setActiveQueryKey({ ...option.data });
                 }}
               >
                 {option.icon}

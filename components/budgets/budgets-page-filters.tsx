@@ -10,6 +10,57 @@ type BudgetsPageFiltersProps = {
   initialBudgetCategories: CategorySelectModel[];
 };
 
+const routeFilterOptions = [
+  {
+    label: "Sort by Remaining (Low to High)",
+    icon: <FaPiggyBank className="mr-2" />,
+    data: {
+      sortBy: "progress",
+      sortDirection: "desc",
+    },
+  },
+  {
+    label: "Sort by Remaining (High to Low)",
+    icon: <FaPiggyBank className="mr-2" />,
+    data: {
+      sortBy: "progress",
+      sortDirection: "asc",
+    },
+  },
+  {
+    label: "Sort by Spending (High to Low)",
+    icon: <GiPayMoney className="mr-auto" />,
+    data: {
+      sortBy: "spentAmount",
+      sortDirection: "desc",
+    },
+  },
+  {
+    label: "Sort by Spending (Low to High)",
+    icon: <GiPayMoney className="mr-auto" />,
+    data: {
+      sortBy: "spentAmount",
+      sortDirection: "asc",
+    },
+  },
+  {
+    label: "Sort by Budget (High to Low)",
+    icon: <FaPiggyBank className="mr-2" />,
+    data: {
+      sortBy: "budgetAmount",
+      sortDirection: "desc",
+    },
+  },
+  {
+    label: "Sort by Budget (Low to High)",
+    icon: <FaPiggyBank className="mr-2" />,
+    data: {
+      sortBy: "budgetAmount",
+      sortDirection: "asc",
+    },
+  },
+];
+
 const BudgetsPageFilters = ({
   budgets,
   initialBudgetCategories,
@@ -24,56 +75,7 @@ const BudgetsPageFilters = ({
       </div>
       {budgets.length > 1 && (
         <RouteFiltersPopover
-          options={[
-            {
-              label: "Sort by Remaining (Low to High)",
-              icon: <FaPiggyBank className="mr-2" />,
-              data: {
-                sortBy: "progress",
-                sortDirection: "desc",
-              },
-            },
-            {
-              label: "Sort by Remaining (High to Low)",
-              icon: <FaPiggyBank className="mr-2" />,
-              data: {
-                sortBy: "progress",
-                sortDirection: "asc",
-              },
-            },
-            {
-              label: "Sort by Spending (High to Low)",
-              icon: <GiPayMoney className="mr-auto" />,
-              data: {
-                sortBy: "spentAmount",
-                sortDirection: "desc",
-              },
-            },
-            {
-              label: "Sort by Spending (Low to High)",
-              icon: <GiPayMoney className="mr-auto" />,
-              data: {
-                sortBy: "spentAmount",
-                sortDirection: "asc",
-              },
-            },
-            {
-              label: "Sort by Budget (High to Low)",
-              icon: <FaPiggyBank className="mr-2" />,
-              data: {
-                sortBy: "budgetAmount",
-                sortDirection: "desc",
-              },
-            },
-            {
-              label: "Sort by Budget (Low to High)",
-              icon: <FaPiggyBank className="mr-2" />,
-              data: {
-                sortBy: "budgetAmount",
-                sortDirection: "asc",
-              },
-            },
-          ]}
+          options={routeFilterOptions}
           queryKeys={["sortBy", "sortDirection"]}
         />
       )}
