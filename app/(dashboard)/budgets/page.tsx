@@ -7,17 +7,19 @@ import BudgetsPageFilters from "@/components/budgets/budgets-page-filters";
 import BudgetCardsList from "@/components/budgets/budget-cards-list";
 import BudgetsNotFoundMessage from "@/components/budgets/budgets-not-found-message";
 
-const BudgetsPage = async ({
-  searchParams,
-}: {
-  searchParams: {
-    page: string;
-    query: string;
-    category: string;
-    sortBy: string;
-    sortDirection: string;
-  };
-}) => {
+type BudgetsPageSearchParamsType = {
+  page: string;
+  query: string;
+  category: string;
+  sortBy: string;
+  sortDirection: string;
+};
+
+type BudgetsPageProps = {
+  searchParams: BudgetsPageSearchParamsType;
+};
+
+const BudgetsPage = async ({ searchParams }: BudgetsPageProps) => {
   const actionParams = {
     pageNumber: parseInt(searchParams.page) || 1,
     query: searchParams.query || "",
