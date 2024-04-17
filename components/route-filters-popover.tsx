@@ -65,9 +65,9 @@ const RouteFiltersPopover = <T extends Record<string, any>>({
         >
           <BsFilterLeft />
           {triggerLabel || "Filters"}
-          {hasActiveFilter ? (
+          {hasActiveFilter && (
             <div className="w-2 h-2 rounded-full bg-primary absolute top-0 right-0" />
-          ) : null}
+          )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-max">
