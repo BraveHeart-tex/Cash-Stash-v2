@@ -7,8 +7,10 @@ const IncomeAndExpenseChart = ({
   monthlyTransactionsData: MonthlyTransactionsData[];
 }) => {
   return (
-    <div className="flex justify-center items-start flex-col gap-4 ">
-      <h3 className="text-2xl text-primary">Income vs Expenses</h3>
+    <div className="flex justify-center items-start flex-col gap-2">
+      <h3 className="scroll-m-20 text-xl font-semibold tracking-tight text-primary">
+        Income vs Expenses
+      </h3>
       {monthlyTransactionsData.length === 0 ? (
         <h2>No data was found to generate the chart</h2>
       ) : (
@@ -17,7 +19,9 @@ const IncomeAndExpenseChart = ({
             Below chart shows the total income and expenses for the selected
             time
           </p>
-          <div className={"w-full h-[400px] flex justify-center items-start"}>
+          <div
+            className={"w-full h-[400px] flex justify-center items-start mt-4"}
+          >
             <BarChartComponent
               monthlyTransactionsData={monthlyTransactionsData}
             />

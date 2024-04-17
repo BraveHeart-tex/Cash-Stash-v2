@@ -40,8 +40,10 @@ const ReportsPage = async ({
         exit={{ opacity: 0, x: 200, scale: 1.2 }}
         transition={{ duration: 0.5, type: "just" }}
       >
-        <div className="flex flex-col gap-1 mb-4">
-          <h1 className="text-4xl text-primary">Reports</h1>
+        <div className="flex flex-col mb-4">
+          <h1 className="scroll-m-20 text-4xl font-bold tracking-tight text-primary">
+            Reports
+          </h1>
           <p className="text-muted-foreground">
             Take a look at your overall financial performance and see how your
             spending is doing.
@@ -57,7 +59,7 @@ const ReportsPage = async ({
           <div className="lg:p-4 p-2 border rounded-r-lg rounded-bl-lg rounded-tr-none md:rounded-tr-lg">
             <TabsContent value="transactions">
               <div>
-                <p className="text-foreground">
+                <p className="text-muted-foreground">
                   Below table shows all your transactions. You can filter by
                   account, sort by amount and date.
                 </p>
