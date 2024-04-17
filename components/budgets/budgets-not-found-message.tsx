@@ -5,15 +5,18 @@ const BudgetsNotFoundMessage = ({
 }: {
   pageHasParams: boolean;
 }) => {
+  const headingVariants: { [key: number]: string } = {
+    0: "You don't have any budgets created yet.",
+    1: "No budgets were found for your search",
+  };
+
+  const message = `${pageHasParams ? "Remove existing filters or " : ""} Create a budget by clicking the 'Create a budget' button.`;
+
   return (
     <div className="pt-6 w-full">
       <GenericNotFoundBlock
-        heading={
-          pageHasParams
-            ? "No budgets were found for your search"
-            : "You don't have any budgets setup yet."
-        }
-        message={`${pageHasParams && "Remove existing filters or "} Create a budget by clicking the 'Create a budget' button.`}
+        heading={headingVariants[Number(pageHasParams)]}
+        message={message}
       />
     </div>
   );
