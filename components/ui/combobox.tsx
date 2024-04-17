@@ -109,7 +109,7 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
                   placeholder="Search"
                   className="h-9"
                 />
-                <CommandEmpty>
+                <CommandEmpty className="text-muted-foreground p-1 mt-2">
                   {emptyMessage || "No options were found for your search."}
                 </CommandEmpty>
                 <CommandList asChild>

@@ -2,12 +2,12 @@ import CreateBudgetButton from "@/components/create-buttons/create-budget-button
 import MotionDiv from "@/components/animations/motion-div";
 import RouteSearchInput from "@/components/route-search-input";
 import BudgetCard from "@/components/budget-card";
-import QueryStringComboBox from "@/components/query-string-combobox";
 import RouteFiltersPopover from "@/components/route-filters-popover";
 import { GiPayMoney } from "react-icons/gi";
 import { FaPiggyBank } from "react-icons/fa";
 import BudgetsNotFoundMessage from "./budgets-not-found";
 import { BudgetSelectModel } from "@/lib/database/schema";
+import BudgetQueryStringCombobox from "./budget-query-string-combobox";
 import { getCategoriesByType } from "@/server/category";
 import { CATEGORY_TYPES } from "@/lib/constants";
 
@@ -18,7 +18,7 @@ const BudgetList = async ({
   budgets: BudgetSelectModel[];
   pageHasParams: boolean;
 }) => {
-  const budgetOptions =
+  const initialBudgetCategories =
     (await getCategoriesByType(CATEGORY_TYPES.BUDGET)) || [];
 
   return (
@@ -33,13 +33,8 @@ const BudgetList = async ({
             label="Search"
             placeholder="Search budgets by name"
           />
-          <QueryStringComboBox
-            dataset={budgetOptions.map((option) => ({
-              label: option.name,
-              value: option.name,
-            }))}
-            queryStringKey="category"
-            selectLabel="Budget Category"
+          <BudgetQueryStringCombobox
+            initialBudgetCategories={initialBudgetCategories}
           />
         </div>
         {budgets.length > 1 && (

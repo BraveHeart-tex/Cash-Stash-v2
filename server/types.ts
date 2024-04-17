@@ -360,3 +360,8 @@ export type FieldError = {
   field: string;
   message: string | undefined;
 };
+
+export type QueryStringComboboxItem = {
+  label: string;
+  value: string;
+};
