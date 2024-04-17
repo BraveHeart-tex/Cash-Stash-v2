@@ -47,6 +47,27 @@ const LatestAccountTransactionsDialog = ({
   const description = `You can see the last ${transactions.length} transaction${transactions.length === 1 ? "" : "s"} for this
   account below.`;
 
+  const renderMainContent = () => {
+    return (
+      <>
+        <AccountCardContent account={selectedAccount} />
+        <div className="max-h-[400px] overflow-auto">
+          {transactions.map((transaction) => (
+            <TransactionCard
+              useLayoutId={false}
+              key={transaction.id}
+              showPopover={false}
+              transaction={{
+                ...transaction,
+                accountName: selectedAccount.name,
+              }}
+            />
+          ))}
+        </div>
+      </>
+    );
+  };
+
   if (isMobile) {
     return (
       <Drawer
@@ -60,20 +81,7 @@ const LatestAccountTransactionsDialog = ({
             <DrawerTitle>{title}</DrawerTitle>
             <DrawerDescription>{description}</DrawerDescription>
           </DrawerHeader>
-          <div className="px-4">
-            <AccountCardContent account={selectedAccount} />
-            <div className="max-h-[400px] overflow-auto">
-              {transactions.map((transaction) => (
-                <TransactionCard
-                  key={transaction.id}
-                  transaction={{
-                    ...transaction,
-                    accountName: selectedAccount.name,
-                  }}
-                />
-              ))}
-            </div>
-          </div>
+          <div className="px-4">{renderMainContent()}</div>
           <DrawerFooter className="pt-2">
             <Button variant="ghost" onClick={onClose}>
               Close
@@ -96,20 +104,7 @@ const LatestAccountTransactionsDialog = ({
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
-
-        <AccountCardContent account={selectedAccount} />
-        <div className="max-h-[400px] overflow-auto">
-          {transactions.map((transaction) => (
-            <TransactionCard
-              key={transaction.id}
-              showPopover={false}
-              transaction={{
-                ...transaction,
-                accountName: selectedAccount.name,
-              }}
-            />
-          ))}
-        </div>
+        {renderMainContent()}
       </DialogContent>
     </Dialog>
   );

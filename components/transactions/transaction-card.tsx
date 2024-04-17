@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import { deleteTransactionById } from "@/server/transaction";
 import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
+import { HTMLMotionProps, motion } from "framer-motion";
 import DataLabel from "@/components/data-label";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import useGenericModalStore from "@/store/genericModalStore";
@@ -25,11 +25,13 @@ import useAuthStore from "@/store/auth/authStore";
 type TransactionCardProps = {
   transaction: TransactionSelectModel & { accountName: string };
   showPopover?: boolean;
+  useLayoutId?: boolean;
 };
 
 const TransactionCard = ({
   transaction,
   showPopover = true,
+  useLayoutId = true,
 }: TransactionCardProps) => {
   const preferredCurrency = useAuthStore(
     (state) => state.user?.preferredCurrency
@@ -85,15 +87,19 @@ const TransactionCard = ({
     return format(new Date(date), "dd/MM/yyyy HH:mm");
   };
 
+  const motionConfig: HTMLMotionProps<"article"> = {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.5 },
+    exit: { opacity: 0, y: 20 },
+  };
+
+  if (useLayoutId) {
+    motionConfig.layoutId = `transaction-card-${transaction.id}`;
+  }
+
   return (
-    <motion.article
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      exit={{ opacity: 0, y: 20 }}
-      className="relative"
-      layoutId={`transaction-card-${transaction.id}`}
-    >
+    <motion.article {...motionConfig} className="relative">
       <Card className={"mt-4 relative"}>
         <CardHeader className={"border-b h-[100px]"}>
           <CardTitle>{transaction.description}</CardTitle>
