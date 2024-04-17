@@ -30,25 +30,28 @@ const BudgetsPage = async ({
     .filter((param) => param !== searchParams.page)
     .some((param) => param);
 
-  const result = await getPaginatedBudgets(actionParams);
-  const initialBudgetCategories =
-    (await getCategoriesByType(CATEGORY_TYPES.BUDGET)) || [];
+  const [budgetsResponse, initialBudgetCategories] = await Promise.all([
+    getPaginatedBudgets(actionParams),
+    getCategoriesByType(CATEGORY_TYPES.BUDGET),
+  ]);
+
+  const { budgets, totalPages } = budgetsResponse;
 
   return (
     <main>
       <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
         <BudgetsPageHeader />
         <BudgetsPageFilters
-          initialBudgetCategories={initialBudgetCategories}
-          budgets={result.budgets}
+          initialBudgetCategories={initialBudgetCategories || []}
+          budgets={budgets}
         />
-        {result.budgets.length === 0 ? (
+        {budgets.length === 0 ? (
           <BudgetsNotFoundMessage pageHasParams={pageHasParams} />
         ) : (
-          <BudgetCardsList budgets={result.budgets} />
+          <BudgetCardsList budgets={budgets} />
         )}
       </div>
-      {result.totalPages > 1 && <RoutePaginationControls {...result} />}
+      {totalPages > 1 && <RoutePaginationControls {...budgetsResponse} />}
     </main>
   );
 };
