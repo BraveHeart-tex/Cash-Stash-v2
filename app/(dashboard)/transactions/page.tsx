@@ -51,9 +51,9 @@ const TransactionsPage = async ({ searchParams }: TransactionsPageProps) => {
     <main>
       <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
         <div className="flex items-center gap-2 justify-between mb-4 flex-wrap">
-          <h3 className="scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0 text-primary">
+          <h1 className="scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0 text-primary">
             Transactions
-          </h3>
+          </h1>
           <CreateTransactionButton className="mt-0" />
         </div>
         <div className="flex items-center justify-between flex-wrap">

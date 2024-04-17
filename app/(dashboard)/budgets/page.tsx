@@ -1,6 +1,11 @@
 import { getPaginatedBudgets } from "@/server/budget";
-import BudgetList from "@/components/budgets/budget-list";
 import RoutePaginationControls from "@/components/route-pagination-controls";
+import { getCategoriesByType } from "@/server/category";
+import { CATEGORY_TYPES } from "@/lib/constants";
+import BudgetsPageHeader from "@/components/budgets/budgets-page-header";
+import BudgetsPageFilters from "@/components/budgets/budgets-page-filters";
+import BudgetCardsList from "@/components/budgets/budget-cards-list";
+import BudgetsNotFoundMessage from "@/components/budgets/budgets-not-found-message";
 
 const BudgetsPage = async ({
   searchParams,
@@ -26,10 +31,23 @@ const BudgetsPage = async ({
     .some((param) => param);
 
   const result = await getPaginatedBudgets(actionParams);
+  const initialBudgetCategories =
+    (await getCategoriesByType(CATEGORY_TYPES.BUDGET)) || [];
 
   return (
     <main>
-      <BudgetList budgets={result.budgets} pageHasParams={pageHasParams} />
+      <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
+        <BudgetsPageHeader />
+        <BudgetsPageFilters
+          initialBudgetCategories={initialBudgetCategories}
+          budgets={result.budgets}
+        />
+        {result.budgets.length === 0 ? (
+          <BudgetsNotFoundMessage pageHasParams={pageHasParams} />
+        ) : (
+          <BudgetCardsList budgets={result.budgets} />
+        )}
+      </div>
       {result.totalPages > 1 && <RoutePaginationControls {...result} />}
     </main>
   );

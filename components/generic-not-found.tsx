@@ -16,14 +16,14 @@ const GenericNotFound = ({
       animate={{ opacity: 1 }}
       exit={{ opacity: 1 }}
       transition={{ duration: 0.5, type: "just" }}
-      className="lg:text-left p-4"
+      className="text-center pt-4"
     >
       {renderTitle({
         className:
-          "inline-block text-2xl lg:text-3xl font-semibold text-primary",
+          "inline-block text-2xl lg:text-3xl font-semibold text-primary scroll-m-20 tracking-tight",
       })}
       {renderMessage({
-        className: "mt-3 text-foreground",
+        className: "mt-3 text-muted-foreground",
       })}
     </motion.div>
   );
