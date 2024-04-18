@@ -13,31 +13,32 @@ const seed = async () => {
         userId: USER_ID,
         category: faker.helpers.arrayElement(accounts.category.enumValues),
       });
-
-      await trx.insert(transactions).values({
-        accountId,
-        amount: faker.number.int({ min: 0, max: 1000 }),
-        description: faker.lorem.sentence(),
-        userId: USER_ID,
-        category: faker.helpers.arrayElement(transactions.category.enumValues),
-      });
-
-      await trx.insert(budgets).values({
-        budgetAmount: faker.number.int({ min: 0, max: 1000 }),
-        category: faker.lorem.word(),
-        name: faker.lorem.word(),
-        progress: faker.number.int({ min: 0, max: 100 }),
-        spentAmount: faker.number.int({ min: 0, max: 1000 }),
-        userId: USER_ID,
-      });
-
-      await trx.insert(goals).values({
-        currentAmount: faker.number.int({ min: 0, max: 1000 }),
-        goalAmount: faker.number.int({ min: 0, max: 1000 }),
-        name: faker.lorem.word(),
-        progress: faker.number.int({ min: 0, max: 100 }),
-        userId: USER_ID,
-      });
+      await Promise.all([
+        trx.insert(transactions).values({
+          accountId,
+          amount: faker.number.int({ min: -100, max: 1000 }),
+          description: faker.lorem.sentence(),
+          userId: USER_ID,
+          category: faker.helpers.arrayElement(
+            transactions.category.enumValues
+          ),
+        }),
+        trx.insert(budgets).values({
+          budgetAmount: faker.number.int({ min: 0, max: 1000 }),
+          category: faker.lorem.word(),
+          name: faker.lorem.word(),
+          progress: faker.number.int({ min: 0, max: 100 }),
+          spentAmount: faker.number.int({ min: 0, max: 1000 }),
+          userId: USER_ID,
+        }),
+        trx.insert(goals).values({
+          currentAmount: faker.number.int({ min: 0, max: 1000 }),
+          goalAmount: faker.number.int({ min: 0, max: 1000 }),
+          name: faker.lorem.word(),
+          progress: faker.number.int({ min: 0, max: 100 }),
+          userId: USER_ID,
+        }),
+      ]);
     }
   });
 };
