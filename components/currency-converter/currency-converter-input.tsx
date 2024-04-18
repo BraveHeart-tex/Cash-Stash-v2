@@ -77,7 +77,10 @@ const CurrencyConverterInput = ({
       <div className="w-full grid grid-cols-1 lg:grid-cols-2 lg:gap-4">
         <div>
           <div className="flex items-center justify-between">
-            <CurrencySelectCombobox queryKey="currency" />
+            <CurrencySelectCombobox
+              queryKey="currency"
+              triggerClassName="w-max"
+            />
             <span className="text-muted-foreground ml-auto">
               Last Updated: {format(new Date(updatedAt), "dd/MM/yyyy HH:mm")}
             </span>
@@ -105,7 +108,7 @@ const CurrencyConverterInput = ({
           <CurrencySelectCombobox
             defaultValue="EUR"
             queryKey="to"
-            triggerClassName="self-start"
+            triggerClassName="self-start w-max"
           />
           <Input
             disabled

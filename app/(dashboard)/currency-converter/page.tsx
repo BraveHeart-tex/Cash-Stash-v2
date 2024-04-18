@@ -33,7 +33,9 @@ const CurrencyConverterPage = async ({
   return (
     <main className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
       <div className="flex flex-col gap-1">
-        <h2 className="text-4xl text-primary">Currency Converter</h2>
+        <h1 className="scroll-m-20 text-4xl font-bold tracking-tight text-primary">
+          Currency Converter
+        </h1>
         <p className="text-muted-foreground">
           See the current exchange rates and convert between your preferred
           currencies.

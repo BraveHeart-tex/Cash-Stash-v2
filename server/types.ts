@@ -119,6 +119,7 @@ export type NavigationItem = {
   label: string;
   icon: IconType;
   link: PageLink;
+  isPrimary?: boolean;
 };
 
 export type RecaptchaResponse = {

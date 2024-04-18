@@ -28,16 +28,16 @@ const MobileTabsListItem = ({ page }: { page: PageItem }) => {
       type="button"
       ref={elementRef}
       className={cn(
-        "inline-flex h-full w-full flex-col items-center justify-center px-5 hover:bg-gray-100 dark:hover:bg-background/70 group",
+        "inline-flex h-full w-full flex-col items-center justify-center md:px-5 group",
         isActive && "active-tab"
       )}
     >
       {createElement(page.icon, {
         className:
-          "w-5 h-5 mb-2 text-muted-foreground group-hover:text-primary group-[.active-tab]:text-primary",
+          "w-5 h-5 mb-2 text-muted-foreground group-[.active-tab]:text-primary",
       })}
 
-      <span className="text-sm text-muted-foreground group-hover:text-primary group-[.active-tab]:text-primary">
+      <span className="text-sm text-muted-foreground group-[.active-tab]:text-primary">
         {page.label}
       </span>
     </Link>

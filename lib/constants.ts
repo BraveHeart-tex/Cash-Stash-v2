@@ -2,6 +2,7 @@ import { NavigationItem } from "@/server/types";
 import { AiOutlineTransaction } from "react-icons/ai";
 import { FaCog, FaMoneyBill, FaPiggyBank } from "react-icons/fa";
 import { MdDashboard, MdOutlineAccountBalanceWallet } from "react-icons/md";
+import { SiConvertio } from "react-icons/si";
 import { TbReportAnalytics } from "react-icons/tb";
 
 export const PRIMARY_COLOR = "#c4002b" as const;
@@ -77,16 +78,19 @@ export const NAVIGATION_ITEMS: NavigationItem[] = [
     label: "Dashboard",
     icon: MdDashboard,
     link: PAGE_ROUTES.HOME_PAGE,
+    isPrimary: true,
   },
   {
     label: "Accounts",
     icon: MdOutlineAccountBalanceWallet,
     link: PAGE_ROUTES.ACCOUNTS_ROUTE,
+    isPrimary: true,
   },
   {
     label: "Budgets",
     icon: FaMoneyBill,
     link: PAGE_ROUTES.BUDGETS_ROUTE,
+    isPrimary: true,
   },
   {
     label: "Goals",
@@ -97,6 +101,12 @@ export const NAVIGATION_ITEMS: NavigationItem[] = [
     label: "Transactions",
     icon: AiOutlineTransaction,
     link: PAGE_ROUTES.TRANSACTIONS_ROUTE,
+    isPrimary: true,
+  },
+  {
+    label: "Currency Converter",
+    icon: SiConvertio,
+    link: PAGE_ROUTES.CURRENCY_CONVERTER_ROUTE,
   },
   {
     label: "Reports",
