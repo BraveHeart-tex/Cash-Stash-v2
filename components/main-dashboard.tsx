@@ -15,6 +15,7 @@ import { getPaginatedGoals } from "@/server/goal";
 import { getPaginatedReminders } from "@/server/reminder";
 
 const Dashboard = async () => {
+  // TODO: Write custom function to fetch dashboard-related data
   let [
     transactionsResult,
     accountsResult,
@@ -59,9 +60,9 @@ const Dashboard = async () => {
       description:
         "Access your accounts here. Navigate to the 'Accounts' page to see a comprehensive list of all your accounts.",
       data: (
-        <div className="max-h-[330px] min-h-[330px] lg:max-h-[350px] lg:min-h-[350px] overflow-y-auto scrollbar-hide">
+        <article className="max-h-[330px] min-h-[330px] lg:max-h-[350px] lg:min-h-[350px] overflow-y-auto">
           <AccountSummaries accounts={accountsResult.accounts} />
-        </div>
+        </article>
       ),
     },
     {
@@ -69,9 +70,9 @@ const Dashboard = async () => {
       description:
         "Explore your budgets here. Simply click on a budget card to view its details or create a new one using the menu button above.",
       data: (
-        <div className="max-h-[300px] min-h-[300px] lg:max-h-[350px] lg:min-h-[350px] overflow-y-auto">
+        <article className="max-h-[300px] min-h-[300px] lg:max-h-[350px] lg:min-h-[350px] overflow-y-auto">
           <BudgetStatus budgets={budgetsResult.budgets} />
-        </div>
+        </article>
       ),
     },
     {
@@ -79,9 +80,9 @@ const Dashboard = async () => {
       description:
         "Explore your goals here. Simply click on a goal card to view or edit its details, or create a new one by clicking the menu button above.",
       data: (
-        <div className="max-h-[300px] min-h-[300px] lg:max-h-[350px] lg:min-h-[350px] overflow-y-auto">
+        <article className="max-h-[300px] min-h-[300px] lg:max-h-[350px] lg:min-h-[350px] overflow-y-auto">
           <GoalStatus goals={goalsResult.goals} />
-        </div>
+        </article>
       ),
     },
     {
@@ -96,12 +97,12 @@ const Dashboard = async () => {
       description:
         "View a breakdown of your spending versus earnings for this month, along with additional financial insights.",
       data: (
-        <div className="p-2 max-h-[500px] min-h-[500px] overflow-y-auto flex flex-col gap-4 items-center justify-center scrollbar-hide">
+        <article className="p-2 max-h-[500px] min-h-[500px] overflow-y-auto flex flex-col gap-4 items-center justify-center scrollbar-hide">
           <BarChartComponent
             monthlyTransactionsData={monthlyTransactions.data || []}
           />
           <FinancialInsights insightsData={insightsDataResult} />
-        </div>
+        </article>
       ),
     },
     {

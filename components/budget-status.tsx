@@ -24,7 +24,7 @@ const BudgetStatus = ({ budgets }: { budgets: BudgetSelectModel[] }) => {
   }
 
   return (
-    <div className="flex flex-col space-y-2">
+    <div className="flex flex-col space-y-2 pr-2">
       <AnimatePresenceClient>
         {budgets.map((budget) => (
           <BudgetCard key={budget.id} budget={budget} />

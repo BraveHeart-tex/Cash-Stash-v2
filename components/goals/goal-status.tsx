@@ -24,7 +24,7 @@ const GoalStatus = ({ goals }: { goals: GoalSelectModel[] }) => {
   }
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 pr-2">
       <AnimatePresenceClient>
         {goals.map((goal) => (
           <GoalCard key={goal.id} goal={goal} />

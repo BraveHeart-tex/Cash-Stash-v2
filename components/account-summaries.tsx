@@ -29,7 +29,7 @@ const AccountSummaries = ({
 
   return (
     <div>
-      <ul className="grid grid-cols-1 gap-4">
+      <ul className="grid grid-cols-1 gap-4 pr-2">
         <AnimatePresenceClient>
           {accounts.map((account, index) => (
             <AccountCard account={account} key={account.id + index} />

@@ -28,7 +28,7 @@ const TransactionHistory = ({ transactions }: TransactionHistoryProps) => {
   }
 
   return (
-    <div className="p-2 min-h-[500px] max-h-[500px] overflow-y-auto">
+    <div className="pr-2 min-h-[500px] max-h-[500px] overflow-y-auto">
       <div className="grid grid-cols-1 gap-4">
         <AnimatePresenceClient>
           {transactions.map((transaction) => (
