@@ -1,4 +1,46 @@
-const seed = async () => {};
+import { db } from "./connection";
+import { accounts, budgets, goals, transactions } from "./schema";
+import { faker } from "@faker-js/faker";
+
+const USER_ID = "um3kgd74zu4f3eltxzh68wos";
+
+const seed = async () => {
+  await db.transaction(async (trx) => {
+    for (let i = 0; i < 50; i++) {
+      const [{ insertId: accountId }] = await trx.insert(accounts).values({
+        balance: faker.number.int({ min: 0, max: 1000 }),
+        name: faker.finance.accountName(),
+        userId: USER_ID,
+        category: faker.helpers.arrayElement(accounts.category.enumValues),
+      });
+
+      await trx.insert(transactions).values({
+        accountId,
+        amount: faker.number.int({ min: 0, max: 1000 }),
+        description: faker.lorem.sentence(),
+        userId: USER_ID,
+        category: faker.helpers.arrayElement(transactions.category.enumValues),
+      });
+
+      await trx.insert(budgets).values({
+        budgetAmount: faker.number.int({ min: 0, max: 1000 }),
+        category: faker.lorem.word(),
+        name: faker.lorem.word(),
+        progress: faker.number.int({ min: 0, max: 100 }),
+        spentAmount: faker.number.int({ min: 0, max: 1000 }),
+        userId: USER_ID,
+      });
+
+      await trx.insert(goals).values({
+        currentAmount: faker.number.int({ min: 0, max: 1000 }),
+        goalAmount: faker.number.int({ min: 0, max: 1000 }),
+        name: faker.lorem.word(),
+        progress: faker.number.int({ min: 0, max: 100 }),
+        userId: USER_ID,
+      });
+    }
+  });
+};
 
 seed()
   .catch((e) => {

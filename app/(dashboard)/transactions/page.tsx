@@ -55,7 +55,7 @@ const TransactionsPage = async ({ searchParams }: TransactionsPageProps) => {
           accountsFilterDataset={accountsFilterDataset}
           categoryFilterDataset={categoryFilterDataset}
         />
-        <div className="h-[500px] overflow-auto w-full">
+        <div className="max-h-[500px] overflow-auto w-full pr-2">
           {transactionsResponse.transactions.length > 0 ? (
             <TransactionList transactions={transactionsResponse.transactions} />
           ) : (
