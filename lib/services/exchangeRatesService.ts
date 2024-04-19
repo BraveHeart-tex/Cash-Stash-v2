@@ -9,9 +9,7 @@ const exchangeRatesService = {
         },
       });
 
-      const data = await response.json();
-
-      return data;
+      return await response.json();
     } catch (error) {
       console.error("Error fetching exchange rates", error);
       return null;

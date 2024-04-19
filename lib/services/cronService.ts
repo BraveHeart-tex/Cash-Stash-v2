@@ -5,9 +5,9 @@ import { and, eq, lte } from "drizzle-orm";
 import { convertISOToMysqlDatetime } from "@/lib/utils/dateUtils/convertISOToMysqlDatetime";
 import { isExchangeRateResponse } from "@/lib/utils/typeGuards/isExchangeRateResponse";
 import { isExchangeRateResponseError } from "@/lib/utils/typeGuards/isExchangeRateError";
-import currencyRatesRepository from "../database/repository/currencyRatesRepository";
-import exchangeRatesService from "./exchangeRatesService";
-import emailVerificationCodeRepository from "../database/repository/emailVerificationCodeRepository";
+import currencyRatesRepository from "@/lib/database/repository/currencyRatesRepository";
+import exchangeRatesService from "@/lib/services/exchangeRatesService";
+import emailVerificationCodeRepository from "@/lib/database/repository/emailVerificationCodeRepository";
 
 const cronService = {
   async deleteUnverifiedAccounts() {
