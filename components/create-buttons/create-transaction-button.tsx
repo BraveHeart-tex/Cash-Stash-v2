@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { useTransition } from "react";
-import { FaExchangeAlt } from "react-icons/fa";
+import { FaExchangeAlt, FaPlus } from "react-icons/fa";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import useGenericModalStore from "@/store/genericModalStore";
 import { userCanCreateTransaction } from "@/server/transaction";
@@ -36,21 +36,26 @@ const CreateTransactionButton = ({ className }: { className?: string }) => {
   return (
     <Button
       className={cn(
-        "font-semibold mt-3 flex items-center gap-[14px] whitespace-nowrap",
+        "font-semibold mt-3 ",
         isPending && "opacity-50 cursor-not-allowed",
         className
       )}
+      type="button"
+      name="create-transaction"
       onClick={handleCreateTransactionClick}
       loading={isPending}
     >
-      {isPending ? (
-        "Loading..."
-      ) : (
-        <>
-          <FaExchangeAlt className="text-xl" />
-          Create a transaction
-        </>
-      )}
+      <FaPlus className="text-xl md:hidden" />
+      <div className="hidden md:flex items-center gap-[14px] whitespace-nowrap">
+        {isPending ? (
+          "Loading..."
+        ) : (
+          <>
+            <FaExchangeAlt className="text-xl" />
+            Create a transaction
+          </>
+        )}
+      </div>
     </Button>
   );
 };
