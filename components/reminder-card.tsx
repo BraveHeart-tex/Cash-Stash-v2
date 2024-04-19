@@ -36,7 +36,7 @@ const ReminderCard = ({ reminder }: ReminderCardProps) => {
       exit={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.2 }}
       layoutId={`reminder-${reminder.id}`}
-      className="flex items-center flex-col gap-1 rounded-md bg-card p-4 shadow-xl relative border"
+      className="flex items-center flex-col gap-1 rounded-md bg-card p-4 shadow-sm relative border"
       key={reminder.id}
     >
       <p className="font-semibold self-start mb-2">{reminder.title}</p>

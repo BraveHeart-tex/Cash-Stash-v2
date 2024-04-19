@@ -18,7 +18,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   );
   if (active && payload && payload.length) {
     return (
-      <div className="bg-card shadow-lg rounded-md p-6 grid grid-cols-1 gap-2">
+      <div className="bg-card shadow-sm rounded-md p-6 grid grid-cols-1 gap-2">
         <p className="text-primary font-semibold">{`${label}`}</p>
         <p className="text-success">
           <span className="font-semibold">Income: </span>

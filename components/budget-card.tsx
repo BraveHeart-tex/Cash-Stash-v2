@@ -82,7 +82,7 @@ const BudgetCard = ({ budget }: BudgetCardProps) => {
       transition={{ duration: 0.6, type: "tween" }}
       layoutId={`budget-card-${budget.id}`}
       key={budget.id}
-      className="flex flex-col gap-2 p-4 pt-6 border-1 shadow-xl rounded-md relative bg-card border"
+      className="flex flex-col gap-2 p-4 pt-6 border-1 shadow-sm rounded-md relative bg-card border"
     >
       <div className="flex flex-col gap-1 p-0">
         <span className="font-semibold text-foreground text-lg">

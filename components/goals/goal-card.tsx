@@ -82,7 +82,7 @@ const GoalCard = ({ goal }: GoalCardProps) => {
       transition={{ duration: 0.5 }}
       exit={{ opacity: 0, y: 20 }}
       layoutId={`goal-card-${goal.id}`}
-      className="flex flex-col gap-2 p-4 pt-6 border-1 shadow-xl rounded-md relative bg-card border"
+      className="flex flex-col gap-2 p-4 pt-6 border-1 shadow-sm rounded-md relative bg-card border"
     >
       <p className="font-semibold text-foreground">{goal.name}</p>
       <div className="absolute top-3 right-1 mb-2">

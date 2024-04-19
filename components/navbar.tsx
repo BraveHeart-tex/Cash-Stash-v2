@@ -18,7 +18,7 @@ const Navbar = ({ user }: { user: User | null }) => {
   }, [user]);
 
   return (
-    <div className="mb-6 shadow-lg p-4 bg-primary dark:bg-background dark:border-b">
+    <div className="mb-6 shadow-sm p-4 bg-primary dark:bg-background dark:border-b">
       <motion.div
         initial={{ x: -100, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
