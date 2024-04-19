@@ -31,6 +31,7 @@ const Navbar = ({ user }: { user: User | null }) => {
               src={"/logo.svg"}
               alt="Cash Stash"
               width={200}
+              height={200}
               className="mx-auto lg:mx-0"
               style={{
                 filter: "grayscale(1) invert(1)",

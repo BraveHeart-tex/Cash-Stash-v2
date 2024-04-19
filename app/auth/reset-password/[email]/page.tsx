@@ -47,6 +47,7 @@ const ResetPassword = async ({
             src={"/logo.svg"}
             alt="Cash Stash"
             width={200}
+            height={200}
             className="mb-4 md:mx-auto dark:invert"
           />
           <CardTitle>Reset Your Password</CardTitle>

@@ -114,6 +114,7 @@ const RegisterForm = () => {
             src={"/logo.svg"}
             alt="Cash Stash"
             width={200}
+            height={200}
             className="mb-4 mx-auto dark:invert block 2xl:hidden"
           />
           <CardTitle>Welcome!</CardTitle>
