@@ -6,7 +6,6 @@ import NotificationsAndReminders from "@/components/notification-and-reminders";
 import TransactionHistory from "@/components/transaction-history";
 import BarChartComponent from "@/components/charts/bar-chart";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import MotionDiv from "@/components/animations/motion-div";
 import { getPaginatedTransactions } from "@/server/transaction";
 import { getPaginatedAccounts } from "@/server/account";
 import { fetchInsightsDataAction, getChartData } from "@/server";
@@ -112,34 +111,22 @@ const Dashboard = async () => {
     },
   ];
 
-  const dashboardVariants = {
-    hidden: { opacity: 0, y: -50 },
-    visible: { opacity: 1, y: 0 },
-  };
-
   return (
-    <MotionDiv
-      initial="hidden"
-      animate="visible"
-      variants={dashboardVariants}
-      transition={{ duration: 0.5, ease: "easeInOut" }}
-    >
-      <div className="p-0 lg:p-1 lg:pt-0 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
-          {sectionData.map((section) => (
-            <Card key={section.title}>
-              <CardHeader className="font-medium text-xl text-primary">
-                {section.title}
-                <span className="text-muted-foreground text-sm">
-                  {section.description}
-                </span>
-              </CardHeader>
-              <CardContent>{section.data}</CardContent>
-            </Card>
-          ))}
-        </div>
+    <div className="p-0 lg:p-1 lg:pt-0 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+        {sectionData.map((section) => (
+          <Card key={section.title}>
+            <CardHeader className="font-medium text-xl text-primary">
+              {section.title}
+              <span className="text-muted-foreground text-sm">
+                {section.description}
+              </span>
+            </CardHeader>
+            <CardContent>{section.data}</CardContent>
+          </Card>
+        ))}
       </div>
-    </MotionDiv>
+    </div>
   );
 };
 
