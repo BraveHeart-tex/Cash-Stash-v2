@@ -195,7 +195,7 @@ const LoginForm = () => {
           </CardContent>
           <CardFooter>
             <div className="flex flex-col gap-2 lg:flex-row lg:justify-between w-full ">
-              <p>
+              <p className="text-muted-foreground text-sm">
                 Don't have an account?{" "}
                 <Button
                   disabled={isPending}
