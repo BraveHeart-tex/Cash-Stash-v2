@@ -1,13 +1,14 @@
 "use client";
 import { ConvertCurrencyType } from "@/server/types";
 import { useQueryState } from "nuqs";
-import CurrencyConverterListItem from "./converted-currency-list-item";
-import { Input } from "../ui/input";
+import CurrencyConverterListItem from "@/components/currency-converter/converted-currency-list-item";
+import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { Label } from "../ui/label";
+import { Label } from "@/components/ui/label";
 import { FaSearch } from "react-icons/fa";
 import { MdQuestionMark } from "react-icons/md";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
+import { FaXmark } from "react-icons/fa6";
 
 const ConvertedCurrencyList = ({
   currencyList,
@@ -30,16 +31,29 @@ const ConvertedCurrencyList = ({
   return (
     <div className="relative border px-2 rounded-md mt-2 max-h-[350px] lg:max-h-[500px] overflow-auto">
       <div className="flex flex-col gap-1 sticky top-0 bg-background w-full z-10 rounded-md py-1">
-        <Label>Search</Label>
+        <Label htmlFor="search-currency">Search</Label>
         <div className="relative w-full lg:w-[400px]">
           <Input
+            id="search-currency"
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-8"
+            className="px-8"
             placeholder="Search for currency..."
           />
           <FaSearch className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground" />
+          {searchQuery && (
+            <Button
+              type="button"
+              name="clear-search"
+              size="icon"
+              variant="ghost"
+              className="absolute right-0 top-1/2 -translate-y-1/2 text-muted-foreground p-0"
+              onClick={() => setSearchQuery("")}
+            >
+              <FaXmark />
+            </Button>
+          )}
         </div>
       </div>
       <ul
@@ -55,7 +69,6 @@ const ConvertedCurrencyList = ({
             setSelectedCurrency={setSelectedCurrency}
           />
         ))}
-
         {searchQuery && filteredCurrencies.length === 0 ? (
           <div className="text-center col-span-4">
             <div className="flex flex-col gap-2 justify-center items-center">
@@ -63,7 +76,12 @@ const ConvertedCurrencyList = ({
               <p className="text-foreground font-medium">
                 No results were found for your search
               </p>
-              <Button variant="outline" onClick={() => setSearchQuery("")}>
+              <Button
+                type="button"
+                name="clear-search"
+                variant="outline"
+                onClick={() => setSearchQuery("")}
+              >
                 Clear search
               </Button>
             </div>

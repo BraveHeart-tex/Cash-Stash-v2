@@ -7,10 +7,12 @@ const CurrencyConverterListItem = ({
   setSelectedCurrency,
 }: {
   item: ConvertCurrencyType;
+  // eslint-disable-next-line no-unused-vars
   setSelectedCurrency: (value: string) => void;
 }) => {
   return (
     <li
+      aria-label={item.label}
       className="flex items-center justify-between p-2 rounded-md hover:bg-accent cursor-pointer text-ellipsis"
       onClick={() => setSelectedCurrency(item.symbol)}
     >
