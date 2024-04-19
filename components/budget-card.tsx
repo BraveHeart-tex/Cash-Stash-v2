@@ -79,9 +79,7 @@ const BudgetCard = ({ budget }: BudgetCardProps) => {
 
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.6, type: "tween" }}
       layoutId={`budget-card-${budget.id}`}
       key={budget.id}
       className="flex flex-col gap-2 p-4 pt-6 border-1 shadow-xl rounded-md relative bg-card border"

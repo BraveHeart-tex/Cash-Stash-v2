@@ -8,6 +8,7 @@ import QRCode from "react-qr-code";
 import TwoFactorAuthenticationActivationInput from "./two-factor-authentication-activation-input";
 import { useEffect, useTransition } from "react";
 import { getTwoFactorAuthURI } from "@/server/auth";
+import { ImSpinner2 } from "react-icons/im";
 
 const TwoFactorAuthenticationActivation = () => {
   let [isPending, startTransition] = useTransition();
@@ -70,7 +71,7 @@ const TwoFactorAuthenticationActivation = () => {
           code or enter the secret key into your authentication app.
           {isPending && !uri ? (
             <div className="flex items-center justify-center flex-col h-full w-full my-10">
-              <FaSpinner className="animate-spin text-4xl" />
+              <ImSpinner2 className="animate-spin text-4xl" />
             </div>
           ) : (
             <div className="w-full flex items-center justify-center flex-col gap-4 my-4">

@@ -34,7 +34,7 @@ const GenericConfirmDialog = () => {
   } = useGenericConfirmStore((state) => state);
   const actionRef = useRef<HTMLButtonElement | null>(null);
   const isMobile = useMediaQuery("(max-width: 768px)");
-  let [isPending, startTransition] = useTransition();
+  let [, startTransition] = useTransition();
 
   useEffect(() => {
     if (visible && actionRef?.current) {
@@ -74,7 +74,8 @@ const GenericConfirmDialog = () => {
           <DrawerFooter className="pt-2">
             {primaryActionLabel && (
               <Button
-                disabled={isPending}
+                disabled={loading}
+                loading={loading}
                 onClick={() => {
                   startTransition(async () => {
                     callPrimaryAction();
@@ -85,7 +86,7 @@ const GenericConfirmDialog = () => {
               </Button>
             )}
             <Button
-              disabled={isPending}
+              disabled={loading}
               variant="ghost"
               onClick={() => {
                 callSecondaryAction();
@@ -125,6 +126,7 @@ const GenericConfirmDialog = () => {
                   callPrimaryAction();
                 }}
                 disabled={loading}
+                loading={loading}
                 tabIndex={0}
                 ref={actionRef}
               >
