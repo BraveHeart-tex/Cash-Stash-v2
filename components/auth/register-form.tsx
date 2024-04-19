@@ -115,7 +115,7 @@ const RegisterForm = () => {
             src={logo}
             alt="Cash Stash"
             width={200}
-            className="mb-4 md:mx-auto dark:invert"
+            className="mb-4 mx-auto dark:invert block 2xl:hidden"
           />
           <CardTitle>Welcome!</CardTitle>
           <CardDescription>
@@ -192,7 +192,7 @@ const RegisterForm = () => {
         </CardContent>
         <CardFooter>
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between w-full gap-2">
-            <p>
+            <p className="text-muted-foreground text-sm">
               Already have an account?{" "}
               <Button
                 variant="link"
