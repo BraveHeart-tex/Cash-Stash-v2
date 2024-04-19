@@ -48,7 +48,7 @@ const CreateTransactionButton = ({ className }: { className?: string }) => {
       ) : (
         <>
           <FaExchangeAlt className="text-xl" />
-          Create a Transaction
+          Create a transaction
         </>
       )}
     </Button>

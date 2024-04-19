@@ -116,9 +116,7 @@ const AccountCardContent = ({
       )}
       <p className="font-semibold mb-2 text-primary">
         {account.name}{" "}
-        <span className="dark:text-white/60 text-foreground">
-          ({accountCategory})
-        </span>
+        <span className="text-foreground">({accountCategory})</span>
       </p>
       <p>Balance: {formatMoney(account.balance, preferredCurrency)}</p>
     </motion.div>
