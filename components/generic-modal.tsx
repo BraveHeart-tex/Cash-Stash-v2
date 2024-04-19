@@ -25,7 +25,6 @@ const GenericModal = () => {
     dialogTitle,
     dialogDescription,
     isGenericModalOpen,
-    mode,
     key,
     data,
     props,
@@ -38,7 +37,6 @@ const GenericModal = () => {
   }
 
   const dialogContentToBeRendered = getGenericDialogContent({
-    mode,
     key,
     entityId,
     props,

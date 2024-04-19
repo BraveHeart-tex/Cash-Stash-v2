@@ -10,7 +10,12 @@ import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import { generateLabelFromEnumValue } from "@/lib/utils/stringUtils/generateLabelFromEnumValue";
 import { AccountWithTransactions } from "@/server/types";
-import { FaTrash, FaEdit, FaRegCreditCard } from "react-icons/fa";
+import {
+  FaTrash,
+  FaEdit,
+  FaRegCreditCard,
+  FaMoneyBillWave,
+} from "react-icons/fa";
 import useAuthStore from "@/store/auth/authStore";
 
 type AccountCardContentProps = {
@@ -77,6 +82,18 @@ const AccountCardContent = ({
   const accountCategory =
     generateLabelFromEnumValue(account.category) + " Account";
 
+  const handleCreateTransactionClick = () => {
+    openGenericModal({
+      dialogTitle: "Create Transaction",
+      dialogDescription: "Use the form below to create a new transaction.",
+      mode: "create",
+      key: "transaction",
+      data: {
+        accountId: account.id,
+      },
+    });
+  };
+
   return (
     <motion.div
       transition={{ duration: 0.5 }}
@@ -85,7 +102,7 @@ const AccountCardContent = ({
       layoutId={`account-card-${account.id}`}
       key={account.id}
       className={cn(
-        "flex flex-col gap-2 p-4 border-1 shadow-xl rounded-md relative bg-card border",
+        "flex flex-col gap-2 p-4 shadow-sm border-1 rounded-md relative bg-card border",
         className
       )}
     >
@@ -101,8 +118,13 @@ const AccountCardContent = ({
             },
             {
               icon: FaEdit,
-              label: "Edit",
+              label: "Edit Account",
               onClick: handleEditAccount,
+            },
+            {
+              icon: FaMoneyBillWave,
+              label: "Add Transaction",
+              onClick: handleCreateTransactionClick,
             },
             {
               icon: FaTrash,

@@ -60,7 +60,7 @@ const Dashboard = async () => {
       description:
         "Access your accounts here. Navigate to the 'Accounts' page to see a comprehensive list of all your accounts.",
       data: (
-        <article className="max-h-[330px] min-h-[330px] lg:max-h-[350px] lg:min-h-[350px] overflow-y-auto">
+        <article className="max-h-[330px] min-h-[330px] lg:max-h-[350px] lg:min-h-[350px] overflow-y-auto overflow-x-hidden">
           <AccountSummaries accounts={accountsResult.accounts} />
         </article>
       ),

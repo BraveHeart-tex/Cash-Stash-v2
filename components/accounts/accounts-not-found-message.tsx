@@ -8,8 +8,8 @@ const AccountsNotFoundMessage = ({
   pageHasParams,
 }: AccountsNotFoundMessageProps) => {
   const headingVariants: { [key: number]: string } = {
-    0: "You don't have any budgets created yet.",
-    1: "No budgets were found for your search",
+    0: "You don't have any accounts created yet.",
+    1: "No accounts were found for your search",
   };
 
   const message = `${pageHasParams ? "Remove existing filters or " : ""} Create a budget by clicking the 'Create a budget' button.`;

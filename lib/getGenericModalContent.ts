@@ -6,7 +6,6 @@ import TransactionForm from "@/components/transactions/transaction-form";
 import ReminderForm from "@/components/reminder-form";
 
 type GetGenericDialogContentParams = {
-  mode: "create" | "edit";
   key: "budget" | "goal" | "transaction" | "reminder" | "account" | "";
   entityId: string | number;
   props?: Record<string, any>;
@@ -24,16 +23,10 @@ const ContentMap: {
 };
 
 export const getGenericDialogContent = ({
-  mode,
   key,
   data,
   props,
 }: GetGenericDialogContentParams) => {
   const Component = ContentMap[key];
-
-  if (mode === "edit") {
-    return createElement(Component, { data, ...props });
-  }
-
-  return createElement(Component, { ...props });
+  return createElement(Component, { data, ...props });
 };
