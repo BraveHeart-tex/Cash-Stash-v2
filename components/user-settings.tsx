@@ -15,8 +15,9 @@ const UserSettings = () => {
   );
   const handleEnableTwoFactorAuth = () => {
     showGenericConfirm({
-      title: "Enable 2FA",
-      message: "Are you sure you want to enable 2FA?",
+      title: "Are you sure you want to enable 2FA?",
+      message:
+        "Enabling 2FA will add an extra layer of security to your account. Are you sure you want to enable it?",
       primaryActionLabel: "Enable",
       onConfirm: () => {
         startTransition(async () => {

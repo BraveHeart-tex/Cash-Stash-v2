@@ -46,8 +46,8 @@ const TransactionCard = ({
 
   const handleDeleteClick = () => {
     showGenericConfirm({
-      title: "Delete Transaction",
-      message: "Are you sure you want to delete this transaction?",
+      title: "Are you sure you want to delete this transaction?",
+      message: "This action cannot be undone.",
       primaryActionLabel: "Delete",
       onConfirm: async () => {
         const response = await deleteTransactionById(transaction);

@@ -32,8 +32,8 @@ const BudgetCard = ({ budget }: BudgetCardProps) => {
 
   const handleDeleteClick = (id: number) => {
     showGenericConfirm({
-      title: "Delete Budget",
-      message: "Are you sure you want to delete this budget?",
+      title: "Are you sure you want to delete this budget?",
+      message: "This action cannot be undone.",
       primaryActionLabel: "Delete",
       onConfirm: async () => {
         const response = await deleteBudget(id);

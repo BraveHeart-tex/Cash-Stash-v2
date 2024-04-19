@@ -32,8 +32,8 @@ const GoalCard = ({ goal }: GoalCardProps) => {
 
   const handleDeleteGoal = (id: number) => {
     showGenericConfirm({
-      title: "Delete Goal",
-      message: "Are you sure you want to delete this goal?",
+      title: "Are you sure you want to delete this goal?",
+      message: "This action cannot be undone.",
       primaryActionLabel: "Delete",
       onConfirm: async () => {
         const response = await deleteGoal(id);
