@@ -11,7 +11,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Image from "next/image";
-import logo from "@/components/Logo.svg";
 import { Label } from "@/components/ui/label";
 import TwoFactorAuthenticationTimer from "@/components/two-factor-authentication-timer";
 import { redirect } from "next/navigation";
@@ -44,7 +43,7 @@ const TwoFactorAuthenticationForm = ({ email }: { email: string }) => {
     <Card>
       <CardHeader className="text-xl">
         <Image
-          src={logo}
+          src={"/logo.svg"}
           alt="Cash Stash"
           width={200}
           className="mb-4 md:mx-auto dark:invert"

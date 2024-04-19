@@ -6,7 +6,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Image from "next/image";
-import logo from "@/components/Logo.svg";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import ForgotPassword from "@/components/auth/forgot-password";
@@ -63,7 +62,7 @@ const SignInHelpPage = ({
       <Card className="min-w-[400px]">
         <CardHeader className="text-xl">
           <Image
-            src={logo}
+            src={"/logo.svg"}
             alt="Cash Stash"
             width={200}
             className="mb-4 md:mx-auto dark:invert"

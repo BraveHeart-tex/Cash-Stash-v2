@@ -9,7 +9,6 @@ import { getUser } from "@/lib/auth/session";
 import { PAGE_ROUTES } from "@/lib/constants";
 import Image from "next/image";
 import { redirect } from "next/navigation";
-import logo from "@/components/Logo.svg";
 import ResetPasswordForm from "@/components/reset-password-form";
 
 type ResetPasswordPageProps = {
@@ -45,7 +44,7 @@ const ResetPassword = async ({
       <Card className="w-full lg:w-[600px]">
         <CardHeader className="text-xl">
           <Image
-            src={logo}
+            src={"/logo.svg"}
             alt="Cash Stash"
             width={200}
             className="mb-4 md:mx-auto dark:invert"

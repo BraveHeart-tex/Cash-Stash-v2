@@ -1,5 +1,4 @@
 "use client";
-import Logo from "@/components/Logo.svg";
 import Image from "next/image";
 import UserMenu from "@/components/user-menu";
 import { ModeToggle } from "@/components/mode-toggle";
@@ -29,7 +28,7 @@ const Navbar = ({ user }: { user: User | null }) => {
           <div className="hidden md:block" />
           <Link href={PAGE_ROUTES.HOME_PAGE} className="ml-auto lg:ml-0">
             <Image
-              src={Logo}
+              src={"/logo.svg"}
               alt="Cash Stash"
               width={200}
               className="mx-auto lg:mx-0"

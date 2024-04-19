@@ -1,5 +1,4 @@
 import LoginForm from "@/components/auth/login-form";
-import logo from "@/components/Logo.svg";
 import { getUser } from "@/lib/auth/session";
 import { PAGE_ROUTES } from "@/lib/constants";
 import Image from "next/image";
@@ -20,7 +19,7 @@ const LoginPage = async () => {
       <div className="grid grid-cols-1 2xl:grid-cols-2 min-h-screen w-full items-center">
         <div className="relative items-center justify-center flex-col hidden 2xl:flex bg-muted h-screen">
           <Image
-            src={logo}
+            src={"/logo.svg"}
             alt="logo"
             width={400}
             height={400}

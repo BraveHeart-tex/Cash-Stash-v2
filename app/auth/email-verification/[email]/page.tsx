@@ -1,7 +1,6 @@
 import { checkEmailValidityBeforeVerification } from "@/server/auth";
 import EmailVerificationInput from "@/components/auth/email-verification-input";
 import EmailVerificationTimer from "@/components/auth/email-verification-timer";
-import logo from "@/components/Logo.svg";
 import {
   Card,
   CardContent,
@@ -52,7 +51,7 @@ const EmailVerificationPage = async ({
       <Card>
         <CardHeader className="text-xl">
           <Image
-            src={logo}
+            src={"/logo.svg"}
             alt="Cash Stash"
             width={200}
             className="mb-4 md:mx-auto dark:invert"

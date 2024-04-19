@@ -8,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import logo from "@/components/Logo.svg";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -137,7 +136,7 @@ const LoginForm = () => {
         <Card className="w-full">
           <CardHeader className="text-xl">
             <Image
-              src={logo}
+              src={"/logo.svg"}
               alt="Cash Stash"
               width={200}
               className="mb-4 mx-auto dark:invert block 2xl:hidden"
