@@ -95,10 +95,26 @@ const LoginForm = () => {
   if (loggedIn) {
     return (
       <div className="flex flex-col items-center justify-center h-screen gap-2">
-        <h1 className="text-2xl font-semibold text-primary">
+        <Image
+          src="/logging-in-dark.svg"
+          width={300}
+          height={300}
+          alt="logging in"
+          className="hidden dark:block"
+        />
+        <Image
+          src="/logging-in.svg"
+          width={300}
+          height={300}
+          alt="logging in"
+          className="block dark:hidden"
+        />
+        <h1 className="scroll-m-20 text-3xl font-semibold tracking-tight text-primary">
           Logged in successfully.
         </h1>
-        <span className="animate-bounce">You are being redirected...</span>
+        <span className="text-muted-foreground">
+          You are being redirected...
+        </span>
       </div>
     );
   }
@@ -124,7 +140,7 @@ const LoginForm = () => {
               src={logo}
               alt="Cash Stash"
               width={200}
-              className="mb-4 md:mx-auto dark:invert"
+              className="mb-4 mx-auto dark:invert block 2xl:hidden"
             />
             <CardTitle>Welcome!</CardTitle>
             <CardDescription>Sign in to access your account.</CardDescription>
@@ -135,6 +151,8 @@ const LoginForm = () => {
                 className="flex flex-col gap-4"
                 onSubmit={form.handleSubmit(handleLoginFormSubmit)}
                 data-testid="login-form"
+                name="login-form"
+                aria-label="login-form"
               >
                 <div className="grid grid-cols-1 gap-2">
                   <FormField
