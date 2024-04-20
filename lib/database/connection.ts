@@ -5,6 +5,7 @@ import { drizzle } from "drizzle-orm/mysql2";
 import { sessions, users } from "@/lib/database/schema";
 import * as schema from "@/lib/database/schema";
 import * as dotenv from "dotenv";
+import QueryLogger from "../utils/queryLogger";
 
 dotenv.config();
 
@@ -23,7 +24,7 @@ const asyncPool = pool.promise();
 export const db = drizzle(asyncPool, {
   schema,
   mode: "default",
-  // logger: new MyLogger(),
+  logger: new QueryLogger(),
 });
 
 export const adapter = new DrizzleMySQLAdapter(db, sessions, users);
