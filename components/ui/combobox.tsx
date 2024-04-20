@@ -71,6 +71,25 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
       return newOptions;
     }, [options, searchQuery]);
 
+    const renderTriggerPlaceholder = () => {
+      if (selectedOption) {
+        return (
+          <span className="flex items-center gap-1">
+            {selectedOption?.icon ? (
+              <selectedOption.icon className="h-4 w-4" />
+            ) : null}
+            {selectedOption?.label}
+          </span>
+        );
+      }
+
+      if (triggerPlaceholder) {
+        return triggerPlaceholder;
+      }
+
+      return "Select an option";
+    };
+
     return (
       <Popover open={isOpen} onOpenChange={setIsOpen} modal>
         <PopoverTrigger asChild ref={ref} className="w-full">
@@ -88,16 +107,7 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
               )}
               onClick={() => setIsOpen(!isOpen)}
             >
-              {(
-                <span className="flex items-center gap-1">
-                  {selectedOption?.icon ? (
-                    <selectedOption.icon className="h-4 w-4" />
-                  ) : null}
-                  {selectedOption?.label}
-                </span>
-              ) ||
-                triggerPlaceholder ||
-                "Select an option"}
+              {renderTriggerPlaceholder()}
               <FaSort className="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
           )}
