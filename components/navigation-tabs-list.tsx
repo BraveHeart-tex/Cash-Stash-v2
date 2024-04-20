@@ -18,7 +18,7 @@ const NavigationTabsList = () => {
               asChild
               value={page.label}
               className={
-                "relative data-[state=active]:text-white data-[state=active]:bg-transparent"
+                "relative data-[state=active]:text-primary-foreground data-[state=active]:bg-transparent"
               }
               data-state={pathName === page.link ? "active" : "inactive"}
             >
@@ -26,10 +26,7 @@ const NavigationTabsList = () => {
                 {pathName === page.link && (
                   <motion.div
                     layoutId="active-pill"
-                    className="absolute inset-0 bg-gradient-to-r from-primary to-primary/70 "
-                    style={{
-                      borderRadius: "9999px",
-                    }}
+                    className="absolute inset-0 bg-gradient-to-r from-primary to-primary/70 rounded-md"
                   />
                 )}
                 <span className={`flex items-center relative z-10`}>

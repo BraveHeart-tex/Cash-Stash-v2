@@ -1,0 +1,162 @@
+import { useForm } from "react-hook-form";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import categorySchema, { CategorySchemaType } from "@/schemas/category-schema";
+import { useTransition } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { CATEGORY_TYPES } from "@/lib/constants";
+import { createCategory } from "@/server/category";
+import { toast } from "sonner";
+import { CategorySelectModel } from "@/lib/database/schema";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+type CategoryFormProps = {
+  // eslint-disable-next-line no-unused-vars
+  afterSave?: (values: CategorySelectModel) => void;
+  defaultTypeValue?: (typeof CATEGORY_TYPES)[keyof typeof CATEGORY_TYPES];
+  showTypeOptions: boolean;
+};
+
+const CategoryForm = ({
+  afterSave,
+  showTypeOptions = true,
+  defaultTypeValue = CATEGORY_TYPES.BUDGET,
+}: CategoryFormProps) => {
+  let [isPending, startTransition] = useTransition();
+  const form = useForm<CategorySchemaType>({
+    resolver: zodResolver(categorySchema),
+    defaultValues: {
+      type: defaultTypeValue,
+    },
+  });
+
+  const handleFormSubmit = (values: CategorySchemaType) => {
+    startTransition(async () => {
+      const response = await createCategory(values);
+      if ("data" in response) {
+        afterSave?.(response.data);
+      }
+
+      processFormSubmissionResult(response);
+    });
+  };
+
+  const processFormSubmissionResult = (
+    result: Awaited<ReturnType<typeof createCategory>>
+  ) => {
+    if ("fieldErrors" in result) {
+      result.fieldErrors.forEach((fieldError) => {
+        form.setError(fieldError.field as any, {
+          type: "manual",
+          message: fieldError.message,
+        });
+      });
+
+      return toast.error("An error occurred.", {
+        description: result.error,
+      });
+    }
+
+    toast.success("Success!", {
+      description: "Category has been created.",
+    });
+  };
+
+  // stops the parent form from submitting
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    if (event) {
+      if (typeof event.preventDefault === "function") {
+        event.preventDefault();
+      }
+
+      if (typeof event.stopPropagation === "function") {
+        event.stopPropagation();
+      }
+    }
+
+    return form.handleSubmit(handleFormSubmit)(event);
+  };
+
+  return (
+    <Form {...form}>
+      <form
+        id="category-form"
+        role="form"
+        name="category-form"
+        aria-label="Category Form"
+        onSubmit={onSubmit}
+        className="grid grid-cols-1 gap-4"
+      >
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Category Name</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter category name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        {showTypeOptions && (
+          <FormField
+            control={form.control}
+            name="type"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Category Type</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value.toString()}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a category type" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value={CATEGORY_TYPES.BUDGET.toString()}>
+                      Budget
+                    </SelectItem>
+                    <SelectItem value={CATEGORY_TYPES.TRANSACTION.toString()}>
+                      Transaction
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormDescription>
+                  Refers to the type of category you want to create.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+        <Button
+          type="submit"
+          disabled={isPending || form.formState.isSubmitting}
+        >
+          {isPending ? "Submitting..." : "Create"}
+        </Button>
+      </form>
+    </Form>
+  );
+};
+
+export default CategoryForm;

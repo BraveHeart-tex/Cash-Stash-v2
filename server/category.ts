@@ -1,6 +1,6 @@
 "use server";
 import { getUser } from "@/lib/auth/session";
-import { PAGE_ROUTES } from "@/lib/constants";
+import { CATEGORY_TYPES, PAGE_ROUTES } from "@/lib/constants";
 import { processZodError } from "@/lib/utils/objectUtils/processZodError";
 import categorySchema, { CategorySchemaType } from "@/schemas/category-schema";
 import { redirect } from "next/navigation";
@@ -49,9 +49,14 @@ export const createCategory = async (
 
     if (error instanceof Error) {
       if ("code" in error && error.code === "ER_DUP_ENTRY") {
+        const entity =
+          values.type === CATEGORY_TYPES.BUDGET ? "Budget" : "Transaction";
+
         return {
-          error: `Category: ${values.name} already exists.`,
-          fieldErrors: [{ field: "name", message: "Category already exists." }],
+          error: `${entity} Category: ${values.name} already exists.`,
+          fieldErrors: [
+            { field: "name", message: `${entity} Category already exists.` },
+          ],
         };
       }
     }

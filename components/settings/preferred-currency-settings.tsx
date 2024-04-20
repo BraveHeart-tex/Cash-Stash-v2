@@ -3,7 +3,7 @@ import { CURRENCIES } from "@/lib/constants";
 
 const PreferredCurrencySettings = async () => {
   return (
-    <div className="flex flex-col gap-2">
+    <section id="preferred-currency" className="flex flex-col gap-2">
       <div>
         <h2 className="text-xl font-semibold text-primary">
           Preffered Currency
@@ -18,7 +18,7 @@ const PreferredCurrencySettings = async () => {
           value: item.symbol,
         }))}
       />
-    </div>
+    </section>
   );
 };
 

@@ -342,6 +342,7 @@ export type ExchangeRateResponseError = {
 };
 
 export type ComboboxOption = {
+  icon?: IconType;
   label: string | number;
   value: string;
 };
@@ -366,3 +367,11 @@ export type QueryStringComboboxItem = {
   label: string;
   value: string;
 };
+
+export type GenericDialogKeyType =
+  | "budget"
+  | "goal"
+  | "transaction"
+  | "reminder"
+  | "account"
+  | "category";

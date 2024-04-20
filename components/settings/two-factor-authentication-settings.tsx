@@ -75,7 +75,7 @@ const TwoFactorAuthenticationSettings = () => {
     user?.activatedTwoFactorAuthentication;
 
   return (
-    <div>
+    <section id="two-factor-authentication">
       <h2 className="text-xl font-semibold text-primary">
         Two-Factor Authentication
       </h2>
@@ -113,7 +113,7 @@ const TwoFactorAuthenticationSettings = () => {
           {isPending ? "Disabling..." : "Disable Two-Factor Authentication"}
         </Button>
       ) : null}
-    </div>
+    </section>
   );
 };
 

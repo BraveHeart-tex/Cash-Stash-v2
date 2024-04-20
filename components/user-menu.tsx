@@ -9,8 +9,8 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import useAuthStore from "@/store/auth/authStore";
-import { ModeToggle } from "@/components/mode-toggle";
 import { Label } from "@/components/ui/label";
+import ModeToggle from "./ui/mode-toggle";
 
 const UserMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -45,7 +45,9 @@ const UserMenu = () => {
 
         <div className="block lg:hidden">
           <Label>Color Mode</Label>
-          <ModeToggle layoutId="active-colorTheme-pill-userMenu" />
+          <div className="bg-background flex gap-1">
+            <ModeToggle />
+          </div>
         </div>
 
         <Button

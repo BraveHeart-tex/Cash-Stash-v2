@@ -11,68 +11,25 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { BaseValidatedResponse } from "@/server/types";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useTransition } from "react";
 import budgetSchema, { BudgetSchemaType } from "@/schemas/budget-schema";
 import { createBudget, updateBudget } from "@/server/budget";
 import useGenericModalStore from "@/store/genericModalStore";
 import { toast } from "sonner";
-import { BudgetSelectModel, CategorySelectModel } from "@/lib/database/schema";
-import CurrencyFormLabel from "../ui/currency-form-label";
-import { FaPlus } from "react-icons/fa";
-import BudgetCategoryForm from "./budget-category-form";
+import { BudgetSelectModel } from "@/lib/database/schema";
+import CurrencyFormLabel from "@/components/ui/currency-form-label";
 import useCategoriesStore from "@/store/categoriesStore";
 import { CATEGORY_TYPES } from "@/lib/constants";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import { getCategoriesByType } from "@/server/category";
 import Combobox from "@/components/ui/combobox";
 import { compareMatchingKeys } from "@/lib/utils/objectUtils/compareMatchingKeys";
+import CreateBudgetCategoryPopover from "./create-budget-category-popover";
 
 type BudgetFormProps = {
   data?: BudgetSelectModel;
-};
-
-const CreateBudgetCategoryPopover = ({
-  onSave,
-}: {
-  // eslint-disable-next-line no-unused-vars
-  onSave: (values: CategorySelectModel) => void;
-}) => {
-  const [open, setOpen] = useState(false);
-  const addCategory = useCategoriesStore((state) => state.addCategory);
-
-  return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button type="button" size="icon">
-          <FaPlus />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="z-[500]">
-        <div className="grid gap-4">
-          <div className="space-y-2">
-            <h4 className="font-medium leading-none">Add Budget Category</h4>
-            <p className="text-sm text-muted-foreground">
-              Add a new budget category by using the form below. Category:
-            </p>
-          </div>
-          <BudgetCategoryForm
-            afterSave={(values) => {
-              setOpen(false);
-              addCategory(values);
-              onSave(values);
-            }}
-          />
-        </div>
-      </PopoverContent>
-    </Popover>
-  );
 };
 
 const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {

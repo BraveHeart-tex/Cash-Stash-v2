@@ -98,7 +98,12 @@ export default async function RootLayout({ children }: LayoutProps) {
         <meta name="msapplication-TileColor" content="#b91d47" />
       </head>
       <body className={InterFont.className}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          themes={["light", "dark", "system", "monokai"]}
+        >
           <GoogleCaptchaWrapper>
             <RedirectionPathToaster />
             <SonnerToaster />

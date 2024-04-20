@@ -1,3 +1,4 @@
+import { GenericDialogKeyType } from "@/server/types";
 import { create } from "zustand";
 
 type GenericModalState = {
@@ -6,7 +7,7 @@ type GenericModalState = {
   dialogTitle?: string;
   dialogDescription?: string;
   mode: "edit" | "create";
-  key: "budget" | "goal" | "transaction" | "reminder" | "account" | "";
+  key: GenericDialogKeyType | null;
   props: Record<string, any>;
   data: Record<string, any>;
   // eslint-disable-next-line no-unused-vars
@@ -20,7 +21,7 @@ const useGenericModalStore = create<GenericModalState>((set) => ({
   mode: "create",
   dialogTitle: "",
   dialogDescription: "",
-  key: "",
+  key: null,
   props: {},
   data: {},
   openGenericModal: (params: Partial<GenericModalState>) => {
@@ -47,7 +48,7 @@ const useGenericModalStore = create<GenericModalState>((set) => ({
       mode: "create",
       dialogTitle: "",
       dialogDescription: "",
-      key: "",
+      key: null,
       props: {},
       data: {},
     }));

@@ -1,3 +1,4 @@
+import ColorThemeSettings from "@/components/settings/color-theme-settings";
 import NotificationSettings from "@/components/settings/notification-settings";
 import PreferredCurrencySettings from "@/components/settings/preferred-currency-settings";
 import TwoFactorAuthenticationSettings from "@/components/settings/two-factor-authentication-settings";
@@ -29,6 +30,7 @@ const SettingsPage = async () => {
         <div className="flex flex-col gap-10">
           <PreferredCurrencySettings />
           <NotificationSettings />
+          <ColorThemeSettings />
           <TwoFactorAuthenticationSettings />
         </div>
       </div>

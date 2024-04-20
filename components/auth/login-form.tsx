@@ -140,7 +140,7 @@ const LoginForm = () => {
               alt="Cash Stash"
               width={200}
               height={200}
-              className="mb-4 mx-auto dark:invert block 2xl:hidden"
+              className="mb-4 mx-auto dark:invert block 2xl:hidden logo-light"
             />
             <CardTitle>Welcome!</CardTitle>
             <CardDescription>Sign in to access your account.</CardDescription>

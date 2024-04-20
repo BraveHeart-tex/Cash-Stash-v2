@@ -88,7 +88,14 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
               )}
               onClick={() => setIsOpen(!isOpen)}
             >
-              {selectedOption?.label ||
+              {(
+                <span className="flex items-center gap-1">
+                  {selectedOption?.icon ? (
+                    <selectedOption.icon className="h-4 w-4" />
+                  ) : null}
+                  {selectedOption?.label}
+                </span>
+              ) ||
                 triggerPlaceholder ||
                 "Select an option"}
               <FaSort className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -135,7 +142,12 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
                                 "font-semibold text-primary"
                             )}
                           >
-                            {option.label}
+                            <span className="flex items-center gap-2">
+                              {option.icon ? (
+                                <option.icon className="h-4 w-4" />
+                              ) : null}
+                              {option.label}
+                            </span>
                             <FaCheck
                               className={cn(
                                 "ml-auto h-4 w-4",

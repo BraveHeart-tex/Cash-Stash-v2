@@ -4,6 +4,9 @@ import { FaCog, FaMoneyBill, FaPiggyBank } from "react-icons/fa";
 import { MdDashboard, MdOutlineAccountBalanceWallet } from "react-icons/md";
 import { SiConvertio } from "react-icons/si";
 import { TbReportAnalytics } from "react-icons/tb";
+import { BiCategory } from "react-icons/bi";
+import { FaDesktop, FaMoon, FaSun } from "react-icons/fa";
+import { MdOutlineColorLens } from "react-icons/md";
 
 export const PRIMARY_COLOR = "#c4002b" as const;
 export const PRIMARY_FOREGROUND_COLOR = "#fefcfa" as const;
@@ -19,6 +22,7 @@ export const PAGE_ROUTES = {
   GOALS_ROUTE: "/goals",
   TRANSACTIONS_ROUTE: "/transactions",
   REPORTS_ROUTE: "/reports",
+  CATEGORY_ROUTE: "/categories",
   EMAIL_VERIFICATION_ROUTE: "/auth/email-verification",
   SIGN_IN_HELP_ROUTE: "/auth/help",
   FORGOT_PASSWORD_ROUTE: "/auth/help?category=forgot-password",
@@ -103,6 +107,7 @@ export const NAVIGATION_ITEMS: NavigationItem[] = [
     link: PAGE_ROUTES.TRANSACTIONS_ROUTE,
     isPrimary: true,
   },
+  { label: "Categories", icon: BiCategory, link: PAGE_ROUTES.CATEGORY_ROUTE },
   {
     label: "Currency Converter",
     icon: SiConvertio,
@@ -994,3 +999,26 @@ export const CURRENCIES = [
     symbol: "ZMW",
   },
 ] as const;
+
+export const THEME_OPTIONS = [
+  {
+    icon: FaSun,
+    label: "Default Light",
+    value: "light",
+  },
+  {
+    icon: FaMoon,
+    label: "Default Dark",
+    value: "dark",
+  },
+  {
+    icon: FaDesktop,
+    label: "System",
+    value: "system",
+  },
+  {
+    icon: MdOutlineColorLens,
+    label: "Monokai Pro",
+    value: "monokai",
+  },
+];

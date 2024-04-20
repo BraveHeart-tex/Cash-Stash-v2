@@ -1,13 +1,14 @@
 "use client";
 import Image from "next/image";
 import UserMenu from "@/components/user-menu";
-import { ModeToggle } from "@/components/mode-toggle";
+
 import Link from "next/link";
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { User } from "lucia";
 import useAuthStore from "@/store/auth/authStore";
 import { PAGE_ROUTES } from "@/lib/constants";
+import ModeToggle from "./ui/mode-toggle";
 
 const Navbar = ({ user }: { user: User | null }) => {
   const setCurrentUser = useAuthStore((state) => state.setUser);
@@ -32,15 +33,12 @@ const Navbar = ({ user }: { user: User | null }) => {
               alt="Cash Stash"
               width={200}
               height={200}
-              className="mx-auto lg:mx-0"
-              style={{
-                filter: "grayscale(1) invert(1)",
-              }}
+              className="mx-auto lg:mx-0 invert logo grayscale"
             />
           </Link>
           <div className="flex justify-center items-center gap-4 ml-auto lg:ml-0">
-            <div className="lg:flex items-center hidden gap-1">
-              <ModeToggle layoutId="active-colorTheme-pill" />
+            <div className="lg:flex items-center hidden gap-1 bg-background rounded-md">
+              <ModeToggle />
             </div>
             <UserMenu />
           </div>

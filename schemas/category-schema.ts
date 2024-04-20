@@ -6,7 +6,7 @@ const categorySchema = z.object({
     .string()
     .min(1, "Category name is required")
     .max(50, "Category name is too long"),
-  type: z
+  type: z.coerce
     .number()
     .min(CATEGORY_TYPES.TRANSACTION, "Invalid category type")
     .max(CATEGORY_TYPES.BUDGET, "Invalid category type")

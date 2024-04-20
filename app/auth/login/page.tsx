@@ -23,7 +23,7 @@ const LoginPage = async () => {
             alt="logo"
             width={400}
             height={400}
-            className="dark:invert"
+            className="dark:invert logo-light"
           />
           <p className="absolute bottom-2 right-2 text-xs">
             Made by{" "}
