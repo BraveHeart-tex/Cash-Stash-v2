@@ -1,4 +1,4 @@
-import "./globals.css";
+import "@/app/globals.css";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Metadata } from "next";
@@ -6,6 +6,7 @@ import RedirectionPathToaster from "@/components/redirection-path-toaster";
 import { ReactNode } from "react";
 import SonnerToaster from "@/components/ui/sonner";
 import GoogleCaptchaWrapper from "@/components/google-captcha-wrapper";
+import { THEME_OPTIONS } from "@/lib/constants";
 
 const InterFont = Inter({
   weight: ["300", "400", "500", "600", "700"],
@@ -92,6 +93,7 @@ type LayoutProps = {
 };
 
 export default async function RootLayout({ children }: LayoutProps) {
+  const themeValues = THEME_OPTIONS.map((item) => item.value);
   return (
     <html lang="en">
       <head>
@@ -102,7 +104,7 @@ export default async function RootLayout({ children }: LayoutProps) {
           attribute="class"
           defaultTheme="system"
           enableSystem
-          themes={["light", "dark", "system", "monokai"]}
+          themes={themeValues}
         >
           <GoogleCaptchaWrapper>
             <RedirectionPathToaster />

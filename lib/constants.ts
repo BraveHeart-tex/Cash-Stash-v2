@@ -1019,7 +1019,7 @@ export const THEME_OPTIONS = [
   {
     icon: MdOutlineColorLens,
     label: "Monokai Pro",
-    value: "monokai",
+    value: "monokai-dark",
   },
 ];
 

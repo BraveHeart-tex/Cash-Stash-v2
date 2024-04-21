@@ -66,7 +66,7 @@ const SignInHelpPage = ({
             alt="Cash Stash"
             width={200}
             height={200}
-            className="mb-4 md:mx-auto dark:invert logo-light"
+            className="mb-4 md:mx-auto dark:invert monokai-dark:invert"
           />
           <CardTitle>{renderTitle()}</CardTitle>
           <CardDescription>{renderDescription()}</CardDescription>

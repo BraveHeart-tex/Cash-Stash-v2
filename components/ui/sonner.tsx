@@ -12,7 +12,9 @@ const SonnerToaster = ({ ...props }: ToasterProps) => {
 
   return (
     <Sonner
-      theme={theme === "monokai" ? "dark" : (theme as ToasterProps["theme"])}
+      theme={
+        theme === "monokai-dark" ? "dark" : (theme as ToasterProps["theme"])
+      }
       richColors
       closeButton
       className="toaster group"

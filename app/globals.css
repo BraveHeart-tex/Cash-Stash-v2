@@ -2,12 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-.monokai .logo {
+.monokai-dark .logo {
   filter: invert(0);
-}
-
-.monokai .logo-light {
-  filter: invert(1);
 }
 
 .grecaptcha-badge {
@@ -83,7 +79,7 @@
     --ring: 346.8 77.2% 49.8%;
   }
 
-  .monokai:root {
+  .monokai-dark:root {
     --background: 285 5% 17%;
     --foreground: 60 25% 98%;
     --muted: 285 12% 21%;
@@ -110,7 +106,7 @@
     --radius: 0.5rem;
   }
 
-  .monokai.dark {
+  .monokai-dark.dark {
     --background: 285 5% 17%;
     --foreground: 60 25% 98%;
     --muted: 285 12% 21%;

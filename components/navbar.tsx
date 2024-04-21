@@ -33,7 +33,7 @@ const Navbar = ({ user }: { user: User | null }) => {
               alt="Cash Stash"
               width={200}
               height={200}
-              className="mx-auto lg:mx-0 invert logo grayscale"
+              className="mx-auto lg:mx-0 invert monokai-dark:invert-0 grayscale"
             />
           </Link>
           <div className="flex justify-center items-center gap-4 ml-auto lg:ml-0">
