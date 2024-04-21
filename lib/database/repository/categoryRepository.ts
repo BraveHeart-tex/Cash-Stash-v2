@@ -1,7 +1,7 @@
 import { and, eq, like, sql } from "drizzle-orm";
-import { db } from "../connection";
-import { CategoryInsertModel, categories } from "../schema";
-import { CategoryType } from "@/server/types";
+import { db } from "@/lib/database/connection";
+import { CategoryInsertModel, categories } from "@/lib/database/schema";
+import { CategoryType, CategoryUpdateModel } from "@/server/types";
 import { getPageSizeAndSkipAmount } from "@/lib/constants";
 
 type GetMultipleCategoriesParams = {
@@ -31,10 +31,7 @@ const categoryRepository = {
       .from(categories)
       .where(and(eq(categories.userId, userId), eq(categories.type, type)));
   },
-  async updateCategory(
-    data: Required<Pick<CategoryInsertModel, "id">> &
-      Partial<Omit<CategoryInsertModel, "id">>
-  ) {
+  async updateCategory(data: CategoryUpdateModel) {
     return await db
       .update(categories)
       .set(data)

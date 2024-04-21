@@ -4,16 +4,15 @@ import { Input } from "@/components/ui/input";
 import { useDebounceValue } from "usehooks-ts";
 import { FaSearch } from "react-icons/fa";
 import { useQueryState } from "nuqs";
-import { Label } from "./ui/label";
+import { Label } from "@/components/ui/label";
 
-const RouteSearchInput = ({
-  placeholder,
-  label,
-}: {
+type RouteSearchInputProps = {
   placeholder: string;
   label: string;
-}) => {
-  const [searchQuery, setSearchQuery] = useQueryState("query", {
+};
+
+const RouteSearchInput = ({ placeholder, label }: RouteSearchInputProps) => {
+  const [, setSearchQuery] = useQueryState("query", {
     shallow: false,
   });
   const [debouncedQuery, setDebouncedQuery] = useDebounceValue("", 300);
@@ -34,6 +33,7 @@ const RouteSearchInput = ({
       <div className="relative">
         <Input
           id="search"
+          autoComplete="off"
           className="pl-7"
           onChange={handleInputChange}
           placeholder={placeholder}

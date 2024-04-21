@@ -1,3 +1,5 @@
+import CategoriesNotFoundMessage from "@/components/categories/categories-not-found-message";
+import CategoriesPageFilters from "@/components/categories/categories-page-filters";
 import CategoriesPageHeader from "@/components/categories/categories-page-header";
 import CategoryCardList from "@/components/categories/category-card-list";
 import RoutePaginationControls from "@/components/route-pagination-controls";
@@ -23,10 +25,18 @@ const CategoriesPage = async ({ searchParams }: CategoriesPageProps) => {
     type,
   });
 
+  const pageHasParams = Object.values(searchParams).some(
+    (param) => param !== ""
+  );
+
   return (
     <main>
-      <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
+      <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px] space-y-2">
         <CategoriesPageHeader />
+        <CategoriesPageFilters />
+        {categories.length === 0 ? (
+          <CategoriesNotFoundMessage pageHasParams={pageHasParams} />
+        ) : null}
         <CategoryCardList categories={categories} />
       </div>
       {result.totalPages > 1 && <RoutePaginationControls {...result} />}

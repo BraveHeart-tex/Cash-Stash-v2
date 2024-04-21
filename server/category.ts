@@ -8,9 +8,11 @@ import { ZodError } from "zod";
 import categoryRepository from "@/lib/database/repository/categoryRepository";
 import {
   CategoryType,
+  CategoryUpdateModel,
   GetPaginatedCategoriesParams,
   GetPaginatedCategoriesResponse,
 } from "./types";
+import logger from "@/lib/utils/logger";
 
 export const getPaginatedCategories = async ({
   pageNumber,
@@ -51,7 +53,7 @@ export const getPaginatedCategories = async ({
       currentPage: pageNumber,
     };
   } catch (error) {
-    console.error("getPaginatedCategories error", error);
+    logger.error(`getPaginatedCategories error: ${error}`);
     return {
       categories: [],
       hasNextPage: false,
@@ -95,7 +97,7 @@ export const createCategory = async (
       data: category,
     };
   } catch (error) {
-    console.log("ERROR CREATING CATEGORY", error);
+    logger.error(`createCategory error: ${error}`);
 
     if (error instanceof ZodError) {
       return processZodError(error);
@@ -134,6 +136,67 @@ export const getCategoriesByType = async (
   try {
     return await categoryRepository.getCategoriesByType(user.id, type);
   } catch (error) {
+    logger.error(`getCategoriesByType error: ${error}`);
     return null;
+  }
+};
+
+export const deleteCategory = async (id: number) => {
+  const { user } = await getUser();
+  if (!user) {
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+  }
+
+  try {
+    const [response] = await categoryRepository.deleteCategory(id);
+    return response.affectedRows > 0;
+  } catch (error) {
+    logger.error(`deleteCategory error: ${error}`);
+    return false;
+  }
+};
+
+export const updateCategory = async (data: CategoryUpdateModel) => {
+  const { user } = await getUser();
+  if (!user) {
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+  }
+
+  try {
+    const [response] = await categoryRepository.updateCategory(data);
+
+    if (response.affectedRows === 0) {
+      return {
+        error:
+          "Something went wrong while updating the category. Please try again later.",
+        fieldErrors: [],
+      };
+    }
+
+    return {
+      data,
+    };
+  } catch (error) {
+    logger.error(`update category error: ${error}`);
+
+    if (error instanceof Error) {
+      if ("code" in error && error.code === "ER_DUP_ENTRY") {
+        const entity =
+          data.type === CATEGORY_TYPES.BUDGET ? "Budget" : "Transaction";
+
+        return {
+          error: `${entity} Category: ${data.name} already exists.`,
+          fieldErrors: [
+            { field: "name", message: `${entity} Category already exists.` },
+          ],
+        };
+      }
+    }
+
+    return {
+      error:
+        "Something went wrong while updating the category. Please try again later.",
+      fieldErrors: [],
+    };
   }
 };

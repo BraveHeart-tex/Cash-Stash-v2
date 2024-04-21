@@ -2,6 +2,7 @@ import { IconType } from "react-icons/lib";
 import {
   AccountSelectModel,
   BudgetSelectModel,
+  CategoryInsertModel,
   CategorySelectModel,
   GoalSelectModel,
   ReminderSelectModel,
@@ -384,3 +385,6 @@ export type GetPaginatedCategoriesParams = BasePaginatedActionParams & {
 export type GetPaginatedCategoriesResponse = BasePaginatedResponse & {
   categories: CategorySelectModel[];
 };
+
+export type CategoryUpdateModel = Required<Pick<CategoryInsertModel, "id">> &
+  Partial<Omit<CategoryInsertModel, "id">>;

@@ -3,12 +3,17 @@ import { cn } from "@/lib/utils/stringUtils/cn";
 import { Button } from "@/components/ui/button";
 import useGenericModalStore from "@/store/genericModalStore";
 import { FaPlus } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 type CreateCategoryButtonProps = {
   className?: string;
 };
 
 const CreateCategoryButton = ({ className }: CreateCategoryButtonProps) => {
+  const router = useRouter();
+  const closeGenericModal = useGenericModalStore(
+    (state) => state.closeGenericModal
+  );
   const openGenericModal = useGenericModalStore(
     (state) => state.openGenericModal
   );
@@ -23,6 +28,12 @@ const CreateCategoryButton = ({ className }: CreateCategoryButtonProps) => {
           key: "category",
           dialogTitle: "Create a category",
           dialogDescription: "Use the form below to create a new category.",
+          props: {
+            afterSave: () => {
+              router.refresh();
+              closeGenericModal();
+            },
+          },
         })
       }
     >

@@ -1,12 +1,11 @@
 import { Logger } from "drizzle-orm";
-
-const RESET = "\x1b[0m";
-const GREEN = "\x1b[32m";
-const YELLOW = "\x1b[33m";
+import { LOG_COLORS } from "../constants";
 
 export default class QueryLogger implements Logger {
   logQuery(query: string, params: unknown[]): void {
-    console.log(`${YELLOW} QUERY: ${query} ${RESET}`);
-    console.log(`${GREEN} PARAMS: ${JSON.stringify(params, null, 2)} ${RESET}`);
+    console.log(`${LOG_COLORS.YELLOW} QUERY: ${query} ${LOG_COLORS.RESET}`);
+    console.log(
+      `${LOG_COLORS.GREEN} PARAMS: ${JSON.stringify(params, null, 2)} ${LOG_COLORS.RESET}`
+    );
   }
 }
