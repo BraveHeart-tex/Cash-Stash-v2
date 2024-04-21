@@ -1,6 +1,6 @@
 "use client";
 import { NAVIGATION_ITEMS } from "@/lib/constants";
-import { TabsList, TabsTrigger, Tabs } from "./ui/tabs";
+import { TabsList, TabsTrigger, Tabs } from "@/components/ui/tabs";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";

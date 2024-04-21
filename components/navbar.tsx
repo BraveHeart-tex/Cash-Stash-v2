@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import { User } from "lucia";
 import useAuthStore from "@/store/auth/authStore";
 import { PAGE_ROUTES } from "@/lib/constants";
-import ModeToggle from "./ui/mode-toggle";
+import ModeToggle from "@/components/ui/mode-toggle";
 
 const Navbar = ({ user }: { user: User | null }) => {
   const setCurrentUser = useAuthStore((state) => state.setUser);

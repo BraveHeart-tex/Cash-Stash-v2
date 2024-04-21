@@ -5,7 +5,7 @@ import { drizzle } from "drizzle-orm/mysql2";
 import { sessions, users } from "@/lib/database/schema";
 import * as schema from "@/lib/database/schema";
 import * as dotenv from "dotenv";
-import QueryLogger from "../utils/queryLogger";
+import QueryLogger from "@/lib/utils/queryLogger";
 
 dotenv.config();
 

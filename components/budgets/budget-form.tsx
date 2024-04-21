@@ -26,7 +26,7 @@ import { cn } from "@/lib/utils/stringUtils/cn";
 import { getCategoriesByType } from "@/server/category";
 import Combobox from "@/components/ui/combobox";
 import { compareMatchingKeys } from "@/lib/utils/objectUtils/compareMatchingKeys";
-import CreateBudgetCategoryPopover from "./create-budget-category-popover";
+import CreateBudgetCategoryPopover from "@/components/budgets/create-budget-category-popover";
 
 type BudgetFormProps = {
   data?: BudgetSelectModel;

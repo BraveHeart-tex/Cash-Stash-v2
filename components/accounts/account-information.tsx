@@ -1,5 +1,5 @@
 "use client";
-import AccountCard from "../account-card";
+import AccountCard from "@/components/account-card";
 import { motion } from "framer-motion";
 import { AccountWithTransactions } from "@/server/types";
 

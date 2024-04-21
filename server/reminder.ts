@@ -10,7 +10,7 @@ import {
   GetPaginatedRemindersParams,
   GetPaginatedRemindersResponse,
   BaseValidatedResponse,
-} from "./types";
+} from "@/server/types";
 import reminderRepository from "@/lib/database/repository/reminderRepository";
 import { convertISOToMysqlDatetime } from "@/lib/utils/dateUtils/convertISOToMysqlDatetime";
 

@@ -1,7 +1,6 @@
 "use client";
 
-import Combobox from "./combobox";
-
+import Combobox from "@/components/ui/combobox";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils/stringUtils/cn";

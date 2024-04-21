@@ -11,7 +11,7 @@ import {
   CategoryUpdateModel,
   GetPaginatedCategoriesParams,
   GetPaginatedCategoriesResponse,
-} from "./types";
+} from "@/server/types";
 import logger from "@/lib/utils/logger";
 
 export const getPaginatedCategories = async ({

@@ -1,6 +1,6 @@
-import RouteFiltersPopover from "../route-filters-popover";
-import RouteSearchInput from "../route-search-input";
-import BudgetQueryStringCombobox from "./budget-query-string-combobox";
+import RouteFiltersPopover from "@/components/route-filters-popover";
+import RouteSearchInput from "@/components/route-search-input";
+import BudgetQueryStringCombobox from "@/components/budgets/budget-query-string-combobox";
 import { GiPayMoney } from "react-icons/gi";
 import { FaPiggyBank } from "react-icons/fa";
 import { BudgetSelectModel, CategorySelectModel } from "@/lib/database/schema";

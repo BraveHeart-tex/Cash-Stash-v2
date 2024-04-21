@@ -1,6 +1,6 @@
 "use client";
 import { useQueryState } from "nuqs";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
@@ -18,7 +18,7 @@ const RoutePaginationControls = ({
   hasPreviousPage,
 }: PaginationControlsProps) => {
   const [changingPage, setChangingPage] = useState(false);
-  const [page, setPage] = useQueryState("page", {
+  const [, setPage] = useQueryState("page", {
     defaultValue: "1",
     shallow: false,
   });

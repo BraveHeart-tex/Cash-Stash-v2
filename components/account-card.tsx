@@ -1,7 +1,7 @@
 "use client";
-import LatestAccountTransactionsDialog from "./latest-account-transactions-dialog";
+import LatestAccountTransactionsDialog from "@/components/latest-account-transactions-dialog";
 import { useState } from "react";
-import AccountCardContent from "./account-card-content";
+import AccountCardContent from "@/components/account-card-content";
 import { AccountWithTransactions } from "@/server/types";
 
 type AccountCardProps = {

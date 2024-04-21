@@ -1,7 +1,7 @@
-import MotionDiv from "./animations/motion-div";
+import MotionDiv from "@/components/animations/motion-div";
 import useGenericModalStore from "@/store/genericModalStore";
 import { ReminderSelectModel } from "@/lib/database/schema";
-import ActionPopover from "./action-popover";
+import ActionPopover from "@/components/action-popover";
 import { FaCheck, FaEdit, FaTrash } from "react-icons/fa";
 
 type ReminderCardProps = {

@@ -1,4 +1,4 @@
-import GenericNotFoundBlock from "../ui/generic-not-found-block";
+import GenericNotFoundBlock from "@/components/ui/generic-not-found-block";
 
 type GoalsNotFoundMessageProps = {
   pageHasParams: boolean;

@@ -4,7 +4,7 @@ import { getUser } from "@/lib/auth/session";
 import { CURRENCIES, PAGE_ROUTES } from "@/lib/constants";
 import currencyRatesRepository from "@/lib/database/repository/currencyRatesRepository";
 import { redirect } from "next/navigation";
-import { ConvertCurrencyType } from "./types";
+import { ConvertCurrencyType } from "@/server/types";
 
 type ConvertCurrencyParams = {
   currency: string;

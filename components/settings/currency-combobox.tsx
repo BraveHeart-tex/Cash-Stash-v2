@@ -2,7 +2,7 @@
 import { ComboboxOption } from "@/server/types";
 import Combobox from "@/components/ui/combobox";
 import { useState, useTransition } from "react";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import useAuthStore from "@/store/auth/authStore";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import { toast } from "sonner";

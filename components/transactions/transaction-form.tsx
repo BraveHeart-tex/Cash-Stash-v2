@@ -34,7 +34,7 @@ import {
   transactions,
 } from "@/lib/database/schema";
 import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
-import CurrencyFormLabel from "../ui/currency-form-label";
+import CurrencyFormLabel from "@/components/ui/currency-form-label";
 import { compareMatchingKeys } from "@/lib/utils/objectUtils/compareMatchingKeys";
 
 type TransactionFormProps = {

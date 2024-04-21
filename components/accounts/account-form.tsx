@@ -27,7 +27,7 @@ import accountSchema, { AccountSchemaType } from "@/schemas/account-schema";
 import { toast } from "sonner";
 import { AccountSelectModel, accounts } from "@/lib/database/schema";
 import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
-import CurrencyFormLabel from "../ui/currency-form-label";
+import CurrencyFormLabel from "@/components/ui/currency-form-label";
 import { compareMatchingKeys } from "@/lib/utils/objectUtils/compareMatchingKeys";
 
 type AccountFormProps = {

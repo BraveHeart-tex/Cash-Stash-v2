@@ -1,5 +1,5 @@
-import { db } from "./connection";
-import { accounts, budgets, goals, transactions } from "./schema";
+import { db } from "@/lib/database/connection";
+import { accounts, budgets, goals, transactions } from "@/lib/database/schema";
 import { faker } from "@faker-js/faker";
 
 const USER_ID = "um3kgd74zu4f3eltxzh68wos";

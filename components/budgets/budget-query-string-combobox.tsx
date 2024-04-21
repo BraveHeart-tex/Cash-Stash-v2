@@ -1,6 +1,6 @@
 "use client";
 import useCategoriesStore from "@/store/categoriesStore";
-import QueryStringComboBox from "../query-string-combobox";
+import QueryStringComboBox from "@/components/query-string-combobox";
 import { CATEGORY_TYPES } from "@/lib/constants";
 import { useEffect } from "react";
 import { CategorySelectModel } from "@/lib/database/schema";

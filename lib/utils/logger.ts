@@ -1,4 +1,4 @@
-import { LOG_COLORS } from "../constants";
+import { LOG_COLORS } from "@/lib/constants";
 
 interface ILogger {
   // eslint-disable-next-line no-unused-vars

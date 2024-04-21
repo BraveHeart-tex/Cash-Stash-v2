@@ -9,7 +9,7 @@ import { useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { MdOutlineScreenLockPortrait } from "react-icons/md";
-import TwoFactorAuthenticationActivation from "./two-factor-authentication-activation";
+import TwoFactorAuthenticationActivation from "@/components/settings/two-factor-authentication-activation";
 
 const TwoFactorAuthenticationSettings = () => {
   const user = useAuthStore((state) => state.user);

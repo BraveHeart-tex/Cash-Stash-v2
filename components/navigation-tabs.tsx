@@ -1,5 +1,5 @@
-import NavigationTabsList from "./navigation-tabs-list";
-import MobileTabsList from "./mobile-tab-list";
+import NavigationTabsList from "@/components/navigation-tabs-list";
+import MobileTabsList from "@/components/mobile-tab-list";
 
 const NavigationTabs = () => {
   return (

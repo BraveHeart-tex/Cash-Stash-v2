@@ -1,5 +1,5 @@
 import { TransactionSelectModel } from "@/lib/database/schema";
-import TransactionCard from "./transaction-card";
+import TransactionCard from "@/components/transactions/transaction-card";
 
 const TransactionList = ({
   transactions,

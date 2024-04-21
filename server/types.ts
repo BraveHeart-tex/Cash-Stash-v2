@@ -388,3 +388,13 @@ export type GetPaginatedCategoriesResponse = BasePaginatedResponse & {
 
 export type CategoryUpdateModel = Required<Pick<CategoryInsertModel, "id">> &
   Partial<Omit<CategoryInsertModel, "id">>;
+
+export type TransactionPageSearchParams = {
+  transactionType?: string;
+  accountId?: string;
+  sortBy?: string;
+  sortDirection?: string;
+  category?: string;
+  page?: string;
+  query?: string;
+};

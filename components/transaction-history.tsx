@@ -1,8 +1,8 @@
-import TransactionCard from "./transactions/transaction-card";
-import CreateTransactionButton from "./create-buttons/create-transaction-button";
+import TransactionCard from "@/components/transactions/transaction-card";
+import CreateTransactionButton from "@/components/create-buttons/create-transaction-button";
 import AnimatePresenceClient from "@/components/animations/animate-presence";
 import { TransactionSelectModel } from "@/lib/database/schema";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { PAGE_ROUTES } from "@/lib/constants";
 

@@ -1,4 +1,4 @@
-import CreateCategoryButton from "../create-buttons/create-category-button";
+import CreateCategoryButton from "@/components/create-buttons/create-category-button";
 
 const CategoriesPageHeader = () => {
   return (

@@ -1,5 +1,5 @@
 import { Logger } from "drizzle-orm";
-import { LOG_COLORS } from "../constants";
+import { LOG_COLORS } from "@/lib/constants";
 
 export default class QueryLogger implements Logger {
   logQuery(query: string, params: unknown[]): void {

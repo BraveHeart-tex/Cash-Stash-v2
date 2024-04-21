@@ -8,16 +8,7 @@ import RoutePaginationControls from "@/components/route-pagination-controls";
 import TransactionsPageHeader from "@/components/transactions/transactions-page-header";
 import TransactionsPageFilters from "@/components/transactions/transactions-page-filters";
 import TransactionsNotFoundMessage from "@/components/transactions/transactions-not-found-message";
-
-export type TransactionPageSearchParams = {
-  transactionType?: string;
-  accountId?: string;
-  sortBy?: string;
-  sortDirection?: string;
-  category?: string;
-  page?: string;
-  query?: string;
-};
+import { TransactionPageSearchParams } from "@/server/types";
 
 type TransactionsPageProps = {
   searchParams: TransactionPageSearchParams;

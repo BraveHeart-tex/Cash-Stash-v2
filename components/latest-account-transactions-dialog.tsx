@@ -20,7 +20,7 @@ import {
   AccountSelectModel,
   TransactionSelectModel,
 } from "@/lib/database/schema";
-import AccountCardContent from "./account-card-content";
+import AccountCardContent from "@/components/account-card-content";
 
 type LatestAccountTransactionsDialogProps = {
   selectedAccount:

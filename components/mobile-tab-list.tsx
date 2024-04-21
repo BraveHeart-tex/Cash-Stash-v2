@@ -1,9 +1,9 @@
 "use client";
 import { NAVIGATION_ITEMS, PAGE_ROUTES } from "@/lib/constants";
 import { usePathname } from "next/navigation";
-import MobileTabsListItem from "./mobile-tab-list-item";
+import MobileTabsListItem from "@/components/mobile-tab-list-item";
 import useAuthStore from "@/store/auth/authStore";
-import NavigationItemsDrawer from "./navigation-items-drawer";
+import NavigationItemsDrawer from "@/components/navigation-items-drawer";
 
 const MobileTabsList = () => {
   const userInState = useAuthStore((state) => state.user);

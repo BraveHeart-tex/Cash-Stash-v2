@@ -1,5 +1,5 @@
 import useAuthStore from "@/store/auth/authStore";
-import { FormLabel } from "./form";
+import { FormLabel } from "@/components/ui/form";
 
 type ICurrencyFormLabelProps = React.ComponentPropsWithoutRef<"label"> & {
   label: string;

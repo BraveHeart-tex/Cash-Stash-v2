@@ -3,7 +3,7 @@
 import { CATEGORY_TYPES } from "@/lib/constants";
 import { CategorySelectModel } from "@/lib/database/schema";
 import { motion } from "framer-motion";
-import ActionPopover from "../action-popover";
+import ActionPopover from "@/components/action-popover";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import useGenericModalStore from "@/store/genericModalStore";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";

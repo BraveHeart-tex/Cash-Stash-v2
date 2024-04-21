@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
-import { db } from "../connection";
-import { CurrencyRateInsertModel, currencyRates } from "../schema";
+import { db } from "@/lib/database/connection";
+import { CurrencyRateInsertModel, currencyRates } from "@/lib/database/schema";
 
 const currencyRatesRepository = {
   async updateCurrencyRate(rateToUpdate: CurrencyRateInsertModel) {

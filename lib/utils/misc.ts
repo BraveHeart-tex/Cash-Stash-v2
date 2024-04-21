@@ -1,6 +1,8 @@
-import { GetPaginatedTransactionsParams } from "@/server/types";
-import { TransactionPageSearchParams } from "@/app/(dashboard)/transactions/page";
-import { TransactionSelectModel } from "../database/schema";
+import {
+  GetPaginatedTransactionsParams,
+  TransactionPageSearchParams,
+} from "@/server/types";
+import { TransactionSelectModel } from "@/lib/database/schema";
 
 export function createGetPaginatedTransactionsParams(
   searchParams: TransactionPageSearchParams

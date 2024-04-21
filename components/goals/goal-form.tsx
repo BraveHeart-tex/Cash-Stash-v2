@@ -19,7 +19,7 @@ import { createGoal, updateGoal } from "@/server/goal";
 import useGenericModalStore from "@/store/genericModalStore";
 import { toast } from "sonner";
 import { GoalSelectModel } from "@/lib/database/schema";
-import CurrencyFormLabel from "../ui/currency-form-label";
+import CurrencyFormLabel from "@/components/ui/currency-form-label";
 import { compareMatchingKeys } from "@/lib/utils/objectUtils/compareMatchingKeys";
 
 type GoalFormProps = {

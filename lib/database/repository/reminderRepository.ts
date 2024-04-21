@@ -1,6 +1,6 @@
 import { and, between, eq, like, sql } from "drizzle-orm";
-import { db } from "../connection";
-import { ReminderInsertModel, reminders } from "../schema";
+import { db } from "@/lib/database/connection";
+import { ReminderInsertModel, reminders } from "@/lib/database/schema";
 import { getPageSizeAndSkipAmount } from "@/lib/constants";
 
 type GetMultipleRemindersParams = {

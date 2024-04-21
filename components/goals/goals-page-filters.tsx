@@ -1,6 +1,6 @@
 import { GiPayMoney } from "react-icons/gi";
-import RouteFiltersPopover from "../route-filters-popover";
-import RouteSearchInput from "../route-search-input";
+import RouteFiltersPopover from "@/components/route-filters-popover";
+import RouteSearchInput from "@/components/route-search-input";
 import { FaPiggyBank } from "react-icons/fa";
 
 const goalFilters = [
