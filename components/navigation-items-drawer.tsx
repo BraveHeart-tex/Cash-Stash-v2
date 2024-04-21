@@ -36,7 +36,12 @@ const NavigationItemsDrawer = () => {
       }}
     >
       <DrawerTrigger asChild>
-        <Button className="rounded-full w-[44px] h-[44px]">
+        <Button
+          className="rounded-full w-[44px] h-[44px]"
+          type="button"
+          name="navigation-drawer"
+          aria-label="Open navigation menus"
+        >
           <FaBars className="w-5 h-5" />
         </Button>
       </DrawerTrigger>
