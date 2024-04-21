@@ -249,7 +249,7 @@ export const logout = async () => {
     sessionCookie.value,
     sessionCookie.attributes
   );
-  return redirect(PAGE_ROUTES.LOGIN_ROUTE);
+  redirect(PAGE_ROUTES.LOGIN_ROUTE);
 };
 
 export const checkEmailValidityBeforeVerification = async (email: string) => {

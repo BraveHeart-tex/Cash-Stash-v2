@@ -12,7 +12,7 @@ const CategoriesNotFoundMessage = ({
     1: "No categories were found for your search",
   };
 
-  const message = `${pageHasParams ? "Remove existing filters or " : ""} Create a categories by clicking the 'Create a category' button.`;
+  const message = `${pageHasParams ? "Remove existing filters or " : ""} Create a category by clicking the 'Create a category' button.`;
 
   return (
     <div className="pt-6 w-full">

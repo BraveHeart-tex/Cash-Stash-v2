@@ -10,7 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import useAuthStore from "@/store/auth/authStore";
 import { Label } from "@/components/ui/label";
-import ModeToggle from "./ui/mode-toggle";
+import ModeToggle from "@/components/ui/mode-toggle";
 
 const UserMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -54,8 +54,9 @@ const UserMenu = () => {
           type="button"
           onClick={() => handleLogout()}
           disabled={isPending}
+          loading={isPending}
         >
-          {isPending ? "Logging out..." : "Logout"}
+          Logout
         </Button>
       </DropdownMenuContent>
     </DropdownMenu>
