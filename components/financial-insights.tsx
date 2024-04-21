@@ -40,14 +40,9 @@ const FinancialInsights = ({ insightsData }: FinancialInsightsProps) => {
   const noInsightsData = Object.keys(insightsData || {}).length === 0;
 
   const NoDataMessage = () => (
-    <MotionDiv
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      className="grid grid-cols-1 gap-4 text-primary"
-    >
-      <p>No data was found to generate financial insights from.</p>
-    </MotionDiv>
+    <p className="text-primary">
+      No data was found to generate financial insights from.
+    </p>
   );
 
   if (!insightsData) return <NoDataMessage />;
@@ -55,7 +50,7 @@ const FinancialInsights = ({ insightsData }: FinancialInsightsProps) => {
   if (noInsightsData || (insightsData && !insightsData.totalIncome)) {
     return (
       <article className="flex h-[300px] items-center justify-center">
-        <div className="my-3">
+        <div className="my-3 flex flex-col justify-center items-center">
           <NoDataMessage />
           <Link href={PAGE_ROUTES.TRANSACTIONS_ROUTE}>
             <Button className="font-semibold  mt-3 flex items-center gap-[14px]">
