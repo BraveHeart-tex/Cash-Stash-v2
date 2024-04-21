@@ -1,7 +1,15 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, like, sql } from "drizzle-orm";
 import { db } from "../connection";
 import { CategoryInsertModel, categories } from "../schema";
 import { CategoryType } from "@/server/types";
+import { getPageSizeAndSkipAmount } from "@/lib/constants";
+
+type GetMultipleCategoriesParams = {
+  query?: string;
+  page: number;
+  type?: CategoryType;
+  userId: string;
+};
 
 const categoryRepository = {
   async createCategory(data: CategoryInsertModel) {
@@ -37,6 +45,52 @@ const categoryRepository = {
       .select()
       .from(categories)
       .where(eq(categories.userId, userId));
+  },
+  async getMultiple({
+    query,
+    page,
+    type,
+    userId,
+  }: GetMultipleCategoriesParams) {
+    const { pageSize, skipAmount } = getPageSizeAndSkipAmount(page);
+
+    const categoryTypeCondition = type ? eq(categories.type, type) : undefined;
+
+    const categoriesQuery = db
+      .select()
+      .from(categories)
+      .where(
+        and(
+          eq(categories.userId, userId),
+          like(categories.name, `%${query}%`),
+          categoryTypeCondition
+        )
+      )
+      .limit(pageSize)
+      .offset(skipAmount);
+
+    const categoriesCountQuery = db
+      .select({
+        count: sql<number>`count(*)`,
+      })
+      .from(categories)
+      .where(
+        and(
+          eq(categories.userId, userId),
+          like(categories.name, `%${query}%`),
+          categoryTypeCondition
+        )
+      );
+
+    const [categoriesResult, [totalCountResult]] = await Promise.all([
+      categoriesQuery,
+      categoriesCountQuery,
+    ]);
+
+    return {
+      categories: categoriesResult,
+      totalCount: totalCountResult.count,
+    };
   },
 };
 

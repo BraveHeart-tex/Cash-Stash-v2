@@ -2,6 +2,7 @@ import { IconType } from "react-icons/lib";
 import {
   AccountSelectModel,
   BudgetSelectModel,
+  CategorySelectModel,
   GoalSelectModel,
   ReminderSelectModel,
   TransactionSelectModel,
@@ -375,3 +376,11 @@ export type GenericDialogKeyType =
   | "reminder"
   | "account"
   | "category";
+
+export type GetPaginatedCategoriesParams = BasePaginatedActionParams & {
+  type?: CategoryType;
+};
+
+export type GetPaginatedCategoriesResponse = BasePaginatedResponse & {
+  categories: CategorySelectModel[];
+};

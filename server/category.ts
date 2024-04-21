@@ -6,7 +6,61 @@ import categorySchema, { CategorySchemaType } from "@/schemas/category-schema";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import categoryRepository from "@/lib/database/repository/categoryRepository";
-import { CategoryType } from "./types";
+import {
+  CategoryType,
+  GetPaginatedCategoriesParams,
+  GetPaginatedCategoriesResponse,
+} from "./types";
+
+export const getPaginatedCategories = async ({
+  pageNumber,
+  query,
+  type,
+}: GetPaginatedCategoriesParams): Promise<GetPaginatedCategoriesResponse> => {
+  const { user } = await getUser();
+  if (!user) {
+    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+  }
+
+  const PAGE_SIZE = 12;
+  const skipAmount = (pageNumber - 1) * PAGE_SIZE;
+
+  try {
+    const { categories, totalCount } = await categoryRepository.getMultiple({
+      page: pageNumber,
+      query,
+      type,
+      userId: user.id,
+    });
+
+    if (categories.length === 0) {
+      return {
+        categories: [],
+        hasNextPage: false,
+        hasPreviousPage: false,
+        currentPage: 1,
+        totalPages: 1,
+      };
+    }
+
+    return {
+      categories,
+      hasNextPage: totalCount > skipAmount + PAGE_SIZE,
+      hasPreviousPage: pageNumber > 1,
+      totalPages: Math.ceil(totalCount / PAGE_SIZE),
+      currentPage: pageNumber,
+    };
+  } catch (error) {
+    console.error("getPaginatedCategories error", error);
+    return {
+      categories: [],
+      hasNextPage: false,
+      hasPreviousPage: false,
+      currentPage: 1,
+      totalPages: 1,
+    };
+  }
+};
 
 export const createCategory = async (
   values: CategorySchemaType
