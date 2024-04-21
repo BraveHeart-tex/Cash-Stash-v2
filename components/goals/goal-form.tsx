@@ -100,14 +100,6 @@ const GoalForm = ({ data: goalToBeUpdated }: GoalFormProps) => {
     }
   };
 
-  const renderSubmitButtonContent = () => {
-    if (form.formState.isSubmitting || isPending) {
-      return "Submitting...";
-    }
-
-    return entityId ? "Update" : "Create";
-  };
-
   return (
     <Form {...form}>
       <form
@@ -165,10 +157,13 @@ const GoalForm = ({ data: goalToBeUpdated }: GoalFormProps) => {
         />
         <Button
           className="w-full"
+          name="submit"
           type="submit"
+          aria-label="Submit goal form"
+          loading={form.formState.isSubmitting || isPending}
           disabled={form.formState.isSubmitting || isPending}
         >
-          {renderSubmitButtonContent()}
+          {entityId ? "Update" : "Create"}
         </Button>
       </form>
     </Form>

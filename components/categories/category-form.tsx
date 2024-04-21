@@ -190,6 +190,8 @@ const CategoryForm = ({
         )}
         <Button
           type="submit"
+          name="submit-category-form"
+          aria-label="Submit category form"
           loading={form.formState.isSubmitting || isPending}
           disabled={isPending || form.formState.isSubmitting}
         >

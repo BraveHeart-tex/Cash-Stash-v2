@@ -239,6 +239,8 @@ const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
         <Button
           className="w-full"
           type="submit"
+          name="submit-budget-form-button"
+          aria-label="Submit budget form"
           loading={form.formState.isSubmitting || isPending}
           disabled={form.formState.isSubmitting || isPending}
         >

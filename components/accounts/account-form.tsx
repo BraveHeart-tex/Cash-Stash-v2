@@ -112,14 +112,6 @@ const AccountForm = ({ data: accountToBeUpdated }: AccountFormProps) => {
 
   const selectOptions = generateOptionsFromEnums(accounts.category.enumValues);
 
-  const renderSubmitButtonContent = () => {
-    if (form.formState.isSubmitting || isPending) {
-      return "Submitting...";
-    }
-
-    return entityId ? "Update" : "Create";
-  };
-
   return (
     <Form {...form}>
       <form
@@ -182,9 +174,12 @@ const AccountForm = ({ data: accountToBeUpdated }: AccountFormProps) => {
         <Button
           className="w-full"
           type="submit"
+          name="submit-account-form-button"
+          aria-label="Submit account form"
+          loading={form.formState.isSubmitting || isPending}
           disabled={form.formState.isSubmitting || isPending}
         >
-          {renderSubmitButtonContent()}
+          {entityId ? "Update" : "Create"}
         </Button>
       </form>
     </Form>

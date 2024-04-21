@@ -155,18 +155,6 @@ const TransactionForm = ({
     transactions.category.enumValues
   );
 
-  const renderSubmitButtonContent = () => {
-    if (isPending && accounts.length === 0) {
-      return "Loading...";
-    }
-
-    if (isPending && accounts.length > 0) {
-      return "Submitting...";
-    }
-
-    return !entityId ? "Create" : "Update";
-  };
-
   const loadingAccounts = isPending && accounts.length === 0;
 
   return (
@@ -278,9 +266,12 @@ const TransactionForm = ({
         <Button
           className="w-full"
           type="submit"
+          name="submit-transaction-form-button"
+          aria-label="Submit transaction form"
+          loading={form.formState.isSubmitting || isPending}
           disabled={form.formState.isSubmitting || isPending}
         >
-          {renderSubmitButtonContent()}
+          {!entityId ? "Create" : "Update"}
         </Button>
       </form>
     </Form>
