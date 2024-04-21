@@ -1,13 +1,13 @@
 import { getPageSizeAndSkipAmount } from "@/lib/constants";
 import { db } from "@/lib/database/connection";
-import { budgets, BudgetInsertModel } from "@/lib/database/schema";
-import { and, asc, desc, eq, like, sql } from "drizzle-orm";
+import { budgets, BudgetInsertModel, categories } from "@/lib/database/schema";
+import { and, asc, desc, eq, like, sql, getTableColumns } from "drizzle-orm";
 
 type GetMultipleBudgetsParams = {
   page: number;
   userId: string;
   query?: string;
-  category?: string;
+  category?: number;
   sortBy?: string;
   sortDirection?: string;
 };
@@ -105,7 +105,7 @@ const budgetRepository = {
     };
 
     const categoryCondition = category
-      ? eq(budgets.category, category)
+      ? eq(budgets.categoryId, category)
       : undefined;
 
     let orderByCondition = desc(budgets.id);
@@ -142,8 +142,12 @@ const budgetRepository = {
     }
 
     const budgetsQuery = db
-      .select()
+      .select({
+        ...getTableColumns(budgets),
+        category: categories.name,
+      })
       .from(budgets)
+      .innerJoin(categories, eq(budgets.categoryId, categories.id))
       .where(
         and(
           eq(budgets.userId, userId),

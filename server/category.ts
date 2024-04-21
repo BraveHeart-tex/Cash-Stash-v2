@@ -1,6 +1,6 @@
 "use server";
 import { getUser } from "@/lib/auth/session";
-import { CATEGORY_TYPES, PAGE_ROUTES } from "@/lib/constants";
+import { CACHE_PREFIXES, CATEGORY_TYPES, PAGE_ROUTES } from "@/lib/constants";
 import { processZodError } from "@/lib/utils/objectUtils/processZodError";
 import categorySchema, { CategorySchemaType } from "@/schemas/category-schema";
 import { redirect } from "next/navigation";
@@ -13,6 +13,8 @@ import {
   GetPaginatedCategoriesResponse,
 } from "@/server/types";
 import logger from "@/lib/utils/logger";
+import redisService from "@/lib/redis/redisService";
+import { generateCachePrefixWithUserId } from "@/lib/redis/redisUtils";
 
 export const getPaginatedCategories = async ({
   pageNumber,
@@ -149,6 +151,13 @@ export const deleteCategory = async (id: number) => {
 
   try {
     const [response] = await categoryRepository.deleteCategory(id);
+
+    if (response.affectedRows > 0) {
+      await redisService.invalidateKeysByPrefix(
+        generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_BUDGETS, user.id)
+      );
+    }
+
     return response.affectedRows > 0;
   } catch (error) {
     logger.error(`deleteCategory error: ${error}`);
@@ -172,6 +181,10 @@ export const updateCategory = async (data: CategoryUpdateModel) => {
         fieldErrors: [],
       };
     }
+
+    await redisService.invalidateKeysByPrefix(
+      generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_BUDGETS, user.id)
+    );
 
     return {
       data,

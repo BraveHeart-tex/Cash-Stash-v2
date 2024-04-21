@@ -85,9 +85,12 @@ export const budgets = mysqlTable(
       .notNull()
       .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
     progress: double("progress").notNull(),
-    category: varchar("category", {
-      length: 50,
-    }).notNull(),
+    categoryId: int("categoryId")
+      .notNull()
+      .references(() => categories.id, {
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      }),
     createdAt: datetime("createdAt", { mode: "string", fsp: 3 })
       .default(sql`CURRENT_TIMESTAMP(3)`)
       .notNull(),
@@ -97,7 +100,10 @@ export const budgets = mysqlTable(
   },
   (table) => {
     return {
-      budgetsUserIdFkey: index("budgets_userId_fkey").on(table.userId),
+      budgetsUserIdFKey: index("budgets_userId_fkey").on(table.userId),
+      budgetsCategoryIdFkey: index("budgets_categoryId_fkey").on(
+        table.categoryId
+      ),
       budgetId: primaryKey({ columns: [table.id], name: "Budget_id" }),
     };
   }

@@ -23,7 +23,7 @@ const BudgetsPage = async ({ searchParams }: BudgetsPageProps) => {
   const actionParams = {
     pageNumber: parseInt(searchParams.page) || 1,
     query: searchParams.query || "",
-    category: searchParams.category,
+    category: Number(searchParams.category),
     sortBy: searchParams.sortBy || "",
     sortDirection: searchParams.sortDirection || "",
   };

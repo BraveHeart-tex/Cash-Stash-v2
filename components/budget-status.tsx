@@ -4,9 +4,9 @@ import AnimatePresenceClient from "@/components/animations/animate-presence";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { PAGE_ROUTES } from "@/lib/constants";
-import { BudgetSelectModel } from "@/lib/database/schema";
+import { BudgetWithCategory } from "@/server/types";
 
-const BudgetStatus = ({ budgets }: { budgets: BudgetSelectModel[] }) => {
+const BudgetStatus = ({ budgets }: { budgets: BudgetWithCategory[] }) => {
   if (!budgets || budgets.length === 0) {
     return (
       <article className="flex h-[300px] items-center justify-center">

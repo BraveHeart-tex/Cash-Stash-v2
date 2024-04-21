@@ -25,7 +25,7 @@ const seed = async () => {
         }),
         trx.insert(budgets).values({
           budgetAmount: faker.number.int({ min: 0, max: 1000 }),
-          category: faker.lorem.word(),
+          categoryId: 1,
           name: faker.lorem.word(),
           progress: faker.number.int({ min: 0, max: 100 }),
           spentAmount: faker.number.int({ min: 0, max: 1000 }),

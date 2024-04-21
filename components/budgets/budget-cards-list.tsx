@@ -1,8 +1,8 @@
-import { BudgetSelectModel } from "@/lib/database/schema";
 import BudgetCard from "@/components/budget-card";
+import { BudgetWithCategory } from "@/server/types";
 
 type BudgetCardsListProps = {
-  budgets: BudgetSelectModel[];
+  budgets: BudgetWithCategory[];
 };
 
 const BudgetCardsList = ({ budgets }: BudgetCardsListProps) => {

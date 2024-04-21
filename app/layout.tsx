@@ -7,6 +7,7 @@ import { ReactNode } from "react";
 import SonnerToaster from "@/components/ui/sonner";
 import GoogleCaptchaWrapper from "@/components/google-captcha-wrapper";
 import { THEME_OPTIONS } from "@/lib/constants";
+import logger from "@/lib/utils/logger";
 
 const InterFont = Inter({
   weight: ["300", "400", "500", "600", "700"],
@@ -94,6 +95,7 @@ type LayoutProps = {
 
 export default async function RootLayout({ children }: LayoutProps) {
   const themeValues = THEME_OPTIONS.map((item) => item.value);
+  logger.info(`themeValues ${themeValues}`);
   return (
     <html lang="en">
       <head>

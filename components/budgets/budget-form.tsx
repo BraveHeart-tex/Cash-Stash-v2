@@ -22,10 +22,10 @@ import { BudgetSelectModel } from "@/lib/database/schema";
 import CurrencyFormLabel from "@/components/ui/currency-form-label";
 import useCategoriesStore from "@/store/categoriesStore";
 import { CATEGORY_TYPES } from "@/lib/constants";
-import { cn } from "@/lib/utils/stringUtils/cn";
 import { getCategoriesByType } from "@/server/category";
-import Combobox from "@/components/ui/combobox";
 import { compareMatchingKeys } from "@/lib/utils/objectUtils/compareMatchingKeys";
+import Combobox from "@/components/ui/combobox";
+import { cn } from "@/lib/utils/stringUtils/cn";
 import CreateBudgetCategoryPopover from "@/components/budgets/create-budget-category-popover";
 
 type BudgetFormProps = {
@@ -118,6 +118,8 @@ const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
         update: "Your budget has been updated.",
       };
       router.refresh();
+      console.log("showsuccess toast");
+
       toast.success("Success!", {
         description: successMessage[entityId ? "update" : "create"],
       });
@@ -125,17 +127,9 @@ const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
     }
   };
 
-  const renderSubmitButtonContent = () => {
-    if (form.formState.isSubmitting || isPending) {
-      return "Submitting...";
-    }
-
-    return entityId ? "Update Budget" : "Create Budget";
-  };
-
   const budgetCategoryOptions = budgetCategories.map((category) => ({
     label: category.name,
-    value: category.name,
+    value: category.id.toString(),
   }));
 
   const isBudgetCategoryListEmpty = budgetCategories.length === 0;
@@ -201,7 +195,7 @@ const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
         />
         <FormField
           control={form.control}
-          name="category"
+          name="categoryId"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Budget Category</FormLabel>
@@ -209,20 +203,22 @@ const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
                 <div className="flex items-center gap-1">
                   <Combobox
                     key={JSON.stringify(
-                      form.watch("category") + budgetCategories
+                      form.watch("categoryId")?.toString() + budgetCategories
                     )}
                     ref={field.ref}
                     options={budgetCategoryOptions}
                     contentClassName="z-[100]"
                     defaultOption={budgetCategoryOptions.find(
-                      (category) => category.value === form.watch("category")
+                      (category) => +category.value === form.watch("categoryId")
                     )}
                     triggerClassName={cn(
                       "focus:outline focus:outline-1 focus:outline-offset-1 focus:outline-destructive",
                       !isPending && isBudgetCategoryListEmpty && "hidden"
                     )}
                     triggerPlaceholder="Select a budget category"
-                    onSelect={(option) => field.onChange(option.value)}
+                    onSelect={(option) => {
+                      field.onChange(+option.value);
+                    }}
                   />
                   {!isPending && isBudgetCategoryListEmpty && (
                     <p className="mr-auto text-muted-foreground">
@@ -231,7 +227,7 @@ const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
                   )}
                   <CreateBudgetCategoryPopover
                     onSave={(values) => {
-                      field.onChange(values.name);
+                      field.onChange(values.id);
                     }}
                   />
                 </div>
@@ -243,9 +239,10 @@ const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
         <Button
           className="w-full"
           type="submit"
+          loading={form.formState.isSubmitting || isPending}
           disabled={form.formState.isSubmitting || isPending}
         >
-          {renderSubmitButtonContent()}
+          {entityId ? "Update Budget" : "Create Budget"}
         </Button>
       </form>
     </Form>

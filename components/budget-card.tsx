@@ -8,14 +8,14 @@ import useGenericModalStore from "@/store/genericModalStore";
 import { deleteBudget } from "@/server/budget";
 import ActionPopover from "@/components/action-popover";
 import { toast } from "sonner";
-import { BudgetSelectModel } from "@/lib/database/schema";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import useAuthStore from "@/store/auth/authStore";
+import { BudgetWithCategory } from "@/server/types";
 
 type BudgetCardProps = {
-  budget: BudgetSelectModel;
+  budget: BudgetWithCategory;
 };
 
 const BudgetCard = ({ budget }: BudgetCardProps) => {

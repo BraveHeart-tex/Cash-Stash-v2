@@ -9,7 +9,11 @@ const budgetSchema = z
         required_error: "Budget amount is required",
       })
       .positive("Budget amount must be positive"),
-    category: z.string().min(1, "Category cannot be blank"),
+    categoryId: z.coerce
+      .number()
+      .min(1, "Category is required")
+      .positive()
+      .default(0),
     spentAmount: z.coerce
       .number()
       .nonnegative("Spent amount can't be negative")

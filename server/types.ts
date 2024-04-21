@@ -42,13 +42,13 @@ export type IGetPaginatedAccountsResponse = BasePaginatedResponse & {
 };
 
 export type IGetPaginatedBudgetsParams = BasePaginatedActionParams & {
-  category?: string;
+  category?: number;
   sortBy?: string;
   sortDirection?: string;
 };
 
 export type GetPaginatedBudgetsResponse = BasePaginatedResponse & {
-  budgets: BudgetSelectModel[];
+  budgets: BudgetWithCategory[];
 };
 
 export type GetPaginatedGoalsParams = BasePaginatedActionParams & {
@@ -398,3 +398,5 @@ export type TransactionPageSearchParams = {
   page?: string;
   query?: string;
 };
+
+export type BudgetWithCategory = BudgetSelectModel & { category: string };

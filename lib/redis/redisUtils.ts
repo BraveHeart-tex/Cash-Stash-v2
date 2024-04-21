@@ -1,6 +1,7 @@
 import { CACHE_PREFIXES } from "@/lib/constants";
 import redis from "@/lib/redis/redisConnection";
-import { BudgetSelectModel, GoalSelectModel } from "@/lib/database/schema";
+import { GoalSelectModel } from "@/lib/database/schema";
+import { BudgetWithCategory } from "@/server/types";
 
 type Entity = {
   [key: string]: any;
@@ -107,14 +108,14 @@ export const getPaginatedBudgetsKey = ({
   userId,
   pageNumber = 1,
   query = "",
-  category = "",
+  category = 0,
   sortBy = "",
   sortDirection = "",
 }: {
   userId: string;
   pageNumber?: number;
   query?: string;
-  category?: string;
+  category?: number;
   sortBy?: string;
   sortDirection?: string;
   orderByCondition?: string;
@@ -203,7 +204,7 @@ export const invalidateKeysByPrefix = async (prefix: string) => {
 
 export const mapRedisHashToBudget = (
   budgetFromCache: Record<string, string> | null
-): BudgetSelectModel | null => {
+): BudgetWithCategory | null => {
   const mappingConfig = {
     id: (value: string) => Number(value),
     name: (value: string) => value,
@@ -211,12 +212,13 @@ export const mapRedisHashToBudget = (
     spentAmount: (value: string) => Number(value),
     userId: (value: string) => value,
     progress: (value: string) => Number(value),
-    category: (value: string) => value as BudgetSelectModel["category"],
+    category: (value: string) => value as BudgetWithCategory["category"],
+    categoryId: (value: string) => Number(value),
     createdAt: (value: string) => new Date(value).toISOString(),
     updatedAt: (value: string) => new Date(value).toISOString(),
   };
 
-  return mapRedisHashToEntity<BudgetSelectModel>(
+  return mapRedisHashToEntity<BudgetWithCategory>(
     budgetFromCache,
     mappingConfig
   );
