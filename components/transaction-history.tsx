@@ -1,7 +1,6 @@
 import TransactionCard from "./transactions/transaction-card";
 import CreateTransactionButton from "./create-buttons/create-transaction-button";
 import AnimatePresenceClient from "@/components/animations/animate-presence";
-import MotionDiv from "@/components/animations/motion-div";
 import { TransactionSelectModel } from "@/lib/database/schema";
 import { Button } from "./ui/button";
 import Link from "next/link";
@@ -14,15 +13,11 @@ type TransactionHistoryProps = {
 const TransactionHistory = ({ transactions }: TransactionHistoryProps) => {
   if (!transactions || transactions.length === 0) {
     return (
-      <article className="flex h-[500px] items-center justify-center">
-        <MotionDiv
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
+      <article className="flex flex-col h-[540px] items-center justify-center">
+        <div className="flex flex-col justify-center items-center">
           <p className="text-primary">No transactions found.</p>
-          <CreateTransactionButton />
-        </MotionDiv>
+          <CreateTransactionButton className="mt-3" />
+        </div>
       </article>
     );
   }

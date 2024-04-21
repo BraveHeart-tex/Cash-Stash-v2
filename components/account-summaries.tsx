@@ -1,9 +1,8 @@
-import AccountCard from "./account-card";
-import CreateAccountButton from "./create-buttons/create-account-button";
+import AccountCard from "@/components/account-card";
+import CreateAccountButton from "@/components/create-buttons/create-account-button";
 import AnimatePresenceClient from "@/components/animations/animate-presence";
-import MotionDiv from "@/components/animations/motion-div";
 import Link from "next/link";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { PAGE_ROUTES } from "@/lib/constants";
 import { AccountWithTransactions } from "@/server/types";
 
@@ -15,14 +14,10 @@ const AccountSummaries = ({
   if (accounts.length === 0) {
     return (
       <article className="flex h-[300px] items-center justify-center">
-        <MotionDiv
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
+        <div className="flex flex-col justify-center items-center gap-2">
           <p className="text-primary">No accounts found.</p>
           <CreateAccountButton />
-        </MotionDiv>
+        </div>
       </article>
     );
   }

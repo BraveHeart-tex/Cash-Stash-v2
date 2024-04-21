@@ -1,7 +1,6 @@
 import BudgetCard from "@/components/budget-card";
 import CreateBudgetButton from "@/components/create-buttons/create-budget-button";
 import AnimatePresenceClient from "@/components/animations/animate-presence";
-import MotionDiv from "@/components/animations/motion-div";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { PAGE_ROUTES } from "@/lib/constants";
@@ -11,14 +10,10 @@ const BudgetStatus = ({ budgets }: { budgets: BudgetSelectModel[] }) => {
   if (!budgets || budgets.length === 0) {
     return (
       <article className="flex h-[300px] items-center justify-center">
-        <MotionDiv
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
+        <div className="flex flex-col justify-center items-center gap-2">
           <p className="text-primary">No budgets found.</p>
           <CreateBudgetButton />
-        </MotionDiv>
+        </div>
       </article>
     );
   }

@@ -1,4 +1,4 @@
-import CreateTransactionButton from "../create-buttons/create-transaction-button";
+import CreateTransactionButton from "@/components/create-buttons/create-transaction-button";
 
 const TransactionsPageHeader = () => {
   return (
@@ -6,7 +6,7 @@ const TransactionsPageHeader = () => {
       <h1 className="scroll-m-20 text-4xl font-bold tracking-tight text-primary">
         Transactions
       </h1>
-      <CreateTransactionButton className="mt-0" />
+      <CreateTransactionButton minimizeOnMobile />
     </header>
   );
 };

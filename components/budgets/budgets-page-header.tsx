@@ -1,4 +1,4 @@
-import CreateBudgetButton from "../create-buttons/create-budget-button";
+import CreateBudgetButton from "@/components/create-buttons/create-budget-button";
 
 const BudgetsPageHeader = () => {
   return (
@@ -6,7 +6,7 @@ const BudgetsPageHeader = () => {
       <h1 className="scroll-m-20 text-4xl font-bold tracking-tight text-primary">
         Budgets
       </h1>
-      <CreateBudgetButton className="mt-0" />
+      <CreateBudgetButton minimizeOnMobile />
     </header>
   );
 };

@@ -6,7 +6,7 @@ const AccountsPageHeader = () => {
       <h1 className="scroll-m-20 text-4xl font-bold tracking-tight text-primary">
         Accounts
       </h1>
-      <CreateAccountButton className="self-start mt-0" />
+      <CreateAccountButton minimizeOnMobile className="self-start" />
     </header>
   );
 };

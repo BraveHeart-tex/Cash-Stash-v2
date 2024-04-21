@@ -7,7 +7,15 @@ import useGenericModalStore from "@/store/genericModalStore";
 import { userCanCreateTransaction } from "@/server/transaction";
 import { toast } from "sonner";
 
-const CreateTransactionButton = ({ className }: { className?: string }) => {
+type CreateTransactionButtonProps = {
+  className?: string;
+  minimizeOnMobile?: boolean;
+};
+
+const CreateTransactionButton = ({
+  className,
+  minimizeOnMobile,
+}: CreateTransactionButtonProps) => {
   let [isPending, startTransition] = useTransition();
   const openGenericModal = useGenericModalStore(
     (state) => state.openGenericModal
@@ -36,17 +44,25 @@ const CreateTransactionButton = ({ className }: { className?: string }) => {
   return (
     <Button
       className={cn(
-        "font-semibold mt-3 ",
+        "font-semibold",
         isPending && "opacity-50 cursor-not-allowed",
         className
       )}
       type="button"
       name="create-transaction"
+      aria-label="Create a transaction"
       onClick={handleCreateTransactionClick}
       loading={isPending}
     >
-      <FaPlus className="text-xl md:hidden" />
-      <div className="hidden md:flex items-center gap-[14px] whitespace-nowrap">
+      <FaPlus
+        className={cn("text-xl hidden", minimizeOnMobile && "inline md:hidden")}
+      />
+      <div
+        className={cn(
+          "flex items-center gap-[14px] whitespace-nowrap",
+          minimizeOnMobile && "hidden md:flex"
+        )}
+      >
         {isPending ? (
           "Loading..."
         ) : (

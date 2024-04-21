@@ -2,23 +2,26 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import useGenericModalStore from "@/store/genericModalStore";
-import { FaPiggyBank } from "react-icons/fa";
+import { FaPiggyBank, FaPlus } from "react-icons/fa";
 
 type CreateAccountButtonProps = {
   className?: string;
+  minimizeOnMobile?: boolean;
 };
 
-const CreateAccountButton = ({ className }: CreateAccountButtonProps) => {
+const CreateAccountButton = ({
+  className,
+  minimizeOnMobile,
+}: CreateAccountButtonProps) => {
   const openGenericModal = useGenericModalStore(
     (state) => state.openGenericModal
   );
   return (
     <Button
-      className={cn(
-        "font-semibold mt-3 flex items-center gap-[14px]",
-        className
-      )}
-      data-testid="create-account-button"
+      className={cn("font-semibold flex items-center gap-[14px]", className)}
+      type="button"
+      name="create-account"
+      aria-label="Create an account"
       onClick={() =>
         openGenericModal({
           mode: "create",
@@ -29,7 +32,17 @@ const CreateAccountButton = ({ className }: CreateAccountButtonProps) => {
         })
       }
     >
-      <FaPiggyBank size={18} /> Create an account
+      <FaPlus
+        className={cn("text-xl hidden", minimizeOnMobile && "inline md:hidden")}
+      />
+      <div
+        className={cn(
+          "flex items-center gap-2",
+          minimizeOnMobile && "hidden md:flex"
+        )}
+      >
+        <FaPiggyBank size={18} /> Create an account
+      </div>
     </Button>
   );
 };

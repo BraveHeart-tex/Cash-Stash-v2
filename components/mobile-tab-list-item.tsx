@@ -1,7 +1,7 @@
 "use client";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import { usePathname } from "next/navigation";
-import { createElement, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 
 type PageItem = {
@@ -32,12 +32,8 @@ const MobileTabsListItem = ({ page }: { page: PageItem }) => {
         isActive && "active-tab"
       )}
     >
-      {createElement(page.icon, {
-        className:
-          "w-5 h-5 mb-2 text-muted-foreground group-[.active-tab]:text-primary",
-      })}
-
-      <span className="text-sm text-muted-foreground group-[.active-tab]:text-primary">
+      <page.icon className="w-5 h-5 mb-2 text-muted-foreground group-[.active-tab]:text-primary" />
+      <span className="text-xs md:text-sm text-muted-foreground group-[.active-tab]:text-primary">
         {page.label}
       </span>
     </Link>
