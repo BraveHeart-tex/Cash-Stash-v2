@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.monokai-dark .logo {
-  filter: invert(0);
-}
-
 .grecaptcha-badge {
   opacity: 0;
 }
