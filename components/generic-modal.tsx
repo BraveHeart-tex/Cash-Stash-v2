@@ -12,6 +12,7 @@ import { getGenericDialogContent } from "@/lib/getGenericModalContent";
 import { useMediaQuery } from "usehooks-ts";
 import {
   Drawer,
+  DrawerClose,
   DrawerContent,
   DrawerDescription,
   DrawerHeader,
@@ -49,24 +50,29 @@ const GenericModal = () => {
         open={isGenericModalOpen}
         onOpenChange={(isOpen) => {
           if (!isOpen) {
-            closeGenericModal();
+            setTimeout(() => {
+              closeGenericModal();
+            });
           }
         }}
       >
-        <DrawerContent className="h-[75vh]">
+        <DrawerContent
+          className="h-[90vh]"
+          onOpenAutoFocus={(event) => {
+            if (isMobile) event.preventDefault();
+          }}
+        >
           <DrawerHeader className="text-left">
             <DrawerTitle>{dialogTitle}</DrawerTitle>
             <DrawerDescription>{dialogDescription}</DrawerDescription>
           </DrawerHeader>
           <div className="px-4">
             {dialogContentToBeRendered}
-            <Button
-              className="w-full mt-1"
-              variant="outline"
-              onClick={() => closeGenericModal()}
-            >
-              Cancel
-            </Button>
+            <DrawerClose asChild>
+              <Button className="w-full mt-1" variant="outline">
+                Cancel
+              </Button>
+            </DrawerClose>
           </div>
         </DrawerContent>
       </Drawer>
@@ -82,7 +88,11 @@ const GenericModal = () => {
         }
       }}
     >
-      <DialogContent>
+      <DialogContent
+        onOpenAutoFocus={(event) => {
+          if (isMobile) event.preventDefault();
+        }}
+      >
         <DialogHeader>
           <DialogTitle>{dialogTitle}</DialogTitle>
           <DialogDescription>{dialogDescription}</DialogDescription>

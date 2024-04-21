@@ -17,6 +17,7 @@ import {
 import { FaCheck, FaSort } from "react-icons/fa";
 import { ComboboxOption } from "@/server/types";
 import { motion, AnimatePresence } from "framer-motion";
+import { useMediaQuery } from "usehooks-ts";
 
 type ComboboxProps = {
   options: ComboboxOption[];
@@ -44,6 +45,7 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
     },
     ref
   ) => {
+    const isMobile = useMediaQuery("(max-width: 768px)");
     const [isOpen, setIsOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedOption, setSelectedOption] = useState<ComboboxOption | null>(
@@ -113,6 +115,9 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
           )}
         </PopoverTrigger>
         <PopoverContent
+          onOpenAutoFocus={(event) => {
+            if (isMobile) event.preventDefault();
+          }}
           align="start"
           className={cn("p-1 min-w-max", contentClassName)}
         >
