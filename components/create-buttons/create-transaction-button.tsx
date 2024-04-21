@@ -45,7 +45,7 @@ const CreateTransactionButton = ({
     <Button
       className={cn(
         "font-semibold",
-        isPending && "opacity-50 cursor-not-allowed",
+        isPending && "cursor-not-allowed opacity-50",
         className
       )}
       type="button"
@@ -55,7 +55,7 @@ const CreateTransactionButton = ({
       loading={isPending}
     >
       <FaPlus
-        className={cn("text-xl hidden", minimizeOnMobile && "inline md:hidden")}
+        className={cn("hidden text-xl", minimizeOnMobile && "inline md:hidden")}
       />
       <div
         className={cn(

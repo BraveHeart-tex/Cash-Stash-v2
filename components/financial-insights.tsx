@@ -15,7 +15,7 @@ type FinancialInsightsProps = {
 
 const SavingsRate = ({ value }: { value: number }) => (
   <div className="mb-4 flex flex-col">
-    <h3 className="font-semibold text-lg">Savings Rate</h3>
+    <h3 className="text-lg font-semibold">Savings Rate</h3>
     <p>{value}%</p>
     <p
       className={cn(
@@ -50,10 +50,10 @@ const FinancialInsights = ({ insightsData }: FinancialInsightsProps) => {
   if (noInsightsData || (insightsData && !insightsData.totalIncome)) {
     return (
       <article className="flex h-[300px] items-center justify-center">
-        <div className="my-3 flex flex-col justify-center items-center">
+        <div className="my-3 flex flex-col items-center justify-center">
           <NoDataMessage />
           <Link href={PAGE_ROUTES.TRANSACTIONS_ROUTE}>
-            <Button className="font-semibold  mt-3 flex items-center gap-[14px]">
+            <Button className="mt-3  flex items-center gap-[14px] font-semibold">
               <FaMoneyBill size={18} />
               Go To Transactions
             </Button>
@@ -93,7 +93,7 @@ const FinancialInsights = ({ insightsData }: FinancialInsightsProps) => {
       <article className="flex h-[300px] items-center justify-center">
         <div className="my-3">
           <NoDataMessage />
-          <Button className="font-semibold  mt-3 hover:bg-foreground hover:text-muted">
+          <Button className="mt-3  font-semibold hover:bg-foreground hover:text-muted">
             <Link href={PAGE_ROUTES.TRANSACTIONS_ROUTE}>
               Go To Transactions
             </Link>
@@ -110,7 +110,7 @@ const FinancialInsights = ({ insightsData }: FinancialInsightsProps) => {
           <SavingsRate key={data.name} value={data.value as number} />
         ) : (
           <div className="mb-4 flex flex-col" key={data.name}>
-            <h3 className="font-bold text-lg">{data.name}</h3>
+            <h3 className="text-lg font-bold">{data.name}</h3>
             <p>{formatMoney(+data.value, preferredCurrency)}</p>
           </div>
         )

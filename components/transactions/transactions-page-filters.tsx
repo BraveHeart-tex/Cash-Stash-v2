@@ -51,7 +51,7 @@ const TransactionsPageFilters = ({
   categoryFilterDataset,
 }: TransactionsPageFiltersProps) => {
   return (
-    <div className="flex items-center gap-2 flex-wrap">
+    <div className="flex flex-wrap items-center gap-2">
       <RouteSearchInput label="Search" placeholder="Search by description" />
       <QueryStringComboBox
         dataset={accountsFilterDataset}

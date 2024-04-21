@@ -79,9 +79,9 @@ const CountDownTimer = ({
       return (
         <>
           {content}
-          <div className="w-full h-2 bg-gray-200 rounded-full mt-1">
+          <div className="mt-1 h-2 w-full rounded-full bg-gray-200">
             <div
-              className="h-full bg-primary rounded-full"
+              className="h-full rounded-full bg-primary"
               style={{
                 width: `${(time / countDownFrom) * 100}%`,
               }}
@@ -93,9 +93,9 @@ const CountDownTimer = ({
 
     if (timerOptions?.progressBarType === "circular") {
       return (
-        <div className="relative w-20 h-20 mt-1">
+        <div className="relative mt-1 h-20 w-20">
           <svg
-            className="absolute w-full h-full"
+            className="absolute h-full w-full"
             viewBox="0 0 36 36"
             preserveAspectRatio="xMidYMid meet"
           >

@@ -7,7 +7,7 @@ const IncomeAndExpenseChart = ({
   monthlyTransactionsData: MonthlyTransactionsData[];
 }) => {
   return (
-    <div className="flex justify-center items-start flex-col gap-2">
+    <div className="flex flex-col items-start justify-center gap-2">
       <h3 className="scroll-m-20 text-xl font-semibold tracking-tight text-primary">
         Income vs Expenses
       </h3>
@@ -20,7 +20,7 @@ const IncomeAndExpenseChart = ({
             time
           </p>
           <div
-            className={"w-full h-[400px] flex justify-center items-start mt-4"}
+            className={"mt-4 flex h-[400px] w-full items-start justify-center"}
           >
             <BarChartComponent
               monthlyTransactionsData={monthlyTransactionsData}

@@ -35,23 +35,23 @@ const RoutePaginationControls = ({
   };
 
   return (
-    <div className="w-full flex items-center justify-center space-x-4">
+    <div className="flex w-full items-center justify-center space-x-4">
       <Button
         onClick={() => handlePageChange("decrement")}
         disabled={!hasPreviousPage || changingPage || currentPage === 1}
-        className="select-none flex items-center gap-1"
+        className="flex select-none items-center gap-1"
         variant="outline"
       >
         <FaChevronLeft />
         Previous
       </Button>
-      <span className="font-medium text-foreground text-sm">
+      <span className="text-sm font-medium text-foreground">
         Page {currentPage} of {totalPages}
       </span>
       <Button
         onClick={() => handlePageChange("increment")}
         disabled={!hasNextPage || changingPage || totalPages === currentPage}
-        className="select-none flex items-center gap-1"
+        className="flex select-none items-center gap-1"
         variant="outline"
       >
         Next

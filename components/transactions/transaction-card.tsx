@@ -97,8 +97,8 @@ const TransactionCard = ({
 
   return (
     <motion.article {...motionConfig} className="relative">
-      <Card className={"mt-4 relative"}>
-        <CardHeader className={"border-b h-[100px]"}>
+      <Card className={"relative mt-4"}>
+        <CardHeader className={"h-[100px] border-b"}>
           <CardTitle>{transaction.description}</CardTitle>
           <CardDescription>{transactionCategoryLabel}</CardDescription>
         </CardHeader>

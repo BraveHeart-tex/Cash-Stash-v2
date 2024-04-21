@@ -19,7 +19,7 @@ const CreateGoalButton = ({
 
   return (
     <Button
-      className={cn("font-semibold flex items-center gap-[14px]", className)}
+      className={cn("flex items-center gap-[14px] font-semibold", className)}
       type="button"
       name="create-goal"
       aria-label="Create a goal"
@@ -33,7 +33,7 @@ const CreateGoalButton = ({
       }
     >
       <FaPlus
-        className={cn("text-xl hidden", minimizeOnMobile && "inline md:hidden")}
+        className={cn("hidden text-xl", minimizeOnMobile && "inline md:hidden")}
       />
       <div
         className={cn(

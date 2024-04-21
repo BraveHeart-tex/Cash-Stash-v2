@@ -31,7 +31,7 @@ const CategoriesPage = async ({ searchParams }: CategoriesPageProps) => {
 
   return (
     <main>
-      <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px] space-y-2">
+      <div className="mx-auto space-y-2 p-4 lg:max-w-[1300px] xl:max-w-[1600px]">
         <CategoriesPageHeader />
         <CategoriesPageFilters />
         {categories.length === 0 ? (

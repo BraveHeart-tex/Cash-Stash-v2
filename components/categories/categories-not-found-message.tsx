@@ -15,7 +15,7 @@ const CategoriesNotFoundMessage = ({
   const message = `${pageHasParams ? "Remove existing filters or " : ""} Create a category by clicking the 'Create a category' button.`;
 
   return (
-    <div className="pt-6 w-full">
+    <div className="w-full pt-6">
       <GenericNotFoundBlock
         heading={headingVariants[Number(pageHasParams)]}
         message={message}

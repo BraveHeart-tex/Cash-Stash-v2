@@ -22,8 +22,8 @@ const PasswordRequirements = ({ password = "" }: { password: string }) => {
   ];
 
   return (
-    <div className="border p-2 rounded-md mt-4">
-      <h2 className="text-lg font-semibold mb-2 text-foreground flex items-center gap-1">
+    <div className="mt-4 rounded-md border p-2">
+      <h2 className="mb-2 flex items-center gap-1 text-lg font-semibold text-foreground">
         <MdPassword className="text-xl" />
         Password requirements:
       </h2>
@@ -32,7 +32,7 @@ const PasswordRequirements = ({ password = "" }: { password: string }) => {
           <li
             key={index}
             className={cn(
-              "text-destructive flex items-center gap-1 font-semibold",
+              "flex items-center gap-1 font-semibold text-destructive",
               validation.isValid && "text-success"
             )}
           >

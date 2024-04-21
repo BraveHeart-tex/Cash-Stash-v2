@@ -28,7 +28,7 @@ const RouteSearchInput = ({ placeholder, label }: RouteSearchInputProps) => {
   }, [debouncedQuery]);
 
   return (
-    <div className="lg:w-96 w-full">
+    <div className="w-full lg:w-96">
       <Label htmlFor="search">{label}</Label>
       <div className="relative">
         <Input
@@ -38,7 +38,7 @@ const RouteSearchInput = ({ placeholder, label }: RouteSearchInputProps) => {
           onChange={handleInputChange}
           placeholder={placeholder}
         />
-        <FaSearch className="absolute top-1/2 left-2 transform -translate-y-1/2 text-foreground/50" />
+        <FaSearch className="absolute left-2 top-1/2 -translate-y-1/2 transform text-foreground/50" />
       </div>
     </div>
   );

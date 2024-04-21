@@ -16,7 +16,7 @@ const GenericNotFound = ({
       animate={{ opacity: 1 }}
       exit={{ opacity: 1 }}
       transition={{ duration: 0.5, type: "just" }}
-      className="text-center pt-4"
+      className="pt-4 text-center"
     >
       {renderTitle({
         className:

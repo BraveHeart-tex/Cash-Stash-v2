@@ -59,7 +59,7 @@ const Dashboard = async () => {
       description:
         "Access your accounts here. Navigate to the 'Accounts' page to see a comprehensive list of all your accounts.",
       data: (
-        <article className="max-h-[330px] min-h-[330px] lg:max-h-[350px] lg:min-h-[350px] overflow-y-auto overflow-x-hidden">
+        <article className="max-h-[330px] min-h-[330px] overflow-y-auto overflow-x-hidden lg:max-h-[350px] lg:min-h-[350px]">
           <AccountSummaries accounts={accountsResult.accounts} />
         </article>
       ),
@@ -69,7 +69,7 @@ const Dashboard = async () => {
       description:
         "Explore your budgets here. Simply click on a budget card to view its details or create a new one using the menu button above.",
       data: (
-        <article className="max-h-[300px] min-h-[300px] lg:max-h-[350px] lg:min-h-[350px] overflow-y-auto">
+        <article className="max-h-[300px] min-h-[300px] overflow-y-auto lg:max-h-[350px] lg:min-h-[350px]">
           <BudgetStatus budgets={budgetsResult.budgets} />
         </article>
       ),
@@ -79,7 +79,7 @@ const Dashboard = async () => {
       description:
         "Explore your goals here. Simply click on a goal card to view or edit its details, or create a new one by clicking the menu button above.",
       data: (
-        <article className="max-h-[300px] min-h-[300px] lg:max-h-[350px] lg:min-h-[350px] overflow-y-auto">
+        <article className="max-h-[300px] min-h-[300px] overflow-y-auto lg:max-h-[350px] lg:min-h-[350px]">
           <GoalStatus goals={goalsResult.goals} />
         </article>
       ),
@@ -96,7 +96,7 @@ const Dashboard = async () => {
       description:
         "View a breakdown of your spending versus earnings for this month, along with additional financial insights.",
       data: (
-        <article className="p-2 max-h-[500px] min-h-[500px] overflow-y-auto flex flex-col gap-4 items-center justify-center scrollbar-hide">
+        <article className="scrollbar-hide flex max-h-[500px] min-h-[500px] flex-col items-center justify-center gap-4 overflow-y-auto p-2">
           <BarChartComponent
             monthlyTransactionsData={monthlyTransactions.data || []}
           />
@@ -112,13 +112,13 @@ const Dashboard = async () => {
   ];
 
   return (
-    <div className="p-0 lg:p-1 lg:pt-0 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+    <div className="mx-auto p-0 lg:max-w-[1300px] lg:p-1 lg:pt-0 xl:max-w-[1600px]">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
         {sectionData.map((section) => (
           <Card key={section.title}>
-            <CardHeader className="font-medium text-xl text-primary">
+            <CardHeader className="text-xl font-medium text-primary">
               {section.title}
-              <span className="text-muted-foreground text-sm">
+              <span className="text-sm text-muted-foreground">
                 {section.description}
               </span>
             </CardHeader>

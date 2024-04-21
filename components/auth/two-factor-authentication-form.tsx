@@ -47,7 +47,7 @@ const TwoFactorAuthenticationForm = ({ email }: { email: string }) => {
           alt="Cash Stash"
           width={200}
           height={200}
-          className="mb-4 md:mx-auto dark:invert"
+          className="mb-4 dark:invert md:mx-auto"
         />
         <CardTitle>Two-Factor Authentication</CardTitle>
         <CardDescription>
@@ -57,7 +57,7 @@ const TwoFactorAuthenticationForm = ({ email }: { email: string }) => {
       </CardHeader>
       <CardContent>
         <TwoFactorAuthenticationTimer />
-        <div className="w-full flex items-center justify-center mt-4">
+        <div className="mt-4 flex w-full items-center justify-center">
           <div>
             <Label>Your 6-digit code</Label>
             <AutoProgressInput

@@ -7,7 +7,7 @@ type GoalCardsListProps = {
 
 const GoalCardsList = ({ goals }: GoalCardsListProps) => {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 pb-4 pr-2 pt-2 overflow-y-auto max-h-[500px]">
+    <div className="grid max-h-[500px] grid-cols-1 gap-4 overflow-y-auto pb-4 pr-2 pt-2 lg:grid-cols-2 xl:grid-cols-3">
       {goals.map((goal) => (
         <GoalCard key={goal.id} goal={goal} />
       ))}

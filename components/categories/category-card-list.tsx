@@ -6,7 +6,7 @@ type CategoryCardListProps = {
 };
 const CategoryCardList = ({ categories }: CategoryCardListProps) => {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 mt-4">
+    <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
       {categories.map((category) => (
         <CategoryCard key={category.id} category={category} />
       ))}

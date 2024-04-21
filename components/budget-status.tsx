@@ -10,7 +10,7 @@ const BudgetStatus = ({ budgets }: { budgets: BudgetSelectModel[] }) => {
   if (!budgets || budgets.length === 0) {
     return (
       <article className="flex h-[300px] items-center justify-center">
-        <div className="flex flex-col justify-center items-center gap-2">
+        <div className="flex flex-col items-center justify-center gap-2">
           <p className="text-primary">No budgets found.</p>
           <CreateBudgetButton />
         </div>
@@ -24,7 +24,7 @@ const BudgetStatus = ({ budgets }: { budgets: BudgetSelectModel[] }) => {
         {budgets.map((budget) => (
           <BudgetCard key={budget.id} budget={budget} />
         ))}
-        <Button className="w-max mt-2 ml-auto">
+        <Button className="ml-auto mt-2 w-max">
           <Link href={PAGE_ROUTES.BUDGETS_ROUTE}>See all your budgets</Link>
         </Button>
       </AnimatePresenceClient>

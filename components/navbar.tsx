@@ -19,13 +19,13 @@ const Navbar = ({ user }: { user: User | null }) => {
   }, [user]);
 
   return (
-    <div className="mb-6 shadow-sm p-4 bg-primary dark:bg-background dark:border-b">
+    <div className="mb-6 bg-primary p-4 shadow-sm dark:border-b dark:bg-background">
       <motion.div
         initial={{ x: -100, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.3, type: "just" }}
       >
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           <div className="hidden md:block" />
           <Link href={PAGE_ROUTES.HOME_PAGE} className="ml-auto lg:ml-0">
             <Image
@@ -33,11 +33,11 @@ const Navbar = ({ user }: { user: User | null }) => {
               alt="Cash Stash"
               width={200}
               height={200}
-              className="mx-auto lg:mx-0 invert monokai-dark:invert-0 grayscale"
+              className="mx-auto grayscale invert monokai-dark:invert-0 lg:mx-0"
             />
           </Link>
-          <div className="flex justify-center items-center gap-4 ml-auto lg:ml-0">
-            <div className="lg:flex items-center hidden gap-1 bg-background rounded-md">
+          <div className="ml-auto flex items-center justify-center gap-4 lg:ml-0">
+            <div className="hidden items-center gap-1 rounded-md bg-background lg:flex">
               <ModeToggle />
             </div>
             <UserMenu />

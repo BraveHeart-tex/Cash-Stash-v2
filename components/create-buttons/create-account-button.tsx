@@ -18,7 +18,7 @@ const CreateAccountButton = ({
   );
   return (
     <Button
-      className={cn("font-semibold flex items-center gap-[14px]", className)}
+      className={cn("flex items-center gap-[14px] font-semibold", className)}
       type="button"
       name="create-account"
       aria-label="Create an account"
@@ -33,7 +33,7 @@ const CreateAccountButton = ({
       }
     >
       <FaPlus
-        className={cn("text-xl hidden", minimizeOnMobile && "inline md:hidden")}
+        className={cn("hidden text-xl", minimizeOnMobile && "inline md:hidden")}
       />
       <div
         className={cn(

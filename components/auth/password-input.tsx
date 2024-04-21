@@ -29,7 +29,7 @@ function PasswordInput<T extends FieldValues>({
             {...field}
           />
           {capsLockActive && (
-            <div className="absolute right-0 top-[2.5px] bg-primary p-2 rounded-full flex items-center justify-center text-primary-foreground">
+            <div className="absolute right-0 top-[2.5px] flex items-center justify-center rounded-full bg-primary p-2 text-primary-foreground">
               <BsCapslock />
             </div>
           )}

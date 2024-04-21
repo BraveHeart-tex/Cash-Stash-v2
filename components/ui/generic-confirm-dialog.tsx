@@ -109,7 +109,7 @@ const GenericConfirmDialog = () => {
           <AlertDialogDescription>{message}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <div className="flex items-center gap-1 flex-row">
+          <div className="flex flex-row items-center gap-1">
             <Button
               disabled={loading}
               variant="outline"

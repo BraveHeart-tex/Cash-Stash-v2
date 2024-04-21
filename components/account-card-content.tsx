@@ -102,7 +102,7 @@ const AccountCardContent = ({
       layoutId={`account-card-${account.id}`}
       key={account.id}
       className={cn(
-        "flex flex-col gap-2 p-4 shadow-sm border-1 rounded-md relative bg-card border",
+        "border-1 relative flex flex-col gap-2 rounded-md border bg-card p-4 shadow-sm",
         className
       )}
     >
@@ -136,7 +136,7 @@ const AccountCardContent = ({
           triggerClassName="top-0 right-0"
         />
       )}
-      <p className="font-semibold mb-2 text-primary">
+      <p className="mb-2 font-semibold text-primary">
         {account.name}{" "}
         <span className="text-foreground">({accountCategory})</span>
       </p>

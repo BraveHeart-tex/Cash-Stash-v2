@@ -13,7 +13,7 @@ const GoalsNotFoundMessage = ({ pageHasParams }: GoalsNotFoundMessageProps) => {
   const message = `${pageHasParams ? "Remove existing filters or " : ""} Create a goal by clicking the 'Create a goal' button.`;
 
   return (
-    <div className="pt-6 w-full">
+    <div className="w-full pt-6">
       <GenericNotFoundBlock
         heading={headingVariants[Number(pageHasParams)]}
         message={message}

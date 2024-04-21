@@ -31,8 +31,8 @@ const CurrencySelectCombobox = ({
         setValue(option.value);
       }}
       trigger={
-        <Button variant="ghost" className={cn("text-lg p-1", triggerClassName)}>
-          <span className="text-2xl mr-1">{flagEmoji}</span> {value}
+        <Button variant="ghost" className={cn("p-1 text-lg", triggerClassName)}>
+          <span className="mr-1 text-2xl">{flagEmoji}</span> {value}
           <FaChevronDown className="ml-1" />
         </Button>
       }

@@ -80,7 +80,7 @@ const CategoryCard = ({ category }: CategoryCardProps) => {
     <motion.article
       layoutId={`${category.id}-category-card`}
       className={
-        "flex flex-col gap-2 p-4 shadow-sm border-1 rounded-md relative bg-card border"
+        "border-1 relative flex flex-col gap-2 rounded-md border bg-card p-4 shadow-sm"
       }
     >
       <ActionPopover
@@ -99,7 +99,7 @@ const CategoryCard = ({ category }: CategoryCardProps) => {
           },
         ]}
       />
-      <h3 className="font-semibold mb-2 text-primary">
+      <h3 className="mb-2 font-semibold text-primary">
         <span className="text-muted-foreground">Category Name: </span>
         {category.name}
       </h3>

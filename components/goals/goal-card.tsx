@@ -82,10 +82,10 @@ const GoalCard = ({ goal }: GoalCardProps) => {
       transition={{ duration: 0.5 }}
       exit={{ opacity: 0, y: 20 }}
       layoutId={`goal-card-${goal.id}`}
-      className="flex flex-col gap-2 p-4 pt-6 border-1 shadow-sm rounded-md relative bg-card border"
+      className="border-1 relative flex flex-col gap-2 rounded-md border bg-card p-4 pt-6 shadow-sm"
     >
       <p className="font-semibold text-foreground">{goal.name}</p>
-      <div className="absolute top-3 right-1 mb-2">
+      <div className="absolute right-1 top-3 mb-2">
         <div className="flex items-center">
           <ActionPopover
             heading="Goal Actions"

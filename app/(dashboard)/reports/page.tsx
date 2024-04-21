@@ -33,14 +33,14 @@ const ReportsPage = async ({
   const data = chartDataResponse.data || [];
 
   return (
-    <main className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
+    <main className="mx-auto p-4 lg:max-w-[1300px] xl:max-w-[1600px]">
       <MotionDiv
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0, x: 200, scale: 1.2 }}
         transition={{ duration: 0.5, type: "just" }}
       >
-        <div className="flex flex-col mb-4">
+        <div className="mb-4 flex flex-col">
           <h1 className="scroll-m-20 text-4xl font-bold tracking-tight text-primary">
             Reports
           </h1>
@@ -50,13 +50,13 @@ const ReportsPage = async ({
           </p>
         </div>
         <Tabs defaultValue="transactions">
-          <TabsList className="rounded-b-none border border-b-0 w-full md:w-auto justify-start overflow-x-auto overflow-y-hidden scrollbar-hide">
+          <TabsList className="scrollbar-hide w-full justify-start overflow-x-auto overflow-y-hidden rounded-b-none border border-b-0 md:w-auto">
             <TabsTrigger value="transactions">Transactions</TabsTrigger>
             <TabsTrigger value="incomeAndExpenses">
               Income vs Expenses
             </TabsTrigger>
           </TabsList>
-          <div className="lg:p-4 p-2 border rounded-r-lg rounded-bl-lg rounded-tr-none md:rounded-tr-lg">
+          <div className="rounded-r-lg rounded-bl-lg rounded-tr-none border p-2 md:rounded-tr-lg lg:p-4">
             <TabsContent value="transactions">
               <div>
                 <p className="text-muted-foreground">

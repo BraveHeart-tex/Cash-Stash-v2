@@ -37,7 +37,7 @@ const ActionPopover = ({
     }
 
     return (
-      <div className="p-2 hover:bg-secondary transition-all rounded-md">
+      <div className="rounded-md p-2 transition-all hover:bg-secondary">
         <DotsHorizontalIcon className="h-5 w-5" />
       </div>
     );
@@ -51,7 +51,7 @@ const ActionPopover = ({
     <Popover>
       <PopoverTrigger
         className={cn(
-          positionAbsolute && "absolute focus:outline-none outline-none",
+          positionAbsolute && "absolute outline-none focus:outline-none",
           triggerClassName
         )}
       >
@@ -68,7 +68,7 @@ const ActionPopover = ({
               size={"icon"}
               aria-label={option.label}
               onClick={option.onClick}
-              className="mr-2 p-1 flex items-center gap-2 w-full justify-start"
+              className="mr-2 flex w-full items-center justify-start gap-2 p-1"
             >
               {option.icon({ className: "h-5 w-5" })}
               <span className="text-[1.1em]">{option.label}</span>

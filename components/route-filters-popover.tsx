@@ -61,17 +61,17 @@ const RouteFiltersPopover = <T extends Record<string, any>>({
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          className="w-max flex items-center gap-1 self-end relative"
+          className="relative flex w-max items-center gap-1 self-end"
         >
           <BsFilterLeft />
           {triggerLabel || "Filters"}
           {hasActiveFilter && (
-            <div className="w-2 h-2 rounded-full bg-primary absolute top-0 right-0" />
+            <div className="absolute right-0 top-0 h-2 w-2 rounded-full bg-primary" />
           )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-max">
-        <h3 className="text-lg font-semibold mb-2 text-foreground">Filters</h3>
+        <h3 className="mb-2 text-lg font-semibold text-foreground">Filters</h3>
         <div className="p-1">
           <div className="flex flex-col gap-2">
             {optionsWithIds.map((option) => (
@@ -82,7 +82,7 @@ const RouteFiltersPopover = <T extends Record<string, any>>({
                     ? "default"
                     : "outline"
                 }
-                className="capitalize font-normal whitespace-nowrap flex items-center gap-1"
+                className="flex items-center gap-1 whitespace-nowrap font-normal capitalize"
                 onClick={() => {
                   setActiveQueryKey({ ...option.data });
                 }}

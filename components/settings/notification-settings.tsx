@@ -3,7 +3,7 @@ import { Switch } from "@/components/ui/switch";
 const NotificationSettings = () => {
   return (
     <section id="notifications">
-      <h2 className="text-xl font-semibold text-primary flex items-center gap-2">
+      <h2 className="flex items-center gap-2 text-xl font-semibold text-primary">
         Notifications:
         <Switch />
       </h2>

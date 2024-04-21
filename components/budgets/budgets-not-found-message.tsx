@@ -13,7 +13,7 @@ const BudgetsNotFoundMessage = ({
   const message = `${pageHasParams ? "Remove existing filters or " : ""} Create a budget by clicking the 'Create a budget' button.`;
 
   return (
-    <div className="pt-6 w-full">
+    <div className="w-full pt-6">
       <GenericNotFoundBlock
         heading={headingVariants[Number(pageHasParams)]}
         message={message}

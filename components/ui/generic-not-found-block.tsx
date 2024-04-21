@@ -17,7 +17,7 @@ const GenericNotFoundBlock = ({
     <div className="text-center">
       <h2
         className={cn(
-          "inline-block text-2xl lg:text-3xl font-semibold text-primary scroll-m-20 tracking-tight",
+          "inline-block scroll-m-20 text-2xl font-semibold tracking-tight text-primary lg:text-3xl",
           headingClassName
         )}
       >

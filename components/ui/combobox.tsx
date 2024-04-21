@@ -119,7 +119,7 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
             if (isMobile) event.preventDefault();
           }}
           align="start"
-          className={cn("p-1 min-w-max", contentClassName)}
+          className={cn("min-w-max p-1", contentClassName)}
         >
           <Command shouldFilter={false} className="w-full">
             <AnimatePresence>
@@ -134,12 +134,12 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
                   placeholder="Search"
                   className="h-9"
                 />
-                <CommandEmpty className="text-muted-foreground p-1 mt-2">
+                <CommandEmpty className="mt-2 p-1 text-muted-foreground">
                   {emptyMessage || "No options were found for your search."}
                 </CommandEmpty>
                 <CommandList asChild>
                   <AnimatePresence>
-                    <motion.ul className="mt-1 w-full min-h-[2.2rem] max-h-[150px] md:max-h-[200px] lg:max-h-[400px] overflow-auto">
+                    <motion.ul className="mt-1 max-h-[150px] min-h-[2.2rem] w-full overflow-auto md:max-h-[200px] lg:max-h-[400px]">
                       {filteredOptions.map((option) => (
                         <CommandItem
                           key={option.value}

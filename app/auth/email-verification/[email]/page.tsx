@@ -46,7 +46,7 @@ const EmailVerificationPage = async ({
   return (
     <section
       id="email-verification"
-      className="flex flex-col justify-center items-center h-screen p-2"
+      className="flex h-screen flex-col items-center justify-center p-2"
     >
       <Card>
         <CardHeader className="text-xl">
@@ -55,7 +55,7 @@ const EmailVerificationPage = async ({
             alt="Cash Stash"
             width={200}
             height={200}
-            className="mb-4 md:mx-auto dark:invert"
+            className="mb-4 dark:invert md:mx-auto"
           />
           <CardTitle>Email Verification</CardTitle>
         </CardHeader>
@@ -74,7 +74,7 @@ const EmailVerificationPage = async ({
           <EmailVerificationInput email={email} />
         </CardContent>
         <CardFooter>
-          <div className="text-sm flex items-center">
+          <div className="flex items-center text-sm">
             <p>Didn't receive the email?</p>
             <ResendVerificationTokenButton email={email} />
           </div>

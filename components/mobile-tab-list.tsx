@@ -24,9 +24,9 @@ const MobileTabsList = () => {
   return (
     <nav
       role="navigation"
-      className="fixed bottom-0 left-0 z-50 w-full h-16 bg-background border-t border-border lg:hidden scrollbar-hide"
+      className="scrollbar-hide fixed bottom-0 left-0 z-50 h-16 w-full border-t border-border bg-background lg:hidden"
     >
-      <div className="flex items-center justify-between h-full font-medium overflow-auto scrollbar-hide">
+      <div className="scrollbar-hide flex h-full items-center justify-between overflow-auto font-medium">
         {firstTwoItems.map((page) => (
           <MobileTabsListItem key={page.link} page={page} />
         ))}

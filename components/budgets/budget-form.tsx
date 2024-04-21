@@ -225,7 +225,7 @@ const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
                     onSelect={(option) => field.onChange(option.value)}
                   />
                   {!isPending && isBudgetCategoryListEmpty && (
-                    <p className="text-muted-foreground mr-auto">
+                    <p className="mr-auto text-muted-foreground">
                       Looks like there are no budget categories yet.
                     </p>
                   )}

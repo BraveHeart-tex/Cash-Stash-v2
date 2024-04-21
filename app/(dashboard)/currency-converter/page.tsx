@@ -31,7 +31,7 @@ const CurrencyConverterPage = async ({
     currencies.find((item) => item.symbol === to)?.amount || 0;
 
   return (
-    <main className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
+    <main className="mx-auto p-4 lg:max-w-[1300px] xl:max-w-[1600px]">
       <div className="flex flex-col gap-1">
         <h1 className="scroll-m-20 text-4xl font-bold tracking-tight text-primary">
           Currency Converter

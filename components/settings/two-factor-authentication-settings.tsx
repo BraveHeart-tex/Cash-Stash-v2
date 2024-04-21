@@ -79,7 +79,7 @@ const TwoFactorAuthenticationSettings = () => {
       <h2 className="text-xl font-semibold text-primary">
         Two-Factor Authentication
       </h2>
-      <p className="text-muted-foreground w-full lg:w-[70%]">
+      <p className="w-full text-muted-foreground lg:w-[70%]">
         {user?.prefersTwoFactorAuthentication &&
         user.activatedTwoFactorAuthentication ? (
           "Two-factor authentication is currently enabled on your account."
@@ -94,7 +94,7 @@ const TwoFactorAuthenticationSettings = () => {
       {shouldShowActiviationForm ? <TwoFactorAuthenticationActivation /> : null}
       {shouldShowEnableButton ? (
         <Button
-          className="w-max flex items-center gap-2 mt-2"
+          className="mt-2 flex w-max items-center gap-2"
           onClick={handleEnableTwoFactorAuth}
           disabled={isPending}
         >
@@ -105,7 +105,7 @@ const TwoFactorAuthenticationSettings = () => {
 
       {shouldShowDisableButton ? (
         <Button
-          className="w-max flex items-center gap-2 mt-2"
+          className="mt-2 flex w-max items-center gap-2"
           onClick={handleDisabledTwoFactorAuth}
           disabled={isPending}
         >

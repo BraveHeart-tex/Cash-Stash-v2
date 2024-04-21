@@ -38,7 +38,7 @@ const AccountsPage = async ({ searchParams }: AccountPageProps) => {
 
   return (
     <main>
-      <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px] mb-2">
+      <div className="mx-auto mb-2 p-4 lg:max-w-[1300px] xl:max-w-[1600px]">
         <AccountsPageHeader />
         <AccountsPageFilters accounts={accounts} />
         {accounts.length === 0 && (

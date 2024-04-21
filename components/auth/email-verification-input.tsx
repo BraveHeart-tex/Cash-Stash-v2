@@ -41,8 +41,8 @@ const EmailVerificationInput = ({ email }: { email: string }) => {
   }, [email, verificationCode, verifyEmail]);
 
   return (
-    <div className="mt-4 w-full flex lg:items-center lg:justify-center">
-      <div className="gap-1 hidden lg:flex lg:flex-col">
+    <div className="mt-4 flex w-full lg:items-center lg:justify-center">
+      <div className="hidden gap-1 lg:flex lg:flex-col">
         <Label htmlFor="verificationCode">Verification Code</Label>
         <AutoProgressInput
           length={EMAIL_VERIFICATION_CODE_LENGTH}
@@ -51,7 +51,7 @@ const EmailVerificationInput = ({ email }: { email: string }) => {
           shouldFocusFirstInput
         />
       </div>
-      <div className="lg:hidden w-full">
+      <div className="w-full lg:hidden">
         {errorMessage && <p className="text-destructive">{errorMessage}</p>}
         <Label htmlFor="verificationCode">Verification Code</Label>
         <Input

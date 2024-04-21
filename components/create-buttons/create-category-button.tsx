@@ -20,7 +20,7 @@ const CreateCategoryButton = ({ className }: CreateCategoryButtonProps) => {
 
   return (
     <Button
-      className={cn("font-semibold flex items-center gap-2", className)}
+      className={cn("flex items-center gap-2 font-semibold", className)}
       data-testid="create-account-button"
       onClick={() =>
         openGenericModal({

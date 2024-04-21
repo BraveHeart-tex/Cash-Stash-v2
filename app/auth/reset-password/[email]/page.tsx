@@ -39,7 +39,7 @@ const ResetPassword = async ({
   return (
     <section
       id="reset-password"
-      className="flex flex-col justify-center items-center h-screen p-2"
+      className="flex h-screen flex-col items-center justify-center p-2"
     >
       <Card className="w-full lg:w-[600px]">
         <CardHeader className="text-xl">
@@ -48,7 +48,7 @@ const ResetPassword = async ({
             alt="Cash Stash"
             width={200}
             height={200}
-            className="mb-4 md:mx-auto dark:invert"
+            className="mb-4 dark:invert md:mx-auto"
           />
           <CardTitle>Reset Your Password</CardTitle>
           <CardDescription>

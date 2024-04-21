@@ -10,7 +10,7 @@ const NavigationTabsList = () => {
 
   return (
     <Tabs defaultValue={NAVIGATION_ITEMS[0].label}>
-      <div className="overflow-scroll scrollbar-hide hidden lg:block">
+      <div className="scrollbar-hide hidden overflow-scroll lg:block">
         <TabsList className="lg:w-auto">
           {NAVIGATION_ITEMS.map((page) => (
             <TabsTrigger
@@ -18,7 +18,7 @@ const NavigationTabsList = () => {
               asChild
               value={page.label}
               className={
-                "relative data-[state=active]:text-primary-foreground data-[state=active]:bg-transparent"
+                "relative data-[state=active]:bg-transparent data-[state=active]:text-primary-foreground"
               }
               data-state={pathName === page.link ? "active" : "inactive"}
             >
@@ -26,11 +26,11 @@ const NavigationTabsList = () => {
                 {pathName === page.link && (
                   <motion.div
                     layoutId="active-pill"
-                    className="absolute inset-0 bg-gradient-to-r from-primary to-primary/70 rounded-md"
+                    className="absolute inset-0 rounded-md bg-gradient-to-r from-primary to-primary/70"
                   />
                 )}
-                <span className={`flex items-center relative z-10`}>
-                  <page.icon className={"w-6 h-6 mr-1"} />
+                <span className={`relative z-10 flex items-center`}>
+                  <page.icon className={"mr-1 h-6 w-6"} />
                   {page.label}
                 </span>
               </Link>

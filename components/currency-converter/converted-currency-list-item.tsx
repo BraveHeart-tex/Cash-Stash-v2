@@ -13,11 +13,11 @@ const CurrencyConverterListItem = ({
   return (
     <li
       aria-label={item.label}
-      className="flex items-center justify-between p-2 rounded-md hover:bg-accent cursor-pointer text-ellipsis"
+      className="flex cursor-pointer items-center justify-between text-ellipsis rounded-md p-2 hover:bg-accent"
       onClick={() => setSelectedCurrency(item.symbol)}
     >
       <div className="flex items-center">
-        <span className="text-lg mr-1">
+        <span className="mr-1 text-lg">
           {FLAGS_BY_CURRENCY_SYMBOL[item.symbol]}
         </span>
         <span className="text-lg">{item.label}</span>

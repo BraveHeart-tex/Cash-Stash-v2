@@ -43,10 +43,10 @@ const TwoFactorAuthenticationActivation = () => {
   }, [shoudlGetUri, setUri]);
 
   return (
-    <div className="text-foreground bg-card shadow-sm border rounded-sm p-4 lg:p-10 mt-5">
+    <div className="mt-5 rounded-sm border bg-card p-4 text-foreground shadow-sm lg:p-10">
       <div className="flex flex-col gap-2">
         <div>
-          <span className="text-primary font-semibold">1.</span> Get an
+          <span className="font-semibold text-primary">1.</span> Get an
           authentication app by downloading it on your mobile device. Example:{" "}
           <Link
             href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en_US"
@@ -67,14 +67,14 @@ const TwoFactorAuthenticationActivation = () => {
           </Link>
         </div>
         <div>
-          <span className="text-primary font-semibold">2.</span> Scan the QR
+          <span className="font-semibold text-primary">2.</span> Scan the QR
           code or enter the secret key into your authentication app.
           {isPending && !uri ? (
-            <div className="flex items-center justify-center flex-col h-full w-full my-10">
+            <div className="my-10 flex h-full w-full flex-col items-center justify-center">
               <ImSpinner2 className="animate-spin text-4xl" />
             </div>
           ) : (
-            <div className="w-full flex items-center justify-center flex-col gap-4 my-4">
+            <div className="my-4 flex w-full flex-col items-center justify-center gap-4">
               <QRCode value={uri} />
               {secret && (
                 <div className="flex items-center gap-1">
@@ -90,7 +90,7 @@ const TwoFactorAuthenticationActivation = () => {
           )}
         </div>
         <div>
-          <span className="text-primary font-semibold">3.</span> Enter the
+          <span className="font-semibold text-primary">3.</span> Enter the
           6-digit code from the app to enable two-factor authentication.
           <div className="mt-1">
             <TwoFactorAuthenticationActivationInput />

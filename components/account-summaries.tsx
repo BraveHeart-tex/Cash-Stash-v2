@@ -14,7 +14,7 @@ const AccountSummaries = ({
   if (accounts.length === 0) {
     return (
       <article className="flex h-[300px] items-center justify-center">
-        <div className="flex flex-col justify-center items-center gap-2">
+        <div className="flex flex-col items-center justify-center gap-2">
           <p className="text-primary">No accounts found.</p>
           <CreateAccountButton />
         </div>
@@ -29,7 +29,7 @@ const AccountSummaries = ({
           {accounts.map((account, index) => (
             <AccountCard account={account} key={account.id + index} />
           ))}
-          <Button className="w-max mt-2 ml-auto">
+          <Button className="ml-auto mt-2 w-max">
             <Link href={PAGE_ROUTES.ACCOUNTS_ROUTE}>See all your accounts</Link>
           </Button>
         </AnimatePresenceClient>

@@ -31,14 +31,14 @@ const UserSettings = () => {
   return (
     <div>
       <div className="flex flex-col gap-1">
-        <h2 className="font-semibold text-foreground text-lg">
+        <h2 className="text-lg font-semibold text-foreground">
           2-Factor Authentication
         </h2>
-        <p className="text-muted-foreground text-sm">
+        <p className="text-sm text-muted-foreground">
           You can Enable 2FA to add an extra layer of security to your account.
         </p>
         <Button
-          className="w-max mt-2"
+          className="mt-2 w-max"
           onClick={handleEnableTwoFactorAuth}
           disabled={isPending}
         >

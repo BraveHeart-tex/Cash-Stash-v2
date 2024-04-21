@@ -129,7 +129,7 @@ export function DataTable<TData, TValue>({
             )}
           </TableBody>
         </Table>
-        <div className="flex items-center justify-center space-x-2 py-4 w-full">
+        <div className="flex w-full items-center justify-center space-x-2 py-4">
           <Button
             variant="outline"
             size="sm"
@@ -138,7 +138,7 @@ export function DataTable<TData, TValue>({
           >
             Previous
           </Button>
-          <span className="font-medium text-foreground text-sm">
+          <span className="text-sm font-medium text-foreground">
             Page {table.getState().pagination.pageIndex + 1} of{" "}
             {table.getPageCount()}
           </span>

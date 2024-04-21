@@ -12,7 +12,7 @@ const GoalStatus = ({ goals }: GoalStatusProps) => {
   if (goals.length === 0) {
     return (
       <article className="flex h-[300px] items-center justify-center">
-        <div className="flex flex-col gap-2 justify-center items-center">
+        <div className="flex flex-col items-center justify-center gap-2">
           <p className="text-primary">No goals found.</p>
           <CreateGoalButton />
         </div>
@@ -26,7 +26,7 @@ const GoalStatus = ({ goals }: GoalStatusProps) => {
         {goals.map((goal) => (
           <GoalCard key={goal.id} goal={goal} />
         ))}
-        <Button className="w-max mt-2 ml-auto">
+        <Button className="ml-auto mt-2 w-max">
           <Link href={PAGE_ROUTES.GOALS_ROUTE}>See all your goals</Link>
         </Button>
       </AnimatePresenceClient>

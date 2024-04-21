@@ -35,7 +35,7 @@ const ForgotPassword = () => {
         <Label htmlFor="email">Email</Label>
         <Input name="email" type="email" ref={inputRef} required />
       </div>
-      <Button type="submit" className="w-full mt-2" disabled={isPending}>
+      <Button type="submit" className="mt-2 w-full" disabled={isPending}>
         {isPending ? "Sending..." : "Send Reset Link"}
       </Button>
     </form>

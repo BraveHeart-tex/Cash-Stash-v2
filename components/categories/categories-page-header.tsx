@@ -2,7 +2,7 @@ import CreateCategoryButton from "@/components/create-buttons/create-category-bu
 
 const CategoriesPageHeader = () => {
   return (
-    <header className="w-full flex flex-col gap-1">
+    <header className="flex w-full flex-col gap-1">
       <div className="flex items-center justify-between">
         <h1 className="scroll-m-20 text-4xl font-bold tracking-tight text-primary">
           Categories

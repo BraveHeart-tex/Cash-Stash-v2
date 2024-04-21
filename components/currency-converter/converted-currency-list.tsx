@@ -29,8 +29,8 @@ const ConvertedCurrencyList = ({
   );
 
   return (
-    <div className="relative border px-2 rounded-md mt-2 max-h-[350px] lg:max-h-[500px] overflow-auto">
-      <div className="flex flex-col gap-1 sticky top-0 bg-background w-full z-10 rounded-md py-1">
+    <div className="relative mt-2 max-h-[350px] overflow-auto rounded-md border px-2 lg:max-h-[500px]">
+      <div className="sticky top-0 z-10 flex w-full flex-col gap-1 rounded-md bg-background py-1">
         <Label htmlFor="search-currency">Search</Label>
         <div className="relative w-full lg:w-[400px]">
           <Input
@@ -48,7 +48,7 @@ const ConvertedCurrencyList = ({
               name="clear-search"
               size="icon"
               variant="ghost"
-              className="absolute right-0 top-1/2 -translate-y-1/2 text-muted-foreground p-0"
+              className="absolute right-0 top-1/2 -translate-y-1/2 p-0 text-muted-foreground"
               onClick={() => setSearchQuery("")}
             >
               <FaXmark />
@@ -57,7 +57,7 @@ const ConvertedCurrencyList = ({
         </div>
       </div>
       <ul
-        className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 min-h-[300px]"
+        className="grid min-h-[300px] grid-cols-1 lg:grid-cols-2 xl:grid-cols-3"
         style={{
           gridAutoRows: "min-content",
         }}
@@ -70,10 +70,10 @@ const ConvertedCurrencyList = ({
           />
         ))}
         {searchQuery && filteredCurrencies.length === 0 ? (
-          <div className="text-center col-span-4">
-            <div className="flex flex-col gap-2 justify-center items-center">
+          <div className="col-span-4 text-center">
+            <div className="flex flex-col items-center justify-center gap-2">
               <MdQuestionMark className="text-2xl" />
-              <p className="text-foreground font-medium">
+              <p className="font-medium text-foreground">
                 No results were found for your search
               </p>
               <Button

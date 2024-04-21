@@ -30,7 +30,7 @@ const GoalsPage = async ({ searchParams }: GoalsPageProps) => {
 
   return (
     <main>
-      <div className="p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px]">
+      <div className="mx-auto p-4 lg:max-w-[1300px] xl:max-w-[1600px]">
         <GoalsPageHeader />
         <GoalsPageFilters
           shouldRenderPopover={goalsResponse.goals.length > 1}

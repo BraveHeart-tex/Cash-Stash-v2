@@ -82,15 +82,15 @@ const BudgetCard = ({ budget }: BudgetCardProps) => {
       transition={{ duration: 0.6, type: "tween" }}
       layoutId={`budget-card-${budget.id}`}
       key={budget.id}
-      className="flex flex-col gap-2 p-4 pt-6 border-1 shadow-sm rounded-md relative bg-card border"
+      className="border-1 relative flex flex-col gap-2 rounded-md border bg-card p-4 pt-6 shadow-sm"
     >
       <div className="flex flex-col gap-1 p-0">
-        <span className="font-semibold text-foreground text-lg">
+        <span className="text-lg font-semibold text-foreground">
           {budget.name}
         </span>
         <span className="text-muted-foreground">{budget.category}</span>
       </div>
-      <div className="absolute top-5 right-1 mb-2">
+      <div className="absolute right-1 top-5 mb-2">
         <div className="flex items-center gap-1">
           <ActionPopover
             heading="Budget Actions"
@@ -123,7 +123,7 @@ const BudgetCard = ({ budget }: BudgetCardProps) => {
         className="mt-4"
         indicatorClassName={getProgressColor(budget.progress)}
       />
-      <div className="w-full flex flex-col lg:flex-row lg:items-center justify-between mt-2">
+      <div className="mt-2 flex w-full flex-col justify-between lg:flex-row lg:items-center">
         <span className="text-foreground">
           Budget: {formatMoney(budget.budgetAmount, preferredCurrency)} / Spent:{" "}
           {formatMoney(budget.spentAmount, preferredCurrency)}

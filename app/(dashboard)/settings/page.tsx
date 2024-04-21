@@ -16,7 +16,7 @@ const SettingsPage = async () => {
   return (
     <section
       id="settings"
-      className="rounded-md p-2 lg:p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px] mb-2"
+      className="mx-auto mb-2 rounded-md p-2 lg:max-w-[1300px] lg:p-4 xl:max-w-[1600px]"
     >
       <div className="flex flex-col gap-1">
         <h1 className="scroll-m-20 text-4xl font-bold tracking-tight text-primary">

@@ -24,7 +24,7 @@ const ResendVerificationTokenButton = ({ email }: { email: string }) => {
   return (
     <Button
       variant="link"
-      className="p-0 ml-1 underline"
+      className="ml-1 p-0 underline"
       onClick={handleRequestAgain}
       disabled={isPending}
     >

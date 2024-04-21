@@ -26,7 +26,7 @@ const NotificationsAndReminders = ({
       >
         <p className="text-primary">No reminders were found.</p>
         <Button
-          className="mt-3 font-semibold flex items-center gap-[14px]"
+          className="mt-3 flex items-center gap-[14px] font-semibold"
           onClick={() => {
             openGenericModal({
               key: "reminder",
@@ -48,7 +48,7 @@ const NotificationsAndReminders = ({
   if (!reminders.length) return noRemindersState();
 
   return (
-    <div className="pr-2 min-h-[500px] max-h-[500px] overflow-y-auto">
+    <div className="max-h-[500px] min-h-[500px] overflow-y-auto pr-2">
       <div className="grid grid-cols-1 gap-4">
         <AnimatePresenceClient>
           {reminders.length > 0

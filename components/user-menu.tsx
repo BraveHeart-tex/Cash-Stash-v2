@@ -34,7 +34,7 @@ const UserMenu = () => {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className="p-4 grid grid-cols-1 gap-[12px] w-[300px]"
+        className="grid w-[300px] grid-cols-1 gap-[12px] p-4"
         align="end"
       >
         <div className="flex flex-col gap-1">
@@ -45,7 +45,7 @@ const UserMenu = () => {
 
         <div className="block lg:hidden">
           <Label>Color Mode</Label>
-          <div className="bg-background flex gap-1">
+          <div className="flex gap-1 bg-background">
             <ModeToggle />
           </div>
         </div>

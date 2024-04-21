@@ -36,10 +36,10 @@ const ReminderCard = ({ reminder }: ReminderCardProps) => {
       exit={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.2 }}
       layoutId={`reminder-${reminder.id}`}
-      className="flex items-center flex-col gap-1 rounded-md bg-card p-4 shadow-sm relative border"
+      className="relative flex flex-col items-center gap-1 rounded-md border bg-card p-4 shadow-sm"
       key={reminder.id}
     >
-      <p className="font-semibold self-start mb-2">{reminder.title}</p>
+      <p className="mb-2 self-start font-semibold">{reminder.title}</p>
 
       {reminder.reminderDate && (
         <div className="w-full">
@@ -53,7 +53,7 @@ const ReminderCard = ({ reminder }: ReminderCardProps) => {
           </p>
         </div>
       )}
-      <div className="w-full flex items-center gap-1 mt-2">
+      <div className="mt-2 flex w-full items-center gap-1">
         <span className="font-semibold text-primary">Notes:</span>
         <p className="text-foreground">{reminder.description}</p>
       </div>

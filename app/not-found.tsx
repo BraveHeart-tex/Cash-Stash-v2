@@ -11,9 +11,9 @@ const NotFound = async () => {
   }
 
   return (
-    <div className="p-1 lg:p-4 mx-auto lg:max-w-[1300px] xl:max-w-[1600px] mb-2">
+    <div className="mx-auto mb-2 p-1 lg:max-w-[1300px] lg:p-4 xl:max-w-[1600px]">
       <div className="grid grid-cols-1 gap-4">
-        <h1 className="text-6xl font-semibold text-left text-primary">
+        <h1 className="text-left text-6xl font-semibold text-primary">
           404 Page Not Found...
         </h1>
         <p className="text-foreground">

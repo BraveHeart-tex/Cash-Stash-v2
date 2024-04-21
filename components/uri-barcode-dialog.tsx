@@ -48,13 +48,13 @@ const UriBarcodeDialog = () => {
 
   const renderContent = () => {
     return (
-      <div className="w-full flex items-center justify-center flex-col gap-4">
+      <div className="flex w-full flex-col items-center justify-center gap-4">
         {secret && (
           <div className="flex items-center gap-2">
             <Button size="icon" onClick={handleCopyToClipBoard}>
               <FaCopy />
             </Button>
-            <span className="border border-primary rounded-md p-2 text-primary">
+            <span className="rounded-md border border-primary p-2 text-primary">
               {secret}
             </span>
           </div>

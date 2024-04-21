@@ -57,7 +57,7 @@ const SignInHelpPage = ({
   return (
     <section
       id="sign-in-help"
-      className="flex flex-col justify-center items-center h-screen p-2"
+      className="flex h-screen flex-col items-center justify-center p-2"
     >
       <Card className="min-w-[400px]">
         <CardHeader className="text-xl">
@@ -66,7 +66,7 @@ const SignInHelpPage = ({
             alt="Cash Stash"
             width={200}
             height={200}
-            className="mb-4 md:mx-auto dark:invert monokai-dark:invert"
+            className="mb-4 monokai-dark:invert dark:invert md:mx-auto"
           />
           <CardTitle>{renderTitle()}</CardTitle>
           <CardDescription>{renderDescription()}</CardDescription>
@@ -88,8 +88,8 @@ const SignInHelpPage = ({
               </Button>
             </>
           )}
-          <div className="w-full flex items-center justify-end mt-2">
-            <Button variant="link" className="underline p-0">
+          <div className="mt-2 flex w-full items-center justify-end">
+            <Button variant="link" className="p-0 underline">
               <FaArrowLeft className="mr-1" />
               <Link href={PAGE_ROUTES.LOGIN_ROUTE}>Back to sign in</Link>
             </Button>

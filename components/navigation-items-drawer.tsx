@@ -37,12 +37,12 @@ const NavigationItemsDrawer = () => {
     >
       <DrawerTrigger asChild>
         <Button
-          className="rounded-full w-[44px] h-[44px]"
+          className="h-[44px] w-[44px] rounded-full"
           type="button"
           name="navigation-drawer"
           aria-label="Open navigation menus"
         >
-          <FaBars className="w-5 h-5" />
+          <FaBars className="h-5 w-5" />
         </Button>
       </DrawerTrigger>
       <DrawerContent className="h-[70vh]">
@@ -63,9 +63,9 @@ const NavigationItemsDrawer = () => {
                 onChange={(e) => setQuery(e.target.value)}
               />
             </div>
-            <div className="flex flex-col gap-1 border rounded-md p-2 mt-4">
+            <div className="mt-4 flex flex-col gap-1 rounded-md border p-2">
               {filteredNavItems.length === 0 && (
-                <div className="flex flex-col justify-center items-center w-full h-full">
+                <div className="flex h-full w-full flex-col items-center justify-center">
                   <p>No menu was found for your search...</p>
                   <Button
                     variant="outline"
@@ -85,7 +85,7 @@ const NavigationItemsDrawer = () => {
                 >
                   <Link
                     href={item.link}
-                    className="w-full font-medium text-base text-left flex items-center gap-2 text-foreground"
+                    className="flex w-full items-center gap-2 text-left text-base font-medium text-foreground"
                   >
                     <item.icon size={18} />
                     {item.label}

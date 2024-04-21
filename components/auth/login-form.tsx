@@ -93,7 +93,7 @@ const LoginForm = () => {
 
   if (loggedIn) {
     return (
-      <div className="flex flex-col items-center justify-center h-screen gap-2">
+      <div className="flex h-screen flex-col items-center justify-center gap-2">
         <Image
           src="/logging-in-dark.svg"
           width={300}
@@ -140,7 +140,7 @@ const LoginForm = () => {
               alt="Cash Stash"
               width={200}
               height={200}
-              className="mb-4 mx-auto dark:invert block 2xl:hidden monokai-dark:invert"
+              className="mx-auto mb-4 block monokai-dark:invert dark:invert 2xl:hidden"
             />
             <CardTitle>Welcome!</CardTitle>
             <CardDescription>Sign in to access your account.</CardDescription>
@@ -194,8 +194,8 @@ const LoginForm = () => {
             </Form>
           </CardContent>
           <CardFooter>
-            <div className="flex flex-col gap-2 lg:flex-row lg:justify-between w-full ">
-              <p className="text-muted-foreground text-sm">
+            <div className="flex w-full flex-col gap-2 lg:flex-row lg:justify-between ">
+              <p className="text-sm text-muted-foreground">
                 Don't have an account?{" "}
                 <Button
                   disabled={isPending}
