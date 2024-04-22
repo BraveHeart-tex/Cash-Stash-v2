@@ -3,11 +3,13 @@ import QueryStringComboBox from "@/components/query-string-combobox";
 import RouteFiltersPopover from "@/components/route-filters-popover";
 import RouteSearchInput from "@/components/route-search-input";
 import { QueryStringComboboxItem } from "@/server/types";
+import TransactionCategoryCombobox from "@/components/transactions/transaction-category-combobox";
+import { getCategoriesByType } from "@/server/category";
+import { CATEGORY_TYPES } from "@/lib/constants";
 
 type TransactionsPageFiltersProps = {
   shouldRenderPopover: boolean;
   accountsFilterDataset: QueryStringComboboxItem[];
-  categoryFilterDataset: QueryStringComboboxItem[];
 };
 
 const transactionsFilterOptions = [
@@ -45,11 +47,14 @@ const transactionsFilterOptions = [
   },
 ];
 
-const TransactionsPageFilters = ({
+const TransactionsPageFilters = async ({
   shouldRenderPopover,
   accountsFilterDataset,
-  categoryFilterDataset,
 }: TransactionsPageFiltersProps) => {
+  const initialTransactionCategories = await getCategoriesByType(
+    CATEGORY_TYPES.TRANSACTION
+  );
+
   return (
     <div className="flex flex-wrap items-center gap-2">
       <RouteSearchInput label="Search" placeholder="Search by description" />
@@ -58,10 +63,8 @@ const TransactionsPageFilters = ({
         queryStringKey="accountId"
         selectLabel="Account"
       />
-      <QueryStringComboBox
-        dataset={categoryFilterDataset}
-        queryStringKey="category"
-        selectLabel="Category"
+      <TransactionCategoryCombobox
+        initialTransactionCategories={initialTransactionCategories || []}
       />
       {shouldRenderPopover && (
         <div className="ml-auto self-end">

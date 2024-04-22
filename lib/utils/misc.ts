@@ -2,7 +2,6 @@ import {
   GetPaginatedTransactionsParams,
   TransactionPageSearchParams,
 } from "@/server/types";
-import { TransactionSelectModel } from "@/lib/database/schema";
 
 export function createGetPaginatedTransactionsParams(
   searchParams: TransactionPageSearchParams
@@ -12,7 +11,7 @@ export function createGetPaginatedTransactionsParams(
     accountId,
     sortBy,
     sortDirection,
-    category,
+    categoryId,
     page,
     query,
   } = searchParams;
@@ -22,7 +21,7 @@ export function createGetPaginatedTransactionsParams(
     accountId: accountId ? parseInt(accountId) : undefined,
     sortBy: (sortBy || "createdAt") as "amount" | "createdAt",
     sortDirection: (sortDirection || "desc") as "asc" | "desc",
-    category: category as TransactionSelectModel["category"],
+    categoryId: categoryId || undefined,
     pageNumber: page ? parseInt(page) : 1,
     query,
   };

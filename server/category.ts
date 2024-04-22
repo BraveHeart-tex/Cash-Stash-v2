@@ -143,7 +143,7 @@ export const getCategoriesByType = async (
   }
 };
 
-export const deleteCategory = async (id: number) => {
+export const deleteCategory = async (id: number, type: CategoryType) => {
   const { user } = await getUser();
   if (!user) {
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
@@ -153,9 +153,23 @@ export const deleteCategory = async (id: number) => {
     const [response] = await categoryRepository.deleteCategory(id);
 
     if (response.affectedRows > 0) {
-      await redisService.invalidateKeysByPrefix(
-        generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_BUDGETS, user.id)
-      );
+      let prefix;
+
+      if (type === CATEGORY_TYPES.BUDGET) {
+        prefix = generateCachePrefixWithUserId(
+          CACHE_PREFIXES.PAGINATED_BUDGETS,
+          user.id
+        );
+      }
+
+      if (type === CATEGORY_TYPES.TRANSACTION) {
+        prefix = generateCachePrefixWithUserId(
+          CACHE_PREFIXES.PAGINATED_TRANSACTIONS,
+          user.id
+        );
+      }
+
+      await redisService.invalidateKeysByPrefix(prefix!);
     }
 
     return response.affectedRows > 0;

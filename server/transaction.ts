@@ -210,7 +210,7 @@ export const getPaginatedTransactions = async ({
   sortDirection = "desc",
   query = "",
   pageNumber,
-  category,
+  categoryId,
 }: GetPaginatedTransactionsParams): Promise<GetPaginatedTransactionsResponse> => {
   const { user } = await getUser();
   if (!user) {
@@ -229,7 +229,7 @@ export const getPaginatedTransactions = async ({
       sortDirection,
       query,
       pageNumber,
-      category,
+      categoryId,
     });
 
     const cachedData = await redisService.get(cacheKey);
@@ -258,7 +258,7 @@ export const getPaginatedTransactions = async ({
         sortDirection,
         query,
         page: pageNumber,
-        category,
+        categoryId,
       });
 
     if (transactions.length === 0) {

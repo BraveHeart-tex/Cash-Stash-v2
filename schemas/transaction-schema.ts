@@ -1,4 +1,3 @@
-import { transactions } from "@/lib/database/schema";
 import { z } from "zod";
 
 const transactionSchema = z.object({
@@ -10,20 +9,11 @@ const transactionSchema = z.object({
     .string()
     .min(1, "Description is required")
     .max(100, "Description is too long"),
-  category: z
-    .enum(transactions.category.enumValues, {
-      required_error: "Category is required",
-      invalid_type_error: "Invalid category",
-    })
-    .superRefine((val, ctx) => {
-      if (!val) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Category is required",
-          path: ["category"],
-        });
-      }
-    }),
+  categoryId: z.coerce
+    .number()
+    .min(1, "Category is required")
+    .positive()
+    .default(0),
   accountId: z.coerce
     .number({
       required_error: "Account is required",

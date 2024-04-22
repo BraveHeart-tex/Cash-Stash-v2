@@ -31,11 +31,15 @@ import { toast } from "sonner";
 import {
   AccountSelectModel,
   TransactionSelectModel,
-  transactions,
 } from "@/lib/database/schema";
-import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
 import CurrencyFormLabel from "@/components/ui/currency-form-label";
 import { compareMatchingKeys } from "@/lib/utils/objectUtils/compareMatchingKeys";
+import useCategoriesStore from "@/store/categoriesStore";
+import { CATEGORY_TYPES } from "@/lib/constants";
+import { getCategoriesByType } from "@/server/category";
+import CreateTransactionCategoryPopover from "@/components/transactions/create-transaction-category-popover";
+import Combobox from "@/components/ui/combobox";
+import { cn } from "@/lib/utils/stringUtils/cn";
 
 type TransactionFormProps = {
   data?: TransactionSelectModel;
@@ -53,6 +57,10 @@ const TransactionForm = ({
   const form = useForm<TransactionSchemaType>({
     resolver: zodResolver(transactionSchema),
   });
+  const transactionsCategories = useCategoriesStore(
+    (state) => state.categories
+  ).filter((category) => category.type === CATEGORY_TYPES.TRANSACTION);
+  const setCategories = useCategoriesStore((state) => state.setCategories);
   const entityId = transactionToBeUpdated?.id;
 
   useEffect(() => {
@@ -64,7 +72,17 @@ const TransactionForm = ({
 
   useEffect(() => {
     startTransition(async () => {
-      const accounts = await getCurrentUserAccounts();
+      const [accounts, transactionCategories] = await Promise.all([
+        getCurrentUserAccounts(),
+        getCategoriesByType(CATEGORY_TYPES.TRANSACTION),
+      ]);
+
+      if (!transactionCategories) {
+        toast.error(
+          "There was an error while getting budget categories. Please try again later."
+        );
+        return;
+      }
 
       if (accounts.length === 0) {
         toast.error("No accounts found.", {
@@ -74,8 +92,10 @@ const TransactionForm = ({
         return;
       }
 
+      setCategories(transactionCategories);
       setAccounts(accounts);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const setDefaultFormValues = (
@@ -151,11 +171,17 @@ const TransactionForm = ({
     }));
   }, [accounts]);
 
-  const transactionCategorySelectOptions = generateOptionsFromEnums(
-    transactions.category.enumValues
-  );
-
   const loadingAccounts = isPending && accounts.length === 0;
+
+  const transactionCategoryOptions = useMemo(() => {
+    return transactionsCategories.map((category) => ({
+      label: category.name,
+      value: category.id.toString(),
+    }));
+  }, [transactionsCategories]);
+
+  const isTransactionCategoryListEmpty =
+    transactionCategoryOptions.length === 0;
 
   return (
     <Form {...form}>
@@ -174,7 +200,7 @@ const TransactionForm = ({
                   field.onChange(value);
                 }}
                 defaultValue={
-                  transactionToBeUpdated?.accountId.toString() ||
+                  transactionToBeUpdated?.accountId?.toString() ||
                   field.value?.toString()
                 }
               >
@@ -198,37 +224,12 @@ const TransactionForm = ({
                   ))}
                 </SelectContent>
               </Select>
+
               <FormMessage />
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="category"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Category</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                defaultValue={transactionToBeUpdated?.category || field.value}
-              >
-                <FormControl>
-                  <SelectTrigger ref={field.ref}>
-                    <SelectValue placeholder="Select a category" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {transactionCategorySelectOptions.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+
         <FormField
           control={form.control}
           name="amount"
@@ -243,6 +244,49 @@ const TransactionForm = ({
                   {...field}
                 />
               </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="categoryId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Category</FormLabel>
+              <div className="flex items-center gap-1">
+                <Combobox
+                  key={JSON.stringify(
+                    form.watch("categoryId")?.toString() +
+                      transactionsCategories
+                  )}
+                  ref={field.ref}
+                  options={transactionCategoryOptions}
+                  contentClassName="z-[100]"
+                  defaultOption={transactionCategoryOptions.find(
+                    (category) => +category.value === form.watch("categoryId")
+                  )}
+                  triggerClassName={cn(
+                    "focus:outline focus:outline-1 focus:outline-offset-1 focus:outline-destructive",
+                    !isPending && isTransactionCategoryListEmpty && "hidden"
+                  )}
+                  triggerPlaceholder="Select a category"
+                  onSelect={(option) => {
+                    field.onChange(+option.value);
+                  }}
+                />
+                {!isPending && isTransactionCategoryListEmpty && (
+                  <p className="mr-auto text-muted-foreground">
+                    Looks like there are no transaction categories yet.
+                  </p>
+                )}
+                <CreateTransactionCategoryPopover
+                  onSave={(values) => {
+                    field.onChange(values.id);
+                  }}
+                />
+              </div>
+
               <FormMessage />
             </FormItem>
           )}

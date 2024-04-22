@@ -2,8 +2,6 @@ import { getPaginatedTransactions } from "@/server/transaction";
 import TransactionList from "@/components/transactions/transaction-list";
 import { getCurrentUserAccountsThatHaveTransactions } from "@/server/account";
 import { createGetPaginatedTransactionsParams } from "@/lib/utils/misc";
-import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
-import { transactions } from "@/lib/database/schema";
 import RoutePaginationControls from "@/components/route-pagination-controls";
 import TransactionsPageHeader from "@/components/transactions/transactions-page-header";
 import TransactionsPageFilters from "@/components/transactions/transactions-page-filters";
@@ -27,10 +25,6 @@ const TransactionsPage = async ({ searchParams }: TransactionsPageProps) => {
     value: account.id.toString(),
   }));
 
-  const categoryFilterDataset = generateOptionsFromEnums(
-    transactions.category.enumValues
-  );
-
   const pageHasParams = Object.keys(searchParams)
     .filter((key) => key !== "page")
     .some(
@@ -44,7 +38,6 @@ const TransactionsPage = async ({ searchParams }: TransactionsPageProps) => {
         <TransactionsPageFilters
           shouldRenderPopover={transactionsResponse.transactions.length > 1}
           accountsFilterDataset={accountsFilterDataset}
-          categoryFilterDataset={categoryFilterDataset}
         />
         <div className="max-h-[500px] w-full overflow-auto pr-2">
           {transactionsResponse.transactions.length > 0 ? (

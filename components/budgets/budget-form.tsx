@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { BaseValidatedResponse } from "@/server/types";
 import { useRouter } from "next/navigation";
-import { useEffect, useTransition } from "react";
+import { useEffect, useMemo, useTransition } from "react";
 import budgetSchema, { BudgetSchemaType } from "@/schemas/budget-schema";
 import { createBudget, updateBudget } from "@/server/budget";
 import useGenericModalStore from "@/store/genericModalStore";
@@ -118,8 +118,6 @@ const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
         update: "Your budget has been updated.",
       };
       router.refresh();
-      console.log("showsuccess toast");
-
       toast.success("Success!", {
         description: successMessage[entityId ? "update" : "create"],
       });
@@ -127,10 +125,12 @@ const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
     }
   };
 
-  const budgetCategoryOptions = budgetCategories.map((category) => ({
-    label: category.name,
-    value: category.id.toString(),
-  }));
+  const budgetCategoryOptions = useMemo(() => {
+    return budgetCategories.map((category) => ({
+      label: category.name,
+      value: category.id.toString(),
+    }));
+  }, [budgetCategories]);
 
   const isBudgetCategoryListEmpty = budgetCategories.length === 0;
 

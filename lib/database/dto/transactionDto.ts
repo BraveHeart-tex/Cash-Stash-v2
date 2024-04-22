@@ -6,7 +6,7 @@ export const createTransactionDto = (
   userId: string
 ): TransactionInsertModel => {
   return {
-    category: validatedData.category,
+    categoryId: validatedData.categoryId,
     userId: userId,
     amount: validatedData.amount,
     description: validatedData.description,

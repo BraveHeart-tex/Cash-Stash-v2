@@ -1,16 +1,16 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { TransactionSelectModel } from "@/lib/database/schema";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import { generateLabelFromEnumValue } from "@/lib/utils/stringUtils/generateLabelFromEnumValue";
+import { TransactionWithCategoryAndAccountName } from "@/server/types";
 import useAuthStore from "@/store/auth/authStore";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { FaArrowsUpDown } from "react-icons/fa6";
 
 type TransactionWithAccount = Pick<
-  TransactionSelectModel,
+  TransactionWithCategoryAndAccountName,
   "amount" | "category" | "createdAt" | "description"
 > & { accountName: string };
 

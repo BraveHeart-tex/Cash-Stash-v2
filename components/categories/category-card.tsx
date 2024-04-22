@@ -11,6 +11,7 @@ import { deleteCategory } from "@/server/category";
 import { toast } from "sonner";
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { CategoryType } from "@/server/types";
 
 type CategoryCardProps = {
   category: CategorySelectModel;
@@ -62,7 +63,10 @@ const CategoryCard = ({ category }: CategoryCardProps) => {
       primaryActionLabel: "Delete",
       onConfirm: () => {
         startTransition(async () => {
-          const response = await deleteCategory(category.id);
+          const response = await deleteCategory(
+            category.id,
+            category.type as CategoryType
+          );
           if (!response) {
             toast.error(
               "A problem occurred while deleting the category. Please try again later."

@@ -1,13 +1,24 @@
 import {
   accounts,
   AccountSelectModel,
+  categories,
   TransactionInsertModel,
   transactions,
   TransactionSelectModel,
 } from "@/lib/database/schema";
 import { db } from "@/lib/database/connection";
 import accountRepository from "@/lib/database/repository/accountRepository";
-import { and, asc, desc, eq, gt, like, lt, sql } from "drizzle-orm";
+import {
+  and,
+  asc,
+  desc,
+  eq,
+  gt,
+  like,
+  lt,
+  sql,
+  getTableColumns,
+} from "drizzle-orm";
 import { getPageSizeAndSkipAmount } from "@/lib/constants";
 
 type CreateTransactionReturnType = {
@@ -20,7 +31,7 @@ type GetMultipleTransactionsParams = {
   page: number;
   userId: string;
   query?: string;
-  category?: TransactionSelectModel["category"];
+  categoryId?: number;
   sortBy?: string;
   sortDirection?: string;
   transactionType?: string;
@@ -216,7 +227,7 @@ const transactionRepository = {
     page,
     userId,
     query,
-    category,
+    categoryId,
     sortBy,
     sortDirection,
     transactionType,
@@ -267,15 +278,17 @@ const transactionRepository = {
 
     const transactionsQuery = db
       .select({
-        transaction: transactions,
+        ...getTableColumns(transactions),
         accountName: accounts.name,
+        category: categories.name,
       })
       .from(transactions)
       .innerJoin(accounts, eq(transactions.accountId, accounts.id))
+      .innerJoin(categories, eq(transactions.categoryId, categories.id))
       .where(
         and(
           eq(transactions.userId, userId),
-          eq(transactions.category, category || transactions.category),
+          eq(transactions.categoryId, categoryId || transactions.categoryId),
           eq(transactions.accountId, accountId || transactions.accountId),
           like(transactions.description, `%${query}%`),
           transactionTypeCondition
@@ -294,7 +307,7 @@ const transactionRepository = {
         and(
           eq(transactions.userId, userId),
           eq(transactions.accountId, accountId || transactions.accountId),
-          eq(transactions.category, category || transactions.category),
+          eq(transactions.categoryId, categoryId || transactions.categoryId),
           like(transactions.description, `%${query}%`),
           transactionTypeCondition
         )
@@ -308,13 +321,8 @@ const transactionRepository = {
 
       const totalCount = totalCountResponse.count;
 
-      const mappedTransactions = transactions.map((item) => ({
-        ...item.transaction,
-        accountName: item.accountName,
-      }));
-
       return {
-        transactions: mappedTransactions,
+        transactions,
         totalCount,
       };
     } catch (error) {

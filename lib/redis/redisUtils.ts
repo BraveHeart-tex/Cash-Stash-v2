@@ -166,7 +166,7 @@ export const getPaginatedTransactionsKey = ({
   sortDirection,
   query,
   pageNumber,
-  category,
+  categoryId,
 }: {
   userId: string;
   transactionType?: string;
@@ -175,7 +175,7 @@ export const getPaginatedTransactionsKey = ({
   sortDirection?: string;
   query?: string;
   pageNumber?: number;
-  category?: string;
+  categoryId?: number;
 }) => {
   return (
     generateCachePrefixWithUserId(
@@ -190,7 +190,7 @@ export const getPaginatedTransactionsKey = ({
       sortDirection,
       query,
       pageNumber,
-      category,
+      categoryId,
     })
   );
 };

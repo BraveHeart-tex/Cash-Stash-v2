@@ -14,16 +14,16 @@ import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import useGenericModalStore from "@/store/genericModalStore";
 import ActionPopover from "@/components/action-popover";
 import { toast } from "sonner";
-import { TransactionSelectModel } from "@/lib/database/schema";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import { generateLabelFromEnumValue } from "@/lib/utils/stringUtils/generateLabelFromEnumValue";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { format } from "date-fns";
 import useAuthStore from "@/store/auth/authStore";
+import { TransactionWithCategoryAndAccountName } from "@/server/types";
 
 type TransactionCardProps = {
-  transaction: TransactionSelectModel & { accountName: string };
+  transaction: TransactionWithCategoryAndAccountName;
   showPopover?: boolean;
   useLayoutId?: boolean;
 };

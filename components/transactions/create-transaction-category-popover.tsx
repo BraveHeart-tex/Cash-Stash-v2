@@ -7,19 +7,19 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import CategoryForm from "@/components/categories/category-form";
-import { CATEGORY_TYPES } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { FaPlus } from "react-icons/fa";
+import CategoryForm from "@/components/categories/category-form";
+import { CATEGORY_TYPES } from "@/lib/constants";
 
-type CreateBudgetCategoryPopoverProps = {
+type CreateTransactionCategoryPopoverProps = {
   // eslint-disable-next-line no-unused-vars
   onSave: (values: CategorySelectModel) => void;
 };
 
-const CreateBudgetCategoryPopover = ({
+const CreateTransactionCategoryPopover = ({
   onSave,
-}: CreateBudgetCategoryPopoverProps) => {
+}: CreateTransactionCategoryPopoverProps) => {
   const [open, setOpen] = useState(false);
   const addCategory = useCategoriesStore((state) => state.addCategory);
 
@@ -33,9 +33,11 @@ const CreateBudgetCategoryPopover = ({
       <PopoverContent className="z-[500]">
         <div className="grid gap-4">
           <div className="space-y-2">
-            <h4 className="font-medium leading-none">Add Budget Category</h4>
+            <h4 className="font-medium leading-none">
+              Add Transaction Category
+            </h4>
             <p className="text-sm text-muted-foreground">
-              Add a new budget category by using the form below.
+              Add a new transaction category by using the form below.
             </p>
           </div>
           <CategoryForm
@@ -45,12 +47,11 @@ const CreateBudgetCategoryPopover = ({
               addCategory(values);
               onSave(values);
             }}
-            defaultTypeValue={CATEGORY_TYPES.BUDGET}
+            defaultTypeValue={CATEGORY_TYPES.TRANSACTION}
           />
         </div>
       </PopoverContent>
     </Popover>
   );
 };
-
-export default CreateBudgetCategoryPopover;
+export default CreateTransactionCategoryPopover;

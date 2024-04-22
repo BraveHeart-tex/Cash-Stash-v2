@@ -336,17 +336,12 @@ export const transactions = mysqlTable(
       sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`
     ),
     description: varchar("description", { length: 191 }).notNull(),
-    category: mysqlEnum("category", [
-      "FOOD",
-      "TRANSPORTATION",
-      "ENTERTAINMENT",
-      "UTILITIES",
-      "SHOPPING",
-      "HOUSING",
-      "OTHER",
-    ])
-      .default("OTHER")
-      .notNull(),
+    categoryId: int("categoryId")
+      .notNull()
+      .references(() => categories.id, {
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      }),
     accountId: int("accountId")
       .notNull()
       .references(() => accounts.id, {
@@ -361,6 +356,9 @@ export const transactions = mysqlTable(
   },
   (table) => {
     return {
+      transactionsCategoryIdFkey: index("transactions_categoryId_fkey").on(
+        table.categoryId
+      ),
       transactionsUserIdFkey: index("transactions_userId_fkey").on(
         table.userId
       ),
@@ -383,6 +381,10 @@ export const transactionRelations = relations(transactions, ({ one }) => ({
   user: one(users, {
     fields: [transactions.userId],
     references: [users.id],
+  }),
+  category: one(categories, {
+    fields: [transactions.categoryId],
+    references: [categories.id],
   }),
 }));
 
@@ -526,10 +528,16 @@ export const categories = mysqlTable(
   }
 );
 
-export const categoryRelations = relations(categories, ({ one }) => ({
+export const categoryRelations = relations(categories, ({ one, many }) => ({
   user: one(users, {
     fields: [categories.userId],
     references: [users.id],
+  }),
+  budget: many(budgets, {
+    relationName: "budget-categories",
+  }),
+  transactions: many(transactions, {
+    relationName: "transaction-categories",
   }),
 }));
 

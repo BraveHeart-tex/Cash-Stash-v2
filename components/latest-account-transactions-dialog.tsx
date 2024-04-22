@@ -16,16 +16,14 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import TransactionCard from "@/components/transactions/transaction-card";
-import {
-  AccountSelectModel,
-  TransactionSelectModel,
-} from "@/lib/database/schema";
+import { AccountSelectModel } from "@/lib/database/schema";
 import AccountCardContent from "@/components/account-card-content";
+import { TransactionWithCategoryAndAccountName } from "@/server/types";
 
 type LatestAccountTransactionsDialogProps = {
   selectedAccount:
     | (AccountSelectModel & {
-        transactions: TransactionSelectModel[];
+        transactions: TransactionWithCategoryAndAccountName[];
       })
     | null;
   onClose: () => void;
@@ -57,10 +55,7 @@ const LatestAccountTransactionsDialog = ({
               useLayoutId={false}
               key={transaction.id}
               showPopover={false}
-              transaction={{
-                ...transaction,
-                accountName: selectedAccount.name,
-              }}
+              transaction={transaction}
             />
           ))}
         </div>

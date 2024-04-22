@@ -139,15 +139,15 @@ export type GetPaginatedTransactionsParams = BasePaginatedActionParams & {
   createdAtStart?: Date;
   createdAtEnd?: Date;
   createdAtOperator?: "equals" | "before" | "after" | "range";
-  category?: TransactionSelectModel["category"];
+  categoryId?: number;
 };
 
 export type GetPaginatedTransactionsResponse = BasePaginatedResponse & {
-  transactions: (TransactionSelectModel & { accountName: string })[];
+  transactions: TransactionWithCategoryAndAccountName[];
 };
 
 export type AccountWithTransactions = AccountSelectModel & {
-  transactions: TransactionSelectModel[];
+  transactions: TransactionWithCategoryAndAccountName[];
 };
 
 export type MonthlyTransactionsData = {
@@ -394,9 +394,12 @@ export type TransactionPageSearchParams = {
   accountId?: string;
   sortBy?: string;
   sortDirection?: string;
-  category?: string;
+  categoryId?: number;
   page?: string;
   query?: string;
 };
 
 export type BudgetWithCategory = BudgetSelectModel & { category: string };
+export type TransactionWithCategoryAndAccountName = TransactionSelectModel & {
+  category: string;
+} & { accountName: string };

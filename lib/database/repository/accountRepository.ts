@@ -6,7 +6,8 @@ import {
   AccountSelectModel,
   transactions,
 } from "@/lib/database/schema";
-import { and, eq, getTableColumns, like, sql } from "drizzle-orm";
+import { AccountWithTransactions } from "@/server/types";
+import { and, asc, desc, eq, getTableColumns, like, sql } from "drizzle-orm";
 
 type GetMultipleAccountsParams = {
   userId: string;
@@ -15,6 +16,11 @@ type GetMultipleAccountsParams = {
   sortBy?: string;
   sortDirection?: string;
   page: number;
+};
+
+type GetMultipleAccountsReturnType = {
+  accounts: AccountWithTransactions[];
+  totalCount: number;
 };
 
 const accountRepository = {
@@ -73,38 +79,44 @@ const accountRepository = {
     sortBy,
     sortDirection,
     page,
-  }: GetMultipleAccountsParams) {
+  }: GetMultipleAccountsParams): Promise<GetMultipleAccountsReturnType> {
     const { pageSize, skipAmount } = getPageSizeAndSkipAmount(page);
 
     const categoryCondition = category
       ? eq(accounts.category, category)
       : undefined;
 
+    const orderByCondition =
+      sortBy && sortDirection
+        ? sortDirection.toUpperCase() === "DESC"
+          ? desc(accounts.balance)
+          : asc(accounts.balance)
+        : accounts.balance;
+
     const accountsQuery = db.query.accounts.findMany({
       with: {
         transactions: {
           limit: 10,
+          with: {
+            account: {
+              columns: {
+                name: true,
+              },
+            },
+            category: {
+              columns: {
+                name: true,
+              },
+            },
+          },
         },
       },
-      where(fields, operators) {
-        const { eq, like, and } = operators;
-        return and(
-          eq(fields.userId, userId),
-          like(fields.name, `%${query}%`),
-          categoryCondition
-        );
-      },
-      orderBy(fields, operators) {
-        const { desc, asc } = operators;
-        const orderByCondition =
-          sortBy && sortDirection
-            ? sortDirection.toUpperCase() === "DESC"
-              ? desc(fields.balance)
-              : asc(fields.balance)
-            : fields.balance;
-
-        return orderByCondition;
-      },
+      where: and(
+        eq(accounts.userId, userId),
+        like(accounts.name, `%${query}%`),
+        categoryCondition
+      ),
+      orderBy: orderByCondition,
       limit: pageSize,
       offset: skipAmount,
     });
@@ -128,8 +140,17 @@ const accountRepository = {
         accountCountQuery,
       ]);
 
+      const mappedUserBankAccounts = userBankAccounts.map((account) => ({
+        ...account,
+        transactions: account.transactions.map((transaction) => ({
+          ...transaction,
+          category: transaction.category.name,
+          accountName: transaction.account.name,
+        })),
+      }));
+
       return {
-        accounts: userBankAccounts,
+        accounts: mappedUserBankAccounts,
         totalCount: totalCount.count,
       };
     } catch (e) {

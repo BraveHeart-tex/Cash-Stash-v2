@@ -218,6 +218,13 @@
       "when": 1713722778581,
       "tag": "0030_striped_christian_walker",
       "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "5",
+      "when": 1713790789198,
+      "tag": "0031_silky_titania",
+      "breakpoints": true
     }
   ]
 }

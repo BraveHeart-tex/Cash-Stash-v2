@@ -66,10 +66,10 @@ const cronService = {
 
         return true;
       } else if (isExchangeRateResponseError(data)) {
-        console.log("Error updating currency rates", data.description);
+        console.error("Error updating currency rates", data.description);
         return false;
       } else {
-        console.log("Error updating currency rates");
+        console.error("Error updating currency rates");
         return false;
       }
     } catch (error) {

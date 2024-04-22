@@ -1,13 +1,13 @@
 import TransactionCard from "@/components/transactions/transaction-card";
 import CreateTransactionButton from "@/components/create-buttons/create-transaction-button";
 import AnimatePresenceClient from "@/components/animations/animate-presence";
-import { TransactionSelectModel } from "@/lib/database/schema";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { PAGE_ROUTES } from "@/lib/constants";
+import { TransactionWithCategoryAndAccountName } from "@/server/types";
 
 type TransactionHistoryProps = {
-  transactions: (TransactionSelectModel & { accountName: string })[] | null;
+  transactions: TransactionWithCategoryAndAccountName[] | null;
 };
 
 const TransactionHistory = ({ transactions }: TransactionHistoryProps) => {

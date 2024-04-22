@@ -1,10 +1,10 @@
-import { TransactionSelectModel } from "@/lib/database/schema";
 import TransactionCard from "@/components/transactions/transaction-card";
+import { TransactionWithCategoryAndAccountName } from "@/server/types";
 
 const TransactionList = ({
   transactions,
 }: {
-  transactions: (TransactionSelectModel & { accountName: string })[];
+  transactions: TransactionWithCategoryAndAccountName[];
 }) => {
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
