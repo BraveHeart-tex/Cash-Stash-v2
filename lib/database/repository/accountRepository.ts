@@ -6,6 +6,7 @@ import {
   AccountSelectModel,
   transactions,
 } from "@/lib/database/schema";
+import logger from "@/lib/utils/logger";
 import { AccountWithTransactions } from "@/server/types";
 import { and, asc, desc, eq, getTableColumns, like, sql } from "drizzle-orm";
 
@@ -43,7 +44,7 @@ const accountRepository = {
         account: null,
       };
     } catch (error) {
-      console.error("Error creating account.", error);
+      logger.error("Error creating account.", error);
       return {
         affectedRows: 0,
         insertId: 0,
@@ -65,7 +66,7 @@ const accountRepository = {
         updatedAccount: updatedRow,
       };
     } catch (error) {
-      console.error("Error updating account.", error);
+      logger.error("Error updating account.", error);
       return {
         affectedRows: 0,
         updatedAccount: null,
@@ -144,8 +145,8 @@ const accountRepository = {
         ...account,
         transactions: account.transactions.map((transaction) => ({
           ...transaction,
-          category: transaction.category.name,
-          accountName: transaction.account.name,
+          category: transaction?.category?.name,
+          accountName: transaction?.account?.name,
         })),
       }));
 
@@ -154,7 +155,7 @@ const accountRepository = {
         totalCount: totalCount.count,
       };
     } catch (e) {
-      console.error("Error fetching accounts", e);
+      logger.error("Error fetching accounts", e);
       return {
         accounts: [],
         totalCount: 0,
@@ -169,7 +170,7 @@ const accountRepository = {
 
       return result.affectedRows;
     } catch (e) {
-      console.error("Error deleting account", e);
+      logger.error("Error deleting account", e);
       return 0;
     }
   },
@@ -181,7 +182,7 @@ const accountRepository = {
         .where(eq(accounts.id, accountId));
       return account;
     } catch (error) {
-      console.error("Error fetching account by id", error);
+      logger.error("Error fetching account by id", error);
       return null;
     }
   },
@@ -192,7 +193,7 @@ const accountRepository = {
         .from(accounts)
         .where(eq(accounts.userId, userId));
     } catch (error) {
-      console.error("Error fetching accounts by user id", error);
+      logger.error("Error fetching accounts by user id", error);
       return [];
     }
   },
@@ -207,7 +208,7 @@ const accountRepository = {
 
       return userAccounts.length > 0;
     } catch (error) {
-      console.error("Error checking if user has account", error);
+      logger.error("Error checking if user has account", error);
       return false;
     }
   },
@@ -223,7 +224,7 @@ const accountRepository = {
 
       return account?.balance ?? 0;
     } catch (e) {
-      console.error("Error getting account balance", e);
+      logger.error("Error getting account balance", e);
       return 0;
     }
   },
@@ -237,7 +238,7 @@ const accountRepository = {
         .innerJoin(transactions, eq(accounts.id, transactions.accountId))
         .where(eq(accounts.userId, userId));
     } catch (error) {
-      console.error(
+      logger.error(
         "Error fetching accounts with transactions by user id",
         error
       );
