@@ -51,6 +51,7 @@ export const accounts = mysqlTable(
   },
   (table) => {
     return {
+      id: primaryKey({ columns: [table.id], name: "Account_id" }),
       userAccountsUserIdFkey: index("userAccounts_userId_fkey").on(
         table.userId
       ),
@@ -519,6 +520,7 @@ export const categories = mysqlTable(
   },
   (table) => {
     return {
+      userIdFkey: index("user_id_fkey").on(table.userId),
       uniqueNameUserType: unique("unique_name_user_type").on(
         table.name,
         table.userId,
