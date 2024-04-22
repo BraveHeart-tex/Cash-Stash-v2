@@ -1,4 +1,5 @@
 import Redis from "ioredis";
+import logger from "@/lib/utils/logger";
 
 export const redis = new Redis(process.env.REDIS_CONNECTION_STRING!);
 
@@ -11,7 +12,7 @@ redis.on("ready", () => {
 });
 
 redis.on("error", (error) => {
-  console.error("Redis client error", error.message);
+  logger.error("Redis client error", error.message);
 });
 
 redis.on("end", () => {

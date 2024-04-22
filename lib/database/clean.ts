@@ -8,6 +8,7 @@ import {
   twoFactorAuthenticationSecrets,
   users,
 } from "@/lib/database/schema";
+import logger from "@/lib/utils/logger";
 
 const clean = async () => {
   if (process.env.NODE_ENV !== "development") return;
@@ -26,7 +27,7 @@ const clean = async () => {
 
 clean()
   .catch((e) => {
-    console.error(e);
+    logger.error(e);
     process.exit(1);
   })
   .finally(async () => {

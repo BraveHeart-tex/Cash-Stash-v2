@@ -1,4 +1,5 @@
 import cronService from "@/lib/services/cronService";
+import logger from "@/lib/utils/logger";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -14,7 +15,7 @@ export async function GET() {
 
     return NextResponse.json({ message: "Cron job ran successfully!" });
   } catch (error) {
-    console.error("Error running cron job");
+    logger.error("Error running cron job");
 
     return NextResponse.json(
       { message: "Error running cron job" },

@@ -1,6 +1,7 @@
 import { db } from "@/lib/database/connection";
 import { accounts, budgets, goals, transactions } from "@/lib/database/schema";
 import { faker } from "@faker-js/faker";
+import logger from "@/lib/utils/logger";
 
 const USER_ID = "um3kgd74zu4f3eltxzh68wos";
 
@@ -43,7 +44,7 @@ const seed = async () => {
 
 seed()
   .catch((e) => {
-    console.error(e);
+    logger.error(e);
     process.exit(1);
   })
   .finally(async () => {

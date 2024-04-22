@@ -8,6 +8,7 @@ import { isExchangeRateResponseError } from "@/lib/utils/typeGuards/isExchangeRa
 import currencyRatesRepository from "@/lib/database/repository/currencyRatesRepository";
 import exchangeRatesService from "@/lib/services/exchangeRatesService";
 import emailVerificationCodeRepository from "@/lib/database/repository/emailVerificationCodeRepository";
+import logger from "@/lib/utils/logger";
 
 const cronService = {
   async deleteUnverifiedAccounts() {
@@ -31,7 +32,7 @@ const cronService = {
 
       return true;
     } catch (error) {
-      console.error("Error deleting unverified accounts", error);
+      logger.error("Error deleting unverified accounts", error);
       return false;
     }
   },
@@ -40,7 +41,7 @@ const cronService = {
       await emailVerificationCodeRepository.deleteExpiredCodes();
       return true;
     } catch (error) {
-      console.error("Error deleting expired email verification tokens", error);
+      logger.error("Error deleting expired email verification tokens", error);
       return false;
     }
   },
@@ -66,14 +67,14 @@ const cronService = {
 
         return true;
       } else if (isExchangeRateResponseError(data)) {
-        console.error("Error updating currency rates", data.description);
+        logger.error("Error updating currency rates", data.description);
         return false;
       } else {
-        console.error("Error updating currency rates");
+        logger.error("Error updating currency rates");
         return false;
       }
     } catch (error) {
-      console.error("Error updating currency rates", error);
+      logger.error("Error updating currency rates", error);
       return false;
     }
   },

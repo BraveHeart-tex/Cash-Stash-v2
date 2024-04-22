@@ -2,6 +2,7 @@ import { and, between, eq, like, sql } from "drizzle-orm";
 import { db } from "@/lib/database/connection";
 import { ReminderInsertModel, reminders } from "@/lib/database/schema";
 import { getPageSizeAndSkipAmount } from "@/lib/constants";
+import logger from "@/lib/utils/logger";
 
 type GetMultipleRemindersParams = {
   userId: string;
@@ -27,7 +28,7 @@ const reminderRepository = {
 
       return reminder;
     } catch (error) {
-      console.error("Create reminder error", error);
+      logger.error("Create reminder error", error);
       return null;
     }
   },
@@ -40,7 +41,7 @@ const reminderRepository = {
 
       return updateResult.affectedRows;
     } catch (error) {
-      console.error("Update reminder error", error);
+      logger.error("Update reminder error", error);
       return 0;
     }
   },
@@ -52,7 +53,7 @@ const reminderRepository = {
 
       return deleteResult.affectedRows;
     } catch (error) {
-      console.error("Delete reminder error", error);
+      logger.error("Delete reminder error", error);
       return 0;
     }
   },

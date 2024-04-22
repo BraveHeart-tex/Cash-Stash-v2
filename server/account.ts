@@ -21,6 +21,7 @@ import transactionRepository from "@/lib/database/repository/transactionReposito
 import redisService from "@/lib/redis/redisService";
 import { AccountSelectModel } from "@/lib/database/schema";
 import { processZodError } from "@/lib/utils/objectUtils/processZodError";
+import logger from "@/lib/utils/logger";
 
 export const registerBankAccount = async ({
   balance,
@@ -62,7 +63,7 @@ export const registerBankAccount = async ({
       fieldErrors: [],
     };
   } catch (error) {
-    console.error("Error registering bank account", error);
+    logger.error("Error registering bank account", error);
     if (error instanceof ZodError) {
       return processZodError(error);
     }
@@ -221,7 +222,7 @@ export const getPaginatedAccounts = async ({
       currentPage: pageNumber,
     };
   } catch (e) {
-    console.error("Error fetching paginated accounts", e);
+    logger.error("Error fetching paginated accounts", e);
     return {
       accounts: [],
       hasNextPage: false,
@@ -291,7 +292,7 @@ export const getTransactionsForAccount = async (accountId: number) => {
 
     return transactions;
   } catch (error) {
-    console.error("Error fetching transactions for account", error);
+    logger.error("Error fetching transactions for account", error);
     return [];
   }
 };

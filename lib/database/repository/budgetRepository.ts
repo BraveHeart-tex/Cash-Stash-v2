@@ -2,6 +2,7 @@ import { getPageSizeAndSkipAmount } from "@/lib/constants";
 import { db } from "@/lib/database/connection";
 import { budgets, BudgetInsertModel, categories } from "@/lib/database/schema";
 import { and, asc, desc, eq, like, sql, getTableColumns } from "drizzle-orm";
+import logger from "@/lib/utils/logger";
 
 type GetMultipleBudgetsParams = {
   page: number;
@@ -22,7 +23,7 @@ const budgetRepository = {
 
       return budget;
     } catch (error) {
-      console.error("Error getting budget by id", error);
+      logger.error("Error getting budget by id", error);
       return null;
     }
   },
@@ -47,7 +48,7 @@ const budgetRepository = {
         budget: null,
       };
     } catch (error) {
-      console.error(error);
+      logger.error(error);
       return {
         affectedRows: 0,
         budget: null,
@@ -68,7 +69,7 @@ const budgetRepository = {
         updatedBudget,
       };
     } catch (error) {
-      console.error("Error updating budget", error);
+      logger.error("Error updating budget", error);
       return {
         affectedRows: 0,
         updatedBudget: null,
@@ -83,7 +84,7 @@ const budgetRepository = {
 
       return deleteBudgetResponse.affectedRows;
     } catch (error) {
-      console.error("Error deleting budget", error);
+      logger.error("Error deleting budget", error);
       return 0;
     }
   },
@@ -185,7 +186,7 @@ const budgetRepository = {
         totalCount,
       };
     } catch (error) {
-      console.error("Error getting budgets", error);
+      logger.error("Error getting budgets", error);
 
       return {
         budgets: [],

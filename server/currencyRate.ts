@@ -5,6 +5,7 @@ import { CURRENCIES, PAGE_ROUTES } from "@/lib/constants";
 import currencyRatesRepository from "@/lib/database/repository/currencyRatesRepository";
 import { redirect } from "next/navigation";
 import { ConvertCurrencyType } from "@/server/types";
+import logger from "@/lib/utils/logger";
 
 type ConvertCurrencyParams = {
   currency: string;
@@ -75,7 +76,7 @@ export const convertCurrency = async ({
       updatedAt: new Date().toISOString(),
     };
   } catch (error) {
-    console.error("Error converting currency", error);
+    logger.error("Error converting currency", error);
     return {
       currencies: [],
       updatedAt: new Date().toISOString(),

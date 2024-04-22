@@ -2,6 +2,7 @@ import { getPageSizeAndSkipAmount } from "@/lib/constants";
 import { db } from "@/lib/database/connection";
 import { GoalInsertModel, goals } from "@/lib/database/schema";
 import { and, asc, desc, eq, like, sql } from "drizzle-orm";
+import logger from "@/lib/utils/logger";
 
 type GetMultipleGoalsParams = {
   page: number;
@@ -30,7 +31,7 @@ const goalRepository = {
         goal: null,
       };
     } catch (error) {
-      console.error("Error creating goal", error);
+      logger.error("Error creating goal", error);
       return {
         affectedRows: 0,
         goal: null,
@@ -45,7 +46,7 @@ const goalRepository = {
 
       return deleteGoalResponse.affectedRows;
     } catch (e) {
-      console.error("Error deleting goal", e);
+      logger.error("Error deleting goal", e);
       return 0;
     }
   },
@@ -55,7 +56,7 @@ const goalRepository = {
 
       return goal;
     } catch (error) {
-      console.error("Error getting goal by id", error);
+      logger.error("Error getting goal by id", error);
       return null;
     }
   },
@@ -79,7 +80,7 @@ const goalRepository = {
         updatedGoal,
       };
     } catch (error) {
-      console.error("Error updating goal", error);
+      logger.error("Error updating goal", error);
       return {
         affectedRows: 0,
         updatedGoal: null,

@@ -20,6 +20,7 @@ import { createBudgetDto } from "@/lib/database/dto/budgetDto";
 import budgetRepository from "@/lib/database/repository/budgetRepository";
 import redisService from "@/lib/redis/redisService";
 import { processZodError } from "@/lib/utils/objectUtils/processZodError";
+import logger from "@/lib/utils/logger";
 
 export const createBudget = async (
   data: BudgetSchemaType
@@ -55,7 +56,7 @@ export const createBudget = async (
       fieldErrors: [],
     };
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     if (error instanceof ZodError) {
       return processZodError(error);
     }
@@ -126,7 +127,7 @@ export const updateBudget = async (
       return processZodError(error);
     }
 
-    console.error(error);
+    logger.error(error);
     return {
       error:
         "There was a problem while updating your budget. Please try again later.",
@@ -230,7 +231,7 @@ export const deleteBudget = async (budgetId: number) => {
       data: "Budget deleted successfully.",
     };
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return {
       error: "We encountered a problem while deleting the budget.",
     };

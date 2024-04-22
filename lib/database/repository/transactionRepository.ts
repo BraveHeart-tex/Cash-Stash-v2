@@ -20,6 +20,7 @@ import {
   getTableColumns,
 } from "drizzle-orm";
 import { getPageSizeAndSkipAmount } from "@/lib/constants";
+import logger from "@/lib/utils/logger";
 
 type CreateTransactionReturnType = {
   affectedRows: number;
@@ -48,7 +49,7 @@ const transactionRepository = {
         .limit(10)
         .orderBy(desc(transactions.createdAt));
     } catch (e) {
-      console.error("getByAccountId error", e);
+      logger.error("getByAccountId error", e);
       return [];
     }
   },
@@ -104,7 +105,7 @@ const transactionRepository = {
         };
       });
     } catch (error) {
-      console.error("create transaction error", error);
+      logger.error("create transaction error", error);
       return {
         affectedRows: 0,
         updatedAccount: null,
@@ -131,7 +132,7 @@ const transactionRepository = {
           .where(eq(accounts.id, oldAccountData.oldAccountId));
 
         if (!updateOldAccountResponse.affectedRows) {
-          console.error("Error updating old account", updateOldAccountResponse);
+          logger.error("Error updating old account", updateOldAccountResponse);
           trx.rollback();
           return {
             affectedRows: 0,
@@ -147,7 +148,7 @@ const transactionRepository = {
           .where(eq(accounts.id, oldAccountData.accountId));
 
         if (!updateNewAccountResponse.affectedRows) {
-          console.error("Error updating new account", updateNewAccountResponse);
+          logger.error("Error updating new account", updateNewAccountResponse);
           trx.rollback();
           return {
             affectedRows: 0,
@@ -161,7 +162,7 @@ const transactionRepository = {
           .where(eq(transactions.id, transactionDto.id));
 
         if (!updateTransactionResponse.affectedRows) {
-          console.error("Error updating transaction");
+          logger.error("Error updating transaction");
           await trx.rollback();
           return {
             affectedRows: 0,
@@ -180,7 +181,7 @@ const transactionRepository = {
         };
       });
     } catch (error) {
-      console.error("Error updating transaction", error);
+      logger.error("Error updating transaction", error);
       return {
         affectedRows: 0,
         updatedTransaction: null,
@@ -217,7 +218,7 @@ const transactionRepository = {
         };
       });
     } catch (error) {
-      console.error("Error getting account by id", error);
+      logger.error("Error getting account by id", error);
       return {
         affectedRows: 0,
       };
@@ -326,7 +327,7 @@ const transactionRepository = {
         totalCount,
       };
     } catch (error) {
-      console.error("Error getting transactions", error);
+      logger.error("Error getting transactions", error);
       return {
         transactions: [],
         totalCount: 0,

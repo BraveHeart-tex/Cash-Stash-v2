@@ -24,6 +24,7 @@ import { createTransactionDto } from "@/lib/database/dto/transactionDto";
 import accountRepository from "@/lib/database/repository/accountRepository";
 import { TransactionSelectModel } from "@/lib/database/schema";
 import { processZodError } from "@/lib/utils/objectUtils/processZodError";
+import logger from "@/lib/utils/logger";
 
 export const createTransaction = async (
   values: TransactionSchemaType
@@ -74,7 +75,7 @@ export const createTransaction = async (
       fieldErrors: [],
     };
   } catch (error) {
-    console.error(error);
+    logger.error(error);
 
     if (error instanceof ZodError) {
       return processZodError(error);
@@ -144,7 +145,7 @@ export const updateTransaction = async (
       fieldErrors: [],
     };
   } catch (error) {
-    console.error(error);
+    logger.error(error);
 
     if (error instanceof ZodError) {
       return processZodError(error);
@@ -195,7 +196,7 @@ export const deleteTransactionById = async (
       data: "Transaction deleted successfully",
     };
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return {
       error:
         "We encountered a problem while deleting the transaction. Please try again later.",
@@ -289,7 +290,7 @@ export const getPaginatedTransactions = async ({
       currentPage: pageNumber,
     };
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return {
       transactions: [],
       hasNextPage: false,

@@ -1,3 +1,5 @@
+import logger from "@/lib/utils/logger";
+
 const exchangeRatesService = {
   getLatestRates: async () => {
     try {
@@ -11,7 +13,7 @@ const exchangeRatesService = {
 
       return await response.json();
     } catch (error) {
-      console.error("Error fetching exchange rates", error);
+      logger.error("Error fetching exchange rates", error);
       return null;
     }
   },

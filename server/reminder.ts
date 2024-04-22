@@ -13,6 +13,7 @@ import {
 } from "@/server/types";
 import reminderRepository from "@/lib/database/repository/reminderRepository";
 import { convertISOToMysqlDatetime } from "@/lib/utils/dateUtils/convertISOToMysqlDatetime";
+import logger from "@/lib/utils/logger";
 
 export const createReminder = async (
   data: ReminderSchemaType
@@ -126,7 +127,7 @@ export const getPaginatedReminders = async ({
       hasPreviousPage: pageNumber > 1,
     };
   } catch (error) {
-    console.error("Error fetching paginated reminders", error);
+    logger.error("Error fetching paginated reminders", error);
     return {
       reminders: [],
       currentPage: 1,

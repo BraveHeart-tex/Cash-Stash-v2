@@ -1,6 +1,7 @@
 import { db } from "@/lib/database/connection";
 import { UserInsertModel, users } from "@/lib/database/schema";
 import { and, eq, InferSelectModel } from "drizzle-orm";
+import logger from "@/lib/utils/logger";
 
 export type UserSelectModel = InferSelectModel<typeof users>;
 
@@ -14,7 +15,7 @@ const userRepository = {
 
       return user;
     } catch (e) {
-      console.error(e);
+      logger.error(e);
       return null;
     }
   },
@@ -28,7 +29,7 @@ const userRepository = {
 
       return user;
     } catch (e) {
-      console.error(e);
+      logger.error(e);
       return null;
     }
   },
@@ -51,7 +52,7 @@ const userRepository = {
         user: null,
       };
     } catch (error) {
-      console.error(error);
+      logger.error(error);
       return {
         affectedRows: 0,
         user: null,
@@ -67,7 +68,7 @@ const userRepository = {
 
       return user;
     } catch (error) {
-      console.error(error);
+      logger.error(error);
       return null;
     }
   },
@@ -80,7 +81,7 @@ const userRepository = {
 
       return user;
     } catch (error) {
-      console.error(error);
+      logger.error(error);
       return null;
     }
   },

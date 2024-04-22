@@ -1,5 +1,4 @@
 "use server";
-
 import { getUser } from "@/lib/auth/session";
 import { PAGE_ROUTES } from "@/lib/constants";
 import { db } from "@/lib/database/connection";
@@ -10,6 +9,7 @@ import { invalidateKeysByUserId } from "@/lib/redis/redisUtils";
 import { eq, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import logger from "@/lib/utils/logger";
 
 export const updateUserCurrencyPreference = async (symbol: string) => {
   const { user } = await getUser();
@@ -39,7 +39,7 @@ export const updateUserCurrencyPreference = async (symbol: string) => {
       success: true,
     };
   } catch (error) {
-    console.error("error updating currency preference", error);
+    logger.error("error updating currency preference", error);
     return {
       error:
         "An error occurred while updating the currency preference. Please try again later.",
@@ -120,7 +120,7 @@ export const convertTransactionsToNewCurrency = async (
       success: "Successfully converted transactions to the new currency rate.",
     };
   } catch (error) {
-    console.error("error converting transactions to new currency", error);
+    logger.error("error converting transactions to new currency", error);
     return {
       error:
         "An error occurred while converting transactions to the new currency rate. Please try again later.",

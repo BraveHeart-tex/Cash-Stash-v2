@@ -2,6 +2,7 @@ import { db } from "@/lib/database/connection";
 import { emailVerificationCode } from "@/lib/database/schema";
 import { convertISOToMysqlDatetime } from "@/lib/utils/dateUtils/convertISOToMysqlDatetime";
 import { eq, lte } from "drizzle-orm";
+import logger from "@/lib/utils/logger";
 
 const getByEmailAndUserId = async (email: string, userId: string) => {
   try {
@@ -15,7 +16,7 @@ const getByEmailAndUserId = async (email: string, userId: string) => {
       },
     });
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return null;
   }
 };

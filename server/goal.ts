@@ -20,6 +20,7 @@ import goalRepository from "@/lib/database/repository/goalRepository";
 import redisService from "@/lib/redis/redisService";
 import { GoalSelectModel } from "@/lib/database/schema";
 import { processZodError } from "@/lib/utils/objectUtils/processZodError";
+import logger from "@/lib/utils/logger";
 
 export const createGoal = async (
   values: GoalSchemaType
@@ -55,7 +56,7 @@ export const createGoal = async (
       fieldErrors: [],
     };
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     if (error instanceof ZodError) {
       return processZodError(error);
     }
@@ -117,7 +118,7 @@ export const updateGoal = async (
       return processZodError(error);
     }
 
-    console.error(error);
+    logger.error(error);
     return {
       error:
         "There was a problem while updating your goal. Please try again later.",
@@ -191,7 +192,7 @@ export const getPaginatedGoals = async ({
       currentPage: pageNumber,
     };
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return {
       goals: [],
       hasNextPage: false,
@@ -228,7 +229,7 @@ export const deleteGoal = async (goalId: number) => {
 
     return { data: "Goal deleted successfully." };
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return {
       error:
         "There was a problem while deleting your goal. Please try again later.",

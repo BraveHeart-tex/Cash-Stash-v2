@@ -47,6 +47,7 @@ import twoFactorAuthenticationSecretRepository from "@/lib/database/repository/t
 import { processZodError } from "@/lib/utils/objectUtils/processZodError";
 import { twoFactorAuthenticationSecrets } from "@/lib/database/schema";
 import { eq } from "drizzle-orm";
+import logger from "@/lib/utils/logger";
 
 export const login = async (values: LoginSchemaType) => {
   const header = headers();
@@ -115,7 +116,7 @@ export const login = async (values: LoginSchemaType) => {
       twoFactorAuthenticationRequired: false,
     };
   } catch (error) {
-    console.error(error);
+    logger.error(error);
 
     if (error instanceof ZodError) {
       return {
@@ -212,7 +213,7 @@ export const register = async (values: RegisterSchemaType) => {
       fieldErrors: [],
     };
   } catch (error) {
-    console.error(error);
+    logger.error(error);
 
     if (error instanceof ZodError) {
       return processZodError(error);
@@ -285,7 +286,7 @@ export const checkEmailValidityBeforeVerification = async (email: string) => {
         : 0,
     };
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return {
       hasValidVerificationCode: false,
       timeLeft: 0,
@@ -349,7 +350,7 @@ export const handleEmailVerification = async (email: string, code: string) => {
         "Email verified successfully. You are being redirected...",
     };
   } catch (error) {
-    console.error("Error while verifying email", error);
+    logger.error("Error while verifying email", error);
     return {
       error:
         "Something went wrong while processing your request. Please try again later.",
@@ -683,7 +684,7 @@ export const disableTwoFactorAuthentication = async () => {
       successMessage: "Two-factor authentication disabled successfully.",
     };
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return {
       error:
         "Something went wrong while processing your request. Please try again later.",
@@ -709,7 +710,7 @@ export const validateReCAPTCHAToken = async (token: string) => {
 
     return data.success;
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return false;
   }
 };
