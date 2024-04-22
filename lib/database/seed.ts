@@ -3,7 +3,9 @@ import { accounts, budgets, goals, transactions } from "@/lib/database/schema";
 import { faker } from "@faker-js/faker";
 import logger from "@/lib/utils/logger";
 
-const USER_ID = "um3kgd74zu4f3eltxzh68wos";
+const USER_ID = "jci4b5yqcf1h09ftpze4lvu7";
+const transactionCategoryId = 110;
+const budgetCategoryId = 111;
 
 const seed = async () => {
   await db.transaction(async (trx) => {
@@ -20,11 +22,11 @@ const seed = async () => {
           amount: faker.number.int({ min: -100, max: 1000 }),
           description: faker.lorem.sentence(),
           userId: USER_ID,
-          categoryId: 1,
+          categoryId: transactionCategoryId,
         }),
         trx.insert(budgets).values({
           budgetAmount: faker.number.int({ min: 0, max: 1000 }),
-          categoryId: 1,
+          categoryId: budgetCategoryId,
           name: faker.lorem.word(),
           progress: faker.number.int({ min: 0, max: 100 }),
           spentAmount: faker.number.int({ min: 0, max: 1000 }),
