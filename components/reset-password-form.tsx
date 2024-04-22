@@ -47,8 +47,10 @@ const ResetPasswordForm = ({ email, token }: ResetPasswordFormProps) => {
       if (response.error) {
         toast.error(response.error);
         router.push(PAGE_ROUTES.LOGIN_ROUTE);
+        return;
       }
 
+      router.push(PAGE_ROUTES.HOME_PAGE);
       toast.success(response.successMessage ?? "Password reset successfully");
     });
   };

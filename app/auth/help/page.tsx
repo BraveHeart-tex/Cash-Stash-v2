@@ -5,13 +5,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import ForgotPassword from "@/components/auth/forgot-password";
 import { PAGE_ROUTES } from "@/lib/constants";
 import ResendVerificationEmailInput from "@/components/resend-verification-token-input";
 import { FaArrowLeft } from "react-icons/fa6";
+import Logo from "@/components/logo";
 
 const SignInHelpPage = ({
   searchParams,
@@ -61,13 +61,7 @@ const SignInHelpPage = ({
     >
       <Card className="min-w-[400px]">
         <CardHeader className="text-xl">
-          <Image
-            src={"/logo.svg"}
-            alt="Cash Stash"
-            width={200}
-            height={200}
-            className="mb-4 monokai-dark:invert dark:invert md:mx-auto"
-          />
+          <Logo width={200} height={200} className="mx-auto mb-4" />
           <CardTitle>{renderTitle()}</CardTitle>
           <CardDescription>{renderDescription()}</CardDescription>
         </CardHeader>

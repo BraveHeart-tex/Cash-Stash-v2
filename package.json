@@ -16,7 +16,8 @@
     "prettier": "prettier --write '**/*.{ts,tsx,js,jsx,json,css,scss,md}' --ignore-path .prettierignore",
     "precommit": "pretty-quick --staged && lint-staged",
     "prepare": "husky install .husky",
-    "db:seed": "tsx ./lib/database/seed.ts"
+    "db:seed": "tsx ./lib/database/seed.ts",
+    "db:clean": "tsx ./lib/database/clean.ts"
   },
   "resolutions": {
     "@radix-ui/react-dismissable-layer": "^1.0.5",

@@ -8,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -35,6 +34,7 @@ import { useTransition } from "react";
 import PasswordInput from "@/components/auth/password-input";
 import { toast } from "sonner";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
+import Logo from "@/components/logo";
 
 const RegisterForm = () => {
   const { executeRecaptcha } = useGoogleReCaptcha();
@@ -110,13 +110,7 @@ const RegisterForm = () => {
     >
       <Card className="w-full">
         <CardHeader className="text-xl">
-          <Image
-            src={"/logo.svg"}
-            alt="Cash Stash"
-            width={200}
-            height={200}
-            className="mx-auto mb-4 block monokai-dark:invert dark:invert 2xl:hidden"
-          />
+          <Logo className="mx-auto mb-4 2xl:hidden" />
           <CardTitle>Welcome!</CardTitle>
           <CardDescription>
             Get started by creating your account.

@@ -15,9 +15,9 @@ import {
   EMAIL_VERIFICATION_REDIRECTION_PATHS,
   PAGE_ROUTES,
 } from "@/lib/constants";
-import Image from "next/image";
 import { redirect } from "next/navigation";
 import ResendVerificationTokenButton from "@/components/resend-verification-token-button";
+import Logo from "@/components/logo";
 
 type EmailVerificationPageProps = {
   params: {
@@ -50,13 +50,7 @@ const EmailVerificationPage = async ({
     >
       <Card>
         <CardHeader className="text-xl">
-          <Image
-            src={"/logo.svg"}
-            alt="Cash Stash"
-            width={200}
-            height={200}
-            className="mb-4 dark:invert md:mx-auto"
-          />
+          <Logo width={200} height={200} className="mx-auto mb-4" />
           <CardTitle>Email Verification</CardTitle>
         </CardHeader>
         <CardContent>

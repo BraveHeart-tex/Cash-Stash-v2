@@ -1,7 +1,7 @@
 import LoginForm from "@/components/auth/login-form";
+import Logo from "@/components/logo";
 import { getUser } from "@/lib/auth/session";
 import { PAGE_ROUTES } from "@/lib/constants";
-import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -18,12 +18,10 @@ const LoginPage = async () => {
     >
       <div className="grid min-h-screen w-full grid-cols-1 items-center 2xl:grid-cols-2">
         <div className="relative hidden h-screen flex-col items-center justify-center bg-muted 2xl:flex">
-          <Image
-            src={"/logo.svg"}
-            alt="logo"
+          <Logo
+            className="monokai-dark:invert dark:invert"
             width={400}
             height={400}
-            className="monokai-dark:invert dark:invert"
           />
           <p className="absolute bottom-2 right-2 text-xs">
             Made by{" "}

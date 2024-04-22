@@ -2,8 +2,8 @@ import { getUser } from "@/lib/auth/session";
 import { redirect } from "next/navigation";
 import RegisterForm from "@/components/auth/register-form";
 import { PAGE_ROUTES } from "@/lib/constants";
-import Image from "next/image";
 import Link from "next/link";
+import Logo from "@/components/logo";
 
 const SignUpPage = async () => {
   const { user } = await getUser();
@@ -18,13 +18,7 @@ const SignUpPage = async () => {
     >
       <div className="grid min-h-screen w-full grid-cols-1 items-center 2xl:grid-cols-2">
         <div className="relative hidden h-screen flex-col items-center justify-center bg-muted 2xl:flex">
-          <Image
-            src={"/logo.svg"}
-            alt="logo"
-            width={400}
-            height={400}
-            className="monokai-dark:invert dark:invert"
-          />
+          <Logo width={400} height={400} />
           <p className="absolute bottom-2 right-2 text-xs">
             Made by{" "}
             <Link

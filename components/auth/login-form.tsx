@@ -8,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import loginSchema, { LoginSchemaType } from "@/schemas/login-schema";
@@ -32,6 +31,7 @@ import PasswordInput from "@/components/auth/password-input";
 import { toast } from "sonner";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import LoggedInIllustration from "@/components/logged-in-illustration";
+import Logo from "@/components/logo";
 
 const LoginForm = () => {
   const { executeRecaptcha } = useGoogleReCaptcha();
@@ -123,12 +123,10 @@ const LoginForm = () => {
       ) : (
         <Card className="w-full">
           <CardHeader className="text-xl">
-            <Image
-              src={"/logo.svg"}
-              alt="Cash Stash"
+            <Logo
               width={200}
               height={200}
-              className="mx-auto mb-4 block monokai-dark:invert dark:invert 2xl:hidden"
+              className="mx-auto mb-4 2xl:hidden"
             />
             <CardTitle>Welcome!</CardTitle>
             <CardDescription>Sign in to access your account.</CardDescription>

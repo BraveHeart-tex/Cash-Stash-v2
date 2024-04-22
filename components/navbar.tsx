@@ -1,7 +1,5 @@
 "use client";
-import Image from "next/image";
 import UserMenu from "@/components/user-menu";
-
 import Link from "next/link";
 import { useEffect } from "react";
 import { motion } from "framer-motion";
@@ -9,6 +7,7 @@ import { User } from "lucia";
 import useAuthStore from "@/store/auth/authStore";
 import { PAGE_ROUTES } from "@/lib/constants";
 import ModeToggle from "@/components/ui/mode-toggle";
+import Logo from "@/components/logo";
 
 const Navbar = ({ user }: { user: User | null }) => {
   const setCurrentUser = useAuthStore((state) => state.setUser);
@@ -28,9 +27,7 @@ const Navbar = ({ user }: { user: User | null }) => {
         <div className="flex items-center justify-between">
           <div className="hidden md:block" />
           <Link href={PAGE_ROUTES.HOME_PAGE} className="ml-auto lg:ml-0">
-            <Image
-              src={"/logo.svg"}
-              alt="Cash Stash"
+            <Logo
               width={200}
               height={200}
               className="mx-auto grayscale invert monokai-dark:invert-0 lg:mx-0"

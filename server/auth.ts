@@ -443,6 +443,37 @@ export const sendPasswordResetEmail = async (email: string) => {
   };
 };
 
+export const checkResetPasswordEmailAndToken = async ({
+  email,
+  token,
+}: {
+  email: string;
+  token: string;
+}) => {
+  const user = await userRepository.getVerifiedUserByEmail(email);
+
+  if (!user) {
+    return {
+      error: "Invalid request",
+      successMessage: null,
+    };
+  }
+
+  const resetToken = await passwordResetTokenRepository.getByToken(token);
+
+  if (!resetToken || !isWithinExpirationDate(new Date(resetToken.expiresAt))) {
+    return {
+      error: "Invalid request",
+      successMessage: null,
+    };
+  }
+
+  return {
+    error: null,
+    successMessage: null,
+  };
+};
+
 export const resetPassword = async ({
   email,
   token,
