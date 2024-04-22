@@ -31,6 +31,7 @@ import TwoFactorAuthenticationForm from "@/components/auth/two-factor-authentica
 import PasswordInput from "@/components/auth/password-input";
 import { toast } from "sonner";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
+import LoggedInIllustration from "@/components/logged-in-illustration";
 
 const LoginForm = () => {
   const { executeRecaptcha } = useGoogleReCaptcha();
@@ -94,20 +95,7 @@ const LoginForm = () => {
   if (loggedIn) {
     return (
       <div className="flex h-screen flex-col items-center justify-center gap-2">
-        <Image
-          src="/logging-in-dark.svg"
-          width={300}
-          height={300}
-          alt="logging in"
-          className="hidden dark:block"
-        />
-        <Image
-          src="/logging-in.svg"
-          width={300}
-          height={300}
-          alt="logging in"
-          className="block dark:hidden"
-        />
+        <LoggedInIllustration />
         <h1 className="scroll-m-20 text-3xl font-semibold tracking-tight text-primary">
           Logged in successfully.
         </h1>
