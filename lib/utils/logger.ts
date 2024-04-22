@@ -29,7 +29,7 @@ class Logger implements ILogger {
         console.warn(`${LOG_COLORS.YELLOW}[WARN]`, ...args, LOG_COLORS.RESET);
         break;
       case LogLevel.ERROR:
-        logger.error(`${LOG_COLORS.RED}[ERROR]`, ...args, LOG_COLORS.RESET);
+        console.error(`${LOG_COLORS.RED}[ERROR]`, ...args, LOG_COLORS.RESET);
         break;
       default:
         console.log(...args);

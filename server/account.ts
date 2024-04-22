@@ -22,6 +22,7 @@ import redisService from "@/lib/redis/redisService";
 import { AccountSelectModel } from "@/lib/database/schema";
 import { processZodError } from "@/lib/utils/objectUtils/processZodError";
 import logger from "@/lib/utils/logger";
+import { generateLabelFromEnumValue } from "@/lib/utils/stringUtils/generateLabelFromEnumValue";
 
 export const registerBankAccount = async ({
   balance,
@@ -64,8 +65,27 @@ export const registerBankAccount = async ({
     };
   } catch (error) {
     logger.error("Error registering bank account", error);
+
     if (error instanceof ZodError) {
       return processZodError(error);
+    }
+
+    if (error instanceof Error) {
+      if ("code" in error && error.code === "ER_DUP_ENTRY") {
+        return {
+          error: `Account already exists with name ${name} and category ${generateLabelFromEnumValue(category)}.`,
+          fieldErrors: [
+            {
+              field: "name",
+              message: `Account already exists with name: ${name}.`,
+            },
+            {
+              field: "category",
+              message: `Account already exists with category: ${generateLabelFromEnumValue(category)}.`,
+            },
+          ],
+        };
+      }
     }
 
     return {

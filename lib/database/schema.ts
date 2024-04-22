@@ -55,6 +55,9 @@ export const accounts = mysqlTable(
       userAccountsUserIdFkey: index("userAccounts_userId_fkey").on(
         table.userId
       ),
+      userAccountsAccountNameUserIdAndCategoryUnique: unique(
+        "accounts_userId_name_category_unique"
+      ).on(table.name, table.userId, table.category),
     };
   }
 );

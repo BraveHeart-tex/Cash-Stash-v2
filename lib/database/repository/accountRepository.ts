@@ -26,31 +26,22 @@ type GetMultipleAccountsReturnType = {
 
 const accountRepository = {
   async create(accountDto: AccountInsertModel, withReturning?: true) {
-    try {
-      const [result] = await db.insert(accounts).values(accountDto);
+    const [result] = await db.insert(accounts).values(accountDto);
 
-      if (withReturning && result.affectedRows) {
-        const account = await this.getById(result.insertId);
-        return {
-          affectedRows: result.affectedRows,
-          insertId: result.insertId,
-          account,
-        };
-      }
-
+    if (withReturning && result.affectedRows) {
+      const account = await this.getById(result.insertId);
       return {
         affectedRows: result.affectedRows,
         insertId: result.insertId,
-        account: null,
-      };
-    } catch (error) {
-      logger.error("Error creating account.", error);
-      return {
-        affectedRows: 0,
-        insertId: 0,
-        account: null,
+        account,
       };
     }
+
+    return {
+      affectedRows: result.affectedRows,
+      insertId: result.insertId,
+      account: null,
+    };
   },
   async update(accountId: number, data: Partial<AccountInsertModel>) {
     try {

@@ -232,6 +232,27 @@
       "when": 1713798060284,
       "tag": "0032_tricky_mongu",
       "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "5",
+      "when": 1713810832035,
+      "tag": "0033_brown_shinko_yamashiro",
+      "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "5",
+      "when": 1713811189981,
+      "tag": "0034_rare_victor_mancha",
+      "breakpoints": true
+    },
+    {
+      "idx": 35,
+      "version": "5",
+      "when": 1713811245858,
+      "tag": "0035_ordinary_princess_powerful",
+      "breakpoints": true
     }
   ]
 }
