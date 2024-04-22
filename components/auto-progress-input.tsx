@@ -1,14 +1,15 @@
-import React, {
+"use client";
+import {
   useState,
   useRef,
   RefObject,
   KeyboardEvent,
   ClipboardEvent,
   HTMLInputTypeAttribute,
-  useEffect,
 } from "react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils/stringUtils/cn";
+import { Label } from "@/components/ui/label";
 
 type AutoProgressInputProps = {
   length: number;
@@ -16,7 +17,6 @@ type AutoProgressInputProps = {
   onChange: (value: string) => void;
   type?: HTMLInputTypeAttribute;
   loading?: boolean;
-  shouldFocusFirstInput?: boolean;
 };
 
 const AutoProgressInput = ({
@@ -24,19 +24,12 @@ const AutoProgressInput = ({
   onChange,
   type = "text",
   loading,
-  shouldFocusFirstInput = false,
 }: AutoProgressInputProps) => {
   const [values, setValues] = useState(new Array(length).fill(""));
   const refs: RefObject<HTMLInputElement>[] = Array.from({ length }, () =>
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useRef<HTMLInputElement>(null)
   );
-
-  useEffect(() => {
-    if (shouldFocusFirstInput) {
-      refs[0]?.current?.focus();
-    }
-  }, [shouldFocusFirstInput, refs]);
 
   const handleChange = (index: number, value: string) => {
     const newValues = [...values];
@@ -76,21 +69,31 @@ const AutoProgressInput = ({
   return (
     <div className="flex items-center">
       {values.map((value, index) => (
-        <Input
-          className={cn(
-            "mr-[0.5em] w-[3em] bg-background text-center",
-            loading && "animate-pulse opacity-50"
-          )}
-          key={index}
-          ref={refs[index]}
-          type={type}
-          disabled={loading}
-          maxLength={1}
-          onPaste={handlePaste}
-          value={value}
-          onChange={(e) => handleChange(index, e.target.value)}
-          onKeyDown={(e) => handleKeyDown(index, e)}
-        />
+        <>
+          <Label
+            htmlFor={`auto-progress-input-${index + 1}`}
+            className="sr-only"
+          >
+            Input {index + 1}
+          </Label>
+          <Input
+            id={`auto-progress-input-${index + 1}`}
+            className={cn(
+              "mr-[0.5em] w-[3em] bg-background text-center",
+              loading && "animate-pulse opacity-50"
+            )}
+            aria-label={`Auto progress input field ${index + 1}`}
+            key={index}
+            ref={refs[index]}
+            type={type}
+            disabled={loading}
+            maxLength={1}
+            onPaste={handlePaste}
+            value={value}
+            onChange={(e) => handleChange(index, e.target.value)}
+            onKeyDown={(e) => handleKeyDown(index, e)}
+          />
+        </>
       ))}
     </div>
   );

@@ -48,7 +48,6 @@ const EmailVerificationInput = ({ email }: { email: string }) => {
           length={EMAIL_VERIFICATION_CODE_LENGTH}
           onChange={setVerificationCode}
           loading={loading}
-          shouldFocusFirstInput
         />
       </div>
       <div className="w-full lg:hidden">
