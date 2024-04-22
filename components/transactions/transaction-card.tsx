@@ -16,7 +16,6 @@ import ActionPopover from "@/components/action-popover";
 import { toast } from "sonner";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import { cn } from "@/lib/utils/stringUtils/cn";
-import { generateLabelFromEnumValue } from "@/lib/utils/stringUtils/generateLabelFromEnumValue";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { format } from "date-fns";
 import useAuthStore from "@/store/auth/authStore";
@@ -79,10 +78,6 @@ const TransactionCard = ({
     });
   };
 
-  const transactionCategoryLabel = generateLabelFromEnumValue(
-    transaction.category
-  );
-
   const formatTransactionDate = (date: string) => {
     return format(new Date(date), "dd/MM/yyyy HH:mm");
   };
@@ -100,7 +95,7 @@ const TransactionCard = ({
       <Card className={"relative mt-4"}>
         <CardHeader className={"h-[100px] border-b"}>
           <CardTitle>{transaction.description}</CardTitle>
-          <CardDescription>{transactionCategoryLabel}</CardDescription>
+          <CardDescription>{transaction.category}</CardDescription>
         </CardHeader>
         <CardContent className="py-2">
           <div className="grid grid-cols-1 gap-1">
@@ -108,7 +103,7 @@ const TransactionCard = ({
               label="Date"
               value={formatTransactionDate(transaction.createdAt)}
             />
-            <DataLabel label={"Category"} value={transactionCategoryLabel} />
+            <DataLabel label={"Category"} value={transaction.category} />
             <DataLabel label={"Account Name"} value={transaction.accountName} />
 
             <DataLabel
