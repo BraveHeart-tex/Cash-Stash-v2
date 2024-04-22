@@ -33,13 +33,13 @@ const TransactionsPage = async ({ searchParams }: TransactionsPageProps) => {
 
   return (
     <main>
-      <div className="mx-auto p-4 lg:max-w-[1300px] xl:max-w-[1600px]">
+      <div className="mx-auto p-4 lg:max-w-[1300px] xl:max-w-[1600px] ">
         <TransactionsPageHeader />
         <TransactionsPageFilters
           shouldRenderPopover={transactionsResponse.transactions.length > 1}
           accountsFilterDataset={accountsFilterDataset}
         />
-        <div className="max-h-[500px] w-full overflow-auto pr-2">
+        <div className="mt-2 h-[calc(100vh-470px)] w-full overflow-auto pr-2 lg:h-[calc(100vh-400px)]">
           {transactionsResponse.transactions.length > 0 ? (
             <TransactionList transactions={transactionsResponse.transactions} />
           ) : (
