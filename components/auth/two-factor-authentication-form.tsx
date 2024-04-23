@@ -11,13 +11,15 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import TwoFactorAuthenticationTimer from "@/components/two-factor-authentication-timer";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Logo from "@/components/logo";
+import { PAGE_ROUTES } from "@/lib/constants";
 
 const TwoFactorAuthenticationForm = ({ email }: { email: string }) => {
   const [isPending, startTransition] = useTransition();
   const [code, setCode] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     if (code.length === 6) {
@@ -32,11 +34,12 @@ const TwoFactorAuthenticationForm = ({ email }: { email: string }) => {
         }
 
         if (response.successMessage) {
+          router.push(PAGE_ROUTES.HOME_PAGE);
           toast.success(response.successMessage);
         }
       });
     }
-  }, [code, email]);
+  }, [code, email, router]);
 
   return (
     <Card>
