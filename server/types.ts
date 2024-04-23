@@ -403,3 +403,26 @@ export type BudgetWithCategory = BudgetSelectModel & { category: string };
 export type TransactionWithCategoryAndAccountName = TransactionSelectModel & {
   category: string;
 } & { accountName: string };
+
+export type MaskOptions = {
+  /** The string to be prepended to the masked value. */
+  prefix?: string;
+  /** The string to be appended to the masked value. */
+  suffix?: string;
+  /** Whether to include a thousands separator in the masked value. */
+  includeThousandsSeparator?: boolean;
+  /** The symbol used as the thousands separator in the masked value. */
+  thousandsSeparatorSymbol?: string;
+  /** Whether to allow a decimal component in the masked value. */
+  allowDecimal?: boolean;
+  /** The symbol used as the decimal component in the masked value. */
+  decimalSymbol?: string;
+  /** The maximum number of decimal places in the masked value. */
+  decimalLimit?: number;
+  /** The maximum number of integer digits in the masked value. */
+  integerLimit?: number;
+  /** Whether to allow negative values in the masked value. */
+  allowNegative?: boolean;
+  /** Whether to allow leading zeroes in the masked value. */
+  allowLeadingZeroes?: boolean;
+};

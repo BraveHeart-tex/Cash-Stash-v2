@@ -164,6 +164,9 @@ importers:
       react-qr-code:
         specifier: ^2.0.12
         version: 2.0.12(react@18.2.0)
+      react-text-mask:
+        specifier: ^5.5.0
+        version: 5.5.0(react@18.2.0)
       recharts:
         specifier: ^2.12.2
         version: 2.12.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -176,6 +179,9 @@ importers:
       tailwindcss-animate:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.4.1)
+      text-mask-addons:
+        specifier: ^3.8.0
+        version: 3.8.0
       tsx:
         specifier: ^4.7.1
         version: 4.7.1
@@ -222,6 +228,9 @@ importers:
       "@types/react-google-recaptcha":
         specifier: ^2.1.9
         version: 2.1.9
+      "@types/react-text-mask":
+        specifier: ^5.4.14
+        version: 5.4.14
       "@types/uuid":
         specifier: ^9.0.8
         version: 9.0.8
@@ -3560,6 +3569,12 @@ packages:
     resolution:
       {
         integrity: sha512-nT31LrBDuoSZJN4QuwtQSF3O89FVHC4jLhM+NtKEmVF5R1e8OY0Jo4//x2Yapn2aNHguwgX5doAq8Zo+Ehd0ug==,
+      }
+
+  "@types/react-text-mask@5.4.14":
+    resolution:
+      {
+        integrity: sha512-VkQuH+7Ol+ue/EFe9EFqJAmDe3ay5VML29l3aJkdzAriMhiprJOmdAFjZ3jOT6p3+nBgEUHxaQtUgg8k8Sk5wA==,
       }
 
   "@types/react@18.2.63":
@@ -7500,6 +7515,14 @@ packages:
       "@types/react":
         optional: true
 
+  react-text-mask@5.5.0:
+    resolution:
+      {
+        integrity: sha512-SLJlJQxa0uonMXsnXRpv5abIepGmHz77ylQcra0GNd7Jtk4Wj2Mtp85uGQHv1avba2uI8ZvRpIEQPpJKsqRGYw==,
+      }
+    peerDependencies:
+      react: ^0.14.0 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
+
   react-transition-group@4.4.5:
     resolution:
       {
@@ -8238,6 +8261,12 @@ packages:
       }
     engines: { node: ">=10" }
     hasBin: true
+
+  text-mask-addons@3.8.0:
+    resolution:
+      {
+        integrity: sha512-VSZSdc/tKn4zGxgpJ+uNBzoW1t472AoAFIlbw1K7hSNXz0DfSBYDJNRxLqgxOfWw1BY2z6DQpm7g0sYZn5qLpg==,
+      }
 
   text-table@0.2.0:
     resolution:
@@ -10842,6 +10871,10 @@ snapshots:
     dependencies:
       "@types/react": 18.2.63
 
+  "@types/react-text-mask@5.4.14":
+    dependencies:
+      "@types/react": 18.2.63
+
   "@types/react@18.2.63":
     dependencies:
       "@types/prop-types": 15.7.11
@@ -13386,6 +13419,11 @@ snapshots:
     optionalDependencies:
       "@types/react": 18.2.63
 
+  react-text-mask@5.5.0(react@18.2.0):
+    dependencies:
+      prop-types: 15.8.1
+      react: 18.2.0
+
   react-transition-group@4.4.5(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:
       "@babel/runtime": 7.24.0
@@ -13921,6 +13959,8 @@ snapshots:
       acorn: 8.11.3
       commander: 2.20.3
       source-map-support: 0.5.21
+
+  text-mask-addons@3.8.0: {}
 
   text-table@0.2.0: {}
 

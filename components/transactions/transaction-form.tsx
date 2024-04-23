@@ -2,6 +2,7 @@
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -40,7 +41,18 @@ import { getCategoriesByType } from "@/server/category";
 import CreateTransactionCategoryPopover from "@/components/transactions/create-transaction-category-popover";
 import Combobox from "@/components/ui/combobox";
 import { cn } from "@/lib/utils/stringUtils/cn";
-import { FaMinus, FaPlus } from "react-icons/fa";
+import { FaMinus, FaPlus, FaQuestion } from "react-icons/fa";
+import useAuthStore from "@/store/auth/authStore";
+import CurrencyInput from "@/components/transactions/transaction-amount-input";
+import getCurrencyAmblem from "@/lib/utils/stringUtils/getCurrencyAmblem";
+import { parseCurrencyToNumber } from "@/lib/utils/numberUtils/parseCurrencyToNumber";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { maskString } from "@/lib/utils/stringUtils/maskString";
 
 type TransactionFormProps = {
   data?: TransactionSelectModel;
@@ -53,7 +65,11 @@ const TransactionForm = ({
   const closeGenericModal = useGenericModalStore(
     (state) => state.closeGenericModal
   );
+  const preferredCurrency = useAuthStore(
+    (state) => state.user?.preferredCurrency
+  );
   const [accounts, setAccounts] = useState<AccountSelectModel[]>([]);
+  const [maskedAmount, setMaskedAmount] = useState("");
   const router = useRouter();
   const form = useForm<TransactionSchemaType>({
     resolver: zodResolver(transactionSchema),
@@ -65,11 +81,16 @@ const TransactionForm = ({
   const entityId = transactionToBeUpdated?.id;
 
   useEffect(() => {
-    if (transactionToBeUpdated) {
+    if (transactionToBeUpdated && Object.keys(transactionToBeUpdated).length) {
       setDefaultFormValues(transactionToBeUpdated);
+      setMaskedAmount(
+        maskString(transactionToBeUpdated.amount.toString(), {
+          prefix: getCurrencyAmblem(preferredCurrency!),
+        })
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [transactionToBeUpdated]);
+  }, [transactionToBeUpdated, preferredCurrency]);
 
   useEffect(() => {
     startTransition(async () => {
@@ -184,6 +205,22 @@ const TransactionForm = ({
   const isTransactionCategoryListEmpty =
     transactionCategoryOptions.length === 0;
 
+  const renderTooltipTriggerContent = () => {
+    const fieldValue = form.watch("amount");
+
+    if (fieldValue === undefined) {
+      return <FaQuestion />;
+    }
+
+    const isNegative = Math.sign(fieldValue) === -1;
+
+    if (isNegative) {
+      return <FaMinus />;
+    }
+
+    return <FaPlus />;
+  };
+
   return (
     <Form {...form}>
       <form
@@ -239,24 +276,72 @@ const TransactionForm = ({
               <CurrencyFormLabel label="Amount" />
               <FormControl>
                 <div className="relative">
-                  <Button
-                    type="button"
-                    name="toggle-amount-sign"
-                    size="icon"
-                    className="absolute left-0"
-                    onClick={() => {}}
-                  >
-                    {Math.sign(field.value) === -1 ? <FaMinus /> : <FaPlus />}
-                  </Button>
-                  <Input
-                    placeholder="Transaction amount"
-                    type="number"
-                    className="pl-10"
-                    step={"0.01"}
-                    {...field}
+                  <TooltipProvider>
+                    <Tooltip defaultOpen={false} delayDuration={0}>
+                      <TooltipTrigger asChild autoFocus={false}>
+                        <Button
+                          type="button"
+                          name="toggle-amount-sign"
+                          size="icon"
+                          variant={
+                            field.value !== undefined
+                              ? Math.sign(field.value) === -1
+                                ? "destructive"
+                                : "success"
+                              : "default"
+                          }
+                          className={cn(
+                            "absolute left-1 top-1 h-7 w-7",
+                            field.value !== undefined &&
+                              Math.sign(field.value) !== -1 &&
+                              "bg-success text-success-foreground"
+                          )}
+                          onClick={() => {
+                            if (field.value === undefined) return;
+                            const convertedValue = -1 * field.value;
+                            form.setValue("amount", convertedValue);
+                            setMaskedAmount(convertedValue.toString());
+                          }}
+                        >
+                          {renderTooltipTriggerContent()}
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Use [+] for incomes, [-] for expenses</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                  <CurrencyInput
+                    maskOptions={{
+                      prefix: getCurrencyAmblem(preferredCurrency!),
+                    }}
+                    itemRef="amount"
+                    inputMode="numeric"
+                    value={maskedAmount}
+                    onChange={(event) => {
+                      const value = event.target.value;
+                      form.setValue("amount", parseCurrencyToNumber(value));
+                      setMaskedAmount(value);
+                    }}
+                    render={(ref: any, props) => (
+                      <Input
+                        placeholder="Transaction amount"
+                        className="pl-10"
+                        {...props}
+                        ref={ref}
+                      />
+                    )}
                   />
                 </div>
               </FormControl>
+              <FormDescription>
+                {field?.value?.toString() && (
+                  <>
+                    This will count as
+                    {Math.sign(field.value) === -1 ? " an expense" : " income"}
+                  </>
+                )}
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}

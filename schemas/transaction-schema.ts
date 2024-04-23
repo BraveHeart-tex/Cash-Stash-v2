@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const transactionSchema = z.object({
-  amount: z.coerce.number({
+  amount: z.number({
     required_error: "Amount is required",
     invalid_type_error: "Amount must be a number",
   }),
