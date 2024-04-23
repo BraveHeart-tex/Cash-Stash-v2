@@ -90,7 +90,7 @@ const GenericModal = () => {
     >
       <DialogContent
         onOpenAutoFocus={(event) => {
-          if (isMobile) event.preventDefault();
+          if (isMobile || key === "transaction") event.preventDefault();
         }}
       >
         <DialogHeader>

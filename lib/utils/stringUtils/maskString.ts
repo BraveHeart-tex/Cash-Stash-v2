@@ -16,8 +16,12 @@ export function maskString(input: string, options: MaskOptions) {
 
   let numericString = input.replace(/[^\d.-]/g, "");
 
+  let isNegative = false;
   if (!allowNegative) {
     numericString = numericString.replace(/-/g, "");
+  } else if (numericString.startsWith("-")) {
+    isNegative = true;
+    numericString = numericString.slice(1);
   }
 
   if (!allowLeadingZeroes) {
@@ -41,7 +45,8 @@ export function maskString(input: string, options: MaskOptions) {
     );
   }
 
-  let maskedString = prefix + integerPart;
+  let maskedString = isNegative ? "-" + prefix : prefix;
+  maskedString += integerPart;
   if (allowDecimal && decimalPart !== undefined) {
     maskedString += decimalSymbol + decimalPart;
   }

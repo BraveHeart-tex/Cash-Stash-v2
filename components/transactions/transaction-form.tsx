@@ -300,7 +300,11 @@ const TransactionForm = ({
                             if (field.value === undefined) return;
                             const convertedValue = -1 * field.value;
                             form.setValue("amount", convertedValue);
-                            setMaskedAmount(convertedValue.toString());
+                            setMaskedAmount(
+                              maskString(convertedValue.toString(), {
+                                prefix: getCurrencyAmblem(preferredCurrency!),
+                              })
+                            );
                           }}
                         >
                           {renderTooltipTriggerContent()}
