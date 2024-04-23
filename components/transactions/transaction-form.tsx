@@ -40,6 +40,7 @@ import { getCategoriesByType } from "@/server/category";
 import CreateTransactionCategoryPopover from "@/components/transactions/create-transaction-category-popover";
 import Combobox from "@/components/ui/combobox";
 import { cn } from "@/lib/utils/stringUtils/cn";
+import { FaMinus, FaPlus } from "react-icons/fa";
 
 type TransactionFormProps = {
   data?: TransactionSelectModel;
@@ -237,12 +238,24 @@ const TransactionForm = ({
             <FormItem>
               <CurrencyFormLabel label="Amount" />
               <FormControl>
-                <Input
-                  placeholder="Transaction amount"
-                  type="number"
-                  step={"0.01"}
-                  {...field}
-                />
+                <div className="relative">
+                  <Button
+                    type="button"
+                    name="toggle-amount-sign"
+                    size="icon"
+                    className="absolute left-0"
+                    onClick={() => {}}
+                  >
+                    {Math.sign(field.value) === -1 ? <FaMinus /> : <FaPlus />}
+                  </Button>
+                  <Input
+                    placeholder="Transaction amount"
+                    type="number"
+                    className="pl-10"
+                    step={"0.01"}
+                    {...field}
+                  />
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -26,7 +26,7 @@ const CreateTransactionCategoryPopover = ({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button type="button" size="icon">
+        <Button type="button" size="icon" variant="outline">
           <FaPlus />
         </Button>
       </PopoverTrigger>
