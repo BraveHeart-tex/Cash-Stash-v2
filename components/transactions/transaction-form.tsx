@@ -84,7 +84,7 @@ const TransactionForm = ({
     if (transactionToBeUpdated && Object.keys(transactionToBeUpdated).length) {
       setDefaultFormValues(transactionToBeUpdated);
       setMaskedAmount(
-        maskString(transactionToBeUpdated.amount.toString(), {
+        maskString(transactionToBeUpdated?.amount?.toString(), {
           prefix: getCurrencyAmblem(preferredCurrency!),
         })
       );
