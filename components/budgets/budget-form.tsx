@@ -27,6 +27,7 @@ import { compareMatchingKeys } from "@/lib/utils/objectUtils/compareMatchingKeys
 import Combobox from "@/components/ui/combobox";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import CreateBudgetCategoryPopover from "@/components/budgets/create-budget-category-popover";
+import MaskedAmountInput from "@/components/ui/masked-amount-input";
 
 type BudgetFormProps = {
   data?: BudgetSelectModel;
@@ -164,11 +165,14 @@ const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
             <FormItem>
               <CurrencyFormLabel label="Budget Amount" />
               <FormControl>
-                <Input
-                  type="number"
-                  step="0.01"
+                <MaskedAmountInput
+                  initialValue={field.value}
                   placeholder="Enter the budget amount"
-                  {...field}
+                  id="budgetAmount"
+                  onMaskedValueChange={(value) => {
+                    field.onChange(value);
+                  }}
+                  ref={field.ref}
                 />
               </FormControl>
               <FormMessage />
@@ -182,11 +186,14 @@ const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
             <FormItem>
               <CurrencyFormLabel label="Spent Amount" />
               <FormControl>
-                <Input
-                  type="number"
+                <MaskedAmountInput
                   placeholder="Enter the spent amount (optional)"
-                  step="0.01"
-                  {...field}
+                  initialValue={form.watch("spentAmount")}
+                  id="spentAmount"
+                  onMaskedValueChange={(value) => {
+                    field.onChange(value);
+                  }}
+                  ref={field.ref}
                 />
               </FormControl>
               <FormMessage />
