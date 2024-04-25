@@ -29,6 +29,7 @@ import { AccountSelectModel, accounts } from "@/lib/database/schema";
 import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
 import CurrencyFormLabel from "@/components/ui/currency-form-label";
 import { compareMatchingKeys } from "@/lib/utils/objectUtils/compareMatchingKeys";
+import MaskedAmountInput from "@/components/ui/masked-amount-input";
 
 type AccountFormProps = {
   data?: AccountSelectModel;
@@ -165,7 +166,15 @@ const AccountForm = ({ data: accountToBeUpdated }: AccountFormProps) => {
             <FormItem>
               <CurrencyFormLabel label="Balance" />
               <FormControl>
-                <Input type="number" step="0.01" {...field} />
+                <MaskedAmountInput
+                  placeholder="Account balance"
+                  initialValue={field.value}
+                  id="balance"
+                  onMaskedValueChange={(value) => {
+                    field.onChange(value);
+                  }}
+                  ref={field.ref}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

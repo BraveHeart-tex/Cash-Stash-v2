@@ -188,7 +188,7 @@ const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
               <FormControl>
                 <MaskedAmountInput
                   placeholder="Enter the spent amount (optional)"
-                  initialValue={form.watch("spentAmount")}
+                  initialValue={field.value}
                   id="spentAmount"
                   onMaskedValueChange={(value) => {
                     field.onChange(value);
