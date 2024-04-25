@@ -83,11 +83,13 @@ const TransactionForm = ({
   useEffect(() => {
     if (transactionToBeUpdated && Object.keys(transactionToBeUpdated).length) {
       setDefaultFormValues(transactionToBeUpdated);
-      setMaskedAmount(
-        maskString(transactionToBeUpdated?.amount?.toString(), {
-          prefix: getCurrencyAmblem(preferredCurrency!),
-        })
-      );
+      if (transactionToBeUpdated.amount) {
+        setMaskedAmount(
+          maskString(transactionToBeUpdated.amount.toString(), {
+            prefix: getCurrencyAmblem(preferredCurrency!),
+          })
+        );
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transactionToBeUpdated, preferredCurrency]);
