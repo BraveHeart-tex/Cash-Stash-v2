@@ -26,6 +26,10 @@ import {
 } from "@/components/ui/select";
 import { compareMatchingKeys } from "@/lib/utils/objectUtils/compareMatchingKeys";
 import { CategoryUpdateModel } from "@/server/types";
+import {
+  CreateCategoryReturnType,
+  UpdateCategoryReturnType,
+} from "@/typings/categories";
 
 type CategoryFormProps = {
   // eslint-disable-next-line no-unused-vars
@@ -77,8 +81,8 @@ const CategoryForm = ({
         ? await updateCategory(updatedValues as CategoryUpdateModel)
         : await createCategory(updatedValues);
 
-      if ("data" in response) {
-        afterSave?.(response.data);
+      if ("data" in response && !isEditMode) {
+        afterSave?.(response.data as CategorySelectModel);
       }
 
       processFormSubmissionResult(response);
@@ -86,7 +90,7 @@ const CategoryForm = ({
   };
 
   const processFormSubmissionResult = (
-    result: Awaited<ReturnType<typeof createCategory>>
+    result: Awaited<CreateCategoryReturnType | UpdateCategoryReturnType>
   ) => {
     if ("fieldErrors" in result) {
       result.fieldErrors.forEach((fieldError) => {

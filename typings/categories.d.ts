@@ -1,17 +1,32 @@
-/* eslint-disable no-unused-vars */
-namespace CategoryModels {
-  type CreateCategoryReturnType = Promise<
-    CreateCategorySuccessResponse | CreateCategoryErrorResponse
-  >;
+import { CategorySelectModel } from "@/lib/database/schema";
+import { CategoryUpdateModel, FieldError } from "@/server/types";
 
-  type CreateCategorySuccessResponse = {
-    data: CategorySelectModel;
-  };
+export type CreateCategoryReturnType = Promise<
+  CreateCategorySuccessResponse | CreateCategoryErrorResponse
+>;
 
-  type CreateCategoryErrorResponse = {
-    error: string;
-    fieldErrors: FieldError[];
-  };
+type CreateCategorySuccessResponse = {
+  data: CategorySelectModel;
+};
 
-  type GetCategoriesByTypeReturnType = Promise<CategorySelectModel[] | null>;
-}
+type CreateCategoryErrorResponse = {
+  error: string;
+  fieldErrors: FieldError[];
+};
+
+export type GetCategoriesByTypeReturnType = Promise<
+  CategorySelectModel[] | null
+>;
+
+type UpdateCategorySuccessResponse = {
+  data: CategoryUpdateModel;
+};
+
+type UpdateCategoryErrorResponse = {
+  error: string;
+  fieldErrors: FieldError[];
+};
+
+export type UpdateCategoryReturnType = Promise<
+  UpdateCategorySuccessResponse | UpdateCategoryErrorResponse
+>;

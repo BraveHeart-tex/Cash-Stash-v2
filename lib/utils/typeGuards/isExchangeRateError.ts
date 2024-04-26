@@ -1,4 +1,4 @@
-import { ExchangeRateResponseError } from "@/server/types";
+import { ExchangeRateResponseError } from "@/typings/exchangeRates";
 
 export function isExchangeRateResponseError(
   data: any

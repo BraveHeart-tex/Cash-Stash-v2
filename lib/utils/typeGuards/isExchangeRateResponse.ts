@@ -1,4 +1,4 @@
-import { ExchangeRateResponse } from "@/server/types";
+import { ExchangeRateResponse } from "@/typings/exchangeRates";
 
 export function isExchangeRateResponse(
   data: any

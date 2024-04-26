@@ -15,6 +15,11 @@ import {
 import logger from "@/lib/utils/logger";
 import redisService from "@/lib/redis/redisService";
 import { generateCachePrefixWithUserId } from "@/lib/redis/redisUtils";
+import {
+  CreateCategoryReturnType,
+  GetCategoriesByTypeReturnType,
+  UpdateCategoryReturnType,
+} from "@/typings/categories";
 
 export const getPaginatedCategories = async ({
   pageNumber,
@@ -68,7 +73,7 @@ export const getPaginatedCategories = async ({
 
 export const createCategory = async (
   values: CategorySchemaType
-): CategoryModels.CreateCategoryReturnType => {
+): CreateCategoryReturnType => {
   const { user } = await getUser();
 
   if (!user) {
@@ -129,7 +134,7 @@ export const createCategory = async (
 
 export const getCategoriesByType = async (
   type: CategoryType
-): CategoryModels.GetCategoriesByTypeReturnType => {
+): GetCategoriesByTypeReturnType => {
   const { user } = await getUser();
   if (!user) {
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
@@ -143,7 +148,10 @@ export const getCategoriesByType = async (
   }
 };
 
-export const deleteCategory = async (id: number, type: CategoryType) => {
+export const deleteCategory = async (
+  id: number,
+  type: CategoryType
+): Promise<boolean> => {
   const { user } = await getUser();
   if (!user) {
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
@@ -179,7 +187,9 @@ export const deleteCategory = async (id: number, type: CategoryType) => {
   }
 };
 
-export const updateCategory = async (data: CategoryUpdateModel) => {
+export const updateCategory = async (
+  data: CategoryUpdateModel
+): UpdateCategoryReturnType => {
   const { user } = await getUser();
   if (!user) {
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
