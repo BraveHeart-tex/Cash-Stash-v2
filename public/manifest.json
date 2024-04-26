@@ -1,7 +1,7 @@
 {
-  "theme_color": "#ffffff",
-  "background_color": "#e11d48",
-  "display": "fullscreen",
+  "theme_color": "##e11d48",
+  "background_color": "#ffffff",
+  "display": "standalone",
   "scope": "/",
   "start_url": "/",
   "name": "Cash Stash",
