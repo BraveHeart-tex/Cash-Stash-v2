@@ -2,7 +2,10 @@ import { accounts } from "@/lib/database/schema";
 import { z } from "zod";
 
 const accountSchema = z.object({
-  balance: z.coerce.number().default(0),
+  balance: z.coerce
+    .number()
+    .transform((val) => (isNaN(val) ? 0 : val))
+    .default(0),
   category: z
     .enum(accounts.category.enumValues, {
       required_error: "Account Category is required",

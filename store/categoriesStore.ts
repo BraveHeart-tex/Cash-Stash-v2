@@ -20,7 +20,6 @@ const useCategoriesStore = create<
 >(
   devtools((set, get) => ({
     categories: [],
-    // TODO: Test with different types (1,2)
     setCategories: (categories) => {
       set({ categories });
     },

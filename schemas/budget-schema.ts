@@ -8,15 +8,17 @@ const budgetSchema = z
         invalid_type_error: "Budget amount must be a number",
         required_error: "Budget amount is required",
       })
-      .positive("Budget amount must be positive"),
+      .positive("Budget amount must be positive")
+      .transform((val) => (isNaN(val) ? 0 : val)),
     categoryId: z.coerce
       .number()
-      .min(1, "Category is required")
+      .min(1, "Budget category is required")
       .positive()
       .default(0),
     spentAmount: z.coerce
       .number()
       .nonnegative("Spent amount can't be negative")
+      .transform((val) => (isNaN(val) ? 0 : val))
       .default(0),
     progress: z.number().default(0),
   })

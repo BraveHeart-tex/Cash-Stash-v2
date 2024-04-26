@@ -33,9 +33,14 @@ import MaskedAmountInput from "@/components/ui/masked-amount-input";
 
 type AccountFormProps = {
   data?: AccountSelectModel;
+  // eslint-disable-next-line no-unused-vars
+  afterSave?: (values: AccountSelectModel) => void;
 };
 
-const AccountForm = ({ data: accountToBeUpdated }: AccountFormProps) => {
+const AccountForm = ({
+  data: accountToBeUpdated,
+  afterSave,
+}: AccountFormProps) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const closeGenericModal = useGenericModalStore(
@@ -108,6 +113,7 @@ const AccountForm = ({ data: accountToBeUpdated }: AccountFormProps) => {
         description: successMessage[entityId ? "update" : "create"],
       });
       closeGenericModal();
+      afterSave?.(result.data!);
     }
   };
 

@@ -21,6 +21,7 @@ import { toast } from "sonner";
 import { GoalSelectModel } from "@/lib/database/schema";
 import CurrencyFormLabel from "@/components/ui/currency-form-label";
 import { compareMatchingKeys } from "@/lib/utils/objectUtils/compareMatchingKeys";
+import MaskedAmountInput from "@/components/ui/masked-amount-input";
 
 type GoalFormProps = {
   data?: GoalSelectModel;
@@ -126,11 +127,14 @@ const GoalForm = ({ data: goalToBeUpdated }: GoalFormProps) => {
             <FormItem>
               <CurrencyFormLabel label="Goal Amount" />
               <FormControl>
-                <Input
-                  type="number"
-                  placeholder="e.g. 1000"
-                  step="0.01"
-                  {...field}
+                <MaskedAmountInput
+                  initialValue={field.value}
+                  placeholder="Enter the goal amount"
+                  id="goalAmount"
+                  onMaskedValueChange={(value) => {
+                    field.onChange(value);
+                  }}
+                  ref={field.ref}
                 />
               </FormControl>
               <FormMessage />
@@ -144,11 +148,14 @@ const GoalForm = ({ data: goalToBeUpdated }: GoalFormProps) => {
             <FormItem>
               <CurrencyFormLabel label="Current Amount" />
               <FormControl>
-                <Input
-                  type="number"
-                  placeholder="e.g. 200"
-                  step="0.01"
-                  {...field}
+                <MaskedAmountInput
+                  initialValue={field.value}
+                  placeholder="Enter the current amount"
+                  id="currentAmount"
+                  onMaskedValueChange={(value) => {
+                    field.onChange(value);
+                  }}
+                  ref={field.ref}
                 />
               </FormControl>
               <FormMessage />

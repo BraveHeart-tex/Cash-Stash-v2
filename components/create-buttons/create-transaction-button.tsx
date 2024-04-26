@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils/stringUtils/cn";
 import useGenericModalStore from "@/store/genericModalStore";
 import { userCanCreateTransaction } from "@/server/transaction";
 import { toast } from "sonner";
+import { AccountSelectModel } from "@/lib/database/schema";
 
 type CreateTransactionButtonProps = {
   className?: string;
@@ -20,6 +21,35 @@ const CreateTransactionButton = ({
   const openGenericModal = useGenericModalStore(
     (state) => state.openGenericModal
   );
+
+  const openCreateTransactionModal = (accountId?: number) => {
+    openGenericModal({
+      dialogTitle: "Create Transaction",
+      dialogDescription: "Use the form below to create a new transaction.",
+      mode: "create",
+      key: "transaction",
+      data: {
+        accountId,
+      },
+    });
+  };
+
+  const openCreateAccountModal = () => {
+    openGenericModal({
+      key: "account",
+      mode: "create",
+      dialogTitle: "Register Bank Account",
+      dialogDescription: "Use the form below to register a new bank account.",
+      props: {
+        afterSave: (values: AccountSelectModel) => {
+          setTimeout(() => {
+            openCreateTransactionModal(values.id);
+          }, 300);
+        },
+      },
+    });
+  };
+
   const handleCreateTransactionClick = async () => {
     startTransition(async () => {
       const canCreateTransaction = await userCanCreateTransaction();
@@ -28,15 +58,15 @@ const CreateTransactionButton = ({
         toast.error("No accounts found.", {
           description:
             "You need to create an account before you can create a transaction.",
+          action: {
+            label: "Create Account",
+            onClick: () => {
+              openCreateAccountModal();
+            },
+          },
         });
-        return;
       } else {
-        openGenericModal({
-          dialogTitle: "Create Transaction",
-          dialogDescription: "Use the form below to create a new transaction.",
-          mode: "create",
-          key: "transaction",
-        });
+        openCreateTransactionModal();
       }
     });
   };
