@@ -11,7 +11,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { BaseValidatedResponse } from "@/server/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useTransition } from "react";
 import goalSchema, { GoalSchemaType } from "@/schemas/goal-schema";
@@ -22,6 +21,7 @@ import { GoalSelectModel } from "@/lib/database/schema";
 import CurrencyFormLabel from "@/components/ui/currency-form-label";
 import { compareMatchingKeys } from "@/lib/utils/objectUtils/compareMatchingKeys";
 import MaskedAmountInput from "@/components/ui/masked-amount-input";
+import { BaseValidatedResponse } from "@/typings/baseTypes";
 
 type GoalFormProps = {
   data?: GoalSelectModel;

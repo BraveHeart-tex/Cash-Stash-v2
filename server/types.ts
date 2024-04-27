@@ -9,27 +9,10 @@ import {
   TransactionSelectModel,
 } from "@/lib/database/schema";
 import { CATEGORY_TYPES, PAGE_ROUTES } from "@/lib/constants";
-
-type BasePaginatedResponse = {
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
-  currentPage: number;
-  totalPages: number;
-};
-
-type BasePaginatedActionParams = {
-  pageNumber: number;
-  query?: string;
-};
-
-export type BaseValidatedResponse<T> = {
-  data?: T;
-  error?: string;
-  fieldErrors: {
-    field: string;
-    message: string | undefined;
-  }[];
-};
+import {
+  BasePaginatedActionParams,
+  BasePaginatedResponse,
+} from "@/typings/baseTypes";
 
 export type GetPaginatedAccountsParams = BasePaginatedActionParams & {
   sortBy?: string;

@@ -9,11 +9,11 @@ import { ZodError } from "zod";
 import {
   GetPaginatedRemindersParams,
   GetPaginatedRemindersResponse,
-  BaseValidatedResponse,
 } from "@/server/types";
 import reminderRepository from "@/lib/database/repository/reminderRepository";
 import { convertISOToMysqlDatetime } from "@/lib/utils/dateUtils/convertISOToMysqlDatetime";
 import logger from "@/lib/utils/logger";
+import { BaseValidatedResponse } from "@/typings/baseTypes";
 
 export const createReminder = async (
   data: ReminderSchemaType

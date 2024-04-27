@@ -15,7 +15,6 @@ import { ZodError } from "zod";
 import {
   GetPaginatedTransactionsParams,
   GetPaginatedTransactionsResponse,
-  BaseValidatedResponse,
 } from "@/server/types";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import redisService from "@/lib/redis/redisService";
@@ -25,6 +24,7 @@ import accountRepository from "@/lib/database/repository/accountRepository";
 import { TransactionSelectModel } from "@/lib/database/schema";
 import { processZodError } from "@/lib/utils/objectUtils/processZodError";
 import logger from "@/lib/utils/logger";
+import { BaseValidatedResponse } from "@/typings/baseTypes";
 
 export const createTransaction = async (
   values: TransactionSchemaType

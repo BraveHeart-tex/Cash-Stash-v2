@@ -6,7 +6,6 @@ import { ZodError } from "zod";
 import {
   GetPaginatedGoalsParams,
   GetPaginatedGoalsResponse,
-  BaseValidatedResponse,
 } from "@/server/types";
 import {
   generateCachePrefixWithUserId,
@@ -21,6 +20,7 @@ import redisService from "@/lib/redis/redisService";
 import { GoalSelectModel } from "@/lib/database/schema";
 import { processZodError } from "@/lib/utils/objectUtils/processZodError";
 import logger from "@/lib/utils/logger";
+import { BaseValidatedResponse } from "@/typings/baseTypes";
 
 export const createGoal = async (
   values: GoalSchemaType

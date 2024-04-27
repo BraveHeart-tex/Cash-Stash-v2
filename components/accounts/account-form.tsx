@@ -19,7 +19,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { registerBankAccount, updateBankAccount } from "@/server/account";
-import { BaseValidatedResponse } from "@/server/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useTransition } from "react";
 import useGenericModalStore from "@/store/genericModalStore";
@@ -30,6 +29,7 @@ import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOption
 import CurrencyFormLabel from "@/components/ui/currency-form-label";
 import { compareMatchingKeys } from "@/lib/utils/objectUtils/compareMatchingKeys";
 import MaskedAmountInput from "@/components/ui/masked-amount-input";
+import { BaseValidatedResponse } from "@/typings/baseTypes";
 
 type AccountFormProps = {
   data?: AccountSelectModel;

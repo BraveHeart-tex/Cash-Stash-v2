@@ -19,7 +19,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { BaseValidatedResponse } from "@/server/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState, useTransition } from "react";
 import transactionSchema, {
@@ -53,6 +52,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { maskString } from "@/lib/utils/stringUtils/maskString";
+import { BaseValidatedResponse } from "@/typings/baseTypes";
 
 type TransactionFormProps = {
   data?: TransactionSelectModel;

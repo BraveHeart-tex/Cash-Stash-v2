@@ -11,7 +11,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { BaseValidatedResponse } from "@/server/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useTransition } from "react";
 import budgetSchema, { BudgetSchemaType } from "@/schemas/budget-schema";
@@ -28,6 +27,7 @@ import Combobox from "@/components/ui/combobox";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import CreateBudgetCategoryPopover from "@/components/budgets/create-budget-category-popover";
 import MaskedAmountInput from "@/components/ui/masked-amount-input";
+import { BaseValidatedResponse } from "@/typings/baseTypes";
 
 type BudgetFormProps = {
   data?: BudgetSelectModel;

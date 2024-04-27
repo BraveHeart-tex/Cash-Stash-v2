@@ -3,11 +3,6 @@ import { getUser } from "@/lib/auth/session";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import {
-  GetPaginatedAccountsParams,
-  IGetPaginatedAccountsResponse,
-  BaseValidatedResponse,
-} from "@/server/types";
-import {
   generateCachePrefixWithUserId,
   getAccountKey,
   getAccountTransactionsKey,
@@ -19,16 +14,22 @@ import { createAccountDto } from "@/lib/database/dto/accountDto";
 import accountRepository from "@/lib/database/repository/accountRepository";
 import transactionRepository from "@/lib/database/repository/transactionRepository";
 import redisService from "@/lib/redis/redisService";
-import { AccountSelectModel } from "@/lib/database/schema";
 import { processZodError } from "@/lib/utils/objectUtils/processZodError";
 import logger from "@/lib/utils/logger";
 import { generateLabelFromEnumValue } from "@/lib/utils/stringUtils/generateLabelFromEnumValue";
+import {
+  GetPaginatedAccountsParams,
+  GetPaginatedAccountsReturnType,
+  RegisterBankAccountReturnType,
+  UpdateBankAccountParams,
+  UpdateBankAccountReturnType,
+} from "@/typings/accounts";
 
 export const registerBankAccount = async ({
   balance,
   category,
   name,
-}: AccountSchemaType): Promise<BaseValidatedResponse<AccountSelectModel>> => {
+}: AccountSchemaType): RegisterBankAccountReturnType => {
   const { user } = await getUser();
 
   if (!user) {
@@ -99,9 +100,7 @@ export const registerBankAccount = async ({
 export const updateBankAccount = async ({
   accountId,
   ...rest
-}: AccountSchemaType & { accountId: number }): Promise<
-  BaseValidatedResponse<AccountSelectModel>
-> => {
+}: UpdateBankAccountParams): UpdateBankAccountReturnType => {
   const { user } = await getUser();
   if (!user) {
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
@@ -173,7 +172,7 @@ export const getPaginatedAccounts = async ({
   category,
   sortBy,
   sortDirection,
-}: GetPaginatedAccountsParams): Promise<IGetPaginatedAccountsResponse> => {
+}: GetPaginatedAccountsParams): GetPaginatedAccountsReturnType => {
   const { user } = await getUser();
 
   if (!user) {

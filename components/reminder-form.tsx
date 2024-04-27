@@ -11,7 +11,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { BaseValidatedResponse } from "@/server/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useTransition } from "react";
 import useGenericModalStore from "@/store/genericModalStore";
@@ -39,6 +38,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { compareMatchingKeys } from "@/lib/utils/objectUtils/compareMatchingKeys";
+import { BaseValidatedResponse } from "@/typings/baseTypes";
 
 type ReminderFormProps = {
   data?: ReminderSelectModel;

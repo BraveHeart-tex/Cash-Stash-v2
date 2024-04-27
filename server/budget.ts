@@ -7,7 +7,6 @@ import { ZodError } from "zod";
 import {
   IGetPaginatedBudgetsParams,
   GetPaginatedBudgetsResponse,
-  BaseValidatedResponse,
 } from "@/server/types";
 import {
   generateCachePrefixWithUserId,
@@ -21,6 +20,7 @@ import budgetRepository from "@/lib/database/repository/budgetRepository";
 import redisService from "@/lib/redis/redisService";
 import { processZodError } from "@/lib/utils/objectUtils/processZodError";
 import logger from "@/lib/utils/logger";
+import { BaseValidatedResponse } from "@/typings/baseTypes";
 
 export const createBudget = async (
   data: BudgetSchemaType
