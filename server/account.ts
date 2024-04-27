@@ -134,7 +134,6 @@ export const updateBankAccount = async ({
       };
     }
 
-    // TODO: Refactor for better cmd usage
     await Promise.all([
       redisService.invalidateKeysByPrefix(
         generateCachePrefixWithUserId(

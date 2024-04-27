@@ -44,11 +44,11 @@ class RedisService extends Redis {
 const redisService = RedisService.getInstance();
 
 redisService.on("connect", () => {
-  console.log("redisService client connected.");
+  logger.info("redisService client connected.");
 });
 
 redisService.on("ready", () => {
-  console.log("redisService client is ready.");
+  logger.info("redisService client is ready.");
 });
 
 redisService.on("error", (error) => {
@@ -56,7 +56,7 @@ redisService.on("error", (error) => {
 });
 
 redisService.on("end", () => {
-  console.log("redisService client disconnected.");
+  logger.info("redisService client disconnected.");
 });
 
 process.on("SIGINT", () => {
