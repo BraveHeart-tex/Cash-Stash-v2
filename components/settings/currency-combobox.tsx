@@ -1,6 +1,5 @@
 "use client";
-import { ComboboxOption } from "@/server/types";
-import Combobox from "@/components/ui/combobox";
+import Combobox, { ComboboxOption } from "@/components/ui/combobox";
 import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import useAuthStore from "@/store/auth/authStore";
@@ -11,7 +10,11 @@ import {
   updateUserCurrencyPreference,
 } from "@/server/user";
 
-const CurrencyCombobox = ({ currencies }: { currencies: ComboboxOption[] }) => {
+type CurrencyComboboxProps = {
+  currencies: ComboboxOption[];
+};
+
+const CurrencyCombobox = ({ currencies }: CurrencyComboboxProps) => {
   let [isPending, startTransition] = useTransition();
   const [selectedCurrency, setSelectedCurrency] =
     useState<ComboboxOption | null>(null);

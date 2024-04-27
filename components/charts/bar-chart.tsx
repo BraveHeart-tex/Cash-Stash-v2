@@ -1,7 +1,7 @@
 "use client";
-import { MonthlyTransactionsData } from "@/server/types";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import useAuthStore from "@/store/auth/authStore";
+import { MonthlyTransactionsData } from "@/typings/reports";
 import {
   BarChart,
   Bar,
@@ -35,11 +35,13 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
+type BarChartComponentProps = {
+  monthlyTransactionsData: MonthlyTransactionsData[];
+};
+
 const BarChartComponent = ({
   monthlyTransactionsData,
-}: {
-  monthlyTransactionsData: MonthlyTransactionsData[];
-}) => {
+}: BarChartComponentProps) => {
   if (monthlyTransactionsData.length === 0) {
     return null;
   }

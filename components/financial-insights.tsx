@@ -1,13 +1,12 @@
 "use client";
-import { InsightsData } from "@/server/types";
 import { Button } from "@/components/ui/button";
 import { FaMoneyBill } from "react-icons/fa";
 import Link from "next/link";
-import MotionDiv from "@/components/animations/motion-div";
 import { PAGE_ROUTES } from "@/lib/constants";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import useAuthStore from "@/store/auth/authStore";
+import { InsightsData } from "@/typings/reports";
 
 type FinancialInsightsProps = {
   insightsData: InsightsData | null;

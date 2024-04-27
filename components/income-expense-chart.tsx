@@ -1,11 +1,13 @@
-import { MonthlyTransactionsData } from "@/server/types";
 import BarChartComponent from "@/components/charts/bar-chart";
+import { MonthlyTransactionsData } from "@/typings/reports";
+
+type IncomeAndExpenseChartProps = {
+  monthlyTransactionsData: MonthlyTransactionsData[];
+};
 
 const IncomeAndExpenseChart = ({
   monthlyTransactionsData,
-}: {
-  monthlyTransactionsData: MonthlyTransactionsData[];
-}) => {
+}: IncomeAndExpenseChartProps) => {
   return (
     <div className="flex flex-col items-start justify-center gap-2">
       <h3 className="scroll-m-20 text-xl font-semibold tracking-tight text-primary">

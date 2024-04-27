@@ -1,4 +1,3 @@
-import { NavigationItem } from "@/server/types";
 import { AiOutlineTransaction } from "react-icons/ai";
 import { FaCog, FaMoneyBill, FaPiggyBank } from "react-icons/fa";
 import { MdDashboard, MdOutlineAccountBalanceWallet } from "react-icons/md";
@@ -7,6 +6,7 @@ import { TbReportAnalytics } from "react-icons/tb";
 import { BiCategory } from "react-icons/bi";
 import { FaDesktop, FaMoon, FaSun } from "react-icons/fa";
 import { MdOutlineColorLens } from "react-icons/md";
+import { NavigationItem } from "@/typings/constants";
 
 export const PRIMARY_COLOR = "#c4002b" as const;
 export const PRIMARY_FOREGROUND_COLOR = "#fefcfa" as const;

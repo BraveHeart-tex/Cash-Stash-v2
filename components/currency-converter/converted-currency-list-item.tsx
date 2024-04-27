@@ -1,15 +1,17 @@
-import { ConvertCurrencyType } from "@/server/types";
 import { FLAGS_BY_CURRENCY_SYMBOL } from "@/lib/constants";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
+import { ConvertCurrencyType } from "@/typings/currencies";
+
+type ConvertedCurrencyListItemProps = {
+  item: ConvertCurrencyType;
+  // eslint-disable-next-line no-unused-vars
+  setSelectedCurrency: (value: string) => void;
+};
 
 const CurrencyConverterListItem = ({
   item,
   setSelectedCurrency,
-}: {
-  item: ConvertCurrencyType;
-  // eslint-disable-next-line no-unused-vars
-  setSelectedCurrency: (value: string) => void;
-}) => {
+}: ConvertedCurrencyListItemProps) => {
   return (
     <li
       aria-label={item.label}

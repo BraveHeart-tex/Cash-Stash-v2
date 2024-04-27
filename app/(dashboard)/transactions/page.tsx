@@ -5,7 +5,16 @@ import RoutePaginationControls from "@/components/route-pagination-controls";
 import TransactionsPageHeader from "@/components/transactions/transactions-page-header";
 import TransactionsPageFilters from "@/components/transactions/transactions-page-filters";
 import TransactionsNotFoundMessage from "@/components/transactions/transactions-not-found-message";
-import { TransactionPageSearchParams } from "@/server/types";
+
+export type TransactionPageSearchParams = {
+  transactionType?: string;
+  accountId?: string;
+  sortBy?: string;
+  sortDirection?: string;
+  categoryId?: number;
+  page?: string;
+  query?: string;
+};
 
 type TransactionsPageProps = {
   searchParams: TransactionPageSearchParams;

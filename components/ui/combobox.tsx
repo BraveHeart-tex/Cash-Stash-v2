@@ -15,9 +15,15 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { FaCheck, FaSort } from "react-icons/fa";
-import { ComboboxOption } from "@/server/types";
 import { motion, AnimatePresence } from "framer-motion";
 import { useMediaQuery } from "usehooks-ts";
+import { IconType } from "react-icons/lib";
+
+export type ComboboxOption = {
+  icon?: IconType;
+  label: string | number;
+  value: string;
+};
 
 type ComboboxProps = {
   options: ComboboxOption[];

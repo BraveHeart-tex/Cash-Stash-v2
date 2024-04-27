@@ -1,8 +1,9 @@
 import { FaCalendar, FaMoneyBill } from "react-icons/fa";
-import QueryStringComboBox from "@/components/query-string-combobox";
+import QueryStringComboBox, {
+  QueryStringComboboxItem,
+} from "@/components/query-string-combobox";
 import RouteFiltersPopover from "@/components/route-filters-popover";
 import RouteSearchInput from "@/components/route-search-input";
-import { QueryStringComboboxItem } from "@/server/types";
 import TransactionCategoryCombobox from "@/components/transactions/transaction-category-combobox";
 import { getCategoriesByType } from "@/server/category";
 import { CATEGORY_TYPES } from "@/lib/constants";

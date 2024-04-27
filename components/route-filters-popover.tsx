@@ -7,10 +7,15 @@ import {
 import { Button } from "@/components/ui/button";
 import { BsFilterLeft } from "react-icons/bs";
 import { useQueryStates, parseAsString, UseQueryStatesKeysMap } from "nuqs";
-import { GenericFilterOption } from "@/server/types";
 import { v4 as uuidv4 } from "uuid";
 import { compareDeepObjectEquality } from "@/lib/utils/objectUtils/compareDeepObjectEquality";
 import { useState } from "react";
+
+type GenericFilterOption<T> = {
+  label: string;
+  data: T;
+  icon: React.JSX.Element;
+};
 
 type RouteFiltersPopoverProps<T extends Record<string, any>> = {
   options: GenericFilterOption<T>[];

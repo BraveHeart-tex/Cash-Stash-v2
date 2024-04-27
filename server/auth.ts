@@ -38,7 +38,6 @@ import {
 } from "@/lib/auth/authUtils";
 import { revalidatePath } from "next/cache";
 import { isWithinExpirationDate } from "oslo";
-import { RecaptchaResponse } from "@/server/types";
 import { db, lucia } from "@/lib/database/connection";
 import userRepository from "@/lib/database/repository/userRepository";
 import emailVerificationCodeRepository from "@/lib/database/repository/emailVerificationCodeRepository";
@@ -691,6 +690,13 @@ export const disableTwoFactorAuthentication = async () => {
       successMessage: null,
     };
   }
+};
+
+type RecaptchaResponse = {
+  success: boolean;
+  challenge_ts: string;
+  hostname: string;
+  "error-codes": string[];
 };
 
 export const validateReCAPTCHAToken = async (token: string) => {

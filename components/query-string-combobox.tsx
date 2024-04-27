@@ -2,7 +2,6 @@
 import { useQueryState } from "nuqs";
 import Combobox from "@/components/ui/combobox";
 import { Label } from "@/components/ui/label";
-import { QueryStringComboboxItem } from "@/server/types";
 import {
   Select,
   SelectContent,
@@ -12,6 +11,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
+export type QueryStringComboboxItem = {
+  label: string;
+  value: string;
+};
 
 type QueryStringComboBoxProps = {
   dataset: QueryStringComboboxItem[];

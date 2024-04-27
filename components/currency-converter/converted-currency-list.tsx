@@ -1,5 +1,4 @@
 "use client";
-import { ConvertCurrencyType } from "@/server/types";
 import { useQueryState } from "nuqs";
 import CurrencyConverterListItem from "@/components/currency-converter/converted-currency-list-item";
 import { Input } from "@/components/ui/input";
@@ -9,12 +8,15 @@ import { FaSearch } from "react-icons/fa";
 import { MdQuestionMark } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import { FaXmark } from "react-icons/fa6";
+import { ConvertCurrencyType } from "@/typings/currencies";
+
+type ConvertedCurrencyListProps = {
+  currencyList: ConvertCurrencyType[];
+};
 
 const ConvertedCurrencyList = ({
   currencyList,
-}: {
-  currencyList: ConvertCurrencyType[];
-}) => {
+}: ConvertedCurrencyListProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCurrency, setSelectedCurrency] = useQueryState("currency", {
     shallow: false,
