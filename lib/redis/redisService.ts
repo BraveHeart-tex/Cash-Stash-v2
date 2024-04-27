@@ -1,50 +1,66 @@
-import redis from "@/lib/redis/redisConnection";
+import Redis from "ioredis";
+import logger from "@/lib/utils/logger";
 
-const redisService = {
-  hset: async (key: string, object: Record<string, any>) => {
-    return redis.hset(key, object);
-  },
+let instance: RedisService;
 
-  hgetall: async (key: string) => {
-    return redis.hgetall(key);
-  },
+class RedisService extends Redis {
+  private constructor() {
+    super(process.env.REDIS_CONNECTION_STRING!);
+  }
 
-  get: async (key: string) => {
-    return redis.get(key);
-  },
-
-  del: async (key: string) => {
-    return redis.del(key);
-  },
-
-  set: async (
-    key: string,
-    data: string,
-    secondsToken?: "EX" | "PX" | "NX" | "XX",
-    seconds?: number
-  ) => {
-    if (!secondsToken || !seconds) {
-      return redis.set(key, data);
+  static getInstance(): RedisService {
+    if (!instance) {
+      instance = new RedisService();
     }
+    return instance;
+  }
 
-    return redis.set(key, data, secondsToken as any, seconds);
-  },
-
-  invalidateKeysByPrefix: async (prefix: string) => {
-    const keys = await redis.keys("*");
+  async invalidateKeysByPrefix(prefix: string) {
+    const keys = await this.keys("*");
     const keysToDelete = keys.filter((key) => key.startsWith(prefix));
     if (keysToDelete.length === 0) return;
-    return redis.del(keysToDelete);
-  },
+    return this.del(keysToDelete);
+  }
 
-  invalidateMultipleKeysByPrefix: async (prefixes: string[]) => {
-    const keys = await redis.keys("*");
+  async invalidateMultipleKeysByPrefix(prefixes: string[]) {
+    const keys = await this.keys("*");
     const keysToDelete = keys.filter((key) =>
       prefixes.some((prefix) => key.startsWith(prefix))
     );
     if (keysToDelete.length === 0) return;
-    return redis.del(keysToDelete);
-  },
-};
+    return this.del(keysToDelete);
+  }
+
+  async invalidateKeysByUserId(userId: string) {
+    const stream = this.scanStream();
+    stream.on("data", async (keys) => {
+      const keysToDelete = keys.filter((key: string) => key.includes(userId));
+      if (keysToDelete.length === 0) return;
+      await this.del(keysToDelete);
+    });
+  }
+}
+
+const redisService = RedisService.getInstance();
+
+redisService.on("connect", () => {
+  console.log("redisService client connected.");
+});
+
+redisService.on("ready", () => {
+  console.log("redisService client is ready.");
+});
+
+redisService.on("error", (error) => {
+  logger.error("redisService client error", error.message);
+});
+
+redisService.on("end", () => {
+  console.log("redisService client disconnected.");
+});
+
+process.on("SIGINT", () => {
+  redisService.quit();
+});
 
 export default redisService;

@@ -1,7 +1,7 @@
 import { CACHE_PREFIXES } from "@/lib/constants";
-import redis from "@/lib/redis/redisConnection";
 import { GoalSelectModel } from "@/lib/database/schema";
 import { BudgetWithCategory } from "@/server/types";
+import redisService from "@/lib/redis/redisService";
 
 type Entity = {
   [key: string]: any;
@@ -195,13 +195,6 @@ export const getPaginatedTransactionsKey = ({
   );
 };
 
-export const invalidateKeysByPrefix = async (prefix: string) => {
-  const keys = await redis.keys("*");
-  const keysToDelete = keys.filter((key) => key.startsWith(prefix));
-  if (keysToDelete.length === 0) return;
-  await redis.del(keysToDelete);
-};
-
 export const mapRedisHashToBudget = (
   budgetFromCache: Record<string, string> | null
 ): BudgetWithCategory | null => {
@@ -243,9 +236,9 @@ export const mapRedisHashToGoal = (
 
 export const checkRateLimit = async (ipAdress: string) => {
   const key = getLoginRateLimitKey(ipAdress);
-  const count = await redis.incr(key);
+  const count = await redisService.incr(key);
   if (count === 1) {
-    await redis.expire(key, 60);
+    await redisService.expire(key, 60);
   }
   return count;
 };
@@ -254,9 +247,9 @@ export const checkIPBasedSendVerificationCodeRateLimit = async (
   ipAdress: string
 ) => {
   const key = getSendVerificationCodeRateLimitKey(ipAdress);
-  const count = await redis.incr(key);
+  const count = await redisService.incr(key);
   if (count === 1) {
-    await redis.expire(key, 60);
+    await redisService.expire(key, 60);
   }
   return count;
 };
@@ -265,9 +258,9 @@ export const checkUserIdBasedSendVerificationCodeRateLimit = async (
   userId: string
 ) => {
   const key = `${CACHE_PREFIXES.SEND_VERIFICATION_CODE_RATE_LIMIT}:${userId}`;
-  const count = await redis.incr(key);
+  const count = await redisService.incr(key);
   if (count === 1) {
-    await redis.expire(key, 60);
+    await redisService.expire(key, 60);
   }
   return count;
 };
@@ -277,18 +270,18 @@ export const checkSignUpRateLimit = async (
   ipAdress: string
 ) => {
   const key = getSignUpRateLimitKey(userId, ipAdress);
-  const count = await redis.incr(key);
+  const count = await redisService.incr(key);
   if (count === 1) {
-    await redis.expire(key, 60);
+    await redisService.expire(key, 60);
   }
   return count;
 };
 
 export const verifyVerificationCodeRateLimit = async (ipAdress: string) => {
   const key = getVerifyVerificationCodeRateLimitKey(ipAdress);
-  const count = await redis.incr(key);
+  const count = await redisService.incr(key);
   if (count === 1) {
-    await redis.expire(key, 60);
+    await redisService.expire(key, 60);
   }
   return count;
 };
@@ -297,18 +290,18 @@ export const verifyResetPasswordLinkRequestRateLimit = async (
   ipAdress: string
 ) => {
   const key = `${CACHE_PREFIXES.RESET_PASSWORD_LINK_REQUEST_RATE_LIMIT}:${ipAdress}`;
-  const count = await redis.incr(key);
+  const count = await redisService.incr(key);
   if (count === 1) {
-    await redis.expire(key, 60);
+    await redisService.expire(key, 60);
   }
   return count;
 };
 
 export const checkIpBasedTwoFactorAuthRateLimit = async (ipAdress: string) => {
   const key = `${CACHE_PREFIXES.TWO_FACTOR_AUTH_RATE_LIMIT}:${ipAdress}`;
-  const count = await redis.incr(key);
+  const count = await redisService.incr(key);
   if (count === 1) {
-    await redis.expire(key, 60);
+    await redisService.expire(key, 60);
   }
   return count;
 };
@@ -317,18 +310,9 @@ export const checkUserIdBasedTwoFactorAuthRateLimit = async (
   userId: string
 ) => {
   const key = `${CACHE_PREFIXES.TWO_FACTOR_AUTH_RATE_LIMIT}:${userId}`;
-  const count = await redis.incr(key);
+  const count = await redisService.incr(key);
   if (count === 1) {
-    await redis.expire(key, 60);
+    await redisService.expire(key, 60);
   }
   return count;
 };
-
-export async function invalidateKeysByUserId(userId: string) {
-  const stream = redis.scanStream();
-  stream.on("data", async (keys) => {
-    const keysToDelete = keys.filter((key: string) => key.includes(userId));
-    if (keysToDelete.length === 0) return;
-    await redis.del(keysToDelete);
-  });
-}

@@ -5,11 +5,11 @@ import { db } from "@/lib/database/connection";
 import currencyRatesRepository from "@/lib/database/repository/currencyRatesRepository";
 import userRepository from "@/lib/database/repository/userRepository";
 import { accounts, budgets, goals, transactions } from "@/lib/database/schema";
-import { invalidateKeysByUserId } from "@/lib/redis/redisUtils";
 import { eq, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import logger from "@/lib/utils/logger";
+import redisService from "@/lib/redis/redisService";
 
 export const updateUserCurrencyPreference = async (symbol: string) => {
   const { user } = await getUser();
@@ -108,7 +108,7 @@ export const convertTransactionsToNewCurrency = async (
       return results;
     });
 
-    await invalidateKeysByUserId(user.id);
+    await redisService.invalidateKeysByUserId(user.id);
     revalidatePath(PAGE_ROUTES.HOME_PAGE);
     revalidatePath(PAGE_ROUTES.ACCOUNTS_ROUTE);
     revalidatePath(PAGE_ROUTES.BUDGETS_ROUTE);
