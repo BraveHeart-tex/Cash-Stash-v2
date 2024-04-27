@@ -2,7 +2,7 @@
 import LatestAccountTransactionsDialog from "@/components/latest-account-transactions-dialog";
 import { useState } from "react";
 import AccountCardContent from "@/components/account-card-content";
-import { AccountWithTransactions } from "@/server/types";
+import { AccountWithTransactions } from "@/typings/accounts";
 
 type AccountCardProps = {
   account: AccountWithTransactions;

@@ -1,4 +1,4 @@
-import { MaskOptions } from "@/server/types";
+import { MaskOptions } from "@/lib/utils/stringUtils/maskString";
 import React from "react";
 import MaskedInput, { MaskedInputProps } from "react-text-mask";
 import createNumberMask from "text-mask-addons/dist/createNumberMask";

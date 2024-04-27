@@ -1,6 +1,7 @@
 import { AccountSelectModel } from "@/lib/database/schema";
 import { AccountSchemaType } from "@/schemas/account-schema";
 import { BaseValidatedResponse } from "@/typings/baseTypes";
+import { TransactionWithCategoryAndAccountName } from "@/typings/transactions";
 
 export type RegisterBankAccountReturnType = Promise<
   BaseValidatedResponse<AccountSelectModel>
@@ -23,3 +24,7 @@ export type GetPaginatedAccountsParams = BasePaginatedActionParams & {
 };
 
 export type UpdateBankAccountParams = AccountSchemaType & { accountId: number };
+
+export type AccountWithTransactions = AccountSelectModel & {
+  transactions: TransactionWithCategoryAndAccountName[];
+};

@@ -2,22 +2,22 @@
 import { processZodError } from "@/lib/utils/objectUtils/processZodError";
 import { getUser } from "@/lib/auth/session";
 import { PAGE_ROUTES } from "@/lib/constants";
-import { ReminderSelectModel } from "@/lib/database/schema";
 import reminderSchema, { ReminderSchemaType } from "@/schemas/reminder-schema";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
-import {
-  GetPaginatedRemindersParams,
-  GetPaginatedRemindersResponse,
-} from "@/server/types";
 import reminderRepository from "@/lib/database/repository/reminderRepository";
 import { convertISOToMysqlDatetime } from "@/lib/utils/dateUtils/convertISOToMysqlDatetime";
 import logger from "@/lib/utils/logger";
-import { BaseValidatedResponse } from "@/typings/baseTypes";
+import {
+  CreateReminderReturnType,
+  GetPaginatedRemindersParams,
+  GetPaginatedRemindersResponse,
+  ReminderUpdateModel,
+} from "@/typings/reminders";
 
 export const createReminder = async (
   data: ReminderSchemaType
-): Promise<BaseValidatedResponse<ReminderSelectModel>> => {
+): CreateReminderReturnType => {
   const { user } = await getUser();
 
   if (!user) {
@@ -59,9 +59,7 @@ export const createReminder = async (
   }
 };
 
-export const updateReminder = async (
-  reminder: ReminderSchemaType & { id: number }
-) => {
+export const updateReminder = async (reminder: ReminderUpdateModel) => {
   try {
     const validatedData = reminderSchema.parse(reminder);
 
@@ -101,7 +99,7 @@ export const getPaginatedReminders = async ({
   pageNumber = 1,
   startDate,
   endDate,
-}: GetPaginatedRemindersParams): Promise<GetPaginatedRemindersResponse> => {
+}: GetPaginatedRemindersParams): GetPaginatedRemindersResponse => {
   const { user } = await getUser();
 
   if (!user) {

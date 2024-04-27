@@ -1,41 +1,5 @@
 import { IconType } from "react-icons/lib";
-import {
-  AccountSelectModel,
-  GoalSelectModel,
-  ReminderSelectModel,
-  TransactionSelectModel,
-} from "@/lib/database/schema";
-import { CATEGORY_TYPES, PAGE_ROUTES } from "@/lib/constants";
-import {
-  BasePaginatedActionParams,
-  BasePaginatedResponse,
-} from "@/typings/baseTypes";
-
-export type GetPaginatedGoalsParams = BasePaginatedActionParams & {
-  sortBy?: string;
-  sortDirection?: string;
-};
-
-export type GetPaginatedGoalsResponse = BasePaginatedResponse & {
-  goals: GoalSelectModel[];
-};
-
-export type GetPaginatedRemindersParams = BasePaginatedActionParams & {
-  startDate?: string;
-  endDate?: string;
-};
-
-export type GetPaginatedRemindersResponse = BasePaginatedResponse & {
-  reminders: ReminderSelectModel[];
-};
-
-export type SerializedUserAccount = Omit<
-  AccountSelectModel,
-  "createdAt" | "updatedAt"
-> & {
-  createdAt: string;
-  updatedAt: string;
-};
+import { PAGE_ROUTES } from "@/lib/constants";
 
 export type GenericFilterOption<T> = {
   label: string;
@@ -62,25 +26,6 @@ export type RecaptchaResponse = {
   challenge_ts: string;
   hostname: string;
   "error-codes": string[];
-};
-
-export type GetPaginatedTransactionsParams = BasePaginatedActionParams & {
-  transactionType?: string;
-  accountId?: number;
-  sortBy: "amount" | "createdAt";
-  sortDirection?: "asc" | "desc";
-  createdAtStart?: Date;
-  createdAtEnd?: Date;
-  createdAtOperator?: "equals" | "before" | "after" | "range";
-  categoryId?: number;
-};
-
-export type GetPaginatedTransactionsResponse = BasePaginatedResponse & {
-  transactions: TransactionWithCategoryAndAccountName[];
-};
-
-export type AccountWithTransactions = AccountSelectModel & {
-  transactions: TransactionWithCategoryAndAccountName[];
 };
 
 export type MonthlyTransactionsData = {
@@ -117,31 +62,4 @@ export type TransactionPageSearchParams = {
   categoryId?: number;
   page?: string;
   query?: string;
-};
-
-export type TransactionWithCategoryAndAccountName = TransactionSelectModel & {
-  category: string;
-} & { accountName: string };
-
-export type MaskOptions = {
-  /** The string to be prepended to the masked value. */
-  prefix?: string;
-  /** The string to be appended to the masked value. */
-  suffix?: string;
-  /** Whether to include a thousands separator in the masked value. */
-  includeThousandsSeparator?: boolean;
-  /** The symbol used as the thousands separator in the masked value. */
-  thousandsSeparatorSymbol?: string;
-  /** Whether to allow a decimal component in the masked value. */
-  allowDecimal?: boolean;
-  /** The symbol used as the decimal component in the masked value. */
-  decimalSymbol?: string;
-  /** The maximum number of decimal places in the masked value. */
-  decimalLimit?: number;
-  /** The maximum number of integer digits in the masked value. */
-  integerLimit?: number;
-  /** Whether to allow negative values in the masked value. */
-  allowNegative?: boolean;
-  /** Whether to allow leading zeroes in the masked value. */
-  allowLeadingZeroes?: boolean;
 };

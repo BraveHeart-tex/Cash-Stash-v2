@@ -18,7 +18,7 @@ import {
 import TransactionCard from "@/components/transactions/transaction-card";
 import { AccountSelectModel } from "@/lib/database/schema";
 import AccountCardContent from "@/components/account-card-content";
-import { TransactionWithCategoryAndAccountName } from "@/server/types";
+import { TransactionWithCategoryAndAccountName } from "@/typings/transactions";
 
 type LatestAccountTransactionsDialogProps = {
   selectedAccount:

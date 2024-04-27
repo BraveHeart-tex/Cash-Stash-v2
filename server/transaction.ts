@@ -12,10 +12,6 @@ import transactionSchema, {
 } from "@/schemas/transaction-schema";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
-import {
-  GetPaginatedTransactionsParams,
-  GetPaginatedTransactionsResponse,
-} from "@/server/types";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import redisService from "@/lib/redis/redisService";
 import transactionRepository from "@/lib/database/repository/transactionRepository";
@@ -23,11 +19,16 @@ import accountRepository from "@/lib/database/repository/accountRepository";
 import { TransactionSelectModel } from "@/lib/database/schema";
 import { processZodError } from "@/lib/utils/objectUtils/processZodError";
 import logger from "@/lib/utils/logger";
-import { BaseValidatedResponse } from "@/typings/baseTypes";
+import {
+  CreateTransactionReturnType,
+  GetPaginatedTransactionsParams,
+  GetPaginatedTransactionsReturnType,
+  UpdateTransactionReturnType,
+} from "@/typings/transactions";
 
 export const createTransaction = async (
   values: TransactionSchemaType
-): Promise<BaseValidatedResponse<TransactionSelectModel>> => {
+): CreateTransactionReturnType => {
   const { user } = await getUser();
 
   if (!user) {
@@ -95,7 +96,7 @@ export const updateTransaction = async (
   transactionId: number,
   values: TransactionSchemaType,
   oldTransaction: TransactionSelectModel
-): Promise<BaseValidatedResponse<TransactionSelectModel>> => {
+): UpdateTransactionReturnType => {
   const { user } = await getUser();
 
   if (!user) {
@@ -214,7 +215,7 @@ export const getPaginatedTransactions = async ({
   query = "",
   pageNumber,
   categoryId,
-}: GetPaginatedTransactionsParams): Promise<GetPaginatedTransactionsResponse> => {
+}: GetPaginatedTransactionsParams): GetPaginatedTransactionsReturnType => {
   const { user } = await getUser();
   if (!user) {
     redirect(PAGE_ROUTES.LOGIN_ROUTE);

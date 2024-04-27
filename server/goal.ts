@@ -4,10 +4,6 @@ import goalSchema, { GoalSchemaType } from "@/schemas/goal-schema";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import {
-  GetPaginatedGoalsParams,
-  GetPaginatedGoalsResponse,
-} from "@/server/types";
-import {
   generateCachePrefixWithUserId,
   getGoalKey,
   getPaginatedGoalsKeys,
@@ -19,11 +15,16 @@ import redisService from "@/lib/redis/redisService";
 import { GoalSelectModel } from "@/lib/database/schema";
 import { processZodError } from "@/lib/utils/objectUtils/processZodError";
 import logger from "@/lib/utils/logger";
-import { BaseValidatedResponse } from "@/typings/baseTypes";
+import {
+  CreateGoalReturnType,
+  GetPaginatedGoalsParams,
+  GetPaginatedGoalsReturnType,
+  UpdateGoalReturnType,
+} from "@/typings/goals";
 
 export const createGoal = async (
   values: GoalSchemaType
-): Promise<BaseValidatedResponse<GoalSelectModel>> => {
+): CreateGoalReturnType => {
   const { user } = await getUser();
   if (!user) {
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
@@ -74,7 +75,7 @@ export const createGoal = async (
 export const updateGoal = async (
   goalId: number,
   values: GoalSchemaType
-): Promise<BaseValidatedResponse<GoalSelectModel>> => {
+): UpdateGoalReturnType => {
   const { user } = await getUser();
   if (!user) {
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
@@ -134,7 +135,7 @@ export const getPaginatedGoals = async ({
   query,
   sortBy,
   sortDirection,
-}: GetPaginatedGoalsParams): Promise<GetPaginatedGoalsResponse> => {
+}: GetPaginatedGoalsParams): GetPaginatedGoalsReturnType => {
   const { user } = await getUser();
 
   if (!user) {

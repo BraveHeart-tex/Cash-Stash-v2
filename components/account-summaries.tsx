@@ -4,13 +4,13 @@ import AnimatePresenceClient from "@/components/animations/animate-presence";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { PAGE_ROUTES } from "@/lib/constants";
-import { AccountWithTransactions } from "@/server/types";
+import { AccountWithTransactions } from "@/typings/accounts";
 
-const AccountSummaries = ({
-  accounts,
-}: {
+type AccountSummariesProps = {
   accounts: AccountWithTransactions[];
-}) => {
+};
+
+const AccountSummaries = ({ accounts }: AccountSummariesProps) => {
   if (accounts.length === 0) {
     return (
       <article className="flex h-[300px] items-center justify-center">

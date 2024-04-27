@@ -9,7 +9,6 @@ import { toast } from "sonner";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import { generateLabelFromEnumValue } from "@/lib/utils/stringUtils/generateLabelFromEnumValue";
-import { AccountWithTransactions } from "@/server/types";
 import {
   FaTrash,
   FaEdit,
@@ -17,6 +16,7 @@ import {
   FaMoneyBillWave,
 } from "react-icons/fa";
 import useAuthStore from "@/store/auth/authStore";
+import { AccountWithTransactions } from "@/typings/accounts";
 
 type AccountCardContentProps = {
   account: AccountWithTransactions;

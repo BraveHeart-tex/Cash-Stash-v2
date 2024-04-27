@@ -4,7 +4,7 @@ import AnimatePresenceClient from "@/components/animations/animate-presence";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { PAGE_ROUTES } from "@/lib/constants";
-import { TransactionWithCategoryAndAccountName } from "@/server/types";
+import { TransactionWithCategoryAndAccountName } from "@/typings/transactions";
 
 type TransactionHistoryProps = {
   transactions: TransactionWithCategoryAndAccountName[] | null;

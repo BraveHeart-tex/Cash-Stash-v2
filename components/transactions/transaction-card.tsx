@@ -19,7 +19,7 @@ import { cn } from "@/lib/utils/stringUtils/cn";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { format } from "date-fns";
 import useAuthStore from "@/store/auth/authStore";
-import { TransactionWithCategoryAndAccountName } from "@/server/types";
+import { TransactionWithCategoryAndAccountName } from "@/typings/transactions";
 
 type TransactionCardProps = {
   transaction: TransactionWithCategoryAndAccountName;

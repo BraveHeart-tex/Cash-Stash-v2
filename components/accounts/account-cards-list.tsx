@@ -1,5 +1,5 @@
 import AccountCard from "@/components/account-card";
-import { AccountWithTransactions } from "@/server/types";
+import { AccountWithTransactions } from "@/typings/accounts";
 
 type AccountCardsListProps = {
   accounts: AccountWithTransactions[];

@@ -7,7 +7,7 @@ import {
   transactions,
 } from "@/lib/database/schema";
 import logger from "@/lib/utils/logger";
-import { AccountWithTransactions } from "@/server/types";
+import { AccountWithTransactions } from "@/typings/accounts";
 import { and, asc, desc, eq, getTableColumns, like, sql } from "drizzle-orm";
 
 type GetMultipleAccountsParams = {

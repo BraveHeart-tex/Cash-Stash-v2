@@ -1,7 +1,6 @@
 import { getPaginatedTransactions } from "@/server/transaction";
 import TransactionList from "@/components/transactions/transaction-list";
 import { getCurrentUserAccountsThatHaveTransactions } from "@/server/account";
-import { createGetPaginatedTransactionsParams } from "@/lib/utils/misc";
 import RoutePaginationControls from "@/components/route-pagination-controls";
 import TransactionsPageHeader from "@/components/transactions/transactions-page-header";
 import TransactionsPageFilters from "@/components/transactions/transactions-page-filters";
@@ -13,7 +12,24 @@ type TransactionsPageProps = {
 };
 
 const TransactionsPage = async ({ searchParams }: TransactionsPageProps) => {
-  const actionParams = createGetPaginatedTransactionsParams(searchParams);
+  const {
+    transactionType,
+    accountId,
+    sortBy,
+    sortDirection,
+    categoryId,
+    page,
+    query,
+  } = searchParams;
+  const actionParams = {
+    transactionType,
+    accountId: accountId ? parseInt(accountId) : undefined,
+    sortBy: (sortBy || "createdAt") as "amount" | "createdAt",
+    sortDirection: (sortDirection || "desc") as "asc" | "desc",
+    categoryId: categoryId || undefined,
+    pageNumber: page ? parseInt(page) : 1,
+    query,
+  };
 
   const [transactionsResponse, usersAccounts] = await Promise.all([
     getPaginatedTransactions(actionParams),
