@@ -21,3 +21,5 @@ export type GetPaginatedBudgetsReturnType = Promise<
     budgets: BudgetWithCategory[];
   }
 >;
+
+export type BudgetWithCategory = BudgetSelectModel & { category: string };

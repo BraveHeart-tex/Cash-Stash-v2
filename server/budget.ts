@@ -11,7 +11,6 @@ import {
   mapRedisHashToBudget,
 } from "@/lib/redis/redisUtils";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
-import { createBudgetDto } from "@/lib/database/dto/budgetDto";
 import budgetRepository from "@/lib/database/repository/budgetRepository";
 import redisService from "@/lib/redis/redisService";
 import { processZodError } from "@/lib/utils/objectUtils/processZodError";
@@ -33,7 +32,10 @@ export const createBudget = async (
 
   try {
     const validatedData = budgetSchema.parse(data);
-    const budgetDto = createBudgetDto(validatedData, user.id);
+    const budgetDto = {
+      ...validatedData,
+      userId: user.id,
+    };
 
     const { affectedRows, budget } = await budgetRepository.create(budgetDto);
 

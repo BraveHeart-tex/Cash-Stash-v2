@@ -19,7 +19,6 @@ import {
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import redisService from "@/lib/redis/redisService";
 import transactionRepository from "@/lib/database/repository/transactionRepository";
-import { createTransactionDto } from "@/lib/database/dto/transactionDto";
 import accountRepository from "@/lib/database/repository/accountRepository";
 import { TransactionSelectModel } from "@/lib/database/schema";
 import { processZodError } from "@/lib/utils/objectUtils/processZodError";
@@ -38,7 +37,10 @@ export const createTransaction = async (
   try {
     const validatedData = transactionSchema.parse(values);
 
-    const transactionDto = createTransactionDto(validatedData, user.id);
+    const transactionDto = {
+      ...validatedData,
+      userId: user.id,
+    };
 
     const { affectedRows, updatedAccount, createdTransaction } =
       await transactionRepository.create(transactionDto);

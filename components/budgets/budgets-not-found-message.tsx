@@ -1,10 +1,12 @@
 import GenericNotFoundBlock from "@/components/ui/generic-not-found-block";
 
+type BudgetsNotFoundMessageProps = {
+  pageHasParams: boolean;
+};
+
 const BudgetsNotFoundMessage = ({
   pageHasParams,
-}: {
-  pageHasParams: boolean;
-}) => {
+}: BudgetsNotFoundMessageProps) => {
   const headingVariants: { [key: number]: string } = {
     0: "You don't have any budgets created yet.",
     1: "No budgets were found for your search",

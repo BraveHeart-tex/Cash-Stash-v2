@@ -1,5 +1,5 @@
 import BudgetCard from "@/components/budget-card";
-import { BudgetWithCategory } from "@/server/types";
+import { BudgetWithCategory } from "@/typings/budgets";
 
 type BudgetCardsListProps = {
   budgets: BudgetWithCategory[];

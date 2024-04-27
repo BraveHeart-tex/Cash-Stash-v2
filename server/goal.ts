@@ -14,7 +14,6 @@ import {
   mapRedisHashToGoal,
 } from "@/lib/redis/redisUtils";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
-import { createGoalDto } from "@/lib/database/dto/goalDto";
 import goalRepository from "@/lib/database/repository/goalRepository";
 import redisService from "@/lib/redis/redisService";
 import { GoalSelectModel } from "@/lib/database/schema";
@@ -32,7 +31,10 @@ export const createGoal = async (
 
   try {
     const validatedData = goalSchema.parse(values);
-    const goalDto = createGoalDto(validatedData, user.id);
+    const goalDto = {
+      ...validatedData,
+      userId: user.id,
+    };
 
     const { affectedRows, goal } = await goalRepository.create(goalDto);
 

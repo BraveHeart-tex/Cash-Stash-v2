@@ -4,9 +4,13 @@ import AnimatePresenceClient from "@/components/animations/animate-presence";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { PAGE_ROUTES } from "@/lib/constants";
-import { BudgetWithCategory } from "@/server/types";
+import { BudgetWithCategory } from "@/typings/budgets";
 
-const BudgetStatus = ({ budgets }: { budgets: BudgetWithCategory[] }) => {
+type BudgetStatusProps = {
+  budgets: BudgetWithCategory[];
+};
+
+const BudgetStatus = ({ budgets }: BudgetStatusProps) => {
   if (!budgets || budgets.length === 0) {
     return (
       <article className="flex h-[300px] items-center justify-center">

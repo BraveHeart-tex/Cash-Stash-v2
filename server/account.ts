@@ -10,7 +10,6 @@ import {
 } from "@/lib/redis/redisUtils";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import accountSchema, { AccountSchemaType } from "@/schemas/account-schema";
-import { createAccountDto } from "@/lib/database/dto/accountDto";
 import accountRepository from "@/lib/database/repository/accountRepository";
 import transactionRepository from "@/lib/database/repository/transactionRepository";
 import redisService from "@/lib/redis/redisService";
@@ -39,7 +38,10 @@ export const registerBankAccount = async ({
   try {
     const validatedData = accountSchema.parse({ balance, category, name });
 
-    const accountDto = createAccountDto(validatedData, user.id);
+    const accountDto = {
+      ...validatedData,
+      userId: user.id,
+    };
 
     const { affectedRows, account } = await accountRepository.create(
       accountDto,

@@ -1,7 +1,7 @@
 import { CACHE_PREFIXES } from "@/lib/constants";
 import { GoalSelectModel } from "@/lib/database/schema";
-import { BudgetWithCategory } from "@/server/types";
 import redisService from "@/lib/redis/redisService";
+import { BudgetWithCategory } from "@/typings/budgets";
 
 type Entity = {
   [key: string]: any;

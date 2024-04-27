@@ -12,7 +12,7 @@ import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import useAuthStore from "@/store/auth/authStore";
-import { BudgetWithCategory } from "@/server/types";
+import { BudgetWithCategory } from "@/typings/budgets";
 
 type BudgetCardProps = {
   budget: BudgetWithCategory;

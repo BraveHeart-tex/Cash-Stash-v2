@@ -1,7 +1,6 @@
 import { IconType } from "react-icons/lib";
 import {
   AccountSelectModel,
-  BudgetSelectModel,
   CategoryInsertModel,
   CategorySelectModel,
   GoalSelectModel,
@@ -44,15 +43,6 @@ export type GenericFilterOption<T> = {
   label: string;
   data: T;
   icon: React.JSX.Element;
-};
-
-export type UpdateBudgetResponse = {
-  budget?: BudgetSelectModel;
-  error?: string;
-  fieldErrors: {
-    field: string;
-    message: string | undefined;
-  }[];
 };
 
 export type InsightsData = {
@@ -144,7 +134,6 @@ export type TransactionPageSearchParams = {
   query?: string;
 };
 
-export type BudgetWithCategory = BudgetSelectModel & { category: string };
 export type TransactionWithCategoryAndAccountName = TransactionSelectModel & {
   category: string;
 } & { accountName: string };
