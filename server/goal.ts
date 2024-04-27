@@ -153,7 +153,7 @@ export const getPaginatedGoals = async ({
 
     const cachedGoals = await redisService.get(cacheKey);
     if (cachedGoals) {
-      console.log("PAGINATED GOALS CACHE HIT");
+      logger.info("PAGINATED GOALS CACHE HIT");
       const parsedCacheData = JSON.parse(cachedGoals);
       return {
         goals: parsedCacheData.goals,

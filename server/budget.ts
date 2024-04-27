@@ -83,10 +83,10 @@ export const updateBudget = async (
   const budgetFromCache = await redisService.hgetall(getBudgetKey(budgetId));
 
   if (budgetFromCache) {
-    console.log("UPDATE Budget CACHE HIT");
+    logger.info("UPDATE Budget CACHE HIT");
     budgetToBeUpdated = mapRedisHashToBudget(budgetFromCache);
   } else {
-    console.log("UPDATE Budget CACHE MISS");
+    logger.info("UPDATE Budget CACHE MISS");
     budgetToBeUpdated = await budgetRepository.getById(budgetId);
   }
 
@@ -163,7 +163,7 @@ export const getPaginatedBudgets = async ({
 
   const cachedData = await redisService.get(cacheKey);
   if (cachedData) {
-    console.log("Budgets CACHE HIT");
+    logger.info("Budgets CACHE HIT");
     return {
       budgets: JSON.parse(cachedData).budgets,
       hasNextPage: JSON.parse(cachedData).totalCount > skipAmount + PAGE_SIZE,
@@ -173,7 +173,7 @@ export const getPaginatedBudgets = async ({
     };
   }
 
-  console.log("Budgets CACHE MISS");
+  logger.info("Budgets CACHE MISS");
 
   const { budgets, totalCount } = await budgetRepository.getMultiple({
     userId: user.id,
