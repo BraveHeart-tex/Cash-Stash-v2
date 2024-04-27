@@ -1,4 +1,4 @@
-import { GenericDialogKeyType } from "@/server/types";
+import { GenericDialogKeyType } from "@/typings/genericModal";
 import { create } from "zustand";
 
 type GenericModalState = {

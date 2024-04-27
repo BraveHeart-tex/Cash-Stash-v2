@@ -5,10 +5,6 @@ import { BudgetSelectModel } from "@/lib/database/schema";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import {
-  IGetPaginatedBudgetsParams,
-  GetPaginatedBudgetsResponse,
-} from "@/server/types";
-import {
   generateCachePrefixWithUserId,
   getBudgetKey,
   getPaginatedBudgetsKey,
@@ -20,11 +16,16 @@ import budgetRepository from "@/lib/database/repository/budgetRepository";
 import redisService from "@/lib/redis/redisService";
 import { processZodError } from "@/lib/utils/objectUtils/processZodError";
 import logger from "@/lib/utils/logger";
-import { BaseValidatedResponse } from "@/typings/baseTypes";
+import {
+  CreateBudgetReturnType,
+  GetPaginatedBudgetsParams,
+  GetPaginatedBudgetsReturnType,
+  UpdateBudgetReturnType,
+} from "@/typings/budgets";
 
 export const createBudget = async (
   data: BudgetSchemaType
-): Promise<BaseValidatedResponse<BudgetSelectModel>> => {
+): CreateBudgetReturnType => {
   const { user } = await getUser();
   if (!user) {
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
@@ -72,7 +73,7 @@ export const createBudget = async (
 export const updateBudget = async (
   budgetId: number,
   values: BudgetSchemaType
-): Promise<BaseValidatedResponse<BudgetSelectModel>> => {
+): UpdateBudgetReturnType => {
   const { user } = await getUser();
   if (!user) {
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
@@ -142,7 +143,7 @@ export const getPaginatedBudgets = async ({
   category,
   sortBy,
   sortDirection,
-}: IGetPaginatedBudgetsParams): Promise<GetPaginatedBudgetsResponse> => {
+}: GetPaginatedBudgetsParams): GetPaginatedBudgetsReturnType => {
   const { user } = await getUser();
 
   if (!user) {

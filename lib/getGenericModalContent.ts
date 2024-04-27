@@ -4,8 +4,8 @@ import BudgetForm from "@/components/budgets/budget-form";
 import GoalForm from "@/components/goals/goal-form";
 import TransactionForm from "@/components/transactions/transaction-form";
 import ReminderForm from "@/components/reminder-form";
-import { GenericDialogKeyType } from "@/server/types";
 import CategoryForm from "@/components/categories/category-form";
+import { GenericDialogKeyType } from "@/typings/genericModal";
 
 type GetGenericDialogContentParams = {
   key: GenericDialogKeyType;

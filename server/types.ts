@@ -14,26 +14,6 @@ import {
   BasePaginatedResponse,
 } from "@/typings/baseTypes";
 
-export type GetPaginatedAccountsParams = BasePaginatedActionParams & {
-  sortBy?: string;
-  sortDirection?: string;
-  category?: AccountSelectModel["category"];
-};
-
-export type IGetPaginatedAccountsResponse = BasePaginatedResponse & {
-  accounts: AccountWithTransactions[];
-};
-
-export type IGetPaginatedBudgetsParams = BasePaginatedActionParams & {
-  category?: number;
-  sortBy?: string;
-  sortDirection?: string;
-};
-
-export type GetPaginatedBudgetsResponse = BasePaginatedResponse & {
-  budgets: BudgetWithCategory[];
-};
-
 export type GetPaginatedGoalsParams = BasePaginatedActionParams & {
   sortBy?: string;
   sortDirection?: string;
@@ -80,24 +60,6 @@ export type InsightsData = {
   totalExpense: number;
   netIncome: number;
   savingsRate: string;
-};
-
-export type SerializedTransaction = Omit<
-  TransactionSelectModel,
-  "createdAt" | "updatedAt"
-> & {
-  createdAt: string;
-  updatedAt: string;
-  account?: Partial<AccountSelectModel>;
-};
-
-export type SerializedReminder = Omit<
-  ReminderSelectModel,
-  "createdAt" | "updatedAt" | "reminderDate"
-> & {
-  createdAt: string;
-  updatedAt: string;
-  reminderDate: string;
 };
 
 export type NavigationItem = {
@@ -156,23 +118,10 @@ export type CategoryType = (typeof CATEGORY_TYPES)[keyof typeof CATEGORY_TYPES];
 
 export type PageLink = (typeof PAGE_ROUTES)[keyof typeof PAGE_ROUTES];
 
-export type FieldError = {
-  field: string;
-  message: string | undefined;
-};
-
 export type QueryStringComboboxItem = {
   label: string;
   value: string;
 };
-
-export type GenericDialogKeyType =
-  | "budget"
-  | "goal"
-  | "transaction"
-  | "reminder"
-  | "account"
-  | "category";
 
 export type GetPaginatedCategoriesParams = BasePaginatedActionParams & {
   type?: CategoryType;

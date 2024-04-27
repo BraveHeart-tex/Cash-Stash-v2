@@ -1,5 +1,3 @@
-import { FieldError } from "@/server/types";
-
 export type BasePaginatedResponse = {
   hasNextPage: boolean;
   hasPreviousPage: boolean;
@@ -16,4 +14,9 @@ export type BaseValidatedResponse<T> = {
   data?: T;
   error?: string;
   fieldErrors: FieldError[];
+};
+
+export type FieldError = {
+  field: string;
+  message: string | undefined;
 };
