@@ -1,8 +1,6 @@
 import { IconType } from "react-icons/lib";
 import {
   AccountSelectModel,
-  CategoryInsertModel,
-  CategorySelectModel,
   GoalSelectModel,
   ReminderSelectModel,
   TransactionSelectModel,
@@ -104,25 +102,12 @@ export type ConvertCurrencyType = {
   amount: number;
 };
 
-export type CategoryType = (typeof CATEGORY_TYPES)[keyof typeof CATEGORY_TYPES];
-
 export type PageLink = (typeof PAGE_ROUTES)[keyof typeof PAGE_ROUTES];
 
 export type QueryStringComboboxItem = {
   label: string;
   value: string;
 };
-
-export type GetPaginatedCategoriesParams = BasePaginatedActionParams & {
-  type?: CategoryType;
-};
-
-export type GetPaginatedCategoriesResponse = BasePaginatedResponse & {
-  categories: CategorySelectModel[];
-};
-
-export type CategoryUpdateModel = Required<Pick<CategoryInsertModel, "id">> &
-  Partial<Omit<CategoryInsertModel, "id">>;
 
 export type TransactionPageSearchParams = {
   transactionType?: string;

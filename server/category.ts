@@ -6,18 +6,16 @@ import categorySchema, { CategorySchemaType } from "@/schemas/category-schema";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import categoryRepository from "@/lib/database/repository/categoryRepository";
-import {
-  CategoryType,
-  CategoryUpdateModel,
-  GetPaginatedCategoriesParams,
-  GetPaginatedCategoriesResponse,
-} from "@/server/types";
 import logger from "@/lib/utils/logger";
 import redisService from "@/lib/redis/redisService";
 import { generateCachePrefixWithUserId } from "@/lib/redis/redisUtils";
 import {
+  CategoryType,
+  CategoryUpdateModel,
   CreateCategoryReturnType,
   GetCategoriesByTypeReturnType,
+  GetPaginatedCategoriesParams,
+  GetPaginatedCategoriesReturnType,
   UpdateCategoryReturnType,
 } from "@/typings/categories";
 
@@ -25,7 +23,7 @@ export const getPaginatedCategories = async ({
   pageNumber,
   query,
   type,
-}: GetPaginatedCategoriesParams): Promise<GetPaginatedCategoriesResponse> => {
+}: GetPaginatedCategoriesParams): GetPaginatedCategoriesReturnType => {
   const { user } = await getUser();
   if (!user) {
     redirect(PAGE_ROUTES.LOGIN_ROUTE);
@@ -148,10 +146,7 @@ export const getCategoriesByType = async (
   }
 };
 
-export const deleteCategory = async (
-  id: number,
-  type: CategoryType
-): Promise<boolean> => {
+export const deleteCategory = async (id: number, type: CategoryType) => {
   const { user } = await getUser();
   if (!user) {
     redirect(PAGE_ROUTES.LOGIN_ROUTE);

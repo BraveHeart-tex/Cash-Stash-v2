@@ -25,8 +25,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { compareMatchingKeys } from "@/lib/utils/objectUtils/compareMatchingKeys";
-import { CategoryUpdateModel } from "@/server/types";
 import {
+  CategoryUpdateModel,
   CreateCategoryReturnType,
   UpdateCategoryReturnType,
 } from "@/typings/categories";

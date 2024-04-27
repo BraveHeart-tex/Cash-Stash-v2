@@ -11,7 +11,7 @@ import { deleteCategory } from "@/server/category";
 import { toast } from "sonner";
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { CategoryType } from "@/server/types";
+import { CategoryType } from "@/typings/categories";
 
 type CategoryCardProps = {
   category: CategorySelectModel;

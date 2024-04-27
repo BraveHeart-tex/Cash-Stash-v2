@@ -1,8 +1,8 @@
 import { and, eq, like, sql } from "drizzle-orm";
 import { db } from "@/lib/database/connection";
 import { CategoryInsertModel, categories } from "@/lib/database/schema";
-import { CategoryType, CategoryUpdateModel } from "@/server/types";
 import { getPageSizeAndSkipAmount } from "@/lib/constants";
+import { CategoryType, CategoryUpdateModel } from "@/typings/categories";
 
 type GetMultipleCategoriesParams = {
   query?: string;

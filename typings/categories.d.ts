@@ -1,5 +1,12 @@
-import { CategorySelectModel } from "@/lib/database/schema";
+import { CATEGORY_TYPES } from "@/lib/constants";
+import {
+  CategoryInsertModel,
+  CategorySelectModel,
+} from "@/lib/database/schema";
 import { CategoryUpdateModel, FieldError } from "@/server/types";
+import { BasePaginatedResponse } from "@/typings/baseTypes";
+
+export type CategoryType = (typeof CATEGORY_TYPES)[keyof typeof CATEGORY_TYPES];
 
 export type CreateCategoryReturnType = Promise<
   CreateCategorySuccessResponse | CreateCategoryErrorResponse
@@ -30,3 +37,16 @@ type UpdateCategoryErrorResponse = {
 export type UpdateCategoryReturnType = Promise<
   UpdateCategorySuccessResponse | UpdateCategoryErrorResponse
 >;
+
+export type GetPaginatedCategoriesReturnType = Promise<
+  BasePaginatedResponse & {
+    categories: CategorySelectModel[];
+  }
+>;
+
+export type CategoryUpdateModel = Required<Pick<CategoryInsertModel, "id">> &
+  Partial<Omit<CategoryInsertModel, "id">>;
+
+export type GetPaginatedCategoriesParams = BasePaginatedActionParams & {
+  type?: CategoryType;
+};

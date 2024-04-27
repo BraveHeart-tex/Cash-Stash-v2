@@ -4,7 +4,7 @@ import CategoriesPageHeader from "@/components/categories/categories-page-header
 import CategoryCardList from "@/components/categories/category-card-list";
 import RoutePaginationControls from "@/components/route-pagination-controls";
 import { getPaginatedCategories } from "@/server/category";
-import { CategoryType } from "@/server/types";
+import { CategoryType } from "@/typings/categories";
 
 type CategoriesPageSearchParamsType = {
   page: string;
