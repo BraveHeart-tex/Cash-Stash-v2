@@ -4,13 +4,13 @@ import PreferredCurrencySettings from "@/components/settings/preferred-currency-
 import TwoFactorAuthenticationSettings from "@/components/settings/two-factor-authentication-settings";
 import { getUser } from "@/lib/auth/session";
 import { PAGE_ROUTES } from "@/lib/constants";
-import { redirect } from "next/navigation";
+import { redirect } from "@/navigation";
 
 const SettingsPage = async () => {
   const { user } = await getUser();
 
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   return (

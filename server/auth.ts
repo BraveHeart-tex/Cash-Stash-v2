@@ -5,7 +5,7 @@ import loginSchema, { LoginSchemaType } from "@/schemas/login-schema";
 import registerSchema, { RegisterSchemaType } from "@/schemas/register-schema";
 import { ZodError } from "zod";
 import { cookies, headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { redirect } from "@/navigation";
 import { createTOTPKeyURI, TOTPController } from "oslo/otp";
 import { decodeHex, encodeHex } from "oslo/encoding";
 import {
@@ -249,7 +249,7 @@ export const logout = async () => {
     sessionCookie.value,
     sessionCookie.attributes
   );
-  redirect(PAGE_ROUTES.LOGIN_ROUTE);
+  return redirect(PAGE_ROUTES.LOGIN_ROUTE);
 };
 
 export const checkEmailValidityBeforeVerification = async (email: string) => {
@@ -298,7 +298,7 @@ export const handleEmailVerification = async (email: string, code: string) => {
     const user = await userRepository.getUnverifiedUserByEmail(email);
 
     if (!user) {
-      redirect(PAGE_ROUTES.LOGIN_ROUTE);
+      return redirect(PAGE_ROUTES.LOGIN_ROUTE);
     }
 
     const isValid = await verifyVerificationCode(user, code);
@@ -528,7 +528,7 @@ export const enableTwoFactorAuthentication = async () => {
   const { user } = await getUser();
 
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   await userRepository.updateUser(user.id, {
@@ -548,7 +548,7 @@ export const enableTwoFactorAuthentication = async () => {
 export const activateTwoFactorAuthentication = async (otp: string) => {
   const { user } = await getUser();
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   const result = await twoFactorAuthenticationSecretRepository.getByUserId(
@@ -665,7 +665,7 @@ export const validateOTP = async (otp: string, email: string) => {
 export const disableTwoFactorAuthentication = async () => {
   const { user } = await getUser();
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   try {

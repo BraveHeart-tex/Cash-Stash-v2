@@ -1,13 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { getUser } from "@/lib/auth/session";
 import { PAGE_ROUTES } from "@/lib/constants";
+import { redirect } from "@/navigation";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
 const NotFound = async () => {
   const { user } = await getUser();
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   return (

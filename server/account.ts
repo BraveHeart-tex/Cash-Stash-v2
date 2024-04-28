@@ -1,6 +1,6 @@
 "use server";
 import { getUser } from "@/lib/auth/session";
-import { redirect } from "next/navigation";
+import { redirect } from "@/navigation";
 import { ZodError } from "zod";
 import {
   generateCachePrefixWithUserId,
@@ -32,7 +32,7 @@ export const registerBankAccount = async ({
   const { user } = await getUser();
 
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   try {
@@ -105,7 +105,7 @@ export const updateBankAccount = async ({
 }: UpdateBankAccountParams): UpdateBankAccountReturnType => {
   const { user } = await getUser();
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   if (!accountId) {
@@ -178,7 +178,7 @@ export const getPaginatedAccounts = async ({
   const { user } = await getUser();
 
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   const PAGE_SIZE = 12;
@@ -257,7 +257,7 @@ export const deleteAccount = async (accountId: number) => {
   const { user } = await getUser();
 
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   try {
@@ -291,7 +291,7 @@ export const getTransactionsForAccount = async (accountId: number) => {
   const { user } = await getUser();
 
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   try {
@@ -321,7 +321,7 @@ export const getCurrentUserAccounts = async () => {
   const { user } = await getUser();
 
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   return await accountRepository.getByUserId(user.id);
@@ -331,7 +331,7 @@ export const getCurrentUserAccountsThatHaveTransactions = async () => {
   const { user } = await getUser();
 
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   return await accountRepository.getAccountsThatHaveTransactions(user.id);

@@ -1,8 +1,8 @@
 "use client";
 import { cn } from "@/lib/utils/stringUtils/cn";
-import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 import Link from "next/link";
+import { usePathname } from "@/navigation";
 
 type PageItem = {
   label: string;

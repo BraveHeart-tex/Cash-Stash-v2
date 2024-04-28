@@ -33,13 +33,50 @@ import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import LoggedInIllustration from "@/components/logged-in-illustration";
 import Logo from "@/components/logo";
 
-const LoginForm = () => {
+type LoginFormProps = {
+  internationalizationConfig: {
+    loggedInHeading: string;
+    loggedInDescription: string;
+    loginHeading: string;
+    loginDescription: string;
+    captchaError: string;
+    loginSuccessMessage: string;
+    formErrorMessage: string;
+    emailFieldLabel: string;
+    emailFieldPlaceholder: string;
+    passwordFieldLabel: string;
+    passwordFieldPlaceholder: string;
+    passwordFieldCapsLockMessage: string;
+    signInButtonLabel: string;
+    signInHelpMessage: string;
+    signUpText: string;
+  };
+};
+
+const LoginForm = ({ internationalizationConfig }: LoginFormProps) => {
   const { executeRecaptcha } = useGoogleReCaptcha();
   let [isPending, startTransition] = useTransition();
   const [showTwoFactorForm, setShowTwoFactorForm] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const router = useRouter();
 
+  const {
+    loggedInHeading,
+    loggedInDescription,
+    loginHeading,
+    loginDescription,
+    captchaError,
+    loginSuccessMessage,
+    formErrorMessage,
+    emailFieldLabel,
+    emailFieldPlaceholder,
+    passwordFieldLabel,
+    passwordFieldPlaceholder,
+    passwordFieldCapsLockMessage,
+    signInButtonLabel,
+    signInHelpMessage,
+    signUpText,
+  } = internationalizationConfig;
   const form = useForm<LoginSchemaType>({
     resolver: zodResolver(loginSchema),
   });
@@ -51,7 +88,7 @@ const LoginForm = () => {
       const isCaptchaTokenValid = await validateReCAPTCHAToken(captchaToken);
 
       if (!isCaptchaTokenValid) {
-        toast.error("Captcha validation failed.");
+        toast.error(captchaError);
         return;
       }
 
@@ -69,7 +106,7 @@ const LoginForm = () => {
 
       router.push(PAGE_ROUTES.HOME_PAGE);
       setLoggedIn(true);
-      toast.success("Logged in successfully.");
+      toast.success(loginSuccessMessage);
     });
   };
 
@@ -86,7 +123,7 @@ const LoginForm = () => {
     }
 
     if (result.error) {
-      toast.error("An error occurred.", {
+      toast.error(formErrorMessage, {
         description: result.error,
       });
     }
@@ -97,11 +134,9 @@ const LoginForm = () => {
       <div className="flex h-screen flex-col items-center justify-center gap-2">
         <LoggedInIllustration />
         <h1 className="scroll-m-20 text-3xl font-semibold tracking-tight text-primary">
-          Logged in successfully.
+          {loggedInHeading}
         </h1>
-        <span className="text-muted-foreground">
-          You are being redirected...
-        </span>
+        <span className="text-muted-foreground">{loggedInDescription}</span>
       </div>
     );
   }
@@ -110,6 +145,9 @@ const LoginForm = () => {
     hidden: { opacity: 0, y: 50 },
     visible: { opacity: 1, y: 0 },
   };
+
+  const signUpQuestion = signUpText.split("? ")[0] + "?";
+  const signUpCTA = signUpText.split("? ")[1];
 
   return (
     <motion.div
@@ -128,8 +166,8 @@ const LoginForm = () => {
               height={200}
               className="mx-auto mb-4 2xl:hidden"
             />
-            <CardTitle>Welcome!</CardTitle>
-            <CardDescription>Sign in to access your account.</CardDescription>
+            <CardTitle>{loginHeading}</CardTitle>
+            <CardDescription>{loginDescription}</CardDescription>
           </CardHeader>
           <CardContent>
             <Form {...form}>
@@ -146,11 +184,11 @@ const LoginForm = () => {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Email</FormLabel>
+                        <FormLabel>{emailFieldLabel}</FormLabel>
                         <FormControl>
                           <Input
                             type="email"
-                            placeholder="Enter your email"
+                            placeholder={emailFieldPlaceholder}
                             {...field}
                           />
                         </FormControl>
@@ -162,19 +200,27 @@ const LoginForm = () => {
                     control={form.control}
                     name="password"
                     render={({ field }) => (
-                      <PasswordInput<LoginSchemaType> field={field} />
+                      <PasswordInput<LoginSchemaType>
+                        field={field}
+                        passwordFieldCapsLockMessage={
+                          passwordFieldCapsLockMessage
+                        }
+                        passwordFieldLabel={passwordFieldLabel}
+                        passwordFieldPlaceholder={passwordFieldPlaceholder}
+                      />
                     )}
                   />
                 </div>
                 <Button
                   loading={isPending}
                   type="submit"
-                  name="Login to your account"
+                  name="sign-in-btn"
+                  aria-label={signInButtonLabel}
                   className="font-semibold"
                   disabled={isPending}
                   data-testid="login-button"
                 >
-                  Sign in
+                  {signInButtonLabel}
                 </Button>
               </form>
             </Form>
@@ -182,32 +228,24 @@ const LoginForm = () => {
           <CardFooter>
             <div className="flex w-full flex-col gap-2 lg:flex-row lg:justify-between ">
               <p className="text-sm text-muted-foreground">
-                Don't have an account?{" "}
+                {signUpQuestion}{" "}
                 <Button
                   disabled={isPending}
                   variant="link"
-                  aria-label="Sign up for a new account."
+                  aria-label={signUpCTA}
                   className="p-0 underline"
                 >
-                  <Link
-                    href={PAGE_ROUTES.SIGN_UP_ROUTE}
-                    aria-label="Sign up for a new account."
-                  >
-                    Sign up
-                  </Link>
+                  <Link href={PAGE_ROUTES.SIGN_UP_ROUTE}>{signUpCTA}</Link>
                 </Button>
               </p>
               <Button
                 disabled={isPending}
                 variant="link"
-                aria-label="Sign up for a new account."
+                aria-label={signInHelpMessage}
                 className="w-max p-0 underline"
               >
-                <Link
-                  href={PAGE_ROUTES.SIGN_IN_HELP_ROUTE}
-                  aria-label="Sign up for a new account."
-                >
-                  I need help signing in
+                <Link href={PAGE_ROUTES.SIGN_IN_HELP_ROUTE}>
+                  {signInHelpMessage}
                 </Link>
               </Button>
             </div>

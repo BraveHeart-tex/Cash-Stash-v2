@@ -4,5 +4,22 @@
     "createBudgetButtonLabel": "Create a Budget",
     "createBudgetDialogTitle": "Create a budget",
     "createBudgetDialogDescription": "Fill out the form below to create a budget."
+  },
+  "Login": {
+    "loggedInHeading": "Logged in successfully.",
+    "loggedInDescription": "You are being redirected...",
+    "loginHeading": "Welcome!",
+    "loginDescription": "Sign in to access your account.",
+    "captchaError": "Captcha verification failed. Please try again.",
+    "loginSuccessMessage": "Logged in successfully. You are being redirected...",
+    "formErrorMessage": "An error occurred",
+    "emailFieldLabel": "Email",
+    "emailFieldPlaceholder": "Enter your email",
+    "passwordFieldLabel": "Password",
+    "passwordFieldPlaceholder": "Enter your password",
+    "passwordFieldCapsLockMessage": "Caps lock is on.",
+    "signInButtonLabel": "Sign in",
+    "signInHelpMessage": "I need help signing in",
+    "signUpText": "Don't have an account? Sign up"
   }
 }

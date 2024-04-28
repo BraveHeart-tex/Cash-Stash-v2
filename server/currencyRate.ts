@@ -3,7 +3,7 @@
 import { getUser } from "@/lib/auth/session";
 import { CURRENCIES, PAGE_ROUTES } from "@/lib/constants";
 import currencyRatesRepository from "@/lib/database/repository/currencyRatesRepository";
-import { redirect } from "next/navigation";
+import { redirect } from "@/navigation";
 import logger from "@/lib/utils/logger";
 import { ConvertCurrencyType } from "@/typings/currencies";
 
@@ -25,7 +25,7 @@ export const convertCurrency = async ({
   const { user } = await getUser();
 
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   try {

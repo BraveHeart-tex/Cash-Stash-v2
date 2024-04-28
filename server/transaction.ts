@@ -10,7 +10,7 @@ import { getUser } from "@/lib/auth/session";
 import transactionSchema, {
   TransactionSchemaType,
 } from "@/schemas/transaction-schema";
-import { redirect } from "next/navigation";
+import { redirect } from "@/navigation";
 import { ZodError } from "zod";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
 import redisService from "@/lib/redis/redisService";
@@ -32,7 +32,7 @@ export const createTransaction = async (
   const { user } = await getUser();
 
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   try {
@@ -100,7 +100,7 @@ export const updateTransaction = async (
   const { user } = await getUser();
 
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   try {
@@ -218,7 +218,7 @@ export const getPaginatedTransactions = async ({
 }: GetPaginatedTransactionsParams): GetPaginatedTransactionsReturnType => {
   const { user } = await getUser();
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   const PAGE_SIZE = 12;

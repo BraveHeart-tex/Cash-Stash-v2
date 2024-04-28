@@ -1,6 +1,6 @@
 "use client";
 import { NAVIGATION_ITEMS, PAGE_ROUTES } from "@/lib/constants";
-import { usePathname } from "next/navigation";
+import { usePathname } from "@/navigation";
 import MobileTabsListItem from "@/components/mobile-tab-list-item";
 import useAuthStore from "@/store/auth/authStore";
 import NavigationItemsDrawer from "@/components/navigation-items-drawer";

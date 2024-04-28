@@ -2,7 +2,7 @@
 import { getUser } from "@/lib/auth/session";
 import budgetSchema, { BudgetSchemaType } from "@/schemas/budget-schema";
 import { BudgetSelectModel } from "@/lib/database/schema";
-import { redirect } from "next/navigation";
+import { redirect } from "@/navigation";
 import { ZodError } from "zod";
 import {
   generateCachePrefixWithUserId,
@@ -27,7 +27,7 @@ export const createBudget = async (
 ): CreateBudgetReturnType => {
   const { user } = await getUser();
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   try {
@@ -78,7 +78,7 @@ export const updateBudget = async (
 ): UpdateBudgetReturnType => {
   const { user } = await getUser();
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   let budgetToBeUpdated: BudgetSelectModel | null;
@@ -149,7 +149,7 @@ export const getPaginatedBudgets = async ({
   const { user } = await getUser();
 
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   const PAGE_SIZE = 12;
@@ -211,7 +211,7 @@ export const getPaginatedBudgets = async ({
 export const deleteBudget = async (budgetId: number) => {
   const { user } = await getUser();
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   try {

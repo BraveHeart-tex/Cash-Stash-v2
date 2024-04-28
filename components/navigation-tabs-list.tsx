@@ -2,12 +2,10 @@
 import { NAVIGATION_ITEMS } from "@/lib/constants";
 import { TabsList, TabsTrigger, Tabs } from "@/components/ui/tabs";
 import { motion } from "framer-motion";
-import { usePathname } from "next/navigation";
-import { Link } from "@/navigation";
+import { usePathname, Link } from "@/navigation";
 
 const NavigationTabsList = () => {
   const pathName = usePathname();
-  const trimmedPathname = "/" + pathName?.split("/").pop();
 
   return (
     <Tabs defaultValue={NAVIGATION_ITEMS[0].label}>
@@ -21,10 +19,10 @@ const NavigationTabsList = () => {
               className={
                 "relative data-[state=active]:bg-transparent data-[state=active]:text-primary-foreground"
               }
-              data-state={trimmedPathname === page.link ? "active" : "inactive"}
+              data-state={pathName === page.link ? "active" : "inactive"}
             >
               <Link href={page.link}>
-                {trimmedPathname === page.link && (
+                {pathName === page.link && (
                   <motion.div
                     layoutId="active-pill"
                     className="absolute inset-0 rounded-md bg-gradient-to-r from-primary to-primary/70"

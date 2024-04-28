@@ -4,5 +4,22 @@
     "createBudgetButtonLabel": "Bütçe Ekleyin",
     "createBudgetDialogTitle": "Bütçe Ekleyin",
     "createBudgetDialogDescription": "Aşağıdaki formu kullanarak bütçenizi oluşturun."
+  },
+  "Login": {
+    "loggedInHeading": "Başarıyla Giriş Yaptınız.",
+    "loggedInDescription": "Yönlendiriliyorsunuz...",
+    "loginHeading": "Merhaba!",
+    "loginDescription": "Hesabınıza erişmek için giriş yapın.",
+    "captchaError": "Captcha doğrulaması başarısız oldu. Lütfen tekrar deneyin.",
+    "loginSuccessMessage": "Başarıyla giriş yapıldı. Yönlendiriliyorsunuz...",
+    "formErrorMessage": "Bir hata oluştu",
+    "emailFieldLabel": "E-posta",
+    "emailFieldPlaceholder": "E-posta adresinizi girin",
+    "passwordFieldLabel": "Şifre",
+    "passwordFieldPlaceholder": "Şifrenizi girin",
+    "passwordFieldCapsLockMessage": "Caps lock açık.",
+    "signInButtonLabel": "Oturum aç",
+    "signInHelpMessage": "Oturum açmak için yardıma ihtiyacım var",
+    "signUpText": "Hesabınız yok mu? Kayıt olun"
   }
 }

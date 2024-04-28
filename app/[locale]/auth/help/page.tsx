@@ -13,13 +13,13 @@ import ResendVerificationEmailInput from "@/components/resend-verification-token
 import { FaArrowLeft } from "react-icons/fa6";
 import Logo from "@/components/logo";
 
-const SignInHelpPage = ({
-  searchParams,
-}: {
+type SignInHelpPageProps = {
   searchParams: {
     category: string;
   };
-}) => {
+};
+
+const SignInHelpPage = ({ searchParams }: SignInHelpPageProps) => {
   const category = searchParams.category;
 
   const renderContent = () => {
