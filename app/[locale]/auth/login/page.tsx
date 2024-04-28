@@ -19,7 +19,7 @@ const LoginPage = async () => {
       id="login-page"
       className="flex min-h-screen items-center justify-center"
     >
-      <div className="grid min-h-screen w-full grid-cols-1 items-center 2xl:grid-cols-2">
+      <div className="grid w-full grid-cols-1 items-center 2xl:grid-cols-2">
         <div className="relative hidden h-screen flex-col items-center justify-center bg-muted 2xl:flex">
           <Logo
             className="monokai-dark:invert dark:invert"
