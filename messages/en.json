@@ -21,5 +21,44 @@
     "signInButtonLabel": "Sign in",
     "signInHelpMessage": "I need help signing in",
     "signUpText": "Don't have an account? Sign up"
+  },
+  "Settings": {
+    "pageTitle": "Settings",
+    "pageDescription": "Personalize your CashStash experience.",
+
+    "currencySettingsTitle": "Preffered Currency",
+    "currencySettingsDescription": "Choose your preferred currency for displaying amounts.",
+
+    "notificationSettingsTitle": "Notifications",
+    "notificationSettingsDescription": "Manage your notification preferences. We'll send you notifications only when you set a reminder for them.",
+
+    "colorThemeSettingsTitle": "Color Theme",
+    "colorThemeSettingsDescription": "Choose your preferred color theme.",
+
+    "twoFactorSettingsTitle": "Two Factor Authentication",
+    "twoFactorAlreadyEnableDescription": "Two-factor authentication is currently enabled on your account.",
+    "twoFactorSettingsDescription": "Enhance your account security with two-factor authentication. Once enabled, simply enter a unique code from your mobile device along with your password during sign-in for added protection.",
+
+    "twoFactorDisableDialogTitle": "Are you sure you want to disable two-factor authentication?",
+    "twoFactorDisableDialogMessage": "Two-factor authentication increases the security of your account. Are you sure you want to disable it? You can enable it again at any time.",
+    "twoFactorDisableDialogPrimaryActionLabel": "Disable",
+
+    "twoFactorEnableDialogTitle": "Are you sure you want to enable two-factor authentication?",
+    "twoFactorEnableDialogMessage": "Upon enabling two-factor authentication, you will be required to enter a unique code from your mobile device in addition to your password when signing in.",
+    "twoFactorToastInfoMessage": "You can now use the form below to enable two-factor authentication.",
+    "twoFactorEnableDialogPrimaryActionLabel": "Enable",
+
+    "twoFactorEnablePending": "Enabling...",
+    "twoFactorEnableCTA": "Enable Two-Factor Authentication",
+
+    "twoFactorDisablePeding": "Disabling...",
+    "twoFactorDisableCTA": "Disable Two-Factor Authentication",
+
+    "twoFactorFormStepOne": "Get an authentication app by downloading it on your mobile device. Example:",
+    "twoFactorFormStepTwo": "Scan the QR code or enter the secret key into your authentication app.",
+    "twoFactorFormStepThree": "Enter the 6-digit code from the app to enable two-factor authentication.",
+    "twoFactorCopyToClipboardSuccessMessage": "Code copied to clipboard.",
+    "twoFactorCopyToClipboardCTA": "Copy Secret",
+    "twoFactorCodeInputLabel": "Code"
   }
 }

@@ -1,13 +1,19 @@
 import ModeToggle from "@/components/ui/mode-toggle";
 
-const ColorThemeSettings = () => {
+type ColorThemeSettingsProps = {
+  title: string;
+  description: string;
+};
+
+const ColorThemeSettings = ({
+  title,
+  description,
+}: ColorThemeSettingsProps) => {
   return (
     <section id="color-theme" className="flex flex-col gap-1">
       <div>
-        <h2 className="text-xl font-semibold text-primary">Color Theme</h2>
-        <p className="text-muted-foreground">
-          Choose your preferred color theme.
-        </p>
+        <h2 className="text-xl font-semibold text-primary">{title}</h2>
+        <p className="text-muted-foreground">{description}</p>
       </div>
       <ModeToggle triggerClassName="w-full md:w-[400px] whitespace-nowrap" />
     </section>

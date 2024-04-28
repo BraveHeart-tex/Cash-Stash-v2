@@ -21,5 +21,44 @@
     "signInButtonLabel": "Oturum aç",
     "signInHelpMessage": "Oturum açmak için yardıma ihtiyacım var",
     "signUpText": "Hesabınız yok mu? Kayıt olun"
+  },
+  "Settings": {
+    "pageTitle": "Ayarlar",
+    "pageDescription": "CashStash deneyiminizi kişiselleştirin.",
+
+    "currencySettingsTitle": "Tercih Edilen Para Birimi",
+    "currencySettingsDescription": "Tutarları görüntülemek için tercih ettiğiniz para birimini seçin.",
+
+    "notificationSettingsTitle": "Bildirimler",
+    "notificationSettingsDescription": "Bildirim tercihlerinizi yönetin. Size bildirimleri yalnızca onlar için bir hatırlatıcı ayarladığınızda göndereceğiz.",
+
+    "colorThemeSettingsTitle": "Renk Teması",
+    "colorThemeSettingsDescription": "Tercih ettiğiniz renk temasını seçin.",
+
+    "twoFactorSettingsTitle": "İki Faktörlü Kimlik Doğrulama",
+    "twoFactorAlreadyEnableDescription": "Hesabınızda iki faktörlü kimlik doğrulama etkin durumdadır.",
+    "twoFactorSettingsDescription": "İki faktörlü kimlik doğrulama ile hesap güvenliğinizi artırın. Etkinleştirildikten sonra, daha fazla koruma için oturum açma sırasında parolanızla birlikte mobil cihazınızdan benzersiz bir kod girmeniz yeterlidir.",
+
+    "twoFactorDisableDialogTitle": "İki faktörlü kimlik doğrulamayı devre dışı bırakmak istediğinizden emin misiniz?",
+    "twoFactorDisableDialogMessage": "İki faktörlü kimlik doğrulama, hesabınızın güvenliğini artırır. Devre dışı bırakmak istediğinizden emin misiniz? İstediğiniz zaman tekrar etkinleştirebilirsiniz.",
+    "twoFactorDisableDialogPrimaryActionLabel": "Devre dışı bırak",
+
+    "twoFactorEnableDialogTitle": "İki faktörlü kimlik doğrulamayı etkinleştirmek istediğinizden emin misiniz?",
+    "twoFactorEnableDialogMessage": "İki faktörlü kimlik doğrulamayı etkinleştirdikten sonra, oturum açarken şifrenize ek olarak mobil cihazınızdan benzersiz bir kod girmeniz gerekecektir.",
+    "twoFactorToastInfoMessage": "Artık iki faktörlü kimlik doğrulamayı etkinleştirmek için aşağıdaki formu kullanabilirsiniz.",
+    "twoFactorEnableDialogPrimaryActionLabel": "Etkinleştir",
+
+    "twoFactorEnablePending": "Etkinleştiriliyor...",
+    "twoFactorEnableCTA": "İki Faktörlü Kimlik Doğrulamayı Etkinleştir",
+
+    "twoFactorDisablePeding": "Devre dışı bırakılıyor...",
+    "twoFactorDisableCTA": "İki Faktörlü Kimlik Doğrulamayı Devre Dışı Bırak",
+
+    "twoFactorFormStepOne": "Mobil cihazınıza bir kimlik doğrulama uygulaması indirin. Örnek:",
+    "twoFactorFormStepTwo": "QR kodunu tarayın veya gizli anahtarı kimlik doğrulama uygulamanıza girin.",
+    "twoFactorFormStepThree": "İki faktörlü kimlik doğrulamayı etkinleştirmek için uygulamadan aldığınız 6 haneli kodu girin.",
+    "twoFactorCopyToClipboardSuccessMessage": "Kod panoya kopyalandı.",
+    "twoFactorCopyToClipboardCTA": "Gizli Anahtarı Kopyalayın",
+    "twoFactorCodeInputLabel": "Uygulamadan Aldığınız 6 Haneli Kod"
   }
 }
