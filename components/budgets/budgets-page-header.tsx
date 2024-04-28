@@ -12,6 +12,8 @@ const BudgetsPageHeader = () => {
       <CreateBudgetButton
         internalizationConfig={{
           buttonLabel: t("createBudgetButtonLabel"),
+          dialogTitle: t("createBudgetDialogTitle"),
+          dialogDescription: t("createBudgetDialogDescription"),
         }}
         minimizeOnMobile
       />

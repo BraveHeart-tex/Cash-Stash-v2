@@ -2,11 +2,12 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import useGenericModalStore from "@/store/genericModalStore";
-import { useTranslations } from "next-intl";
 import { FaMoneyBillAlt, FaPlus } from "react-icons/fa";
 
 type CreateBudgetButtonInternalizationConfig = {
   buttonLabel: string;
+  dialogTitle: string;
+  dialogDescription: string;
 };
 
 type CreateBudgetButtonProps = {
@@ -23,20 +24,20 @@ const CreateBudgetButton = ({
   const openGenericModal = useGenericModalStore(
     (state) => state.openGenericModal
   );
-  const { buttonLabel } = internalizationConfig;
+  const { buttonLabel, dialogTitle, dialogDescription } = internalizationConfig;
 
   return (
     <Button
       className={cn("flex items-center gap-[14px] font-semibold", className)}
       type="button"
       name="create-budget"
-      aria-label="Create a budget"
+      aria-label={buttonLabel}
       onClick={() =>
         openGenericModal({
           mode: "create",
           key: "budget",
-          dialogTitle: "Create a budget",
-          dialogDescription: "Fill out the form below to create a budget.",
+          dialogTitle,
+          dialogDescription,
         })
       }
     >

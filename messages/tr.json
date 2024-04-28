@@ -1,6 +1,8 @@
 {
   "Budgets": {
     "pageTitle": "Bütçeler",
-    "createBudgetButtonLabel": "Bütçe Ekleyin"
+    "createBudgetButtonLabel": "Bütçe Ekleyin",
+    "createBudgetDialogTitle": "Bütçe Ekleyin",
+    "createBudgetDialogDescription": "Aşağıdaki formu kullanarak bütçenizi oluşturun."
   }
 }
