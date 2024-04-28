@@ -5,7 +5,7 @@ import { DataTable } from "@/components/ui/data-table";
 import { transactionTableColumns } from "@/components/reports/transactions-data-table/transaction-table-columns";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import IncomeAndExpenseChart from "@/components/income-expense-chart";
-import { TransactionPageSearchParams } from "@/app/(dashboard)/transactions/page";
+import { TransactionPageSearchParams } from "@/app/[locale]/(dashboard)/transactions/page";
 
 type ReportsPageProps = {
   searchParams: TransactionPageSearchParams;

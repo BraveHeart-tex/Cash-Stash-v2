@@ -89,13 +89,17 @@ export const metadata: Metadata = {
 
 type LayoutProps = {
   children: ReactNode;
+  params: { locale: string };
 };
 
-export default async function RootLayout({ children }: LayoutProps) {
+export default async function RootLayout({
+  children,
+  params: { locale },
+}: LayoutProps) {
   const themeValues = THEME_OPTIONS.map((item) => item.value);
 
   return (
-    <html lang="en">
+    <html lang={locale}>
       <head>
         <meta name="msapplication-TileColor" content="#b91d47" />
         <link
