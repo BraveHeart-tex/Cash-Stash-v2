@@ -8,5 +8,18 @@ const loginSchema = z.object({
     .max(100, "Password cannot exceed 100 characters."),
 });
 
+// TODO:
+const getLoginSchema = (obj: {
+  invalidEmail: string;
+  passwordTooShort: string;
+  passwordTooLong: string;
+}) => {
+  const { invalidEmail, passwordTooShort, passwordTooLong } = obj;
+  return z.object({
+    email: z.string().email(invalidEmail),
+    password: z.string().min(8, passwordTooShort).max(100, passwordTooLong),
+  });
+};
+
 export type LoginSchemaType = z.infer<typeof loginSchema>;
 export default loginSchema;
