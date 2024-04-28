@@ -60,5 +60,12 @@
     "twoFactorCopyToClipboardSuccessMessage": "Code copied to clipboard.",
     "twoFactorCopyToClipboardCTA": "Copy Secret",
     "twoFactorCodeInputLabel": "Code"
+  },
+  "Actions": {
+    "Auth": {
+      "Login": {},
+      "Logout": {},
+      "Register": {}
+    }
   }
 }
