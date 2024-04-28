@@ -13,13 +13,15 @@ import {
   HiOutlineSwitchVertical,
 } from "react-icons/hi";
 
+type CurrencyConverterInputProps = {
+  updatedAt: string;
+  convertedToCurrencyAmount: number;
+};
+
 const CurrencyConverterInput = ({
   updatedAt,
   convertedToCurrencyAmount,
-}: {
-  updatedAt: string;
-  convertedToCurrencyAmount: number;
-}) => {
+}: CurrencyConverterInputProps) => {
   const [currency, setCurrency] = useQueryState("currency", {
     shallow: false,
   });
@@ -68,8 +70,11 @@ const CurrencyConverterInput = ({
   );
 
   const handleCurrencySwitch = () => {
-    setCurrency(toCurrency);
-    setToCurrency(currency);
+    const newCurrency = toCurrency;
+    const newToCurrency = currency;
+
+    setCurrency(newCurrency);
+    setToCurrency(newToCurrency);
   };
 
   return (
