@@ -20,7 +20,15 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 
-const GenericConfirmDialog = () => {
+type GenericConfirmDialogProps = {
+  internationalizationConfig: {
+    defaultSecondaryActionLabel: string;
+  };
+};
+
+const GenericConfirmDialog = ({
+  internationalizationConfig,
+}: GenericConfirmDialogProps) => {
   const {
     visible,
     cleanUp,
@@ -93,7 +101,8 @@ const GenericConfirmDialog = () => {
                 cleanUp();
               }}
             >
-              {secondaryActionLabel || "Cancel"}
+              {secondaryActionLabel ||
+                internationalizationConfig.defaultSecondaryActionLabel}
             </Button>
           </DrawerFooter>
         </DrawerContent>
@@ -118,7 +127,8 @@ const GenericConfirmDialog = () => {
                 cleanUp();
               }}
             >
-              {secondaryActionLabel || "Cancel"}
+              {secondaryActionLabel ||
+                internationalizationConfig.defaultSecondaryActionLabel}
             </Button>
             {primaryActionLabel && (
               <Button
