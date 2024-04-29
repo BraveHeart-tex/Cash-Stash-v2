@@ -65,7 +65,12 @@
     "Auth": {
       "Login": {},
       "Logout": {},
-      "Register": {}
+      "Register": {},
+      "activateTwoFactorAuthentication": {
+        "invalidRequest": "Geçersiz istek.",
+        "invalidCode": "Geçersiz doğrulama kodu.",
+        "successMessage": "İki faktörlü kimlik doğrulaması etkinleştirildi."
+      }
     }
   },
   "Zod": {

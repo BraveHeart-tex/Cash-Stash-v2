@@ -559,13 +559,17 @@ export const activateTwoFactorAuthentication = async (otp: string) => {
     return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
+  const t = await getTranslations(
+    "Actions.Auth.activateTwoFactorAuthentication"
+  );
+
   const result = await twoFactorAuthenticationSecretRepository.getByUserId(
     user.id
   );
 
   if (!result) {
     return {
-      error: "Invalid request",
+      error: t("invalidRequest"),
       successMessage: null,
     };
   }
@@ -577,7 +581,7 @@ export const activateTwoFactorAuthentication = async (otp: string) => {
 
   if (!isValid) {
     return {
-      error: "Invalid verification code",
+      error: t("invalidCode"),
       successMessage: null,
     };
   }
@@ -588,7 +592,7 @@ export const activateTwoFactorAuthentication = async (otp: string) => {
 
   return {
     error: null,
-    successMessage: "Two-factor authentication enabled successfully.",
+    successMessage: t("successMessage"),
   };
 };
 

@@ -65,7 +65,12 @@
     "Auth": {
       "Login": {},
       "Logout": {},
-      "Register": {}
+      "Register": {},
+      "activateTwoFactorAuthentication": {
+        "invalidRequest": "Invalid request.",
+        "invalidCode": "Invalid verification code.",
+        "successMessage": "Two-factor authentication enabled successfully."
+      }
     }
   },
   "Zod": {
