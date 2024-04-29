@@ -10,6 +10,10 @@ export async function middleware(request: NextRequest) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
 
+  if (isCronJob && authorizationToken === process.env.CRON_API_KEY) {
+    return NextResponse.next();
+  }
+
   if (request.method !== "GET") {
     const originHeader = request.headers.get("Origin");
     const hostHeader = request.headers.get("Host");
@@ -46,5 +50,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/(en|tr)/:path*"],
+  matcher: ["/", "/(en|tr)/:path*", "/api/cron/:path*"],
 };

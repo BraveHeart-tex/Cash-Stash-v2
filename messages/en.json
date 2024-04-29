@@ -67,5 +67,12 @@
       "Logout": {},
       "Register": {}
     }
+  },
+  "Zod": {
+    "Login": {
+      "invalidEmail": "Please provide a valid email address.",
+      "passwordTooShort": "Password must be at least 8 characters long.",
+      "passwordTooLong": "Password cannot exceed 100 characters."
+    }
   }
 }

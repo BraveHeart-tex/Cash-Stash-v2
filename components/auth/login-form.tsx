@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import loginSchema, { LoginSchemaType } from "@/schemas/login-schema";
+import { getLoginSchema, LoginSchemaType } from "@/schemas/login-schema";
 import { useState, useTransition } from "react";
 import { login, validateReCAPTCHAToken } from "@/server/auth";
 import { useRouter } from "next/navigation";
@@ -50,6 +50,9 @@ type LoginFormProps = {
     signInButtonLabel: string;
     signInHelpMessage: string;
     signUpText: string;
+    invalidEmail: string;
+    passwordTooShort: string;
+    passwordTooLong: string;
   };
 };
 
@@ -76,7 +79,16 @@ const LoginForm = ({ internationalizationConfig }: LoginFormProps) => {
     signInButtonLabel,
     signInHelpMessage,
     signUpText,
+    invalidEmail,
+    passwordTooLong,
+    passwordTooShort,
   } = internationalizationConfig;
+  const loginSchema = getLoginSchema({
+    invalidEmail,
+    passwordTooShort,
+    passwordTooLong,
+  });
+
   const form = useForm<LoginSchemaType>({
     resolver: zodResolver(loginSchema),
   });

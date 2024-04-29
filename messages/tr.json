@@ -60,5 +60,19 @@
     "twoFactorCopyToClipboardSuccessMessage": "Kod panoya kopyalandı.",
     "twoFactorCopyToClipboardCTA": "Gizli Anahtarı Kopyalayın",
     "twoFactorCodeInputLabel": "Uygulamadan Aldığınız 6 Haneli Kod"
+  },
+  "Actions": {
+    "Auth": {
+      "Login": {},
+      "Logout": {},
+      "Register": {}
+    }
+  },
+  "Zod": {
+    "Login": {
+      "invalidEmail": "Lütfen geçerli bir e-posta adresi girin.",
+      "passwordTooShort": "Şifre en az 8 karakter olmalıdır.",
+      "passwordTooLong": "Şifre en fazla 100 karakter olabilir."
+    }
   }
 }

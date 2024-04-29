@@ -1,7 +1,7 @@
 "use server";
 import { getUser } from "@/lib/auth/session";
 import { Argon2id } from "oslo/password";
-import loginSchema, { LoginSchemaType } from "@/schemas/login-schema";
+import { LoginSchemaType, getLoginSchema } from "@/schemas/login-schema";
 import registerSchema, { RegisterSchemaType } from "@/schemas/register-schema";
 import { ZodError } from "zod";
 import { cookies, headers } from "next/headers";
@@ -47,6 +47,7 @@ import { processZodError } from "@/lib/utils/objectUtils/processZodError";
 import { twoFactorAuthenticationSecrets } from "@/lib/database/schema";
 import { eq } from "drizzle-orm";
 import logger from "@/lib/utils/logger";
+import { getTranslations } from "next-intl/server";
 
 export const login = async (values: LoginSchemaType) => {
   const header = headers();
@@ -65,6 +66,13 @@ export const login = async (values: LoginSchemaType) => {
   }
 
   try {
+    const t = await getTranslations("Zod.Login");
+    const loginSchema = getLoginSchema({
+      invalidEmail: t("invalidEmail"),
+      passwordTooShort: t("passwordTooShort"),
+      passwordTooLong: t("passwordTooLong"),
+    });
+
     const data = loginSchema.parse(values);
 
     const existingUser = await userRepository.getByEmail(data.email);

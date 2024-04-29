@@ -13,6 +13,7 @@ const LoginPage = async () => {
   }
 
   const t = await getTranslations("Login");
+  const zodT = await getTranslations("Zod.Login");
 
   return (
     <section
@@ -55,6 +56,9 @@ const LoginPage = async () => {
               signInButtonLabel: t("signInButtonLabel"),
               signInHelpMessage: t("signInHelpMessage"),
               signUpText: t("signUpText"),
+              invalidEmail: zodT("invalidEmail"),
+              passwordTooShort: zodT("passwordTooShort"),
+              passwordTooLong: zodT("passwordTooLong"),
             }}
           />
         </div>
