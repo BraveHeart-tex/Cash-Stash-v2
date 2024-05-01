@@ -1,5 +1,5 @@
 "use client";
-import { forwardRef, useMemo, useState } from "react";
+import { forwardRef, useEffect, useMemo, useState } from "react";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import { Button } from "@/components/ui/button";
 import {
@@ -57,6 +57,12 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
     const [selectedOption, setSelectedOption] = useState<ComboboxOption | null>(
       defaultOption || null
     );
+
+    useEffect(() => {
+      if (defaultOption) {
+        setSelectedOption(defaultOption);
+      }
+    }, [defaultOption]);
 
     const handleOptionClick = (option: ComboboxOption) => {
       setSelectedOption(option);

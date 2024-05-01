@@ -33,7 +33,7 @@ const ModeToggle = ({ triggerClassName }: ModeToggleProps) => {
   return (
     <Combobox
       triggerClassName={cn("w-full  whitespace-nowrap", triggerClassName)}
-      defaultOption={THEME_OPTIONS.find((item) => item.value === theme)}
+      defaultOption={mappedOptions.find((item) => item.value === theme)}
       options={mappedOptions}
       onSelect={(option) => handleSelect(option.value)}
     />
