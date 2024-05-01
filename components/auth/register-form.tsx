@@ -14,7 +14,6 @@ import {
   register as registerUser,
   validateReCAPTCHAToken,
 } from "@/server/auth";
-import Link from "next/link";
 import registerSchema, { RegisterSchemaType } from "@/schemas/register-schema";
 import { motion } from "framer-motion";
 import {
@@ -29,12 +28,12 @@ import {
 import { Input } from "@/components/ui/input";
 import PasswordRequirements from "@/components/auth/password-requirements";
 import { PAGE_ROUTES } from "@/lib/constants";
-import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import PasswordInput from "@/components/auth/password-input";
 import { toast } from "sonner";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import Logo from "@/components/logo";
+import { Link, useRouter } from "@/navigation";
 
 const RegisterForm = () => {
   const { executeRecaptcha } = useGoogleReCaptcha();

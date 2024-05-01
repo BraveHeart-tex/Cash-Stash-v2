@@ -11,7 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/navigation";
 import { useEffect, useMemo, useTransition } from "react";
 import budgetSchema, { BudgetSchemaType } from "@/schemas/budget-schema";
 import { createBudget, updateBudget } from "@/server/budget";

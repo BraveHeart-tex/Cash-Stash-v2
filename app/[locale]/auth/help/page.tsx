@@ -5,13 +5,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import ForgotPassword from "@/components/auth/forgot-password";
 import { PAGE_ROUTES } from "@/lib/constants";
 import ResendVerificationEmailInput from "@/components/resend-verification-token-input";
 import { FaArrowLeft } from "react-icons/fa6";
 import Logo from "@/components/logo";
+import { Link } from "@/navigation";
 
 type SignInHelpPageProps = {
   searchParams: {

@@ -13,8 +13,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { getLoginSchema, LoginSchemaType } from "@/schemas/login-schema";
 import { useState, useTransition } from "react";
 import { login, validateReCAPTCHAToken } from "@/server/auth";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   Form,
@@ -32,6 +30,7 @@ import { toast } from "sonner";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import LoggedInIllustration from "@/components/logged-in-illustration";
 import Logo from "@/components/logo";
+import { Link, useRouter } from "@/navigation";
 
 type LoginFormProps = {
   internationalizationConfig: {

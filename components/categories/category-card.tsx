@@ -10,7 +10,7 @@ import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import { deleteCategory } from "@/server/category";
 import { toast } from "sonner";
 import { useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/navigation";
 import { CategoryType } from "@/typings/categories";
 
 type CategoryCardProps = {

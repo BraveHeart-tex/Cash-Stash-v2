@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/navigation";
 import { useEffect, useMemo, useState, useTransition } from "react";
 import transactionSchema, {
   TransactionSchemaType,

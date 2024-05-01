@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils/stringUtils/cn";
 import { Button } from "@/components/ui/button";
 import useGenericModalStore from "@/store/genericModalStore";
 import { FaPlus } from "react-icons/fa";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/navigation";
 
 type CreateCategoryButtonProps = {
   className?: string;

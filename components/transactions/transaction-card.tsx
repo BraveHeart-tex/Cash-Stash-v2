@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { deleteTransactionById } from "@/server/transaction";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/navigation";
 import { HTMLMotionProps, motion } from "framer-motion";
 import DataLabel from "@/components/data-label";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";

@@ -19,7 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { registerBankAccount, updateBankAccount } from "@/server/account";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/navigation";
 import { useEffect, useTransition } from "react";
 import useGenericModalStore from "@/store/genericModalStore";
 import accountSchema, { AccountSchemaType } from "@/schemas/account-schema";
