@@ -59,6 +59,10 @@ const LoginPage = async () => {
               invalidEmail: zodT("invalidEmail"),
               passwordTooShort: zodT("passwordTooShort"),
               passwordTooLong: zodT("passwordTooLong"),
+              twoFactorFormCodeLabel: t("twoFactorFormCodeLabel"),
+              twoFactorFormDescription: t("twoFactorFormDescription"),
+              twoFactorFormTitle: t("twoFactorFormTitle"),
+              twoFactorFormButtonLabel: t("twoFactorFormButtonLabel"),
             }}
           />
         </div>

@@ -53,6 +53,10 @@ type LoginFormProps = {
     invalidEmail: string;
     passwordTooShort: string;
     passwordTooLong: string;
+    twoFactorFormTitle: string;
+    twoFactorFormDescription: string;
+    twoFactorFormCodeLabel: string;
+    twoFactorFormButtonLabel: string;
   };
 };
 
@@ -82,6 +86,10 @@ const LoginForm = ({ internationalizationConfig }: LoginFormProps) => {
     invalidEmail,
     passwordTooLong,
     passwordTooShort,
+    twoFactorFormCodeLabel,
+    twoFactorFormDescription,
+    twoFactorFormTitle,
+    twoFactorFormButtonLabel,
   } = internationalizationConfig;
   const loginSchema = getLoginSchema({
     invalidEmail,
@@ -169,7 +177,15 @@ const LoginForm = ({ internationalizationConfig }: LoginFormProps) => {
       transition={{ duration: 0.5, ease: "easeInOut" }}
     >
       {showTwoFactorForm ? (
-        <TwoFactorAuthenticationForm email={form.getValues("email")} />
+        <TwoFactorAuthenticationForm
+          internationalizationConfig={{
+            twoFactorFormCodeLabel,
+            twoFactorFormDescription,
+            twoFactorFormTitle,
+            twoFactorFormButtonLabel,
+          }}
+          email={form.getValues("email")}
+        />
       ) : (
         <Card className="w-full">
           <CardHeader className="text-xl">

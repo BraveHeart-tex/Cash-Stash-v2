@@ -4,13 +4,14 @@ import {
   EMAIL_VERIFICATION_REDIRECTION_PATHS,
   TWO_FACTOR_AUTH_INPUT_TIMEOUT_SECONDS,
 } from "@/lib/constants";
-import { redirect } from "@/navigation";
+import { useRouter } from "@/navigation";
 import { toast } from "sonner";
 
 const TwoFactorAuthenticationTimer = () => {
+  const router = useRouter();
   const onCountDownEnd = () => {
     toast.error("Verification timeout. Please try logging in again.");
-    redirect(EMAIL_VERIFICATION_REDIRECTION_PATHS.VERIFICATION_TIMEOUT);
+    router.push(EMAIL_VERIFICATION_REDIRECTION_PATHS.VERIFICATION_TIMEOUT);
   };
 
   return (

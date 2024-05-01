@@ -26,7 +26,12 @@
     "passwordFieldCapsLockMessage": "Caps lock açık.",
     "signInButtonLabel": "Oturum aç",
     "signInHelpMessage": "Oturum açmak için yardıma ihtiyacım var",
-    "signUpText": "Hesabınız yok mu? Kayıt olun"
+    "signUpText": "Hesabınız yok mu? Kayıt olun",
+
+    "twoFactorFormTitle": "İki Faktörlü Kimlik Doğrulama",
+    "twoFactorFormDescription": "Hesabınız iki faktörlü kimlik doğrulama ile korunmaktadır. Lütfen oturum açmak için kimlik doğrulayıcı uygulamanızdaki 6 haneli kodu girin.",
+    "twoFactorFormCodeLabel": "6 haneli kodunuz",
+    "twoFactorFormButtonLabel": "Doğrula"
   },
   "Settings": {
     "pageTitle": "Ayarlar",
@@ -84,9 +89,15 @@
   },
   "Actions": {
     "Auth": {
-      "Login": {},
-      "Logout": {},
-      "Register": {},
+      "login": {},
+      "logout": {},
+      "register": {},
+      "validateOTP": {
+        "rateLimitExceeded": "Çok fazla deneme yaptınız. Giriş sayfasına yönlendiriliyorsunuz.",
+        "invalidRequest": "Geçersiz istek.",
+        "invalidCode": "Geçersiz doğrulama kodu. {attemptsLeft} deneme hakkınız kaldı.",
+        "successMessage": "Başarıyla giriş yapıldı. Yönlendiriliyorsunuz..."
+      },
       "activateTwoFactorAuthentication": {
         "invalidRequest": "Geçersiz istek.",
         "invalidCode": "Geçersiz doğrulama kodu.",

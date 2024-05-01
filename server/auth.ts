@@ -601,11 +601,12 @@ export const validateOTP = async (otp: string, email: string) => {
   const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
     ","
   )[0];
+  const t = await getTranslations("Actions.Auth.validateOTP");
   const count = await checkIpBasedTwoFactorAuthRateLimit(ipAddress);
 
   if (count >= MAX_TWO_FACTOR_AUTH_ATTEMPTS) {
     return {
-      error: "Too many attempts. You are being redirected to the login page.",
+      error: t("rateLimitExceeded"),
       successMessage: null,
       redirectPath: PAGE_ROUTES.LOGIN_ROUTE,
     };
@@ -615,7 +616,7 @@ export const validateOTP = async (otp: string, email: string) => {
 
   if (!user || !user?.prefersTwoFactorAuthentication) {
     return {
-      error: "Invalid request",
+      error: t("invalidRequest"),
       successMessage: null,
       redirectPath: null,
     };
@@ -627,7 +628,7 @@ export const validateOTP = async (otp: string, email: string) => {
 
   if (userIdBasedCount >= MAX_TWO_FACTOR_AUTH_ATTEMPTS) {
     return {
-      error: "Too many attempts. You are being redirected to the login page.",
+      error: t("rateLimitExceeded"),
       successMessage: null,
       redirectPath: PAGE_ROUTES.LOGIN_ROUTE,
     };
@@ -639,7 +640,7 @@ export const validateOTP = async (otp: string, email: string) => {
 
   if (!result) {
     return {
-      error: "Invalid request",
+      error: t("invalidRequest"),
       successMessage: null,
       redirectPath: PAGE_ROUTES.LOGIN_ROUTE,
     };
@@ -653,7 +654,7 @@ export const validateOTP = async (otp: string, email: string) => {
   if (!isValid) {
     const attemptsLeft = MAX_TWO_FACTOR_AUTH_ATTEMPTS - userIdBasedCount;
     return {
-      error: `Invalid verification code. You have ${attemptsLeft} tries left.`,
+      error: t("invalidCode", { attemptsLeft }),
       successMessage: null,
       redirectPath: null,
     };
@@ -669,7 +670,7 @@ export const validateOTP = async (otp: string, email: string) => {
 
   return {
     error: null,
-    successMessage: "Logged in successfully. You are being redirected...",
+    successMessage: t("successMessage"),
     redirectPath: null,
   };
 };

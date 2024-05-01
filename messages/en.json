@@ -26,7 +26,12 @@
     "passwordFieldCapsLockMessage": "Caps lock is on.",
     "signInButtonLabel": "Sign in",
     "signInHelpMessage": "I need help signing in",
-    "signUpText": "Don't have an account? Sign up"
+    "signUpText": "Don't have an account? Sign up",
+
+    "twoFactorFormTitle": "Two-Factor Authentication",
+    "twoFactorFormDescription": "Your account is protected with two-factor authentication. Please enter the 6-digit code from your authenticator app to log in.",
+    "twoFactorFormCodeLabel": "Your 6-digit code",
+    "twoFactorFormButtonLabel": "Validate"
   },
   "Settings": {
     "pageTitle": "Settings",
@@ -84,9 +89,15 @@
   },
   "Actions": {
     "Auth": {
-      "Login": {},
-      "Logout": {},
-      "Register": {},
+      "login": {},
+      "logout": {},
+      "register": {},
+      "validateOTP": {
+        "rateLimitExceeded": "Too many attempts. You are being redirected to the login page.",
+        "invalidRequest": "Invalid request.",
+        "invalidCode": "Invalid verification code. You have {attemptsLeft, plural, =1 {1 attempt} other {# attempts}} left.",
+        "successMessage": "Logged in successfully. You are being redirected..."
+      },
       "activateTwoFactorAuthentication": {
         "invalidRequest": "Invalid request.",
         "invalidCode": "Invalid verification code.",
