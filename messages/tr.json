@@ -164,7 +164,12 @@
     "Auth": {
       "login": {},
       "logout": {},
-      "register": {},
+      "register": {
+        "rateLimitExceeded": "Çok fazla deneme yaptınız. Giriş sayfasına yönlendiriliyorsunuz.",
+        "unverifiedEmailAlreadyExists": "Belirtilen e-postaya sahip kullanıcı zaten mevcut. Lütfen e-postanızı doğrulayın.",
+        "userAlreadyExists": "Belirtilen e-postaya sahip kullanıcı zaten mevcut: {email}",
+        "internalErrorMessage": "İsteğiniz işlenirken bir sorun oluştu. Lütfen daha sonra tekrar deneyin."
+      },
       "validateOTP": {
         "rateLimitExceeded": "Çok fazla deneme yaptınız. Giriş sayfasına yönlendiriliyorsunuz.",
         "invalidRequest": "Geçersiz istek.",
@@ -183,6 +188,14 @@
       "invalidEmail": "Lütfen geçerli bir e-posta adresi girin.",
       "passwordTooShort": "Şifre en az 8 karakter olmalıdır.",
       "passwordTooLong": "Şifre en fazla 100 karakter olabilir."
+    },
+    "Register": {
+      "invalidEmail": "Lütfen geçerli bir e-posta adresi girin.",
+      "nameTooShort": "İsim 2 karakterden az olamaz.",
+      "nameTooLong": "İsim en fazla 100 karakter olabilir.",
+      "passwordTooShort": "Şifre en az 8 karakterden oluşmalıdır.",
+      "passwordTooLong": "Şifre en çok 100 karakter olabilir.",
+      "invalidPassword": "Şifre en az bir büyük harf, bir küçük harf ve bir sayı içermelidir."
     }
   }
 }

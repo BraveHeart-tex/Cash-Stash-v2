@@ -14,7 +14,10 @@ import {
   register as registerUser,
   validateReCAPTCHAToken,
 } from "@/server/auth";
-import registerSchema, { RegisterSchemaType } from "@/schemas/register-schema";
+import {
+  RegisterSchemaType,
+  getRegisterSchema,
+} from "@/schemas/register-schema";
 import { motion } from "framer-motion";
 import {
   Form,
@@ -39,6 +42,16 @@ import DOMPurify from "isomorphic-dompurify";
 
 const RegisterForm = () => {
   const t = useTranslations("Components.RegisterForm");
+  const schemaT = useTranslations("Zod.Register");
+  const registerSchema = getRegisterSchema({
+    invalidEmail: schemaT("invalidEmail"),
+    invalidPassword: schemaT("invalidPassword"),
+    nameTooLong: schemaT("nameTooLong"),
+    nameTooShort: schemaT("nameTooShort"),
+    passwordTooLong: schemaT("passwordTooLong"),
+    passwordTooShort: schemaT("passwordTooShort"),
+  });
+
   const { executeRecaptcha } = useGoogleReCaptcha();
   const [isPending, startTransition] = useTransition();
 

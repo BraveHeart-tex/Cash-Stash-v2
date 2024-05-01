@@ -2,7 +2,10 @@
 import { getUser } from "@/lib/auth/session";
 import { Argon2id } from "oslo/password";
 import { LoginSchemaType, getLoginSchema } from "@/schemas/login-schema";
-import registerSchema, { RegisterSchemaType } from "@/schemas/register-schema";
+import {
+  RegisterSchemaType,
+  getRegisterSchema,
+} from "@/schemas/register-schema";
 import { ZodError } from "zod";
 import { cookies, headers } from "next/headers";
 import { redirect } from "@/navigation";
@@ -143,7 +146,20 @@ export const login = async (values: LoginSchemaType) => {
 };
 
 export const register = async (values: RegisterSchemaType) => {
+  const [t, actionT] = await Promise.all([
+    getTranslations("Zod.Register"),
+    getTranslations("Actions.Auth.register"),
+  ]);
   try {
+    const registerSchema = getRegisterSchema({
+      invalidEmail: t("invalidEmail"),
+      nameTooShort: t("nameTooShort"),
+      nameTooLong: t("nameTooLong"),
+      passwordTooShort: t("passwordTooShort"),
+      passwordTooLong: t("passwordTooLong"),
+      invalidPassword: t("invalidPassword"),
+    });
+
     const data = registerSchema.parse(values);
 
     const userExists = await userRepository.getByEmail(data.email);
@@ -157,19 +173,17 @@ export const register = async (values: RegisterSchemaType) => {
 
       if (count >= MAX_SIGN_UP_REQUESTS_PER_MINUTE) {
         return {
-          error:
-            "You have made too many requests. Please wait a minute before trying again.",
+          error: actionT("rateLimitExceeded"),
           fieldErrors: [],
         };
       }
 
       return {
-        error: `User already exists with the given email. Please verify your email.`,
+        error: actionT("unverifiedEmailAlreadyExists"),
         fieldErrors: [
           {
             field: "email",
-            message:
-              "User already exists with the given email. Please verify your email.",
+            message: actionT("unverifiedEmailAlreadyExists"),
           },
         ],
       };
@@ -177,11 +191,11 @@ export const register = async (values: RegisterSchemaType) => {
 
     if (userExists) {
       return {
-        error: `User already exists with the given email: ${data.email}`,
+        error: actionT("userAlreadyExists", { email: data.email }),
         fieldErrors: [
           {
             field: "email",
-            message: "User already exists with the given email",
+            message: actionT("userAlreadyExists", { email: data.email }),
           },
         ],
       };
@@ -201,8 +215,7 @@ export const register = async (values: RegisterSchemaType) => {
 
     if (!user || affectedRows === 0) {
       return {
-        error:
-          "There was a problem while processing your request. Please try again later.",
+        error: actionT("internalErrorMessage"),
         fieldErrors: [],
       };
     }
@@ -227,8 +240,7 @@ export const register = async (values: RegisterSchemaType) => {
     }
 
     return {
-      error:
-        "Something went wrong while processing your request. Please try again later.",
+      error: actionT("internalErrorMessage"),
       fieldErrors: [],
     };
   }

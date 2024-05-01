@@ -177,6 +177,7 @@ export default async function RootLayout({
                   "ThemeOptions",
                   "NavigationItems",
                   "Components",
+                  "Zod",
                 ])}
               >
                 {children}

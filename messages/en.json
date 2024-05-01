@@ -173,7 +173,12 @@
     "Auth": {
       "login": {},
       "logout": {},
-      "register": {},
+      "register": {
+        "rateLimitExceeded": "Too many attempts. You are being redirected to the login page.",
+        "unverifiedEmailAlreadyExists": "User already exists with the given email. Please verify your email.",
+        "userAlreadyExists": "User already exists with the given email: {email}",
+        "internalErrorMessage": "There was a problem while processing your request. Please try again later."
+      },
       "validateOTP": {
         "rateLimitExceeded": "Too many attempts. You are being redirected to the login page.",
         "invalidRequest": "Invalid request.",
@@ -192,6 +197,14 @@
       "invalidEmail": "Please provide a valid email address.",
       "passwordTooShort": "Password must be at least 8 characters long.",
       "passwordTooLong": "Password cannot exceed 100 characters."
+    },
+    "Register": {
+      "invalidEmail": "Please enter a valid email address.",
+      "nameTooShort": "Name cannot be less than 2 characters.",
+      "nameTooLong": "Name cannot exceed 100 characters.",
+      "passwordTooShort": "Password should be at least 8 characters.",
+      "passwordTooLong": "Password cannot exceed 100 characters.",
+      "invalidPassword": "Password should contain at least one uppercase letter, one lowercase letter, and one number."
     }
   }
 }
