@@ -44,9 +44,6 @@ type LoginFormProps = {
     formErrorMessage: string;
     emailFieldLabel: string;
     emailFieldPlaceholder: string;
-    passwordFieldLabel: string;
-    passwordFieldPlaceholder: string;
-    passwordFieldCapsLockMessage: string;
     signInButtonLabel: string;
     signInHelpMessage: string;
     signUpText: string;
@@ -77,9 +74,6 @@ const LoginForm = ({ internationalizationConfig }: LoginFormProps) => {
     formErrorMessage,
     emailFieldLabel,
     emailFieldPlaceholder,
-    passwordFieldLabel,
-    passwordFieldPlaceholder,
-    passwordFieldCapsLockMessage,
     signInButtonLabel,
     signInHelpMessage,
     signUpText,
@@ -228,14 +222,7 @@ const LoginForm = ({ internationalizationConfig }: LoginFormProps) => {
                     control={form.control}
                     name="password"
                     render={({ field }) => (
-                      <PasswordInput<LoginSchemaType>
-                        field={field}
-                        passwordFieldCapsLockMessage={
-                          passwordFieldCapsLockMessage
-                        }
-                        passwordFieldLabel={passwordFieldLabel}
-                        passwordFieldPlaceholder={passwordFieldPlaceholder}
-                      />
+                      <PasswordInput<LoginSchemaType> field={field} />
                     )}
                   />
                 </div>

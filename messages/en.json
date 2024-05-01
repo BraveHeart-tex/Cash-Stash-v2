@@ -64,9 +64,6 @@
     "formErrorMessage": "An error occurred",
     "emailFieldLabel": "Email",
     "emailFieldPlaceholder": "Enter your email",
-    "passwordFieldLabel": "Password",
-    "passwordFieldPlaceholder": "Enter your password",
-    "passwordFieldCapsLockMessage": "Caps lock is on.",
     "signInButtonLabel": "Sign in",
     "signInHelpMessage": "I need help signing in",
     "signUpText": "Don't have an account? Sign up",
@@ -75,6 +72,15 @@
     "twoFactorFormDescription": "Your account is protected with two-factor authentication. Please enter the 6-digit code from your authenticator app to log in.",
     "twoFactorFormCodeLabel": "Your 6-digit code",
     "twoFactorFormButtonLabel": "Validate"
+  },
+  "Register": {
+    "registerFormHeading": "Welcome!",
+    "registerFormDescription": "Create an account to get started.",
+    "registerFormFullNameLabel": "Full Name",
+    "registerFormFullNamePlaceholder": "Enter your full name",
+    "registerFormEmailLabel": "Email",
+    "registerFormEmailPlaceholder": "Enter your email address",
+    "registerFormEmailNote": "<strong>Note</strong>: Please provide a valid email address for{' '} <u> account verification, password recovery, and other important communications. </u>"
   },
   "Settings": {
     "pageTitle": "Settings",
@@ -129,6 +135,13 @@
     "changeCurrencySuccessMessage": "Preferred currency changed successfully",
     "changeCurrencyPrimaryActionLabel": "Confirm",
     "changeCurrencySaveLabel": "Save Changes"
+  },
+  "Components": {
+    "PasswordInput": {
+      "passwordFieldLabel": "Password",
+      "passwordFieldPlaceholder": "Enter your password",
+      "passwordFieldCapsLockMessage": "Caps lock is on."
+    }
   },
   "Actions": {
     "Auth": {

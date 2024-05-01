@@ -112,9 +112,7 @@ const RegisterForm = () => {
         <CardHeader className="text-xl">
           <Logo className="mx-auto mb-4 2xl:hidden" />
           <CardTitle>Welcome!</CardTitle>
-          <CardDescription>
-            Get started by creating your account.
-          </CardDescription>
+          <CardDescription>Create an account to get started</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>

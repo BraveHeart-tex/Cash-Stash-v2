@@ -10,29 +10,25 @@ import { Input } from "@/components/ui/input";
 import { BsCapslock } from "react-icons/bs";
 import useCapsLock from "@/components/hooks/useCapsLock";
 import { ControllerRenderProps, FieldValues } from "react-hook-form";
+import { useTranslations } from "next-intl";
 
 type PasswordInputProps<T extends FieldValues> = {
   field: ControllerRenderProps<T, any>;
-  passwordFieldLabel: string;
-  passwordFieldPlaceholder: string;
-  passwordFieldCapsLockMessage: string;
 };
 
 function PasswordInput<T extends FieldValues>({
   field,
-  passwordFieldLabel,
-  passwordFieldPlaceholder,
-  passwordFieldCapsLockMessage,
 }: PasswordInputProps<T>) {
   const capsLockActive = useCapsLock();
+  const t = useTranslations("Components.PasswordInput");
   return (
     <FormItem>
-      <FormLabel>{passwordFieldLabel}</FormLabel>
+      <FormLabel>{t("passwordFieldLabel")}</FormLabel>
       <FormControl>
         <div className="relative">
           <Input
             type="password"
-            placeholder={passwordFieldPlaceholder}
+            placeholder={t("passwordFieldPlaceholder")}
             className="pr-10"
             {...field}
           />
@@ -45,7 +41,7 @@ function PasswordInput<T extends FieldValues>({
       </FormControl>
       {capsLockActive && (
         <FormDescription className="font-semibold">
-          {passwordFieldCapsLockMessage}
+          {t("passwordFieldCapsLockMessage")}
         </FormDescription>
       )}
       <FormMessage />

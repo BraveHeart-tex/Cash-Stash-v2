@@ -64,9 +64,6 @@
     "formErrorMessage": "Bir hata oluştu",
     "emailFieldLabel": "E-posta",
     "emailFieldPlaceholder": "E-posta adresinizi girin",
-    "passwordFieldLabel": "Şifre",
-    "passwordFieldPlaceholder": "Şifrenizi girin",
-    "passwordFieldCapsLockMessage": "Caps lock açık.",
     "signInButtonLabel": "Oturum aç",
     "signInHelpMessage": "Oturum açmak için yardıma ihtiyacım var",
     "signUpText": "Hesabınız yok mu? Kayıt olun",
@@ -129,6 +126,13 @@
     "changeCurrencySuccessMessage": "Tercih edilen para birimi başarıyla değiştirildi",
     "changeCurrencyPrimaryActionLabel": "Onayla",
     "changeCurrencySaveLabel": "Değişiklikleri Kaydet"
+  },
+  "Components": {
+    "PasswordInput": {
+      "passwordFieldLabel": "Şifre",
+      "passwordFieldPlaceholder": "Şifrenizi girin",
+      "passwordFieldCapsLockMessage": "Caps lock açık."
+    }
   },
   "Actions": {
     "Auth": {
