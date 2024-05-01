@@ -1,20 +1,16 @@
 {
   "ThemeOptions": {
     "light": {
-      "label": "Varsayılan Açık",
-      "value": "light"
+      "label": "Varsayılan Açık"
     },
     "dark": {
-      "label": "Varsayılan Koyu",
-      "value": "dark"
+      "label": "Varsayılan Koyu"
     },
     "system": {
-      "label": "Sistem",
-      "value": "system"
+      "label": "Sistem"
     },
     "monokai-dark": {
-      "label": "Monokai Pro",
-      "value": "monokai-dark"
+      "label": "Monokai Pro"
     }
   },
   "GenericConfirmDialog": {

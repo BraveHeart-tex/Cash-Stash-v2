@@ -1,20 +1,16 @@
 {
   "ThemeOptions": {
     "light": {
-      "label": "Default Light",
-      "value": "light"
+      "label": "Default Light"
     },
     "dark": {
-      "label": "Default Dark",
-      "value": "dark"
+      "label": "Default Dark"
     },
     "system": {
-      "label": "System",
-      "value": "system"
+      "label": "System"
     },
     "monokai-dark": {
-      "label": "Monokai Pro",
-      "value": "monokai-dark"
+      "label": "Monokai Pro"
     }
   },
   "GenericConfirmDialog": {
