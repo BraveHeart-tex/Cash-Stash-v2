@@ -13,6 +13,35 @@
       "label": "Monokai Pro"
     }
   },
+  "NavigationItems": {
+    "/": {
+      "label": "Dashboard"
+    },
+    "/accounts": {
+      "label": "Accounts"
+    },
+    "/budgets": {
+      "label": "Budgets"
+    },
+    "/goals": {
+      "label": "Goals"
+    },
+    "/transactions": {
+      "label": "Transactions"
+    },
+    "/categories": {
+      "label": "Categories"
+    },
+    "/currency-converter": {
+      "label": "Currency Converter"
+    },
+    "/reports": {
+      "label": "Reports"
+    },
+    "/settings": {
+      "label": "Settings"
+    }
+  },
   "GenericConfirmDialog": {
     "defaultSecondaryActionLabel": "Cancel"
   },

@@ -13,6 +13,35 @@
       "label": "Monokai Pro"
     }
   },
+  "NavigationItems": {
+    "/": {
+      "label": "Dashboard"
+    },
+    "/accounts": {
+      "label": "Hesaplar"
+    },
+    "/budgets": {
+      "label": "Bütçeler"
+    },
+    "/goals": {
+      "label": "Hedefler"
+    },
+    "/transactions": {
+      "label": "İşlemler"
+    },
+    "/categories": {
+      "label": "Kategoriler"
+    },
+    "/currency-converter": {
+      "label": "Döviz Çevirici"
+    },
+    "/reports": {
+      "label": "Raporlar"
+    },
+    "/settings": {
+      "label": "Ayarlar"
+    }
+  },
   "GenericConfirmDialog": {
     "defaultSecondaryActionLabel": "Vazgeç"
   },

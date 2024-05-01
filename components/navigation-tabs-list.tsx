@@ -3,8 +3,10 @@ import { NAVIGATION_ITEMS } from "@/lib/constants";
 import { TabsList, TabsTrigger, Tabs } from "@/components/ui/tabs";
 import { motion } from "framer-motion";
 import { usePathname, Link } from "@/navigation";
+import { useTranslations } from "next-intl";
 
 const NavigationTabsList = () => {
+  const t = useTranslations("NavigationItems");
   const pathName = usePathname();
 
   return (
@@ -30,7 +32,7 @@ const NavigationTabsList = () => {
                 )}
                 <span className={`relative z-10 flex items-center`}>
                   <page.icon className={"mr-1 h-6 w-6"} />
-                  {page.label}
+                  {t(`${page.link}.label` as any)}
                 </span>
               </Link>
             </TabsTrigger>
