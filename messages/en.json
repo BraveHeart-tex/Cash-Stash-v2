@@ -145,6 +145,28 @@
     "UserMenu": {
       "colorModeLabel": "Color Theme",
       "logoutLabel": "Logout"
+    },
+    "RegisterForm": {
+      "captchaValidationFailedMessage": "Captcha validation failed. Please try again.",
+      "accountCreatedSuccessfullyMessage": "Account created successfully",
+      "accountCreatedSuccessfullyDescription": "Please check your email to verify your account.",
+      "anErrorOccurredMessage": "An error occurred",
+      "formTitle": "Welcome!",
+      "formDescription": "Create an account to get started",
+      "nameFieldLabel": "Full Name",
+      "nameFieldPlaceholder": "Enter your full name",
+      "emailFieldLabel": "Email",
+      "emailFieldPlaceholder": "Enter your email",
+      "emailFieldDescription": "<strong>Note</strong>: Please provide a valid email address for <u> account verification, password recovery, and other important communications. </u>",
+      "submitButtonLabel": "Sign Up",
+      "signInLink": "Already have an account? Sign in"
+    },
+    "PasswordRequirements": {
+      "title": "Password Requirements",
+      "8 characters": "8 characters",
+      "1 lowercase letter": "1 lowercase letter",
+      "1 uppercase letter": "1 uppercase letter",
+      "1 number": "1 number"
     }
   },
   "Actions": {

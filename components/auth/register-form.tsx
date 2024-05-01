@@ -34,8 +34,11 @@ import { toast } from "sonner";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import Logo from "@/components/logo";
 import { Link, useRouter } from "@/navigation";
+import { useTranslations } from "next-intl";
+import DOMPurify from "isomorphic-dompurify";
 
 const RegisterForm = () => {
+  const t = useTranslations("Components.RegisterForm");
   const { executeRecaptcha } = useGoogleReCaptcha();
   const [isPending, startTransition] = useTransition();
 
@@ -49,7 +52,7 @@ const RegisterForm = () => {
     let captchaToken = await executeRecaptcha();
 
     if (!captchaToken) {
-      toast.error("Captcha validation failed.");
+      toast.error(t("captchaValidationFailedMessage"));
       return;
     }
 
@@ -57,7 +60,7 @@ const RegisterForm = () => {
       const isCaptchaTokenValid = await validateReCAPTCHAToken(captchaToken);
 
       if (!isCaptchaTokenValid) {
-        toast.error("Captcha validation failed.");
+        toast.error(t("captchaValidationFailedMessage"));
         return;
       }
 
@@ -70,8 +73,8 @@ const RegisterForm = () => {
 
       router.push(PAGE_ROUTES.EMAIL_VERIFICATION_ROUTE + `/${data.email}`);
 
-      toast.success("Account created successfully", {
-        description: "Please check your email to verify your account.",
+      toast.success(t("accountCreatedSuccessfullyMessage"), {
+        description: t("accountCreatedSuccessfullyDescription"),
       });
     });
   };
@@ -89,7 +92,7 @@ const RegisterForm = () => {
     }
 
     if (result.error) {
-      toast.error("An error occurred.", {
+      toast.error(t("anErrorOccurredMessage"), {
         description: result.error,
       });
     }
@@ -99,6 +102,9 @@ const RegisterForm = () => {
     hidden: { opacity: 0, y: -100 },
     visible: { opacity: 1, y: 0 },
   };
+
+  const signInCtaQuestion = t("signInLink").split("?")[0] + "?";
+  const signInCta = t("signInLink").split("?")[1];
 
   return (
     <motion.div
@@ -110,8 +116,8 @@ const RegisterForm = () => {
       <Card className="w-full">
         <CardHeader className="text-xl">
           <Logo className="mx-auto mb-4 2xl:hidden" />
-          <CardTitle>Welcome!</CardTitle>
-          <CardDescription>Create an account to get started</CardDescription>
+          <CardTitle>{t("formTitle")}</CardTitle>
+          <CardDescription>{t("formDescription")}</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -125,9 +131,12 @@ const RegisterForm = () => {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Full Name</FormLabel>
+                      <FormLabel>{t("nameFieldLabel")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="John Doe" {...field} />
+                        <Input
+                          placeholder={t("nameFieldPlaceholder")}
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -138,22 +147,25 @@ const RegisterForm = () => {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>{t("emailFieldLabel")}</FormLabel>
                       <FormControl>
                         <Input
                           type="email"
-                          placeholder="Your email adress"
+                          placeholder={t("emailFieldPlaceholder")}
                           {...field}
                         />
                       </FormControl>
-                      <FormDescription className="text-[0.9em]">
-                        <strong>Note</strong>: Please provide a valid email
-                        address for{" "}
-                        <u>
-                          account verification, password recovery, and other
-                          important communications.
-                        </u>
-                      </FormDescription>
+                      <FormDescription
+                        className="text-[0.9em]"
+                        dangerouslySetInnerHTML={{
+                          __html: DOMPurify.sanitize(
+                            t.markup("emailFieldDescription", {
+                              strong: (chunks) => `<strong>${chunks}</strong> `,
+                              u: (chunks) => `<u>${chunks}</u>`,
+                            })
+                          ),
+                        }}
+                      ></FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -173,10 +185,9 @@ const RegisterForm = () => {
                 type="submit"
                 className="font-semibold"
                 disabled={form.formState.isSubmitting || isPending}
+                loading={isPending}
               >
-                {form.formState.isSubmitting || isPending
-                  ? "Signing up..."
-                  : "Sign Up"}
+                {t("submitButtonLabel")}
               </Button>
             </form>
           </Form>
@@ -184,14 +195,14 @@ const RegisterForm = () => {
         <CardFooter>
           <div className="flex w-full flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
             <p className="text-sm text-muted-foreground">
-              Already have an account?{" "}
+              {signInCtaQuestion} &nbsp;
               <Button
                 variant="link"
                 disabled={form.formState.isSubmitting || isPending}
-                aria-label="Sign up for a new account."
+                aria-label={t("signInLink")}
                 className="p-0 underline"
               >
-                <Link href={PAGE_ROUTES.LOGIN_ROUTE}>Log In</Link>
+                <Link href={PAGE_ROUTES.LOGIN_ROUTE}>{signInCta}</Link>
               </Button>
             </p>
           </div>

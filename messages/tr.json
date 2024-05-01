@@ -136,6 +136,28 @@
     "UserMenu": {
       "colorModeLabel": "Renk Teması",
       "logoutLabel": "Çıkış Yap"
+    },
+    "RegisterForm": {
+      "captchaValidationFailedMessage": "Captcha doğrulaması başarısız oldu. Lütfen tekrar deneyin.",
+      "accountCreatedSuccessfullyMessage": "Hesabınız başarılı bir şekilde oluşturuldu",
+      "accountCreatedSuccessfullyDescription": "Hesabınızı doğrulamak için lütfen e-postanızı kontrol edin.",
+      "anErrorOccurredMessage": "Bir hata oluştu",
+      "formTitle": "Merhaba!",
+      "formDescription": "Başlamak için bir hesabınızı oluşturun.",
+      "nameFieldLabel": "Adınız",
+      "nameFieldPlaceholder": "Adınızı girin",
+      "emailFieldLabel": "E-posta",
+      "emailFieldPlaceholder": "E-posta adresinizi girin",
+      "emailFieldDescription": "<strong>Not</strong>: Lütfen <u>hesap doğrulama, şifre kurtarma ve diğer önemli işlemler için geçerli bir e-posta adresi sağlayın.</u>",
+      "submitButtonLabel": "Kayıt Ol",
+      "signInLink": "Zaten bir hesabınız var mı? Oturum aç"
+    },
+    "PasswordRequirements": {
+      "title": "Şifre Kriterleri",
+      "8 characters": "8 karakter",
+      "1 lowercase letter": "1 küçük harf",
+      "1 uppercase letter": "1 büyük harf",
+      "1 number": "1 sayı"
     }
   },
   "Actions": {
