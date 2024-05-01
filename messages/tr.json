@@ -1,4 +1,22 @@
 {
+  "ThemeOptions": {
+    "light": {
+      "label": "Varsayılan Açık",
+      "value": "light"
+    },
+    "dark": {
+      "label": "Varsayılan Koyu",
+      "value": "dark"
+    },
+    "system": {
+      "label": "Sistem",
+      "value": "system"
+    },
+    "monokai-dark": {
+      "label": "Monokai Pro",
+      "value": "monokai-dark"
+    }
+  },
   "GenericConfirmDialog": {
     "defaultSecondaryActionLabel": "Vazgeç"
   },

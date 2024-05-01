@@ -1,4 +1,22 @@
 {
+  "ThemeOptions": {
+    "light": {
+      "label": "Default Light",
+      "value": "light"
+    },
+    "dark": {
+      "label": "Default Dark",
+      "value": "dark"
+    },
+    "system": {
+      "label": "System",
+      "value": "system"
+    },
+    "monokai-dark": {
+      "label": "Monokai Pro",
+      "value": "monokai-dark"
+    }
+  },
   "GenericConfirmDialog": {
     "defaultSecondaryActionLabel": "Cancel"
   },

@@ -7,6 +7,9 @@ import { ReactNode } from "react";
 import SonnerToaster from "@/components/ui/sonner";
 import GoogleCaptchaWrapper from "@/components/google-captcha-wrapper";
 import { THEME_OPTIONS } from "@/lib/constants";
+import { NextIntlClientProvider } from "next-intl";
+import { pick } from "@/lib/utils/objectUtils/pick";
+import { getMessages } from "next-intl/server";
 
 const InterFont = Inter({
   weight: ["300", "400", "500", "600", "700"],
@@ -98,6 +101,10 @@ export default async function RootLayout({
 }: LayoutProps) {
   const themeValues = THEME_OPTIONS.map((item) => item.value);
 
+  const messages = await getMessages({
+    locale,
+  });
+
   return (
     <html lang={locale}>
       <head>
@@ -163,7 +170,14 @@ export default async function RootLayout({
           <GoogleCaptchaWrapper>
             <RedirectionPathToaster />
             <SonnerToaster />
-            <main className="pb-16 lg:pb-0">{children}</main>
+            <main className="pb-16 lg:pb-0">
+              <NextIntlClientProvider
+                locale={locale}
+                messages={pick(messages, ["ThemeOptions"])}
+              >
+                {children}
+              </NextIntlClientProvider>
+            </main>
           </GoogleCaptchaWrapper>
         </ThemeProvider>
       </body>
