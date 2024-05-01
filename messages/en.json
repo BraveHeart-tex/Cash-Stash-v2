@@ -141,6 +141,10 @@
       "passwordFieldLabel": "Password",
       "passwordFieldPlaceholder": "Enter your password",
       "passwordFieldCapsLockMessage": "Caps lock is on."
+    },
+    "UserMenu": {
+      "colorModeLabel": "Color Theme",
+      "logoutLabel": "Logout"
     }
   },
   "Actions": {

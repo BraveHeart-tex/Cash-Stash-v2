@@ -11,8 +11,10 @@ import { Button } from "@/components/ui/button";
 import useAuthStore from "@/store/auth/authStore";
 import { Label } from "@/components/ui/label";
 import ModeToggle from "@/components/ui/mode-toggle";
+import { useTranslations } from "next-intl";
 
 const UserMenu = () => {
+  const t = useTranslations("Components.UserMenu");
   const [isOpen, setIsOpen] = useState(false);
   let [isPending, startTransition] = useTransition();
   const user = useAuthStore((state) => state.user);
@@ -44,7 +46,7 @@ const UserMenu = () => {
         <hr />
 
         <div className="block lg:hidden">
-          <Label>Color Mode</Label>
+          <Label>{t("colorModeLabel")}</Label>
           <div className="flex gap-1 bg-background">
             <ModeToggle />
           </div>
@@ -56,7 +58,7 @@ const UserMenu = () => {
           disabled={isPending}
           loading={isPending}
         >
-          Logout
+          {t("logoutLabel")}
         </Button>
       </DropdownMenuContent>
     </DropdownMenu>

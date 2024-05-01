@@ -173,7 +173,11 @@ export default async function RootLayout({
             <main className="pb-16 lg:pb-0">
               <NextIntlClientProvider
                 locale={locale}
-                messages={pick(messages, ["ThemeOptions", "NavigationItems"])}
+                messages={pick(messages, [
+                  "ThemeOptions",
+                  "NavigationItems",
+                  "Components",
+                ])}
               >
                 {children}
               </NextIntlClientProvider>

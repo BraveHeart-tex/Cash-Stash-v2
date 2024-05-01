@@ -132,6 +132,10 @@
       "passwordFieldLabel": "Şifre",
       "passwordFieldPlaceholder": "Şifrenizi girin",
       "passwordFieldCapsLockMessage": "Caps lock açık."
+    },
+    "UserMenu": {
+      "colorModeLabel": "Renk Teması",
+      "logoutLabel": "Çıkış Yap"
     }
   },
   "Actions": {
