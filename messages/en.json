@@ -156,6 +156,40 @@
     "changeCurrencySaveLabel": "Save Changes"
   },
   "Components": {
+    "AccountForm": {
+      "noChangesMessage": "No changes detected.",
+      "noChangesDescription": "You haven't made any changes to your account details.",
+      "anErrorOccurredMessage": "An error occurred",
+
+      "createAccountSuccessMessage": "Account created successfully",
+      "updateAccountSuccessMessage": "Account updated successfully",
+      "successTitle": "Success!",
+
+      "nameField": {
+        "label": "Account Name",
+        "placeholder": "Enter account name"
+      },
+      "typeField": {
+        "label": "Account Type",
+        "placeholder": "Select account type",
+        "selectOptions": {
+          "CHECKING": "Checking",
+          "SAVINGS": "Savings",
+          "CREDIT_CARD": "Credit Card",
+          "INVESTMENT": "Investment",
+          "LOAN": "Loan",
+          "OTHER": "Other"
+        }
+      },
+      "balanceField": {
+        "label": "Balance",
+        "placeholder": "Enter account balance"
+      },
+      "submitButtonLabel": {
+        "create": "Create Account",
+        "update": "Update Account"
+      }
+    },
     "AccountSummaries": {
       "noAccountsFound": "No accounts found.",
       "seeAllYourAccounts": "See all your accounts"

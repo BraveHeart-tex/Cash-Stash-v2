@@ -147,6 +147,40 @@
     "changeCurrencySaveLabel": "Değişiklikleri Kaydet"
   },
   "Components": {
+    "AccountForm": {
+      "noChangesMessage": "Herhangi bir değişiklik tespit edilmedi.",
+      "noChangesDescription": "Hesap bilgilerinizde herhangi bir değişiklik yapmadınız.",
+      "anErrorOccurredMessage": "Bir hata oluştu",
+
+      "createAccountSuccessMessage": "Hesap başarıyla oluşturuldu",
+      "updateAccountSuccessMessage": "Hesap başarıyla güncellendi",
+      "successTitle": "Başarılı!",
+
+      "nameField": {
+        "label": "Hesap Adı",
+        "placeholder": "Hesap adını giriniz"
+      },
+      "typeField": {
+        "label": "Hesap Tipi",
+        "placeholder": "Hesap tipi seçiniz",
+        "selectOptions": {
+          "CHECKING": "Çek Hesabı",
+          "SAVINGS": "Birikim Hesabı",
+          "CREDIT_CARD": "Kredi Kartı",
+          "INVESTMENT": "Yatırım Hesabı",
+          "LOAN": "Kredi",
+          "OTHER": "Diğer"
+        }
+      },
+      "balanceField": {
+        "label": "Bakiye",
+        "placeholder": "Hesap bakiyesi giriniz"
+      },
+      "submitButtonLabel": {
+        "create": "Hesap Oluştur",
+        "update": "Hesabı Güncelle"
+      }
+    },
     "AccountSummaries": {
       "noAccountsFound": "Hiçbir hesap bulunamadı.",
       "seeAllYourAccounts": "Tüm hesaplarınızı görüntüleyin"
