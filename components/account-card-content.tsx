@@ -10,7 +10,6 @@ import ActionPopover, {
 import { toast } from "sonner";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import { cn } from "@/lib/utils/stringUtils/cn";
-import { generateLabelFromEnumValue } from "@/lib/utils/stringUtils/generateLabelFromEnumValue";
 import {
   FaTrash,
   FaEdit,
@@ -37,6 +36,7 @@ const AccountCardContent = ({
   className,
   showPopover,
 }: AccountCardContentProps) => {
+  const categoryT = useTranslations("Enums.AccountCategory");
   const t = useTranslations("Components.AccountCard");
   const preferredCurrency = useAuthStore(
     (state) => state.user?.preferredCurrency
@@ -82,8 +82,7 @@ const AccountCardContent = ({
     });
   };
 
-  const accountCategory =
-    generateLabelFromEnumValue(account.category) + " Account";
+  const accountCategory = categoryT(account.category);
 
   const handleCreateTransactionClick = () => {
     openGenericModal({

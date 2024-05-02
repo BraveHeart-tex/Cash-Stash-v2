@@ -41,6 +41,7 @@ const AccountForm = ({
   data: accountToBeUpdated,
   afterSave,
 }: AccountFormProps) => {
+  const categoryT = useTranslations("Enums.AccountCategory");
   const t = useTranslations("Components.AccountForm");
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
@@ -119,11 +120,9 @@ const AccountForm = ({
   };
 
   const selectOptions = accounts.category.enumValues.map((value) => ({
-    label: t(`typeField.selectOptions.${value}`),
+    label: categoryT(value),
     value,
   }));
-
-  console.log(t("submitButtonLabel.create"));
 
   return (
     <Form {...form}>

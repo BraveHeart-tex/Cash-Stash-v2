@@ -178,6 +178,7 @@ export default async function RootLayout({
                   "NavigationItems",
                   "Components",
                   "Zod",
+                  "Enums",
                 ])}
               >
                 {children}
