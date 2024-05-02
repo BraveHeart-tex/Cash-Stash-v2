@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import useGenericModalStore from "@/store/genericModalStore";
+import { useTranslations } from "next-intl";
 import { FaPiggyBank, FaPlus } from "react-icons/fa";
 
 type CreateAccountButtonProps = {
@@ -13,6 +14,7 @@ const CreateAccountButton = ({
   className,
   minimizeOnMobile,
 }: CreateAccountButtonProps) => {
+  const t = useTranslations("Components.CreateAccountButton");
   const openGenericModal = useGenericModalStore(
     (state) => state.openGenericModal
   );
@@ -21,14 +23,13 @@ const CreateAccountButton = ({
       className={cn("flex items-center gap-[14px] font-semibold", className)}
       type="button"
       name="create-account"
-      aria-label="Create an account"
+      aria-label={t("label")}
       onClick={() =>
         openGenericModal({
           mode: "create",
           key: "account",
-          dialogTitle: "Register Bank Account",
-          dialogDescription:
-            "Fill out the form below to register your bank account.",
+          dialogTitle: t("createAccountDialogTitle"),
+          dialogDescription: t("createAccountDialogMessage"),
         })
       }
     >
@@ -41,7 +42,7 @@ const CreateAccountButton = ({
           minimizeOnMobile && "hidden md:flex"
         )}
       >
-        <FaPiggyBank size={18} /> Create an account
+        <FaPiggyBank size={18} /> {t("label")}
       </div>
     </Button>
   );

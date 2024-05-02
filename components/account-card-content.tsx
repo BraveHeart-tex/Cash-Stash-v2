@@ -53,7 +53,7 @@ const AccountCardContent = ({
     showGenericConfirm({
       title: t("deleteAccountDialogTitle"),
       message: t("deleteAccountDialogMessage"),
-      primaryActionLabel: "Delete",
+      primaryActionLabel: t("deleteAccountDialogPrimaryActionLabel"),
       async onConfirm() {
         const result = await deleteAccount(account.id);
 

@@ -147,6 +147,10 @@
     "changeCurrencySaveLabel": "Değişiklikleri Kaydet"
   },
   "Components": {
+    "AccountSummaries": {
+      "noAccountsFound": "Hiçbir hesap bulunamadı.",
+      "seeAllYourAccounts": "Tüm hesaplarınızı görüntüleyin"
+    },
     "AccountCard": {
       "deleteAccountDialogTitle": "Bu hesabı silmek istediğinizden emin misiniz?",
       "deleteAccountDialogMessage": "Bu aynı zamanda bu hesapla ilişkili tüm işlemleri de silecektir. Bu işlem geri alınamaz.",
@@ -166,6 +170,11 @@
       "Edit Account": "Düzenle",
       "Add Transaction": "İşlem Ekle",
       "Delete": "Sil"
+    },
+    "CreateAccountButton": {
+      "label": "Hesap Ekle",
+      "createAccountDialogTitle": "Hesap Ekle",
+      "createAccountDialogMessage": "Yeni bir hesap eklemek için aşağıdaki formu kullanın."
     },
     "PasswordInput": {
       "passwordFieldLabel": "Şifre",

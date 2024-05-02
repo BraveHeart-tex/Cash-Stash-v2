@@ -156,6 +156,10 @@
     "changeCurrencySaveLabel": "Save Changes"
   },
   "Components": {
+    "AccountSummaries": {
+      "noAccountsFound": "No accounts found.",
+      "seeAllYourAccounts": "See all your accounts"
+    },
     "AccountCard": {
       "deleteAccountDialogTitle": "Are you sure you want to delete this account?",
       "deleteAccountDialogMessage": "This will also delete all the transactions associated with this account. This action cannot be undone.",
@@ -175,6 +179,11 @@
       "Edit Account": "Edit Account",
       "Add Transaction": "Add Transaction",
       "Delete": "Delete"
+    },
+    "CreateAccountButton": {
+      "label": "Create an Account",
+      "createAccountDialogTitle": "Create an Account",
+      "createAccountDialogMessage": "Use the form below to add a new bank account."
     },
     "PasswordInput": {
       "passwordFieldLabel": "Password",
