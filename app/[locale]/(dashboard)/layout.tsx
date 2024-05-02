@@ -12,16 +12,18 @@ const DashboardMainLayout = async ({
   children: React.ReactNode;
 }) => {
   const { user } = await getUser();
-  const t = await getTranslations("GenericConfirmDialog");
+  const t = await getTranslations("Generic");
 
   return (
     <main>
       <Navbar user={user} />
       <NavigationTabs />
-      <GenericModal />
+      <GenericModal cancelLabel={t("GenericContentModal.dialogCancelLabel")} />
       <GenericConfirmDialog
         internationalizationConfig={{
-          defaultSecondaryActionLabel: t("defaultSecondaryActionLabel"),
+          defaultSecondaryActionLabel: t(
+            "GenericConfirmDialog.defaultSecondaryActionLabel"
+          ),
         }}
       />
       {children}

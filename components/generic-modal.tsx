@@ -20,7 +20,11 @@ import {
 } from "@/components/ui/drawer";
 import useGenericModalStore from "@/store/genericModalStore";
 
-const GenericModal = () => {
+type GenericModalProps = {
+  cancelLabel?: string;
+};
+
+const GenericModal = ({ cancelLabel = "Cancel" }: GenericModalProps) => {
   const {
     entityId,
     dialogTitle,
@@ -70,7 +74,7 @@ const GenericModal = () => {
             {dialogContentToBeRendered}
             <DrawerClose asChild>
               <Button className="mt-1 w-full" variant="outline">
-                Cancel
+                {cancelLabel}
               </Button>
             </DrawerClose>
           </div>
@@ -100,7 +104,7 @@ const GenericModal = () => {
         {dialogContentToBeRendered}
         <DialogFooter>
           <Button variant="ghost" onClick={() => closeGenericModal()}>
-            Cancel
+            {cancelLabel}
           </Button>
         </DialogFooter>
       </DialogContent>
