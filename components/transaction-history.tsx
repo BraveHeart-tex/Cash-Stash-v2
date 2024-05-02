@@ -2,7 +2,7 @@ import TransactionCard from "@/components/transactions/transaction-card";
 import CreateTransactionButton from "@/components/create-buttons/create-transaction-button";
 import AnimatePresenceClient from "@/components/animations/animate-presence";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { Link } from "@/navigation";
 import { PAGE_ROUTES } from "@/lib/constants";
 import { TransactionWithCategoryAndAccountName } from "@/typings/transactions";
 

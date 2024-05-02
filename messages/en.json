@@ -156,6 +156,26 @@
     "changeCurrencySaveLabel": "Save Changes"
   },
   "Components": {
+    "AccountCard": {
+      "deleteAccountDialogTitle": "Are you sure you want to delete this account?",
+      "deleteAccountDialogMessage": "This will also delete all the transactions associated with this account. This action cannot be undone.",
+      "deleteAccountDialogPrimaryActionLabel": "Delete",
+      "deleteAccountErrorMessage": "An error occurred while deleting the account. Please try again later.",
+      "deleteAccountSuccessMessage": "Account deleted successfully.",
+      "deleteAccountSuccessDescription": "Selected account has been deleted.",
+
+      "editAccountDialogTitle": "Edit Account",
+      "editAccountAccountDialogMessage": "Use the form below to edit your account details.",
+
+      "createTransactionDialogTitle": "Create Transaction",
+      "createTransactionAccountDialogMessage": "Use the form below to create a new transaction.",
+
+      "accountActionsHeading": "Account Actions",
+      "Show Latest Transactions": "Show Latest Transactions",
+      "Edit Account": "Edit Account",
+      "Add Transaction": "Add Transaction",
+      "Delete": "Delete"
+    },
     "PasswordInput": {
       "passwordFieldLabel": "Password",
       "passwordFieldPlaceholder": "Enter your password",

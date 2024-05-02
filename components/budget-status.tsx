@@ -2,7 +2,7 @@ import BudgetCard from "@/components/budget-card";
 import CreateBudgetButton from "@/components/create-buttons/create-budget-button";
 import AnimatePresenceClient from "@/components/animations/animate-presence";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { Link } from "@/navigation";
 import { PAGE_ROUTES } from "@/lib/constants";
 import { BudgetWithCategory } from "@/typings/budgets";
 import { useTranslations } from "next-intl";

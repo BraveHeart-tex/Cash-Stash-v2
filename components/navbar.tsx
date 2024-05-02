@@ -1,6 +1,6 @@
 "use client";
 import UserMenu from "@/components/user-menu";
-import Link from "next/link";
+import { Link } from "@/navigation";
 import { useEffect } from "react";
 import { User } from "lucia";
 import useAuthStore from "@/store/auth/authStore";

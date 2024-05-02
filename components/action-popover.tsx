@@ -9,7 +9,7 @@ import { IconType } from "react-icons/lib";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils/stringUtils/cn";
 
-type PopoverActionOption = {
+export type PopoverActionOption = {
   icon: IconType;
   label: string;
   onClick: () => void;

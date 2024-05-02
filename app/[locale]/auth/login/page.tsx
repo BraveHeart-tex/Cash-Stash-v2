@@ -2,7 +2,7 @@ import LoginForm from "@/components/auth/login-form";
 import Logo from "@/components/logo";
 import { getUser } from "@/lib/auth/session";
 import { PAGE_ROUTES } from "@/lib/constants";
-import Link from "next/link";
+import { Link } from "@/navigation";
 import { redirect } from "@/navigation";
 import { getTranslations } from "next-intl/server";
 

@@ -147,6 +147,26 @@
     "changeCurrencySaveLabel": "Değişiklikleri Kaydet"
   },
   "Components": {
+    "AccountCard": {
+      "deleteAccountDialogTitle": "Bu hesabı silmek istediğinizden emin misiniz?",
+      "deleteAccountDialogMessage": "Bu aynı zamanda bu hesapla ilişkili tüm işlemleri de silecektir. Bu işlem geri alınamaz.",
+      "deleteAccountDialogPrimaryActionLabel": "Sil",
+      "deleteAccountErrorMessage": "Hesap silinirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+      "deleteAccountSuccessMessage": "Hesap başarıyla silindi.",
+      "deleteAccountSuccessDescription": "Seçilen hesap silindi.",
+
+      "editAccountDialogTitle": "Hesap Bilgilerini Düzenle",
+      "editAccountAccountDialogMessage": "Hesap bilgilerinizi düzenlemek için aşağıdaki formu kullanın.",
+
+      "createTransactionDialogTitle": "İşlem Oluştur",
+      "createTransactionAccountDialogMessage": "Yeni bir işlem oluşturmak için aşağıdaki formu kullanın.",
+
+      "accountActionsHeading": "Hesap Aksiyonları",
+      "Show Latest Transactions": "En Son İşlemlerini Görüntüle",
+      "Edit Account": "Düzenle",
+      "Add Transaction": "İşlem Ekle",
+      "Delete": "Sil"
+    },
     "PasswordInput": {
       "passwordFieldLabel": "Şifre",
       "passwordFieldPlaceholder": "Şifrenizi girin",

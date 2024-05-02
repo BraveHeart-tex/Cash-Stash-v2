@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { getUser } from "@/lib/auth/session";
 import { PAGE_ROUTES } from "@/lib/constants";
 import { redirect } from "@/navigation";
-import Link from "next/link";
+import { Link } from "@/navigation";
 
 const NotFound = async () => {
   const { user } = await getUser();

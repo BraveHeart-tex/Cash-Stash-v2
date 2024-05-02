@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { Link } from "@/navigation";
 import useAuthStore from "@/store/auth/authStore";
 import { toast } from "sonner";
 import { FaCopy } from "react-icons/fa";
