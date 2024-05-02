@@ -54,6 +54,25 @@
     "createBudgetDialogTitle": "Create a budget",
     "createBudgetDialogDescription": "Fill out the form below to create a budget."
   },
+  "Dashboard": {
+    "accountsSummaryTitle": "Accounts Summary",
+    "accountsSummaryDescription": "Access your accounts here. Navigate to the 'Accounts' page to see a comprehensive list of all your accounts.",
+
+    "budgetsSummaryTitle": "Budget Status",
+    "budgetsSummaryDescription": "Explore your budgets here. Simply click on a budget card to view its details or create a new one from the 'Budgets' page.",
+
+    "goalSummaryTitle": "Goal Progress",
+    "goalSummaryDescription": "Explore your goals here. Simply click on a goal card to view or edit its details, or create a new one by clicking the menu button above.",
+
+    "transactionSummaryTitle": "Latest Transactions",
+    "transactionSummaryDescription": "Explore your latest transactions here.",
+
+    "financialInsightsTitle": "Financial Insights",
+    "financialInsightsDescription": "View a breakdown of your spending versus earnings for this month, along with additional financial insights.",
+
+    "notificationsAndRemindersTitle": "Notifications & Reminders",
+    "notificationsAndRemindersDescription": "Manage your notifications and reminders here."
+  },
   "Login": {
     "loggedInHeading": "Logged in successfully.",
     "loggedInDescription": "You are being redirected...",

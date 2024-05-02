@@ -54,6 +54,25 @@
     "createBudgetDialogTitle": "Bütçe Ekleyin",
     "createBudgetDialogDescription": "Aşağıdaki formu kullanarak bütçenizi oluşturun."
   },
+  "Dashboard": {
+    "accountsSummaryTitle": "Hesaplara Genel Bakış",
+    "accountsSummaryDescription": "Hesaplarınıza buradan erişin. Tüm hesaplarınızın kapsamlı bir listesini görmek için 'Hesaplar' sayfasına gidin.",
+
+    "budgetsSummaryTitle": "Bütçe Özetleri",
+    "budgetsSummaryDescription": "Bütçelerinizi buradan yönetin. Ayrıntılarını görüntülemek için bir bütçe kartına tıklamanız veya 'Bütçeler' sayfasından yeni bir bütçe oluşturmanız yeterlidir.",
+
+    "goalSummaryTitle": "Hedef İlerlemeleri",
+    "goalSummaryDescription": "Hedeflerinizi burada keşfedin. Hedefin, ayrıntılarını görüntülemek veya düzenlemek için kartın sağ üst kısmındaki butona tıklayın.",
+
+    "transactionSummaryTitle": "En Son İşlemler",
+    "transactionSummaryDescription": "En son işlemlerinizi buradan görüntüleyin.",
+
+    "financialInsightsTitle": "Finansal Analizler",
+    "financialInsightsDescription": "Ek finansal bilgilerle birlikte bu ayki harcamalarınızın ve kazançlarınızın bir dökümünü görüntüleyin.",
+
+    "notificationsAndRemindersTitle": "Bildirimler & Hatırlatmalar",
+    "notificationsAndRemindersDescription": "Bildirimlerinizi ve hatırlatıcılarınızı buradan yönetin."
+  },
   "Login": {
     "loggedInHeading": "Başarıyla Giriş Yaptınız.",
     "loggedInDescription": "Yönlendiriliyorsunuz...",
