@@ -256,6 +256,11 @@
       "1 lowercase letter": "1 lowercase letter",
       "1 uppercase letter": "1 uppercase letter",
       "1 number": "1 number"
+    },
+    "RoutePaginationControls": {
+      "previous": "Previous",
+      "next": "Next",
+      "pageInformation": "Page {currentPage} of {totalPages}"
     }
   },
   "Actions": {
