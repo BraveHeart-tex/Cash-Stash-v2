@@ -88,7 +88,13 @@
     "createBudgetDialogTitle": "Bütçe Ekleyin",
     "createBudgetDialogDescription": "Aşağıdaki formu kullanarak bütçenizi oluşturun.",
     "BudgetsPageFilters": {
-      "routeSearchInputPlaceholder": "Bütçeleri isme göre arayın"
+      "routeSearchInputPlaceholder": "Bütçeleri isme göre arayın",
+      "sortByProgressDesc": "Kalan Göre Sırala (Yüksekten Düşüğe)",
+      "sortByProgressAsc": "Kalan Göre Sırala (Düşükten Yükseğe)",
+      "sortBySpentAmountDesc": "Sort by Spending (Yüksekten Düşüğe)",
+      "sortBySpentAmountAsc": "Sort by Spending (Düşükten Yükseğe)",
+      "sortByBudgetAmountDesc": "Sort by Budget (Yüksekten Düşüğe)",
+      "sortByBudgetAmountAsc": "Sort by Budget (Düşükten Yükseğe)"
     }
   },
   "Dashboard": {

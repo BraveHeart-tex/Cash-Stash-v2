@@ -89,7 +89,13 @@
     "createBudgetDialogDescription": "Fill out the form below to create a budget.",
 
     "BudgetsPageFilters": {
-      "routeSearchInputPlaceholder": "Search budgets by name"
+      "routeSearchInputPlaceholder": "Search budgets by name",
+      "sortByProgressDesc": "Sort by Remaining (High to Low)",
+      "sortByProgressAsc": "Sort by Remaining (Low to High)",
+      "sortBySpentAmountDesc": "Sort by Spending (High to Low)",
+      "sortBySpentAmountAsc": "Sort by Spending (Low to High)",
+      "sortByBudgetAmountDesc": "Sort by Budget (High to Low)",
+      "sortByBudgetAmountAsc": "Sort by Budget (Low to High)"
     }
   },
   "Dashboard": {
