@@ -439,6 +439,12 @@
       "passwordTooShort": "Password should be at least 8 characters.",
       "passwordTooLong": "Password cannot exceed 100 characters.",
       "invalidPassword": "Password should contain at least one uppercase letter, one lowercase letter, and one number."
+    },
+    "Account": {
+      "balanceErrorMessage": "Balance must be a number.",
+      "categoryRequiredErrorMessage": "Account Category is required.",
+      "categoryInvalidTypeError": "Invalid account category.",
+      "nameErrorMessage": "Account name is required."
     }
   }
 }

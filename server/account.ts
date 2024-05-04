@@ -9,7 +9,7 @@ import {
   getPaginatedAccountsKey,
 } from "@/lib/redis/redisUtils";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
-import accountSchema, { AccountSchemaType } from "@/schemas/account-schema";
+import { AccountSchemaType, getAccountSchema } from "@/schemas/account-schema";
 import accountRepository from "@/lib/database/repository/accountRepository";
 import transactionRepository from "@/lib/database/repository/transactionRepository";
 import redisService from "@/lib/redis/redisService";
@@ -23,6 +23,7 @@ import {
   UpdateBankAccountParams,
   UpdateBankAccountReturnType,
 } from "@/typings/accounts";
+import { getTranslations } from "next-intl/server";
 
 export const registerBankAccount = async ({
   balance,
@@ -36,6 +37,14 @@ export const registerBankAccount = async ({
   }
 
   try {
+    const zodT = await getTranslations("Zod.Account");
+    const accountSchema = getAccountSchema({
+      balanceErrorMessage: zodT("balanceErrorMessage"),
+      nameErrorMessage: zodT("nameErrorMessage"),
+      categoryInvalidTypeError: zodT("categoryInvalidTypeError"),
+      categoryRequiredErrorMessage: zodT("categoryRequiredErrorMessage"),
+    });
+
     const validatedData = accountSchema.parse({ balance, category, name });
 
     const accountDto = {
@@ -116,6 +125,14 @@ export const updateBankAccount = async ({
   }
 
   try {
+    const zodT = await getTranslations("Zod.Account");
+    const accountSchema = getAccountSchema({
+      balanceErrorMessage: zodT("balanceErrorMessage"),
+      nameErrorMessage: zodT("nameErrorMessage"),
+      categoryInvalidTypeError: zodT("categoryInvalidTypeError"),
+      categoryRequiredErrorMessage: zodT("categoryRequiredErrorMessage"),
+    });
+
     const validatedData = accountSchema.parse(rest);
     const updateDto = {
       ...validatedData,

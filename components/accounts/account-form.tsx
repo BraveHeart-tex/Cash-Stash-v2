@@ -22,7 +22,7 @@ import { registerBankAccount, updateBankAccount } from "@/server/account";
 import { useRouter } from "@/navigation";
 import { useEffect, useTransition } from "react";
 import useGenericModalStore from "@/store/genericModalStore";
-import accountSchema, { AccountSchemaType } from "@/schemas/account-schema";
+import { AccountSchemaType, getAccountSchema } from "@/schemas/account-schema";
 import { toast } from "sonner";
 import { AccountSelectModel, accounts } from "@/lib/database/schema";
 import CurrencyFormLabel from "@/components/ui/currency-form-label";
@@ -43,11 +43,18 @@ const AccountForm = ({
 }: AccountFormProps) => {
   const categoryT = useTranslations("Enums.AccountCategory");
   const t = useTranslations("Components.AccountForm");
+  const zodT = useTranslations("Zod.Account");
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const closeGenericModal = useGenericModalStore(
     (state) => state.closeGenericModal
   );
+  const accountSchema = getAccountSchema({
+    balanceErrorMessage: zodT("balanceErrorMessage"),
+    nameErrorMessage: zodT("nameErrorMessage"),
+    categoryInvalidTypeError: zodT("categoryInvalidTypeError"),
+    categoryRequiredErrorMessage: zodT("categoryRequiredErrorMessage"),
+  });
   const form = useForm<AccountSchemaType>({
     resolver: zodResolver(accountSchema),
   });

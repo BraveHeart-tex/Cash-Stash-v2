@@ -436,6 +436,12 @@
       "passwordTooShort": "Şifre en az 8 karakterden oluşmalıdır.",
       "passwordTooLong": "Şifre en çok 100 karakter olabilir.",
       "invalidPassword": "Şifre en az bir büyük harf, bir küçük harf ve bir sayı içermelidir."
+    },
+    "Account": {
+      "balanceErrorMessage": "Bakiye bir sayı olmalıdır.",
+      "categoryRequiredErrorMessage": "Hesap Kategorisi zorunludur.",
+      "categoryInvalidTypeError": "Geçersiz hesap kategorisi.",
+      "nameErrorMessage": "Hesap ismi zorunludur."
     }
   }
 }
