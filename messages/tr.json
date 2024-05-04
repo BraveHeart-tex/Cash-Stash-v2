@@ -239,6 +239,21 @@
       "Add Transaction": "İşlem Ekle",
       "Delete": "Sil"
     },
+    "BudgetCard": {
+      "deleteBudgetDialogTitle": "Bu bütçeyi silmek istediğinizden emin misiniz?",
+      "deleteBudgetDialogMessage": "Bu işlem geri alınamaz.",
+      "deleteBudgetDialogPrimaryActionLabel": "Sil",
+      "deleteBudgetErrorMessage": "Bir hata oluştu",
+      "deleteBudgetSuccessMessage": "Bütçe başarıyla silindi.",
+      "editBudgetDialogTitle": "Bütçeyi Düzenle",
+      "editBudgetDialogMessage": "Bütçe detaylarınızı düzenlemek için aşağıdaki formu kullanın.",
+
+      "budgetActionsHeading": "Bütçe Aksiyonları",
+      "budgetActionsEditLabel": "Düzenle",
+      "budgetActionsDeleteLabel": "Sil",
+
+      "budgetSpent": "Bütçe: {budget} / Harcanan: {spent}"
+    },
     "CreateAccountButton": {
       "label": "Hesap Ekle",
       "createAccountDialogTitle": "Hesap Ekle",

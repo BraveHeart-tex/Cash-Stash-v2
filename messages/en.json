@@ -240,6 +240,21 @@
       "Add Transaction": "Add Transaction",
       "Delete": "Delete"
     },
+    "BudgetCard": {
+      "deleteBudgetDialogTitle": "Are you sure you want to delete this budget?",
+      "deleteBudgetDialogMessage": "This action cannot be undone.",
+      "deleteBudgetDialogPrimaryActionLabel": "Delete",
+      "deleteBudgetErrorMessage": "An error occurred",
+      "deleteBudgetSuccessMessage": "Budget deleted successfully.",
+      "editBudgetDialogTitle": "Edit Budget",
+      "editBudgetDialogMessage": "Use the form below to edit your budget details.",
+
+      "budgetActionsHeading": "Budget Actions",
+      "budgetActionsEditLabel": "Edit",
+      "budgetActionsDeleteLabel": "Delete",
+
+      "budgetSpent": "Budget : {budget} / Spent: {spent}"
+    },
     "CreateAccountButton": {
       "label": "Create an Account",
       "createAccountDialogTitle": "Create an Account",
