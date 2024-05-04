@@ -45,7 +45,7 @@ type GoalsPageFiltersProps = {
 const GoalsPageFilters = ({ shouldRenderPopover }: GoalsPageFiltersProps) => {
   return (
     <div className="flex items-center justify-between gap-2">
-      <RouteSearchInput label="Search" placeholder="Search goals by name" />
+      <RouteSearchInput placeholder="Search goals by name" />
       {shouldRenderPopover && (
         <RouteFiltersPopover
           options={goalFilters}

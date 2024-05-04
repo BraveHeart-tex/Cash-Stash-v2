@@ -68,7 +68,7 @@ const BudgetsPageFilters = ({
   return (
     <div className="flex flex-wrap items-center justify-between gap-2">
       <div className="flex items-center gap-2">
-        <RouteSearchInput label="Search" placeholder="Search budgets by name" />
+        <RouteSearchInput placeholder="Search budgets by name" />
         <BudgetQueryStringCombobox
           initialBudgetCategories={initialBudgetCategories}
         />
