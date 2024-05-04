@@ -421,6 +421,17 @@
         "invalidCode": "Geçersiz doğrulama kodu.",
         "successMessage": "İki faktörlü kimlik doğrulaması etkinleştirildi."
       }
+    },
+    "Account": {
+      "registerBankAccount": {
+        "internalErrorMessage": "İsteğiniz işlenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+        "duplicateAccountEntry": "Ad {name} ve kategori {category} ile hesap zaten mevcut.",
+        "duplicateAccountEntryWithCategory": "Kategori: {category} ile hesap zaten mevcut.",
+        "duplicateAccountEntryWithName": "Ad: {name} ile hesap zaten mevcut."
+      },
+      "updateBankAccount": {},
+      "getPaginatedAccounts": {},
+      "deleteAccount": {}
     }
   },
   "Zod": {

@@ -19,8 +19,8 @@ export const getAccountSchema = (messageConfig: MessageConfig) => {
   return z.object({
     balance: z.coerce
       .number({
-        invalid_type_error: balanceErrorMessage,
         required_error: balanceErrorMessage,
+        invalid_type_error: balanceErrorMessage,
       })
       .transform((val) => (isNaN(val) ? 0 : val))
       .default(0),

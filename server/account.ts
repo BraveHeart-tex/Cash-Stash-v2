@@ -36,8 +36,12 @@ export const registerBankAccount = async ({
     return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
+  const [zodT, actionT] = await Promise.all([
+    getTranslations("Zod.Account"),
+    getTranslations("Actions.Account.registerBankAccount"),
+  ]);
+
   try {
-    const zodT = await getTranslations("Zod.Account");
     const accountSchema = getAccountSchema({
       balanceErrorMessage: zodT("balanceErrorMessage"),
       nameErrorMessage: zodT("nameErrorMessage"),
@@ -58,7 +62,7 @@ export const registerBankAccount = async ({
     );
 
     if (affectedRows === 0 || !account) {
-      return { error: "Error creating account.", fieldErrors: [] };
+      return { error: actionT("internalErrorMessage"), fieldErrors: [] };
     }
 
     await Promise.all([
@@ -85,15 +89,20 @@ export const registerBankAccount = async ({
     if (error instanceof Error) {
       if ("code" in error && error.code === "ER_DUP_ENTRY") {
         return {
-          error: `Account already exists with name ${name} and category ${generateLabelFromEnumValue(category)}.`,
+          error: actionT("duplicateAccountEntry", {
+            name,
+            category: generateLabelFromEnumValue(category),
+          }),
           fieldErrors: [
             {
               field: "name",
-              message: `Account already exists with name: ${name}.`,
+              message: actionT("duplicateAccountEntryWithName", { name }),
             },
             {
               field: "category",
-              message: `Account already exists with category: ${generateLabelFromEnumValue(category)}.`,
+              message: actionT("duplicateAccountEntryWithCategory", {
+                category: generateLabelFromEnumValue(category),
+              }),
             },
           ],
         };
@@ -101,8 +110,7 @@ export const registerBankAccount = async ({
     }
 
     return {
-      error:
-        "An error occurred while registering your bank account. Please try again later.",
+      error: actionT("internalErrorMessage"),
       fieldErrors: [],
     };
   }
