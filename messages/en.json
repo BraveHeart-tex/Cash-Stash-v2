@@ -324,6 +324,11 @@
     },
     "BudgetQueryStringCombobox": {
       "label": "Budget Category"
+    },
+    "Combobox": {
+      "emptyMessage": "No options were found for your search.",
+      "searchPlaceholder": "Search",
+      "selectAnOption": "Select an option"
     }
   },
   "Actions": {
