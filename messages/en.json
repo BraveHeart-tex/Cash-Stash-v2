@@ -432,7 +432,12 @@
         "duplicateAccountEntryWithCategory": "Account already exists with category: {category}",
         "duplicateAccountEntryWithName": "Account already exists with name: {name}"
       },
-      "updateBankAccount": {},
+      "updateBankAccount": {
+        "internalErrorMessage": "An error occurred while processing your request. Please try again later.",
+        "duplicateAccountEntry": "Account already exists with name {name} and category {category}.",
+        "duplicateAccountEntryWithCategory": "Account already exists with category: {category}",
+        "duplicateAccountEntryWithName": "Account already exists with name: {name}"
+      },
       "getPaginatedAccounts": {},
       "deleteAccount": {}
     }

@@ -44,25 +44,17 @@ const accountRepository = {
     };
   },
   async update(accountId: number, data: Partial<AccountInsertModel>) {
-    try {
-      const [updateResult] = await db
-        .update(accounts)
-        .set(data)
-        .where(eq(accounts.id, accountId));
+    const [updateResult] = await db
+      .update(accounts)
+      .set(data)
+      .where(eq(accounts.id, accountId));
 
-      const updatedRow = await this.getById(accountId);
+    const updatedRow = await this.getById(accountId);
 
-      return {
-        affectedRows: updateResult.affectedRows,
-        updatedAccount: updatedRow,
-      };
-    } catch (error) {
-      logger.error("Error updating account.", error);
-      return {
-        affectedRows: 0,
-        updatedAccount: null,
-      };
-    }
+    return {
+      affectedRows: updateResult.affectedRows,
+      updatedAccount: updatedRow,
+    };
   },
   async getMultiple({
     userId,

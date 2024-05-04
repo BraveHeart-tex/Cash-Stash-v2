@@ -125,12 +125,7 @@ export const updateBankAccount = async ({
     return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
-  if (!accountId) {
-    return {
-      error: "Invalid request. Please provide an account ID.",
-      fieldErrors: [],
-    };
-  }
+  const actionT = await getTranslations("Actions.Account.updateBankAccount");
 
   try {
     const zodT = await getTranslations("Zod.Account");
@@ -154,8 +149,7 @@ export const updateBankAccount = async ({
 
     if (affectedRows === 0 || !updatedAccount) {
       return {
-        error:
-          "An error occurred while updating your bank account. Please try again later.",
+        error: actionT("internalErrorMessage"),
         fieldErrors: [],
       };
     }
@@ -181,13 +175,39 @@ export const updateBankAccount = async ({
       fieldErrors: [],
     };
   } catch (error) {
+    logger.error("Error updating bank account", error);
+
     if (error instanceof ZodError) {
       return processZodError(error);
     }
 
+    if (error instanceof Error) {
+      if ("code" in error && error.code === "ER_DUP_ENTRY") {
+        return {
+          error: actionT("duplicateAccountEntry", {
+            name: rest.name,
+            category: generateLabelFromEnumValue(rest.category),
+          }),
+          fieldErrors: [
+            {
+              field: "name",
+              message: actionT("duplicateAccountEntryWithName", {
+                name: rest.name,
+              }),
+            },
+            {
+              field: "category",
+              message: actionT("duplicateAccountEntryWithCategory", {
+                category: generateLabelFromEnumValue(rest.category),
+              }),
+            },
+          ],
+        };
+      }
+    }
+
     return {
-      error:
-        "An error occurred while updating your bank account. Please try again later.",
+      error: actionT("internalErrorMessage"),
       fieldErrors: [],
     };
   }
