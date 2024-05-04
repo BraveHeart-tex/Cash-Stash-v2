@@ -63,6 +63,19 @@
       "OTHER": "Other"
     }
   },
+  "Accounts": {
+    "pageTitle": "Accounts",
+    "AccountsNotFoundMessage": {
+      "pageHasParams": {
+        "heading": "No accounts were found for your search",
+        "message": "Remove existing filters or create an account by clicking the 'Create an account' button."
+      },
+      "noAccountsFound": {
+        "heading": "You don't have any accounts created yet.",
+        "message": "Create an account by clicking the 'Create an account' button."
+      }
+    }
+  },
   "Budgets": {
     "pageTitle": "Budgets",
     "createBudgetButtonLabel": "Create a Budget",

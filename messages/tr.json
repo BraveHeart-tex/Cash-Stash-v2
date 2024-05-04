@@ -63,6 +63,19 @@
       "OTHER": "Diğer"
     }
   },
+  "Accounts": {
+    "pageTitle": "Hesaplar",
+    "AccountsNotFoundMessage": {
+      "pageHasParams": {
+        "heading": "Aramanız için hiçbir hesap bulunamadı",
+        "message": "Mevcut filtreleri kaldırın veya 'Hesap Ekle' düğmesine tıklayarak bir hesap oluşturun."
+      },
+      "noAccountsFound": {
+        "heading": "Henüz bir hesap oluşturmadınız",
+        "message": "'Hesap Ekle' düğmesine tıklayarak bir hesap oluşturun."
+      }
+    }
+  },
   "Budgets": {
     "pageTitle": "Bütçeler",
     "createBudgetButtonLabel": "Bütçe Ekleyin",

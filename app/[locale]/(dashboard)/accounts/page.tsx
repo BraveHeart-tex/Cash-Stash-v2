@@ -6,6 +6,7 @@ import AccountsNotFoundMessage from "@/components/accounts/accounts-not-found-me
 import AccountsPageHeader from "@/components/accounts/accounts-page-header";
 import AccountsPageFilters from "@/components/accounts/accounts-page-filters";
 import AccountCardsList from "@/components/accounts/account-cards-list";
+import { getTranslations } from "next-intl/server";
 
 type AccountsPageSearchParamsType = {
   page: string;
@@ -35,11 +36,12 @@ const AccountsPage = async ({ searchParams }: AccountPageProps) => {
   });
   const { accounts, totalPages } = result;
   const pageHasParams = !!(query || category);
+  const t = await getTranslations("Accounts");
 
   return (
     <main>
       <div className="mx-auto mb-2 p-4 lg:max-w-[1300px] xl:max-w-[1600px]">
-        <AccountsPageHeader />
+        <AccountsPageHeader title={t("pageTitle")} />
         <AccountsPageFilters accounts={accounts} />
         {accounts.length === 0 && (
           <AccountsNotFoundMessage pageHasParams={pageHasParams} />
