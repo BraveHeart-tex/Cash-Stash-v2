@@ -74,7 +74,13 @@
         "heading": "Henüz bir hesap oluşturmadınız",
         "message": "'Hesap Ekle' düğmesine tıklayarak bir hesap oluşturun."
       }
-    }
+    },
+    "RouteFiltersPopover": {
+      "sortByBalanceAsc": "Bakiyeye göre sırala (Düşükten yükseğe)",
+      "sortByBalanceDesc": "Bakiyeye göre sırala (Yüksekten düşüğe)"
+    },
+    "routeSearchInputPlaceholder": "Hesapları isme göre arayın",
+    "queryStringComboBoxSelectLabel": "Hesap Tipi"
   },
   "Budgets": {
     "pageTitle": "Bütçeler",
@@ -273,6 +279,16 @@
       "previous": "Önceki",
       "next": "Sonraki",
       "pageInformation": "Sayfa {currentPage} / {totalPages}"
+    },
+    "RouteSearchInput": {
+      "label": "Arama"
+    },
+    "QueryStringComboBox": {
+      "allLabel": "Hepsi"
+    },
+    "RouteFiltersPopover": {
+      "heading": "Filtreler",
+      "clearLabel": "Temizle"
     }
   },
   "Actions": {

@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useTranslations } from "next-intl";
 
 export type QueryStringComboboxItem = {
   label: string;
@@ -32,6 +33,7 @@ const QueryStringComboBox = ({
   selectLabel,
   renderAsSelect = false,
 }: QueryStringComboBoxProps) => {
+  const t = useTranslations("Components.QueryStringComboBox");
   const [key, setKey] = useQueryState(queryStringKey, {
     defaultValue,
     shallow: false,
@@ -43,18 +45,20 @@ const QueryStringComboBox = ({
 
   const readableLabel = dataset.find((item) => item.value === key)?.label;
 
+  const allLabel = t("allLabel");
+
   return (
     <div>
       <Label>{selectLabel}</Label>
       {renderAsSelect ? (
-        <Select defaultValue={"All"} onValueChange={handleValueChange}>
+        <Select defaultValue={allLabel} onValueChange={handleValueChange}>
           <SelectTrigger className="w-full lg:w-[180px]">
-            <SelectValue>{readableLabel || "All"}</SelectValue>
+            <SelectValue>{readableLabel || allLabel}</SelectValue>
           </SelectTrigger>
           <SelectContent className="max-h-[300px] overflow-auto">
             <SelectGroup>
               <SelectLabel>{selectLabel}</SelectLabel>
-              <SelectItem value={""}>All</SelectItem>
+              <SelectItem value={""}>allLabel</SelectItem>
               {dataset.map((item) => (
                 <SelectItem key={item.value} value={item.value}>
                   {item.label}
@@ -67,7 +71,7 @@ const QueryStringComboBox = ({
         <Combobox
           options={[
             {
-              label: "All",
+              label: allLabel,
               value: "",
             },
             ...dataset,
@@ -76,7 +80,7 @@ const QueryStringComboBox = ({
             handleValueChange(option.value);
           }}
           contentClassName="w-full"
-          triggerPlaceholder={readableLabel || "All"}
+          triggerPlaceholder={readableLabel || allLabel}
         />
       )}
     </div>

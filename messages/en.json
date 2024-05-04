@@ -74,7 +74,13 @@
         "heading": "You don't have any accounts created yet.",
         "message": "Create an account by clicking the 'Create an account' button."
       }
-    }
+    },
+    "RouteFiltersPopover": {
+      "sortByBalanceAsc": "Sort by balance (Low to High)",
+      "sortByBalanceDesc": "Sort by balance (High to Low)"
+    },
+    "routeSearchInputPlaceholder": "Search accounts by name",
+    "queryStringComboBoxSelectLabel": "Account Category"
   },
   "Budgets": {
     "pageTitle": "Budgets",
@@ -274,6 +280,16 @@
       "previous": "Previous",
       "next": "Next",
       "pageInformation": "Page {currentPage} of {totalPages}"
+    },
+    "RouteSearchInput": {
+      "label": "Search"
+    },
+    "QueryStringComboBox": {
+      "allLabel": "All"
+    },
+    "RouteFiltersPopover": {
+      "heading": "Filters",
+      "clearLabel": "Clear"
     }
   },
   "Actions": {

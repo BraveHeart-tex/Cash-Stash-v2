@@ -5,7 +5,7 @@ import {
   AccountSelectModel,
   accounts as accountsTable,
 } from "@/lib/database/schema";
-import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
+import { useTranslations } from "next-intl";
 import { BsSortDown, BsSortUp } from "react-icons/bs";
 
 type AccountsPageFiltersProps = {
@@ -13,28 +13,29 @@ type AccountsPageFiltersProps = {
 };
 
 const AccountsPageFilters = ({ accounts }: AccountsPageFiltersProps) => {
-  const selectDataset = generateOptionsFromEnums(
-    accountsTable.category.enumValues
-  );
+  const t = useTranslations("Accounts");
+  const accountCategoryT = useTranslations("Enums.AccountCategory");
+
+  const selectDataset = accountsTable.category.enumValues.map((category) => ({
+    label: accountCategoryT(category),
+    value: category,
+  }));
 
   return (
     <div className="flex flex-wrap items-center justify-between gap-2">
       <div className="flex items-center gap-2">
-        <RouteSearchInput
-          label="Search"
-          placeholder="Search accounts by name"
-        />
+        <RouteSearchInput placeholder={t("routeSearchInputPlaceholder")} />
         <QueryStringComboBox
           dataset={selectDataset}
           queryStringKey="category"
-          selectLabel="Account Category"
+          selectLabel={t("queryStringComboBoxSelectLabel")}
         />
       </div>
       {accounts.length > 1 && (
         <RouteFiltersPopover
           options={[
             {
-              label: "Sort by balance (Low to High)",
+              label: t("RouteFiltersPopover.sortByBalanceAsc"),
               icon: <BsSortUp />,
               data: {
                 sortBy: "balance",
@@ -42,7 +43,7 @@ const AccountsPageFilters = ({ accounts }: AccountsPageFiltersProps) => {
               },
             },
             {
-              label: "Sort by balance (High to Low)",
+              label: t("RouteFiltersPopover.sortByBalanceDesc"),
               icon: <BsSortDown />,
               data: {
                 sortBy: "balance",
