@@ -95,6 +95,16 @@
       "sortBySpentAmountAsc": "Sort by Spending (Düşükten Yükseğe)",
       "sortByBudgetAmountDesc": "Sort by Budget (Yüksekten Düşüğe)",
       "sortByBudgetAmountAsc": "Sort by Budget (Düşükten Yükseğe)"
+    },
+    "BudgetsNotFoundMessage": {
+      "pageHasParams": {
+        "heading": "Aramanız için bütçe bulunamadı",
+        "message": "Mevcut filtreleri kaldırın veya 'Bütçe Ekleyin' düğmesine tıklayarak bir bütçe oluşturun."
+      },
+      "noBudgetsFound": {
+        "heading": "Henüz oluşturulmuş bir bütçeniz yok.",
+        "message": "'Bütçe Ekleyin' düğmesine tıklayarak bir bütçe oluşturun."
+      }
     }
   },
   "Dashboard": {

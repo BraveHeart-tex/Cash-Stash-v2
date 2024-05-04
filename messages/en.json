@@ -96,6 +96,17 @@
       "sortBySpentAmountAsc": "Sort by Spending (Low to High)",
       "sortByBudgetAmountDesc": "Sort by Budget (High to Low)",
       "sortByBudgetAmountAsc": "Sort by Budget (Low to High)"
+    },
+
+    "BudgetsNotFoundMessage": {
+      "pageHasParams": {
+        "heading": "No budgets were found for your search",
+        "message": "Remove existing filters or create a budget by clicking the 'Create a Budget' button."
+      },
+      "noBudgetsFound": {
+        "heading": "You don't have any budgets created yet.",
+        "message": "Create a budget by clicking the 'Create a Budget' button."
+      }
     }
   },
   "Dashboard": {
