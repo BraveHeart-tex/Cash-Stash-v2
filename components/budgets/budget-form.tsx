@@ -28,12 +28,14 @@ import { cn } from "@/lib/utils/stringUtils/cn";
 import CreateBudgetCategoryPopover from "@/components/budgets/create-budget-category-popover";
 import MaskedAmountInput from "@/components/ui/masked-amount-input";
 import { BaseValidatedResponse } from "@/typings/baseTypes";
+import { useTranslations } from "next-intl";
 
 type BudgetFormProps = {
   data?: BudgetSelectModel;
 };
 
 const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
+  const t = useTranslations("Components.BudgetForm");
   const [isPending, startTransition] = useTransition();
   const closeGenericModal = useGenericModalStore(
     (state) => state.closeGenericModal
@@ -48,20 +50,19 @@ const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
   const setCategories = useCategoriesStore((state) => state.setCategories);
 
   const entityId = budgetToBeUpdated?.id;
+  const categoryErrorMessage = t("categoryErrorMessage");
 
   useEffect(() => {
     startTransition(async () => {
       const budgetCategories = await getCategoriesByType(CATEGORY_TYPES.BUDGET);
       if (!budgetCategories) {
-        toast.error(
-          "There was an error while getting budget categories. Please try again later."
-        );
+        toast.error(categoryErrorMessage);
         return;
       }
 
       setCategories(budgetCategories);
     });
-  }, [setCategories]);
+  }, [setCategories, categoryErrorMessage]);
 
   useEffect(() => {
     if (budgetToBeUpdated) {
@@ -79,8 +80,8 @@ const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
   const handleFormSubmit = async (values: BudgetSchemaType) => {
     if (isPending) return;
     if (entityId && compareMatchingKeys(budgetToBeUpdated, values)) {
-      toast.info("No changes detected.", {
-        description: "You haven't made any changes to the budget.",
+      toast.info(t("noChangesMessage"), {
+        description: t("noChangesDescription"),
       });
       return;
     }
@@ -110,18 +111,16 @@ const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
     }
 
     if (result.error) {
-      toast.error("An error occurred.", {
+      toast.error(t("anErrorOccurredMessage"), {
         description: result.error,
       });
     } else {
       const successMessage = {
-        create: "Your budget has been created.",
-        update: "Your budget has been updated.",
+        create: t("createBudgetSuccessMessage"),
+        update: t("updateBudgetSuccessMessage"),
       };
       router.refresh();
-      toast.success("Success!", {
-        description: successMessage[entityId ? "update" : "create"],
-      });
+      toast.success(successMessage[entityId ? "update" : "create"]);
       closeGenericModal();
     }
   };
@@ -150,9 +149,12 @@ const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Budget Name</FormLabel>
+              <FormLabel>{t("budgetNameField.label")}</FormLabel>
               <FormControl>
-                <Input placeholder="Give your budget a name" {...field} />
+                <Input
+                  placeholder={t("budgetNameField.placeholder")}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -163,11 +165,11 @@ const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
           name="budgetAmount"
           render={({ field }) => (
             <FormItem>
-              <CurrencyFormLabel label="Budget Amount" />
+              <CurrencyFormLabel label={t("budgetAmountField.label")} />
               <FormControl>
                 <MaskedAmountInput
                   initialValue={field.value}
-                  placeholder="Enter the budget amount"
+                  placeholder={t("budgetAmountField.placeholder")}
                   id="budgetAmount"
                   onMaskedValueChange={(value) => {
                     field.onChange(value);
@@ -184,10 +186,10 @@ const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
           name="spentAmount"
           render={({ field }) => (
             <FormItem>
-              <CurrencyFormLabel label="Spent Amount" />
+              <CurrencyFormLabel label={t("spentAmountField.label")} />
               <FormControl>
                 <MaskedAmountInput
-                  placeholder="Enter the spent amount (optional)"
+                  placeholder={t("spentAmountField.placeholder")}
                   initialValue={field.value}
                   id="spentAmount"
                   onMaskedValueChange={(value) => {
@@ -205,7 +207,7 @@ const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
           name="categoryId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Budget Category</FormLabel>
+              <FormLabel>{t("budgetCategoryField.label")}</FormLabel>
               <FormControl>
                 <div className="flex items-center gap-1">
                   <Combobox
@@ -222,14 +224,14 @@ const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
                       "focus:outline focus:outline-1 focus:outline-offset-1 focus:outline-destructive",
                       !isPending && isBudgetCategoryListEmpty && "hidden"
                     )}
-                    triggerPlaceholder="Select a budget category"
+                    triggerPlaceholder={t("budgetCategoryField.placeholder")}
                     onSelect={(option) => {
                       field.onChange(+option.value);
                     }}
                   />
                   {!isPending && isBudgetCategoryListEmpty && (
                     <p className="mr-auto text-muted-foreground">
-                      Looks like there are no budget categories yet.
+                      {t("budgetCategoryField.noCategoriesMessage")}
                     </p>
                   )}
                   <CreateBudgetCategoryPopover
@@ -247,11 +249,11 @@ const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
           className="w-full"
           type="submit"
           name="submit-budget-form-button"
-          aria-label="Submit budget form"
-          loading={form.formState.isSubmitting || isPending}
+          aria-label={t(`submitButtonLabel.${entityId ? "update" : "create"}`)}
+          loading={isPending}
           disabled={form.formState.isSubmitting || isPending}
         >
-          {entityId ? "Update Budget" : "Create Budget"}
+          {t(`submitButtonLabel.${entityId ? "update" : "create"}`)}
         </Button>
       </form>
     </Form>

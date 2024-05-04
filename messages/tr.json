@@ -273,6 +273,67 @@
 
       "budgetSpent": "Bütçe: {budget} / Harcanan: {spent}"
     },
+    "BudgetForm": {
+      "categoryErrorMessage": "Bütçe kategorileri getirilirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+      "noChangesMessage": "Herhangi bir değişiklik tespit edilmedi.",
+      "noChangesDescription": "Bütçenizde herhangi bir değişiklik yapmadınız.",
+      "anErrorOccurredMessage": "Bir hata oluştu",
+      "createBudgetSuccessMessage": "Bütçe başarıyla oluşturuldu.",
+      "updateBudgetSuccessMessage": "Bütçe başarıyla güncellendi.",
+      "successTitle": "Başarılı!",
+
+      "budgetNameField": {
+        "label": "Bütçe Adı",
+        "placeholder": "Bütçenize bir isim verin"
+      },
+      "budgetAmountField": {
+        "label": "Bütçe Miktarı",
+        "placeholder": "Bütçe miktarını girin"
+      },
+      "spentAmountField": {
+        "label": "Harcanan Miktar",
+        "placeholder": "Harcama tutarınızı girin (isteğe bağlı)"
+      },
+      "budgetCategoryField": {
+        "label": "Bütçe Kategorisi",
+        "placeholder": "Bir bütçe kategorisi seçin",
+        "noCategoriesMessage": "Görünüşe göre henüz herhangi bir bütçe kategorisi oluşturmamışsınız."
+      },
+      "submitButtonLabel": {
+        "create": "Bütçe Oluştur",
+        "update": "Bütçeyi Güncelle"
+      }
+    },
+    "CategoryForm": {
+      "noChangesMessage": "Herhangi bir değişiklik tespit edilmedi.",
+      "noChangesDescription": "Kategorinizde herhangi bir değişiklik yapmadınız.",
+      "anErrorOccurredMessage": "Bir hata oluştu",
+      "successMessage": {
+        "create": "Kategori başarıyla oluşturuldu",
+        "update": "Kategori başarıyla güncellendi"
+      },
+      "nameField": {
+        "label": "Kategori Adı",
+        "placeholder": "Kategori adını giriniz"
+      },
+      "typeField": {
+        "label": "Kategori Tipi",
+        "placeholder": "Kategori tipi seçiniz",
+        "options": {
+          "budget": "Bütçe",
+          "transaction": "İşlem"
+        },
+        "description": "Oluşturmak istediğiniz kategori türünü ifade eder."
+      },
+      "submitButtonLabel": {
+        "create": "Kategori Oluştur",
+        "update": "Kategoriyi güncelle"
+      }
+    },
+    "CreateBudgetCategoryPopover": {
+      "title": "Bütçe Kategorisi Ekle",
+      "description": "Aşağıdaki formu kullanarak yeni bir bütçe kategorisi ekleyin."
+    },
     "CreateAccountButton": {
       "label": "Hesap Ekle",
       "createAccountDialogTitle": "Hesap Ekle",

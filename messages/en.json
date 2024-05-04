@@ -276,6 +276,67 @@
 
       "budgetSpent": "Budget : {budget} / Spent: {spent}"
     },
+    "BudgetForm": {
+      "categoryErrorMessage": "There was an error while getting budget categories. Please try again later.",
+      "noChangesMessage": "No changes detected.",
+      "noChangesDescription": "You haven't made any changes to your budget.",
+      "anErrorOccurredMessage": "An error occurred",
+      "createBudgetSuccessMessage": "Budget created successfully",
+      "updateBudgetSuccessMessage": "Budget updated successfully",
+      "successTitle": "Success!",
+
+      "budgetNameField": {
+        "label": "Budget Name",
+        "placeholder": "Give your budget a name"
+      },
+      "budgetAmountField": {
+        "label": "Budget Amount",
+        "placeholder": "Enter your budget amount"
+      },
+      "spentAmountField": {
+        "label": "Spent Amount",
+        "placeholder": "Enter your spent amount (optional)"
+      },
+      "budgetCategoryField": {
+        "label": "Budget Category",
+        "placeholder": "Select a budget category",
+        "noCategoriesMessage": "It appears you haven't created any budget categories yet."
+      },
+      "submitButtonLabel": {
+        "create": "Create Budget",
+        "update": "Update Budget"
+      }
+    },
+    "CategoryForm": {
+      "noChangesMessage": "No changes detected.",
+      "noChangesDescription": "You haven't made any changes to the category",
+      "anErrorOccurredMessage": "An error occurred",
+      "successMessage": {
+        "create": "Category created successfully",
+        "update": "Category updated successfully"
+      },
+      "nameField": {
+        "label": "Category Name",
+        "placeholder": "Enter category name"
+      },
+      "typeField": {
+        "label": "Category Type",
+        "placeholder": "Select category type",
+        "options": {
+          "budget": "Budget",
+          "transaction": "Transaction"
+        },
+        "description": "Refers to the type of category you want to create."
+      },
+      "submitButtonLabel": {
+        "create": "Create Category",
+        "update": "Update Category"
+      }
+    },
+    "CreateBudgetCategoryPopover": {
+      "title": "Add Budget Category",
+      "description": "Add a new budget category by using the form below."
+    },
     "CreateAccountButton": {
       "label": "Create an Account",
       "createAccountDialogTitle": "Create an Account",
