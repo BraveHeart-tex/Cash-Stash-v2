@@ -290,6 +290,12 @@
     "RouteFiltersPopover": {
       "heading": "Filters",
       "clearLabel": "Clear"
+    },
+    "LocaleToggle": {
+      "tr": "Turkish",
+      "en": "English",
+      "screenReaderLabel": "Change language",
+      "switchItemAriaLabel": "Change language to {language}"
     }
   },
   "Actions": {

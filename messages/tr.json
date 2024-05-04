@@ -289,6 +289,12 @@
     "RouteFiltersPopover": {
       "heading": "Filtreler",
       "clearLabel": "Temizle"
+    },
+    "LocaleToggle": {
+      "tr": "Türkçe",
+      "en": "İngilizce",
+      "screenReaderLabel": "Uygulama dilini değiştir",
+      "switchItemAriaLabel": "Uygulama dilini {language} olarak değiştir"
     }
   },
   "Actions": {

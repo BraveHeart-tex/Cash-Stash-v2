@@ -1,6 +1,7 @@
 import { verifyRequestOrigin } from "lucia";
 import { NextRequest, NextResponse } from "next/server";
 import createIntlMiddleware from "next-intl/middleware";
+import { LOCALES } from "@/lib/constants";
 
 export async function middleware(request: NextRequest) {
   const authorizationToken = request.headers.get("Authorization") || "";
@@ -40,7 +41,7 @@ export async function middleware(request: NextRequest) {
   }
 
   const handleI18nRouting = createIntlMiddleware({
-    locales: ["en", "tr"],
+    locales: LOCALES,
     defaultLocale: "en",
   });
 

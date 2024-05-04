@@ -36,6 +36,8 @@ export const CATEGORY_TYPES = {
   BUDGET: 2,
 } as const;
 
+export const LOCALES = ["en", "tr"] as const;
+
 export const MAX_VERIFICATION_CODE_ATTEMPTS = 3 as const;
 export const SEND_VERIFICATION_CODE_RATE_LIMIT = 3 as const;
 export const MAX_LOGIN_REQUESTS_PER_MINUTE = 5 as const;
