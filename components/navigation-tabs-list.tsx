@@ -21,6 +21,7 @@ const NavigationTabsList = () => {
               className={
                 "relative data-[state=active]:bg-transparent data-[state=active]:text-primary-foreground"
               }
+              tabIndex={0}
               data-state={pathName === page.link ? "active" : "inactive"}
             >
               <Link href={page.link}>

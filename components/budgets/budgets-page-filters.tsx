@@ -4,6 +4,7 @@ import BudgetQueryStringCombobox from "@/components/budgets/budget-query-string-
 import { GiPayMoney } from "react-icons/gi";
 import { FaPiggyBank } from "react-icons/fa";
 import { BudgetSelectModel, CategorySelectModel } from "@/lib/database/schema";
+import { useTranslations } from "next-intl";
 
 type BudgetsPageFiltersProps = {
   budgets: BudgetSelectModel[];
@@ -65,10 +66,11 @@ const BudgetsPageFilters = ({
   budgets,
   initialBudgetCategories,
 }: BudgetsPageFiltersProps) => {
+  const t = useTranslations("Budgets.BudgetsPageFilters");
   return (
     <div className="flex flex-wrap items-center justify-between gap-2">
       <div className="flex items-center gap-2">
-        <RouteSearchInput placeholder="Search budgets by name" />
+        <RouteSearchInput placeholder={t("routeSearchInputPlaceholder")} />
         <BudgetQueryStringCombobox
           initialBudgetCategories={initialBudgetCategories}
         />

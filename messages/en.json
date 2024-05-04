@@ -86,7 +86,11 @@
     "pageTitle": "Budgets",
     "createBudgetButtonLabel": "Create a Budget",
     "createBudgetDialogTitle": "Create a budget",
-    "createBudgetDialogDescription": "Fill out the form below to create a budget."
+    "createBudgetDialogDescription": "Fill out the form below to create a budget.",
+
+    "BudgetsPageFilters": {
+      "routeSearchInputPlaceholder": "Search budgets by name"
+    }
   },
   "Dashboard": {
     "accountsSummaryTitle": "Accounts Summary",
@@ -311,6 +315,9 @@
       "en": "English",
       "screenReaderLabel": "Change language",
       "switchItemAriaLabel": "Change language to {language}"
+    },
+    "BudgetQueryStringCombobox": {
+      "label": "Budget Category"
     }
   },
   "Actions": {

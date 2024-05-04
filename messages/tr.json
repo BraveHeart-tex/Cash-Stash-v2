@@ -86,7 +86,10 @@
     "pageTitle": "Bütçeler",
     "createBudgetButtonLabel": "Bütçe Ekleyin",
     "createBudgetDialogTitle": "Bütçe Ekleyin",
-    "createBudgetDialogDescription": "Aşağıdaki formu kullanarak bütçenizi oluşturun."
+    "createBudgetDialogDescription": "Aşağıdaki formu kullanarak bütçenizi oluşturun.",
+    "BudgetsPageFilters": {
+      "routeSearchInputPlaceholder": "Bütçeleri isme göre arayın"
+    }
   },
   "Dashboard": {
     "accountsSummaryTitle": "Hesaplara Genel Bakış",
@@ -310,6 +313,9 @@
       "en": "İngilizce",
       "screenReaderLabel": "Uygulama dilini değiştir",
       "switchItemAriaLabel": "Uygulama dilini {language} olarak değiştir"
+    },
+    "BudgetQueryStringCombobox": {
+      "label": "Bütçe Kategorisi"
     }
   },
   "Actions": {
