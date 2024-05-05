@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "@/navigation";
 import { useEffect, useMemo, useTransition } from "react";
-import budgetSchema, { BudgetSchemaType } from "@/schemas/budget-schema";
+import { BudgetSchemaType, getBudgetSchema } from "@/schemas/budget-schema";
 import { createBudget, updateBudget } from "@/server/budget";
 import useGenericModalStore from "@/store/genericModalStore";
 import { toast } from "sonner";
@@ -36,11 +36,20 @@ type BudgetFormProps = {
 
 const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
   const t = useTranslations("Components.BudgetForm");
+  const zodT = useTranslations("Zod.Budget");
   const [isPending, startTransition] = useTransition();
   const closeGenericModal = useGenericModalStore(
     (state) => state.closeGenericModal
   );
   const router = useRouter();
+  const budgetSchema = getBudgetSchema({
+    blankName: zodT("blankName"),
+    budgetAmountRequired: zodT("budgetAmountRequired"),
+    budgetAmountInvalid: zodT("budgetAmountInvalid"),
+    budgetAmountPositive: zodT("budgetAmountPositive"),
+    budgetCategoryRequired: zodT("budgetCategoryRequired"),
+    spentAmountNegative: zodT("spentAmountNegative"),
+  });
   const form = useForm<BudgetSchemaType>({
     resolver: zodResolver(budgetSchema),
   });

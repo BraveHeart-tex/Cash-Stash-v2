@@ -486,6 +486,14 @@
       "categoryRequiredErrorMessage": "Hesap Kategorisi zorunludur.",
       "categoryInvalidTypeError": "Geçersiz hesap kategorisi.",
       "nameErrorMessage": "Hesap ismi zorunludur."
+    },
+    "Budget": {
+      "blankName": "Bütçe ismi zorunludur.",
+      "budgetAmountPositive": "Bütçe tutarı pozitif bir sayı olmalıdır.",
+      "budgetAmountRequired": "Bütçe tutarı zorunludur.",
+      "budgetAmountInvalid": "Bütçe tutarı pozitif bir sayı olmalıdır.",
+      "budgetCategoryRequired": "Bütçe kategorisi zorunludur.",
+      "spentAmountNegative": "Harcanan miktar negatif olamaz."
     }
   }
 }

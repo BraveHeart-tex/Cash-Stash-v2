@@ -488,6 +488,14 @@
       "categoryRequiredErrorMessage": "Account Category is required.",
       "categoryInvalidTypeError": "Invalid account category.",
       "nameErrorMessage": "Account name is required."
+    },
+    "Budget": {
+      "blankName": "Name cannot be blank.",
+      "budgetAmountPositive": "Budget amount must be a positive number.",
+      "budgetAmountRequired": "Budget amount is required.",
+      "budgetAmountInvalid": "Budget amount must be a positive number.",
+      "budgetCategoryRequired": "Budget category is required.",
+      "spentAmountNegative": "Spent amount can't be negative."
     }
   }
 }

@@ -1,6 +1,6 @@
 "use server";
 import { getUser } from "@/lib/auth/session";
-import budgetSchema, { BudgetSchemaType } from "@/schemas/budget-schema";
+import { BudgetSchemaType, getBudgetSchema } from "@/schemas/budget-schema";
 import { BudgetSelectModel } from "@/lib/database/schema";
 import { redirect } from "@/navigation";
 import { ZodError } from "zod";
@@ -21,6 +21,7 @@ import {
   GetPaginatedBudgetsReturnType,
   UpdateBudgetReturnType,
 } from "@/typings/budgets";
+import { getTranslations } from "next-intl/server";
 
 export const createBudget = async (
   data: BudgetSchemaType
@@ -31,6 +32,15 @@ export const createBudget = async (
   }
 
   try {
+    const zodT = await getTranslations("Zod.Budget");
+    const budgetSchema = getBudgetSchema({
+      blankName: zodT("blankName"),
+      budgetAmountRequired: zodT("budgetAmountRequired"),
+      budgetAmountInvalid: zodT("budgetAmountInvalid"),
+      budgetAmountPositive: zodT("budgetAmountPositive"),
+      budgetCategoryRequired: zodT("budgetCategoryRequired"),
+      spentAmountNegative: zodT("spentAmountNegative"),
+    });
     const validatedData = budgetSchema.parse(data);
     const budgetDto = {
       ...validatedData,
@@ -97,6 +107,15 @@ export const updateBudget = async (
     return { error: `Budget to be updated cannot be found.`, fieldErrors: [] };
 
   try {
+    const zodT = await getTranslations("Zod.Budget");
+    const budgetSchema = getBudgetSchema({
+      blankName: zodT("blankName"),
+      budgetAmountRequired: zodT("budgetAmountRequired"),
+      budgetAmountInvalid: zodT("budgetAmountInvalid"),
+      budgetAmountPositive: zodT("budgetAmountPositive"),
+      budgetCategoryRequired: zodT("budgetCategoryRequired"),
+      spentAmountNegative: zodT("spentAmountNegative"),
+    });
     const validatedData = budgetSchema.parse(values);
 
     const updateBudgetDto = {
