@@ -431,6 +431,7 @@ export const resendEmailVerificationCode = async (email: string) => {
 };
 
 export const sendPasswordResetEmail = async (email: string) => {
+  const actionT = await getTranslations("Actions.Auth.sendPasswordResetEmail");
   const header = headers();
   const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
     ","
@@ -438,7 +439,7 @@ export const sendPasswordResetEmail = async (email: string) => {
   const count = await verifyResetPasswordLinkRequestRateLimit(ipAddress);
   if (count >= MAX_RESET_PASSWORD_LINK_REQUESTS_PER_MINUTE) {
     return {
-      message: "Too many requests. Please wait before trying again.",
+      message: actionT("rateLimitExceeded"),
       isError: true,
     };
   }
@@ -447,8 +448,7 @@ export const sendPasswordResetEmail = async (email: string) => {
 
   if (!user) {
     return {
-      message:
-        "If you have an account, an email has been sent to you. Please check your inbox. Make sure to check your spam folder",
+      message: actionT("successMessage"),
       isError: false,
     };
   }
@@ -460,8 +460,7 @@ export const sendPasswordResetEmail = async (email: string) => {
 
   return {
     isError: false,
-    message:
-      "If you have an account, an email has been sent to you. Please check your inbox. Make sure to check your spam folder",
+    message: actionT("successMessage"),
   };
 };
 
