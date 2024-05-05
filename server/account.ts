@@ -305,11 +305,12 @@ export const deleteAccount = async (accountId: number) => {
     return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
+  const t = await getTranslations("Actions.Account.deleteAccount");
   try {
     const affectedRows = await accountRepository.deleteById(accountId);
 
     if (affectedRows === 0) {
-      return { error: "An error occurred while deleting the account." };
+      return { error: t("anErrorOccurred") };
     }
 
     await Promise.all([
@@ -326,9 +327,9 @@ export const deleteAccount = async (accountId: number) => {
       redisService.del(getAccountKey(accountId)),
     ]);
 
-    return { data: "Account deleted successfully." };
+    return { data: t("successMessage") };
   } catch (error) {
-    return { error: "An error occurred while deleting the account." };
+    return { error: t("anErrorOccurred") };
   }
 };
 
@@ -343,7 +344,7 @@ export const getTransactionsForAccount = async (accountId: number) => {
     const key = getAccountTransactionsKey(accountId);
     const cachedData = await redisService.get(key);
     if (cachedData) {
-      console.info("getTransactionsForAccount CACHE HIT");
+      logger.info("getTransactionsForAccount CACHE HIT");
       return JSON.parse(cachedData);
     }
 

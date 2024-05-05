@@ -436,7 +436,10 @@
         "duplicateAccountEntryWithName": "Ad: {name} ile hesap zaten mevcut."
       },
       "getPaginatedAccounts": {},
-      "deleteAccount": {}
+      "deleteAccount": {
+        "anErrorOccurred": "Hesap silinirken bir hata oluştu.",
+        "successMessage": "Hesap başarıyla silindi."
+      }
     }
   },
   "Zod": {

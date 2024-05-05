@@ -438,8 +438,10 @@
         "duplicateAccountEntryWithCategory": "Account already exists with category: {category}",
         "duplicateAccountEntryWithName": "Account already exists with name: {name}"
       },
-      "getPaginatedAccounts": {},
-      "deleteAccount": {}
+      "deleteAccount": {
+        "anErrorOccurred": "An error occurred while deleting the account.",
+        "successMessage": "Account deleted successfully."
+      }
     }
   },
   "Zod": {
