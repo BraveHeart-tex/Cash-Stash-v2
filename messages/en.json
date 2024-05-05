@@ -430,6 +430,10 @@
         "rateLimitExceeded": "You have made too many requests. Please wait a minute before trying again.",
         "successMessage": "If you have an account, an email has been sent to you. Please check your inbox. Make sure to check your spam folder"
       },
+      "resetPassword": {
+        "invalidRequest": "Invalid request.",
+        "successMessage": "Password reset successfully. You are being redirected..."
+      },
       "validateOTP": {
         "rateLimitExceeded": "Too many attempts. You are being redirected to the login page.",
         "invalidRequest": "Invalid request.",

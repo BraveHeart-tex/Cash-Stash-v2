@@ -504,11 +504,12 @@ export const resetPassword = async ({
   token: string;
   password: string;
 }) => {
+  const actionT = await getTranslations("Actions.Auth.resetPassword");
   const user = await userRepository.getVerifiedUserByEmail(email);
 
   if (!user) {
     return {
-      error: "Invalid request",
+      error: actionT("invalidRequest"),
       successMessage: null,
     };
   }
@@ -517,7 +518,7 @@ export const resetPassword = async ({
 
   if (!resetToken || !isWithinExpirationDate(new Date(resetToken.expiresAt))) {
     return {
-      error: "Invalid request",
+      error: actionT("invalidRequest"),
       successMessage: null,
     };
   }
@@ -541,7 +542,7 @@ export const resetPassword = async ({
 
   return {
     error: null,
-    successMessage: "Password reset successfully. You are being redirected...",
+    successMessage: actionT("successMessage"),
   };
 };
 
