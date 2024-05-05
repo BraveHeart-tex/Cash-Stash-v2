@@ -380,6 +380,9 @@ export const handleEmailVerification = async (email: string, code: string) => {
 };
 
 export const resendEmailVerificationCode = async (email: string) => {
+  const actionT = await getTranslations(
+    "Actions.Auth.resendEmailVerificationCode"
+  );
   const header = headers();
   const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
     ","
@@ -387,7 +390,7 @@ export const resendEmailVerificationCode = async (email: string) => {
   const count = await checkIPBasedSendVerificationCodeRateLimit(ipAddress);
   if (count >= SEND_VERIFICATION_CODE_RATE_LIMIT) {
     return {
-      message: "Too many requests. Please wait before trying again.",
+      message: actionT("rateLimitExceeded"),
       isError: true,
     };
   }
@@ -396,8 +399,7 @@ export const resendEmailVerificationCode = async (email: string) => {
 
   if (!user) {
     return {
-      message:
-        "If you have an account, an email has been sent to you. Please check your inbox. Make sure to check your spam folder",
+      message: actionT("successMessage"),
       isError: false,
     };
   }
@@ -408,7 +410,7 @@ export const resendEmailVerificationCode = async (email: string) => {
 
   if (userIdBasedCount >= SEND_VERIFICATION_CODE_RATE_LIMIT) {
     return {
-      message: "Too many requests. Please wait before trying again.",
+      message: actionT("rateLimitExceeded"),
       isError: true,
     };
   }
@@ -424,8 +426,7 @@ export const resendEmailVerificationCode = async (email: string) => {
 
   return {
     isError: false,
-    message:
-      "If you have an account, an email has been sent to you. Please check your inbox. Make sure to check your spam folder",
+    message: actionT("successMessage"),
   };
 };
 

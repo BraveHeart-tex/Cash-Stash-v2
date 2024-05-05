@@ -419,6 +419,10 @@
         "successMessage": "E-posta başarıyla doğrulandı. Yönlendiriliyorsunuz...",
         "internalErrorMessage": "İsteğiniz işlenirken bir sorun oluştu. Lütfen daha sonra tekrar deneyin."
       },
+      "resendEmailVerificationCode": {
+        "rateLimitExceeded": "Çok fazla deneme yaptınız. Giriş sayfasına yönlendiriliyorsunuz.",
+        "successMessage": "Eğer bir hesabınız varsa, size bir e-posta gönderilmiştir. Lütfen gelen kutunuzu veya spam klasörünüzü kontrol edin."
+      },
       "validateOTP": {
         "rateLimitExceeded": "Çok fazla deneme yaptınız. Giriş sayfasına yönlendiriliyorsunuz.",
         "invalidRequest": "Geçersiz istek.",
