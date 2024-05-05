@@ -314,6 +314,8 @@ export const checkEmailValidityBeforeVerification = async (email: string) => {
 };
 
 export const handleEmailVerification = async (email: string, code: string) => {
+  const actionT = await getTranslations("Actions.Auth.handleEmailVerification");
+
   try {
     const user = await userRepository.getUnverifiedUserByEmail(email);
 
@@ -334,7 +336,7 @@ export const handleEmailVerification = async (email: string, code: string) => {
       if (verificationCount >= MAX_VERIFICATION_CODE_ATTEMPTS) {
         await emailVerificationCodeRepository.deleteByUserId(user.id);
         return {
-          error: "Too many attempts. Please wait before trying again.",
+          error: actionT("rateLimitExceeded"),
           successMessage: null,
           redirectPath: EMAIL_VERIFICATION_REDIRECTION_PATHS.TOO_MANY_REQUESTS,
         };
@@ -343,8 +345,9 @@ export const handleEmailVerification = async (email: string, code: string) => {
       const triesLeft = MAX_VERIFICATION_CODE_ATTEMPTS - verificationCount;
 
       return {
-        error:
-          "Invalid verification code. You have " + triesLeft + " tries left",
+        error: actionT("invalidCode", {
+          attemptsLeft: triesLeft,
+        }),
         successMessage: null,
       };
     }
@@ -365,14 +368,12 @@ export const handleEmailVerification = async (email: string, code: string) => {
 
     return {
       error: null,
-      successMessage:
-        "Email verified successfully. You are being redirected...",
+      successMessage: actionT("successMessage"),
     };
   } catch (error) {
     logger.error("Error while verifying email", error);
     return {
-      error:
-        "Something went wrong while processing your request. Please try again later.",
+      error: actionT("internalErrorMessage"),
       successMessage: null,
     };
   }

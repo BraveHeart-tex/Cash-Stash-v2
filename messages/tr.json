@@ -407,11 +407,16 @@
         "incorrectCredentials": "Yanlış e-posta veya şifre.",
         "internalErrorMessage": "İsteğiniz işlenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin."
       },
-      "logout": {},
       "register": {
         "rateLimitExceeded": "Çok fazla deneme yaptınız. Giriş sayfasına yönlendiriliyorsunuz.",
         "unverifiedEmailAlreadyExists": "Belirtilen e-postaya sahip kullanıcı zaten mevcut. Lütfen e-postanızı doğrulayın.",
         "userAlreadyExists": "Belirtilen e-postaya sahip kullanıcı zaten mevcut: {email}",
+        "internalErrorMessage": "İsteğiniz işlenirken bir sorun oluştu. Lütfen daha sonra tekrar deneyin."
+      },
+      "handleEmailVerification": {
+        "rateLimitExceeded": "Çok fazla deneme yaptınız. Giriş sayfasına yönlendiriliyorsunuz.",
+        "invalidCode": "Geçersiz doğrulama kodu. {attemptsLeft} deneme hakkınız kaldı.",
+        "successMessage": "E-posta başarıyla doğrulandı. Yönlendiriliyorsunuz...",
         "internalErrorMessage": "İsteğiniz işlenirken bir sorun oluştu. Lütfen daha sonra tekrar deneyin."
       },
       "validateOTP": {

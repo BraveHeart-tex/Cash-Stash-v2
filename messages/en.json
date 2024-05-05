@@ -410,11 +410,16 @@
         "incorrectCredentials": "Incorrect email or password.",
         "internalErrorMessage": "An error occurred while processing your request. Please try again later."
       },
-      "logout": {},
       "register": {
         "rateLimitExceeded": "Too many attempts. You are being redirected to the login page.",
         "unverifiedEmailAlreadyExists": "User already exists with the given email. Please verify your email.",
         "userAlreadyExists": "User already exists with the given email: {email}",
+        "internalErrorMessage": "There was a problem while processing your request. Please try again later."
+      },
+      "handleEmailVerification": {
+        "rateLimitExceeded": "You have made too many requests. Please wait a minute before trying again.",
+        "invalidCode": "Invalid verification code. You have {attemptsLeft, plural, =1 {1 attempt} other {# attempts}} left.",
+        "successMessage": "Email verified successfully. You are being redirected...",
         "internalErrorMessage": "There was a problem while processing your request. Please try again later."
       },
       "validateOTP": {
