@@ -405,7 +405,11 @@
   },
   "Actions": {
     "Auth": {
-      "login": {},
+      "login": {
+        "rateLimitExceeded": "You have made too many requests. Please wait a minute before trying again.",
+        "incorrectCredentials": "Incorrect email or password.",
+        "internalErrorMessage": "An error occurred while processing your request. Please try again later."
+      },
       "logout": {},
       "register": {
         "rateLimitExceeded": "Too many attempts. You are being redirected to the login page.",

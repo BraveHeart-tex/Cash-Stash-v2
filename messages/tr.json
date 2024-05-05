@@ -402,7 +402,11 @@
   },
   "Actions": {
     "Auth": {
-      "login": {},
+      "login": {
+        "rateLimitExceeded": "Çok fazla denemede bulundunuz. Lütfen tekrar denemeden önce bir dakika bekleyin.",
+        "incorrectCredentials": "Yanlış e-posta veya şifre.",
+        "internalErrorMessage": "İsteğiniz işlenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin."
+      },
       "logout": {},
       "register": {
         "rateLimitExceeded": "Çok fazla deneme yaptınız. Giriş sayfasına yönlendiriliyorsunuz.",

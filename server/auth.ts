@@ -59,21 +59,22 @@ export const login = async (values: LoginSchemaType) => {
   )[0];
   const count = await checkRateLimit(ipAddress);
 
+  const actionT = await getTranslations("Actions.Auth.login");
+
   if (count >= MAX_LOGIN_REQUESTS_PER_MINUTE) {
     return {
-      error:
-        "You have made too many requests. Please wait a minute before trying again.",
+      error: actionT("rateLimitExceeded"),
       fieldErrors: [],
       twoFactorAuthenticationRequired: false,
     };
   }
 
   try {
-    const t = await getTranslations("Zod.Login");
+    const zodT = await getTranslations("Zod.Login");
     const loginSchema = getLoginSchema({
-      invalidEmail: t("invalidEmail"),
-      passwordTooShort: t("passwordTooShort"),
-      passwordTooLong: t("passwordTooLong"),
+      invalidEmail: zodT("invalidEmail"),
+      passwordTooShort: zodT("passwordTooShort"),
+      passwordTooLong: zodT("passwordTooLong"),
     });
 
     const data = loginSchema.parse(values);
@@ -82,7 +83,7 @@ export const login = async (values: LoginSchemaType) => {
 
     if (!existingUser) {
       return {
-        error: "Incorrect email or password",
+        error: actionT("incorrectCredentials"),
         fieldErrors: [],
         twoFactorAuthenticationRequired: false,
       };
@@ -95,7 +96,7 @@ export const login = async (values: LoginSchemaType) => {
 
     if (!isPasswordValid) {
       return {
-        error: "Incorrect email or password",
+        error: actionT("incorrectCredentials"),
         fieldErrors: [],
         twoFactorAuthenticationRequired: false,
       };
@@ -136,8 +137,7 @@ export const login = async (values: LoginSchemaType) => {
     }
 
     return {
-      error:
-        "Something went wrong while processing your request. Please try again later.",
+      error: actionT("internalErrorMessage"),
       fieldErrors: [],
       redirectPath: null,
       twoFactorAuthenticationRequired: false,
