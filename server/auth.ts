@@ -695,6 +695,9 @@ export const disableTwoFactorAuthentication = async () => {
     return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
+  const actionT = await getTranslations(
+    "Actions.Auth.disableTwoFactorAuthentication"
+  );
   try {
     await twoFactorAuthenticationSecretRepository.removeTwoFactorAuthenticationSecret(
       user.id
@@ -707,13 +710,12 @@ export const disableTwoFactorAuthentication = async () => {
 
     return {
       error: null,
-      successMessage: "Two-factor authentication disabled successfully.",
+      successMessage: actionT("successMessage"),
     };
   } catch (error) {
     logger.error(error);
     return {
-      error:
-        "Something went wrong while processing your request. Please try again later.",
+      error: actionT("internalErrorMessage"),
       successMessage: null,
     };
   }

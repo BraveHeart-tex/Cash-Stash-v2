@@ -441,6 +441,10 @@
         "invalidRequest": "Geçersiz istek.",
         "invalidCode": "Geçersiz doğrulama kodu.",
         "successMessage": "İki faktörlü kimlik doğrulaması etkinleştirildi."
+      },
+      "disableTwoFactorAuthentication": {
+        "internalErrorMessage": "İsteğiniz işlenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+        "successMessage": "İki faktörlü kimlik doğrulaması devre dışı bırakıldı."
       }
     },
     "Account": {

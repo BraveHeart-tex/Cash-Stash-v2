@@ -444,6 +444,10 @@
         "invalidRequest": "Invalid request.",
         "invalidCode": "Invalid verification code.",
         "successMessage": "Two-factor authentication enabled successfully."
+      },
+      "disableTwoFactorAuthentication": {
+        "internalErrorMessage": "An error occurred while processing your request. Please try again later.",
+        "successMessage": "Two-factor authentication disabled successfully."
       }
     },
     "Account": {
