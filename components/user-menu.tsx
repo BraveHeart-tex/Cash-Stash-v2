@@ -29,7 +29,7 @@ const UserMenu = () => {
 
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
-      <DropdownMenuTrigger className="outline-none focus:outline-none">
+      <DropdownMenuTrigger className="select-none outline-none focus:outline-none">
         <Avatar>
           <AvatarImage alt={user?.name} />
           <AvatarFallback>{avatarPlaceholder}</AvatarFallback>

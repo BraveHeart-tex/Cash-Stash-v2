@@ -40,7 +40,7 @@ const LocaleToggle = () => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild className="cursor-pointer">
+      <DropdownMenuTrigger asChild className="cursor-pointer select-none">
         <Button className="bg-background hover:bg-background/80" size="icon">
           <span className="text-xl">{iconMap[locale]}</span>
           <span className="sr-only">{t("screenReaderLabel")}</span>
