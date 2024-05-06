@@ -465,6 +465,11 @@
         "anErrorOccurred": "Hesap silinirken bir hata oluştu.",
         "successMessage": "Hesap başarıyla silindi."
       }
+    },
+    "Budget": {
+      "createBudget": {
+        "internalErrorMessage": "İsteğiniz işlenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin."
+      }
     }
   },
   "Zod": {

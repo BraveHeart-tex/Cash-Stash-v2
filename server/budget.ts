@@ -31,6 +31,8 @@ export const createBudget = async (
     return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
+  const actionT = await getTranslations("Actions.Budget.createBudget");
+
   try {
     const zodT = await getTranslations("Zod.Budget");
     const budgetSchema = getBudgetSchema({
@@ -51,8 +53,7 @@ export const createBudget = async (
 
     if (!affectedRows || !budget) {
       return {
-        error:
-          "There was a problem while creating your budget. Please try again later.",
+        error: actionT("internalErrorMessage"),
         fieldErrors: [],
       };
     }
@@ -75,8 +76,7 @@ export const createBudget = async (
     }
 
     return {
-      error:
-        "There was a problem while creating your budget. Please try again later.",
+      error: actionT("internalErrorMessage"),
       fieldErrors: [],
     };
   }

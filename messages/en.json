@@ -467,6 +467,11 @@
         "anErrorOccurred": "An error occurred while deleting the account.",
         "successMessage": "Account deleted successfully."
       }
+    },
+    "Budget": {
+      "createBudget": {
+        "internalErrorMessage": "An error occurred while processing your request. Please try again later."
+      }
     }
   },
   "Zod": {
