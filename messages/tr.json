@@ -469,6 +469,10 @@
     "Budget": {
       "createBudget": {
         "internalErrorMessage": "İsteğiniz işlenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin."
+      },
+      "updateBudget": {
+        "budgetNotFound": "Güncellenmesi gereken bütçeyi bulamadık.",
+        "internalErrorMessage": "İsteğiniz işlenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin."
       }
     }
   },

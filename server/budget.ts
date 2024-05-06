@@ -103,8 +103,10 @@ export const updateBudget = async (
     budgetToBeUpdated = await budgetRepository.getById(budgetId);
   }
 
+  const actionT = await getTranslations("Actions.Budget.updateBudget");
+
   if (!budgetToBeUpdated)
-    return { error: `Budget to be updated cannot be found.`, fieldErrors: [] };
+    return { error: actionT("budgetNotFound"), fieldErrors: [] };
 
   try {
     const zodT = await getTranslations("Zod.Budget");
@@ -130,8 +132,7 @@ export const updateBudget = async (
 
     if (affectedRows === 0 || !updatedBudget) {
       return {
-        error:
-          "There was a problem while trying to update your budget. Please try again later.",
+        error: actionT("internalErrorMessage"),
         fieldErrors: [],
       };
     }
@@ -151,8 +152,7 @@ export const updateBudget = async (
 
     logger.error(error);
     return {
-      error:
-        "There was a problem while updating your budget. Please try again later.",
+      error: actionT("internalErrorMessage"),
       fieldErrors: [],
     };
   }

@@ -471,6 +471,10 @@
     "Budget": {
       "createBudget": {
         "internalErrorMessage": "An error occurred while processing your request. Please try again later."
+      },
+      "updateBudget": {
+        "budgetNotFound": "We couldn't find the budget that needs updating.",
+        "internalErrorMessage": "An error occurred while processing your request. Please try again later."
       }
     }
   },
