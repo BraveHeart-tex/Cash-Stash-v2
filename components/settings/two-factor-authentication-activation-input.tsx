@@ -5,7 +5,13 @@ import { activateTwoFactorAuthentication } from "@/server/auth";
 import { toast } from "sonner";
 import useAuthStore from "@/store/auth/authStore";
 
-const TwoFactorAuthenticationActivationInput = () => {
+type TwoFactorAuthenticationActivationInputProps = {
+  label: string;
+};
+
+const TwoFactorAuthenticationActivationInput = ({
+  label,
+}: TwoFactorAuthenticationActivationInputProps) => {
   const [code, setCode] = useState("");
   let [isPending, startTransition] = useTransition();
   const user = useAuthStore((state) => state.user);
@@ -33,7 +39,7 @@ const TwoFactorAuthenticationActivationInput = () => {
 
   return (
     <div>
-      <Label>Code</Label>
+      <Label>{label}</Label>
       <AutoProgressInput loading={isPending} length={6} onChange={setCode} />
     </div>
   );

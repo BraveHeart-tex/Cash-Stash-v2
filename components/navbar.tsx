@@ -1,12 +1,13 @@
 "use client";
 import UserMenu from "@/components/user-menu";
-import Link from "next/link";
+import { Link } from "@/navigation";
 import { useEffect } from "react";
 import { User } from "lucia";
 import useAuthStore from "@/store/auth/authStore";
 import { PAGE_ROUTES } from "@/lib/constants";
 import ModeToggle from "@/components/ui/mode-toggle";
 import Logo from "@/components/logo";
+import LocaleToggle from "@/components/ui/locale-toggle";
 
 const Navbar = ({ user }: { user: User | null }) => {
   const setCurrentUser = useAuthStore((state) => state.setUser);
@@ -31,6 +32,7 @@ const Navbar = ({ user }: { user: User | null }) => {
           <div className="hidden items-center gap-1 rounded-md bg-background lg:flex">
             <ModeToggle />
           </div>
+          <LocaleToggle />
           <UserMenu />
         </div>
       </div>

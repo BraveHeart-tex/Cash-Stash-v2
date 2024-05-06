@@ -1,16 +1,21 @@
 import { Switch } from "@/components/ui/switch";
 
-const NotificationSettings = () => {
+type NotificationSettingsProps = {
+  title: string;
+  description: string;
+};
+
+const NotificationSettings = ({
+  title,
+  description,
+}: NotificationSettingsProps) => {
   return (
     <section id="notifications">
       <h2 className="flex items-center gap-2 text-xl font-semibold text-primary">
-        Notifications:
+        {title}:
         <Switch />
       </h2>
-      <p className="text-muted-foreground">
-        Manage your notification preferences. We'll send you notifications only
-        when you set a reminder for them.
-      </p>
+      <p className="text-muted-foreground">{description}</p>
     </section>
   );
 };

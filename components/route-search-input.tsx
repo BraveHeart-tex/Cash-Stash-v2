@@ -5,13 +5,14 @@ import { useDebounceValue } from "usehooks-ts";
 import { FaSearch } from "react-icons/fa";
 import { useQueryState } from "nuqs";
 import { Label } from "@/components/ui/label";
+import { useTranslations } from "next-intl";
 
 type RouteSearchInputProps = {
   placeholder: string;
-  label: string;
 };
 
-const RouteSearchInput = ({ placeholder, label }: RouteSearchInputProps) => {
+const RouteSearchInput = ({ placeholder }: RouteSearchInputProps) => {
+  const t = useTranslations("Components.RouteSearchInput");
   const [, setSearchQuery] = useQueryState("query", {
     shallow: false,
   });
@@ -29,7 +30,7 @@ const RouteSearchInput = ({ placeholder, label }: RouteSearchInputProps) => {
 
   return (
     <div className="w-full lg:w-96">
-      <Label htmlFor="search">{label}</Label>
+      <Label htmlFor="search">{t("label")}</Label>
       <div className="relative">
         <Input
           id="search"

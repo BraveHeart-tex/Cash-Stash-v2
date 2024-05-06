@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { Link } from "@/navigation";
 import useAuthStore from "@/store/auth/authStore";
 import { toast } from "sonner";
 import { FaCopy } from "react-icons/fa";
@@ -10,7 +10,20 @@ import { useEffect, useTransition } from "react";
 import { getTwoFactorAuthURI } from "@/server/auth";
 import { ImSpinner2 } from "react-icons/im";
 
-const TwoFactorAuthenticationActivation = () => {
+type TwoFactorAuthenticationActivationProps = {
+  internationalzationConfig: {
+    twoFactorFormStepOne: string;
+    twoFactorFormStepTwo: string;
+    twoFactorFormStepThree: string;
+    twoFactorCopyToClipboardSuccessMessage: string;
+    twoFactorCopyToClipboardCTA: string;
+    twoFactorCodeInputLabel: string;
+  };
+};
+
+const TwoFactorAuthenticationActivation = ({
+  internationalzationConfig,
+}: TwoFactorAuthenticationActivationProps) => {
   let [isPending, startTransition] = useTransition();
   const user = useAuthStore((state) => state.user);
 
@@ -21,9 +34,18 @@ const TwoFactorAuthenticationActivation = () => {
   const secretMatch = regex.exec(uri);
   const secret = secretMatch ? secretMatch[1] : null;
 
+  const {
+    twoFactorFormStepOne,
+    twoFactorFormStepTwo,
+    twoFactorFormStepThree,
+    twoFactorCopyToClipboardSuccessMessage,
+    twoFactorCopyToClipboardCTA,
+    twoFactorCodeInputLabel,
+  } = internationalzationConfig;
+
   const handleCopyToClipBoard = async () => {
     await navigator.clipboard.writeText(secret!);
-    toast.info("Code copied to clipboard.");
+    toast.info(twoFactorCopyToClipboardSuccessMessage);
   };
 
   const shoudlGetUri =
@@ -46,8 +68,8 @@ const TwoFactorAuthenticationActivation = () => {
     <div className="mt-5 rounded-sm border bg-card p-4 text-foreground shadow-sm lg:p-10">
       <div className="flex flex-col gap-2">
         <div>
-          <span className="font-semibold text-primary">1.</span> Get an
-          authentication app by downloading it on your mobile device. Example:{" "}
+          <span className="font-semibold text-primary">1.</span>{" "}
+          {twoFactorFormStepOne}{" "}
           <Link
             href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en_US"
             target="_blank"
@@ -67,8 +89,8 @@ const TwoFactorAuthenticationActivation = () => {
           </Link>
         </div>
         <div>
-          <span className="font-semibold text-primary">2.</span> Scan the QR
-          code or enter the secret key into your authentication app.
+          <span className="font-semibold text-primary">2.</span>{" "}
+          {twoFactorFormStepTwo}
           {isPending && !uri ? (
             <div className="my-10 flex h-full w-full flex-col items-center justify-center">
               <ImSpinner2 className="animate-spin text-4xl" />
@@ -82,7 +104,7 @@ const TwoFactorAuthenticationActivation = () => {
                     onClick={handleCopyToClipBoard}
                     className="flex items-center gap-2"
                   >
-                    <FaCopy /> Copy Secret
+                    <FaCopy /> {twoFactorCopyToClipboardCTA}
                   </Button>
                 </div>
               )}
@@ -90,10 +112,12 @@ const TwoFactorAuthenticationActivation = () => {
           )}
         </div>
         <div>
-          <span className="font-semibold text-primary">3.</span> Enter the
-          6-digit code from the app to enable two-factor authentication.
+          <span className="font-semibold text-primary">3.</span>{" "}
+          {twoFactorFormStepThree}
           <div className="mt-1">
-            <TwoFactorAuthenticationActivationInput />
+            <TwoFactorAuthenticationActivationInput
+              label={twoFactorCodeInputLabel}
+            />
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 "use client";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/navigation";
 import { motion } from "framer-motion";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import useGenericModalStore from "@/store/genericModalStore";
@@ -13,12 +13,14 @@ import { cn } from "@/lib/utils/stringUtils/cn";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import useAuthStore from "@/store/auth/authStore";
 import { BudgetWithCategory } from "@/typings/budgets";
+import { useTranslations } from "next-intl";
 
 type BudgetCardProps = {
   budget: BudgetWithCategory;
 };
 
 const BudgetCard = ({ budget }: BudgetCardProps) => {
+  const t = useTranslations("Components.BudgetCard");
   const preferredCurrency = useAuthStore(
     (state) => state.user?.preferredCurrency
   );
@@ -32,22 +34,20 @@ const BudgetCard = ({ budget }: BudgetCardProps) => {
 
   const handleDeleteClick = (id: number) => {
     showGenericConfirm({
-      title: "Are you sure you want to delete this budget?",
-      message: "This action cannot be undone.",
-      primaryActionLabel: "Delete",
+      title: t("deleteBudgetDialogTitle"),
+      message: t("deleteBudgetDialogMessage"),
+      primaryActionLabel: t("deleteBudgetDialogPrimaryActionLabel"),
       onConfirm: async () => {
         const response = await deleteBudget(id);
 
         if (response?.error) {
-          toast.error("An error occurred.", {
+          toast.error(t("deleteBudgetErrorMessage"), {
             description: response.error,
           });
         } else {
           router.refresh();
 
-          toast.success("Budget deleted.", {
-            description: "Selected budget has been deleted.",
-          });
+          toast.success(t("deleteBudgetSuccessMessage"));
         }
       },
     });
@@ -67,9 +67,8 @@ const BudgetCard = ({ budget }: BudgetCardProps) => {
 
   const handleEditClick = () => {
     openGenericModal({
-      dialogTitle: "Edit Budget",
-      dialogDescription:
-        "Edit your budget information by using the form below.",
+      dialogTitle: t("editBudgetDialogTitle"),
+      dialogDescription: t("editBudgetDialogMessage"),
       entityId: budget.id,
       mode: "edit",
       key: "budget",
@@ -93,17 +92,17 @@ const BudgetCard = ({ budget }: BudgetCardProps) => {
       <div className="absolute right-1 top-5 mb-2">
         <div className="flex items-center gap-1">
           <ActionPopover
-            heading="Budget Actions"
+            heading={t("budgetActionsHeading")}
             triggerClassName="top-0 right-0 mb-0"
             options={[
               {
                 icon: FaEdit,
-                label: "Edit",
+                label: t("budgetActionsEditLabel"),
                 onClick: () => handleEditClick(),
               },
               {
                 icon: FaTrash,
-                label: "Delete",
+                label: t("budgetActionsDeleteLabel"),
                 onClick: () => handleDeleteClick(budget.id),
               },
             ]}
@@ -125,8 +124,10 @@ const BudgetCard = ({ budget }: BudgetCardProps) => {
       />
       <div className="mt-2 flex w-full flex-col justify-between lg:flex-row lg:items-center">
         <span className="text-foreground">
-          Budget: {formatMoney(budget.budgetAmount, preferredCurrency)} / Spent:{" "}
-          {formatMoney(budget.spentAmount, preferredCurrency)}
+          {t("budgetSpent", {
+            budget: formatMoney(budget.budgetAmount, preferredCurrency),
+            spent: formatMoney(budget.spentAmount, preferredCurrency),
+          })}
         </span>
       </div>
     </motion.div>

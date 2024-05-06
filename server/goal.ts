@@ -1,7 +1,7 @@
 "use server";
 import { getUser } from "@/lib/auth/session";
 import goalSchema, { GoalSchemaType } from "@/schemas/goal-schema";
-import { redirect } from "next/navigation";
+import { redirect } from "@/navigation";
 import { ZodError } from "zod";
 import {
   generateCachePrefixWithUserId,
@@ -27,7 +27,7 @@ export const createGoal = async (
 ): CreateGoalReturnType => {
   const { user } = await getUser();
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   try {
@@ -78,7 +78,7 @@ export const updateGoal = async (
 ): UpdateGoalReturnType => {
   const { user } = await getUser();
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   let goalToBeUpdated: GoalSelectModel | null;
@@ -139,7 +139,7 @@ export const getPaginatedGoals = async ({
   const { user } = await getUser();
 
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   try {
@@ -210,7 +210,7 @@ export const deleteGoal = async (goalId: number) => {
   const { user } = await getUser();
 
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   try {

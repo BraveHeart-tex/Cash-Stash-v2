@@ -11,6 +11,7 @@ import CategoryForm from "@/components/categories/category-form";
 import { CATEGORY_TYPES } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { FaPlus } from "react-icons/fa";
+import { useTranslations } from "next-intl";
 
 type CreateBudgetCategoryPopoverProps = {
   // eslint-disable-next-line no-unused-vars
@@ -20,6 +21,7 @@ type CreateBudgetCategoryPopoverProps = {
 const CreateBudgetCategoryPopover = ({
   onSave,
 }: CreateBudgetCategoryPopoverProps) => {
+  const t = useTranslations("Components.CreateBudgetCategoryPopover");
   const [open, setOpen] = useState(false);
   const addCategory = useCategoriesStore((state) => state.addCategory);
 
@@ -33,10 +35,8 @@ const CreateBudgetCategoryPopover = ({
       <PopoverContent className="z-[500]">
         <div className="grid gap-4">
           <div className="space-y-2">
-            <h4 className="font-medium leading-none">Add Budget Category</h4>
-            <p className="text-sm text-muted-foreground">
-              Add a new budget category by using the form below.
-            </p>
+            <h4 className="font-medium leading-none">{t("title")}</h4>
+            <p className="text-sm text-muted-foreground">{t("description")}</p>
           </div>
           <CategoryForm
             showTypeOptions={false}

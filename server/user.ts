@@ -7,14 +7,14 @@ import userRepository from "@/lib/database/repository/userRepository";
 import { accounts, budgets, goals, transactions } from "@/lib/database/schema";
 import { eq, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { redirect } from "@/navigation";
 import logger from "@/lib/utils/logger";
 import redisService from "@/lib/redis/redisService";
 
 export const updateUserCurrencyPreference = async (symbol: string) => {
   const { user } = await getUser();
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   if (symbol.length !== 3) {
@@ -53,7 +53,7 @@ export const convertTransactionsToNewCurrency = async (
 ) => {
   const { user } = await getUser();
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   if (newSymbol.length !== 3) {

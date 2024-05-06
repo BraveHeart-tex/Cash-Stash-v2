@@ -6,6 +6,7 @@ import {
   KeyboardEvent,
   ClipboardEvent,
   HTMLInputTypeAttribute,
+  Fragment,
 } from "react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils/stringUtils/cn";
@@ -69,7 +70,7 @@ const AutoProgressInput = ({
   return (
     <div className="flex items-center">
       {values.map((value, index) => (
-        <>
+        <Fragment key={index}>
           <Label
             htmlFor={`auto-progress-input-${index + 1}`}
             className="sr-only"
@@ -82,6 +83,7 @@ const AutoProgressInput = ({
               "mr-[0.5em] w-[3em] bg-background text-center",
               loading && "animate-pulse opacity-50"
             )}
+            autoComplete="off"
             aria-label={`Auto progress input field ${index + 1}`}
             key={index}
             ref={refs[index]}
@@ -93,7 +95,7 @@ const AutoProgressInput = ({
             onChange={(e) => handleChange(index, e.target.value)}
             onKeyDown={(e) => handleKeyDown(index, e)}
           />
-        </>
+        </Fragment>
       ))}
     </div>
   );

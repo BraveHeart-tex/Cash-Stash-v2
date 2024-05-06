@@ -15,9 +15,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { NAVIGATION_ITEMS } from "@/lib/constants";
-import Link from "next/link";
+import { Link } from "@/navigation";
+import { useTranslations } from "next-intl";
 
 const NavigationItemsDrawer = () => {
+  const t = useTranslations("NavigationItems");
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
 
@@ -88,7 +90,7 @@ const NavigationItemsDrawer = () => {
                     className="flex w-full items-center gap-2 text-left text-base font-medium text-foreground"
                   >
                     <item.icon size={18} />
-                    {item.label}
+                    {t(`${item.link}.label` as any)}
                     <FaChevronRight className="ml-auto text-muted-foreground" />
                   </Link>
                 </Button>

@@ -12,8 +12,10 @@ import { fetchInsightsDataAction, getChartData } from "@/server";
 import { getPaginatedBudgets } from "@/server/budget";
 import { getPaginatedGoals } from "@/server/goal";
 import { getPaginatedReminders } from "@/server/reminder";
+import { getTranslations } from "next-intl/server";
 
 const Dashboard = async () => {
+  const t = await getTranslations("Dashboard");
   // TODO: Write custom function to fetch dashboard-related data
   let [
     transactionsResult,
@@ -55,9 +57,8 @@ const Dashboard = async () => {
 
   const sectionData = [
     {
-      title: "Accounts Summary",
-      description:
-        "Access your accounts here. Navigate to the 'Accounts' page to see a comprehensive list of all your accounts.",
+      title: t("accountsSummaryTitle"),
+      description: t("accountsSummaryDescription"),
       data: (
         <article className="max-h-[330px] min-h-[330px] overflow-y-auto overflow-x-hidden lg:max-h-[350px] lg:min-h-[350px]">
           <AccountSummaries accounts={accountsResult.accounts} />
@@ -65,9 +66,8 @@ const Dashboard = async () => {
       ),
     },
     {
-      title: "Budget Status",
-      description:
-        "Explore your budgets here. Simply click on a budget card to view its details or create a new one using the menu button above.",
+      title: t("budgetsSummaryTitle"),
+      description: t("budgetsSummaryDescription"),
       data: (
         <article className="max-h-[300px] min-h-[300px] overflow-y-auto lg:max-h-[350px] lg:min-h-[350px]">
           <BudgetStatus budgets={budgetsResult.budgets} />
@@ -75,9 +75,8 @@ const Dashboard = async () => {
       ),
     },
     {
-      title: "Goal Progress",
-      description:
-        "Explore your goals here. Simply click on a goal card to view or edit its details, or create a new one by clicking the menu button above.",
+      title: t("goalSummaryTitle"),
+      description: t("goalSummaryDescription"),
       data: (
         <article className="max-h-[300px] min-h-[300px] overflow-y-auto lg:max-h-[350px] lg:min-h-[350px]">
           <GoalStatus goals={goalsResult.goals} />
@@ -85,16 +84,15 @@ const Dashboard = async () => {
       ),
     },
     {
-      title: "Latest Transactions",
-      description: "Explore your latest transactions here.",
+      title: t("transactionSummaryTitle"),
+      description: t("transactionSummaryDescription"),
       data: (
         <TransactionHistory transactions={transactionsResult.transactions} />
       ),
     },
     {
-      title: "Financial Insights",
-      description:
-        "View a breakdown of your spending versus earnings for this month, along with additional financial insights.",
+      title: t("financialInsightsTitle"),
+      description: t("financialInsightsDescription"),
       data: (
         <article className="scrollbar-hide flex max-h-[500px] min-h-[500px] flex-col items-center justify-center gap-4 overflow-y-auto p-2">
           <BarChartComponent
@@ -105,8 +103,8 @@ const Dashboard = async () => {
       ),
     },
     {
-      title: "Notifications and Reminders",
-      description: "View your notifications, and reminders here.",
+      title: t("notificationsAndRemindersTitle"),
+      description: t("notificationsAndRemindersDescription"),
       data: <NotificationsAndReminders reminders={remindersResult.reminders} />,
     },
   ];

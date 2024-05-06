@@ -1,5 +1,5 @@
 "use client";
-import { redirect } from "next/navigation";
+import { redirect } from "@/navigation";
 import CountDownTimer from "@/components/countdown-timer";
 import {
   EMAIL_VERIFICATION_CODE_EXPIRY_SECONDS,

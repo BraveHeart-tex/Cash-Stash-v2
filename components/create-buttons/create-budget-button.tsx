@@ -4,30 +4,40 @@ import { cn } from "@/lib/utils/stringUtils/cn";
 import useGenericModalStore from "@/store/genericModalStore";
 import { FaMoneyBillAlt, FaPlus } from "react-icons/fa";
 
+type CreateBudgetButtonInternalizationConfig = {
+  buttonLabel: string;
+  dialogTitle: string;
+  dialogDescription: string;
+};
+
 type CreateBudgetButtonProps = {
   className?: string;
   minimizeOnMobile?: boolean;
+  internalizationConfig: CreateBudgetButtonInternalizationConfig;
 };
 
 const CreateBudgetButton = ({
   className,
   minimizeOnMobile,
+  internalizationConfig,
 }: CreateBudgetButtonProps) => {
   const openGenericModal = useGenericModalStore(
     (state) => state.openGenericModal
   );
+  const { buttonLabel, dialogTitle, dialogDescription } = internalizationConfig;
+
   return (
     <Button
       className={cn("flex items-center gap-[14px] font-semibold", className)}
       type="button"
       name="create-budget"
-      aria-label="Create a budget"
+      aria-label={buttonLabel}
       onClick={() =>
         openGenericModal({
           mode: "create",
           key: "budget",
-          dialogTitle: "Create a budget",
-          dialogDescription: "Fill out the form below to create a budget.",
+          dialogTitle,
+          dialogDescription,
         })
       }
     >
@@ -41,7 +51,7 @@ const CreateBudgetButton = ({
           minimizeOnMobile && "hidden md:flex"
         )}
       >
-        <FaMoneyBillAlt size={18} /> Create a budget
+        <FaMoneyBillAlt size={18} /> {buttonLabel}
       </div>
     </Button>
   );

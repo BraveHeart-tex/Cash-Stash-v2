@@ -18,11 +18,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useTransition } from "react";
 import { resetPassword } from "@/server/auth";
-import { useRouter } from "next/navigation";
 import { PAGE_ROUTES } from "@/lib/constants";
 import { toast } from "sonner";
 import PasswordInput from "@/components/auth/password-input";
 import PasswordRequirements from "@/components/auth/password-requirements";
+import { useRouter } from "@/navigation";
 
 type ResetPasswordFormProps = {
   email: string;

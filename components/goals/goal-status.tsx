@@ -2,7 +2,7 @@ import GoalCard from "@/components/goals/goal-card";
 import CreateGoalButton from "@/components/create-buttons/create-goal-button";
 import AnimatePresenceClient from "@/components/animations/animate-presence";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { Link } from "@/navigation";
 import { PAGE_ROUTES } from "@/lib/constants";
 import { GoalSelectModel } from "@/lib/database/schema";
 

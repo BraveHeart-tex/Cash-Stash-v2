@@ -1,11 +1,12 @@
 "use client";
 import { NAVIGATION_ITEMS } from "@/lib/constants";
 import { TabsList, TabsTrigger, Tabs } from "@/components/ui/tabs";
-import Link from "next/link";
 import { motion } from "framer-motion";
-import { usePathname } from "next/navigation";
+import { usePathname, Link } from "@/navigation";
+import { useTranslations } from "next-intl";
 
 const NavigationTabsList = () => {
+  const t = useTranslations("NavigationItems");
   const pathName = usePathname();
 
   return (
@@ -20,6 +21,7 @@ const NavigationTabsList = () => {
               className={
                 "relative data-[state=active]:bg-transparent data-[state=active]:text-primary-foreground"
               }
+              tabIndex={0}
               data-state={pathName === page.link ? "active" : "inactive"}
             >
               <Link href={page.link}>
@@ -31,7 +33,7 @@ const NavigationTabsList = () => {
                 )}
                 <span className={`relative z-10 flex items-center`}>
                   <page.icon className={"mr-1 h-6 w-6"} />
-                  {page.label}
+                  {t(`${page.link}.label` as any)}
                 </span>
               </Link>
             </TabsTrigger>

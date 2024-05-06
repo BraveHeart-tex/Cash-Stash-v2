@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { FaMoneyBill } from "react-icons/fa";
-import Link from "next/link";
+import { Link } from "@/navigation";
 import { PAGE_ROUTES } from "@/lib/constants";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";

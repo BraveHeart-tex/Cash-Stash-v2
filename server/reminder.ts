@@ -3,7 +3,7 @@ import { processZodError } from "@/lib/utils/objectUtils/processZodError";
 import { getUser } from "@/lib/auth/session";
 import { PAGE_ROUTES } from "@/lib/constants";
 import reminderSchema, { ReminderSchemaType } from "@/schemas/reminder-schema";
-import { redirect } from "next/navigation";
+import { redirect } from "@/navigation";
 import { ZodError } from "zod";
 import reminderRepository from "@/lib/database/repository/reminderRepository";
 import { convertISOToMysqlDatetime } from "@/lib/utils/dateUtils/convertISOToMysqlDatetime";
@@ -21,7 +21,7 @@ export const createReminder = async (
   const { user } = await getUser();
 
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   try {
@@ -103,7 +103,7 @@ export const getPaginatedReminders = async ({
   const { user } = await getUser();
 
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
   try {
     const PAGE_SIZE = 12;

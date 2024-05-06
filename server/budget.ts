@@ -1,8 +1,8 @@
 "use server";
 import { getUser } from "@/lib/auth/session";
-import budgetSchema, { BudgetSchemaType } from "@/schemas/budget-schema";
+import { BudgetSchemaType, getBudgetSchema } from "@/schemas/budget-schema";
 import { BudgetSelectModel } from "@/lib/database/schema";
-import { redirect } from "next/navigation";
+import { redirect } from "@/navigation";
 import { ZodError } from "zod";
 import {
   generateCachePrefixWithUserId,
@@ -21,16 +21,28 @@ import {
   GetPaginatedBudgetsReturnType,
   UpdateBudgetReturnType,
 } from "@/typings/budgets";
+import { getTranslations } from "next-intl/server";
 
 export const createBudget = async (
   data: BudgetSchemaType
 ): CreateBudgetReturnType => {
   const { user } = await getUser();
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
+  const actionT = await getTranslations("Actions.Budget.createBudget");
+
   try {
+    const zodT = await getTranslations("Zod.Budget");
+    const budgetSchema = getBudgetSchema({
+      blankName: zodT("blankName"),
+      budgetAmountRequired: zodT("budgetAmountRequired"),
+      budgetAmountInvalid: zodT("budgetAmountInvalid"),
+      budgetAmountPositive: zodT("budgetAmountPositive"),
+      budgetCategoryRequired: zodT("budgetCategoryRequired"),
+      spentAmountNegative: zodT("spentAmountNegative"),
+    });
     const validatedData = budgetSchema.parse(data);
     const budgetDto = {
       ...validatedData,
@@ -41,8 +53,7 @@ export const createBudget = async (
 
     if (!affectedRows || !budget) {
       return {
-        error:
-          "There was a problem while creating your budget. Please try again later.",
+        error: actionT("internalErrorMessage"),
         fieldErrors: [],
       };
     }
@@ -65,8 +76,7 @@ export const createBudget = async (
     }
 
     return {
-      error:
-        "There was a problem while creating your budget. Please try again later.",
+      error: actionT("internalErrorMessage"),
       fieldErrors: [],
     };
   }
@@ -78,7 +88,7 @@ export const updateBudget = async (
 ): UpdateBudgetReturnType => {
   const { user } = await getUser();
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   let budgetToBeUpdated: BudgetSelectModel | null;
@@ -93,10 +103,21 @@ export const updateBudget = async (
     budgetToBeUpdated = await budgetRepository.getById(budgetId);
   }
 
+  const actionT = await getTranslations("Actions.Budget.updateBudget");
+
   if (!budgetToBeUpdated)
-    return { error: `Budget to be updated cannot be found.`, fieldErrors: [] };
+    return { error: actionT("budgetNotFound"), fieldErrors: [] };
 
   try {
+    const zodT = await getTranslations("Zod.Budget");
+    const budgetSchema = getBudgetSchema({
+      blankName: zodT("blankName"),
+      budgetAmountRequired: zodT("budgetAmountRequired"),
+      budgetAmountInvalid: zodT("budgetAmountInvalid"),
+      budgetAmountPositive: zodT("budgetAmountPositive"),
+      budgetCategoryRequired: zodT("budgetCategoryRequired"),
+      spentAmountNegative: zodT("spentAmountNegative"),
+    });
     const validatedData = budgetSchema.parse(values);
 
     const updateBudgetDto = {
@@ -111,8 +132,7 @@ export const updateBudget = async (
 
     if (affectedRows === 0 || !updatedBudget) {
       return {
-        error:
-          "There was a problem while trying to update your budget. Please try again later.",
+        error: actionT("internalErrorMessage"),
         fieldErrors: [],
       };
     }
@@ -132,8 +152,7 @@ export const updateBudget = async (
 
     logger.error(error);
     return {
-      error:
-        "There was a problem while updating your budget. Please try again later.",
+      error: actionT("internalErrorMessage"),
       fieldErrors: [],
     };
   }
@@ -149,7 +168,7 @@ export const getPaginatedBudgets = async ({
   const { user } = await getUser();
 
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   const PAGE_SIZE = 12;
@@ -211,7 +230,7 @@ export const getPaginatedBudgets = async ({
 export const deleteBudget = async (budgetId: number) => {
   const { user } = await getUser();
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   try {

@@ -3,7 +3,7 @@ import { getUser } from "@/lib/auth/session";
 import { CACHE_PREFIXES, CATEGORY_TYPES, PAGE_ROUTES } from "@/lib/constants";
 import { processZodError } from "@/lib/utils/objectUtils/processZodError";
 import categorySchema, { CategorySchemaType } from "@/schemas/category-schema";
-import { redirect } from "next/navigation";
+import { redirect } from "@/navigation";
 import { ZodError } from "zod";
 import categoryRepository from "@/lib/database/repository/categoryRepository";
 import logger from "@/lib/utils/logger";
@@ -26,7 +26,7 @@ export const getPaginatedCategories = async ({
 }: GetPaginatedCategoriesParams): GetPaginatedCategoriesReturnType => {
   const { user } = await getUser();
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   const PAGE_SIZE = 12;
@@ -75,7 +75,7 @@ export const createCategory = async (
   const { user } = await getUser();
 
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   try {
@@ -135,7 +135,7 @@ export const getCategoriesByType = async (
 ): GetCategoriesByTypeReturnType => {
   const { user } = await getUser();
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   try {
@@ -149,7 +149,7 @@ export const getCategoriesByType = async (
 export const deleteCategory = async (id: number, type: CategoryType) => {
   const { user } = await getUser();
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   try {
@@ -187,7 +187,7 @@ export const updateCategory = async (
 ): UpdateCategoryReturnType => {
   const { user } = await getUser();
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   try {

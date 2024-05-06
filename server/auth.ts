@@ -1,11 +1,14 @@
 "use server";
 import { getUser } from "@/lib/auth/session";
 import { Argon2id } from "oslo/password";
-import loginSchema, { LoginSchemaType } from "@/schemas/login-schema";
-import registerSchema, { RegisterSchemaType } from "@/schemas/register-schema";
+import { LoginSchemaType, getLoginSchema } from "@/schemas/login-schema";
+import {
+  RegisterSchemaType,
+  getRegisterSchema,
+} from "@/schemas/register-schema";
 import { ZodError } from "zod";
 import { cookies, headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { redirect } from "@/navigation";
 import { createTOTPKeyURI, TOTPController } from "oslo/otp";
 import { decodeHex, encodeHex } from "oslo/encoding";
 import {
@@ -47,6 +50,7 @@ import { processZodError } from "@/lib/utils/objectUtils/processZodError";
 import { twoFactorAuthenticationSecrets } from "@/lib/database/schema";
 import { eq } from "drizzle-orm";
 import logger from "@/lib/utils/logger";
+import { getTranslations } from "next-intl/server";
 
 export const login = async (values: LoginSchemaType) => {
   const header = headers();
@@ -55,23 +59,31 @@ export const login = async (values: LoginSchemaType) => {
   )[0];
   const count = await checkRateLimit(ipAddress);
 
+  const actionT = await getTranslations("Actions.Auth.login");
+
   if (count >= MAX_LOGIN_REQUESTS_PER_MINUTE) {
     return {
-      error:
-        "You have made too many requests. Please wait a minute before trying again.",
+      error: actionT("rateLimitExceeded"),
       fieldErrors: [],
       twoFactorAuthenticationRequired: false,
     };
   }
 
   try {
+    const zodT = await getTranslations("Zod.Login");
+    const loginSchema = getLoginSchema({
+      invalidEmail: zodT("invalidEmail"),
+      passwordTooShort: zodT("passwordTooShort"),
+      passwordTooLong: zodT("passwordTooLong"),
+    });
+
     const data = loginSchema.parse(values);
 
     const existingUser = await userRepository.getByEmail(data.email);
 
     if (!existingUser) {
       return {
-        error: "Incorrect email or password",
+        error: actionT("incorrectCredentials"),
         fieldErrors: [],
         twoFactorAuthenticationRequired: false,
       };
@@ -84,7 +96,7 @@ export const login = async (values: LoginSchemaType) => {
 
     if (!isPasswordValid) {
       return {
-        error: "Incorrect email or password",
+        error: actionT("incorrectCredentials"),
         fieldErrors: [],
         twoFactorAuthenticationRequired: false,
       };
@@ -125,8 +137,7 @@ export const login = async (values: LoginSchemaType) => {
     }
 
     return {
-      error:
-        "Something went wrong while processing your request. Please try again later.",
+      error: actionT("internalErrorMessage"),
       fieldErrors: [],
       redirectPath: null,
       twoFactorAuthenticationRequired: false,
@@ -135,7 +146,20 @@ export const login = async (values: LoginSchemaType) => {
 };
 
 export const register = async (values: RegisterSchemaType) => {
+  const [t, actionT] = await Promise.all([
+    getTranslations("Zod.Register"),
+    getTranslations("Actions.Auth.register"),
+  ]);
   try {
+    const registerSchema = getRegisterSchema({
+      invalidEmail: t("invalidEmail"),
+      nameTooShort: t("nameTooShort"),
+      nameTooLong: t("nameTooLong"),
+      passwordTooShort: t("passwordTooShort"),
+      passwordTooLong: t("passwordTooLong"),
+      invalidPassword: t("invalidPassword"),
+    });
+
     const data = registerSchema.parse(values);
 
     const userExists = await userRepository.getByEmail(data.email);
@@ -149,19 +173,17 @@ export const register = async (values: RegisterSchemaType) => {
 
       if (count >= MAX_SIGN_UP_REQUESTS_PER_MINUTE) {
         return {
-          error:
-            "You have made too many requests. Please wait a minute before trying again.",
+          error: actionT("rateLimitExceeded"),
           fieldErrors: [],
         };
       }
 
       return {
-        error: `User already exists with the given email. Please verify your email.`,
+        error: actionT("unverifiedEmailAlreadyExists"),
         fieldErrors: [
           {
             field: "email",
-            message:
-              "User already exists with the given email. Please verify your email.",
+            message: actionT("unverifiedEmailAlreadyExists"),
           },
         ],
       };
@@ -169,11 +191,11 @@ export const register = async (values: RegisterSchemaType) => {
 
     if (userExists) {
       return {
-        error: `User already exists with the given email: ${data.email}`,
+        error: actionT("userAlreadyExists", { email: data.email }),
         fieldErrors: [
           {
             field: "email",
-            message: "User already exists with the given email",
+            message: actionT("userAlreadyExists", { email: data.email }),
           },
         ],
       };
@@ -193,8 +215,7 @@ export const register = async (values: RegisterSchemaType) => {
 
     if (!user || affectedRows === 0) {
       return {
-        error:
-          "There was a problem while processing your request. Please try again later.",
+        error: actionT("internalErrorMessage"),
         fieldErrors: [],
       };
     }
@@ -219,8 +240,7 @@ export const register = async (values: RegisterSchemaType) => {
     }
 
     return {
-      error:
-        "Something went wrong while processing your request. Please try again later.",
+      error: actionT("internalErrorMessage"),
       fieldErrors: [],
     };
   }
@@ -249,7 +269,7 @@ export const logout = async () => {
     sessionCookie.value,
     sessionCookie.attributes
   );
-  redirect(PAGE_ROUTES.LOGIN_ROUTE);
+  return redirect(PAGE_ROUTES.LOGIN_ROUTE);
 };
 
 export const checkEmailValidityBeforeVerification = async (email: string) => {
@@ -294,11 +314,13 @@ export const checkEmailValidityBeforeVerification = async (email: string) => {
 };
 
 export const handleEmailVerification = async (email: string, code: string) => {
+  const actionT = await getTranslations("Actions.Auth.handleEmailVerification");
+
   try {
     const user = await userRepository.getUnverifiedUserByEmail(email);
 
     if (!user) {
-      redirect(PAGE_ROUTES.LOGIN_ROUTE);
+      return redirect(PAGE_ROUTES.LOGIN_ROUTE);
     }
 
     const isValid = await verifyVerificationCode(user, code);
@@ -314,7 +336,7 @@ export const handleEmailVerification = async (email: string, code: string) => {
       if (verificationCount >= MAX_VERIFICATION_CODE_ATTEMPTS) {
         await emailVerificationCodeRepository.deleteByUserId(user.id);
         return {
-          error: "Too many attempts. Please wait before trying again.",
+          error: actionT("rateLimitExceeded"),
           successMessage: null,
           redirectPath: EMAIL_VERIFICATION_REDIRECTION_PATHS.TOO_MANY_REQUESTS,
         };
@@ -323,8 +345,9 @@ export const handleEmailVerification = async (email: string, code: string) => {
       const triesLeft = MAX_VERIFICATION_CODE_ATTEMPTS - verificationCount;
 
       return {
-        error:
-          "Invalid verification code. You have " + triesLeft + " tries left",
+        error: actionT("invalidCode", {
+          attemptsLeft: triesLeft,
+        }),
         successMessage: null,
       };
     }
@@ -345,20 +368,21 @@ export const handleEmailVerification = async (email: string, code: string) => {
 
     return {
       error: null,
-      successMessage:
-        "Email verified successfully. You are being redirected...",
+      successMessage: actionT("successMessage"),
     };
   } catch (error) {
     logger.error("Error while verifying email", error);
     return {
-      error:
-        "Something went wrong while processing your request. Please try again later.",
+      error: actionT("internalErrorMessage"),
       successMessage: null,
     };
   }
 };
 
 export const resendEmailVerificationCode = async (email: string) => {
+  const actionT = await getTranslations(
+    "Actions.Auth.resendEmailVerificationCode"
+  );
   const header = headers();
   const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
     ","
@@ -366,7 +390,7 @@ export const resendEmailVerificationCode = async (email: string) => {
   const count = await checkIPBasedSendVerificationCodeRateLimit(ipAddress);
   if (count >= SEND_VERIFICATION_CODE_RATE_LIMIT) {
     return {
-      message: "Too many requests. Please wait before trying again.",
+      message: actionT("rateLimitExceeded"),
       isError: true,
     };
   }
@@ -375,8 +399,7 @@ export const resendEmailVerificationCode = async (email: string) => {
 
   if (!user) {
     return {
-      message:
-        "If you have an account, an email has been sent to you. Please check your inbox. Make sure to check your spam folder",
+      message: actionT("successMessage"),
       isError: false,
     };
   }
@@ -387,7 +410,7 @@ export const resendEmailVerificationCode = async (email: string) => {
 
   if (userIdBasedCount >= SEND_VERIFICATION_CODE_RATE_LIMIT) {
     return {
-      message: "Too many requests. Please wait before trying again.",
+      message: actionT("rateLimitExceeded"),
       isError: true,
     };
   }
@@ -403,12 +426,12 @@ export const resendEmailVerificationCode = async (email: string) => {
 
   return {
     isError: false,
-    message:
-      "If you have an account, an email has been sent to you. Please check your inbox. Make sure to check your spam folder",
+    message: actionT("successMessage"),
   };
 };
 
 export const sendPasswordResetEmail = async (email: string) => {
+  const actionT = await getTranslations("Actions.Auth.sendPasswordResetEmail");
   const header = headers();
   const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
     ","
@@ -416,7 +439,7 @@ export const sendPasswordResetEmail = async (email: string) => {
   const count = await verifyResetPasswordLinkRequestRateLimit(ipAddress);
   if (count >= MAX_RESET_PASSWORD_LINK_REQUESTS_PER_MINUTE) {
     return {
-      message: "Too many requests. Please wait before trying again.",
+      message: actionT("rateLimitExceeded"),
       isError: true,
     };
   }
@@ -425,8 +448,7 @@ export const sendPasswordResetEmail = async (email: string) => {
 
   if (!user) {
     return {
-      message:
-        "If you have an account, an email has been sent to you. Please check your inbox. Make sure to check your spam folder",
+      message: actionT("successMessage"),
       isError: false,
     };
   }
@@ -438,8 +460,7 @@ export const sendPasswordResetEmail = async (email: string) => {
 
   return {
     isError: false,
-    message:
-      "If you have an account, an email has been sent to you. Please check your inbox. Make sure to check your spam folder",
+    message: actionT("successMessage"),
   };
 };
 
@@ -483,11 +504,12 @@ export const resetPassword = async ({
   token: string;
   password: string;
 }) => {
+  const actionT = await getTranslations("Actions.Auth.resetPassword");
   const user = await userRepository.getVerifiedUserByEmail(email);
 
   if (!user) {
     return {
-      error: "Invalid request",
+      error: actionT("invalidRequest"),
       successMessage: null,
     };
   }
@@ -496,7 +518,7 @@ export const resetPassword = async ({
 
   if (!resetToken || !isWithinExpirationDate(new Date(resetToken.expiresAt))) {
     return {
-      error: "Invalid request",
+      error: actionT("invalidRequest"),
       successMessage: null,
     };
   }
@@ -520,7 +542,7 @@ export const resetPassword = async ({
 
   return {
     error: null,
-    successMessage: "Password reset successfully. You are being redirected...",
+    successMessage: actionT("successMessage"),
   };
 };
 
@@ -528,7 +550,7 @@ export const enableTwoFactorAuthentication = async () => {
   const { user } = await getUser();
 
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   await userRepository.updateUser(user.id, {
@@ -548,8 +570,12 @@ export const enableTwoFactorAuthentication = async () => {
 export const activateTwoFactorAuthentication = async (otp: string) => {
   const { user } = await getUser();
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
+
+  const t = await getTranslations(
+    "Actions.Auth.activateTwoFactorAuthentication"
+  );
 
   const result = await twoFactorAuthenticationSecretRepository.getByUserId(
     user.id
@@ -557,7 +583,7 @@ export const activateTwoFactorAuthentication = async (otp: string) => {
 
   if (!result) {
     return {
-      error: "Invalid request",
+      error: t("invalidRequest"),
       successMessage: null,
     };
   }
@@ -569,7 +595,7 @@ export const activateTwoFactorAuthentication = async (otp: string) => {
 
   if (!isValid) {
     return {
-      error: "Invalid verification code",
+      error: t("invalidCode"),
       successMessage: null,
     };
   }
@@ -580,7 +606,7 @@ export const activateTwoFactorAuthentication = async (otp: string) => {
 
   return {
     error: null,
-    successMessage: "Two-factor authentication enabled successfully.",
+    successMessage: t("successMessage"),
   };
 };
 
@@ -589,11 +615,12 @@ export const validateOTP = async (otp: string, email: string) => {
   const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
     ","
   )[0];
+  const t = await getTranslations("Actions.Auth.validateOTP");
   const count = await checkIpBasedTwoFactorAuthRateLimit(ipAddress);
 
   if (count >= MAX_TWO_FACTOR_AUTH_ATTEMPTS) {
     return {
-      error: "Too many attempts. You are being redirected to the login page.",
+      error: t("rateLimitExceeded"),
       successMessage: null,
       redirectPath: PAGE_ROUTES.LOGIN_ROUTE,
     };
@@ -603,7 +630,7 @@ export const validateOTP = async (otp: string, email: string) => {
 
   if (!user || !user?.prefersTwoFactorAuthentication) {
     return {
-      error: "Invalid request",
+      error: t("invalidRequest"),
       successMessage: null,
       redirectPath: null,
     };
@@ -615,7 +642,7 @@ export const validateOTP = async (otp: string, email: string) => {
 
   if (userIdBasedCount >= MAX_TWO_FACTOR_AUTH_ATTEMPTS) {
     return {
-      error: "Too many attempts. You are being redirected to the login page.",
+      error: t("rateLimitExceeded"),
       successMessage: null,
       redirectPath: PAGE_ROUTES.LOGIN_ROUTE,
     };
@@ -627,7 +654,7 @@ export const validateOTP = async (otp: string, email: string) => {
 
   if (!result) {
     return {
-      error: "Invalid request",
+      error: t("invalidRequest"),
       successMessage: null,
       redirectPath: PAGE_ROUTES.LOGIN_ROUTE,
     };
@@ -641,7 +668,7 @@ export const validateOTP = async (otp: string, email: string) => {
   if (!isValid) {
     const attemptsLeft = MAX_TWO_FACTOR_AUTH_ATTEMPTS - userIdBasedCount;
     return {
-      error: `Invalid verification code. You have ${attemptsLeft} tries left.`,
+      error: t("invalidCode", { attemptsLeft }),
       successMessage: null,
       redirectPath: null,
     };
@@ -657,7 +684,7 @@ export const validateOTP = async (otp: string, email: string) => {
 
   return {
     error: null,
-    successMessage: "Logged in successfully. You are being redirected...",
+    successMessage: t("successMessage"),
     redirectPath: null,
   };
 };
@@ -665,9 +692,12 @@ export const validateOTP = async (otp: string, email: string) => {
 export const disableTwoFactorAuthentication = async () => {
   const { user } = await getUser();
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
+  const actionT = await getTranslations(
+    "Actions.Auth.disableTwoFactorAuthentication"
+  );
   try {
     await twoFactorAuthenticationSecretRepository.removeTwoFactorAuthenticationSecret(
       user.id
@@ -680,13 +710,12 @@ export const disableTwoFactorAuthentication = async () => {
 
     return {
       error: null,
-      successMessage: "Two-factor authentication disabled successfully.",
+      successMessage: actionT("successMessage"),
     };
   } catch (error) {
     logger.error(error);
     return {
-      error:
-        "Something went wrong while processing your request. Please try again later.",
+      error: actionT("internalErrorMessage"),
       successMessage: null,
     };
   }

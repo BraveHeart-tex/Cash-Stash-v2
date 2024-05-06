@@ -1,0 +1,508 @@
+{
+  "ThemeOptions": {
+    "light": {
+      "label": "Varsayılan Açık"
+    },
+    "dark": {
+      "label": "Varsayılan Koyu"
+    },
+    "system": {
+      "label": "Sistem"
+    },
+    "monokai-dark": {
+      "label": "Monokai Pro"
+    }
+  },
+  "NavigationItems": {
+    "/": {
+      "label": "Dashboard"
+    },
+    "/accounts": {
+      "label": "Hesaplar"
+    },
+    "/budgets": {
+      "label": "Bütçeler"
+    },
+    "/goals": {
+      "label": "Hedefler"
+    },
+    "/transactions": {
+      "label": "İşlemler"
+    },
+    "/categories": {
+      "label": "Kategoriler"
+    },
+    "/currency-converter": {
+      "label": "Döviz Çevirici"
+    },
+    "/reports": {
+      "label": "Raporlar"
+    },
+    "/settings": {
+      "label": "Ayarlar"
+    }
+  },
+  "Generic": {
+    "GenericConfirmDialog": {
+      "defaultSecondaryActionLabel": "Vazgeç"
+    },
+    "GenericContentModal": {
+      "dialogCancelLabel": "Kapat"
+    }
+  },
+  "Lists": {
+    "currencies": "Ermeni Dramı:AMD, Afgan Afganisi:AFN, Hollanda Antiller Guldeni:ANG, Arnavut Leki:ALL, Birleşik Arap Emirlikleri Dirhemi:AED, Avustralya Doları:AUD, Angola Kwanzası:AOA, Azerbaycan Manatı:AZN, Aruban Florini:AWG, Arjantin Pezosu:ARS, Bosna-Hersek Dönüştürülebilir Markı:BAM, Barbados Doları: BBD, Bangladeş Takası:BDT, Bahreyn Dinarı:BHD, Brunei Doları:BND, Bolivya Bolivianosu:BOB, Burundi Frangı:BIF, Bulgar Levası:BGN, Bermudan Doları:BMD, Brezilya Reali:BRL, Bahama Doları:BSD, Bhutanese Ngultrum:BTN, Bitcoin:BTC, Botswanan Pula:BWP, Belize Doları:BZD, Belarus Rublesi:BYN, Kongo Frangı: CDF, Kanada Doları:CAD, İsviçre Frangı:CHF, Şili Hesap Birimi (UF):CLF, Şili Pezosu:CLP, Küba Dönüştürülebilir Pezosu:CUC, Çin Yuanı (Offshore):CNH, Küba Pezosu:CUP, Çin Yuanı:CNY, Kosta Rika Kolonu:CRC, Danimarka Kronu:DKK, Çek Cumhuriyeti Korunası:CZK, Cibuti Frangı:DJF, Kolombiya Pezosu: COP, Cape Verdean Escudo:CVE, Cezayir Dinarı:DZD, Eritre Nakfa:ERN, Falkland Adaları Poundu:FKP, Fiji Doları:FJD, İngiliz Sterlini:GBP, Etiyopya Birr: ETB, Mısır Poundu:EGP, Dominik Pezosu:DOP, Gürcistan Larisi:GEL, Euro:EUR, Gana Cedi:GHS, Cebelitarık Poundu:GIP, Guernsey Poundu:GGP, Guatemala Quetzal:GTQ, Gine Frangı:GNF, Honduras Lempirası:HNL, Hong Kong Doları:HKD, Gambiya Dalası:GMD, Guyana Doları:GYD, Hırvat Kunası:HRK, Haiti Gurdu:HTG, Macar Forinti:HUF, Irak Dinarı:IQD, İzlanda Kronu:ISK, Endonezya Rupisi:IDR, Manx Poundu:IMP, İsrail Yeni Şekeli:ILS, Hint Rupisi:INR, İran Riyali: IRR, Jersey Poundu:JEP, Jamaika Doları:JMD, Ürdün Dinarı:JOD, Japon Yeni:JPY, Kenya Şilini:KES, Kırgızistan Somu:KGS, Komor Frangı:KMF, Kamboçya Rieli:KHR, Kuzey Kore Wonu:KPW, Güney Kore Wonu:KRW, Kuveyt Dinarı:KWD, Cayman Adaları Doları:KYD, Laos Kipi:LAK, Kazakistan Tengesi:KZT, Lübnan Poundu:LBP, Sri Lanka Rupisi:LKR, Liberya Doları:LRD, Libya Dinarı:LYD, Moldova Leu:MDL, Fas Dirhemi:MAD, Lesotho Loti:LSL, Malagasy Ariary: MGA, Makedon Denarı:MKD, Moritanya Rupisi:MUR, Moğol Tugrik:MNT, Moritanya Ouguiya:MRU, Meksika Pezosu:MXN, Malavi Kwacha:MWK, Myanma Kyat:MMK, Maldiv Rufiyaa:MVR, Macanese Pataca:MOP, Malaysian Ringgit:MYR, Mozambican Metical:MZN, Namibian Dollar:NAD, Nicaraguan Córdoba:NIO, Nigerian Naira:NGN, Nepalese Rupee:NPR, Yeni Zelanda Doları:NZD, Panama Balboa:PAB, Umman Riyali:OMR, Peru Nuevo Sol:PEN, Norveç Kronu:NOK, Papua Yeni Gine Kina:PGK, Filipin Pezosu:PHP, Pakistan Rupisi: PKR, Katar Riyali:QAR, Paraguay Guaranisi:PYG, Sırp Dinarı:RSD, Rus Rublesi:RUB, Polonya Zlotisi:PLN, Ruanda Frangı:RWF, Romanya Leu:RON, Suudi Riyali:SAR, Solomon Adaları Doları: SBD, Seychellois Rupee:SCR, Sudan Poundu:SDG, İsveç Kronu:SEK, Singapur Doları:SGD, Saint Helena Poundu:SHP, Sierra Leonean Leone:SLL, Somali Şilini: SOS, Surinam Doları:SRD, Güney Sudan Poundu:SSP, Tayland Bahtı:THB, São Tomé ve Príncipe Dobra:STN, Salvador Kolonu:SVC, São Tomé ve Príncipe Dobra (2018 öncesi): STD, Swazi Lilangeni:SZL, Suriye Poundu:SYP, Türkmenistan Manatı:TMT, Tacikistan Somonisi:TJS, Tunus Dinarı:TND, Tongan Pa'anga:TOP, Trinidad ve Tobago Doları:TTD, Türk Lirası:TRY, Tanzanya Şilini:TZS, Yeni Tayvan Doları:TWD, Ukrayna Grivnası:UAH, Uganda Şilini:UGX, Amerika Birleşik Devletleri Doları:USD, Uruguay Pesosu:UYU, Özbekistan Somu:UZS, Venezuela Bolívar Soberano:VES, Vanuatu Vatu:VUV, Vietnam Dongu:VND, CFA Frangı BEAC:XAF, Samoa Tala:WST, Altın Ons:XAU, Gümüş Ons:XAG, Doğu Karayip Doları:XCD, Özel Çekme Hakları:XDR, CFA Frangı BCEAO:XOF, Paladyum Ons:XPD, CFP Frangı:XPF, Platin Ons:XPT, Yemen Riyali:YER, Güney Afrika Randı:ZAR, Zimbabve Doları:ZWL, Zambiya Kwaçası:ZMW"
+  },
+  "Enums": {
+    "AccountCategory": {
+      "CHECKING": "Çek Hesabı",
+      "SAVINGS": "Birikim Hesabı",
+      "CREDIT_CARD": "Kredi Kartı",
+      "INVESTMENT": "Yatırım Hesabı",
+      "LOAN": "Kredi",
+      "OTHER": "Diğer"
+    }
+  },
+  "Accounts": {
+    "pageTitle": "Hesaplar",
+    "AccountsNotFoundMessage": {
+      "pageHasParams": {
+        "heading": "Aramanız için hiçbir hesap bulunamadı",
+        "message": "Mevcut filtreleri kaldırın veya 'Hesap Ekle' düğmesine tıklayarak bir hesap oluşturun."
+      },
+      "noAccountsFound": {
+        "heading": "Henüz bir hesap oluşturmadınız",
+        "message": "'Hesap Ekle' düğmesine tıklayarak bir hesap oluşturun."
+      }
+    },
+    "RouteFiltersPopover": {
+      "sortByBalanceAsc": "Bakiyeye göre sırala (Düşükten yükseğe)",
+      "sortByBalanceDesc": "Bakiyeye göre sırala (Yüksekten düşüğe)"
+    },
+    "routeSearchInputPlaceholder": "Hesapları isme göre arayın",
+    "queryStringComboBoxSelectLabel": "Hesap Tipi"
+  },
+  "Budgets": {
+    "pageTitle": "Bütçeler",
+    "createBudgetButtonLabel": "Bütçe Ekleyin",
+    "createBudgetDialogTitle": "Bütçe Ekleyin",
+    "createBudgetDialogDescription": "Aşağıdaki formu kullanarak bütçenizi oluşturun.",
+    "BudgetsPageFilters": {
+      "routeSearchInputPlaceholder": "Bütçeleri isme göre arayın",
+      "sortByProgressDesc": "Kalan Göre Sırala (Yüksekten Düşüğe)",
+      "sortByProgressAsc": "Kalan Göre Sırala (Düşükten Yükseğe)",
+      "sortBySpentAmountDesc": "Sort by Spending (Yüksekten Düşüğe)",
+      "sortBySpentAmountAsc": "Sort by Spending (Düşükten Yükseğe)",
+      "sortByBudgetAmountDesc": "Sort by Budget (Yüksekten Düşüğe)",
+      "sortByBudgetAmountAsc": "Sort by Budget (Düşükten Yükseğe)"
+    },
+    "BudgetsNotFoundMessage": {
+      "pageHasParams": {
+        "heading": "Aramanız için bütçe bulunamadı",
+        "message": "Mevcut filtreleri kaldırın veya 'Bütçe Ekleyin' düğmesine tıklayarak bir bütçe oluşturun."
+      },
+      "noBudgetsFound": {
+        "heading": "Henüz oluşturulmuş bir bütçeniz yok.",
+        "message": "'Bütçe Ekleyin' düğmesine tıklayarak bir bütçe oluşturun."
+      }
+    }
+  },
+  "Dashboard": {
+    "accountsSummaryTitle": "Hesaplara Genel Bakış",
+    "accountsSummaryDescription": "Hesaplarınıza buradan erişin. Tüm hesaplarınızın kapsamlı bir listesini görmek için 'Hesaplar' sayfasına gidin.",
+
+    "budgetsSummaryTitle": "Bütçe Özetleri",
+    "budgetsSummaryDescription": "Bütçelerinizi buradan yönetin. Ayrıntılarını görüntülemek için bir bütçe kartına tıklamanız veya 'Bütçeler' sayfasından yeni bir bütçe oluşturmanız yeterlidir.",
+
+    "goalSummaryTitle": "Hedef İlerlemeleri",
+    "goalSummaryDescription": "Hedeflerinizi burada keşfedin. Hedefin, ayrıntılarını görüntülemek veya düzenlemek için kartın sağ üst kısmındaki butona tıklayın.",
+
+    "transactionSummaryTitle": "En Son İşlemler",
+    "transactionSummaryDescription": "En son işlemlerinizi buradan görüntüleyin.",
+
+    "financialInsightsTitle": "Finansal Analizler",
+    "financialInsightsDescription": "Ek finansal bilgilerle birlikte bu ayki harcamalarınızın ve kazançlarınızın bir dökümünü görüntüleyin.",
+
+    "notificationsAndRemindersTitle": "Bildirimler & Hatırlatmalar",
+    "notificationsAndRemindersDescription": "Bildirimlerinizi ve hatırlatıcılarınızı buradan yönetin."
+  },
+  "Login": {
+    "loggedInHeading": "Başarıyla Giriş Yaptınız.",
+    "loggedInDescription": "Yönlendiriliyorsunuz...",
+    "loginHeading": "Merhaba!",
+    "loginDescription": "Hesabınıza erişmek için giriş yapın.",
+    "captchaError": "Captcha doğrulaması başarısız oldu. Lütfen tekrar deneyin.",
+    "loginSuccessMessage": "Başarıyla giriş yapıldı. Yönlendiriliyorsunuz...",
+    "formErrorMessage": "Bir hata oluştu",
+    "emailFieldLabel": "E-posta",
+    "emailFieldPlaceholder": "E-posta adresinizi girin",
+    "signInButtonLabel": "Oturum aç",
+    "signInHelpMessage": "Oturum açmak için yardıma ihtiyacım var",
+    "signUpText": "Hesabınız yok mu? Kayıt olun",
+
+    "twoFactorFormTitle": "İki Faktörlü Kimlik Doğrulama",
+    "twoFactorFormDescription": "Hesabınız iki faktörlü kimlik doğrulama ile korunmaktadır. Lütfen oturum açmak için kimlik doğrulayıcı uygulamanızdaki 6 haneli kodu girin.",
+    "twoFactorFormCodeLabel": "6 haneli kodunuz",
+    "twoFactorFormButtonLabel": "Doğrula"
+  },
+  "Settings": {
+    "pageTitle": "Ayarlar",
+    "pageDescription": "CashStash deneyiminizi kişiselleştirin.",
+
+    "currencySettingsTitle": "Tercih Edilen Para Birimi",
+    "currencySettingsDescription": "Tutarları görüntülemek için tercih ettiğiniz para birimini seçin.",
+
+    "notificationSettingsTitle": "Bildirimler",
+    "notificationSettingsDescription": "Bildirim tercihlerinizi yönetin. Size bildirimleri yalnızca onlar için bir hatırlatıcı ayarladığınızda göndereceğiz.",
+
+    "colorThemeSettingsTitle": "Renk Teması",
+    "colorThemeSettingsDescription": "Tercih ettiğiniz renk temasını seçin.",
+
+    "twoFactorSettingsTitle": "İki Faktörlü Kimlik Doğrulama",
+    "twoFactorAlreadyEnableDescription": "Hesabınızda iki faktörlü kimlik doğrulama etkin durumdadır.",
+    "twoFactorSettingsDescription": "İki faktörlü kimlik doğrulama ile hesap güvenliğinizi artırın. Etkinleştirildikten sonra, daha fazla koruma için oturum açma sırasında parolanızla birlikte mobil cihazınızdan benzersiz bir kod girmeniz yeterlidir.",
+
+    "twoFactorDisableDialogTitle": "İki faktörlü kimlik doğrulamayı devre dışı bırakmak istediğinizden emin misiniz?",
+    "twoFactorDisableDialogMessage": "İki faktörlü kimlik doğrulama, hesabınızın güvenliğini artırır. Devre dışı bırakmak istediğinizden emin misiniz? İstediğiniz zaman tekrar etkinleştirebilirsiniz.",
+    "twoFactorDisableDialogPrimaryActionLabel": "Devre dışı bırak",
+
+    "twoFactorEnableDialogTitle": "İki faktörlü kimlik doğrulamayı etkinleştirmek istediğinizden emin misiniz?",
+    "twoFactorEnableDialogMessage": "İki faktörlü kimlik doğrulamayı etkinleştirdikten sonra, oturum açarken şifrenize ek olarak mobil cihazınızdan benzersiz bir kod girmeniz gerekecektir.",
+    "twoFactorToastInfoMessage": "Artık iki faktörlü kimlik doğrulamayı etkinleştirmek için aşağıdaki formu kullanabilirsiniz.",
+    "twoFactorEnableDialogPrimaryActionLabel": "Etkinleştir",
+
+    "twoFactorEnablePending": "Etkinleştiriliyor...",
+    "twoFactorEnableCTA": "İki Faktörlü Kimlik Doğrulamayı Etkinleştir",
+
+    "twoFactorDisablePeding": "Devre dışı bırakılıyor...",
+    "twoFactorDisableCTA": "İki Faktörlü Kimlik Doğrulamayı Devre Dışı Bırak",
+
+    "twoFactorFormStepOne": "Mobil cihazınıza bir kimlik doğrulama uygulaması indirin. Örnek:",
+    "twoFactorFormStepTwo": "QR kodunu tarayın veya gizli anahtarı kimlik doğrulama uygulamanıza girin.",
+    "twoFactorFormStepThree": "İki faktörlü kimlik doğrulamayı etkinleştirmek için uygulamadan aldığınız 6 haneli kodu girin.",
+    "twoFactorCopyToClipboardSuccessMessage": "Kod panoya kopyalandı.",
+    "twoFactorCopyToClipboardCTA": "Gizli Anahtarı Kopyalayın",
+    "twoFactorCodeInputLabel": "Uygulamadan Aldığınız 6 Haneli Kod",
+
+    "convertCurrencyDialogTitle": "İşlemlerinizi dönüştürmek ister misiniz?",
+    "convertCurrencyDialogDescription": "Tercih ettiğiniz para birimi güncellendi. İsterseniz, işlemleriniz yeni para biriminize dönüştürülebilir. Bu işlem birkaç saniye sürebilir.",
+    "convertCurrencyPrimaryActionLabel": "Dönüştür",
+    "convertCurrencySecondaryActionLabel": "Dönüştürme",
+    "convertCurrencyPending": "Dönüştürülüyor...",
+    "convertCurrencySuccessMessage": "İşlemler başarıyla yeni para birimi kuruna dönüştürüldü",
+    "currencySaveRejectMessage": "Seçili para birimi yok",
+    "currencySaveSuccessMessage": "Tercih edilen para birimi başarıyla değiştirildi",
+    "changeCurrencyDialogTitle": "Tercih ettiğiniz para birimini değiştirmek istediğinizden emin misiniz?",
+    "changeCurrencyDialogMessage": "Tercih ettiğiniz para birimini şu şekilde değiştireceksiniz: _fromLabel: _toLabel.",
+    "changeCurrencyPending": "Kaydediliyor...",
+    "changeCurrencySuccessMessage": "Tercih edilen para birimi başarıyla değiştirildi",
+    "changeCurrencyPrimaryActionLabel": "Onayla",
+    "changeCurrencySaveLabel": "Değişiklikleri Kaydet"
+  },
+  "Components": {
+    "AccountForm": {
+      "noChangesMessage": "Herhangi bir değişiklik tespit edilmedi.",
+      "noChangesDescription": "Hesap bilgilerinizde herhangi bir değişiklik yapmadınız.",
+      "anErrorOccurredMessage": "Bir hata oluştu",
+
+      "createAccountSuccessMessage": "Hesap başarıyla oluşturuldu",
+      "updateAccountSuccessMessage": "Hesap başarıyla güncellendi",
+      "successTitle": "Başarılı!",
+
+      "nameField": {
+        "label": "Hesap Adı",
+        "placeholder": "Hesap adını giriniz"
+      },
+      "typeField": {
+        "label": "Hesap Tipi",
+        "placeholder": "Hesap tipi seçiniz",
+        "selectOptions": {
+          "CHECKING": "Çek Hesabı",
+          "SAVINGS": "Birikim Hesabı",
+          "CREDIT_CARD": "Kredi Kartı",
+          "INVESTMENT": "Yatırım Hesabı",
+          "LOAN": "Kredi",
+          "OTHER": "Diğer"
+        }
+      },
+      "balanceField": {
+        "label": "Bakiye",
+        "placeholder": "Hesap bakiyesi giriniz"
+      },
+      "submitButtonLabel": {
+        "create": "Hesap Oluştur",
+        "update": "Hesabı Güncelle"
+      }
+    },
+    "AccountSummaries": {
+      "noAccountsFound": "Hiçbir hesap bulunamadı.",
+      "seeAllYourAccounts": "Tüm hesaplarınızı görüntüleyin"
+    },
+    "AccountCard": {
+      "deleteAccountDialogTitle": "Bu hesabı silmek istediğinizden emin misiniz?",
+      "deleteAccountDialogMessage": "Bu aynı zamanda bu hesapla ilişkili tüm işlemleri de silecektir. Bu işlem geri alınamaz.",
+      "deleteAccountDialogPrimaryActionLabel": "Sil",
+      "deleteAccountErrorMessage": "Hesap silinirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+      "deleteAccountSuccessMessage": "Hesap başarıyla silindi.",
+      "deleteAccountSuccessDescription": "Seçilen hesap silindi.",
+
+      "editAccountDialogTitle": "Hesap Bilgilerini Düzenle",
+      "editAccountAccountDialogMessage": "Hesap bilgilerinizi düzenlemek için aşağıdaki formu kullanın.",
+
+      "createTransactionDialogTitle": "İşlem Oluştur",
+      "createTransactionAccountDialogMessage": "Yeni bir işlem oluşturmak için aşağıdaki formu kullanın.",
+
+      "accountActionsHeading": "Hesap Aksiyonları",
+      "Show Latest Transactions": "En Son İşlemlerini Görüntüle",
+      "Edit Account": "Düzenle",
+      "Add Transaction": "İşlem Ekle",
+      "Delete": "Sil"
+    },
+    "BudgetCard": {
+      "deleteBudgetDialogTitle": "Bu bütçeyi silmek istediğinizden emin misiniz?",
+      "deleteBudgetDialogMessage": "Bu işlem geri alınamaz.",
+      "deleteBudgetDialogPrimaryActionLabel": "Sil",
+      "deleteBudgetErrorMessage": "Bir hata oluştu",
+      "deleteBudgetSuccessMessage": "Bütçe başarıyla silindi.",
+      "editBudgetDialogTitle": "Bütçeyi Düzenle",
+      "editBudgetDialogMessage": "Bütçe detaylarınızı düzenlemek için aşağıdaki formu kullanın.",
+
+      "budgetActionsHeading": "Bütçe Aksiyonları",
+      "budgetActionsEditLabel": "Düzenle",
+      "budgetActionsDeleteLabel": "Sil",
+
+      "budgetSpent": "Bütçe: {budget} / Harcanan: {spent}"
+    },
+    "BudgetForm": {
+      "categoryErrorMessage": "Bütçe kategorileri getirilirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+      "noChangesMessage": "Herhangi bir değişiklik tespit edilmedi.",
+      "noChangesDescription": "Bütçenizde herhangi bir değişiklik yapmadınız.",
+      "anErrorOccurredMessage": "Bir hata oluştu",
+      "createBudgetSuccessMessage": "Bütçe başarıyla oluşturuldu.",
+      "updateBudgetSuccessMessage": "Bütçe başarıyla güncellendi.",
+      "successTitle": "Başarılı!",
+
+      "budgetNameField": {
+        "label": "Bütçe Adı",
+        "placeholder": "Bütçenize bir isim verin"
+      },
+      "budgetAmountField": {
+        "label": "Bütçe Miktarı",
+        "placeholder": "Bütçe miktarını girin"
+      },
+      "spentAmountField": {
+        "label": "Harcanan Miktar",
+        "placeholder": "Harcama tutarınızı girin (isteğe bağlı)"
+      },
+      "budgetCategoryField": {
+        "label": "Bütçe Kategorisi",
+        "placeholder": "Bir bütçe kategorisi seçin",
+        "noCategoriesMessage": "Görünüşe göre henüz herhangi bir bütçe kategorisi oluşturmamışsınız."
+      },
+      "submitButtonLabel": {
+        "create": "Bütçe Oluştur",
+        "update": "Bütçeyi Güncelle"
+      }
+    },
+    "CategoryForm": {
+      "noChangesMessage": "Herhangi bir değişiklik tespit edilmedi.",
+      "noChangesDescription": "Kategorinizde herhangi bir değişiklik yapmadınız.",
+      "anErrorOccurredMessage": "Bir hata oluştu",
+      "successMessage": {
+        "create": "Kategori başarıyla oluşturuldu",
+        "update": "Kategori başarıyla güncellendi"
+      },
+      "nameField": {
+        "label": "Kategori Adı",
+        "placeholder": "Kategori adını giriniz"
+      },
+      "typeField": {
+        "label": "Kategori Tipi",
+        "placeholder": "Kategori tipi seçiniz",
+        "options": {
+          "budget": "Bütçe",
+          "transaction": "İşlem"
+        },
+        "description": "Oluşturmak istediğiniz kategori türünü ifade eder."
+      },
+      "submitButtonLabel": {
+        "create": "Kategori Oluştur",
+        "update": "Kategoriyi güncelle"
+      }
+    },
+    "CreateBudgetCategoryPopover": {
+      "title": "Bütçe Kategorisi Ekle",
+      "description": "Aşağıdaki formu kullanarak yeni bir bütçe kategorisi ekleyin."
+    },
+    "CreateAccountButton": {
+      "label": "Hesap Ekle",
+      "createAccountDialogTitle": "Hesap Ekle",
+      "createAccountDialogMessage": "Yeni bir hesap eklemek için aşağıdaki formu kullanın."
+    },
+    "PasswordInput": {
+      "passwordFieldLabel": "Şifre",
+      "passwordFieldPlaceholder": "Şifrenizi girin",
+      "passwordFieldCapsLockMessage": "Caps lock açık."
+    },
+    "UserMenu": {
+      "colorModeLabel": "Renk Teması",
+      "logoutLabel": "Çıkış Yap"
+    },
+    "RegisterForm": {
+      "captchaValidationFailedMessage": "Captcha doğrulaması başarısız oldu. Lütfen tekrar deneyin.",
+      "accountCreatedSuccessfullyMessage": "Hesabınız başarılı bir şekilde oluşturuldu",
+      "accountCreatedSuccessfullyDescription": "Hesabınızı doğrulamak için lütfen e-postanızı kontrol edin.",
+      "anErrorOccurredMessage": "Bir hata oluştu",
+      "formTitle": "Merhaba!",
+      "formDescription": "Başlamak için bir hesabınızı oluşturun.",
+      "nameFieldLabel": "Adınız",
+      "nameFieldPlaceholder": "Adınızı girin",
+      "emailFieldLabel": "E-posta",
+      "emailFieldPlaceholder": "E-posta adresinizi girin",
+      "emailFieldDescription": "<strong>Not</strong>: Lütfen <u>hesap doğrulama, şifre kurtarma ve diğer önemli işlemler için geçerli bir e-posta adresi sağlayın.</u>",
+      "submitButtonLabel": "Kayıt Ol",
+      "signInLink": "Zaten bir hesabınız var mı? Oturum aç"
+    },
+    "PasswordRequirements": {
+      "title": "Şifre Kriterleri",
+      "8 characters": "8 karakter",
+      "1 lowercase letter": "1 küçük harf",
+      "1 uppercase letter": "1 büyük harf",
+      "1 number": "1 sayı"
+    },
+    "RoutePaginationControls": {
+      "previous": "Önceki",
+      "next": "Sonraki",
+      "pageInformation": "Sayfa {currentPage} / {totalPages}"
+    },
+    "RouteSearchInput": {
+      "label": "Arama"
+    },
+    "QueryStringComboBox": {
+      "allLabel": "Hepsi"
+    },
+    "RouteFiltersPopover": {
+      "heading": "Filtreler",
+      "clearLabel": "Temizle"
+    },
+    "LocaleToggle": {
+      "tr": "Türkçe",
+      "en": "İngilizce",
+      "screenReaderLabel": "Uygulama dilini değiştir",
+      "switchItemAriaLabel": "Uygulama dilini {language} olarak değiştir"
+    },
+    "BudgetQueryStringCombobox": {
+      "label": "Bütçe Kategorisi"
+    },
+    "Combobox": {
+      "emptyMessage": "Aramanız için bir seçenek bulunamadı.",
+      "searchPlaceholder": "Arama Yapın",
+      "selectAnOption": "Bir seçenek seçin"
+    }
+  },
+  "Actions": {
+    "Auth": {
+      "login": {
+        "rateLimitExceeded": "Çok fazla denemede bulundunuz. Lütfen tekrar denemeden önce bir dakika bekleyin.",
+        "incorrectCredentials": "Yanlış e-posta veya şifre.",
+        "internalErrorMessage": "İsteğiniz işlenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin."
+      },
+      "register": {
+        "rateLimitExceeded": "Çok fazla deneme yaptınız. Giriş sayfasına yönlendiriliyorsunuz.",
+        "unverifiedEmailAlreadyExists": "Belirtilen e-postaya sahip kullanıcı zaten mevcut. Lütfen e-postanızı doğrulayın.",
+        "userAlreadyExists": "Belirtilen e-postaya sahip kullanıcı zaten mevcut: {email}",
+        "internalErrorMessage": "İsteğiniz işlenirken bir sorun oluştu. Lütfen daha sonra tekrar deneyin."
+      },
+      "handleEmailVerification": {
+        "rateLimitExceeded": "Çok fazla deneme yaptınız. Giriş sayfasına yönlendiriliyorsunuz.",
+        "invalidCode": "Geçersiz doğrulama kodu. {attemptsLeft} deneme hakkınız kaldı.",
+        "successMessage": "E-posta başarıyla doğrulandı. Yönlendiriliyorsunuz...",
+        "internalErrorMessage": "İsteğiniz işlenirken bir sorun oluştu. Lütfen daha sonra tekrar deneyin."
+      },
+      "resendEmailVerificationCode": {
+        "rateLimitExceeded": "Çok fazla deneme yaptınız. Giriş sayfasına yönlendiriliyorsunuz.",
+        "successMessage": "Eğer bir hesabınız varsa, size bir e-posta gönderilmiştir. Lütfen gelen kutunuzu veya spam klasörünüzü kontrol edin."
+      },
+      "sendPasswordResetEmail": {
+        "rateLimitExceeded": "Çok fazla deneme yaptınız. Giriş sayfasına yönlendiriliyorsunuz.",
+        "successMessage": "Eğer bir hesabınız varsa, size bir e-posta gönderilmiştir. Lütfen gelen kutunuzu veya spam klasörünüzü kontrol edin."
+      },
+      "resetPassword": {
+        "invalidRequest": "Geçersiz istek.",
+        "successMessage": "Şifre başarıyla sıfırlandı. Yeniden yönlendiriliyorsunuz..."
+      },
+      "validateOTP": {
+        "rateLimitExceeded": "Çok fazla deneme yaptınız. Giriş sayfasına yönlendiriliyorsunuz.",
+        "invalidRequest": "Geçersiz istek.",
+        "invalidCode": "Geçersiz doğrulama kodu. {attemptsLeft} deneme hakkınız kaldı.",
+        "successMessage": "Başarıyla giriş yapıldı. Yönlendiriliyorsunuz..."
+      },
+      "activateTwoFactorAuthentication": {
+        "invalidRequest": "Geçersiz istek.",
+        "invalidCode": "Geçersiz doğrulama kodu.",
+        "successMessage": "İki faktörlü kimlik doğrulaması etkinleştirildi."
+      },
+      "disableTwoFactorAuthentication": {
+        "internalErrorMessage": "İsteğiniz işlenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+        "successMessage": "İki faktörlü kimlik doğrulaması devre dışı bırakıldı."
+      }
+    },
+    "Account": {
+      "registerBankAccount": {
+        "internalErrorMessage": "İsteğiniz işlenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+        "duplicateAccountEntry": "Ad {name} ve kategori {category} ile hesap zaten mevcut.",
+        "duplicateAccountEntryWithCategory": "Kategori: {category} ile hesap zaten mevcut.",
+        "duplicateAccountEntryWithName": "Ad: {name} ile hesap zaten mevcut."
+      },
+      "updateBankAccount": {
+        "internalErrorMessage": "İsteğiniz işlenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+        "duplicateAccountEntry": "Ad {name} ve kategori {category} ile hesap zaten mevcut.",
+        "duplicateAccountEntryWithCategory": "Kategori: {category} ile hesap zaten mevcut.",
+        "duplicateAccountEntryWithName": "Ad: {name} ile hesap zaten mevcut."
+      },
+      "getPaginatedAccounts": {},
+      "deleteAccount": {
+        "anErrorOccurred": "Hesap silinirken bir hata oluştu.",
+        "successMessage": "Hesap başarıyla silindi."
+      }
+    },
+    "Budget": {
+      "createBudget": {
+        "internalErrorMessage": "İsteğiniz işlenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin."
+      },
+      "updateBudget": {
+        "budgetNotFound": "Güncellenmesi gereken bütçeyi bulamadık.",
+        "internalErrorMessage": "İsteğiniz işlenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin."
+      }
+    }
+  },
+  "Zod": {
+    "Login": {
+      "invalidEmail": "Lütfen geçerli bir e-posta adresi girin.",
+      "passwordTooShort": "Şifre en az 8 karakter olmalıdır.",
+      "passwordTooLong": "Şifre en fazla 100 karakter olabilir."
+    },
+    "Register": {
+      "invalidEmail": "Lütfen geçerli bir e-posta adresi girin.",
+      "nameTooShort": "İsim 2 karakterden az olamaz.",
+      "nameTooLong": "İsim en fazla 100 karakter olabilir.",
+      "passwordTooShort": "Şifre en az 8 karakterden oluşmalıdır.",
+      "passwordTooLong": "Şifre en çok 100 karakter olabilir.",
+      "invalidPassword": "Şifre en az bir büyük harf, bir küçük harf ve bir sayı içermelidir."
+    },
+    "Account": {
+      "balanceErrorMessage": "Bakiye bir sayı olmalıdır.",
+      "categoryRequiredErrorMessage": "Hesap Kategorisi zorunludur.",
+      "categoryInvalidTypeError": "Geçersiz hesap kategorisi.",
+      "nameErrorMessage": "Hesap ismi zorunludur."
+    },
+    "Budget": {
+      "blankName": "Bütçe ismi zorunludur.",
+      "budgetAmountPositive": "Bütçe tutarı pozitif bir sayı olmalıdır.",
+      "budgetAmountRequired": "Bütçe tutarı zorunludur.",
+      "budgetAmountInvalid": "Bütçe tutarı pozitif bir sayı olmalıdır.",
+      "budgetCategoryRequired": "Bütçe kategorisi zorunludur.",
+      "spentAmountNegative": "Harcanan miktar negatif olamaz."
+    }
+  }
+}

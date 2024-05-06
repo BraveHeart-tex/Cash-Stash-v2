@@ -1,7 +1,10 @@
 import { cn } from "@/lib/utils/stringUtils/cn";
+import { useTranslations } from "next-intl";
 import { MdCheck, MdClear, MdPassword } from "react-icons/md";
 
 const PasswordRequirements = ({ password = "" }: { password: string }) => {
+  const t = useTranslations("Components.PasswordRequirements");
+
   const validations = [
     {
       label: "8 characters",
@@ -25,7 +28,7 @@ const PasswordRequirements = ({ password = "" }: { password: string }) => {
     <div className="mt-4 rounded-md border p-2">
       <h2 className="mb-2 flex items-center gap-1 text-lg font-semibold text-foreground">
         <MdPassword className="text-xl" />
-        Password requirements:
+        {t("title")}:
       </h2>
       <ul>
         {validations.map((validation, index) => (
@@ -41,7 +44,7 @@ const PasswordRequirements = ({ password = "" }: { password: string }) => {
             ) : (
               <MdClear className="text-xl" />
             )}
-            {validation.label}
+            {t(validation.label as any)}
           </li>
         ))}
       </ul>

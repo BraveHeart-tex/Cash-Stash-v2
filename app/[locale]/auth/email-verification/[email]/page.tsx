@@ -15,7 +15,7 @@ import {
   EMAIL_VERIFICATION_REDIRECTION_PATHS,
   PAGE_ROUTES,
 } from "@/lib/constants";
-import { redirect } from "next/navigation";
+import { redirect } from "@/navigation";
 import ResendVerificationTokenButton from "@/components/resend-verification-token-button";
 import Logo from "@/components/logo";
 

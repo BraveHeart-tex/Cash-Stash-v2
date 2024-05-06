@@ -58,7 +58,7 @@ const TransactionsPageFilters = async ({
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <RouteSearchInput label="Search" placeholder="Search by description" />
+      <RouteSearchInput placeholder="Search by description" />
       <QueryStringComboBox
         dataset={accountsFilterDataset}
         queryStringKey="accountId"

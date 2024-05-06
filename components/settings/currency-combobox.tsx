@@ -12,9 +12,45 @@ import {
 
 type CurrencyComboboxProps = {
   currencies: ComboboxOption[];
+  internationalizationConfig: {
+    convertCurrencyDialogTitle: string;
+    convertCurrencyDialogDescription: string;
+    convertCurrencyPrimaryActionLabel: string;
+    convertCurrencySecondaryActionLabel: string;
+    convertCurrencyPending: string;
+    convertCurrencySuccessMessage: string;
+    currencySaveRejectMessage: string;
+    currencySaveSuccessMessage: string;
+    changeCurrencyDialogTitle: string;
+    changeCurrencyDialogMessage: string;
+    changeCurrencyPending: string;
+    changeCurrencySuccessMessage: string;
+    changeCurrencyPrimaryActionLabel: string;
+    changeCurrencySaveLabel: string;
+  };
 };
 
-const CurrencyCombobox = ({ currencies }: CurrencyComboboxProps) => {
+const CurrencyCombobox = ({
+  currencies,
+  internationalizationConfig,
+}: CurrencyComboboxProps) => {
+  const {
+    convertCurrencyDialogTitle,
+    convertCurrencyDialogDescription,
+    convertCurrencyPrimaryActionLabel,
+    convertCurrencySecondaryActionLabel,
+    convertCurrencyPending,
+    convertCurrencySuccessMessage,
+    currencySaveRejectMessage,
+    currencySaveSuccessMessage,
+    changeCurrencyDialogTitle,
+    changeCurrencyDialogMessage,
+    changeCurrencyPending,
+    changeCurrencySuccessMessage,
+    changeCurrencyPrimaryActionLabel,
+    changeCurrencySaveLabel,
+  } = internationalizationConfig;
+
   let [isPending, startTransition] = useTransition();
   const [selectedCurrency, setSelectedCurrency] =
     useState<ComboboxOption | null>(null);
@@ -35,9 +71,8 @@ const CurrencyCombobox = ({ currencies }: CurrencyComboboxProps) => {
     selectedCurrency: ComboboxOption
   ) => {
     showGenericConfirm({
-      title: "Would you like to convert your transactions?",
-      message:
-        "Your preferred currency has been updated. If you'd like, your transactions can be converted to your new currency. This process may take a few seconds.",
+      title: convertCurrencyDialogTitle,
+      message: convertCurrencyDialogDescription,
       onConfirm() {
         const updateCurrencyConversion = () => {
           return new Promise(async (resolve, reject) => {
@@ -57,23 +92,22 @@ const CurrencyCombobox = ({ currencies }: CurrencyComboboxProps) => {
           });
         };
         toast.promise(updateCurrencyConversion, {
-          loading: "Converting...",
-          success:
-            "Successfully converted transactions to the new currency rate.",
+          loading: convertCurrencyPending,
+          success: convertCurrencySuccessMessage,
           error(error) {
             return error;
           },
         });
       },
-      primaryActionLabel: "Convert",
-      secondaryActionLabel: "Don't Convert",
+      primaryActionLabel: convertCurrencyPrimaryActionLabel,
+      secondaryActionLabel: convertCurrencySecondaryActionLabel,
     });
   };
 
   const handleCurrencySaveConfirm = () => {
     return new Promise(async (resolve, reject) => {
       if (!selectedCurrency) {
-        reject("No currency selected");
+        reject(currencySaveRejectMessage);
         return;
       }
 
@@ -93,7 +127,7 @@ const CurrencyCombobox = ({ currencies }: CurrencyComboboxProps) => {
           preferredCurrency: selectedCurrency.value,
         });
 
-        resolve("Preferred currency changed successfully");
+        resolve(currencySaveSuccessMessage);
 
         setTimeout(() => {
           askCurrencyConversion(oldSymbol, selectedCurrency);
@@ -105,18 +139,20 @@ const CurrencyCombobox = ({ currencies }: CurrencyComboboxProps) => {
   const handleCurrencySave = () => {
     if (!selectedCurrency) return;
     showGenericConfirm({
-      title: "Are you sure you want to change your preferred currency?",
-      message: `You will be changing your preferred currency from: ${userSelectedCurrency?.label} to: ${selectedCurrency.label}.`,
+      title: changeCurrencyDialogTitle,
+      message: changeCurrencyDialogMessage
+        .replace("_fromLabel", String(userSelectedCurrency?.label))
+        .replace("_toLabel", String(selectedCurrency.label)),
       onConfirm() {
         toast.promise(handleCurrencySaveConfirm, {
-          loading: "Saving...",
-          success: "Preferred currency changed successfully",
+          loading: changeCurrencyPending,
+          success: changeCurrencySuccessMessage,
           error(error) {
             return error;
           },
         });
       },
-      primaryActionLabel: "Confirm",
+      primaryActionLabel: changeCurrencyPrimaryActionLabel,
     });
   };
 
@@ -139,7 +175,7 @@ const CurrencyCombobox = ({ currencies }: CurrencyComboboxProps) => {
             className="w-max"
             onClick={handleCurrencySave}
           >
-            {isPending ? "Saving..." : "Save Changes"}
+            {isPending ? changeCurrencyPending : changeCurrencySaveLabel}
           </Button>
         )}
     </div>

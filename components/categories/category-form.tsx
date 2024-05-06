@@ -30,6 +30,7 @@ import {
   CreateCategoryReturnType,
   UpdateCategoryReturnType,
 } from "@/typings/categories";
+import { useTranslations } from "next-intl";
 
 type CategoryFormProps = {
   // eslint-disable-next-line no-unused-vars
@@ -45,6 +46,7 @@ const CategoryForm = ({
   showTypeOptions = true,
   defaultTypeValue = CATEGORY_TYPES.BUDGET,
 }: CategoryFormProps) => {
+  const t = useTranslations("Components.CategoryForm");
   let [isPending, startTransition] = useTransition();
   const form = useForm<CategorySchemaType>({
     resolver: zodResolver(categorySchema),
@@ -67,8 +69,8 @@ const CategoryForm = ({
 
   const handleFormSubmit = async (values: CategorySchemaType) => {
     if (isEditMode && compareMatchingKeys(categoryToUpdate, values)) {
-      return toast.info("No changes detected.", {
-        description: "You haven't made any changes to the category.",
+      return toast.info(t("noChangesMessage"), {
+        description: t("noChangesDescription"),
       });
     }
 
@@ -100,24 +102,12 @@ const CategoryForm = ({
         });
       });
 
-      return toast.error("An error occurred.", {
+      return toast.error(t("anErrorOccurredMessage"), {
         description: result.error,
       });
     }
 
-    const toastTitle = {
-      create: "Category created.",
-      update: "Category updated.",
-    };
-
-    const toastDescription = {
-      create: "Category has been created.",
-      update: "Category has been updated.",
-    };
-
-    toast.success(toastTitle[isEditMode ? "update" : "create"], {
-      description: toastDescription[isEditMode ? "update" : "create"],
-    });
+    toast.success(t(`successMessage.${isEditMode ? "update" : "create"}`));
   };
 
   // stops the parent form from submitting
@@ -150,9 +140,9 @@ const CategoryForm = ({
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Category Name</FormLabel>
+              <FormLabel>{t("nameField.label")}</FormLabel>
               <FormControl>
-                <Input placeholder="Enter category name" {...field} />
+                <Input placeholder={t("nameField.placeholder")} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -164,7 +154,7 @@ const CategoryForm = ({
             name="type"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Category Type</FormLabel>
+                <FormLabel>{t("typeField.label")}</FormLabel>
                 <Select
                   key={field.value}
                   onValueChange={field.onChange}
@@ -172,21 +162,19 @@ const CategoryForm = ({
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a category type" />
+                      <SelectValue placeholder={t("typeField.placeholder")} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
                     <SelectItem value={CATEGORY_TYPES.BUDGET.toString()}>
-                      Budget
+                      {t("typeField.options.budget")}
                     </SelectItem>
                     <SelectItem value={CATEGORY_TYPES.TRANSACTION.toString()}>
-                      Transaction
+                      {t("typeField.options.transaction")}
                     </SelectItem>
                   </SelectContent>
                 </Select>
-                <FormDescription>
-                  Refers to the type of category you want to create.
-                </FormDescription>
+                <FormDescription>{t("typeField.description")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -196,10 +184,10 @@ const CategoryForm = ({
           type="submit"
           name="submit-category-form"
           aria-label="Submit category form"
-          loading={form.formState.isSubmitting || isPending}
+          loading={isPending}
           disabled={isPending || form.formState.isSubmitting}
         >
-          {isEditMode ? "Update" : "Create"}
+          {t(`submitButtonLabel.${isEditMode ? "update" : "create"}`)}
         </Button>
       </form>
     </Form>

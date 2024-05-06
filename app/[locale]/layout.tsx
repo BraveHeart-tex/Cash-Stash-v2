@@ -7,6 +7,9 @@ import { ReactNode } from "react";
 import SonnerToaster from "@/components/ui/sonner";
 import GoogleCaptchaWrapper from "@/components/google-captcha-wrapper";
 import { THEME_OPTIONS } from "@/lib/constants";
+import { NextIntlClientProvider } from "next-intl";
+import { pick } from "@/lib/utils/objectUtils/pick";
+import { getMessages } from "next-intl/server";
 
 const InterFont = Inter({
   weight: ["300", "400", "500", "600", "700"],
@@ -89,13 +92,21 @@ export const metadata: Metadata = {
 
 type LayoutProps = {
   children: ReactNode;
+  params: { locale: string };
 };
 
-export default async function RootLayout({ children }: LayoutProps) {
+export default async function RootLayout({
+  children,
+  params: { locale },
+}: LayoutProps) {
   const themeValues = THEME_OPTIONS.map((item) => item.value);
 
+  const messages = await getMessages({
+    locale,
+  });
+
   return (
-    <html lang="en">
+    <html lang={locale}>
       <head>
         <meta name="msapplication-TileColor" content="#b91d47" />
         <link
@@ -159,7 +170,20 @@ export default async function RootLayout({ children }: LayoutProps) {
           <GoogleCaptchaWrapper>
             <RedirectionPathToaster />
             <SonnerToaster />
-            <main className="pb-16 lg:pb-0">{children}</main>
+            <main className="pb-16 lg:pb-0">
+              <NextIntlClientProvider
+                locale={locale}
+                messages={pick(messages, [
+                  "ThemeOptions",
+                  "NavigationItems",
+                  "Components",
+                  "Zod",
+                  "Enums",
+                ])}
+              >
+                {children}
+              </NextIntlClientProvider>
+            </main>
           </GoogleCaptchaWrapper>
         </ThemeProvider>
       </body>

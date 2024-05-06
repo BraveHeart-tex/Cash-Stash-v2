@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/card";
 import { getUser } from "@/lib/auth/session";
 import { PAGE_ROUTES } from "@/lib/constants";
-import { redirect } from "next/navigation";
+import { redirect } from "@/navigation";
 import ResetPasswordForm from "@/components/reset-password-form";
 import Logo from "@/components/logo";
 import { checkResetPasswordEmailAndToken } from "@/server/auth";
@@ -34,7 +34,7 @@ const ResetPassword = async ({
   const token = searchParams.token;
 
   if (!email || !token) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   const emailValidityResponse = await checkResetPasswordEmailAndToken({
@@ -43,7 +43,7 @@ const ResetPassword = async ({
   });
 
   if (emailValidityResponse.error) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   return (

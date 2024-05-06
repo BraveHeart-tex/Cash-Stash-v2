@@ -11,19 +11,63 @@ import { Button } from "@/components/ui/button";
 import { MdOutlineScreenLockPortrait } from "react-icons/md";
 import TwoFactorAuthenticationActivation from "@/components/settings/two-factor-authentication-activation";
 
-const TwoFactorAuthenticationSettings = () => {
+type TwoFactorAuthenticationSettingsProps = {
+  internationalizationConfig: {
+    twoFactorSettingsTitle: string;
+    twoFactorAlreadyEnableDescription: string;
+    twoFactorSettingsDescription: string;
+    twoFactorDisableDialogTitle: string;
+    twoFactorDisableDialogMessage: string;
+    twoFactorDisableDialogPrimaryActionLabel: string;
+    twoFactorEnableDialogTitle: string;
+    twoFactorEnableDialogMessage: string;
+    twoFactorToastInfoMessage: string;
+    twoFactorEnableDialogPrimaryActionLabel: string;
+    twoFactorEnablePending: string;
+    twoFactorEnableCTA: string;
+    twoFactorDisablePeding: string;
+    twoFactorDisableCTA: string;
+
+    twoFactorFormStepOne: string;
+    twoFactorFormStepTwo: string;
+    twoFactorFormStepThree: string;
+    twoFactorCopyToClipboardSuccessMessage: string;
+    twoFactorCopyToClipboardCTA: string;
+    twoFactorCodeInputLabel: string;
+  };
+};
+
+const TwoFactorAuthenticationSettings = ({
+  internationalizationConfig,
+}: TwoFactorAuthenticationSettingsProps) => {
   const user = useAuthStore((state) => state.user);
   const setUri = useAuthStore((state) => state.setUri);
   const setUser = useAuthStore((state) => state.setUser);
   const showConfirm = useGenericConfirmStore((state) => state.showConfirm);
   let [isPending, startTransition] = useTransition();
 
+  const {
+    twoFactorSettingsTitle,
+    twoFactorAlreadyEnableDescription,
+    twoFactorSettingsDescription,
+    twoFactorDisableDialogTitle,
+    twoFactorDisableDialogMessage,
+    twoFactorDisableDialogPrimaryActionLabel,
+    twoFactorEnableDialogTitle,
+    twoFactorEnableDialogMessage,
+    twoFactorToastInfoMessage,
+    twoFactorEnableDialogPrimaryActionLabel,
+    twoFactorEnablePending,
+    twoFactorEnableCTA,
+    twoFactorDisablePeding,
+    twoFactorDisableCTA,
+  } = internationalizationConfig;
+
   const handleDisabledTwoFactorAuth = () => {
     showConfirm({
-      title: "Are you sure you want to disable two-factor authentication?",
-      message:
-        "Two-factor authentication increases the security of your account. Are you sure you want to disable it? You can enable it again at any time.",
-      primaryActionLabel: "Disable",
+      title: twoFactorDisableDialogTitle,
+      message: twoFactorDisableDialogMessage,
+      primaryActionLabel: twoFactorDisableDialogPrimaryActionLabel,
       onConfirm: () => {
         startTransition(async () => {
           const response = await disableTwoFactorAuthentication();
@@ -45,18 +89,15 @@ const TwoFactorAuthenticationSettings = () => {
 
   const handleEnableTwoFactorAuth = () => {
     showConfirm({
-      title: "Are you sure you want to enable two-factor authentication?",
-      message:
-        "Upon enabling two-factor authentication, you will be required to enter a unique code from your mobile device in addition to your password when signing in.",
-      primaryActionLabel: "Enable",
+      title: twoFactorEnableDialogTitle,
+      message: twoFactorEnableDialogMessage,
+      primaryActionLabel: twoFactorEnableDialogPrimaryActionLabel,
       onConfirm: () => {
         startTransition(async () => {
           const uriResponse = await enableTwoFactorAuthentication();
           setUri(uriResponse);
           setUser({ prefersTwoFactorAuthentication: true });
-          toast.info(
-            "You can now use the form below to enable two-factor authentication."
-          );
+          toast.info(twoFactorToastInfoMessage);
         });
       },
     });
@@ -77,21 +118,19 @@ const TwoFactorAuthenticationSettings = () => {
   return (
     <section id="two-factor-authentication">
       <h2 className="text-xl font-semibold text-primary">
-        Two-Factor Authentication
+        {twoFactorSettingsTitle}
       </h2>
       <p className="w-full text-muted-foreground lg:w-[70%]">
         {user?.prefersTwoFactorAuthentication &&
-        user.activatedTwoFactorAuthentication ? (
-          "Two-factor authentication is currently enabled on your account."
-        ) : (
-          <>
-            Enhance your account security with two-factor authentication. <br />
-            Once enabled, simply enter a unique code from your mobile device
-            along with your password during sign-in for added protection.
-          </>
-        )}
+        user.activatedTwoFactorAuthentication
+          ? twoFactorAlreadyEnableDescription
+          : twoFactorSettingsDescription}
       </p>
-      {shouldShowActiviationForm ? <TwoFactorAuthenticationActivation /> : null}
+      {shouldShowActiviationForm ? (
+        <TwoFactorAuthenticationActivation
+          internationalzationConfig={internationalizationConfig}
+        />
+      ) : null}
       {shouldShowEnableButton ? (
         <Button
           className="mt-2 flex w-max items-center gap-2"
@@ -99,7 +138,7 @@ const TwoFactorAuthenticationSettings = () => {
           disabled={isPending}
         >
           <MdOutlineScreenLockPortrait />
-          {isPending ? "Enabling..." : "Enable Two-Factor Authentication"}
+          {isPending ? twoFactorEnablePending : twoFactorEnableCTA}
         </Button>
       ) : null}
 
@@ -110,7 +149,7 @@ const TwoFactorAuthenticationSettings = () => {
           disabled={isPending}
         >
           <MdOutlineScreenLockPortrait />
-          {isPending ? "Disabling..." : "Disable Two-Factor Authentication"}
+          {isPending ? twoFactorDisablePeding : twoFactorDisableCTA}
         </Button>
       ) : null}
     </section>

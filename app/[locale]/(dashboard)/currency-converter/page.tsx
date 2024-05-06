@@ -3,7 +3,7 @@ import ConvertedCurrencyList from "@/components/currency-converter/converted-cur
 import CurrencyConverterInput from "@/components/currency-converter/currency-converter-input";
 import { getUser } from "@/lib/auth/session";
 import { PAGE_ROUTES } from "@/lib/constants";
-import { redirect } from "next/navigation";
+import { redirect } from "@/navigation";
 
 const CurrencyConverterPage = async ({
   searchParams,
@@ -17,7 +17,7 @@ const CurrencyConverterPage = async ({
   const { user } = await getUser();
 
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   const { currency = "USD", amount, to = "EUR" } = searchParams;

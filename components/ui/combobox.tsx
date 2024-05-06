@@ -1,5 +1,5 @@
 "use client";
-import { forwardRef, useMemo, useState } from "react";
+import { forwardRef, useEffect, useMemo, useState } from "react";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,6 +18,7 @@ import { FaCheck, FaSort } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import { useMediaQuery } from "usehooks-ts";
 import { IconType } from "react-icons/lib";
+import { useTranslations } from "next-intl";
 
 export type ComboboxOption = {
   icon?: IconType;
@@ -51,12 +52,19 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
     },
     ref
   ) => {
+    const t = useTranslations("Components.Combobox");
     const isMobile = useMediaQuery("(max-width: 768px)");
     const [isOpen, setIsOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedOption, setSelectedOption] = useState<ComboboxOption | null>(
       defaultOption || null
     );
+
+    useEffect(() => {
+      if (defaultOption) {
+        setSelectedOption(defaultOption);
+      }
+    }, [defaultOption]);
 
     const handleOptionClick = (option: ComboboxOption) => {
       setSelectedOption(option);
@@ -95,7 +103,7 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
         return triggerPlaceholder;
       }
 
-      return "Select an option";
+      return t("selectAnOption");
     };
 
     return (
@@ -137,11 +145,11 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
                 <CommandInput
                   value={searchQuery}
                   onValueChange={(value) => setSearchQuery(value)}
-                  placeholder="Search"
+                  placeholder={t("searchPlaceholder")}
                   className="h-9"
                 />
                 <CommandEmpty className="mt-2 p-1 text-muted-foreground">
-                  {emptyMessage || "No options were found for your search."}
+                  {emptyMessage || t("emptyMessage")}
                 </CommandEmpty>
                 <CommandList asChild>
                   <AnimatePresence>

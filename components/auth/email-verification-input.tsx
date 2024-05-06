@@ -6,8 +6,8 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { handleEmailVerification } from "@/server/auth";
 import { EMAIL_VERIFICATION_CODE_LENGTH } from "@/lib/constants";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useRouter } from "@/navigation";
 
 const EmailVerificationInput = ({ email }: { email: string }) => {
   const router = useRouter();

@@ -10,6 +10,7 @@ import { useQueryStates, parseAsString, UseQueryStatesKeysMap } from "nuqs";
 import { v4 as uuidv4 } from "uuid";
 import { compareDeepObjectEquality } from "@/lib/utils/objectUtils/compareDeepObjectEquality";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 type GenericFilterOption<T> = {
   label: string;
@@ -28,6 +29,7 @@ const RouteFiltersPopover = <T extends Record<string, any>>({
   queryKeys,
   triggerLabel,
 }: RouteFiltersPopoverProps<T>) => {
+  const t = useTranslations("Components.RouteFiltersPopover");
   const [isOpen, setIsOpen] = useState(false);
   const [activeQueryKey, setActiveQueryKey] = useQueryStates(
     {
@@ -61,6 +63,8 @@ const RouteFiltersPopover = <T extends Record<string, any>>({
     (key) => activeQueryKey[key] !== ""
   );
 
+  const heading = t("heading");
+
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
@@ -69,14 +73,14 @@ const RouteFiltersPopover = <T extends Record<string, any>>({
           className="relative flex w-max items-center gap-1 self-end"
         >
           <BsFilterLeft />
-          {triggerLabel || "Filters"}
+          {triggerLabel || heading}
           {hasActiveFilter && (
             <div className="absolute right-0 top-0 h-2 w-2 rounded-full bg-primary" />
           )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-max">
-        <h3 className="mb-2 text-lg font-semibold text-foreground">Filters</h3>
+        <h3 className="mb-2 text-lg font-semibold tracking-tight">{heading}</h3>
         <div className="p-1">
           <div className="flex flex-col gap-2">
             {optionsWithIds.map((option) => (
@@ -87,7 +91,7 @@ const RouteFiltersPopover = <T extends Record<string, any>>({
                     ? "default"
                     : "outline"
                 }
-                className="flex items-center gap-1 whitespace-nowrap font-normal capitalize"
+                className="flex items-center gap-1 whitespace-nowrap font-medium  capitalize"
                 onClick={() => {
                   setActiveQueryKey({ ...option.data });
                 }}
@@ -102,7 +106,7 @@ const RouteFiltersPopover = <T extends Record<string, any>>({
             variant="secondary"
             onClick={handleClearFilters}
           >
-            Clear
+            {t("clearLabel")}
           </Button>
         </div>
       </PopoverContent>

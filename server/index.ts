@@ -1,7 +1,7 @@
 "use server";
 import { getUser } from "@/lib/auth/session";
 import { MONTHS_OF_THE_YEAR, PAGE_ROUTES } from "@/lib/constants";
-import { redirect } from "next/navigation";
+import { redirect } from "@/navigation";
 import { and, eq, gt, lt, sql } from "drizzle-orm";
 import { transactions } from "@/lib/database/schema";
 import { db } from "@/lib/database/connection";
@@ -9,7 +9,7 @@ import { db } from "@/lib/database/connection";
 export const fetchMonthlyTransactionsData = async () => {
   const { user } = await getUser();
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   const aggregateByType = async (isIncome: boolean) => {
@@ -41,7 +41,7 @@ export const fetchMonthlyTransactionsData = async () => {
 export const fetchInsightsDataAction = async () => {
   const { user } = await getUser();
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   const aggregateTransaction = async (isIncome: boolean) => {
@@ -82,7 +82,7 @@ export const getChartData = async () => {
     const { user } = await getUser();
 
     if (!user) {
-      redirect(PAGE_ROUTES.LOGIN_ROUTE);
+      return redirect(PAGE_ROUTES.LOGIN_ROUTE);
     }
 
     const transactionsResult = await db

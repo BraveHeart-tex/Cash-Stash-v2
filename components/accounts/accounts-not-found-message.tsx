@@ -1,4 +1,5 @@
 import GenericNotFoundBlock from "@/components/ui/generic-not-found-block";
+import { useTranslations } from "next-intl";
 
 type AccountsNotFoundMessageProps = {
   pageHasParams: boolean;
@@ -7,19 +8,18 @@ type AccountsNotFoundMessageProps = {
 const AccountsNotFoundMessage = ({
   pageHasParams,
 }: AccountsNotFoundMessageProps) => {
-  const headingVariants: { [key: number]: string } = {
-    0: "You don't have any accounts created yet.",
-    1: "No accounts were found for your search",
-  };
+  const t = useTranslations("Accounts.AccountsNotFoundMessage");
 
-  const message = `${pageHasParams ? "Remove existing filters or " : ""} Create a budget by clicking the 'Create a budget' button.`;
+  const heading = t(
+    `${pageHasParams ? "pageHasParams" : "noAccountsFound"}.heading`
+  );
+  const message = t(
+    `${pageHasParams ? "pageHasParams" : "noAccountsFound"}.message`
+  );
 
   return (
     <div className="w-full pt-6">
-      <GenericNotFoundBlock
-        heading={headingVariants[Number(pageHasParams)]}
-        message={message}
-      />
+      <GenericNotFoundBlock heading={heading} message={message} />
     </div>
   );
 };

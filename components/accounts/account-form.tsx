@@ -19,17 +19,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { registerBankAccount, updateBankAccount } from "@/server/account";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/navigation";
 import { useEffect, useTransition } from "react";
 import useGenericModalStore from "@/store/genericModalStore";
-import accountSchema, { AccountSchemaType } from "@/schemas/account-schema";
+import { AccountSchemaType, getAccountSchema } from "@/schemas/account-schema";
 import { toast } from "sonner";
 import { AccountSelectModel, accounts } from "@/lib/database/schema";
-import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
 import CurrencyFormLabel from "@/components/ui/currency-form-label";
 import { compareMatchingKeys } from "@/lib/utils/objectUtils/compareMatchingKeys";
 import MaskedAmountInput from "@/components/ui/masked-amount-input";
 import { BaseValidatedResponse } from "@/typings/baseTypes";
+import { useTranslations } from "next-intl";
 
 type AccountFormProps = {
   data?: AccountSelectModel;
@@ -41,11 +41,20 @@ const AccountForm = ({
   data: accountToBeUpdated,
   afterSave,
 }: AccountFormProps) => {
+  const categoryT = useTranslations("Enums.AccountCategory");
+  const t = useTranslations("Components.AccountForm");
+  const zodT = useTranslations("Zod.Account");
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const closeGenericModal = useGenericModalStore(
     (state) => state.closeGenericModal
   );
+  const accountSchema = getAccountSchema({
+    balanceErrorMessage: zodT("balanceErrorMessage"),
+    nameErrorMessage: zodT("nameErrorMessage"),
+    categoryInvalidTypeError: zodT("categoryInvalidTypeError"),
+    categoryRequiredErrorMessage: zodT("categoryRequiredErrorMessage"),
+  });
   const form = useForm<AccountSchemaType>({
     resolver: zodResolver(accountSchema),
   });
@@ -65,8 +74,8 @@ const AccountForm = ({
 
   const handleFormSubmit = async (values: AccountSchemaType) => {
     if (entityId && compareMatchingKeys(accountToBeUpdated, values)) {
-      toast.info("No changes detected.", {
-        description: "You haven't made any changes.",
+      toast.info(t("noChangesMessage"), {
+        description: t("noChangesDescription"),
       });
       return;
     }
@@ -100,16 +109,16 @@ const AccountForm = ({
     }
 
     if (result.error) {
-      toast.error("An error occurred.", {
+      toast.error(t("anErrorOccurredMessage"), {
         description: result.error,
       });
     } else {
       const successMessage = {
-        create: "Your account has been created.",
-        update: "Your account has been updated.",
+        create: t("createAccountSuccessMessage"),
+        update: t("updateAccountSuccessMessage"),
       };
       router.refresh();
-      toast.success("Success!", {
+      toast.success(t("successTitle"), {
         description: successMessage[entityId ? "update" : "create"],
       });
       closeGenericModal();
@@ -117,7 +126,10 @@ const AccountForm = ({
     }
   };
 
-  const selectOptions = generateOptionsFromEnums(accounts.category.enumValues);
+  const selectOptions = accounts.category.enumValues.map((value) => ({
+    label: categoryT(value),
+    value,
+  }));
 
   return (
     <Form {...form}>
@@ -130,9 +142,9 @@ const AccountForm = ({
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Account Name</FormLabel>
+              <FormLabel>{t("nameField.label")}</FormLabel>
               <FormControl>
-                <Input placeholder="Account name" {...field} />
+                <Input placeholder={t("nameField.placeholder")} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -143,14 +155,14 @@ const AccountForm = ({
           name="category"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Account Type</FormLabel>
+              <FormLabel>{t("typeField.label")}</FormLabel>
               <Select
                 onValueChange={field.onChange}
                 defaultValue={accountToBeUpdated?.category || field.value}
               >
                 <FormControl>
                   <SelectTrigger ref={field.ref}>
-                    <SelectValue placeholder="Select an account type" />
+                    <SelectValue placeholder={t("typeField.placeholder")} />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
@@ -170,10 +182,10 @@ const AccountForm = ({
           name="balance"
           render={({ field }) => (
             <FormItem>
-              <CurrencyFormLabel label="Balance" />
+              <CurrencyFormLabel label={t("balanceField.label")} />
               <FormControl>
                 <MaskedAmountInput
-                  placeholder="Account balance"
+                  placeholder={t("balanceField.placeholder")}
                   initialValue={field.value}
                   id="balance"
                   onMaskedValueChange={(value) => {
@@ -190,11 +202,11 @@ const AccountForm = ({
           className="w-full"
           type="submit"
           name="submit-account-form-button"
-          aria-label="Submit account form"
-          loading={form.formState.isSubmitting || isPending}
+          aria-label={t(`submitButtonLabel.${entityId ? "update" : "create"}`)}
+          loading={isPending}
           disabled={form.formState.isSubmitting || isPending}
         >
-          {entityId ? "Update" : "Create"}
+          {t(`submitButtonLabel.${entityId ? "update" : "create"}`)}
         </Button>
       </form>
     </Form>

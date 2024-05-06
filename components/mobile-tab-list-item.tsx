@@ -1,8 +1,9 @@
 "use client";
 import { cn } from "@/lib/utils/stringUtils/cn";
-import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
-import Link from "next/link";
+import { Link } from "@/navigation";
+import { usePathname } from "@/navigation";
+import { useTranslations } from "next-intl";
 
 type PageItem = {
   label: string;
@@ -11,6 +12,7 @@ type PageItem = {
 };
 
 const MobileTabsListItem = ({ page }: { page: PageItem }) => {
+  const t = useTranslations("NavigationItems");
   const elementRef = useRef<HTMLAnchorElement | null>(null);
   const pathname = usePathname();
   const isActive = pathname === page.link;
@@ -34,7 +36,7 @@ const MobileTabsListItem = ({ page }: { page: PageItem }) => {
     >
       <page.icon className="mb-2 h-5 w-5 text-muted-foreground group-[.active-tab]:text-primary" />
       <span className="text-xs text-muted-foreground group-[.active-tab]:text-primary md:text-sm">
-        {page.label}
+        {t(`${page.link}.label` as any)}
       </span>
     </Link>
   );

@@ -1,21 +1,23 @@
 import AccountCard from "@/components/account-card";
 import CreateAccountButton from "@/components/create-buttons/create-account-button";
 import AnimatePresenceClient from "@/components/animations/animate-presence";
-import Link from "next/link";
+import { Link } from "@/navigation";
 import { Button } from "@/components/ui/button";
 import { PAGE_ROUTES } from "@/lib/constants";
 import { AccountWithTransactions } from "@/typings/accounts";
+import { useTranslations } from "next-intl";
 
 type AccountSummariesProps = {
   accounts: AccountWithTransactions[];
 };
 
 const AccountSummaries = ({ accounts }: AccountSummariesProps) => {
+  const t = useTranslations("Components.AccountSummaries");
   if (accounts.length === 0) {
     return (
       <article className="flex h-[300px] items-center justify-center">
         <div className="flex flex-col items-center justify-center gap-2">
-          <p className="text-primary">No accounts found.</p>
+          <p className="text-primary">{t("noAccountsFound")}</p>
           <CreateAccountButton />
         </div>
       </article>
@@ -30,7 +32,9 @@ const AccountSummaries = ({ accounts }: AccountSummariesProps) => {
             <AccountCard account={account} key={account.id + index} />
           ))}
           <Button className="ml-auto mt-2 w-max">
-            <Link href={PAGE_ROUTES.ACCOUNTS_ROUTE}>See all your accounts</Link>
+            <Link href={PAGE_ROUTES.ACCOUNTS_ROUTE}>
+              {t("seeAllYourAccounts")}
+            </Link>
           </Button>
         </AnimatePresenceClient>
       </ul>

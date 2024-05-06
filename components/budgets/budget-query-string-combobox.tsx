@@ -4,6 +4,7 @@ import QueryStringComboBox from "@/components/query-string-combobox";
 import { CATEGORY_TYPES } from "@/lib/constants";
 import { useEffect } from "react";
 import { CategorySelectModel } from "@/lib/database/schema";
+import { useTranslations } from "next-intl";
 
 type BudgetQueryStringComboboxProps = {
   initialBudgetCategories: CategorySelectModel[];
@@ -12,6 +13,7 @@ type BudgetQueryStringComboboxProps = {
 const BudgetQueryStringCombobox = ({
   initialBudgetCategories,
 }: BudgetQueryStringComboboxProps) => {
+  const t = useTranslations("Components.BudgetQueryStringCombobox");
   const budgetOptions = useCategoriesStore((state) => state.categories).filter(
     (category) => category.type === CATEGORY_TYPES.BUDGET
   );
@@ -29,7 +31,7 @@ const BudgetQueryStringCombobox = ({
         value: option.name,
       }))}
       queryStringKey="category"
-      selectLabel="Budget Category"
+      selectLabel={t("label")}
     />
   );
 };

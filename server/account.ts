@@ -1,6 +1,6 @@
 "use server";
 import { getUser } from "@/lib/auth/session";
-import { redirect } from "next/navigation";
+import { redirect } from "@/navigation";
 import { ZodError } from "zod";
 import {
   generateCachePrefixWithUserId,
@@ -9,7 +9,7 @@ import {
   getPaginatedAccountsKey,
 } from "@/lib/redis/redisUtils";
 import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
-import accountSchema, { AccountSchemaType } from "@/schemas/account-schema";
+import { AccountSchemaType, getAccountSchema } from "@/schemas/account-schema";
 import accountRepository from "@/lib/database/repository/accountRepository";
 import transactionRepository from "@/lib/database/repository/transactionRepository";
 import redisService from "@/lib/redis/redisService";
@@ -23,6 +23,7 @@ import {
   UpdateBankAccountParams,
   UpdateBankAccountReturnType,
 } from "@/typings/accounts";
+import { getTranslations } from "next-intl/server";
 
 export const registerBankAccount = async ({
   balance,
@@ -32,10 +33,22 @@ export const registerBankAccount = async ({
   const { user } = await getUser();
 
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
+  const [zodT, actionT] = await Promise.all([
+    getTranslations("Zod.Account"),
+    getTranslations("Actions.Account.registerBankAccount"),
+  ]);
+
   try {
+    const accountSchema = getAccountSchema({
+      balanceErrorMessage: zodT("balanceErrorMessage"),
+      nameErrorMessage: zodT("nameErrorMessage"),
+      categoryInvalidTypeError: zodT("categoryInvalidTypeError"),
+      categoryRequiredErrorMessage: zodT("categoryRequiredErrorMessage"),
+    });
+
     const validatedData = accountSchema.parse({ balance, category, name });
 
     const accountDto = {
@@ -49,7 +62,7 @@ export const registerBankAccount = async ({
     );
 
     if (affectedRows === 0 || !account) {
-      return { error: "Error creating account.", fieldErrors: [] };
+      return { error: actionT("internalErrorMessage"), fieldErrors: [] };
     }
 
     await Promise.all([
@@ -76,15 +89,20 @@ export const registerBankAccount = async ({
     if (error instanceof Error) {
       if ("code" in error && error.code === "ER_DUP_ENTRY") {
         return {
-          error: `Account already exists with name ${name} and category ${generateLabelFromEnumValue(category)}.`,
+          error: actionT("duplicateAccountEntry", {
+            name,
+            category: generateLabelFromEnumValue(category),
+          }),
           fieldErrors: [
             {
               field: "name",
-              message: `Account already exists with name: ${name}.`,
+              message: actionT("duplicateAccountEntryWithName", { name }),
             },
             {
               field: "category",
-              message: `Account already exists with category: ${generateLabelFromEnumValue(category)}.`,
+              message: actionT("duplicateAccountEntryWithCategory", {
+                category: generateLabelFromEnumValue(category),
+              }),
             },
           ],
         };
@@ -92,8 +110,7 @@ export const registerBankAccount = async ({
     }
 
     return {
-      error:
-        "An error occurred while registering your bank account. Please try again later.",
+      error: actionT("internalErrorMessage"),
       fieldErrors: [],
     };
   }
@@ -105,17 +122,20 @@ export const updateBankAccount = async ({
 }: UpdateBankAccountParams): UpdateBankAccountReturnType => {
   const { user } = await getUser();
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
-  if (!accountId) {
-    return {
-      error: "Invalid request. Please provide an account ID.",
-      fieldErrors: [],
-    };
-  }
+  const actionT = await getTranslations("Actions.Account.updateBankAccount");
 
   try {
+    const zodT = await getTranslations("Zod.Account");
+    const accountSchema = getAccountSchema({
+      balanceErrorMessage: zodT("balanceErrorMessage"),
+      nameErrorMessage: zodT("nameErrorMessage"),
+      categoryInvalidTypeError: zodT("categoryInvalidTypeError"),
+      categoryRequiredErrorMessage: zodT("categoryRequiredErrorMessage"),
+    });
+
     const validatedData = accountSchema.parse(rest);
     const updateDto = {
       ...validatedData,
@@ -129,8 +149,7 @@ export const updateBankAccount = async ({
 
     if (affectedRows === 0 || !updatedAccount) {
       return {
-        error:
-          "An error occurred while updating your bank account. Please try again later.",
+        error: actionT("internalErrorMessage"),
         fieldErrors: [],
       };
     }
@@ -156,13 +175,39 @@ export const updateBankAccount = async ({
       fieldErrors: [],
     };
   } catch (error) {
+    logger.error("Error updating bank account", error);
+
     if (error instanceof ZodError) {
       return processZodError(error);
     }
 
+    if (error instanceof Error) {
+      if ("code" in error && error.code === "ER_DUP_ENTRY") {
+        return {
+          error: actionT("duplicateAccountEntry", {
+            name: rest.name,
+            category: generateLabelFromEnumValue(rest.category),
+          }),
+          fieldErrors: [
+            {
+              field: "name",
+              message: actionT("duplicateAccountEntryWithName", {
+                name: rest.name,
+              }),
+            },
+            {
+              field: "category",
+              message: actionT("duplicateAccountEntryWithCategory", {
+                category: generateLabelFromEnumValue(rest.category),
+              }),
+            },
+          ],
+        };
+      }
+    }
+
     return {
-      error:
-        "An error occurred while updating your bank account. Please try again later.",
+      error: actionT("internalErrorMessage"),
       fieldErrors: [],
     };
   }
@@ -178,7 +223,7 @@ export const getPaginatedAccounts = async ({
   const { user } = await getUser();
 
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   const PAGE_SIZE = 12;
@@ -257,14 +302,15 @@ export const deleteAccount = async (accountId: number) => {
   const { user } = await getUser();
 
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
+  const t = await getTranslations("Actions.Account.deleteAccount");
   try {
     const affectedRows = await accountRepository.deleteById(accountId);
 
     if (affectedRows === 0) {
-      return { error: "An error occurred while deleting the account." };
+      return { error: t("anErrorOccurred") };
     }
 
     await Promise.all([
@@ -281,9 +327,9 @@ export const deleteAccount = async (accountId: number) => {
       redisService.del(getAccountKey(accountId)),
     ]);
 
-    return { data: "Account deleted successfully." };
+    return { data: t("successMessage") };
   } catch (error) {
-    return { error: "An error occurred while deleting the account." };
+    return { error: t("anErrorOccurred") };
   }
 };
 
@@ -291,14 +337,14 @@ export const getTransactionsForAccount = async (accountId: number) => {
   const { user } = await getUser();
 
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   try {
     const key = getAccountTransactionsKey(accountId);
     const cachedData = await redisService.get(key);
     if (cachedData) {
-      console.info("getTransactionsForAccount CACHE HIT");
+      logger.info("getTransactionsForAccount CACHE HIT");
       return JSON.parse(cachedData);
     }
 
@@ -321,7 +367,7 @@ export const getCurrentUserAccounts = async () => {
   const { user } = await getUser();
 
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   return await accountRepository.getByUserId(user.id);
@@ -331,7 +377,7 @@ export const getCurrentUserAccountsThatHaveTransactions = async () => {
   const { user } = await getUser();
 
   if (!user) {
-    redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
   }
 
   return await accountRepository.getAccountsThatHaveTransactions(user.id);

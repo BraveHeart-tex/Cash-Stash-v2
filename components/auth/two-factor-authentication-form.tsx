@@ -1,6 +1,6 @@
 "use client";
 import AutoProgressInput from "@/components/auto-progress-input";
-import { useEffect, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { validateOTP } from "@/server/auth";
 import {
   Card,
@@ -11,57 +11,85 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import TwoFactorAuthenticationTimer from "@/components/two-factor-authentication-timer";
-import { redirect, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Logo from "@/components/logo";
 import { PAGE_ROUTES } from "@/lib/constants";
+import { useRouter } from "@/navigation";
+import { Button } from "@/components/ui/button";
+import { useLocale } from "next-intl";
+import { redirect as nextRedirect } from "next/navigation";
 
-const TwoFactorAuthenticationForm = ({ email }: { email: string }) => {
+type TwoFactorAuthenticationFormProps = {
+  email: string;
+  internationalizationConfig: {
+    twoFactorFormTitle: string;
+    twoFactorFormDescription: string;
+    twoFactorFormCodeLabel: string;
+    twoFactorFormButtonLabel: string;
+  };
+};
+
+const TwoFactorAuthenticationForm = ({
+  email,
+  internationalizationConfig,
+}: TwoFactorAuthenticationFormProps) => {
+  const {
+    twoFactorFormCodeLabel,
+    twoFactorFormDescription,
+    twoFactorFormTitle,
+    twoFactorFormButtonLabel,
+  } = internationalizationConfig;
   const [isPending, startTransition] = useTransition();
   const [code, setCode] = useState("");
   const router = useRouter();
+  const locale = useLocale();
 
-  useEffect(() => {
-    if (code.length === 6) {
-      startTransition(async () => {
-        const response = await validateOTP(code, email);
+  const handleOTPValidation = () => {
+    startTransition(async () => {
+      const response = await validateOTP(code, email);
 
-        if (response.error) {
-          toast.error(response.error);
-          if (response.redirectPath) {
-            redirect(response.redirectPath);
-          }
+      if (response.error) {
+        toast.error(response.error);
+        if (response.redirectPath) {
+          nextRedirect(`/${locale}/${response.redirectPath}`);
         }
+      }
 
-        if (response.successMessage) {
-          router.push(PAGE_ROUTES.HOME_PAGE);
-          toast.success(response.successMessage);
-        }
-      });
-    }
-  }, [code, email, router]);
+      if (response.successMessage) {
+        router.push(PAGE_ROUTES.HOME_PAGE);
+        toast.success(response.successMessage);
+      }
+    });
+  };
 
   return (
     <Card>
       <CardHeader className="text-xl">
         <Logo width={200} height={200} className="mx-auto mb-4" />
-        <CardTitle>Two-Factor Authentication</CardTitle>
-        <CardDescription>
-          Your account is protected with two-factor authentication. Please enter
-          the 6-digit code from your authenticator app to log in.
-        </CardDescription>
+        <CardTitle>{twoFactorFormTitle}</CardTitle>
+        <CardDescription>{twoFactorFormDescription}</CardDescription>
       </CardHeader>
       <CardContent>
         <TwoFactorAuthenticationTimer />
         <div className="mt-4 flex w-full items-center justify-center">
           <div>
-            <Label>Your 6-digit code</Label>
+            <Label>{twoFactorFormCodeLabel}</Label>
             <AutoProgressInput
               loading={isPending}
               length={6}
               onChange={setCode}
             />
           </div>
+          <Button
+            type="button"
+            name="two-factor-authentication"
+            className="self-end"
+            onClick={() => handleOTPValidation()}
+            disabled={isPending || code.length < 6}
+            loading={isPending}
+          >
+            {twoFactorFormButtonLabel}
+          </Button>
         </div>
       </CardContent>
     </Card>

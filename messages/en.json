@@ -1,0 +1,510 @@
+{
+  "ThemeOptions": {
+    "light": {
+      "label": "Default Light"
+    },
+    "dark": {
+      "label": "Default Dark"
+    },
+    "system": {
+      "label": "System"
+    },
+    "monokai-dark": {
+      "label": "Monokai Pro"
+    }
+  },
+  "NavigationItems": {
+    "/": {
+      "label": "Dashboard"
+    },
+    "/accounts": {
+      "label": "Accounts"
+    },
+    "/budgets": {
+      "label": "Budgets"
+    },
+    "/goals": {
+      "label": "Goals"
+    },
+    "/transactions": {
+      "label": "Transactions"
+    },
+    "/categories": {
+      "label": "Categories"
+    },
+    "/currency-converter": {
+      "label": "Currency Converter"
+    },
+    "/reports": {
+      "label": "Reports"
+    },
+    "/settings": {
+      "label": "Settings"
+    }
+  },
+  "Generic": {
+    "GenericConfirmDialog": {
+      "defaultSecondaryActionLabel": "Cancel"
+    },
+    "GenericContentModal": {
+      "dialogCancelLabel": "Cancel"
+    }
+  },
+  "Lists": {
+    "currencies": "Armenian Dram:AMD, Afghan Afghani:AFN, Netherlands Antillean Guilder:ANG, Albanian Lek:ALL, United Arab Emirates Dirham:AED, Australian Dollar:AUD, Angolan Kwanza:AOA, Azerbaijani Manat:AZN, Aruban Florin:AWG, Argentine Peso:ARS, Bosnia-Herzegovina Convertible Mark:BAM, Barbadian Dollar:BBD, Bangladeshi Taka:BDT, Bahraini Dinar:BHD, Brunei Dollar:BND, Bolivian Boliviano:BOB, Burundian Franc:BIF, Bulgarian Lev:BGN, Bermudan Dollar:BMD, Brazilian Real:BRL, Bahamian Dollar:BSD, Bhutanese Ngultrum:BTN, Bitcoin:BTC, Botswanan Pula:BWP, Belize Dollar:BZD, Belarusian Ruble:BYN, Congolese Franc:CDF, Canadian Dollar:CAD, Swiss Franc:CHF, Chilean Unit of Account (UF):CLF, Chilean Peso:CLP, Cuban Convertible Peso:CUC, Chinese Yuan (Offshore):CNH, Cuban Peso:CUP, Chinese Yuan:CNY, Costa Rican Colón:CRC, Danish Krone:DKK, Czech Republic Koruna:CZK, Djiboutian Franc:DJF, Colombian Peso:COP, Cape Verdean Escudo:CVE, Algerian Dinar:DZD, Eritrean Nakfa:ERN, Falkland Islands Pound:FKP, Fijian Dollar:FJD, British Pound Sterling:GBP, Ethiopian Birr:ETB, Egyptian Pound:EGP, Dominican Peso:DOP, Georgian Lari:GEL, Euro:EUR, Ghanaian Cedi:GHS, Gibraltar Pound:GIP, Guernsey Pound:GGP, Guatemalan Quetzal:GTQ, Guinean Franc:GNF, Honduran Lempira:HNL, Hong Kong Dollar:HKD, Gambian Dalasi:GMD, Guyanaese Dollar:GYD, Croatian Kuna:HRK, Haitian Gourde:HTG, Hungarian Forint:HUF, Iraqi Dinar:IQD, Icelandic Króna:ISK, Indonesian Rupiah:IDR, Manx pound:IMP, Israeli New Sheqel:ILS, Indian Rupee:INR, Iranian Rial:IRR, Jersey Pound:JEP, Jamaican Dollar:JMD, Jordanian Dinar:JOD, Japanese Yen:JPY, Kenyan Shilling:KES, Kyrgystani Som:KGS, Comorian Franc:KMF, Cambodian Riel:KHR, North Korean Won:KPW, South Korean Won:KRW, Kuwaiti Dinar:KWD, Cayman Islands Dollar:KYD, Laotian Kip:LAK, Kazakhstani Tenge:KZT, Lebanese Pound:LBP, Sri Lankan Rupee:LKR, Liberian Dollar:LRD, Libyan Dinar:LYD, Moldovan Leu:MDL, Moroccan Dirham:MAD, Lesotho Loti:LSL, Malagasy Ariary:MGA, Macedonian Denar:MKD, Mauritian Rupee:MUR, Mongolian Tugrik:MNT, Mauritanian Ouguiya:MRU, Mexican Peso:MXN, Malawian Kwacha:MWK, Myanma Kyat:MMK, Maldivian Rufiyaa:MVR, Macanese Pataca:MOP, Malaysian Ringgit:MYR, Mozambican Metical:MZN, Namibian Dollar:NAD, Nicaraguan Córdoba:NIO, Nigerian Naira:NGN, Nepalese Rupee:NPR, New Zealand Dollar:NZD, Panamanian Balboa:PAB, Omani Rial:OMR, Peruvian Nuevo Sol:PEN, Norwegian Krone:NOK, Papua New Guinean Kina:PGK, Philippine Peso:PHP, Pakistani Rupee:PKR, Qatari Rial:QAR, Paraguayan Guarani:PYG, Serbian Dinar:RSD, Russian Ruble:RUB, Polish Zloty:PLN, Rwandan Franc:RWF, Romanian Leu:RON, Saudi Riyal:SAR, Solomon Islands Dollar:SBD, Seychellois Rupee:SCR, Sudanese Pound:SDG, Swedish Krona:SEK, Singapore Dollar:SGD, Saint Helena Pound:SHP, Sierra Leonean Leone:SLL, Somali Shilling:SOS, Surinamese Dollar:SRD, South Sudanese Pound:SSP, Thai Baht:THB, São Tomé and Príncipe Dobra:STN, Salvadoran Colón:SVC, São Tomé and Príncipe Dobra (pre-2018):STD, Swazi Lilangeni:SZL, Syrian Pound:SYP, Turkmenistani Manat:TMT, Tajikistani Somoni:TJS, Tunisian Dinar:TND, Tongan Pa'anga:TOP, Trinidad and Tobago Dollar:TTD, Turkish Lira:TRY, Tanzanian Shilling:TZS, New Taiwan Dollar:TWD, Ukrainian Hryvnia:UAH, Ugandan Shilling:UGX, United States Dollar:USD, Uruguayan Peso:UYU, Uzbekistan Som:UZS, Venezuelan Bolívar Soberano:VES, Vanuatu Vatu:VUV, Vietnamese Dong:VND, CFA Franc BEAC:XAF, Samoan Tala:WST, Gold Ounce:XAU, Silver Ounce:XAG, East Caribbean Dollar:XCD, Special Drawing Rights:XDR, CFA Franc BCEAO:XOF, Palladium Ounce:XPD, CFP Franc:XPF, Platinum Ounce:XPT, Yemeni Rial:YER, South African Rand:ZAR, Zimbabwean Dollar:ZWL, Zambian Kwacha:ZMW"
+  },
+  "Enums": {
+    "AccountCategory": {
+      "CHECKING": "Checking Account",
+      "SAVINGS": "Savings Account",
+      "CREDIT_CARD": "Credit Card",
+      "INVESTMENT": "Investment Account",
+      "LOAN": "Loan",
+      "OTHER": "Other"
+    }
+  },
+  "Accounts": {
+    "pageTitle": "Accounts",
+    "AccountsNotFoundMessage": {
+      "pageHasParams": {
+        "heading": "No accounts were found for your search",
+        "message": "Remove existing filters or create an account by clicking the 'Create an account' button."
+      },
+      "noAccountsFound": {
+        "heading": "You don't have any accounts created yet.",
+        "message": "Create an account by clicking the 'Create an account' button."
+      }
+    },
+    "RouteFiltersPopover": {
+      "sortByBalanceAsc": "Sort by balance (Low to High)",
+      "sortByBalanceDesc": "Sort by balance (High to Low)"
+    },
+    "routeSearchInputPlaceholder": "Search accounts by name",
+    "queryStringComboBoxSelectLabel": "Account Category"
+  },
+  "Budgets": {
+    "pageTitle": "Budgets",
+    "createBudgetButtonLabel": "Create a Budget",
+    "createBudgetDialogTitle": "Create a budget",
+    "createBudgetDialogDescription": "Fill out the form below to create a budget.",
+
+    "BudgetsPageFilters": {
+      "routeSearchInputPlaceholder": "Search budgets by name",
+      "sortByProgressDesc": "Sort by Remaining (High to Low)",
+      "sortByProgressAsc": "Sort by Remaining (Low to High)",
+      "sortBySpentAmountDesc": "Sort by Spending (High to Low)",
+      "sortBySpentAmountAsc": "Sort by Spending (Low to High)",
+      "sortByBudgetAmountDesc": "Sort by Budget (High to Low)",
+      "sortByBudgetAmountAsc": "Sort by Budget (Low to High)"
+    },
+
+    "BudgetsNotFoundMessage": {
+      "pageHasParams": {
+        "heading": "No budgets were found for your search",
+        "message": "Remove existing filters or create a budget by clicking the 'Create a Budget' button."
+      },
+      "noBudgetsFound": {
+        "heading": "You don't have any budgets created yet.",
+        "message": "Create a budget by clicking the 'Create a Budget' button."
+      }
+    }
+  },
+  "Dashboard": {
+    "accountsSummaryTitle": "Accounts Summary",
+    "accountsSummaryDescription": "Access your accounts here. Navigate to the 'Accounts' page to see a comprehensive list of all your accounts.",
+
+    "budgetsSummaryTitle": "Budget Status",
+    "budgetsSummaryDescription": "Explore your budgets here. Simply click on a budget card to view its details or create a new one from the 'Budgets' page.",
+
+    "goalSummaryTitle": "Goal Progress",
+    "goalSummaryDescription": "Explore your goals here. Simply click on a goal card to view or edit its details, or create a new one by clicking the menu button above.",
+
+    "transactionSummaryTitle": "Latest Transactions",
+    "transactionSummaryDescription": "Explore your latest transactions here.",
+
+    "financialInsightsTitle": "Financial Insights",
+    "financialInsightsDescription": "View a breakdown of your spending versus earnings for this month, along with additional financial insights.",
+
+    "notificationsAndRemindersTitle": "Notifications & Reminders",
+    "notificationsAndRemindersDescription": "Manage your notifications and reminders here."
+  },
+  "Login": {
+    "loggedInHeading": "Logged in successfully.",
+    "loggedInDescription": "You are being redirected...",
+    "loginHeading": "Welcome!",
+    "loginDescription": "Sign in to access your account.",
+    "captchaError": "Captcha verification failed. Please try again.",
+    "loginSuccessMessage": "Logged in successfully. You are being redirected...",
+    "formErrorMessage": "An error occurred",
+    "emailFieldLabel": "Email",
+    "emailFieldPlaceholder": "Enter your email",
+    "signInButtonLabel": "Sign in",
+    "signInHelpMessage": "I need help signing in",
+    "signUpText": "Don't have an account? Sign up",
+
+    "twoFactorFormTitle": "Two-Factor Authentication",
+    "twoFactorFormDescription": "Your account is protected with two-factor authentication. Please enter the 6-digit code from your authenticator app to log in.",
+    "twoFactorFormCodeLabel": "Your 6-digit code",
+    "twoFactorFormButtonLabel": "Validate"
+  },
+  "Register": {
+    "registerFormHeading": "Welcome!",
+    "registerFormDescription": "Create an account to get started.",
+    "registerFormFullNameLabel": "Full Name",
+    "registerFormFullNamePlaceholder": "Enter your full name",
+    "registerFormEmailLabel": "Email",
+    "registerFormEmailPlaceholder": "Enter your email address",
+    "registerFormEmailNote": "<strong>Note</strong>: Please provide a valid email address for{' '} <u> account verification, password recovery, and other important communications. </u>"
+  },
+  "Settings": {
+    "pageTitle": "Settings",
+    "pageDescription": "Personalize your CashStash experience.",
+
+    "currencySettingsTitle": "Preffered Currency",
+    "currencySettingsDescription": "Choose your preferred currency for displaying amounts.",
+
+    "notificationSettingsTitle": "Notifications",
+    "notificationSettingsDescription": "Manage your notification preferences. We'll send you notifications only when you set a reminder for them.",
+
+    "colorThemeSettingsTitle": "Color Theme",
+    "colorThemeSettingsDescription": "Choose your preferred color theme.",
+
+    "twoFactorSettingsTitle": "Two Factor Authentication",
+    "twoFactorAlreadyEnableDescription": "Two-factor authentication is currently enabled on your account.",
+    "twoFactorSettingsDescription": "Enhance your account security with two-factor authentication. Once enabled, simply enter a unique code from your mobile device along with your password during sign-in for added protection.",
+
+    "twoFactorDisableDialogTitle": "Are you sure you want to disable two-factor authentication?",
+    "twoFactorDisableDialogMessage": "Two-factor authentication increases the security of your account. Are you sure you want to disable it? You can enable it again at any time.",
+    "twoFactorDisableDialogPrimaryActionLabel": "Disable",
+
+    "twoFactorEnableDialogTitle": "Are you sure you want to enable two-factor authentication?",
+    "twoFactorEnableDialogMessage": "Upon enabling two-factor authentication, you will be required to enter a unique code from your mobile device in addition to your password when signing in.",
+    "twoFactorToastInfoMessage": "You can now use the form below to enable two-factor authentication.",
+    "twoFactorEnableDialogPrimaryActionLabel": "Enable",
+
+    "twoFactorEnablePending": "Enabling...",
+    "twoFactorEnableCTA": "Enable Two-Factor Authentication",
+
+    "twoFactorDisablePeding": "Disabling...",
+    "twoFactorDisableCTA": "Disable Two-Factor Authentication",
+
+    "twoFactorFormStepOne": "Get an authentication app by downloading it on your mobile device. Example:",
+    "twoFactorFormStepTwo": "Scan the QR code or enter the secret key into your authentication app.",
+    "twoFactorFormStepThree": "Enter the 6-digit code from the app to enable two-factor authentication.",
+    "twoFactorCopyToClipboardSuccessMessage": "Code copied to clipboard.",
+    "twoFactorCopyToClipboardCTA": "Copy Secret",
+    "twoFactorCodeInputLabel": "Code",
+
+    "convertCurrencyDialogTitle": "Would you like to convert your transactions?",
+    "convertCurrencyDialogDescription": "Your preferred currency has been updated. If you'd like, your transactions can be converted to your new currency. This process may take a few seconds.",
+    "convertCurrencyPrimaryActionLabel": "Convert",
+    "convertCurrencySecondaryActionLabel": "Don't convert",
+    "convertCurrencyPending": "Converting...",
+    "convertCurrencySuccessMessage": "Successfully converted transactions to the new currency rate",
+    "currencySaveRejectMessage": "No currency selected",
+    "currencySaveSuccessMessage": "Preferred currency changed successfully",
+    "changeCurrencyDialogTitle": "Are you sure you want to change your preferred currency?",
+    "changeCurrencyDialogMessage": "You will be changing your preferred currency from: _fromLabel to: _toLabel.",
+    "changeCurrencyPending": "Saving...",
+    "changeCurrencySuccessMessage": "Preferred currency changed successfully",
+    "changeCurrencyPrimaryActionLabel": "Confirm",
+    "changeCurrencySaveLabel": "Save Changes"
+  },
+  "Components": {
+    "AccountForm": {
+      "noChangesMessage": "No changes detected.",
+      "noChangesDescription": "You haven't made any changes to your account details.",
+      "anErrorOccurredMessage": "An error occurred",
+
+      "createAccountSuccessMessage": "Account created successfully",
+      "updateAccountSuccessMessage": "Account updated successfully",
+      "successTitle": "Success!",
+
+      "nameField": {
+        "label": "Account Name",
+        "placeholder": "Enter account name"
+      },
+      "typeField": {
+        "label": "Account Type",
+        "placeholder": "Select account type"
+      },
+      "balanceField": {
+        "label": "Balance",
+        "placeholder": "Enter account balance"
+      },
+      "submitButtonLabel": {
+        "create": "Create Account",
+        "update": "Update Account"
+      }
+    },
+    "AccountSummaries": {
+      "noAccountsFound": "No accounts found.",
+      "seeAllYourAccounts": "See all your accounts"
+    },
+    "AccountCard": {
+      "deleteAccountDialogTitle": "Are you sure you want to delete this account?",
+      "deleteAccountDialogMessage": "This will also delete all the transactions associated with this account. This action cannot be undone.",
+      "deleteAccountDialogPrimaryActionLabel": "Delete",
+      "deleteAccountErrorMessage": "An error occurred while deleting the account. Please try again later.",
+      "deleteAccountSuccessMessage": "Account deleted successfully.",
+      "deleteAccountSuccessDescription": "Selected account has been deleted.",
+
+      "editAccountDialogTitle": "Edit Account",
+      "editAccountAccountDialogMessage": "Use the form below to edit your account details.",
+
+      "createTransactionDialogTitle": "Create Transaction",
+      "createTransactionAccountDialogMessage": "Use the form below to create a new transaction.",
+
+      "accountActionsHeading": "Account Actions",
+      "Show Latest Transactions": "Show Latest Transactions",
+      "Edit Account": "Edit Account",
+      "Add Transaction": "Add Transaction",
+      "Delete": "Delete"
+    },
+    "BudgetCard": {
+      "deleteBudgetDialogTitle": "Are you sure you want to delete this budget?",
+      "deleteBudgetDialogMessage": "This action cannot be undone.",
+      "deleteBudgetDialogPrimaryActionLabel": "Delete",
+      "deleteBudgetErrorMessage": "An error occurred",
+      "deleteBudgetSuccessMessage": "Budget deleted successfully.",
+      "editBudgetDialogTitle": "Edit Budget",
+      "editBudgetDialogMessage": "Use the form below to edit your budget details.",
+
+      "budgetActionsHeading": "Budget Actions",
+      "budgetActionsEditLabel": "Edit",
+      "budgetActionsDeleteLabel": "Delete",
+
+      "budgetSpent": "Budget : {budget} / Spent: {spent}"
+    },
+    "BudgetForm": {
+      "categoryErrorMessage": "There was an error while getting budget categories. Please try again later.",
+      "noChangesMessage": "No changes detected.",
+      "noChangesDescription": "You haven't made any changes to your budget.",
+      "anErrorOccurredMessage": "An error occurred",
+      "createBudgetSuccessMessage": "Budget created successfully",
+      "updateBudgetSuccessMessage": "Budget updated successfully",
+      "successTitle": "Success!",
+
+      "budgetNameField": {
+        "label": "Budget Name",
+        "placeholder": "Give your budget a name"
+      },
+      "budgetAmountField": {
+        "label": "Budget Amount",
+        "placeholder": "Enter your budget amount"
+      },
+      "spentAmountField": {
+        "label": "Spent Amount",
+        "placeholder": "Enter your spent amount (optional)"
+      },
+      "budgetCategoryField": {
+        "label": "Budget Category",
+        "placeholder": "Select a budget category",
+        "noCategoriesMessage": "It appears you haven't created any budget categories yet."
+      },
+      "submitButtonLabel": {
+        "create": "Create Budget",
+        "update": "Update Budget"
+      }
+    },
+    "CategoryForm": {
+      "noChangesMessage": "No changes detected.",
+      "noChangesDescription": "You haven't made any changes to the category",
+      "anErrorOccurredMessage": "An error occurred",
+      "successMessage": {
+        "create": "Category created successfully",
+        "update": "Category updated successfully"
+      },
+      "nameField": {
+        "label": "Category Name",
+        "placeholder": "Enter category name"
+      },
+      "typeField": {
+        "label": "Category Type",
+        "placeholder": "Select category type",
+        "options": {
+          "budget": "Budget",
+          "transaction": "Transaction"
+        },
+        "description": "Refers to the type of category you want to create."
+      },
+      "submitButtonLabel": {
+        "create": "Create Category",
+        "update": "Update Category"
+      }
+    },
+    "CreateBudgetCategoryPopover": {
+      "title": "Add Budget Category",
+      "description": "Add a new budget category by using the form below."
+    },
+    "CreateAccountButton": {
+      "label": "Create an Account",
+      "createAccountDialogTitle": "Create an Account",
+      "createAccountDialogMessage": "Use the form below to add a new bank account."
+    },
+    "PasswordInput": {
+      "passwordFieldLabel": "Password",
+      "passwordFieldPlaceholder": "Enter your password",
+      "passwordFieldCapsLockMessage": "Caps lock is on."
+    },
+    "UserMenu": {
+      "colorModeLabel": "Color Theme",
+      "logoutLabel": "Logout"
+    },
+    "RegisterForm": {
+      "captchaValidationFailedMessage": "Captcha validation failed. Please try again.",
+      "accountCreatedSuccessfullyMessage": "Account created successfully",
+      "accountCreatedSuccessfullyDescription": "Please check your email to verify your account.",
+      "anErrorOccurredMessage": "An error occurred",
+      "formTitle": "Welcome!",
+      "formDescription": "Create an account to get started",
+      "nameFieldLabel": "Full Name",
+      "nameFieldPlaceholder": "Enter your full name",
+      "emailFieldLabel": "Email",
+      "emailFieldPlaceholder": "Enter your email",
+      "emailFieldDescription": "<strong>Note</strong>: Please provide a valid email address for <u> account verification, password recovery, and other important communications. </u>",
+      "submitButtonLabel": "Sign Up",
+      "signInLink": "Already have an account? Sign in"
+    },
+    "PasswordRequirements": {
+      "title": "Password Requirements",
+      "8 characters": "8 characters",
+      "1 lowercase letter": "1 lowercase letter",
+      "1 uppercase letter": "1 uppercase letter",
+      "1 number": "1 number"
+    },
+    "RoutePaginationControls": {
+      "previous": "Previous",
+      "next": "Next",
+      "pageInformation": "Page {currentPage} of {totalPages}"
+    },
+    "RouteSearchInput": {
+      "label": "Search"
+    },
+    "QueryStringComboBox": {
+      "allLabel": "All"
+    },
+    "RouteFiltersPopover": {
+      "heading": "Filters",
+      "clearLabel": "Clear"
+    },
+    "LocaleToggle": {
+      "tr": "Turkish",
+      "en": "English",
+      "screenReaderLabel": "Change language",
+      "switchItemAriaLabel": "Change language to {language}"
+    },
+    "BudgetQueryStringCombobox": {
+      "label": "Budget Category"
+    },
+    "Combobox": {
+      "emptyMessage": "No options were found for your search.",
+      "searchPlaceholder": "Search",
+      "selectAnOption": "Select an option"
+    }
+  },
+  "Actions": {
+    "Auth": {
+      "login": {
+        "rateLimitExceeded": "You have made too many requests. Please wait a minute before trying again.",
+        "incorrectCredentials": "Incorrect email or password.",
+        "internalErrorMessage": "An error occurred while processing your request. Please try again later."
+      },
+      "register": {
+        "rateLimitExceeded": "Too many attempts. You are being redirected to the login page.",
+        "unverifiedEmailAlreadyExists": "User already exists with the given email. Please verify your email.",
+        "userAlreadyExists": "User already exists with the given email: {email}",
+        "internalErrorMessage": "There was a problem while processing your request. Please try again later."
+      },
+      "handleEmailVerification": {
+        "rateLimitExceeded": "You have made too many requests. Please wait a minute before trying again.",
+        "invalidCode": "Invalid verification code. You have {attemptsLeft, plural, =1 {1 attempt} other {# attempts}} left.",
+        "successMessage": "Email verified successfully. You are being redirected...",
+        "internalErrorMessage": "There was a problem while processing your request. Please try again later."
+      },
+      "resendEmailVerificationCode": {
+        "rateLimitExceeded": "You have made too many requests. Please wait a minute before trying again.",
+        "successMessage": "If you have an account, an email has been sent to you. Please check your inbox. Make sure to check your spam folder"
+      },
+      "sendPasswordResetEmail": {
+        "rateLimitExceeded": "You have made too many requests. Please wait a minute before trying again.",
+        "successMessage": "If you have an account, an email has been sent to you. Please check your inbox. Make sure to check your spam folder"
+      },
+      "resetPassword": {
+        "invalidRequest": "Invalid request.",
+        "successMessage": "Password reset successfully. You are being redirected..."
+      },
+      "validateOTP": {
+        "rateLimitExceeded": "Too many attempts. You are being redirected to the login page.",
+        "invalidRequest": "Invalid request.",
+        "invalidCode": "Invalid verification code. You have {attemptsLeft, plural, =1 {1 attempt} other {# attempts}} left.",
+        "successMessage": "Logged in successfully. You are being redirected..."
+      },
+      "activateTwoFactorAuthentication": {
+        "invalidRequest": "Invalid request.",
+        "invalidCode": "Invalid verification code.",
+        "successMessage": "Two-factor authentication enabled successfully."
+      },
+      "disableTwoFactorAuthentication": {
+        "internalErrorMessage": "An error occurred while processing your request. Please try again later.",
+        "successMessage": "Two-factor authentication disabled successfully."
+      }
+    },
+    "Account": {
+      "registerBankAccount": {
+        "internalErrorMessage": "An error occurred while processing your request. Please try again later.",
+        "duplicateAccountEntry": "Account already exists with name {name} and category {category}.",
+        "duplicateAccountEntryWithCategory": "Account already exists with category: {category}",
+        "duplicateAccountEntryWithName": "Account already exists with name: {name}"
+      },
+      "updateBankAccount": {
+        "internalErrorMessage": "An error occurred while processing your request. Please try again later.",
+        "duplicateAccountEntry": "Account already exists with name {name} and category {category}.",
+        "duplicateAccountEntryWithCategory": "Account already exists with category: {category}",
+        "duplicateAccountEntryWithName": "Account already exists with name: {name}"
+      },
+      "deleteAccount": {
+        "anErrorOccurred": "An error occurred while deleting the account.",
+        "successMessage": "Account deleted successfully."
+      }
+    },
+    "Budget": {
+      "createBudget": {
+        "internalErrorMessage": "An error occurred while processing your request. Please try again later."
+      },
+      "updateBudget": {
+        "budgetNotFound": "We couldn't find the budget that needs updating.",
+        "internalErrorMessage": "An error occurred while processing your request. Please try again later."
+      }
+    }
+  },
+  "Zod": {
+    "Login": {
+      "invalidEmail": "Please provide a valid email address.",
+      "passwordTooShort": "Password must be at least 8 characters long.",
+      "passwordTooLong": "Password cannot exceed 100 characters."
+    },
+    "Register": {
+      "invalidEmail": "Please enter a valid email address.",
+      "nameTooShort": "Name cannot be less than 2 characters.",
+      "nameTooLong": "Name cannot exceed 100 characters.",
+      "passwordTooShort": "Password should be at least 8 characters.",
+      "passwordTooLong": "Password cannot exceed 100 characters.",
+      "invalidPassword": "Password should contain at least one uppercase letter, one lowercase letter, and one number."
+    },
+    "Account": {
+      "balanceErrorMessage": "Balance must be a number.",
+      "categoryRequiredErrorMessage": "Account Category is required.",
+      "categoryInvalidTypeError": "Invalid account category.",
+      "nameErrorMessage": "Account name is required."
+    },
+    "Budget": {
+      "blankName": "Name cannot be blank.",
+      "budgetAmountPositive": "Budget amount must be a positive number.",
+      "budgetAmountRequired": "Budget amount is required.",
+      "budgetAmountInvalid": "Budget amount must be a positive number.",
+      "budgetCategoryRequired": "Budget category is required.",
+      "spentAmountNegative": "Spent amount can't be negative."
+    }
+  }
+}
