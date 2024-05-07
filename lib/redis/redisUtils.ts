@@ -234,6 +234,14 @@ export const mapRedisHashToGoal = (
   return mapRedisHashToEntity<GoalSelectModel>(goalFromCache, mappingConfig);
 };
 
+export const checkRateLimitGeneric = async (key: string) => {
+  const count = await redisService.incr(key);
+  if (count === 1) {
+    await redisService.expire(key, 60);
+  }
+  return count;
+};
+
 export const checkRateLimit = async (ipAdress: string) => {
   const key = getLoginRateLimitKey(ipAdress);
   const count = await redisService.incr(key);
