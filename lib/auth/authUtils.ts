@@ -8,7 +8,7 @@ import {
   EMAIL_VERIFICATION_CODE_LENGTH,
   FORGOT_PASSWORD_LINK_EXPIRATION_MINUTES,
 } from "@/lib/constants";
-import { generateId } from "lucia";
+import { User, generateId } from "lucia";
 import ForgotPasswordEmail from "@/emails/forgot-password-email";
 import emailService from "@/lib/services/emailService";
 import { db } from "@/lib/database/connection";
@@ -19,6 +19,8 @@ import {
 } from "@/lib/database/schema";
 import { and, eq } from "drizzle-orm";
 import { convertISOToMysqlDatetime } from "@/lib/utils/dateUtils/convertISOToMysqlDatetime";
+import { getUser } from "@/lib/auth/session";
+import { redirect } from "@/navigation";
 
 export const generateEmailVerificationCode = async (
   userId: string,
@@ -134,3 +136,16 @@ export const createPasswordResetToken = async (userId: string) => {
 
   return tokenId;
 };
+
+export function withUserRedirect<T, P extends any[]>(
+  logic: (user: User, ...params: P) => Promise<T>
+): (...params: P) => Promise<T> {
+  return async (...params: P) => {
+    const { user } = await getUser();
+    if (!user) {
+      return redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    }
+
+    return logic(user!, ...params);
+  };
+}

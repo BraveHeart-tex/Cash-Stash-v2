@@ -1,6 +1,9 @@
 import { BudgetSelectModel } from "@/lib/database/schema";
-import { BudgetWithCategory } from "@/server/types";
-import { BaseValidatedResponse } from "@/typings/baseTypes";
+import {
+  BasePaginatedActionParams,
+  BasePaginatedResponse,
+  BaseValidatedResponse,
+} from "@/typings/baseTypes";
 
 export type CreateBudgetReturnType = Promise<
   BaseValidatedResponse<BudgetSelectModel>
