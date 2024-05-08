@@ -1,5 +1,8 @@
 import { GoalSelectModel } from "@/lib/database/schema";
-import { BaseValidatedResponse } from "@/typings/baseTypes";
+import {
+  BasePaginatedActionParams,
+  BaseValidatedResponse,
+} from "@/typings/baseTypes";
 
 export type CreateGoalReturnType = Promise<
   BaseValidatedResponse<GoalSelectModel>
