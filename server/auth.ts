@@ -33,11 +33,8 @@ import {
   getResetPasswordUrl,
 } from "@/lib/constants";
 import {
-  createPasswordResetToken,
-  generateEmailVerificationCode,
   sendEmailVerificationCode,
   sendResetPasswordLink,
-  verifyVerificationCode,
 } from "@/lib/auth/authUtils";
 import { revalidatePath } from "next/cache";
 import { isWithinExpirationDate } from "oslo";
@@ -51,6 +48,11 @@ import { twoFactorAuthenticationSecrets } from "@/lib/database/schema";
 import { eq } from "drizzle-orm";
 import logger from "@/lib/utils/logger";
 import { getTranslations } from "next-intl/server";
+import {
+  generateEmailVerificationCode,
+  verifyVerificationCode,
+} from "@/server/verificationCode";
+import { createPasswordResetToken } from "@/server/passwordResetToken";
 
 export const login = async (values: LoginSchemaType) => {
   const header = headers();

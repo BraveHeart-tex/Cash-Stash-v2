@@ -1,6 +1,9 @@
 import { AccountSelectModel } from "@/lib/database/schema";
 import { AccountSchemaType } from "@/schemas/account-schema";
-import { BaseValidatedResponse } from "@/typings/baseTypes";
+import {
+  BasePaginatedActionParams,
+  BaseValidatedResponse,
+} from "@/typings/baseTypes";
 import { TransactionWithCategoryAndAccountName } from "@/typings/transactions";
 
 export type RegisterBankAccountReturnType = Promise<
