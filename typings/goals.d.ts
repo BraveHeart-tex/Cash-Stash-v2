@@ -1,6 +1,7 @@
 import { GoalSelectModel } from "@/lib/database/schema";
 import {
   BasePaginatedActionParams,
+  BasePaginatedResponse,
   BaseValidatedResponse,
 } from "@/typings/baseTypes";
 

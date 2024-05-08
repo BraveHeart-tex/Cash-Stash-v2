@@ -1,6 +1,7 @@
 import { TransactionSelectModel } from "@/lib/database/schema";
 import {
   BasePaginatedActionParams,
+  BasePaginatedResponse,
   BaseValidatedResponse,
 } from "@/typings/baseTypes";
 

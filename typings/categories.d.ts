@@ -4,7 +4,10 @@ import {
   CategorySelectModel,
 } from "@/lib/database/schema";
 import { CategoryUpdateModel, FieldError } from "@/server/types";
-import { BasePaginatedResponse } from "@/typings/baseTypes";
+import {
+  BasePaginatedActionParams,
+  BasePaginatedResponse,
+} from "@/typings/baseTypes";
 
 export type CategoryType = (typeof CATEGORY_TYPES)[keyof typeof CATEGORY_TYPES];
 
