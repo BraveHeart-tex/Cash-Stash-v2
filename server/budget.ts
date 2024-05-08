@@ -53,7 +53,7 @@ export const createBudget = withUserRedirect(
       }
 
       await Promise.all([
-        redisService.invalidateKeysByPrefix(
+        redisService.invalidateKeysStartingWith(
           generateCachePrefixWithUserId(
             CACHE_PREFIXES.PAGINATED_BUDGETS,
             user.id
@@ -133,7 +133,7 @@ export const updateBudget = withUserRedirect(
       }
 
       await Promise.all([
-        redisService.invalidateKeysByPrefix(
+        redisService.invalidateKeysStartingWith(
           generateCachePrefixWithUserId(
             CACHE_PREFIXES.PAGINATED_BUDGETS,
             user.id
@@ -233,7 +233,7 @@ export const deleteBudget = withUserRedirect(
       }
 
       await Promise.all([
-        redisService.invalidateKeysByPrefix(
+        redisService.invalidateKeysStartingWith(
           generateCachePrefixWithUserId(
             CACHE_PREFIXES.PAGINATED_BUDGETS,
             user.id

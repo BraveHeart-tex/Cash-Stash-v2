@@ -62,7 +62,7 @@ export const registerBankAccount = withUserRedirect(
       }
 
       await Promise.all([
-        redisService.invalidateKeysByPrefix(
+        redisService.invalidateKeysStartingWith(
           generateCachePrefixWithUserId(
             CACHE_PREFIXES.PAGINATED_ACCOUNTS,
             user.id
@@ -148,13 +148,13 @@ export const updateBankAccount = withUserRedirect(
       }
 
       await Promise.all([
-        redisService.invalidateKeysByPrefix(
+        redisService.invalidateKeysStartingWith(
           generateCachePrefixWithUserId(
             CACHE_PREFIXES.PAGINATED_ACCOUNTS,
             user.id
           )
         ),
-        redisService.invalidateKeysByPrefix(
+        redisService.invalidateKeysStartingWith(
           generateCachePrefixWithUserId(
             CACHE_PREFIXES.PAGINATED_TRANSACTIONS,
             user.id
@@ -302,7 +302,7 @@ export const deleteAccount = withUserRedirect(
       }
 
       await Promise.all([
-        redisService.invalidateMultipleKeysByPrefix([
+        redisService.invalidateKeysMatchingPrefixes([
           generateCachePrefixWithUserId(
             CACHE_PREFIXES.PAGINATED_ACCOUNTS,
             user.id

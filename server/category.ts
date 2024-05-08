@@ -172,7 +172,7 @@ export const deleteCategory = async (id: number, type: CategoryType) => {
         );
       }
 
-      await redisService.invalidateKeysByPrefix(prefix!);
+      await redisService.invalidateKeysStartingWith(prefix!);
     }
 
     return response.affectedRows > 0;
@@ -201,7 +201,7 @@ export const updateCategory = async (
       };
     }
 
-    await redisService.invalidateKeysByPrefix(
+    await redisService.invalidateKeysStartingWith(
       generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_BUDGETS, user.id)
     );
 

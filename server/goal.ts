@@ -48,7 +48,7 @@ export const createGoal = async (
     }
 
     await Promise.all([
-      redisService.invalidateKeysByPrefix(
+      redisService.invalidateKeysStartingWith(
         generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_GOALS, user.id)
       ),
       redisService.hset(getGoalKey(goal.id), goal),
@@ -109,7 +109,7 @@ export const updateGoal = async (
       };
 
     await Promise.all([
-      redisService.invalidateKeysByPrefix(
+      redisService.invalidateKeysStartingWith(
         generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_GOALS, user.id)
       ),
       redisService.hset(getGoalKey(updatedGoal.id), updatedGoal),
@@ -224,7 +224,7 @@ export const deleteGoal = async (goalId: number) => {
     }
 
     await Promise.all([
-      redisService.invalidateKeysByPrefix(
+      redisService.invalidateKeysStartingWith(
         generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_GOALS, user.id)
       ),
       redisService.del(getGoalKey(goalId)),

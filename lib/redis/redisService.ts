@@ -15,14 +15,14 @@ class RedisService extends Redis {
     return instance;
   }
 
-  async invalidateKeysByPrefix(prefix: string) {
+  async invalidateKeysStartingWith(prefix: string) {
     const keys = await this.keys("*");
     const keysToDelete = keys.filter((key) => key.startsWith(prefix));
     if (keysToDelete.length === 0) return;
     return this.del(keysToDelete);
   }
 
-  async invalidateMultipleKeysByPrefix(prefixes: string[]) {
+  async invalidateKeysMatchingPrefixes(prefixes: string[]) {
     const keys = await this.keys("*");
     const keysToDelete = keys.filter((key) =>
       prefixes.some((prefix) => key.startsWith(prefix))

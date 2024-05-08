@@ -55,7 +55,7 @@ export const createTransaction = async (
     }
 
     await Promise.all([
-      redisService.invalidateMultipleKeysByPrefix([
+      redisService.invalidateKeysMatchingPrefixes([
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_ACCOUNTS,
           user.id
@@ -130,7 +130,7 @@ export const updateTransaction = async (
     }
 
     await Promise.all([
-      redisService.invalidateMultipleKeysByPrefix([
+      redisService.invalidateKeysMatchingPrefixes([
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_ACCOUNTS,
           user.id
@@ -182,7 +182,7 @@ export const deleteTransactionById = async (
     }
 
     await Promise.all([
-      redisService.invalidateMultipleKeysByPrefix([
+      redisService.invalidateKeysMatchingPrefixes([
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_ACCOUNTS,
           user.id
