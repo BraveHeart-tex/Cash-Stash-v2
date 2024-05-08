@@ -1,17 +1,13 @@
 "use server";
-import { getUser } from "@/lib/auth/session";
-import { redirect } from "@/navigation";
 import { ZodError } from "zod";
 import {
   generateCachePrefixWithUserId,
   getAccountKey,
-  getAccountTransactionsKey,
   getPaginatedAccountsKey,
 } from "@/lib/redis/redisUtils";
-import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
+import { CACHE_PREFIXES } from "@/lib/constants";
 import { AccountSchemaType, getAccountSchema } from "@/schemas/account-schema";
 import accountRepository from "@/lib/database/repository/accountRepository";
-import transactionRepository from "@/lib/database/repository/transactionRepository";
 import redisService from "@/lib/redis/redisService";
 import { processZodError } from "@/lib/utils/objectUtils/processZodError";
 import logger from "@/lib/utils/logger";
@@ -322,52 +318,11 @@ export const deleteAccount = withUserRedirect(
   }
 );
 
-export const getTransactionsForAccount = async (accountId: number) => {
-  const { user } = await getUser();
+export const getCurrentUserAccounts = withUserRedirect(
+  async (user: User) => await accountRepository.getByUserId(user.id)
+);
 
-  if (!user) {
-    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
-  }
-
-  try {
-    const key = getAccountTransactionsKey(accountId);
-    const cachedData = await redisService.get(key);
-    if (cachedData) {
-      logger.info("getTransactionsForAccount CACHE HIT");
-      return JSON.parse(cachedData);
-    }
-
-    const transactions = await transactionRepository.getByAccountId(accountId);
-
-    if (transactions.length === 0) {
-      return [];
-    }
-
-    await redisService.set(key, JSON.stringify(transactions), "EX", 5 * 60);
-
-    return transactions;
-  } catch (error) {
-    logger.error("Error fetching transactions for account", error);
-    return [];
-  }
-};
-
-export const getCurrentUserAccounts = async () => {
-  const { user } = await getUser();
-
-  if (!user) {
-    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
-  }
-
-  return await accountRepository.getByUserId(user.id);
-};
-
-export const getCurrentUserAccountsThatHaveTransactions = async () => {
-  const { user } = await getUser();
-
-  if (!user) {
-    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
-  }
-
-  return await accountRepository.getAccountsThatHaveTransactions(user.id);
-};
+export const getCurrentUserAccountsThatHaveTransactions = withUserRedirect(
+  async (user: User) =>
+    await accountRepository.getAccountsThatHaveTransactions(user.id)
+);
