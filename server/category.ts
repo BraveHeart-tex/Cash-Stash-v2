@@ -5,7 +5,7 @@ import {
   CategorySchemaType,
   getCategorySchema,
 } from "@/schemas/category-schema";
-import { ZodError } from "zod";
+import { ZodError, z } from "zod";
 import categoryRepository from "@/lib/database/repository/categoryRepository";
 import logger from "@/lib/utils/logger";
 import redisService from "@/lib/redis/redisService";
@@ -22,6 +22,15 @@ import {
 } from "@/typings/categories";
 import { authenticatedAction } from "@/lib/auth/authUtils";
 import { getTranslations } from "next-intl/server";
+
+const getCategorySchemaWithTranslations = async () => {
+  const zodT = await getTranslations("Zod.Category");
+  return getCategorySchema({
+    invalidCategoryTypeErrorMessage: zodT("invalidCategoryTypeErrorMessage"),
+    nameRequiredErrorMessage: zodT("nameRequiredErrorMessage"),
+    nameTooLongErrorMessage: zodT("nameTooLongErrorMessage"),
+  });
+};
 
 export const getPaginatedCategories = authenticatedAction<
   GetPaginatedCategoriesReturnType,
@@ -71,17 +80,10 @@ export const createCategory = authenticatedAction<
   CreateCategoryReturnType,
   CategorySchemaType
 >(async (values, { user }) => {
-  const [zodT, actionT] = await Promise.all([
-    getTranslations("Zod.Category"),
-    getTranslations("Actions.Category.createCategory"),
-  ]);
+  const actionT = await getTranslations("Actions.Category.createCategory");
 
   try {
-    const categorySchema = getCategorySchema({
-      invalidCategoryTypeErrorMessage: zodT("invalidCategoryTypeErrorMessage"),
-      nameRequiredErrorMessage: zodT("nameRequiredErrorMessage"),
-      nameTooLongErrorMessage: zodT("nameTooLongErrorMessage"),
-    });
+    const categorySchema = await getCategorySchemaWithTranslations();
     const validatedData = categorySchema.parse(values);
 
     const categoryDto = {
@@ -186,13 +188,15 @@ export const updateCategory = authenticatedAction<
   UpdateCategoryReturnType,
   CategoryUpdateModel
 >(async (data, { user }) => {
+  const actionT = await getTranslations("Actions.Category.createCategory");
   try {
-    const [response] = await categoryRepository.updateCategory(data);
+    const categorySchema = await getCategorySchemaWithTranslations();
+    const validatedData = categorySchema.extend({ id: z.number() }).parse(data);
+    const [response] = await categoryRepository.updateCategory(validatedData);
 
     if (response.affectedRows === 0) {
       return {
-        error:
-          "Something went wrong while updating the category. Please try again later.",
+        error: actionT("internalErrorMessage"),
         fieldErrors: [],
       };
     }
@@ -207,23 +211,31 @@ export const updateCategory = authenticatedAction<
   } catch (error) {
     logger.error(`update category error: ${error}`);
 
+    if (error instanceof ZodError) {
+      return processZodError(error);
+    }
+
     if (error instanceof Error) {
       if ("code" in error && error.code === "ER_DUP_ENTRY") {
         const entity =
-          data.type === CATEGORY_TYPES.BUDGET ? "Budget" : "Transaction";
+          data.type === CATEGORY_TYPES.BUDGET
+            ? actionT("budget")
+            : actionT("transaction");
+
+        const errorMessage = actionT("duplicateCategoryEntry", {
+          entity,
+          name: data.name,
+        });
 
         return {
-          error: `${entity} Category: ${data.name} already exists.`,
-          fieldErrors: [
-            { field: "name", message: `${entity} Category already exists.` },
-          ],
+          error: errorMessage,
+          fieldErrors: [{ field: "name", message: errorMessage }],
         };
       }
     }
 
     return {
-      error:
-        "Something went wrong while updating the category. Please try again later.",
+      error: actionT("internalErrorMessage"),
       fieldErrors: [],
     };
   }
