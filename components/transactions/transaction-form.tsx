@@ -302,9 +302,9 @@ const TransactionForm = ({
                     </Tooltip>
                   </TooltipProvider>
                   <MaskedAmountInput
+                    ref={field.ref}
                     initialValue={field.value}
                     className="pl-10"
-                    itemRef="amount"
                     inputMode="numeric"
                     onMaskedValueChange={(value) => {
                       field.onChange(value);
