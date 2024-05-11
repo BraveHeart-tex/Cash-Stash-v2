@@ -27,22 +27,24 @@ import {
   authenticatedActionWithNoParams,
 } from "@/lib/auth/authUtils";
 
+const getAccountSchemaWithTranslations = async () => {
+  const zodT = await getTranslations("Zod.Account");
+  return getAccountSchema({
+    balanceErrorMessage: zodT("balanceErrorMessage"),
+    nameErrorMessage: zodT("nameErrorMessage"),
+    categoryInvalidTypeError: zodT("categoryInvalidTypeError"),
+    categoryRequiredErrorMessage: zodT("categoryRequiredErrorMessage"),
+  });
+};
+
 export const registerBankAccount = authenticatedAction<
   RegisterBankAccountReturnType,
   AccountSchemaType
 >(async ({ balance, category, name }, { user }) => {
-  const [zodT, actionT] = await Promise.all([
-    getTranslations("Zod.Account"),
-    getTranslations("Actions.Account.registerBankAccount"),
-  ]);
+  const actionT = await getTranslations("Actions.Account.registerBankAccount");
 
   try {
-    const accountSchema = getAccountSchema({
-      balanceErrorMessage: zodT("balanceErrorMessage"),
-      nameErrorMessage: zodT("nameErrorMessage"),
-      categoryInvalidTypeError: zodT("categoryInvalidTypeError"),
-      categoryRequiredErrorMessage: zodT("categoryRequiredErrorMessage"),
-    });
+    const accountSchema = await getAccountSchemaWithTranslations();
 
     const validatedData = accountSchema.parse({ balance, category, name });
 
@@ -118,14 +120,7 @@ export const updateBankAccount = authenticatedAction<
   const actionT = await getTranslations("Actions.Account.updateBankAccount");
 
   try {
-    const zodT = await getTranslations("Zod.Account");
-    const accountSchema = getAccountSchema({
-      balanceErrorMessage: zodT("balanceErrorMessage"),
-      nameErrorMessage: zodT("nameErrorMessage"),
-      categoryInvalidTypeError: zodT("categoryInvalidTypeError"),
-      categoryRequiredErrorMessage: zodT("categoryRequiredErrorMessage"),
-    });
-
+    const accountSchema = await getAccountSchemaWithTranslations();
     const validatedData = accountSchema.parse(rest);
     const updateDto = {
       ...validatedData,
