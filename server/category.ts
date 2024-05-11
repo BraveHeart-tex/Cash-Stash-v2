@@ -1,7 +1,10 @@
 "use server";
 import { CACHE_PREFIXES, CATEGORY_TYPES } from "@/lib/constants";
 import { processZodError } from "@/lib/utils/objectUtils/processZodError";
-import categorySchema, { CategorySchemaType } from "@/schemas/category-schema";
+import {
+  CategorySchemaType,
+  getCategorySchema,
+} from "@/schemas/category-schema";
 import { ZodError } from "zod";
 import categoryRepository from "@/lib/database/repository/categoryRepository";
 import logger from "@/lib/utils/logger";
@@ -18,6 +21,7 @@ import {
   UpdateCategoryReturnType,
 } from "@/typings/categories";
 import { authenticatedAction } from "@/lib/auth/authUtils";
+import { getTranslations } from "next-intl/server";
 
 export const getPaginatedCategories = authenticatedAction<
   GetPaginatedCategoriesReturnType,
@@ -67,7 +71,13 @@ export const createCategory = authenticatedAction<
   CreateCategoryReturnType,
   CategorySchemaType
 >(async (values, { user }) => {
+  const zodT = await getTranslations("Zod.Category");
   try {
+    const categorySchema = getCategorySchema({
+      invalidCategoryTypeErrorMessage: zodT("invalidCategoryTypeErrorMessage"),
+      nameRequiredErrorMessage: zodT("nameRequiredErrorMessage"),
+      nameTooLongErrorMessage: zodT("nameTooLongErrorMessage"),
+    });
     const validatedData = categorySchema.parse(values);
 
     const categoryDto = {

@@ -509,6 +509,11 @@
       "budgetAmountInvalid": "Budget amount must be a positive number.",
       "budgetCategoryRequired": "Budget category is required.",
       "spentAmountNegative": "Spent amount can't be negative."
+    },
+    "Category": {
+      "nameRequiredErrorMessage": "Category name is required",
+      "nameTooLongErrorMessage": "Category name is too long",
+      "invalidCategoryTypeErrorMessage": "Invalid category type"
     }
   }
 }

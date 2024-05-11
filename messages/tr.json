@@ -507,6 +507,11 @@
       "budgetAmountInvalid": "Bütçe tutarı pozitif bir sayı olmalıdır.",
       "budgetCategoryRequired": "Bütçe kategorisi zorunludur.",
       "spentAmountNegative": "Harcanan miktar negatif olamaz."
+    },
+    "Category": {
+      "nameRequiredErrorMessage": "Kategori adı zorunludur",
+      "nameTooLongErrorMessage": "Kategori adı en fazla 50 karakter olmalıdır.",
+      "invalidCategoryTypeErrorMessage": "Gecersiz kategori tipi."
     }
   }
 }

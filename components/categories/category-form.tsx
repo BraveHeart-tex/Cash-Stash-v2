@@ -9,7 +9,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import useZodResolver from "@/lib/zod-resolver-wrapper";
-import categorySchema, { CategorySchemaType } from "@/schemas/category-schema";
+import {
+  CategorySchemaType,
+  getCategorySchema,
+} from "@/schemas/category-schema";
 import { useEffect, useTransition } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -46,8 +49,16 @@ const CategoryForm = ({
   showTypeOptions = true,
   defaultTypeValue = CATEGORY_TYPES.BUDGET,
 }: CategoryFormProps) => {
-  const t = useTranslations("Components.CategoryForm");
   let [isPending, startTransition] = useTransition();
+  const t = useTranslations("Components.CategoryForm");
+  const zodT = useTranslations("Zod.Category");
+
+  const categorySchema = getCategorySchema({
+    invalidCategoryTypeErrorMessage: zodT("invalidCategoryTypeErrorMessage"),
+    nameRequiredErrorMessage: zodT("nameRequiredErrorMessage"),
+    nameTooLongErrorMessage: zodT("nameTooLongErrorMessage"),
+  });
+
   const form = useForm<CategorySchemaType>({
     resolver: useZodResolver(categorySchema),
     defaultValues: {

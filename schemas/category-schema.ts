@@ -1,18 +1,31 @@
 import { CATEGORY_TYPES } from "@/lib/constants";
 import { z } from "zod";
 
-const categorySchema = z.object({
-  name: z
-    .string()
-    .min(1, "Category name is required")
-    .max(50, "Category name is too long"),
-  type: z.coerce
-    .number()
-    .min(CATEGORY_TYPES.TRANSACTION, "Invalid category type")
-    .max(CATEGORY_TYPES.BUDGET, "Invalid category type")
-    .default(CATEGORY_TYPES.TRANSACTION),
-});
+type CategorySchemaMessageConfig = {
+  nameRequiredErrorMessage: string;
+  nameTooLongErrorMessage: string;
+  invalidCategoryTypeErrorMessage: string;
+};
 
-export type CategorySchemaType = z.infer<typeof categorySchema>;
+export const getCategorySchema = (
+  messageConfig: CategorySchemaMessageConfig
+) => {
+  const {
+    nameRequiredErrorMessage,
+    nameTooLongErrorMessage,
+    invalidCategoryTypeErrorMessage,
+  } = messageConfig;
+  return z.object({
+    name: z
+      .string()
+      .min(1, nameRequiredErrorMessage)
+      .max(50, nameTooLongErrorMessage),
+    type: z.coerce
+      .number()
+      .min(CATEGORY_TYPES.TRANSACTION, invalidCategoryTypeErrorMessage)
+      .max(CATEGORY_TYPES.BUDGET, invalidCategoryTypeErrorMessage)
+      .default(CATEGORY_TYPES.TRANSACTION),
+  });
+};
 
-export default categorySchema;
+export type CategorySchemaType = z.infer<ReturnType<typeof getCategorySchema>>;
