@@ -12,6 +12,7 @@ import useAuthStore from "@/store/auth/authStore";
 import { Label } from "@/components/ui/label";
 import ModeToggle from "@/components/ui/mode-toggle";
 import { useTranslations } from "next-intl";
+import LocaleToggle from "@/components/ui/locale-toggle";
 
 const UserMenu = () => {
   const t = useTranslations("Components.UserMenu");
@@ -44,6 +45,8 @@ const UserMenu = () => {
           <p className="text-muted-foreground">{user?.email}</p>
         </div>
         <hr />
+
+        <LocaleToggle />
 
         <div className="block lg:hidden">
           <Label>{t("colorModeLabel")}</Label>
