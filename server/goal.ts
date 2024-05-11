@@ -1,5 +1,5 @@
 "use server";
-import goalSchema, { GoalSchemaType } from "@/schemas/goal-schema";
+import { GoalSchemaType, getGoalSchema } from "@/schemas/goal-schema";
 import { ZodError } from "zod";
 import {
   generateCachePrefixWithUserId,
@@ -21,12 +21,27 @@ import {
   UpdateGoalReturnType,
 } from "@/typings/goals";
 import { authenticatedAction } from "@/lib/auth/authUtils";
+import { getTranslations } from "next-intl/server";
+
+const getGoalSchemaWithTranslations = async () => {
+  const zodT = await getTranslations("Zod.Goal");
+  return getGoalSchema({
+    currentAmountRequired: zodT("currentAmountRequired"),
+    currentAmountTooSmall: zodT("currentAmountTooSmall"),
+    goalAmountRequired: zodT("goalAmountRequired"),
+    goalAmountTooSmall: zodT("goalAmountTooSmall"),
+    nameRequired: zodT("nameRequired"),
+    nameTooLong: zodT("nameTooLong"),
+  });
+};
 
 export const createGoal = authenticatedAction<
   CreateGoalReturnType,
   GoalSchemaType
 >(async (values, { user }) => {
+  const actionT = await getTranslations("Actions.Goal.createGoal");
   try {
+    const goalSchema = await getGoalSchemaWithTranslations();
     const validatedData = goalSchema.parse(values);
     const goalDto = {
       ...validatedData,
@@ -37,8 +52,7 @@ export const createGoal = authenticatedAction<
 
     if (!affectedRows || !goal) {
       return {
-        error:
-          "There was a problem while creating your goal. Please try again later.",
+        error: actionT("internalErrorMessage"),
         fieldErrors: [],
       };
     }
@@ -61,8 +75,7 @@ export const createGoal = authenticatedAction<
     }
 
     return {
-      error:
-        "There was a problem while creating your goal. Please try again later.",
+      error: actionT("internalErrorMessage"),
       fieldErrors: [],
     };
   }
@@ -85,6 +98,7 @@ export const updateGoal = authenticatedAction<
     return { error: `Goal to be updated cannot be found.`, fieldErrors: [] };
 
   try {
+    const goalSchema = await getGoalSchemaWithTranslations();
     const validatedData = goalSchema.parse(values);
 
     const { affectedRows, updatedGoal } = await goalRepository.update(

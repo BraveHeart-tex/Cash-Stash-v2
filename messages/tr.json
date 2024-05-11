@@ -482,6 +482,11 @@
         "transaction": "İşlem",
         "duplicateCategoryEntry": "Bu adla {entity} kategorisi zaten mevcut: {name}."
       }
+    },
+    "Goal": {
+      "createGoal": {
+        "internalErrorMessage": "İsteğiniz işlenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin."
+      }
     }
   },
   "Zod": {
@@ -517,9 +522,17 @@
       "spentAmountNegative": "Harcanan miktar negatif olamaz."
     },
     "Category": {
-      "nameRequiredErrorMessage": "Kategori adı zorunludur",
+      "nameRequiredErrorMessage": "Kategori adı zorunludur.",
       "nameTooLongErrorMessage": "Kategori adı en fazla 50 karakter olmalıdır.",
       "invalidCategoryTypeErrorMessage": "Gecersiz kategori tipi."
+    },
+    "Goal": {
+      "nameRequired": "Hedef ismi zorunludur.",
+      "nameTooLong": "Hedef ismi çok uzun.",
+      "goalAmountTooSmall": "Hedef miktarı 0'dan büyük olmalıdır.",
+      "goalAmountRequired": "Hedef miktarı zorunludur.",
+      "currentAmountRequired": "Anlık Değer zorunludur.",
+      "currentAmountTooSmall": "Anlık Değer 0'dan büyük olmalıdır."
     }
   }
 }

@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "@/navigation";
 import { useEffect, useTransition } from "react";
-import goalSchema, { GoalSchemaType } from "@/schemas/goal-schema";
+import { GoalSchemaType, getGoalSchema } from "@/schemas/goal-schema";
 import { createGoal, updateGoal } from "@/server/goal";
 import useGenericModalStore from "@/store/genericModalStore";
 import { toast } from "sonner";
@@ -22,6 +22,7 @@ import CurrencyFormLabel from "@/components/ui/currency-form-label";
 import { compareMatchingKeys } from "@/lib/utils/objectUtils/compareMatchingKeys";
 import MaskedAmountInput from "@/components/ui/masked-amount-input";
 import { BaseValidatedResponse } from "@/typings/baseTypes";
+import { useTranslations } from "next-intl";
 
 type GoalFormProps = {
   data?: GoalSelectModel;
@@ -33,6 +34,16 @@ const GoalForm = ({ data: goalToBeUpdated }: GoalFormProps) => {
     (state) => state.closeGenericModal
   );
   const router = useRouter();
+  const zodT = useTranslations("Zod.Goal");
+  const goalSchema = getGoalSchema({
+    currentAmountRequired: zodT("currentAmountRequired"),
+    currentAmountTooSmall: zodT("currentAmountTooSmall"),
+    goalAmountRequired: zodT("goalAmountRequired"),
+    goalAmountTooSmall: zodT("goalAmountTooSmall"),
+    nameRequired: zodT("nameRequired"),
+    nameTooLong: zodT("nameTooLong"),
+  });
+
   const form = useForm<GoalSchemaType>({
     resolver: useZodResolver(goalSchema),
   });
