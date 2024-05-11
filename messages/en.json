@@ -476,6 +476,14 @@
         "budgetNotFound": "We couldn't find the budget that needs updating.",
         "internalErrorMessage": "An error occurred while processing your request. Please try again later."
       }
+    },
+    "Category": {
+      "createCategory": {
+        "internalErrorMessage": "An error occurred while processing your request. Please try again later.",
+        "budget": "Budget",
+        "transaction": "Transaction",
+        "duplicateCategoryEntry": "{entity} Category already exists with name: {name}."
+      }
     }
   },
   "Zod": {

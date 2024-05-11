@@ -474,6 +474,14 @@
         "budgetNotFound": "Güncellenmesi gereken bütçeyi bulamadık.",
         "internalErrorMessage": "İsteğiniz işlenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin."
       }
+    },
+    "Category": {
+      "createCategory": {
+        "internalErrorMessage": "İsteğiniz işlenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+        "budget": "Bütçe",
+        "transaction": "İşlem",
+        "duplicateCategoryEntry": "Bu adla {entity} kategorisi zaten mevcut: {name}."
+      }
     }
   },
   "Zod": {

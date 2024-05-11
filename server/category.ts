@@ -71,7 +71,11 @@ export const createCategory = authenticatedAction<
   CreateCategoryReturnType,
   CategorySchemaType
 >(async (values, { user }) => {
-  const zodT = await getTranslations("Zod.Category");
+  const [zodT, actionT] = await Promise.all([
+    getTranslations("Zod.Category"),
+    getTranslations("Actions.Category.createCategory"),
+  ]);
+
   try {
     const categorySchema = getCategorySchema({
       invalidCategoryTypeErrorMessage: zodT("invalidCategoryTypeErrorMessage"),
@@ -89,8 +93,7 @@ export const createCategory = authenticatedAction<
 
     if (!response.insertId) {
       return {
-        error:
-          "Something went wrong while creating a category. Please try again later.",
+        error: actionT("internalErrorMessage"),
         fieldErrors: [],
       };
     }
@@ -110,20 +113,24 @@ export const createCategory = authenticatedAction<
     if (error instanceof Error) {
       if ("code" in error && error.code === "ER_DUP_ENTRY") {
         const entity =
-          values.type === CATEGORY_TYPES.BUDGET ? "Budget" : "Transaction";
+          values.type === CATEGORY_TYPES.BUDGET
+            ? actionT("budget")
+            : actionT("transaction");
+
+        const errorMessage = actionT("duplicateCategoryEntry", {
+          entity,
+          name: values.name,
+        });
 
         return {
-          error: `${entity} Category: ${values.name} already exists.`,
-          fieldErrors: [
-            { field: "name", message: `${entity} Category already exists.` },
-          ],
+          error: errorMessage,
+          fieldErrors: [{ field: "name", message: errorMessage }],
         };
       }
     }
 
     return {
-      error:
-        "Something went wrong. While creating a category. Please try again later.",
+      error: actionT("internalErrorMessage"),
       fieldErrors: [],
     };
   }
