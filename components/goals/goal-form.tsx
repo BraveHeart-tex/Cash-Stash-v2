@@ -63,7 +63,10 @@ const GoalForm = ({ data: goalToBeUpdated }: GoalFormProps) => {
     startTransition(async () => {
       let result;
       if (entityId) {
-        result = await updateGoal(entityId, values);
+        result = await updateGoal({
+          goalId: entityId,
+          ...values,
+        });
       } else {
         result = await createGoal(values);
       }

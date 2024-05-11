@@ -5,13 +5,9 @@ import {
   BaseValidatedResponse,
 } from "@/typings/baseTypes";
 
-export type CreateBudgetReturnType = Promise<
-  BaseValidatedResponse<BudgetSelectModel>
->;
+export type CreateBudgetReturnType = BaseValidatedResponse<BudgetSelectModel>;
 
-export type UpdateBudgetReturnType = Promise<
-  BaseValidatedResponse<BudgetSelectModel>
->;
+export type UpdateBudgetReturnType = BaseValidatedResponse<BudgetSelectModel>;
 
 export type GetPaginatedBudgetsParams = BasePaginatedActionParams & {
   category?: number;
@@ -19,10 +15,18 @@ export type GetPaginatedBudgetsParams = BasePaginatedActionParams & {
   sortDirection?: string;
 };
 
-export type GetPaginatedBudgetsReturnType = Promise<
-  BasePaginatedResponse & {
-    budgets: BudgetWithCategory[];
-  }
->;
+export type GetPaginatedBudgetsReturnType = BasePaginatedResponse & {
+  budgets: BudgetWithCategory[];
+};
 
 export type BudgetWithCategory = BudgetSelectModel & { category: string };
+
+export type DeleteBudgetReturnType =
+  | {
+      error: string;
+      data?: undefined;
+    }
+  | {
+      data: string;
+      error?: undefined;
+    };

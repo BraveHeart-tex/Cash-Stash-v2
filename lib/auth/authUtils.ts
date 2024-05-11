@@ -6,6 +6,7 @@ import ForgotPasswordEmail from "@/emails/forgot-password-email";
 import emailService from "@/lib/services/emailService";
 import { getUser } from "@/lib/auth/session";
 import { redirect } from "@/navigation";
+import { AuthenticatedFunction, OptionalParameter } from "@/typings/auth";
 
 export const sendEmailVerificationCode = async (
   email: string,
@@ -45,22 +46,32 @@ export const sendResetPasswordLink = async (email: string, url: string) => {
   await emailService.sendEmail(options);
 };
 
-/**
- * A higher-order function that wraps the given logic function with user redirection.
- * @param {Function} logic - The logic function to be wrapped.
- * @param {User} user - The user object.
- * @param {...any} params - The parameters to be passed to the logic function.
- * @return {Promise<T>} - The result of the logic function.
- */
-export function withUserRedirect<T, P extends any[]>(
-  logic: (user: User, ...params: P) => Promise<T>
-): (...params: P) => Promise<T> {
-  return async (...params: P) => {
+export function authenticatedAction<T, P = undefined>(
+  logic: AuthenticatedFunction<T, P>
+  // eslint-disable-next-line no-unused-vars
+): (params: OptionalParameter<AuthenticatedFunction<T, P>>) => Promise<T> {
+  return async (params: OptionalParameter<AuthenticatedFunction<T, P>>) => {
     const { user } = await getUser();
+
     if (!user) {
       return redirect(PAGE_ROUTES.LOGIN_ROUTE);
     }
 
-    return logic(user!, ...params);
+    return logic(params as P, { user }); // Pass params if provided
+  };
+}
+
+export function authenticatedActionWithNoParams<T>(
+  // eslint-disable-next-line no-unused-vars
+  logic: (user: User) => Promise<T>
+) {
+  return async () => {
+    const { user } = await getUser();
+
+    if (!user) {
+      return redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    }
+
+    return logic(user);
   };
 }

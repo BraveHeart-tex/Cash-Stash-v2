@@ -135,11 +135,11 @@ const TransactionForm = ({
     startTransition(async () => {
       let result;
       if (entityId) {
-        result = await updateTransaction(
-          entityId,
+        result = await updateTransaction({
+          transactionId: entityId,
+          oldTransaction: transactionToBeUpdated,
           values,
-          transactionToBeUpdated
-        );
+        });
       } else {
         result = await createTransaction(values);
       }

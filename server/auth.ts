@@ -33,6 +33,8 @@ import {
   getResetPasswordUrl,
 } from "@/lib/constants";
 import {
+  authenticatedAction,
+  authenticatedActionWithNoParams,
   sendEmailVerificationCode,
   sendResetPasswordLink,
 } from "@/lib/auth/authUtils";
@@ -53,6 +55,7 @@ import {
   verifyVerificationCode,
 } from "@/server/verificationCode";
 import { createPasswordResetToken } from "@/server/passwordResetToken";
+import { ActivateTwoFactorAuthenticationReturnType } from "@/typings/auth";
 
 export const login = async (values: LoginSchemaType) => {
   const header = headers();
@@ -548,33 +551,27 @@ export const resetPassword = async ({
   };
 };
 
-export const enableTwoFactorAuthentication = async () => {
-  const { user } = await getUser();
+export const enableTwoFactorAuthentication = authenticatedActionWithNoParams(
+  async (user) => {
+    await userRepository.updateUser(user.id, {
+      prefersTwoFactorAuthentication: 1,
+    });
 
-  if (!user) {
-    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    const twoFactorSecret = crypto.getRandomValues(new Uint8Array(20));
+
+    await twoFactorAuthenticationSecretRepository.create({
+      secret: encodeHex(twoFactorSecret),
+      userId: user.id,
+    });
+
+    return createTOTPKeyURI("CashStash", user.email, twoFactorSecret);
   }
+);
 
-  await userRepository.updateUser(user.id, {
-    prefersTwoFactorAuthentication: 1,
-  });
-
-  const twoFactorSecret = crypto.getRandomValues(new Uint8Array(20));
-
-  await twoFactorAuthenticationSecretRepository.create({
-    secret: encodeHex(twoFactorSecret),
-    userId: user.id,
-  });
-
-  return createTOTPKeyURI("CashStash", user.email, twoFactorSecret);
-};
-
-export const activateTwoFactorAuthentication = async (otp: string) => {
-  const { user } = await getUser();
-  if (!user) {
-    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
-  }
-
+export const activateTwoFactorAuthentication = authenticatedAction<
+  ActivateTwoFactorAuthenticationReturnType,
+  string
+>(async (otp, { user }) => {
   const t = await getTranslations(
     "Actions.Auth.activateTwoFactorAuthentication"
   );
@@ -610,7 +607,7 @@ export const activateTwoFactorAuthentication = async (otp: string) => {
     error: null,
     successMessage: t("successMessage"),
   };
-};
+});
 
 export const validateOTP = async (otp: string, email: string) => {
   const header = headers();

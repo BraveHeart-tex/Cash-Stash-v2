@@ -63,10 +63,10 @@ const CategoryCard = ({ category }: CategoryCardProps) => {
       primaryActionLabel: "Delete",
       onConfirm: () => {
         startTransition(async () => {
-          const response = await deleteCategory(
-            category.id,
-            category.type as CategoryType
-          );
+          const response = await deleteCategory({
+            id: category.id,
+            type: category.type as CategoryType,
+          });
           if (!response) {
             toast.error(
               "A problem occurred while deleting the category. Please try again later."

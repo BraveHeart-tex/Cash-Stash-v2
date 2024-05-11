@@ -23,18 +23,18 @@ import {
   CreateTransactionReturnType,
   GetPaginatedTransactionsParams,
   GetPaginatedTransactionsReturnType,
+  UpdateTransactionParam,
   UpdateTransactionReturnType,
 } from "@/typings/transactions";
+import {
+  authenticatedAction,
+  authenticatedActionWithNoParams,
+} from "@/lib/auth/authUtils";
 
-export const createTransaction = async (
-  values: TransactionSchemaType
-): CreateTransactionReturnType => {
-  const { user } = await getUser();
-
-  if (!user) {
-    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
-  }
-
+export const createTransaction = authenticatedAction<
+  CreateTransactionReturnType,
+  TransactionSchemaType
+>(async (values, { user }) => {
   try {
     const validatedData = transactionSchema.parse(values);
 
@@ -90,19 +90,12 @@ export const createTransaction = async (
       fieldErrors: [],
     };
   }
-};
+});
 
-export const updateTransaction = async (
-  transactionId: number,
-  values: TransactionSchemaType,
-  oldTransaction: TransactionSelectModel
-): UpdateTransactionReturnType => {
-  const { user } = await getUser();
-
-  if (!user) {
-    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
-  }
-
+export const updateTransaction = authenticatedAction<
+  UpdateTransactionReturnType,
+  UpdateTransactionParam
+>(async ({ transactionId, values, oldTransaction }, { user }) => {
   try {
     const { amount: oldAmount, accountId: oldAccountId } = oldTransaction;
 
@@ -160,112 +153,139 @@ export const updateTransaction = async (
       fieldErrors: [],
     };
   }
-};
+});
 
-export const deleteTransactionById = async (
-  transactionToDelete: TransactionSelectModel
-) => {
-  const { user } = await getUser();
-  if (!user) {
-    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
-  }
+export const deleteTransactionById = authenticatedAction(
+  async (transactionToDelete: TransactionSelectModel, { user }) => {
+    try {
+      const { affectedRows } =
+        await transactionRepository.deleteById(transactionToDelete);
 
-  try {
-    const { affectedRows } =
-      await transactionRepository.deleteById(transactionToDelete);
+      if (affectedRows === 0) {
+        return {
+          error:
+            "We encountered a problem while deleting the transaction. Please try again later.",
+        };
+      }
 
-    if (affectedRows === 0) {
+      await Promise.all([
+        redisService.invalidateKeysMatchingPrefixes([
+          generateCachePrefixWithUserId(
+            CACHE_PREFIXES.PAGINATED_ACCOUNTS,
+            user.id
+          ),
+          generateCachePrefixWithUserId(
+            CACHE_PREFIXES.PAGINATED_TRANSACTIONS,
+            user.id
+          ),
+          getAccountTransactionsKey(transactionToDelete.accountId),
+        ]),
+      ]);
+
+      return {
+        data: "Transaction deleted successfully",
+      };
+    } catch (error) {
+      logger.error(error);
       return {
         error:
           "We encountered a problem while deleting the transaction. Please try again later.",
       };
     }
-
-    await Promise.all([
-      redisService.invalidateKeysMatchingPrefixes([
-        generateCachePrefixWithUserId(
-          CACHE_PREFIXES.PAGINATED_ACCOUNTS,
-          user.id
-        ),
-        generateCachePrefixWithUserId(
-          CACHE_PREFIXES.PAGINATED_TRANSACTIONS,
-          user.id
-        ),
-        getAccountTransactionsKey(transactionToDelete.accountId),
-      ]),
-    ]);
-
-    return {
-      data: "Transaction deleted successfully",
-    };
-  } catch (error) {
-    logger.error(error);
-    return {
-      error:
-        "We encountered a problem while deleting the transaction. Please try again later.",
-    };
   }
-};
+);
 
-export const getPaginatedTransactions = async ({
-  transactionType,
-  accountId,
-  sortBy = "createdAt",
-  sortDirection = "desc",
-  query = "",
-  pageNumber,
-  categoryId,
-}: GetPaginatedTransactionsParams): GetPaginatedTransactionsReturnType => {
-  const { user } = await getUser();
-  if (!user) {
-    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
-  }
-
-  const PAGE_SIZE = 12;
-  const skipAmount = (pageNumber - 1) * PAGE_SIZE;
-
-  try {
-    const cacheKey = getPaginatedTransactionsKey({
-      userId: user.id,
-      transactionType,
-      accountId,
-      sortBy,
-      sortDirection,
-      query,
-      pageNumber,
-      categoryId,
-    });
-
-    const cachedData = await redisService.get(cacheKey);
-
-    if (cachedData) {
-      logger.info("PAGINATED TRANSACTIONS CACHE HIT");
-      const parsedData = JSON.parse(cachedData);
-      const cachedResult = parsedData.transactions;
-      const totalCount = parsedData.totalCount;
-
-      return {
-        transactions: cachedResult,
-        hasNextPage: totalCount > skipAmount + PAGE_SIZE,
-        hasPreviousPage: pageNumber > 1,
-        totalPages: Math.ceil(totalCount / PAGE_SIZE),
-        currentPage: pageNumber,
-      };
+export const getPaginatedTransactions = authenticatedAction<
+  GetPaginatedTransactionsReturnType,
+  GetPaginatedTransactionsParams
+>(
+  async ({
+    transactionType,
+    accountId,
+    sortBy = "createdAt",
+    sortDirection = "desc",
+    query = "",
+    pageNumber,
+    categoryId,
+  }) => {
+    const { user } = await getUser();
+    if (!user) {
+      return redirect(PAGE_ROUTES.LOGIN_ROUTE);
     }
 
-    const { transactions, totalCount } =
-      await transactionRepository.getMultiple({
+    const PAGE_SIZE = 12;
+    const skipAmount = (pageNumber - 1) * PAGE_SIZE;
+
+    try {
+      const cacheKey = getPaginatedTransactionsKey({
         userId: user.id,
         transactionType,
         accountId,
         sortBy,
         sortDirection,
         query,
-        page: pageNumber,
+        pageNumber,
         categoryId,
       });
 
-    if (transactions.length === 0) {
+      const cachedData = await redisService.get(cacheKey);
+
+      if (cachedData) {
+        logger.info("PAGINATED TRANSACTIONS CACHE HIT");
+        const parsedData = JSON.parse(cachedData);
+        const cachedResult = parsedData.transactions;
+        const totalCount = parsedData.totalCount;
+
+        return {
+          transactions: cachedResult,
+          hasNextPage: totalCount > skipAmount + PAGE_SIZE,
+          hasPreviousPage: pageNumber > 1,
+          totalPages: Math.ceil(totalCount / PAGE_SIZE),
+          currentPage: pageNumber,
+        };
+      }
+
+      const { transactions, totalCount } =
+        await transactionRepository.getMultiple({
+          userId: user.id,
+          transactionType,
+          accountId,
+          sortBy,
+          sortDirection,
+          query,
+          page: pageNumber,
+          categoryId,
+        });
+
+      if (transactions.length === 0) {
+        return {
+          transactions: [],
+          hasNextPage: false,
+          hasPreviousPage: false,
+          totalPages: 1,
+          currentPage: 1,
+        };
+      }
+
+      await redisService.set(
+        cacheKey,
+        JSON.stringify({
+          transactions,
+          totalCount,
+        }),
+        "EX",
+        60 * 60 * 24
+      );
+
+      return {
+        transactions,
+        hasNextPage: totalCount > skipAmount + PAGE_SIZE,
+        hasPreviousPage: pageNumber > 1,
+        totalPages: Math.ceil(totalCount / PAGE_SIZE),
+        currentPage: pageNumber,
+      };
+    } catch (error) {
+      logger.error(error);
       return {
         transactions: [],
         hasNextPage: false,
@@ -274,41 +294,9 @@ export const getPaginatedTransactions = async ({
         currentPage: 1,
       };
     }
-
-    await redisService.set(
-      cacheKey,
-      JSON.stringify({
-        transactions,
-        totalCount,
-      }),
-      "EX",
-      60 * 60 * 24
-    );
-
-    return {
-      transactions,
-      hasNextPage: totalCount > skipAmount + PAGE_SIZE,
-      hasPreviousPage: pageNumber > 1,
-      totalPages: Math.ceil(totalCount / PAGE_SIZE),
-      currentPage: pageNumber,
-    };
-  } catch (error) {
-    logger.error(error);
-    return {
-      transactions: [],
-      hasNextPage: false,
-      hasPreviousPage: false,
-      totalPages: 1,
-      currentPage: 1,
-    };
   }
-};
+);
 
-export const userCanCreateTransaction = async () => {
-  const { user } = await getUser();
-  if (!user) {
-    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
-  }
-
-  return await accountRepository.checkIfUserHasAccount(user.id);
-};
+export const canUserCreateTransaction = authenticatedActionWithNoParams(
+  async (user) => await accountRepository.checkIfUserHasAccount(user.id)
+);

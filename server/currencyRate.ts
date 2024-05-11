@@ -1,11 +1,10 @@
 "use server";
 
-import { getUser } from "@/lib/auth/session";
-import { CURRENCIES, PAGE_ROUTES } from "@/lib/constants";
+import { CURRENCIES } from "@/lib/constants";
 import currencyRatesRepository from "@/lib/database/repository/currencyRatesRepository";
-import { redirect } from "@/navigation";
 import logger from "@/lib/utils/logger";
 import { ConvertCurrencyType } from "@/typings/currencies";
+import { authenticatedAction } from "@/lib/auth/authUtils";
 
 type ConvertCurrencyParams = {
   currency: string;
@@ -18,16 +17,10 @@ type ConvertCurrencyReturnType = {
   error?: string;
 };
 
-export const convertCurrency = async ({
-  currency,
-  amount,
-}: ConvertCurrencyParams): Promise<ConvertCurrencyReturnType> => {
-  const { user } = await getUser();
-
-  if (!user) {
-    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
-  }
-
+export const convertCurrency = authenticatedAction<
+  ConvertCurrencyReturnType,
+  ConvertCurrencyParams
+>(async ({ currency, amount }) => {
   try {
     const currencyRates = await currencyRatesRepository.getCurrencyRates();
     const convertedAmounts: { [key: string]: number } = {};
@@ -82,4 +75,4 @@ export const convertCurrency = async ({
       updatedAt: new Date().toISOString(),
     };
   }
-};
+});

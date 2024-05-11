@@ -11,9 +11,9 @@ import {
 
 export type CategoryType = (typeof CATEGORY_TYPES)[keyof typeof CATEGORY_TYPES];
 
-export type CreateCategoryReturnType = Promise<
-  CreateCategorySuccessResponse | CreateCategoryErrorResponse
->;
+export type CreateCategoryReturnType =
+  | CreateCategorySuccessResponse
+  | CreateCategoryErrorResponse;
 
 type CreateCategorySuccessResponse = {
   data: CategorySelectModel;
@@ -24,9 +24,7 @@ type CreateCategoryErrorResponse = {
   fieldErrors: FieldError[];
 };
 
-export type GetCategoriesByTypeReturnType = Promise<
-  CategorySelectModel[] | null
->;
+export type GetCategoriesByTypeReturnType = CategorySelectModel[] | null;
 
 type UpdateCategorySuccessResponse = {
   data: CategoryUpdateModel;
@@ -37,19 +35,22 @@ type UpdateCategoryErrorResponse = {
   fieldErrors: FieldError[];
 };
 
-export type UpdateCategoryReturnType = Promise<
-  UpdateCategorySuccessResponse | UpdateCategoryErrorResponse
->;
+export type UpdateCategoryReturnType =
+  | UpdateCategorySuccessResponse
+  | UpdateCategoryErrorResponse;
 
-export type GetPaginatedCategoriesReturnType = Promise<
-  BasePaginatedResponse & {
-    categories: CategorySelectModel[];
-  }
->;
+export type GetPaginatedCategoriesReturnType = BasePaginatedResponse & {
+  categories: CategorySelectModel[];
+};
 
 export type CategoryUpdateModel = Required<Pick<CategoryInsertModel, "id">> &
   Partial<Omit<CategoryInsertModel, "id">>;
 
 export type GetPaginatedCategoriesParams = BasePaginatedActionParams & {
   type?: CategoryType;
+};
+
+export type DeleteCategoryParams = {
+  id: number;
+  type: CategoryType;
 };

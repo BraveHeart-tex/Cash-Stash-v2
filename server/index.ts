@@ -1,90 +1,77 @@
 "use server";
-import { getUser } from "@/lib/auth/session";
-import { MONTHS_OF_THE_YEAR, PAGE_ROUTES } from "@/lib/constants";
-import { redirect } from "@/navigation";
+import { MONTHS_OF_THE_YEAR } from "@/lib/constants";
 import { and, eq, gt, lt, sql } from "drizzle-orm";
 import { transactions } from "@/lib/database/schema";
 import { db } from "@/lib/database/connection";
+import { authenticatedActionWithNoParams } from "@/lib/auth/authUtils";
 
-export const fetchMonthlyTransactionsData = async () => {
-  const { user } = await getUser();
-  if (!user) {
-    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
+export const fetchMonthlyTransactionsData = authenticatedActionWithNoParams(
+  async (user) => {
+    const aggregateByType = async (isIncome: boolean) => {
+      const amountQuery = isIncome
+        ? gt(transactions.amount, 0)
+        : lt(transactions.amount, 0);
+
+      const transactionsSum = await db
+        .select({
+          createdAt: transactions.createdAt,
+          sumAmount: sql<number>`SUM(amount)`.as("sum_amount"),
+        })
+        .from(transactions)
+        .where(and(eq(transactions.userId, user.id), amountQuery))
+        .groupBy(transactions.createdAt);
+
+      return transactionsSum.map((transaction) => ({
+        month: MONTHS_OF_THE_YEAR[new Date(transaction.createdAt).getMonth()],
+        amount: transaction.sumAmount || 0,
+      }));
+    };
+
+    const incomes = await aggregateByType(true);
+    const expenses = await aggregateByType(false);
+
+    return { incomes, expenses };
   }
+);
 
-  const aggregateByType = async (isIncome: boolean) => {
-    const amountQuery = isIncome
-      ? gt(transactions.amount, 0)
-      : lt(transactions.amount, 0);
+export const fetchInsightsDataAction = authenticatedActionWithNoParams(
+  async (user) => {
+    const aggregateTransaction = async (isIncome: boolean) => {
+      const amountQuery = isIncome
+        ? gt(transactions.amount, 0)
+        : lt(transactions.amount, 0);
 
-    const transactionsSum = await db
-      .select({
-        createdAt: transactions.createdAt,
-        sumAmount: sql<number>`SUM(amount)`.as("sum_amount"),
-      })
-      .from(transactions)
-      .where(and(eq(transactions.userId, user.id), amountQuery))
-      .groupBy(transactions.createdAt);
+      const [result] = await db
+        .select({
+          sumAmount: sql<number>`SUM(amount)`.as("sum_amount"),
+        })
+        .from(transactions)
+        .where(and(eq(transactions.userId, user.id), amountQuery));
 
-    return transactionsSum.map((transaction) => ({
-      month: MONTHS_OF_THE_YEAR[new Date(transaction.createdAt).getMonth()],
-      amount: transaction.sumAmount || 0,
-    }));
-  };
+      return Math.abs(result.sumAmount);
+    };
 
-  const incomes = await aggregateByType(true);
-  const expenses = await aggregateByType(false);
+    const totalIncome = await aggregateTransaction(true);
+    const totalExpense = await aggregateTransaction(false);
 
-  return { incomes, expenses };
-};
+    if (!totalIncome || !totalExpense)
+      return { error: "Error calculating net income" };
 
-export const fetchInsightsDataAction = async () => {
-  const { user } = await getUser();
-  if (!user) {
-    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
+    const netIncome = totalIncome - totalExpense;
+
+    const savingsRate = ((netIncome / totalIncome) * 100).toFixed(0);
+
+    return {
+      totalIncome,
+      totalExpense,
+      netIncome,
+      savingsRate,
+    };
   }
+);
 
-  const aggregateTransaction = async (isIncome: boolean) => {
-    const amountQuery = isIncome
-      ? gt(transactions.amount, 0)
-      : lt(transactions.amount, 0);
-
-    const [result] = await db
-      .select({
-        sumAmount: sql<number>`SUM(amount)`.as("sum_amount"),
-      })
-      .from(transactions)
-      .where(and(eq(transactions.userId, user.id), amountQuery));
-
-    return Math.abs(result.sumAmount);
-  };
-
-  const totalIncome = await aggregateTransaction(true);
-  const totalExpense = await aggregateTransaction(false);
-
-  if (!totalIncome || !totalExpense)
-    return { error: "Error calculating net income" };
-
-  const netIncome = totalIncome - totalExpense;
-
-  const savingsRate = ((netIncome / totalIncome) * 100).toFixed(0);
-
-  return {
-    totalIncome,
-    totalExpense,
-    netIncome,
-    savingsRate,
-  };
-};
-
-export const getChartData = async () => {
+export const getChartData = authenticatedActionWithNoParams(async (user) => {
   try {
-    const { user } = await getUser();
-
-    if (!user) {
-      return redirect(PAGE_ROUTES.LOGIN_ROUTE);
-    }
-
     const transactionsResult = await db
       .select()
       .from(transactions)
@@ -116,4 +103,4 @@ export const getChartData = async () => {
   } catch (error) {
     return { error: "An error occurred." };
   }
-};
+});

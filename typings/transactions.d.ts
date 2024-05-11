@@ -5,13 +5,11 @@ import {
   BaseValidatedResponse,
 } from "@/typings/baseTypes";
 
-export type CreateTransactionReturnType = Promise<
-  BaseValidatedResponse<TransactionSelectModel>
->;
+export type CreateTransactionReturnType =
+  BaseValidatedResponse<TransactionSelectModel>;
 
-export type UpdateTransactionReturnType = Promise<
-  BaseValidatedResponse<TransactionSelectModel>
->;
+export type UpdateTransactionReturnType =
+  BaseValidatedResponse<TransactionSelectModel>;
 
 export type GetPaginatedTransactionsParams = BasePaginatedActionParams & {
   transactionType?: string;
@@ -24,12 +22,16 @@ export type GetPaginatedTransactionsParams = BasePaginatedActionParams & {
   categoryId?: number;
 };
 
-export type GetPaginatedTransactionsReturnType = Promise<
-  BasePaginatedResponse & {
-    transactions: TransactionWithCategoryAndAccountName[];
-  }
->;
+export type GetPaginatedTransactionsReturnType = BasePaginatedResponse & {
+  transactions: TransactionWithCategoryAndAccountName[];
+};
 
 export type TransactionWithCategoryAndAccountName = TransactionSelectModel & {
   category: string;
 } & { accountName: string };
+
+export type UpdateTransactionParam = {
+  transactionId: number;
+  values: TransactionSchemaType;
+  oldTransaction: TransactionSelectModel;
+};

@@ -6,9 +6,8 @@ import {
   BaseValidatedResponse,
 } from "@/typings/baseTypes";
 
-export type CreateReminderReturnType = Promise<
-  BaseValidatedResponse<ReminderSelectModel>
->;
+export type CreateReminderReturnType =
+  BaseValidatedResponse<ReminderSelectModel>;
 
 export type ReminderUpdateModel = ReminderSchemaType & { id: number };
 
@@ -17,8 +16,9 @@ export type GetPaginatedRemindersParams = BasePaginatedActionParams & {
   endDate?: string;
 };
 
-export type GetPaginatedRemindersResponse = Promise<
-  BasePaginatedResponse & {
-    reminders: ReminderSelectModel[];
-  }
->;
+export type GetPaginatedRemindersResponse = BasePaginatedResponse & {
+  reminders: ReminderSelectModel[];
+};
+
+export type UpdateReminderReturnType =
+  BaseValidatedResponse<ReminderUpdateModel>;

@@ -39,6 +39,7 @@ import {
 } from "@/components/ui/select";
 import { compareMatchingKeys } from "@/lib/utils/objectUtils/compareMatchingKeys";
 import { BaseValidatedResponse } from "@/typings/baseTypes";
+import { ReminderUpdateModel } from "@/typings/reminders";
 
 type ReminderFormProps = {
   data?: ReminderSelectModel;
@@ -91,7 +92,7 @@ const ReminderForm = ({ data: reminderToBeUpdated }: ReminderFormProps) => {
   };
 
   const processFormSubmissionResult = (
-    result: BaseValidatedResponse<ReminderSelectModel>
+    result: BaseValidatedResponse<ReminderSelectModel | ReminderUpdateModel>
   ) => {
     if (result.fieldErrors.length) {
       result.fieldErrors.forEach((fieldError) => {

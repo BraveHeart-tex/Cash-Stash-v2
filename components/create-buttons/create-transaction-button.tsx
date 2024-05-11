@@ -4,7 +4,7 @@ import { useTransition } from "react";
 import { FaExchangeAlt, FaPlus } from "react-icons/fa";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import useGenericModalStore from "@/store/genericModalStore";
-import { userCanCreateTransaction } from "@/server/transaction";
+import { canUserCreateTransaction } from "@/server/transaction";
 import { toast } from "sonner";
 import { AccountSelectModel } from "@/lib/database/schema";
 
@@ -52,7 +52,7 @@ const CreateTransactionButton = ({
 
   const handleCreateTransactionClick = async () => {
     startTransition(async () => {
-      const canCreateTransaction = await userCanCreateTransaction();
+      const canCreateTransaction = await canUserCreateTransaction();
 
       if (!canCreateTransaction) {
         toast.error("No accounts found.", {

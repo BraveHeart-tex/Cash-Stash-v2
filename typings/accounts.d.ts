@@ -6,19 +6,15 @@ import {
 } from "@/typings/baseTypes";
 import { TransactionWithCategoryAndAccountName } from "@/typings/transactions";
 
-export type RegisterBankAccountReturnType = Promise<
-  BaseValidatedResponse<AccountSelectModel>
->;
+export type RegisterBankAccountReturnType =
+  BaseValidatedResponse<AccountSelectModel>;
 
-export type UpdateBankAccountReturnType = Promise<
-  BaseValidatedResponse<AccountSelectModel>
->;
+export type UpdateBankAccountReturnType =
+  BaseValidatedResponse<AccountSelectModel>;
 
-export type GetPaginatedAccountsReturnType = Promise<
-  BasePaginatedResponse & {
-    accounts: AccountWithTransactions[];
-  }
->;
+export type GetPaginatedAccountsReturnType = BasePaginatedResponse & {
+  accounts: AccountWithTransactions[];
+};
 
 export type GetPaginatedAccountsParams = BasePaginatedActionParams & {
   sortBy?: string;
@@ -31,3 +27,13 @@ export type UpdateBankAccountParams = AccountSchemaType & { accountId: number };
 export type AccountWithTransactions = AccountSelectModel & {
   transactions: TransactionWithCategoryAndAccountName[];
 };
+
+export type DeleteAccountReturnType =
+  | {
+      error: string;
+      data?: undefined;
+    }
+  | {
+      data: string;
+      error?: undefined;
+    };

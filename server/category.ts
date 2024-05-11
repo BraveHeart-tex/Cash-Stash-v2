@@ -1,9 +1,7 @@
 "use server";
-import { getUser } from "@/lib/auth/session";
-import { CACHE_PREFIXES, CATEGORY_TYPES, PAGE_ROUTES } from "@/lib/constants";
+import { CACHE_PREFIXES, CATEGORY_TYPES } from "@/lib/constants";
 import { processZodError } from "@/lib/utils/objectUtils/processZodError";
 import categorySchema, { CategorySchemaType } from "@/schemas/category-schema";
-import { redirect } from "@/navigation";
 import { ZodError } from "zod";
 import categoryRepository from "@/lib/database/repository/categoryRepository";
 import logger from "@/lib/utils/logger";
@@ -13,22 +11,18 @@ import {
   CategoryType,
   CategoryUpdateModel,
   CreateCategoryReturnType,
+  DeleteCategoryParams,
   GetCategoriesByTypeReturnType,
   GetPaginatedCategoriesParams,
   GetPaginatedCategoriesReturnType,
   UpdateCategoryReturnType,
 } from "@/typings/categories";
+import { authenticatedAction } from "@/lib/auth/authUtils";
 
-export const getPaginatedCategories = async ({
-  pageNumber,
-  query,
-  type,
-}: GetPaginatedCategoriesParams): GetPaginatedCategoriesReturnType => {
-  const { user } = await getUser();
-  if (!user) {
-    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
-  }
-
+export const getPaginatedCategories = authenticatedAction<
+  GetPaginatedCategoriesReturnType,
+  GetPaginatedCategoriesParams
+>(async ({ pageNumber, query, type }, { user }) => {
   const PAGE_SIZE = 12;
   const skipAmount = (pageNumber - 1) * PAGE_SIZE;
 
@@ -67,17 +61,12 @@ export const getPaginatedCategories = async ({
       totalPages: 1,
     };
   }
-};
+});
 
-export const createCategory = async (
-  values: CategorySchemaType
-): CreateCategoryReturnType => {
-  const { user } = await getUser();
-
-  if (!user) {
-    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
-  }
-
+export const createCategory = authenticatedAction<
+  CreateCategoryReturnType,
+  CategorySchemaType
+>(async (values, { user }) => {
   try {
     const validatedData = categorySchema.parse(values);
 
@@ -128,30 +117,24 @@ export const createCategory = async (
       fieldErrors: [],
     };
   }
-};
+});
 
-export const getCategoriesByType = async (
-  type: CategoryType
-): GetCategoriesByTypeReturnType => {
-  const { user } = await getUser();
-  if (!user) {
-    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
-  }
-
+export const getCategoriesByType = authenticatedAction<
+  GetCategoriesByTypeReturnType,
+  CategoryType
+>(async (type, { user }) => {
   try {
     return await categoryRepository.getCategoriesByType(user.id, type);
   } catch (error) {
     logger.error(`getCategoriesByType error: ${error}`);
     return null;
   }
-};
+});
 
-export const deleteCategory = async (id: number, type: CategoryType) => {
-  const { user } = await getUser();
-  if (!user) {
-    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
-  }
-
+export const deleteCategory = authenticatedAction<
+  boolean,
+  DeleteCategoryParams
+>(async ({ id, type }, { user }) => {
   try {
     const [response] = await categoryRepository.deleteCategory(id);
 
@@ -180,16 +163,12 @@ export const deleteCategory = async (id: number, type: CategoryType) => {
     logger.error(`deleteCategory error: ${error}`);
     return false;
   }
-};
+});
 
-export const updateCategory = async (
-  data: CategoryUpdateModel
-): UpdateCategoryReturnType => {
-  const { user } = await getUser();
-  if (!user) {
-    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
-  }
-
+export const updateCategory = authenticatedAction<
+  UpdateCategoryReturnType,
+  CategoryUpdateModel
+>(async (data, { user }) => {
   try {
     const [response] = await categoryRepository.updateCategory(data);
 
@@ -231,4 +210,4 @@ export const updateCategory = async (
       fieldErrors: [],
     };
   }
-};
+});

@@ -5,21 +5,25 @@ import {
   BaseValidatedResponse,
 } from "@/typings/baseTypes";
 
-export type CreateGoalReturnType = Promise<
-  BaseValidatedResponse<GoalSelectModel>
->;
+export type CreateGoalReturnType = BaseValidatedResponse<GoalSelectModel>;
 
-export type UpdateGoalReturnType = Promise<
-  BaseValidatedResponse<GoalSelectModel>
->;
+export type UpdateGoalReturnType = BaseValidatedResponse<GoalSelectModel>;
 
 export type GetPaginatedGoalsParams = BasePaginatedActionParams & {
   sortBy?: string;
   sortDirection?: string;
 };
 
-export type GetPaginatedGoalsReturnType = Promise<
-  BasePaginatedResponse & {
-    goals: GoalSelectModel[];
-  }
->;
+export type GetPaginatedGoalsReturnType = BasePaginatedResponse & {
+  goals: GoalSelectModel[];
+};
+
+export type DeleteGoalReturnType =
+  | {
+      error: string;
+      data?: undefined;
+    }
+  | {
+      data: string;
+      error?: undefined;
+    };

@@ -1,9 +1,6 @@
 "use server";
 import { processZodError } from "@/lib/utils/objectUtils/processZodError";
-import { getUser } from "@/lib/auth/session";
-import { PAGE_ROUTES } from "@/lib/constants";
 import reminderSchema, { ReminderSchemaType } from "@/schemas/reminder-schema";
-import { redirect } from "@/navigation";
 import { ZodError } from "zod";
 import reminderRepository from "@/lib/database/repository/reminderRepository";
 import { convertISOToMysqlDatetime } from "@/lib/utils/dateUtils/convertISOToMysqlDatetime";
@@ -13,17 +10,14 @@ import {
   GetPaginatedRemindersParams,
   GetPaginatedRemindersResponse,
   ReminderUpdateModel,
+  UpdateReminderReturnType,
 } from "@/typings/reminders";
+import { authenticatedAction } from "@/lib/auth/authUtils";
 
-export const createReminder = async (
-  data: ReminderSchemaType
-): CreateReminderReturnType => {
-  const { user } = await getUser();
-
-  if (!user) {
-    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
-  }
-
+export const createReminder = authenticatedAction<
+  CreateReminderReturnType,
+  ReminderSchemaType
+>(async (data, { user }) => {
   try {
     const validatedData = reminderSchema.parse(data);
 
@@ -57,9 +51,12 @@ export const createReminder = async (
       fieldErrors: [],
     };
   }
-};
+});
 
-export const updateReminder = async (reminder: ReminderUpdateModel) => {
+export const updateReminder = authenticatedAction<
+  UpdateReminderReturnType,
+  ReminderUpdateModel
+>(async (reminder: ReminderUpdateModel) => {
   try {
     const validatedData = reminderSchema.parse(reminder);
 
@@ -92,19 +89,12 @@ export const updateReminder = async (reminder: ReminderUpdateModel) => {
       fieldErrors: [],
     };
   }
-};
+});
 
-export const getPaginatedReminders = async ({
-  query = "",
-  pageNumber = 1,
-  startDate,
-  endDate,
-}: GetPaginatedRemindersParams): GetPaginatedRemindersResponse => {
-  const { user } = await getUser();
-
-  if (!user) {
-    return redirect(PAGE_ROUTES.LOGIN_ROUTE);
-  }
+export const getPaginatedReminders = authenticatedAction<
+  GetPaginatedRemindersResponse,
+  GetPaginatedRemindersParams
+>(async ({ query = "", pageNumber = 1, startDate, endDate }, { user }) => {
   try {
     const PAGE_SIZE = 12;
     const skipAmount = (pageNumber - 1) * PAGE_SIZE;
@@ -134,4 +124,4 @@ export const getPaginatedReminders = async ({
       hasPreviousPage: false,
     };
   }
-};
+});

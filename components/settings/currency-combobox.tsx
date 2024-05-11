@@ -77,10 +77,10 @@ const CurrencyCombobox = ({
         const updateCurrencyConversion = () => {
           return new Promise(async (resolve, reject) => {
             startTransition(async () => {
-              const response = await convertTransactionsToNewCurrency(
+              const response = await convertTransactionsToNewCurrency({
                 oldSymbol,
-                selectedCurrency.value
-              );
+                newSymbol: selectedCurrency.value,
+              });
 
               if (response?.error) {
                 reject(response.error);

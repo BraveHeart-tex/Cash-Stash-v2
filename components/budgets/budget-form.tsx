@@ -98,7 +98,10 @@ const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
     startTransition(async () => {
       let result;
       if (entityId) {
-        result = await updateBudget(entityId, values);
+        result = await updateBudget({
+          budgetId: entityId,
+          ...values,
+        });
       } else {
         result = await createBudget(values);
       }
