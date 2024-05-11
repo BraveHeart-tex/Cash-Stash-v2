@@ -479,6 +479,10 @@
     }
   },
   "Zod": {
+    "ErrorMap": {
+      "required": "Required",
+      "invalidNumber": "This field should be a valid number."
+    },
     "Login": {
       "invalidEmail": "Please provide a valid email address.",
       "passwordTooShort": "Password must be at least 8 characters long.",

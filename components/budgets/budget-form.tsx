@@ -7,7 +7,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import useZodResolver from "@/lib/zod-resolver-wrapper";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -51,7 +51,7 @@ const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
     spentAmountNegative: zodT("spentAmountNegative"),
   });
   const form = useForm<BudgetSchemaType>({
-    resolver: zodResolver(budgetSchema),
+    resolver: useZodResolver(budgetSchema),
   });
   const budgetCategories = useCategoriesStore(
     (state) => state.categories

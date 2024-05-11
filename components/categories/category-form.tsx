@@ -8,7 +8,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import useZodResolver from "@/lib/zod-resolver-wrapper";
 import categorySchema, { CategorySchemaType } from "@/schemas/category-schema";
 import { useEffect, useTransition } from "react";
 import { Input } from "@/components/ui/input";
@@ -49,7 +49,7 @@ const CategoryForm = ({
   const t = useTranslations("Components.CategoryForm");
   let [isPending, startTransition] = useTransition();
   const form = useForm<CategorySchemaType>({
-    resolver: zodResolver(categorySchema),
+    resolver: useZodResolver(categorySchema),
     defaultValues: {
       type: defaultTypeValue,
     },

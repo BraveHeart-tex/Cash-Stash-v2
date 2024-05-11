@@ -477,6 +477,10 @@
     }
   },
   "Zod": {
+    "ErrorMap": {
+      "required": "Bu alan zorunludur.",
+      "invalidNumber": "Bu alan geçerli bir sayı olmalıdır."
+    },
     "Login": {
       "invalidEmail": "Lütfen geçerli bir e-posta adresi girin.",
       "passwordTooShort": "Şifre en az 8 karakter olmalıdır.",

@@ -7,7 +7,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import useZodResolver from "@/lib/zod-resolver-wrapper";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,7 +34,7 @@ const GoalForm = ({ data: goalToBeUpdated }: GoalFormProps) => {
   );
   const router = useRouter();
   const form = useForm<GoalSchemaType>({
-    resolver: zodResolver(goalSchema),
+    resolver: useZodResolver(goalSchema),
   });
   const entityId = goalToBeUpdated?.id;
 

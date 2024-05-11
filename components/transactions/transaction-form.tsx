@@ -8,7 +8,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import useZodResolver from "@/lib/zod-resolver-wrapper";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -42,17 +42,14 @@ import Combobox from "@/components/ui/combobox";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import { FaMinus, FaPlus, FaQuestion } from "react-icons/fa";
 import useAuthStore from "@/store/auth/authStore";
-import CurrencyInput from "@/components/transactions/transaction-amount-input";
-import getCurrencyAmblem from "@/lib/utils/stringUtils/getCurrencyAmblem";
-import { parseCurrencyToNumber } from "@/lib/utils/numberUtils/parseCurrencyToNumber";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { maskString } from "@/lib/utils/stringUtils/maskString";
 import { BaseValidatedResponse } from "@/typings/baseTypes";
+import MaskedAmountInput from "@/components/ui/masked-amount-input";
 
 type TransactionFormProps = {
   data?: TransactionSelectModel;
@@ -69,10 +66,9 @@ const TransactionForm = ({
     (state) => state.user?.preferredCurrency
   );
   const [accounts, setAccounts] = useState<AccountSelectModel[]>([]);
-  const [maskedAmount, setMaskedAmount] = useState("");
   const router = useRouter();
   const form = useForm<TransactionSchemaType>({
-    resolver: zodResolver(transactionSchema),
+    resolver: useZodResolver(transactionSchema),
   });
   const transactionsCategories = useCategoriesStore(
     (state) => state.categories
@@ -83,13 +79,6 @@ const TransactionForm = ({
   useEffect(() => {
     if (transactionToBeUpdated && Object.keys(transactionToBeUpdated).length) {
       setDefaultFormValues(transactionToBeUpdated);
-      if (transactionToBeUpdated.amount) {
-        setMaskedAmount(
-          maskString(transactionToBeUpdated.amount.toString(), {
-            prefix: getCurrencyAmblem(preferredCurrency!),
-          })
-        );
-      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transactionToBeUpdated, preferredCurrency]);
@@ -301,12 +290,7 @@ const TransactionForm = ({
                           onClick={() => {
                             if (field.value === undefined) return;
                             const convertedValue = -1 * field.value;
-                            form.setValue("amount", convertedValue);
-                            setMaskedAmount(
-                              maskString(convertedValue.toString(), {
-                                prefix: getCurrencyAmblem(preferredCurrency!),
-                              })
-                            );
+                            field.onChange(convertedValue);
                           }}
                         >
                           {renderTooltipTriggerContent()}
@@ -317,26 +301,14 @@ const TransactionForm = ({
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
-                  <CurrencyInput
-                    maskOptions={{
-                      prefix: getCurrencyAmblem(preferredCurrency!),
-                    }}
+                  <MaskedAmountInput
+                    initialValue={field.value}
+                    className="pl-10"
                     itemRef="amount"
                     inputMode="numeric"
-                    value={maskedAmount}
-                    onChange={(event) => {
-                      const value = event.target.value;
-                      form.setValue("amount", parseCurrencyToNumber(value));
-                      setMaskedAmount(value);
+                    onMaskedValueChange={(value) => {
+                      field.onChange(value);
                     }}
-                    render={(ref: any, props) => (
-                      <Input
-                        placeholder="Transaction amount"
-                        className="pl-10"
-                        {...props}
-                        ref={ref}
-                      />
-                    )}
                   />
                 </div>
               </FormControl>

@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import useZodResolver from "@/lib/zod-resolver-wrapper";
 import {
   register as registerUser,
   validateReCAPTCHAToken,
@@ -56,7 +56,7 @@ const RegisterForm = () => {
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<RegisterSchemaType>({
-    resolver: zodResolver(registerSchema),
+    resolver: useZodResolver(registerSchema),
   });
   const router = useRouter();
 

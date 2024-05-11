@@ -10,7 +10,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import useZodResolver from "@/lib/zod-resolver-wrapper";
 import resetPasswordSchema, {
   ResetPasswordSchemaType,
 } from "@/schemas/reset-password-schema";
@@ -33,7 +33,7 @@ const ResetPasswordForm = ({ email, token }: ResetPasswordFormProps) => {
   let [isPending, startTransition] = useTransition();
   const router = useRouter();
   const form = useForm<ResetPasswordSchemaType>({
-    resolver: zodResolver(resetPasswordSchema),
+    resolver: useZodResolver(resetPasswordSchema),
   });
 
   const onSubmit = (data: ResetPasswordSchemaType) => {

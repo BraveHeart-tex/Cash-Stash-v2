@@ -7,7 +7,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import useZodResolver from "@/lib/zod-resolver-wrapper";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -51,7 +51,7 @@ const ReminderForm = ({ data: reminderToBeUpdated }: ReminderFormProps) => {
     (state) => state.closeGenericModal
   );
   const form = useForm<ReminderSchemaType>({
-    resolver: zodResolver(reminderSchema),
+    resolver: useZodResolver(reminderSchema),
   });
   const entityId = reminderToBeUpdated?.id;
 

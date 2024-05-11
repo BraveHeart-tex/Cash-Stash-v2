@@ -9,7 +9,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { getLoginSchema, LoginSchemaType } from "@/schemas/login-schema";
 import { useState, useTransition } from "react";
 import { login, validateReCAPTCHAToken } from "@/server/auth";
@@ -31,6 +30,7 @@ import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import LoggedInIllustration from "@/components/logged-in-illustration";
 import Logo from "@/components/logo";
 import { Link, useRouter } from "@/navigation";
+import useZodResolver from "@/lib/zod-resolver-wrapper";
 
 type LoginFormProps = {
   internationalizationConfig: {
@@ -91,7 +91,7 @@ const LoginForm = ({ internationalizationConfig }: LoginFormProps) => {
   });
 
   const form = useForm<LoginSchemaType>({
-    resolver: zodResolver(loginSchema),
+    resolver: useZodResolver(loginSchema),
   });
 
   const handleLoginFormSubmit = async (data: LoginSchemaType) => {

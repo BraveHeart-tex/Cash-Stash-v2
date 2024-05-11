@@ -7,7 +7,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import useZodResolver from "@/lib/zod-resolver-wrapper";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -56,7 +56,7 @@ const AccountForm = ({
     categoryRequiredErrorMessage: zodT("categoryRequiredErrorMessage"),
   });
   const form = useForm<AccountSchemaType>({
-    resolver: zodResolver(accountSchema),
+    resolver: useZodResolver(accountSchema),
   });
   const entityId = accountToBeUpdated?.id;
 

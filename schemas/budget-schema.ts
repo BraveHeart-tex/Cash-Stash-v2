@@ -30,7 +30,7 @@ export const getBudgetSchema = (
           required_error: budgetAmountRequired,
         })
         .positive(budgetAmountPositive)
-        .transform((val) => (isNaN(val) ? 0 : val)),
+        .transform((val) => (isNaN(val) ? 1 : val)),
       categoryId: z.coerce
         .number()
         .min(1, budgetCategoryRequired)
@@ -44,7 +44,7 @@ export const getBudgetSchema = (
       progress: z.number().default(0),
     })
     .superRefine((data) => {
-      if (isNaN(data.budgetAmount)) data.budgetAmount = 0;
+      if (isNaN(data.budgetAmount)) data.budgetAmount = 1;
       if (isNaN(data.spentAmount)) data.spentAmount = 0;
 
       data.progress = Math.floor((data.spentAmount / data.budgetAmount) * 100);
