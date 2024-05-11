@@ -488,6 +488,14 @@
     "Goal": {
       "createGoal": {
         "internalErrorMessage": "An error occurred while processing your request. Please try again later."
+      },
+      "updateGoal": {
+        "goalNotFound": "We couldn't find the goal that needs updating.",
+        "internalErrorMessage": "An error occurred while processing your request. Please try again later."
+      },
+      "deleteGoal": {
+        "goalDeletedSuccessfully": "Goal deleted successfully.",
+        "internalErrorMessage": "An error occurred while processing your request. Please try again later."
       }
     }
   },

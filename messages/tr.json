@@ -486,6 +486,14 @@
     "Goal": {
       "createGoal": {
         "internalErrorMessage": "İsteğiniz işlenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin."
+      },
+      "updateGoal": {
+        "goalNotFound": "Güncellenmesi gereken hedefi bulamadık.",
+        "internalErrorMessage": "İsteğiniz işlenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin."
+      },
+      "deleteGoal": {
+        "goalDeletedSuccessfully": "Hedef başarıyla silindi.",
+        "internalErrorMessage": "İsteğiniz işlenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin."
       }
     }
   },

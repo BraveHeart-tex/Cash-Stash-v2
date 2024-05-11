@@ -85,6 +85,7 @@ export const updateGoal = authenticatedAction<
   UpdateGoalReturnType,
   GoalSchemaType & { goalId: number }
 >(async ({ goalId, ...values }, { user }) => {
+  const actionT = await getTranslations("Actions.Goal.updateGoal");
   let goalToBeUpdated: GoalSelectModel | null;
 
   const goalFromCache = await redisService.hgetall(getGoalKey(goalId));
@@ -95,7 +96,7 @@ export const updateGoal = authenticatedAction<
   }
 
   if (!goalToBeUpdated)
-    return { error: `Goal to be updated cannot be found.`, fieldErrors: [] };
+    return { error: actionT("goalNotFound"), fieldErrors: [] };
 
   try {
     const goalSchema = await getGoalSchemaWithTranslations();
@@ -108,8 +109,7 @@ export const updateGoal = authenticatedAction<
 
     if (affectedRows === 0 || !updatedGoal)
       return {
-        error:
-          "There was a problem while trying to update your goal. Please try again later.",
+        error: actionT("internalErrorMessage"),
         fieldErrors: [],
       };
 
@@ -128,8 +128,7 @@ export const updateGoal = authenticatedAction<
 
     logger.error(error);
     return {
-      error:
-        "There was a problem while updating your goal. Please try again later.",
+      error: actionT("internalErrorMessage"),
       fieldErrors: [],
     };
   }
@@ -205,13 +204,13 @@ export const getPaginatedGoals = authenticatedAction<
 
 export const deleteGoal = authenticatedAction<DeleteGoalReturnType, number>(
   async (goalId, { user }) => {
+    const actionT = await getTranslations("Actions.Goal.deleteGoal");
     try {
       const affectedRows = await goalRepository.deleteById(goalId);
 
       if (affectedRows === 0) {
         return {
-          error:
-            "There was a problem while deleting your goal. Please try again later.",
+          error: actionT("internalErrorMessage"),
         };
       }
 
@@ -222,12 +221,11 @@ export const deleteGoal = authenticatedAction<DeleteGoalReturnType, number>(
         redisService.del(getGoalKey(goalId)),
       ]);
 
-      return { data: "Goal deleted successfully." };
+      return { data: actionT("goalDeletedSuccessfully") };
     } catch (error) {
       logger.error(error);
       return {
-        error:
-          "There was a problem while deleting your goal. Please try again later.",
+        error: actionT("internalErrorMessage"),
       };
     }
   }
