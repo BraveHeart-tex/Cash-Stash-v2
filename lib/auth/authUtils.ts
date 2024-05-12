@@ -57,7 +57,7 @@ export function authenticatedAction<T, P = undefined>(
       return redirect(PAGE_ROUTES.LOGIN_ROUTE);
     }
 
-    return logic(params as P, { user }); // Pass params if provided
+    return logic(params as P, { user });
   };
 }
 

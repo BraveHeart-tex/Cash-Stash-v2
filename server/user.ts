@@ -10,14 +10,18 @@ import logger from "@/lib/utils/logger";
 import redisService from "@/lib/redis/redisService";
 import { authenticatedAction } from "@/lib/auth/authUtils";
 import { UpdateUserCurrencyPreferenceReturnType } from "@/typings/user-actions";
+import { getTranslations } from "next-intl/server";
 
 export const updateUserCurrencyPreference = authenticatedAction<
   UpdateUserCurrencyPreferenceReturnType,
   string
 >(async (symbol: string, { user }) => {
+  const actionT = await getTranslations(
+    "Actions.User.updateUserCurrencyPreference"
+  );
   if (symbol.length !== 3) {
     return {
-      error: "Invalid currency symbol.",
+      error: actionT("invalidSymbol"),
     };
   }
 
@@ -28,8 +32,7 @@ export const updateUserCurrencyPreference = authenticatedAction<
 
     if (!result.affectedRows) {
       return {
-        error:
-          "An error occurred while updating the currency preference. Please try again later.",
+        error: actionT("internalErrorMessage"),
       };
     }
 
@@ -39,8 +42,7 @@ export const updateUserCurrencyPreference = authenticatedAction<
   } catch (error) {
     logger.error("error updating currency preference", error);
     return {
-      error:
-        "An error occurred while updating the currency preference. Please try again later.",
+      error: actionT("internalErrorMessage"),
     };
   }
 });
@@ -55,9 +57,12 @@ export const convertTransactionsToNewCurrency = authenticatedAction(
     { oldSymbol, newSymbol }: ConvertTransactionsToNewCurrencyParams,
     { user }
   ) => {
+    const actionT = await getTranslations(
+      "Actions.User.convertTransactionsToNewCurrency"
+    );
     if (newSymbol.length !== 3) {
       return {
-        error: "Invalid currency symbol.",
+        error: actionT("invalidSymbol"),
       };
     }
 
@@ -69,7 +74,7 @@ export const convertTransactionsToNewCurrency = authenticatedAction(
 
       if (!newCurrencyRate || !oldRate) {
         return {
-          error: "Invalid currency symbol.",
+          error: actionT("invalidSymbol"),
         };
       }
 
@@ -116,14 +121,12 @@ export const convertTransactionsToNewCurrency = authenticatedAction(
       revalidatePath(PAGE_ROUTES.REPORTS_ROUTE);
 
       return {
-        success:
-          "Successfully converted transactions to the new currency rate.",
+        success: actionT("successMessage"),
       };
     } catch (error) {
       logger.error("error converting transactions to new currency", error);
       return {
-        error:
-          "An error occurred while converting transactions to the new currency rate. Please try again later.",
+        error: actionT("internalErrorMessage"),
       };
     }
   }

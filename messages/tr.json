@@ -565,6 +565,17 @@
         "goalDeletedSuccessfully": "Hedef başarıyla silindi.",
         "internalErrorMessage": "İsteğiniz işlenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin."
       }
+    },
+    "User": {
+      "updateUserCurrencyPreference": {
+        "invalidSymbol": "Geçersiz para birimi sembolü.",
+        "internalErrorMessage": "İsteğiniz işlenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin."
+      },
+      "convertTransactionsToNewCurrency": {
+        "invalidSymbol": "Geçersiz para birimi sembolü.",
+        "internalErrorMessage": "İsteğiniz işlenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+        "successMessage": "Successfully converted transactions to the new currency rate."
+      }
     }
   },
   "Zod": {

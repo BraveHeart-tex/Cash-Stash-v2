@@ -567,6 +567,17 @@
         "goalDeletedSuccessfully": "Goal deleted successfully.",
         "internalErrorMessage": "An error occurred while processing your request. Please try again later."
       }
+    },
+    "User": {
+      "updateUserCurrencyPreference": {
+        "invalidSymbol": "Invalid currency symbol",
+        "internalErrorMessage": "An error occurred while processing your request. Please try again later."
+      },
+      "convertTransactionsToNewCurrency": {
+        "invalidSymbol": "Invalid currency symbol",
+        "internalErrorMessage": "An error occurred while processing your request. Please try again later.",
+        "successMessage": "Successfully converted transactions to the new currency rate."
+      }
     }
   },
   "Zod": {
