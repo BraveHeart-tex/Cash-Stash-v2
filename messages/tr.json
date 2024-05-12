@@ -330,6 +330,31 @@
         "update": "Kategoriyi güncelle"
       }
     },
+    "GoalForm": {
+      "noChangesMessage": "Herhangi bir değişiklik tespit edilmedi.",
+      "noChangesDescription": "Hedefinizde herhangi bir değişiklik yapmadınız.",
+      "anErrorOccurredMessage": "Bir hata oluştu.",
+      "successMessage": {
+        "create": "Hedef başarıyla oluşturuldu.",
+        "update": "Hedef başarıyla güncellendi."
+      },
+      "nameField": {
+        "label": "Hedef Adı",
+        "placeholder": "Hedef adını giriniz"
+      },
+      "goalAmountField": {
+        "label": "Hedef Miktarı",
+        "placeholder": "Hedef miktarını giriniz"
+      },
+      "currentAmountField": {
+        "label": "Anlık Miktar",
+        "placeholder": "Anlık miktarı giriniz"
+      },
+      "submitButtonLabel": {
+        "create": "Hedef Oluştur",
+        "update": "Hedefi Güncelle"
+      }
+    },
     "CreateBudgetCategoryPopover": {
       "title": "Bütçe Kategorisi Ekle",
       "description": "Aşağıdaki formu kullanarak yeni bir bütçe kategorisi ekleyin."

@@ -29,12 +29,15 @@ type GoalFormProps = {
 };
 
 const GoalForm = ({ data: goalToBeUpdated }: GoalFormProps) => {
+  const router = useRouter();
+  const t = useTranslations("Components.GoalForm");
+  const zodT = useTranslations("Zod.Goal");
   const [isPending, startTransition] = useTransition();
+
   const closeGenericModal = useGenericModalStore(
     (state) => state.closeGenericModal
   );
-  const router = useRouter();
-  const zodT = useTranslations("Zod.Goal");
+
   const goalSchema = getGoalSchema({
     currentAmountRequired: zodT("currentAmountRequired"),
     currentAmountTooSmall: zodT("currentAmountTooSmall"),
@@ -47,6 +50,7 @@ const GoalForm = ({ data: goalToBeUpdated }: GoalFormProps) => {
   const form = useForm<GoalSchemaType>({
     resolver: useZodResolver(goalSchema),
   });
+
   const entityId = goalToBeUpdated?.id;
 
   useEffect(() => {
@@ -65,8 +69,8 @@ const GoalForm = ({ data: goalToBeUpdated }: GoalFormProps) => {
 
   const handleFormSubmit = async (values: GoalSchemaType) => {
     if (entityId && compareMatchingKeys(goalToBeUpdated, values)) {
-      toast.info("No changes detected.", {
-        description: "You haven't made any changes to your goal.",
+      toast.info(t("noChangesMessage"), {
+        description: t("noChangesDescription"),
       });
       return;
     }
@@ -99,21 +103,22 @@ const GoalForm = ({ data: goalToBeUpdated }: GoalFormProps) => {
     }
 
     if (result.error) {
-      toast.error("An error occurred.", {
+      toast.error(t("anErrorOccurredMessage"), {
         description: result.error,
       });
     } else {
-      const successMessage = {
-        create: "Your goal has been created.",
-        update: "Your goal has been updated.",
-      };
+      const successMessage = t(
+        `successMessage.${entityId ? "update" : "create"}`
+      );
       router.refresh();
-      toast.success("Success!", {
-        description: successMessage[entityId ? "update" : "create"],
-      });
+      toast.success(successMessage);
       closeGenericModal();
     }
   };
+
+  const submitButtonLabel = t(
+    `submitButtonLabel.${entityId ? "update" : "create"}`
+  );
 
   return (
     <Form {...form}>
@@ -126,9 +131,9 @@ const GoalForm = ({ data: goalToBeUpdated }: GoalFormProps) => {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Goal Name</FormLabel>
+              <FormLabel>{t("nameField.label")}</FormLabel>
               <FormControl>
-                <Input placeholder="Give your goal a name" {...field} />
+                <Input placeholder={t("nameField.placeholder")} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -139,11 +144,11 @@ const GoalForm = ({ data: goalToBeUpdated }: GoalFormProps) => {
           name="goalAmount"
           render={({ field }) => (
             <FormItem>
-              <CurrencyFormLabel label="Goal Amount" />
+              <CurrencyFormLabel label={t("goalAmountField.label")} />
               <FormControl>
                 <MaskedAmountInput
                   initialValue={field.value}
-                  placeholder="Enter the goal amount"
+                  placeholder={t("goalAmountField.placeholder")}
                   id="goalAmount"
                   onMaskedValueChange={(value) => {
                     field.onChange(value);
@@ -160,11 +165,11 @@ const GoalForm = ({ data: goalToBeUpdated }: GoalFormProps) => {
           name="currentAmount"
           render={({ field }) => (
             <FormItem>
-              <CurrencyFormLabel label="Current Amount" />
+              <CurrencyFormLabel label={t("currentAmountField.label")} />
               <FormControl>
                 <MaskedAmountInput
                   initialValue={field.value}
-                  placeholder="Enter the current amount"
+                  placeholder={t("currentAmountField.placeholder")}
                   id="currentAmount"
                   onMaskedValueChange={(value) => {
                     field.onChange(value);
@@ -180,11 +185,11 @@ const GoalForm = ({ data: goalToBeUpdated }: GoalFormProps) => {
           className="w-full"
           name="submit"
           type="submit"
-          aria-label="Submit goal form"
-          loading={form.formState.isSubmitting || isPending}
+          aria-label={submitButtonLabel}
+          loading={isPending}
           disabled={form.formState.isSubmitting || isPending}
         >
-          {entityId ? "Update" : "Create"}
+          {submitButtonLabel}
         </Button>
       </form>
     </Form>
