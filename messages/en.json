@@ -82,6 +82,30 @@
     "routeSearchInputPlaceholder": "Search accounts by name",
     "queryStringComboBoxSelectLabel": "Account Category"
   },
+  "Goals": {
+    "pageTitle": "Goals",
+    "GoalsNotFoundMessage": {
+      "pageHasParams": {
+        "heading": "No goals were found for your search",
+        "message": "Remove existing filters or create a goal by clicking the 'Create a Goal' button."
+      },
+      "noGoalsFound": {
+        "heading": "You don't have any goals created yet.",
+        "message": "Create a goal by clicking the 'Create a Goal' button."
+      }
+    },
+    "RouteFiltersPopover": {
+      "goalAmount": {
+        "asc": "Sort by Target (Low to High)",
+        "desc": "Sort by Target (High to Low)"
+      },
+      "currentAmount": {
+        "asc": "Sort by Current (Low to High)",
+        "desc": "Sort by Current (High to Low)"
+      }
+    },
+    "routeSearchInputPlaceholder": "Search goals by name"
+  },
   "Budgets": {
     "pageTitle": "Budgets",
     "createBudgetButtonLabel": "Create a Budget",
@@ -358,6 +382,22 @@
         "update": "Update Goal"
       }
     },
+    "GoalCard": {
+      "deleteGoalDialogTitle": "Are you sure you want to delete this goal?",
+      "deleteGoalDialogMessage": "This action cannot be undone.",
+      "deleteGoalDialogPrimaryActionLabel": "Delete",
+      "anErrorOccurredMessage": "An error occurred",
+      "editGoalDialogTitle": "Edit Goal",
+      "editGoalDialogDescription": "Edit your goal information by using the form below.",
+      "PopoverActions": {
+        "title": "Goal Actions",
+        "edit": "Edit",
+        "delete": "Delete"
+      },
+      "goalCompletedLabel": "Completed",
+      "currentLabel": "Current",
+      "targetLabel": "Target"
+    },
     "CreateBudgetCategoryPopover": {
       "title": "Add Budget Category",
       "description": "Add a new budget category by using the form below."
@@ -366,6 +406,11 @@
       "label": "Create an Account",
       "createAccountDialogTitle": "Create an Account",
       "createAccountDialogMessage": "Use the form below to add a new bank account."
+    },
+    "CreateGoalButton": {
+      "label": "Create a Goal",
+      "createGoalDialogTitle": "Create a Goal",
+      "createGoalDialogMessage": "Create a new goal by using the form below."
     },
     "PasswordInput": {
       "passwordFieldLabel": "Password",

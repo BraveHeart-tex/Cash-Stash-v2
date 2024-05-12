@@ -1,7 +1,10 @@
 import { GiPayMoney } from "react-icons/gi";
-import RouteFiltersPopover from "@/components/route-filters-popover";
+import RouteFiltersPopover, {
+  GenericFilterOption,
+} from "@/components/route-filters-popover";
 import RouteSearchInput from "@/components/route-search-input";
 import { FaPiggyBank } from "react-icons/fa";
+import { useTranslations } from "next-intl";
 
 const goalFilters = [
   {
@@ -36,19 +39,33 @@ const goalFilters = [
       sortDirection: "asc",
     },
   },
-];
+] as const;
 
 type GoalsPageFiltersProps = {
   shouldRenderPopover: boolean;
 };
 
+type GoalFilterData = {
+  sortBy: string;
+  sortDirection: string;
+};
+
 const GoalsPageFilters = ({ shouldRenderPopover }: GoalsPageFiltersProps) => {
+  const t = useTranslations("Goals");
+
+  const mappedGoals = goalFilters.map((filter) => ({
+    ...filter,
+    label: t(
+      `RouteFiltersPopover.${filter.data.sortBy}.${filter.data.sortDirection}`
+    ),
+  })) as GenericFilterOption<GoalFilterData>[];
+
   return (
     <div className="flex items-center justify-between gap-2">
-      <RouteSearchInput placeholder="Search goals by name" />
+      <RouteSearchInput placeholder={t("routeSearchInputPlaceholder")} />
       {shouldRenderPopover && (
         <RouteFiltersPopover
-          options={goalFilters}
+          options={mappedGoals}
           queryKeys={["sortBy", "sortDirection"]}
         />
       )}

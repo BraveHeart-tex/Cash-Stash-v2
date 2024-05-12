@@ -1,23 +1,24 @@
 import GenericNotFoundBlock from "@/components/ui/generic-not-found-block";
+import { useTranslations } from "next-intl";
 
 type GoalsNotFoundMessageProps = {
   pageHasParams: boolean;
 };
 
 const GoalsNotFoundMessage = ({ pageHasParams }: GoalsNotFoundMessageProps) => {
-  const headingVariants: { [key: number]: string } = {
-    0: "You don't have any goals created yet.",
-    1: "No goals were found for your search",
-  };
+  const t = useTranslations("Goals.GoalsNotFoundMessage");
 
-  const message = `${pageHasParams ? "Remove existing filters or " : ""} Create a goal by clicking the 'Create a goal' button.`;
+  const heading = t(
+    `${pageHasParams ? "pageHasParams" : "noGoalsFound"}.heading`
+  );
+
+  const message = t(
+    `${pageHasParams ? "pageHasParams" : "noGoalsFound"}.message`
+  );
 
   return (
     <div className="w-full pt-6">
-      <GenericNotFoundBlock
-        heading={headingVariants[Number(pageHasParams)]}
-        message={message}
-      />
+      <GenericNotFoundBlock heading={heading} message={message} />
     </div>
   );
 };

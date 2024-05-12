@@ -12,7 +12,7 @@ import { compareDeepObjectEquality } from "@/lib/utils/objectUtils/compareDeepOb
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 
-type GenericFilterOption<T> = {
+export type GenericFilterOption<T> = {
   label: string;
   data: T;
   icon: React.JSX.Element;

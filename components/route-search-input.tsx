@@ -16,7 +16,7 @@ const RouteSearchInput = ({ placeholder }: RouteSearchInputProps) => {
   const [, setSearchQuery] = useQueryState("query", {
     shallow: false,
   });
-  const [debouncedQuery, setDebouncedQuery] = useDebounceValue("", 300);
+  const [debouncedQuery, setDebouncedQuery] = useDebounceValue("", 400);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;

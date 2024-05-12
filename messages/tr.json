@@ -82,6 +82,30 @@
     "routeSearchInputPlaceholder": "Hesapları isme göre arayın",
     "queryStringComboBoxSelectLabel": "Hesap Tipi"
   },
+  "Goals": {
+    "pageTitle": "Hedefler",
+    "GoalsNotFoundMessage": {
+      "pageHasParams": {
+        "heading": "Aramanız için hedef bulunamadı.",
+        "message": "Mevcut filtreleri kaldırın veya 'Hedef Oluştur' düğmesine tıklayarak bir hedef oluşturun."
+      },
+      "noGoalsFound": {
+        "heading": "Henüz bir hedef oluşturmadınız.",
+        "message": "Hedef oluşturmak için 'Hedef Oluştur' düğmesine tıklayın."
+      }
+    },
+    "RouteFiltersPopover": {
+      "goalAmount": {
+        "asc": "Hedefe göre sırala (Düşükten Yükseğe)",
+        "desc": "Hedefe göre sırala (Yüksekten Düşüğe)"
+      },
+      "currentAmount": {
+        "asc": "Anlık miktara göre (Düşükten Yükseğe)",
+        "desc": "Anlık miktara göre (Yüksekten Düşüğe)"
+      }
+    },
+    "routeSearchInputPlaceholder": "Hedefleri isme göre arayın"
+  },
   "Budgets": {
     "pageTitle": "Bütçeler",
     "createBudgetButtonLabel": "Bütçe Ekleyin",
@@ -355,9 +379,30 @@
         "update": "Hedefi Güncelle"
       }
     },
+    "GoalCard": {
+      "deleteGoalDialogTitle": "Seçili hedefi silmek istediğinizden emin misiniz?",
+      "deleteGoalDialogMessage": "Bu işlem geri alınamaz.",
+      "deleteGoalDialogPrimaryActionLabel": "Sil",
+      "anErrorOccurredMessage": "Bir hata oluştu.",
+      "editGoalDialogTitle": "Hedefi Düzenle",
+      "editGoalDialogDescription": "Hedef detaylarını düzenlemek için aşağıdaki formu kullanın.",
+      "PopoverActions": {
+        "title": "Hedef Aksiyonları",
+        "edit": "Düzenle",
+        "delete": "Sil"
+      },
+      "goalCompletedLabel": "Tamamlandı!",
+      "currentLabel": "Güncel",
+      "targetLabel": "Hedef"
+    },
     "CreateBudgetCategoryPopover": {
       "title": "Bütçe Kategorisi Ekle",
       "description": "Aşağıdaki formu kullanarak yeni bir bütçe kategorisi ekleyin."
+    },
+    "CreateGoalButton": {
+      "label": "Hedef Oluştur",
+      "createGoalDialogTitle": "Hedef Oluşturun",
+      "createGoalDialogMessage": "Yeni bir hedef oluşturmak için aşağıdaki formu kullanın."
     },
     "CreateAccountButton": {
       "label": "Hesap Ekle",

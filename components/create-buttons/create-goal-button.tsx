@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import useGenericModalStore from "@/store/genericModalStore";
+import { useTranslations } from "next-intl";
 import { FaBullseye, FaPlus } from "react-icons/fa";
 
 type CreateGoalButtonProps = {
@@ -13,21 +14,24 @@ const CreateGoalButton = ({
   className,
   minimizeOnMobile,
 }: CreateGoalButtonProps) => {
+  const t = useTranslations("Components.CreateGoalButton");
   const openGenericModal = useGenericModalStore(
     (state) => state.openGenericModal
   );
+
+  const label = t("label");
 
   return (
     <Button
       className={cn("flex items-center gap-[14px] font-semibold", className)}
       type="button"
-      name="create-goal"
-      aria-label="Create a goal"
+      name="create-goal-button"
+      aria-label={label}
       onClick={() =>
         openGenericModal({
           mode: "create",
-          dialogTitle: "Create Goal",
-          dialogDescription: "Create a new goal by filling out the form below.",
+          dialogTitle: t("createGoalDialogTitle"),
+          dialogDescription: t("createGoalDialogMessage"),
           key: "goal",
         })
       }
@@ -42,7 +46,7 @@ const CreateGoalButton = ({
         )}
       >
         <FaBullseye size={18} />
-        Create a goal
+        {label}
       </div>
     </Button>
   );

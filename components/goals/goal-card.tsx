@@ -13,12 +13,14 @@ import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import useAuthStore from "@/store/auth/authStore";
+import { useTranslations } from "next-intl";
 
 type GoalCardProps = {
   goal: GoalSelectModel;
 };
 
 const GoalCard = ({ goal }: GoalCardProps) => {
+  const t = useTranslations("Components.GoalCard");
   const preferredCurrency = useAuthStore(
     (state) => state.user?.preferredCurrency
   );
@@ -32,21 +34,19 @@ const GoalCard = ({ goal }: GoalCardProps) => {
 
   const handleDeleteGoal = (id: number) => {
     showGenericConfirm({
-      title: "Are you sure you want to delete this goal?",
-      message: "This action cannot be undone.",
-      primaryActionLabel: "Delete",
+      title: t("deleteGoalDialogTitle"),
+      message: t("deleteGoalDialogMessage"),
+      primaryActionLabel: t("deleteGoalDialogPrimaryActionLabel"),
       onConfirm: async () => {
         const response = await deleteGoal(id);
 
         if (response?.error) {
-          toast.error("An error occurred.", {
+          toast.error(t("anErrorOccurredMessage"), {
             description: response.error,
           });
         } else {
           router.refresh();
-          toast.success("Goal deleted.", {
-            description: "Selected goal has been deleted.",
-          });
+          toast.success(response.data);
         }
       },
     });
@@ -66,8 +66,8 @@ const GoalCard = ({ goal }: GoalCardProps) => {
 
   const handleEditGoal = () => {
     openGenericModal({
-      dialogDescription: "Edit your goal information by using the form below.",
-      dialogTitle: "Edit Goal",
+      dialogDescription: t("editGoalDialogDescription"),
+      dialogTitle: t("editGoalDialogTitle"),
       mode: "edit",
       key: "goal",
       entityId: goal.id,
@@ -88,24 +88,26 @@ const GoalCard = ({ goal }: GoalCardProps) => {
       <div className="absolute right-1 top-3 mb-2">
         <div className="flex items-center">
           <ActionPopover
-            heading="Goal Actions"
+            heading={t("PopoverActions.title")}
             triggerClassName="top-0 right-0 mb-0"
             options={[
               {
                 icon: FaEdit,
-                label: "Edit",
+                label: t("PopoverActions.edit"),
                 onClick: () => handleEditGoal(),
               },
               {
                 icon: FaTrash,
-                label: "Delete",
+                label: t("PopoverActions.delete"),
                 onClick: () => handleDeleteGoal(goal.id),
               },
             ]}
           />
 
           <Badge className={cn("ml-auto", getBadgeColor(goal.progress))}>
-            {goal.progress >= 100 ? "Completed!" : `${goal.progress}%`}
+            {goal.progress >= 100
+              ? t("goalCompletedLabel")
+              : `${goal.progress}%`}
           </Badge>
         </div>
       </div>
@@ -115,8 +117,14 @@ const GoalCard = ({ goal }: GoalCardProps) => {
           indicatorClassName={getGoalProgressColor(goal.progress)}
         />
         <p className="mt-4 text-foreground">
-          Current: {formatMoney(goal.currentAmount, preferredCurrency)} /
-          Target: {formatMoney(goal.goalAmount, preferredCurrency)}
+          <span className="font-medium">{t("currentLabel")}</span>:{" "}
+          <span className="text-primary">
+            {formatMoney(goal.currentAmount, preferredCurrency)}
+          </span>{" "}
+          / <span className="font-medium"> {t("targetLabel")}</span>:{" "}
+          <span className="text-primary">
+            {formatMoney(goal.goalAmount, preferredCurrency)}
+          </span>
         </p>
       </div>
     </motion.article>
