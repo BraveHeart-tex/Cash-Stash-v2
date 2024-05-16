@@ -1,4 +1,9 @@
 {
+  "NotFound": {
+    "title": "Aradığınız Sayfa Bulunamadı",
+    "description": "Görünüşe göre var olmayan bir sayfaya gitmeye çalışmışsınız.",
+    "linkLabel": "Ana sayfaya geri dön"
+  },
   "ThemeOptions": {
     "light": {
       "label": "Varsayılan Açık"

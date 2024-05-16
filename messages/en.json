@@ -1,4 +1,9 @@
 {
+  "NotFound": {
+    "title": "Page Not Found",
+    "description": "Looks like you tried to navigate to a page that doesn't exist.",
+    "linkLabel": "Back to the home page"
+  },
   "ThemeOptions": {
     "light": {
       "label": "Default Light"
