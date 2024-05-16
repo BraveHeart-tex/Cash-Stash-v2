@@ -239,15 +239,7 @@
       },
       "typeField": {
         "label": "Hesap Tipi",
-        "placeholder": "Hesap tipi seçiniz",
-        "selectOptions": {
-          "CHECKING": "Çek Hesabı",
-          "SAVINGS": "Birikim Hesabı",
-          "CREDIT_CARD": "Kredi Kartı",
-          "INVESTMENT": "Yatırım Hesabı",
-          "LOAN": "Kredi",
-          "OTHER": "Diğer"
-        }
+        "placeholder": "Hesap tipi seçiniz"
       },
       "balanceField": {
         "label": "Bakiye",

@@ -171,15 +171,6 @@
     "twoFactorFormCodeLabel": "Your 6-digit code",
     "twoFactorFormButtonLabel": "Validate"
   },
-  "Register": {
-    "registerFormHeading": "Welcome!",
-    "registerFormDescription": "Create an account to get started.",
-    "registerFormFullNameLabel": "Full Name",
-    "registerFormFullNamePlaceholder": "Enter your full name",
-    "registerFormEmailLabel": "Email",
-    "registerFormEmailPlaceholder": "Enter your email address",
-    "registerFormEmailNote": "<strong>Note</strong>: Please provide a valid email address for{' '} <u> account verification, password recovery, and other important communications. </u>"
-  },
   "Settings": {
     "pageTitle": "Settings",
     "pageDescription": "Personalize your CashStash experience.",
