@@ -73,11 +73,11 @@
     "AccountsNotFoundMessage": {
       "pageHasParams": {
         "heading": "Aramanız için hiçbir hesap bulunamadı",
-        "message": "Mevcut filtreleri kaldırın veya 'Hesap Ekle' düğmesine tıklayarak bir hesap oluşturun."
+        "message": "Mevcut filtreleri kaldırın veya 'Hesap Oluştur' düğmesine tıklayarak bir hesap oluşturun."
       },
       "noAccountsFound": {
         "heading": "Henüz bir hesap oluşturmadınız",
-        "message": "'Hesap Ekle' düğmesine tıklayarak bir hesap oluşturun."
+        "message": "'Hesap Oluştur' düğmesine tıklayarak bir hesap oluşturun."
       }
     },
     "RouteFiltersPopover": {
@@ -114,8 +114,8 @@
   },
   "Budgets": {
     "pageTitle": "Bütçeler",
-    "createBudgetButtonLabel": "Bütçe Ekleyin",
-    "createBudgetDialogTitle": "Bütçe Ekleyin",
+    "createBudgetButtonLabel": "Bütçe Oluştur",
+    "createBudgetDialogTitle": "Bütçe Oluşturun",
     "createBudgetDialogDescription": "Aşağıdaki formu kullanarak bütçenizi oluşturun.",
     "allBudgetsLinkLabel": "Bütçeleri Görüntüle",
     "BudgetsPageFilters": {
@@ -130,11 +130,11 @@
     "BudgetsNotFoundMessage": {
       "pageHasParams": {
         "heading": "Aramanız için bütçe bulunamadı",
-        "message": "Mevcut filtreleri kaldırın veya 'Bütçe Ekleyin' düğmesine tıklayarak bir bütçe oluşturun."
+        "message": "Mevcut filtreleri kaldırın veya 'Bütçe Oluştur' düğmesine tıklayarak bir bütçe oluşturun."
       },
       "noBudgetsFound": {
         "heading": "Henüz oluşturulmuş bir bütçeniz yok.",
-        "message": "'Bütçe Ekleyin' düğmesine tıklayarak bir bütçe oluşturun."
+        "message": "'Bütçe Oluştur' düğmesine tıklayarak bir bütçe oluşturun."
       }
     }
   },
@@ -278,7 +278,7 @@
       "accountActionsHeading": "Hesap Aksiyonları",
       "Show Latest Transactions": "En Son İşlemlerini Görüntüle",
       "Edit Account": "Düzenle",
-      "Add Transaction": "İşlem Ekle",
+      "Add Transaction": "İşlem Oluştur",
       "Delete": "Sil"
     },
     "BudgetCard": {
@@ -395,8 +395,8 @@
       "targetLabel": "Hedef"
     },
     "CreateBudgetCategoryPopover": {
-      "title": "Bütçe Kategorisi Ekle",
-      "description": "Aşağıdaki formu kullanarak yeni bir bütçe kategorisi ekleyin."
+      "title": "Bütçe Kategorisi Oluştur",
+      "description": "Aşağıdaki formu kullanarak yeni bir bütçe kategorisi oluşturun."
     },
     "CreateGoalButton": {
       "label": "Hedef Oluştur",
@@ -404,13 +404,19 @@
       "createGoalDialogMessage": "Yeni bir hedef oluşturmak için aşağıdaki formu kullanın."
     },
     "CreateAccountButton": {
-      "label": "Hesap Ekle",
-      "createAccountDialogTitle": "Hesap Ekle",
-      "createAccountDialogMessage": "Yeni bir hesap eklemek için aşağıdaki formu kullanın."
+      "label": "Hesap Oluştur",
+      "createAccountDialogTitle": "Hesap Oluşturun",
+      "createAccountDialogMessage": "Yeni bir hesap oluşturmak için aşağıdaki formu kullanın."
+    },
+    "CreateTransactionButton": {
+      "label": "İşlem Oluştur",
+      "createTransactionDialogMessage": "Aşağıdaki formu kullanarak yeni bir işlem oluşturun.",
+      "noAccountsFound": "Hiçbir hesap bulunamadı.",
+      "noAccountsFoundDescription": "Bir işlem oluşturabilmeniz için önce bir hesap oluşturmanız gerekir."
     },
     "CreateBudgetButton": {
-      "buttonLabel": "Bütçe Ekleyin",
-      "dialogTitle": "Bütçe Ekleyin",
+      "buttonLabel": "Bütçe Oluştur",
+      "dialogTitle": "Bütçe Oluşturun",
       "dialogDescription": "Aşağıdaki formu kullanarak bütçenizi oluşturun."
     },
     "PasswordInput": {
@@ -475,8 +481,8 @@
       }
     },
     "CreateTransactionCategoryPopover": {
-      "title": "İşlem Kategorisi Ekle",
-      "description": "Aşağıdaki formu kullanarak yeni bir işlem kategorisi ekleyin."
+      "title": "İşlem Kategorisi Oluştur",
+      "description": "Aşağıdaki formu kullanarak yeni bir işlem kategorisi oluşturun."
     },
     "PasswordRequirements": {
       "title": "Şifre Kriterleri",

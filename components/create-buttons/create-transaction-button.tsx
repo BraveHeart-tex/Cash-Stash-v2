@@ -7,6 +7,7 @@ import useGenericModalStore from "@/store/genericModalStore";
 import { canUserCreateTransaction } from "@/server/transaction";
 import { toast } from "sonner";
 import { AccountSelectModel } from "@/lib/database/schema";
+import { useTranslations } from "next-intl";
 
 type CreateTransactionButtonProps = {
   className?: string;
@@ -17,6 +18,8 @@ const CreateTransactionButton = ({
   className,
   minimizeOnMobile,
 }: CreateTransactionButtonProps) => {
+  const t = useTranslations("Components.CreateTransactionButton");
+  const createAccountT = useTranslations("Components.CreateAccountButton");
   let [isPending, startTransition] = useTransition();
   const openGenericModal = useGenericModalStore(
     (state) => state.openGenericModal
@@ -24,8 +27,8 @@ const CreateTransactionButton = ({
 
   const openCreateTransactionModal = (accountId?: number) => {
     openGenericModal({
-      dialogTitle: "Create Transaction",
-      dialogDescription: "Use the form below to create a new transaction.",
+      dialogTitle: t("label"),
+      dialogDescription: t("createTransactionDialogMessage"),
       mode: "create",
       key: "transaction",
       data: {
@@ -38,8 +41,8 @@ const CreateTransactionButton = ({
     openGenericModal({
       key: "account",
       mode: "create",
-      dialogTitle: "Register Bank Account",
-      dialogDescription: "Use the form below to register a new bank account.",
+      dialogTitle: createAccountT("createAccountDialogTitle"),
+      dialogDescription: createAccountT("createAccountDialogMessage"),
       props: {
         afterSave: (values: AccountSelectModel) => {
           setTimeout(() => {
@@ -55,11 +58,10 @@ const CreateTransactionButton = ({
       const canCreateTransaction = await canUserCreateTransaction();
 
       if (!canCreateTransaction) {
-        toast.error("No accounts found.", {
-          description:
-            "You need to create an account before you can create a transaction.",
+        toast.error(t("noAccountsFound"), {
+          description: t("noAccountsFoundDescription"),
           action: {
-            label: "Create Account",
+            label: createAccountT("label"),
             onClick: () => {
               openCreateAccountModal();
             },
@@ -71,6 +73,8 @@ const CreateTransactionButton = ({
     });
   };
 
+  const buttonLabel = t("label");
+
   return (
     <Button
       className={cn(
@@ -80,7 +84,7 @@ const CreateTransactionButton = ({
       )}
       type="button"
       name="create-transaction"
-      aria-label="Create a transaction"
+      aria-label={buttonLabel}
       onClick={handleCreateTransactionClick}
       loading={isPending}
     >
@@ -93,14 +97,8 @@ const CreateTransactionButton = ({
           minimizeOnMobile && "hidden md:flex"
         )}
       >
-        {isPending ? (
-          "Loading..."
-        ) : (
-          <>
-            <FaExchangeAlt className="text-xl" />
-            Create a transaction
-          </>
-        )}
+        <FaExchangeAlt className="text-xl" />
+        {buttonLabel}
       </div>
     </Button>
   );

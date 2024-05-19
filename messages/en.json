@@ -404,6 +404,12 @@
       "createAccountDialogTitle": "Create an Account",
       "createAccountDialogMessage": "Use the form below to add a new bank account."
     },
+    "CreateTransactionButton": {
+      "label": "Create a Transaction",
+      "createTransactionDialogMessage": "Create a new transaction by using the form below.",
+      "noAccountsFound": "No accounts found.",
+      "noAccountsFoundDescription": "You need to create an account before you can create a transaction."
+    },
     "CreateBudgetButton": {
       "buttonLabel": "Create a Budget",
       "dialogTitle": "Create a budget",
