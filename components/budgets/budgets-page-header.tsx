@@ -9,14 +9,7 @@ const BudgetsPageHeader = () => {
       <h1 className="scroll-m-20 text-4xl font-bold tracking-tight text-primary">
         {t("pageTitle")}
       </h1>
-      <CreateBudgetButton
-        internalizationConfig={{
-          buttonLabel: t("createBudgetButtonLabel"),
-          dialogTitle: t("createBudgetDialogTitle"),
-          dialogDescription: t("createBudgetDialogDescription"),
-        }}
-        minimizeOnMobile
-      />
+      <CreateBudgetButton minimizeOnMobile />
     </header>
   );
 };

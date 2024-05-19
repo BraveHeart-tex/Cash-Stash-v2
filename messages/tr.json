@@ -723,6 +723,14 @@
       "goalAmountRequired": "Hedef miktarı zorunludur.",
       "currentAmountRequired": "Anlık Değer zorunludur.",
       "currentAmountTooSmall": "Anlık Değer 0'dan büyük olmalıdır."
+    },
+    "Transaction": {
+      "amountRequiredErrorMessage": "Miktar zorunludur.",
+      "amountInvalidErrorMessage": "Miktar geçerli bir sayı olmalıdır.",
+      "descriptionRequiredErrorMessage": "Açıklama zorunludur.",
+      "descriptionTooLongErrorMessage": "Açıklama en fazla 100 karakter olmalıdır.",
+      "categoryRequiredErrorMessage": "Lütfen bir işlem kategorisi seçin.",
+      "accountRequiredErrorMessage": "Lütfen bir hesap seçin."
     }
   }
 }

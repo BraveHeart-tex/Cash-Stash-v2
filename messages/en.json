@@ -723,6 +723,14 @@
       "goalAmountRequired": "Goal amount is required.",
       "currentAmountRequired": "Current amount is required.",
       "currentAmountTooSmall": "Current amount must be greater than 0."
+    },
+    "Transaction": {
+      "amountRequiredErrorMessage": "Amount is required",
+      "amountInvalidErrorMessage": "Amount must be a number",
+      "descriptionRequiredErrorMessage": "Description is required",
+      "descriptionTooLongErrorMessage": "Description is too long",
+      "categoryRequiredErrorMessage": "Please select a category",
+      "accountRequiredErrorMessage": "Please select an account"
     }
   }
 }

@@ -21,9 +21,7 @@ import {
 } from "@/components/ui/select";
 import { useRouter } from "@/navigation";
 import { useEffect, useMemo, useState, useTransition } from "react";
-import transactionSchema, {
-  TransactionSchemaType,
-} from "@/schemas/transaction-schema";
+
 import { getCurrentUserAccounts } from "@/server/account";
 import { createTransaction, updateTransaction } from "@/server/transaction";
 import useGenericModalStore from "@/store/genericModalStore";
@@ -51,6 +49,10 @@ import {
 import { BaseValidatedResponse } from "@/typings/baseTypes";
 import MaskedAmountInput from "@/components/ui/masked-amount-input";
 import { useTranslations } from "next-intl";
+import {
+  TransactionSchemaType,
+  getTransactionSchema,
+} from "@/schemas/transaction-schema";
 
 type TransactionFormProps = {
   data?: TransactionSelectModel;
@@ -60,6 +62,8 @@ const TransactionForm = ({
   data: transactionToBeUpdated,
 }: TransactionFormProps) => {
   const t = useTranslations("Components.TransactionForm");
+  const zodT = useTranslations("Zod.Transaction");
+
   const [isPending, startTransition] = useTransition();
   const closeGenericModal = useGenericModalStore(
     (state) => state.closeGenericModal
@@ -69,6 +73,14 @@ const TransactionForm = ({
   );
   const [accounts, setAccounts] = useState<AccountSelectModel[]>([]);
   const router = useRouter();
+  const transactionSchema = getTransactionSchema({
+    accountRequiredErrorMessage: zodT("accountRequiredErrorMessage"),
+    amountInvalidErrorMessage: zodT("amountInvalidErrorMessage"),
+    amountRequiredErrorMessage: zodT("amountRequiredErrorMessage"),
+    categoryRequiredErrorMessage: zodT("categoryRequiredErrorMessage"),
+    descriptionRequiredErrorMessage: zodT("descriptionRequiredErrorMessage"),
+    descriptionTooLongErrorMessage: zodT("descriptionTooLongErrorMessage"),
+  });
   const form = useForm<TransactionSchemaType>({
     resolver: useZodResolver(transactionSchema),
   });

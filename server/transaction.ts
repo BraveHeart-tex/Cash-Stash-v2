@@ -7,8 +7,9 @@ import {
   getTransactionKey,
 } from "@/lib/redis/redisUtils";
 import { getUser } from "@/lib/auth/session";
-import transactionSchema, {
+import {
   TransactionSchemaType,
+  getTransactionSchema,
 } from "@/schemas/transaction-schema";
 import { redirect } from "@/navigation";
 import { ZodError } from "zod";
@@ -30,12 +31,26 @@ import {
   authenticatedAction,
   authenticatedActionWithNoParams,
 } from "@/lib/auth/authUtils";
+import { getTranslations } from "next-intl/server";
+
+const getTranslatedTransactionSchema = async () => {
+  const zodT = await getTranslations("Zod.Transaction");
+  return getTransactionSchema({
+    accountRequiredErrorMessage: zodT("accountRequiredErrorMessage"),
+    amountInvalidErrorMessage: zodT("amountInvalidErrorMessage"),
+    amountRequiredErrorMessage: zodT("amountRequiredErrorMessage"),
+    categoryRequiredErrorMessage: zodT("categoryRequiredErrorMessage"),
+    descriptionRequiredErrorMessage: zodT("descriptionRequiredErrorMessage"),
+    descriptionTooLongErrorMessage: zodT("descriptionTooLongErrorMessage"),
+  });
+};
 
 export const createTransaction = authenticatedAction<
   CreateTransactionReturnType,
   TransactionSchemaType
 >(async (values, { user }) => {
   try {
+    const transactionSchema = await getTranslatedTransactionSchema();
     const validatedData = transactionSchema.parse(values);
 
     const transactionDto = {
@@ -99,6 +114,7 @@ export const updateTransaction = authenticatedAction<
   try {
     const { amount: oldAmount, accountId: oldAccountId } = oldTransaction;
 
+    const transactionSchema = await getTranslatedTransactionSchema();
     const validatedData = transactionSchema.parse(values);
 
     const oldAccountData = {

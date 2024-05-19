@@ -1,32 +1,54 @@
 import { z } from "zod";
 
-const transactionSchema = z.object({
-  amount: z.number({
-    required_error: "Amount is required",
-    invalid_type_error: "Amount must be a number",
-  }),
-  description: z
-    .string()
-    .min(1, "Description is required")
-    .max(100, "Description is too long"),
-  categoryId: z.coerce
-    .number({
-      required_error: "Category is required",
-      invalid_type_error: "Please select a category",
-    })
-    .min(1, "Category is required")
-    .positive({
-      message: "Please select a category",
-    })
-    .default(0),
-  accountId: z.coerce
-    .number({
-      required_error: "Account is required",
-      invalid_type_error: "Please select an account",
-    })
-    .positive({ message: "Please select an account" })
-    .default(0),
-});
+type TransactionMessageConfig = {
+  amountRequiredErrorMessage: string;
+  amountInvalidErrorMessage: string;
+  descriptionRequiredErrorMessage: string;
+  descriptionTooLongErrorMessage: string;
+  categoryRequiredErrorMessage: string;
+  accountRequiredErrorMessage: string;
+};
 
-export type TransactionSchemaType = z.infer<typeof transactionSchema>;
-export default transactionSchema;
+export const getTransactionSchema = (
+  messageConfig: TransactionMessageConfig
+) => {
+  const {
+    amountRequiredErrorMessage,
+    amountInvalidErrorMessage,
+    descriptionRequiredErrorMessage,
+    descriptionTooLongErrorMessage,
+    categoryRequiredErrorMessage,
+    accountRequiredErrorMessage,
+  } = messageConfig;
+  return z.object({
+    amount: z.number({
+      required_error: amountRequiredErrorMessage,
+      invalid_type_error: amountInvalidErrorMessage,
+    }),
+    description: z
+      .string()
+      .min(1, descriptionRequiredErrorMessage)
+      .max(100, descriptionTooLongErrorMessage),
+    categoryId: z.coerce
+      .number({
+        required_error: categoryRequiredErrorMessage,
+        invalid_type_error: categoryRequiredErrorMessage,
+      })
+      .min(1, categoryRequiredErrorMessage)
+      .positive({
+        message: categoryRequiredErrorMessage,
+      })
+      .default(0),
+    accountId: z.coerce
+      .number({
+        required_error: accountRequiredErrorMessage,
+        invalid_type_error: accountRequiredErrorMessage,
+      })
+      .positive({ message: accountRequiredErrorMessage })
+      .default(0),
+  });
+};
+
+export type TransactionSchemaType = z.infer<
+  ReturnType<typeof getTransactionSchema>
+>;
