@@ -89,6 +89,7 @@
   },
   "Goals": {
     "pageTitle": "Hedefler",
+    "allGoalsLinkLabel": "Hedefleri Görüntüle",
     "GoalsNotFoundMessage": {
       "pageHasParams": {
         "heading": "Aramanız için hedef bulunamadı.",

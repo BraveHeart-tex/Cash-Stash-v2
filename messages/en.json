@@ -89,6 +89,7 @@
   },
   "Goals": {
     "pageTitle": "Goals",
+    "allGoalsLinkLabel": "See all your goals",
     "GoalsNotFoundMessage": {
       "pageHasParams": {
         "heading": "No goals were found for your search",

@@ -5,15 +5,19 @@ import { Button } from "@/components/ui/button";
 import { Link } from "@/navigation";
 import { PAGE_ROUTES } from "@/lib/constants";
 import { GoalSelectModel } from "@/lib/database/schema";
+import { useTranslations } from "next-intl";
 
 type GoalStatusProps = { goals: GoalSelectModel[] };
 
 const GoalStatus = ({ goals }: GoalStatusProps) => {
+  const t = useTranslations("Goals");
   if (goals.length === 0) {
     return (
       <article className="flex h-[300px] items-center justify-center">
         <div className="flex flex-col items-center justify-center gap-2">
-          <p className="text-primary">No goals found.</p>
+          <p className="text-primary">
+            {t("GoalsNotFoundMessage.noGoalsFound.heading")}
+          </p>
           <CreateGoalButton />
         </div>
       </article>
@@ -27,7 +31,7 @@ const GoalStatus = ({ goals }: GoalStatusProps) => {
           <GoalCard key={goal.id} goal={goal} />
         ))}
         <Button className="ml-auto mt-2 w-max">
-          <Link href={PAGE_ROUTES.GOALS_ROUTE}>See all your goals</Link>
+          <Link href={PAGE_ROUTES.GOALS_ROUTE}>{t("allGoalsLinkLabel")}</Link>
         </Button>
       </AnimatePresenceClient>
     </div>
