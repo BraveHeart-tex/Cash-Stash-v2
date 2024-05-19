@@ -1,4 +1,9 @@
-export function convertISOToMysqlDatetime(isoDatetimeString: string) {
+/**
+ * Converts an ISO datetime string to a MySQL datetime string.
+ * @param isoDatetimeString - The ISO datetime string to convert.
+ * @returns The MySQL datetime string.
+ */
+export function convertISOToMysqlDatetime(isoDatetimeString: string): string {
   const isoDatetime = new Date(isoDatetimeString);
 
   const year = isoDatetime.getFullYear();
