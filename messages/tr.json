@@ -178,6 +178,7 @@
     "pageTitle": "İşlemler",
     "routeSearchInputPlaceholder": "İşlemleri açıklamaya göre arayın",
     "queryStringComboBoxSelectLabel": "Hesap",
+    "seeAllTransactionsLinkLabel": "Tüm İşlemleri Görüntüle",
     "RouteFiltersPopover": {
       "label": "Sıralama",
       "amount": {

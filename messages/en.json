@@ -179,6 +179,7 @@
     "pageTitle": "Transactions",
     "routeSearchInputPlaceholder": "Search transactions by description",
     "queryStringComboBoxSelectLabel": "Account",
+    "seeAllTransactionsLinkLabel": "See All Your Transactions",
     "RouteFiltersPopover": {
       "label": "Sort By",
       "amount": {

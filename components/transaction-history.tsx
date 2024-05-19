@@ -5,17 +5,21 @@ import { Button } from "@/components/ui/button";
 import { Link } from "@/navigation";
 import { PAGE_ROUTES } from "@/lib/constants";
 import { TransactionWithCategoryAndAccountName } from "@/typings/transactions";
+import { useTranslations } from "next-intl";
 
 type TransactionHistoryProps = {
   transactions: TransactionWithCategoryAndAccountName[] | null;
 };
 
 const TransactionHistory = ({ transactions }: TransactionHistoryProps) => {
+  const t = useTranslations("Transactions");
   if (!transactions || transactions.length === 0) {
     return (
       <article className="flex h-[540px] flex-col items-center justify-center">
         <div className="flex flex-col items-center justify-center">
-          <p className="text-primary">No transactions found.</p>
+          <p className="text-primary">
+            {t("TransactionsNotFoundMessage.noTransactionsFound.heading")}
+          </p>
           <CreateTransactionButton className="mt-3" />
         </div>
       </article>
@@ -32,7 +36,7 @@ const TransactionHistory = ({ transactions }: TransactionHistoryProps) => {
         </AnimatePresenceClient>
         <Button className="ml-auto w-max">
           <Link href={PAGE_ROUTES.TRANSACTIONS_ROUTE}>
-            View All Transactions
+            {t("seeAllTransactionsLinkLabel")}
           </Link>
         </Button>
       </div>
