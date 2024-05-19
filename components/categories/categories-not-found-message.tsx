@@ -1,4 +1,5 @@
 import GenericNotFoundBlock from "@/components/ui/generic-not-found-block";
+import { useTranslations } from "next-intl";
 
 type CategoriesNotFoundMessageProps = {
   pageHasParams?: boolean;
@@ -7,19 +8,16 @@ type CategoriesNotFoundMessageProps = {
 const CategoriesNotFoundMessage = ({
   pageHasParams = false,
 }: CategoriesNotFoundMessageProps) => {
-  const headingVariants: { [key: number]: string } = {
-    0: "You don't have any categories created yet.",
-    1: "No categories were found for your search",
-  };
-
-  const message = `${pageHasParams ? "Remove existing filters or " : ""} Create a category by clicking the 'Create a category' button.`;
+  const t = useTranslations("Categories.CategoriesNotFoundMessage");
+  const prefix = pageHasParams
+    ? "pageHasParams"
+    : ("noCategoriesFound" as const);
+  const heading = t(`${prefix}.heading`);
+  const message = t(`${prefix}.message`);
 
   return (
     <div className="w-full pt-6">
-      <GenericNotFoundBlock
-        heading={headingVariants[Number(pageHasParams)]}
-        message={message}
-      />
+      <GenericNotFoundBlock heading={heading} message={message} />
     </div>
   );
 };

@@ -78,6 +78,16 @@
         "budget": "Bütçe",
         "transaction": "İşlem"
       }
+    },
+    "CategoriesNotFoundMessage": {
+      "pageHasParams": {
+        "heading": "Aramanız için hiçbir kategori bulunamadı",
+        "message": "Mevcut filtreleri kaldırın veya 'Kategori Oluştur' düğmesine tıklayarak bir kategori oluşturun."
+      },
+      "noCategoriesFound": {
+        "heading": "Henüz oluşturulmuş bir kategoriniz yok.",
+        "message": "'Kategori Oluştur' düğmesine tıklayarak bir kategori oluşturun."
+      }
     }
   },
   "Accounts": {

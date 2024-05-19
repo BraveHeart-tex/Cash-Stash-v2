@@ -78,6 +78,16 @@
         "budget": "Budget",
         "transaction": "Transaction"
       }
+    },
+    "CategoriesNotFoundMessage": {
+      "pageHasParams": {
+        "heading": "No categories were found for your search",
+        "message": "Remove existing filters or create a category by clicking the 'Create a Category' button."
+      },
+      "noCategoriesFound": {
+        "heading": "You don't have any categories created yet.",
+        "message": "Create a category by clicking the 'Create a Category' button."
+      }
     }
   },
   "Accounts": {
