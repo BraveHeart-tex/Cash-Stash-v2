@@ -139,6 +139,32 @@
       }
     }
   },
+  "Transactions": {
+    "pageTitle": "Transactions",
+    "routeSearchInputPlaceholder": "Search transactions by description",
+    "queryStringComboBoxSelectLabel": "Account",
+    "RouteFiltersPopover": {
+      "label": "Sort By",
+      "amount": {
+        "asc": "Sort by Amount (Low to High)",
+        "desc": "Sort by Amount (High to Low)"
+      },
+      "createdAt": {
+        "asc": "Sort by Date (Old to New)",
+        "desc": "Sort by Date (New to Old)"
+      }
+    },
+    "TransactionsNotFoundMessage": {
+      "pageHasParams": {
+        "heading": "No transactions were found for your search",
+        "message": "Remove existing filters or create a transaction by clicking the 'Create a Transaction' button."
+      },
+      "noTransactionsFound": {
+        "heading": "You don't have any transactions created yet.",
+        "message": "Create a transaction by clicking the 'Create a Transaction' button."
+      }
+    }
+  },
   "Dashboard": {
     "accountsSummaryTitle": "Accounts Summary",
     "accountsSummaryDescription": "Access your accounts here. Navigate to the 'Accounts' page to see a comprehensive list of all your accounts.",

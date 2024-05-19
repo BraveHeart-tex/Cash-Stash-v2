@@ -1,23 +1,21 @@
 import GenericNotFoundBlock from "@/components/ui/generic-not-found-block";
+import { useTranslations } from "next-intl";
 
 const TransactionsNotFoundMessage = ({
   pageHasParams,
 }: {
   pageHasParams: boolean;
 }) => {
-  const headingVariants: { [key: number]: string } = {
-    0: "You don't have any transactions created yet.",
-    1: "No transactions were found for your search",
-  };
-
-  const message = `${pageHasParams ? "Remove existing filters or " : ""} Create a transaction by clicking the 'Create a transaction' button.`;
+  const t = useTranslations("Transactions.TransactionsNotFoundMessage");
+  const prefix = pageHasParams
+    ? "pageHasParams"
+    : ("noTransactionsFound" as const);
+  const heading = t(`${prefix}.heading`);
+  const message = t(`${prefix}.message`);
 
   return (
     <div className="w-full pt-6">
-      <GenericNotFoundBlock
-        heading={headingVariants[Number(pageHasParams)]}
-        message={message}
-      />
+      <GenericNotFoundBlock heading={heading} message={message} />
     </div>
   );
 };

@@ -138,6 +138,32 @@
       }
     }
   },
+  "Transactions": {
+    "pageTitle": "İşlemler",
+    "routeSearchInputPlaceholder": "İşlemleri açıklamaya göre arayın",
+    "queryStringComboBoxSelectLabel": "Hesap",
+    "RouteFiltersPopover": {
+      "label": "Sıralama",
+      "amount": {
+        "asc": "Tutara Göre Sırala (Düşükten Yükseğe)",
+        "desc": "Tutara Göre Sırala (Yüksekten Düşüğe)"
+      },
+      "createdAt": {
+        "asc": "Tarihe Göre Sırala (Eskiden Yeniye)",
+        "desc": "Tarihe Göre Sırala (Yeniden Eskiye)"
+      }
+    },
+    "TransactionsNotFoundMessage": {
+      "pageHasParams": {
+        "heading": "Aramanız için işlem bulunamadı.",
+        "message": "Mevcut filtreleri kaldırın veya 'İşlem Oluştur' düğmesine tıklayarak bir işlem oluşturun."
+      },
+      "noTransactionsFound": {
+        "heading": "Henüz oluşturulmuş bir işleminiz yok.",
+        "message": "'İşlem Oluştur' düğmesine tıklayarak bir işlem oluşturun."
+      }
+    }
+  },
   "Dashboard": {
     "accountsSummaryTitle": "Hesaplara Genel Bakış",
     "accountsSummaryDescription": "Hesaplarınıza buradan erişin. Tüm hesaplarınızın kapsamlı bir listesini görmek için 'Hesaplar' sayfasına gidin.",
