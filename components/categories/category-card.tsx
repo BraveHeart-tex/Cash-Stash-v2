@@ -12,12 +12,14 @@ import { toast } from "sonner";
 import { useTransition } from "react";
 import { useRouter } from "@/navigation";
 import { CategoryType } from "@/typings/categories";
+import { useTranslations } from "next-intl";
 
 type CategoryCardProps = {
   category: CategorySelectModel;
 };
 
 const CategoryCard = ({ category }: CategoryCardProps) => {
+  const t = useTranslations("Components.CategoryCard");
   let [, startTransition] = useTransition();
   const router = useRouter();
   const openGenericModal = useGenericModalStore(
@@ -40,9 +42,8 @@ const CategoryCard = ({ category }: CategoryCardProps) => {
 
   const handleEditCategory = () => {
     openGenericModal({
-      dialogTitle: "Edit Category",
-      dialogDescription:
-        "Edit the category information by using the form below.",
+      dialogTitle: t("editCategoryDialogTitle"),
+      dialogDescription: t("editCategoryDialogMessage"),
       mode: "edit",
       key: "category",
       data: category,
@@ -58,9 +59,9 @@ const CategoryCard = ({ category }: CategoryCardProps) => {
 
   const handleDeleteCategory = () => {
     showGenericConfirm({
-      title: "Are you sure you want to delete this category?",
-      message: `This action cannot be undone. If there are ${formattedCategoryType}s linked to this category, they will also be deleted.`,
-      primaryActionLabel: "Delete",
+      title: t("deleteCategoryDialogTitle"),
+      message: t("deleteCategoryDialogMessage", { formattedCategoryType }),
+      primaryActionLabel: t("deleteCategoryDialogPrimaryActionLabel"),
       onConfirm: () => {
         startTransition(async () => {
           const response = await deleteCategory({
@@ -68,12 +69,10 @@ const CategoryCard = ({ category }: CategoryCardProps) => {
             type: category.type as CategoryType,
           });
           if (!response) {
-            toast.error(
-              "A problem occurred while deleting the category. Please try again later."
-            );
+            toast.error(t("deleteCategoryAnErrorOccurred"));
           }
 
-          toast.success("Category deleted successfully.");
+          toast.success(t("deleteCategorySuccess"));
           router.refresh();
         });
       },
@@ -83,33 +82,33 @@ const CategoryCard = ({ category }: CategoryCardProps) => {
   return (
     <motion.article
       layoutId={`${category.id}-category-card`}
-      className={
-        "border-1 relative flex flex-col gap-2 rounded-md border bg-card p-4 shadow-sm"
-      }
+      className="border-1 relative flex flex-col gap-2 rounded-md border bg-card p-4 shadow-sm"
     >
       <ActionPopover
-        heading="Category Actions"
+        heading={t("categoryActions.heading")}
         positionAbsolute
         options={[
           {
             icon: FaEdit,
-            label: "Edit",
+            label: t("categoryActions.edit"),
             onClick: handleEditCategory,
           },
           {
             icon: FaTrash,
-            label: "Delete",
+            label: t("categoryActions.delete"),
             onClick: handleDeleteCategory,
           },
         ]}
       />
       <h3 className="mb-2 font-medium text-primary">
-        <span className="text-muted-foreground">Category Name: </span>
+        <span className="text-muted-foreground">
+          {t("categoryNameDataLabel")}:{" "}
+        </span>
         {category.name}
       </h3>
       <p>
         <span className="font-medium text-muted-foreground">
-          Category Type:{" "}
+          {t("categoryTypeDataLabel")}:{" "}
         </span>
         <span className="font-medium text-foreground/80">
           {formattedCategoryType}

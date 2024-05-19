@@ -270,6 +270,24 @@
     "changeCurrencySaveLabel": "Save Changes"
   },
   "Components": {
+    "CategoryCard": {
+      "editCategoryDialogTitle": "Edit Category",
+      "editCategoryDialogMessage": "Edit the category information by using the form below.",
+
+      "deleteCategoryDialogTitle": "Are you sure you want to delete this category?",
+      "deleteCategoryDialogMessage": "This action cannot be undone. If there are {formattedCategoryType}s linked to this category, they will also be deleted.",
+      "deleteCategoryDialogPrimaryActionLabel": "Delete",
+      "deleteCategoryAnErrorOccurred": "An error occurred while deleting the category. Please try again later.",
+      "deleteCategorySuccess": "Category deleted successfully.",
+      "categoryActions": {
+        "heading": "Category Actions",
+        "edit": "Edit",
+        "delete": "Delete"
+      },
+
+      "categoryNameDataLabel": "Category Name",
+      "categoryTypeDataLabel": "Category Type"
+    },
     "TransactionCategoryCombobox": {
       "label": "Category"
     },

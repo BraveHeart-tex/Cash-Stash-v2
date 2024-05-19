@@ -269,6 +269,23 @@
     "changeCurrencySaveLabel": "Değişiklikleri Kaydet"
   },
   "Components": {
+    "CategoryCard": {
+      "editCategoryDialogTitle": "Kategoriyi Düzenle",
+      "editCategoryDialogMessage": "Aşağıdaki formu kullanarak kategori bilgilerini düzenleyin.",
+
+      "deleteCategoryDialogTitle": "Bu kategoriyi silmek istediğinizden emin misiniz?",
+      "deleteCategoryDialogMessage": "Bu eylem geri alınamaz. Bu kategoriye bağlı {formattedCategoryType}'ler varsa, onlar da silinecektir.",
+      "deleteCategoryDialogPrimaryActionLabel": "Sil",
+      "deleteCategoryAnErrorOccurred": "Kategori silinirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+      "deleteCategorySuccess": "Kategori başarıyla silindi.",
+      "categoryActions": {
+        "heading": "Kategori İşlemleri",
+        "edit": "Düzenle",
+        "delete": "Sil"
+      },
+      "categoryNameDataLabel": "Kategori İsmi",
+      "categoryTypeDataLabel": "Kategori Tipi"
+    },
     "TransactionCategoryCombobox": {
       "label": "Kategori"
     },
@@ -316,7 +333,7 @@
       "createTransactionDialogTitle": "İşlem Oluştur",
       "createTransactionAccountDialogMessage": "Yeni bir işlem oluşturmak için aşağıdaki formu kullanın.",
 
-      "accountActionsHeading": "Hesap Aksiyonları",
+      "accountActionsHeading": "Hesap İşlemleri",
       "Show Latest Transactions": "En Son İşlemlerini Görüntüle",
       "Edit Account": "Düzenle",
       "Add Transaction": "İşlem Oluştur",
@@ -331,7 +348,7 @@
       "editBudgetDialogTitle": "Bütçeyi Düzenle",
       "editBudgetDialogMessage": "Bütçe detaylarınızı düzenlemek için aşağıdaki formu kullanın.",
 
-      "budgetActionsHeading": "Bütçe Aksiyonları",
+      "budgetActionsHeading": "Bütçe İşlemleri",
       "budgetActionsEditLabel": "Düzenle",
       "budgetActionsDeleteLabel": "Sil",
 
@@ -352,7 +369,7 @@
       "accountNameDataLabel": "Hesap Adı",
       "amountDataLabel": "Miktar",
 
-      "transactionActionsHeading": "İşlem Aksiyonları",
+      "transactionActionsHeading": "İşlem İşlemleri",
       "transactionActions": {
         "edit": "Düzenle",
         "delete": "Sil"
@@ -448,7 +465,7 @@
       "editGoalDialogTitle": "Hedefi Düzenle",
       "editGoalDialogDescription": "Hedef detaylarını düzenlemek için aşağıdaki formu kullanın.",
       "PopoverActions": {
-        "title": "Hedef Aksiyonları",
+        "title": "Hedef İşlemleri",
         "edit": "Düzenle",
         "delete": "Sil"
       },
