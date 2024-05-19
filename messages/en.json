@@ -284,6 +284,9 @@
     "changeCurrencySaveLabel": "Save Changes"
   },
   "Components": {
+    "CurrencyConverterInput": {
+      "lastUpdated": "Last updated: {date}"
+    },
     "CategoryCard": {
       "editCategoryDialogTitle": "Edit Category",
       "editCategoryDialogMessage": "Edit the category information by using the form below.",

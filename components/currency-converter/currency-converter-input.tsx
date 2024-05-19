@@ -12,6 +12,7 @@ import {
   HiOutlineSwitchHorizontal,
   HiOutlineSwitchVertical,
 } from "react-icons/hi";
+import { useTranslations } from "next-intl";
 
 type CurrencyConverterInputProps = {
   updatedAt: string;
@@ -22,6 +23,7 @@ const CurrencyConverterInput = ({
   updatedAt,
   convertedToCurrencyAmount,
 }: CurrencyConverterInputProps) => {
+  const t = useTranslations("Components.CurrencyConverterInput");
   const [currency, setCurrency] = useQueryState("currency", {
     shallow: false,
   });
@@ -87,7 +89,9 @@ const CurrencyConverterInput = ({
               triggerClassName="w-max"
             />
             <span className="ml-auto text-muted-foreground">
-              Last Updated: {format(new Date(updatedAt), "dd/MM/yyyy HH:mm")}
+              {t("lastUpdated", {
+                date: format(new Date(updatedAt), "dd/MM/yyyy HH:mm"),
+              })}
             </span>
           </div>
           <div className="flex flex-col items-center lg:flex-row">

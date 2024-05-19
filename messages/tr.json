@@ -283,6 +283,9 @@
     "changeCurrencySaveLabel": "Değişiklikleri Kaydet"
   },
   "Components": {
+    "CurrencyConverterInput": {
+      "lastUpdated": "Son Güncelleme: {date}"
+    },
     "CategoryCard": {
       "editCategoryDialogTitle": "Kategoriyi Düzenle",
       "editCategoryDialogMessage": "Aşağıdaki formu kullanarak kategori bilgilerini düzenleyin.",
