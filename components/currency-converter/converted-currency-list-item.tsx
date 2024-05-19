@@ -15,6 +15,7 @@ const CurrencyConverterListItem = ({
   return (
     <li
       aria-label={item.label}
+      title={item.label}
       className="flex cursor-pointer items-center justify-between text-ellipsis rounded-md p-2 hover:bg-accent"
       onClick={() => setSelectedCurrency(item.symbol)}
     >
