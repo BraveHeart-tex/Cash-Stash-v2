@@ -474,6 +474,10 @@
         "update": "İşlemi Güncelle"
       }
     },
+    "CreateTransactionCategoryPopover": {
+      "title": "İşlem Kategorisi Ekle",
+      "description": "Aşağıdaki formu kullanarak yeni bir işlem kategorisi ekleyin."
+    },
     "PasswordRequirements": {
       "title": "Şifre Kriterleri",
       "8 characters": "8 karakter",

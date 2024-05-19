@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { FaPlus } from "react-icons/fa";
 import CategoryForm from "@/components/categories/category-form";
 import { CATEGORY_TYPES } from "@/lib/constants";
+import { useTranslations } from "next-intl";
 
 type CreateTransactionCategoryPopoverProps = {
   // eslint-disable-next-line no-unused-vars
@@ -20,6 +21,7 @@ type CreateTransactionCategoryPopoverProps = {
 const CreateTransactionCategoryPopover = ({
   onSave,
 }: CreateTransactionCategoryPopoverProps) => {
+  const t = useTranslations("Components.CreateTransactionCategoryPopover");
   const [open, setOpen] = useState(false);
   const addCategory = useCategoriesStore((state) => state.addCategory);
 
@@ -33,12 +35,8 @@ const CreateTransactionCategoryPopover = ({
       <PopoverContent className="z-[500]">
         <div className="grid gap-4">
           <div className="space-y-2">
-            <h4 className="font-medium leading-none">
-              Add Transaction Category
-            </h4>
-            <p className="text-sm text-muted-foreground">
-              Add a new transaction category by using the form below.
-            </p>
+            <h4 className="font-medium leading-none">{t("title")}</h4>
+            <p className="text-sm text-muted-foreground">{t("description")}</p>
           </div>
           <CategoryForm
             showTypeOptions={false}

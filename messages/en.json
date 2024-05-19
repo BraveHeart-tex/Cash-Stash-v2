@@ -475,6 +475,10 @@
         "update": "Update Transaction"
       }
     },
+    "CreateTransactionCategoryPopover": {
+      "title": "Add Transaction Category",
+      "description": "Add a new transaction category by using the form below."
+    },
     "PasswordRequirements": {
       "title": "Password Requirements",
       "8 characters": "8 characters",
