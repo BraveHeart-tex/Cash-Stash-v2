@@ -677,6 +677,18 @@
         "internalErrorMessage": "An error occurred while processing your request. Please try again later.",
         "successMessage": "Successfully converted transactions to the new currency rate."
       }
+    },
+    "Transaction": {
+      "createTransaction": {
+        "errorMessage": "We encountered a problem while creating the transaction. Please try again later."
+      },
+      "updateTransaction": {
+        "errorMessage": "We encountered a problem while updating the transaction. Please try again later."
+      },
+      "deleteTransactionById": {
+        "errorMessage": "We encountered a problem while deleting the transaction. Please try again later.",
+        "successMessage": "Transaction deleted successfully."
+      }
     }
   },
   "Zod": {

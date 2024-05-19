@@ -677,6 +677,18 @@
         "internalErrorMessage": "İsteğiniz işlenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
         "successMessage": "Successfully converted transactions to the new currency rate."
       }
+    },
+    "Transaction": {
+      "createTransaction": {
+        "errorMessage": "İşlem oluşturulurken bir sorunla karşılaştık. Lütfen daha sonra tekrar deneyin."
+      },
+      "updateTransaction": {
+        "errorMessage": "İşlem güncellenirken bir sorunla karşılaştık. Lütfen daha sonra tekrar deneyin."
+      },
+      "deleteTransactionById": {
+        "errorMessage": "İşlem silinirken bir sorunla karşılaştık. Lütfen daha sonra tekrar deneyin.",
+        "successMessage": "İşlem başarıyla silindi."
+      }
     }
   },
   "Zod": {

@@ -49,6 +49,9 @@ export const createTransaction = authenticatedAction<
   CreateTransactionReturnType,
   TransactionSchemaType
 >(async (values, { user }) => {
+  const actionT = await getTranslations(
+    "Actions.Transaction.createTransaction"
+  );
   try {
     const transactionSchema = await getTranslatedTransactionSchema();
     const validatedData = transactionSchema.parse(values);
@@ -63,8 +66,7 @@ export const createTransaction = authenticatedAction<
 
     if (affectedRows === 0 || !createdTransaction || !updatedAccount) {
       return {
-        error:
-          "We encountered a problem while creating the transaction. Please try again later.",
+        error: actionT("errorMessage"),
         fieldErrors: [],
       };
     }
@@ -100,8 +102,7 @@ export const createTransaction = authenticatedAction<
     }
 
     return {
-      error:
-        "A problem occurred while creating the transaction. Please try again later.",
+      error: actionT("errorMessage"),
       fieldErrors: [],
     };
   }
@@ -111,6 +112,9 @@ export const updateTransaction = authenticatedAction<
   UpdateTransactionReturnType,
   UpdateTransactionParam
 >(async ({ transactionId, values, oldTransaction }, { user }) => {
+  const actionT = await getTranslations(
+    "Actions.Transaction.updateTransaction"
+  );
   try {
     const { amount: oldAmount, accountId: oldAccountId } = oldTransaction;
 
@@ -132,8 +136,7 @@ export const updateTransaction = authenticatedAction<
 
     if (affectedRows === 0 || !updatedTransaction) {
       return {
-        error:
-          "We encountered a problem while updating the transaction. Please try again later.",
+        error: actionT("errorMessage"),
         fieldErrors: [],
       };
     }
@@ -164,8 +167,7 @@ export const updateTransaction = authenticatedAction<
     }
 
     return {
-      error:
-        "A problem occurred while updating the transaction. Please try again later.",
+      error: actionT("errorMessage"),
       fieldErrors: [],
     };
   }
@@ -173,14 +175,16 @@ export const updateTransaction = authenticatedAction<
 
 export const deleteTransactionById = authenticatedAction(
   async (transactionToDelete: TransactionSelectModel, { user }) => {
+    const actionT = await getTranslations(
+      "Actions.Transaction.deleteTransactionById"
+    );
     try {
       const { affectedRows } =
         await transactionRepository.deleteById(transactionToDelete);
 
       if (affectedRows === 0) {
         return {
-          error:
-            "We encountered a problem while deleting the transaction. Please try again later.",
+          error: actionT("errorMessage"),
         };
       }
 
@@ -199,13 +203,12 @@ export const deleteTransactionById = authenticatedAction(
       ]);
 
       return {
-        data: "Transaction deleted successfully",
+        data: actionT("successMessage"),
       };
     } catch (error) {
       logger.error(error);
       return {
-        error:
-          "We encountered a problem while deleting the transaction. Please try again later.",
+        error: actionT("errorMessage"),
       };
     }
   }
