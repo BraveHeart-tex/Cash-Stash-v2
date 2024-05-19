@@ -6,12 +6,14 @@ import { transactionTableColumns } from "@/components/reports/transactions-data-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import IncomeAndExpenseChart from "@/components/income-expense-chart";
 import { TransactionPageSearchParams } from "@/app/[locale]/(dashboard)/transactions/page";
+import { getTranslations } from "next-intl/server";
 
 type ReportsPageProps = {
   searchParams: TransactionPageSearchParams;
 };
 
 const ReportsPage = async ({ searchParams }: ReportsPageProps) => {
+  const t = await getTranslations("Reports");
   const {
     transactionType = "all",
     accountId = "",
@@ -42,12 +44,9 @@ const ReportsPage = async ({ searchParams }: ReportsPageProps) => {
       >
         <div className="mb-4 flex flex-col">
           <h1 className="scroll-m-20 text-4xl font-bold tracking-tight text-primary">
-            Reports
+            {t("pageTitle")}
           </h1>
-          <p className="text-muted-foreground">
-            Take a look at your overall financial performance and see how your
-            spending is doing.
-          </p>
+          <p className="text-muted-foreground">{t("pageDescription")}</p>
         </div>
         <Tabs defaultValue="transactions">
           <TabsList className="scrollbar-hide w-full justify-start overflow-x-auto overflow-y-hidden rounded-b-none border border-b-0 md:w-auto">

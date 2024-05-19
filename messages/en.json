@@ -175,6 +175,10 @@
       }
     }
   },
+  "Reports": {
+    "pageTitle": "Reports",
+    "pageDescription": "Take a look at your overall financial performance and see how your spending is doing."
+  },
   "Transactions": {
     "pageTitle": "Transactions",
     "routeSearchInputPlaceholder": "Search transactions by description",
