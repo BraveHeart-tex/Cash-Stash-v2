@@ -116,6 +116,7 @@
     "createBudgetButtonLabel": "Bütçe Ekleyin",
     "createBudgetDialogTitle": "Bütçe Ekleyin",
     "createBudgetDialogDescription": "Aşağıdaki formu kullanarak bütçenizi oluşturun.",
+    "allBudgetsLinkLabel": "Bütçeleri Görüntüle",
     "BudgetsPageFilters": {
       "routeSearchInputPlaceholder": "Bütçeleri isme göre arayın",
       "sortByProgressDesc": "Kalan Göre Sırala (Yüksekten Düşüğe)",

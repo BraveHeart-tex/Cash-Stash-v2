@@ -5,17 +5,21 @@ import { Button } from "@/components/ui/button";
 import { Link } from "@/navigation";
 import { PAGE_ROUTES } from "@/lib/constants";
 import { BudgetWithCategory } from "@/typings/budgets";
+import { useTranslations } from "next-intl";
 
 type BudgetStatusProps = {
   budgets: BudgetWithCategory[];
 };
 
 const BudgetStatus = ({ budgets }: BudgetStatusProps) => {
+  const t = useTranslations("Budgets");
   if (!budgets || budgets.length === 0) {
     return (
       <article className="flex h-[300px] items-center justify-center">
         <div className="flex flex-col items-center justify-center gap-2">
-          <p className="text-primary">No budgets found.</p>
+          <p className="text-primary">
+            {t("BudgetsNotFoundMessage.noBudgetsFound.heading")}
+          </p>
           <CreateBudgetButton />
         </div>
       </article>
@@ -29,7 +33,9 @@ const BudgetStatus = ({ budgets }: BudgetStatusProps) => {
           <BudgetCard key={budget.id} budget={budget} />
         ))}
         <Button className="ml-auto mt-2 w-max">
-          <Link href={PAGE_ROUTES.BUDGETS_ROUTE}>See all your budgets</Link>
+          <Link href={PAGE_ROUTES.BUDGETS_ROUTE}>
+            {t("allBudgetsLinkLabel")}
+          </Link>
         </Button>
       </AnimatePresenceClient>
     </div>

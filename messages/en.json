@@ -116,7 +116,7 @@
     "createBudgetButtonLabel": "Create a Budget",
     "createBudgetDialogTitle": "Create a budget",
     "createBudgetDialogDescription": "Fill out the form below to create a budget.",
-
+    "allBudgetsLinkLabel": "See all your budgets",
     "BudgetsPageFilters": {
       "routeSearchInputPlaceholder": "Search budgets by name",
       "sortByProgressDesc": "Sort by Remaining (High to Low)",
