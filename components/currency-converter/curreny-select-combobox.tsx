@@ -5,6 +5,8 @@ import Combobox from "@/components/ui/combobox";
 import { Button } from "@/components/ui/button";
 import { FaChevronDown } from "react-icons/fa";
 import { cn } from "@/lib/utils/stringUtils/cn";
+import { getTranslatedLabelForCurrency } from "@/lib/utils/translationUtils/getTranslatedLabelForCurrency";
+import { useTranslations } from "next-intl";
 
 const CurrencySelectCombobox = ({
   queryKey,
@@ -15,6 +17,8 @@ const CurrencySelectCombobox = ({
   triggerClassName?: string;
   defaultValue?: string;
 }) => {
+  const t = useTranslations("Lists");
+
   const [value, setValue] = useQueryState(queryKey, {
     shallow: false,
     defaultValue,
@@ -37,11 +41,19 @@ const CurrencySelectCombobox = ({
         </Button>
       }
       defaultOption={{
-        label: selectedOption.name + " (" + selectedOption.symbol + ")",
+        label:
+          getTranslatedLabelForCurrency(t, selectedOption.symbol) +
+          " (" +
+          selectedOption.symbol +
+          ")",
         value: selectedOption.symbol,
       }}
       options={CURRENCIES.map((item) => ({
-        label: item.name + " (" + item.symbol + ")",
+        label:
+          getTranslatedLabelForCurrency(t, item.symbol) +
+          " (" +
+          item.symbol +
+          ")",
         value: item.symbol,
       }))}
     />

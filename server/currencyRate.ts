@@ -6,6 +6,7 @@ import logger from "@/lib/utils/logger";
 import { ConvertCurrencyType } from "@/typings/currencies";
 import { authenticatedAction } from "@/lib/auth/authUtils";
 import { getTranslations } from "next-intl/server";
+import { getTranslatedLabelForCurrency } from "@/lib/utils/translationUtils/getTranslatedLabelForCurrency";
 
 type ConvertCurrencyParams = {
   currency: string;
@@ -60,19 +61,11 @@ export const convertCurrency = authenticatedAction<
 
     const t = await getTranslations("Lists");
 
-    const getTranslatedLabelForCurrency = (currencySymbol: string) => {
-      return t("currencies")
-        .split(", ")
-        .map((s) => s.split(":"))
-        .map(([name, symbol]) => ({ name, symbol }))
-        .find(({ symbol }) => symbol === currencySymbol)?.name;
-    };
-
     const mappedCurrencies = Object.entries(convertedAmounts).map(
       ([key, value]) => {
         const label =
           CURRENCIES.find((item) => item.symbol === key)?.name || key;
-        const translatedLabel = getTranslatedLabelForCurrency(key);
+        const translatedLabel = getTranslatedLabelForCurrency(t, key);
 
         return {
           symbol: key,

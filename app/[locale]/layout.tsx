@@ -179,6 +179,7 @@ export default async function RootLayout({
                   "Components",
                   "Zod",
                   "Enums",
+                  "Lists",
                 ])}
               >
                 {children}

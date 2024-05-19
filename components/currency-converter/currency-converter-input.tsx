@@ -88,7 +88,7 @@ const CurrencyConverterInput = ({
               queryKey="currency"
               triggerClassName="w-max"
             />
-            <span className="ml-auto text-muted-foreground">
+            <span className="ml-auto text-sm text-muted-foreground">
               {t("lastUpdated", {
                 date: format(new Date(updatedAt), "dd/MM/yyyy HH:mm"),
               })}

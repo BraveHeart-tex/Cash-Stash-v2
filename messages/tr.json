@@ -622,7 +622,7 @@
       "label": "Bütçe Kategorisi"
     },
     "Combobox": {
-      "emptyMessage": "Aramanız için bir seçenek bulunamadı.",
+      "emptyMessage": "Aramanıza dair bir seçenek bulunamadı.",
       "searchPlaceholder": "Arama Yapın",
       "selectAnOption": "Bir seçenek seçin"
     }
