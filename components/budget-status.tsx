@@ -33,7 +33,7 @@ const BudgetStatus = ({ budgets }: BudgetStatusProps) => {
           <BudgetCard key={budget.id} budget={budget} />
         ))}
         <Button className="ml-auto mt-2 w-max">
-          <Link href={PAGE_ROUTES.BUDGETS_ROUTE}>
+          <Link href={PAGE_ROUTES.BUDGETS_ROUTE} className="capitalize">
             {t("allBudgetsLinkLabel")}
           </Link>
         </Button>

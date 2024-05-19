@@ -31,7 +31,9 @@ const GoalStatus = ({ goals }: GoalStatusProps) => {
           <GoalCard key={goal.id} goal={goal} />
         ))}
         <Button className="ml-auto mt-2 w-max">
-          <Link href={PAGE_ROUTES.GOALS_ROUTE}>{t("allGoalsLinkLabel")}</Link>
+          <Link href={PAGE_ROUTES.GOALS_ROUTE} className="capitalize">
+            {t("allGoalsLinkLabel")}
+          </Link>
         </Button>
       </AnimatePresenceClient>
     </div>

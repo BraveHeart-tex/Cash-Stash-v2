@@ -32,7 +32,7 @@ const AccountSummaries = ({ accounts }: AccountSummariesProps) => {
             <AccountCard account={account} key={account.id + index} />
           ))}
           <Button className="ml-auto mt-2 w-max">
-            <Link href={PAGE_ROUTES.ACCOUNTS_ROUTE}>
+            <Link href={PAGE_ROUTES.ACCOUNTS_ROUTE} className="capitalize">
               {t("seeAllYourAccounts")}
             </Link>
           </Button>

@@ -35,7 +35,7 @@ const TransactionHistory = ({ transactions }: TransactionHistoryProps) => {
           ))}
         </AnimatePresenceClient>
         <Button className="ml-auto w-max">
-          <Link href={PAGE_ROUTES.TRANSACTIONS_ROUTE}>
+          <Link href={PAGE_ROUTES.TRANSACTIONS_ROUTE} className="capitalize">
             {t("seeAllTransactionsLinkLabel")}
           </Link>
         </Button>
