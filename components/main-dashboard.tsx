@@ -5,7 +5,13 @@ import GoalStatus from "@/components/goals/goal-status";
 import NotificationsAndReminders from "@/components/notification-and-reminders";
 import TransactionHistory from "@/components/transaction-history";
 import BarChartComponent from "@/components/charts/bar-chart";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { getPaginatedTransactions } from "@/server/transaction";
 import { getPaginatedAccounts } from "@/server/account";
 import { fetchInsightsDataAction, getChartData } from "@/server";
@@ -114,11 +120,13 @@ const Dashboard = async () => {
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
         {sectionData.map((section) => (
           <Card key={section.title}>
-            <CardHeader className="text-xl font-medium text-primary">
-              {section.title}
-              <span className="text-sm text-muted-foreground">
+            <CardHeader>
+              <CardTitle className="text-lg text-primary">
+                {section.title}
+              </CardTitle>
+              <CardDescription className="text-sm text-muted-foreground">
                 {section.description}
-              </span>
+              </CardDescription>
             </CardHeader>
             <CardContent>{section.data}</CardContent>
           </Card>
