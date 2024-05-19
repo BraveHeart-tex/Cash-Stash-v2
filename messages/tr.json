@@ -257,6 +257,9 @@
     "changeCurrencySaveLabel": "Değişiklikleri Kaydet"
   },
   "Components": {
+    "TransactionCategoryCombobox": {
+      "label": "Kategori"
+    },
     "AccountForm": {
       "noChangesMessage": "Herhangi bir değişiklik tespit edilmedi.",
       "noChangesDescription": "Hesap bilgilerinizde herhangi bir değişiklik yapmadınız.",
@@ -321,6 +324,27 @@
       "budgetActionsDeleteLabel": "Sil",
 
       "budgetSpent": "Bütçe: {budget} / Harcanan: {spent}"
+    },
+    "TransactionCard": {
+      "deleteTransactionDialogTitle": "Bu işlemi silmek istediğinizden emin misiniz?",
+      "deleteTransactionDialogMessage": "Bu eylem geri alınamaz.",
+      "deleteTransactionDialogPrimaryActionLabel": "Sil",
+      "deleteTransactionErrorMessage": "Bir hata oluştu.",
+      "deleteTransactionSuccessMessage": "İşlem başarıyla silindi.",
+
+      "editTransactionDialogTitle": "İşlemi Düzenle",
+      "editTransactionDialogMessage": "İşlem detaylarınızı düzenlemek için aşağıdaki formu kullanın.",
+
+      "dateDataLabel": "Tarih",
+      "categoryDataLabel": "Kategori",
+      "accountNameDataLabel": "Hesap Adı",
+      "amountDataLabel": "Miktar",
+
+      "transactionActionsHeading": "İşlem Aksiyonları",
+      "transactionActions": {
+        "edit": "Düzenle",
+        "delete": "Sil"
+      }
     },
     "BudgetForm": {
       "categoryErrorMessage": "Bütçe kategorileri getirilirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",

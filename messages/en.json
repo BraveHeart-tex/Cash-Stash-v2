@@ -258,6 +258,9 @@
     "changeCurrencySaveLabel": "Save Changes"
   },
   "Components": {
+    "TransactionCategoryCombobox": {
+      "label": "Category"
+    },
     "AccountForm": {
       "noChangesMessage": "No changes detected.",
       "noChangesDescription": "You haven't made any changes to your account details.",
@@ -322,6 +325,27 @@
       "budgetActionsDeleteLabel": "Delete",
 
       "budgetSpent": "Budget : {budget} / Spent: {spent}"
+    },
+    "TransactionCard": {
+      "deleteTransactionDialogTitle": "Are you sure you want to delete this transaction?",
+      "deleteTransactionDialogMessage": "This action cannot be undone.",
+      "deleteTransactionDialogPrimaryActionLabel": "Delete",
+      "deleteTransactionErrorMessage": "An error occurred",
+      "deleteTransactionSuccessMessage": "Transaction deleted successfully.",
+
+      "editTransactionDialogTitle": "Edit Transaction",
+      "editTransactionDialogMessage": "Use the form below to edit your transaction details.",
+
+      "dateDataLabel": "Date",
+      "categoryDataLabel": "Category",
+      "accountNameDataLabel": "Account Name",
+      "amountDataLabel": "Amount",
+
+      "transactionActionsHeading": "Transaction Actions",
+      "transactionActions": {
+        "edit": "Edit",
+        "delete": "Delete"
+      }
     },
     "BudgetForm": {
       "categoryErrorMessage": "There was an error while getting budget categories. Please try again later.",

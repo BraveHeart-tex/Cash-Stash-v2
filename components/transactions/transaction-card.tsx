@@ -20,6 +20,7 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import { format } from "date-fns";
 import useAuthStore from "@/store/auth/authStore";
 import { TransactionWithCategoryAndAccountName } from "@/typings/transactions";
+import { useTranslations } from "next-intl";
 
 type TransactionCardProps = {
   transaction: TransactionWithCategoryAndAccountName;
@@ -32,6 +33,7 @@ const TransactionCard = ({
   showPopover = true,
   useLayoutId = true,
 }: TransactionCardProps) => {
+  const t = useTranslations("Components.TransactionCard");
   const preferredCurrency = useAuthStore(
     (state) => state.user?.preferredCurrency
   );
@@ -45,20 +47,18 @@ const TransactionCard = ({
 
   const handleDeleteClick = () => {
     showGenericConfirm({
-      title: "Are you sure you want to delete this transaction?",
-      message: "This action cannot be undone.",
-      primaryActionLabel: "Delete",
+      title: t("deleteTransactionDialogTitle"),
+      message: t("deleteTransactionDialogMessage"),
+      primaryActionLabel: t("deleteTransactionDialogPrimaryActionLabel"),
       onConfirm: async () => {
         const response = await deleteTransactionById(transaction);
         if (response?.error) {
-          toast.error("An error occurred.", {
+          toast.error(t("deleteTransactionErrorMessage"), {
             description: response.error,
           });
         } else {
           router.refresh();
-          toast.success("Transaction deleted.", {
-            description: "Selected transaction has been deleted.",
-          });
+          toast.success(t("deleteTransactionSuccessMessage"));
         }
       },
     });
@@ -68,9 +68,8 @@ const TransactionCard = ({
 
   const handleEditClick = () => {
     openGenericModal({
-      dialogTitle: "Edit Transaction",
-      dialogDescription:
-        "Edit the transaction information by using the form below.",
+      dialogTitle: t("editTransactionDialogTitle"),
+      dialogDescription: t("editTransactionDialogMessage"),
       entityId: transaction.id,
       mode: "edit",
       key: "transaction",
@@ -100,14 +99,20 @@ const TransactionCard = ({
         <CardContent className="py-2">
           <div className="grid grid-cols-1 gap-1">
             <DataLabel
-              label="Date"
+              label={t("dateDataLabel")}
               value={formatTransactionDate(transaction.createdAt)}
             />
-            <DataLabel label={"Category"} value={transaction.category} />
-            <DataLabel label={"Account Name"} value={transaction.accountName} />
+            <DataLabel
+              label={t("categoryDataLabel")}
+              value={transaction.category}
+            />
+            <DataLabel
+              label={t("accountNameDataLabel")}
+              value={transaction.accountName}
+            />
 
             <DataLabel
-              label="Amount"
+              label={t("amountDataLabel")}
               value={formatMoney(transaction.amount, preferredCurrency)}
               classNames={{
                 value: cn(
@@ -121,16 +126,16 @@ const TransactionCard = ({
       </Card>
       {showPopover && (
         <ActionPopover
-          heading="Transaction Actions"
+          heading={t("transactionActionsHeading")}
           options={[
             {
               icon: FaEdit,
-              label: "Edit",
+              label: t("transactionActions.edit"),
               onClick: () => handleEditClick(),
             },
             {
               icon: FaTrash,
-              label: "Delete",
+              label: t("transactionActions.delete"),
               onClick: () => handleDeleteClick(),
             },
           ]}
