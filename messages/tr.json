@@ -68,6 +68,10 @@
       "OTHER": "Diğer"
     }
   },
+  "Categories": {
+    "pageTitle": "Kategoriler",
+    "pageDescription": "İşlemlerinizi ve bütçelerinizi gruplandırmak için özel kategoriler oluşturun."
+  },
   "Accounts": {
     "pageTitle": "Hesaplar",
     "AccountsNotFoundMessage": {
@@ -468,6 +472,10 @@
       "buttonLabel": "Bütçe Oluştur",
       "dialogTitle": "Bütçe Oluşturun",
       "dialogDescription": "Aşağıdaki formu kullanarak bütçenizi oluşturun."
+    },
+    "CreateCategoryButton": {
+      "buttonLabel": "Kategori Oluştur",
+      "createCategoryDialogMessage": "Aşağıdaki formu kullanarak yeni bir kategori oluşturun."
     },
     "PasswordInput": {
       "passwordFieldLabel": "Şifre",

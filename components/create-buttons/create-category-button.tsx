@@ -4,12 +4,14 @@ import { Button } from "@/components/ui/button";
 import useGenericModalStore from "@/store/genericModalStore";
 import { FaPlus } from "react-icons/fa";
 import { useRouter } from "@/navigation";
+import { useTranslations } from "next-intl";
 
 type CreateCategoryButtonProps = {
   className?: string;
 };
 
 const CreateCategoryButton = ({ className }: CreateCategoryButtonProps) => {
+  const t = useTranslations("Components.CreateCategoryButton");
   const router = useRouter();
   const closeGenericModal = useGenericModalStore(
     (state) => state.closeGenericModal
@@ -18,16 +20,19 @@ const CreateCategoryButton = ({ className }: CreateCategoryButtonProps) => {
     (state) => state.openGenericModal
   );
 
+  const buttonLabel = t("buttonLabel");
+
   return (
     <Button
       className={cn("flex items-center gap-2 font-semibold", className)}
+      aria-label={buttonLabel}
       data-testid="create-account-button"
       onClick={() =>
         openGenericModal({
           mode: "create",
           key: "category",
-          dialogTitle: "Create a category",
-          dialogDescription: "Use the form below to create a new category.",
+          dialogTitle: buttonLabel,
+          dialogDescription: t("createCategoryDialogMessage"),
           props: {
             afterSave: () => {
               router.refresh();
@@ -38,7 +43,7 @@ const CreateCategoryButton = ({ className }: CreateCategoryButtonProps) => {
       }
     >
       <FaPlus />
-      <span className="hidden md:inline">Create a category</span>
+      <span className="hidden md:inline">{buttonLabel}</span>
     </Button>
   );
 };

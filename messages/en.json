@@ -68,6 +68,10 @@
       "OTHER": "Other"
     }
   },
+  "Categories": {
+    "pageTitle": "Categories",
+    "pageDescription": "Create custom categories to group your transactions and budgets."
+  },
   "Accounts": {
     "pageTitle": "Accounts",
     "AccountsNotFoundMessage": {
@@ -469,6 +473,10 @@
       "label": "Create a Goal",
       "createGoalDialogTitle": "Create a Goal",
       "createGoalDialogMessage": "Create a new goal by using the form below."
+    },
+    "CreateCategoryButton": {
+      "buttonLabel": "Create a Category",
+      "createCategoryDialogMessage": "Create a new category by using the form below."
     },
     "PasswordInput": {
       "passwordFieldLabel": "Password",
