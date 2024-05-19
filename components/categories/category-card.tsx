@@ -103,13 +103,17 @@ const CategoryCard = ({ category }: CategoryCardProps) => {
           },
         ]}
       />
-      <h3 className="mb-2 font-semibold text-primary">
+      <h3 className="mb-2 font-medium text-primary">
         <span className="text-muted-foreground">Category Name: </span>
         {category.name}
       </h3>
       <p>
-        <span className="text-muted-foreground">Category Type:</span>{" "}
-        {formattedCategoryType}
+        <span className="font-medium text-muted-foreground">
+          Category Type:{" "}
+        </span>
+        <span className="font-medium text-foreground/80">
+          {formattedCategoryType}
+        </span>
       </p>
     </motion.article>
   );

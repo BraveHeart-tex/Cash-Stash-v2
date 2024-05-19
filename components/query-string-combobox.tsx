@@ -58,7 +58,7 @@ const QueryStringComboBox = ({
           <SelectContent className="max-h-[300px] overflow-auto">
             <SelectGroup>
               <SelectLabel>{selectLabel}</SelectLabel>
-              <SelectItem value={""}>allLabel</SelectItem>
+              <SelectItem value={""}>{allLabel}</SelectItem>
               {dataset.map((item) => (
                 <SelectItem key={item.value} value={item.value}>
                   {item.label}
