@@ -18,6 +18,16 @@
       "label": "Monokai Pro"
     }
   },
+  "NavigationItemsDrawer": {
+    "trigger-aria-label": "Navigasyon menüsünü aç",
+    "title": "Navigasyon Menüleri",
+    "description": "Aşağıdaki arama çubuğunu kullanarak bir menü arayın.",
+    "searchLabel": "Ara",
+    "searchPlaceholder": "Arama Yapın",
+    "noMenusFoundMessage": "Aramanız için menü bulunamadı...",
+    "clearSearchButtonLabel": "Aramayı Temizle",
+    "closeDrawerLabel": "Kapat"
+  },
   "NavigationItems": {
     "/": {
       "label": "Dashboard"

@@ -18,6 +18,16 @@
       "label": "Monokai Pro"
     }
   },
+  "NavigationItemsDrawer": {
+    "trigger-aria-label": "Open navigation menu",
+    "title": "Navigation Menus",
+    "description": " Search for a menu by using the search bar below.",
+    "searchLabel": "Search",
+    "searchPlaceholder": "Search for a menu",
+    "noMenusFoundMessage": "No menu was found for your search...",
+    "clearSearchButtonLabel": "Clear Search",
+    "closeDrawerLabel": "Close"
+  },
   "NavigationItems": {
     "/": {
       "label": "Dashboard"

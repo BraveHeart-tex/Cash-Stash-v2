@@ -175,6 +175,7 @@ export default async function RootLayout({
                 locale={locale}
                 messages={pick(messages, [
                   "ThemeOptions",
+                  "NavigationItemsDrawer",
                   "NavigationItems",
                   "Components",
                   "Zod",

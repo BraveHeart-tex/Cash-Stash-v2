@@ -17,9 +17,11 @@ import { useState } from "react";
 import { NAVIGATION_ITEMS } from "@/lib/constants";
 import { Link } from "@/navigation";
 import { useTranslations } from "next-intl";
+import { FaXmark } from "react-icons/fa6";
 
 const NavigationItemsDrawer = () => {
   const t = useTranslations("NavigationItems");
+  const drawerT = useTranslations("NavigationItemsDrawer");
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
 
@@ -42,7 +44,7 @@ const NavigationItemsDrawer = () => {
           className="h-[44px] w-[44px] rounded-full"
           type="button"
           name="navigation-drawer"
-          aria-label="Open navigation menus"
+          aria-label={drawerT("trigger-aria-label")}
         >
           <FaBars className="h-5 w-5" />
         </Button>
@@ -50,31 +52,56 @@ const NavigationItemsDrawer = () => {
       <DrawerContent className="h-[70vh]">
         <div className="w-full">
           <DrawerHeader>
-            <DrawerTitle className="text-primary">Navigation Menus</DrawerTitle>
-            <DrawerDescription>
-              Search for a menu by using the search bar below.
-            </DrawerDescription>
+            <DrawerTitle className="text-primary">
+              {drawerT("title")}
+            </DrawerTitle>
+            <DrawerDescription>{drawerT("description")}</DrawerDescription>
           </DrawerHeader>
           <div className="p-4 pb-0">
             <div className="grid gap-1">
-              <Label>Search</Label>
-              <Input
-                id="search"
-                placeholder="Search for a menu"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
+              <Label htmlFor="search-navigation-menus-input">
+                {drawerT("searchLabel")}
+              </Label>
+              <div className="relative">
+                <Input
+                  id="search-navigation-menus-input"
+                  name="search-navigation-menus-input"
+                  type="text"
+                  placeholder={drawerT("searchPlaceholder")}
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  className="pr-8"
+                />
+                {query && (
+                  <Button
+                    type="button"
+                    name="clear-search"
+                    aria-label={drawerT("clearSearchButtonLabel")}
+                    size="icon"
+                    variant="ghost"
+                    className="absolute right-0 top-1/2 -translate-y-1/2 p-0 text-muted-foreground"
+                    onClick={() => setQuery("")}
+                  >
+                    <span className="sr-only">
+                      {drawerT("clearSearchButtonLabel")}
+                    </span>
+                    <FaXmark />
+                  </Button>
+                )}
+              </div>
             </div>
-            <div className="mt-4 flex flex-col gap-1 rounded-md border p-2">
+            <div className="mt-4 flex h-[calc(100vh-530px)] max-h-[calc(100vh-530px)] flex-col gap-1 overflow-auto rounded-md border p-2">
               {filteredNavItems.length === 0 && (
                 <div className="flex h-full w-full flex-col items-center justify-center">
-                  <p>No menu was found for your search...</p>
+                  <p className="text-sm text-muted-foreground">
+                    {drawerT("noMenusFoundMessage")}
+                  </p>
                   <Button
                     variant="outline"
                     className="mt-1"
                     onClick={() => setQuery("")}
                   >
-                    Clear search
+                    {drawerT("clearSearchButtonLabel")}
                   </Button>
                 </div>
               )}
@@ -99,7 +126,7 @@ const NavigationItemsDrawer = () => {
           </div>
           <DrawerFooter>
             <DrawerClose asChild>
-              <Button variant="outline">Close</Button>
+              <Button variant="outline">{drawerT("closeDrawerLabel")}</Button>
             </DrawerClose>
           </DrawerFooter>
         </div>
