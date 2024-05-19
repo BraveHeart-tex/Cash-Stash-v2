@@ -2,29 +2,26 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import useGenericModalStore from "@/store/genericModalStore";
+import { useTranslations } from "next-intl";
 import { FaMoneyBillAlt, FaPlus } from "react-icons/fa";
-
-type CreateBudgetButtonInternalizationConfig = {
-  buttonLabel: string;
-  dialogTitle: string;
-  dialogDescription: string;
-};
 
 type CreateBudgetButtonProps = {
   className?: string;
   minimizeOnMobile?: boolean;
-  internalizationConfig: CreateBudgetButtonInternalizationConfig;
 };
 
 const CreateBudgetButton = ({
   className,
   minimizeOnMobile,
-  internalizationConfig,
 }: CreateBudgetButtonProps) => {
+  const t = useTranslations("Components.CreateBudgetButton");
   const openGenericModal = useGenericModalStore(
     (state) => state.openGenericModal
   );
-  const { buttonLabel, dialogTitle, dialogDescription } = internalizationConfig;
+
+  const buttonLabel = t("buttonLabel");
+  const dialogTitle = t("dialogTitle");
+  const dialogDescription = t("dialogDescription");
 
   return (
     <Button

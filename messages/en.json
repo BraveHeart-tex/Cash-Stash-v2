@@ -403,6 +403,11 @@
       "createAccountDialogTitle": "Create an Account",
       "createAccountDialogMessage": "Use the form below to add a new bank account."
     },
+    "CreateBudgetButton": {
+      "buttonLabel": "Create a Budget",
+      "dialogTitle": "Create a budget",
+      "dialogDescription": "Fill out the form below to create a budget."
+    },
     "CreateGoalButton": {
       "label": "Create a Goal",
       "createGoalDialogTitle": "Create a Goal",

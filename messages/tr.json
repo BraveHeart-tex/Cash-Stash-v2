@@ -406,6 +406,11 @@
       "createAccountDialogTitle": "Hesap Ekle",
       "createAccountDialogMessage": "Yeni bir hesap eklemek için aşağıdaki formu kullanın."
     },
+    "CreateBudgetButton": {
+      "buttonLabel": "Bütçe Ekleyin",
+      "dialogTitle": "Bütçe Ekleyin",
+      "dialogDescription": "Aşağıdaki formu kullanarak bütçenizi oluşturun."
+    },
     "PasswordInput": {
       "passwordFieldLabel": "Şifre",
       "passwordFieldPlaceholder": "Şifrenizi girin",
