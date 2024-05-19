@@ -70,7 +70,15 @@
   },
   "Categories": {
     "pageTitle": "Categories",
-    "pageDescription": "Create custom categories to group your transactions and budgets."
+    "pageDescription": "Create custom categories to group your transactions and budgets.",
+    "CategoriesPageFilters": {
+      "routeSearchInputPlaceholder": "Search categories by name",
+      "queryStringComboBox": {
+        "label": "Category Type",
+        "budget": "Budget",
+        "transaction": "Transaction"
+      }
+    }
   },
   "Accounts": {
     "pageTitle": "Accounts",

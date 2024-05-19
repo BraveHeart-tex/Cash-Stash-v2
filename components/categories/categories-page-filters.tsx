@@ -1,25 +1,28 @@
 import RouteSearchInput from "@/components/route-search-input";
 import QueryStringComboBox from "@/components/query-string-combobox";
 import { CATEGORY_TYPES } from "@/lib/constants";
+import { useTranslations } from "next-intl";
 
 const CategoriesPageFilters = () => {
+  const t = useTranslations("Categories.CategoriesPageFilters");
+
   return (
     <div className="flex flex-wrap items-center justify-between gap-2">
-      <RouteSearchInput placeholder="Search goals by name" />
+      <RouteSearchInput placeholder={t("routeSearchInputPlaceholder")} />
       <QueryStringComboBox
         queryStringKey="type"
         dataset={[
           {
-            label: "Budget",
+            label: t("queryStringComboBox.budget"),
             value: CATEGORY_TYPES.BUDGET.toString(),
           },
           {
-            label: "Transaction",
+            label: t("queryStringComboBox.transaction"),
             value: CATEGORY_TYPES.TRANSACTION.toString(),
           },
         ]}
         renderAsSelect
-        selectLabel="Category Type"
+        selectLabel={t("queryStringComboBox.label")}
       />
     </div>
   );

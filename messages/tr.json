@@ -70,7 +70,15 @@
   },
   "Categories": {
     "pageTitle": "Kategoriler",
-    "pageDescription": "İşlemlerinizi ve bütçelerinizi gruplandırmak için özel kategoriler oluşturun."
+    "pageDescription": "İşlemlerinizi ve bütçelerinizi gruplandırmak için özel kategoriler oluşturun.",
+    "CategoriesPageFilters": {
+      "routeSearchInputPlaceholder": "Kategorileri isme göre arayın",
+      "queryStringComboBox": {
+        "label": "Kategori Tipi",
+        "budget": "Bütçe",
+        "transaction": "İşlem"
+      }
+    }
   },
   "Accounts": {
     "pageTitle": "Hesaplar",
