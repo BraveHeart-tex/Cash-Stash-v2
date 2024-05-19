@@ -287,6 +287,12 @@
     "CurrencyConverterInput": {
       "lastUpdated": "Last updated: {date}"
     },
+    "ConvertedCurrencyList": {
+      "searchLabel": "Search",
+      "searchPlaceholder": "Search by symbol or name",
+      "noResultsMessage": "No results were found for your search",
+      "clearSearchButtonLabel": "Clear Search"
+    },
     "CategoryCard": {
       "editCategoryDialogTitle": "Edit Category",
       "editCategoryDialogMessage": "Edit the category information by using the form below.",

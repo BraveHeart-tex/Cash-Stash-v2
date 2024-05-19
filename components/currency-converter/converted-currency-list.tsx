@@ -9,6 +9,7 @@ import { MdQuestionMark } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import { FaXmark } from "react-icons/fa6";
 import { ConvertCurrencyType } from "@/typings/currencies";
+import { useTranslations } from "next-intl";
 
 type ConvertedCurrencyListProps = {
   currencyList: ConvertCurrencyType[];
@@ -17,6 +18,7 @@ type ConvertedCurrencyListProps = {
 const ConvertedCurrencyList = ({
   currencyList,
 }: ConvertedCurrencyListProps) => {
+  const t = useTranslations("Components.ConvertedCurrencyList");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCurrency, setSelectedCurrency] = useQueryState("currency", {
     shallow: false,
@@ -33,7 +35,7 @@ const ConvertedCurrencyList = ({
   return (
     <div className="relative mt-2 h-[calc(100vh-545px)] flex-grow overflow-auto rounded-md border px-2 lg:h-[calc(100vh-400px)]">
       <div className="sticky top-0 z-10 flex w-full flex-col gap-1 rounded-md bg-background py-1">
-        <Label htmlFor="search-currency">Search</Label>
+        <Label htmlFor="search-currency">{t("searchLabel")}</Label>
         <div className="relative w-full lg:w-[400px]">
           <Input
             id="search-currency"
@@ -41,7 +43,7 @@ const ConvertedCurrencyList = ({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="px-8"
-            placeholder="Search for currency..."
+            placeholder={t("searchPlaceholder")}
           />
           <FaSearch className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground" />
           {searchQuery && (
@@ -76,7 +78,7 @@ const ConvertedCurrencyList = ({
             <div className="flex flex-col items-center justify-center gap-2">
               <MdQuestionMark className="text-2xl" />
               <p className="font-medium text-foreground">
-                No results were found for your search
+                {t("noResultsMessage")}
               </p>
               <Button
                 type="button"
@@ -84,7 +86,7 @@ const ConvertedCurrencyList = ({
                 variant="outline"
                 onClick={() => setSearchQuery("")}
               >
-                Clear search
+                {t("clearSearchButtonLabel")}
               </Button>
             </div>
           </div>

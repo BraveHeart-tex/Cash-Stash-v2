@@ -286,6 +286,12 @@
     "CurrencyConverterInput": {
       "lastUpdated": "Son Güncelleme: {date}"
     },
+    "ConvertedCurrencyList": {
+      "searchLabel": "Ara",
+      "searchPlaceholder": "Sembol veya isme göre arayın...",
+      "noResultsMessage": "Aramanız için sonuç bulunamadı.",
+      "clearSearchButtonLabel": "Aramayı Temizle"
+    },
     "CategoryCard": {
       "editCategoryDialogTitle": "Kategoriyi Düzenle",
       "editCategoryDialogMessage": "Aşağıdaki formu kullanarak kategori bilgilerini düzenleyin.",
