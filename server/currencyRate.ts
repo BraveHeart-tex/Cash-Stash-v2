@@ -5,6 +5,7 @@ import currencyRatesRepository from "@/lib/database/repository/currencyRatesRepo
 import logger from "@/lib/utils/logger";
 import { ConvertCurrencyType } from "@/typings/currencies";
 import { authenticatedAction } from "@/lib/auth/authUtils";
+import { getTranslations } from "next-intl/server";
 
 type ConvertCurrencyParams = {
   currency: string;
@@ -57,15 +58,33 @@ export const convertCurrency = authenticatedAction<
       }
     }
 
-    return {
-      currencies: Object.entries(convertedAmounts).map(([key, value]) => {
+    const t = await getTranslations("Lists");
+
+    const getTranslatedLabelForCurrency = (currencySymbol: string) => {
+      return t("currencies")
+        .split(", ")
+        .map((s) => s.split(":"))
+        .map(([name, symbol]) => ({ name, symbol }))
+        .find(({ symbol }) => symbol === currencySymbol)?.name;
+    };
+
+    const mappedCurrencies = Object.entries(convertedAmounts).map(
+      ([key, value]) => {
+        const label =
+          CURRENCIES.find((item) => item.symbol === key)?.name || key;
+        const translatedLabel = getTranslatedLabelForCurrency(key);
+
         return {
           symbol: key,
           rate: currencyRates[key],
-          label: CURRENCIES.find((item) => item.symbol === key)?.name || "",
+          label: translatedLabel || label,
           amount: value,
         };
-      }),
+      }
+    );
+
+    return {
+      currencies: mappedCurrencies,
       updatedAt: new Date().toISOString(),
     };
   } catch (error) {

@@ -4,6 +4,7 @@ import CurrencyConverterInput from "@/components/currency-converter/currency-con
 import { getUser } from "@/lib/auth/session";
 import { PAGE_ROUTES } from "@/lib/constants";
 import { redirect } from "@/navigation";
+import { getTranslations } from "next-intl/server";
 
 const CurrencyConverterPage = async ({
   searchParams,
@@ -26,6 +27,7 @@ const CurrencyConverterPage = async ({
     currency,
     amount,
   });
+  const t = await getTranslations("CurrencyConverter");
 
   const convertedToCurrencyAmount =
     currencies.find((item) => item.symbol === to)?.amount || 0;
@@ -34,12 +36,9 @@ const CurrencyConverterPage = async ({
     <main className="mx-auto p-4 lg:max-w-[1300px] xl:max-w-[1600px]">
       <div className="flex flex-col gap-1">
         <h1 className="scroll-m-20 text-4xl font-bold tracking-tight text-primary">
-          Currency Converter
+          {t("pageTitle")}
         </h1>
-        <p className="text-muted-foreground">
-          See the current exchange rates and convert between your preferred
-          currencies.
-        </p>
+        <p className="text-muted-foreground">{t("pageDescription")}</p>
       </div>
       <div className="mt-4">
         <CurrencyConverterInput

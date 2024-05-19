@@ -68,6 +68,10 @@
       "OTHER": "Diğer"
     }
   },
+  "CurrencyConverter": {
+    "pageTitle": "Döviz Çevirici",
+    "pageDescription": "Güncel döviz kurlarını görün ve tercih ettiğiniz para birimleri arasında dönüştürme yapın."
+  },
   "Categories": {
     "pageTitle": "Kategoriler",
     "pageDescription": "İşlemlerinizi ve bütçelerinizi gruplandırmak için özel kategoriler oluşturun.",

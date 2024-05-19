@@ -68,6 +68,10 @@
       "OTHER": "Other"
     }
   },
+  "CurrencyConverter": {
+    "pageTitle": "Currency Converter",
+    "pageDescription": "See the current exchange rates and convert between your preferred currencies."
+  },
   "Categories": {
     "pageTitle": "Categories",
     "pageDescription": "Create custom categories to group your transactions and budgets.",

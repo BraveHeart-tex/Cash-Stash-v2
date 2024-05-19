@@ -26,7 +26,7 @@ const ConvertedCurrencyList = ({
   const filteredCurrencies = currencyList.filter(
     (item) =>
       item.symbol !== selectedCurrency &&
-      (item.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (item?.label?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.symbol.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
