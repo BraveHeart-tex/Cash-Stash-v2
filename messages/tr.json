@@ -437,6 +437,43 @@
       "submitButtonLabel": "Kayıt Ol",
       "signInLink": "Zaten bir hesabınız var mı? Oturum aç"
     },
+    "TransactionForm": {
+      "fetchCategoriesErrorMessage": "İşlem kategorileri alınırken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+      "noAccountsFoundHeading": "Hiçbir hesap bulunamadı.",
+      "noAccountsFoundDescription": "Bir işlem oluşturmak için lütfen önce bir hesap oluşturun.",
+      "noChangesMessage": "İşlemde herhangi bir değişiklik yapmadınız.",
+      "anErrorOccurred": "Bir hata oluştu.",
+      "successMessage": {
+        "create": "İşlem başarıyla oluşturuldu.",
+        "update": "İşlem başarıyla güncellendi."
+      },
+      "accountIdField": {
+        "label": "Hesap",
+        "placeholder": "Hesap seçiniz",
+        "loading": "Yükleniyor..."
+      },
+      "amountField": {
+        "label": "Miktar",
+        "amountSignToggleDescription": "Gelirler için [+], giderler için [-] kullanın.",
+        "amountSignInformation": {
+          "expense": "İşlem gider olarak sayılacaktır.",
+          "income": "İşlem gelir olarak sayılacaktır."
+        }
+      },
+      "categoryIdField": {
+        "label": "İşlem Kategorisi",
+        "placeholder": "Kategori seçiniz.",
+        "noCategoriesMessage": "Henüz herhangi bir işlem kategorisi oluşturmadınız."
+      },
+      "descriptionField": {
+        "label": "Açıklama",
+        "placeholder": "Bu işleme eklenecek açıklamayı giriniz."
+      },
+      "submitButtonLabel": {
+        "create": "İşlem Oluştur",
+        "update": "İşlemi Güncelle"
+      }
+    },
     "PasswordRequirements": {
       "title": "Şifre Kriterleri",
       "8 characters": "8 karakter",

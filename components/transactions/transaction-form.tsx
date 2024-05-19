@@ -50,6 +50,7 @@ import {
 } from "@/components/ui/tooltip";
 import { BaseValidatedResponse } from "@/typings/baseTypes";
 import MaskedAmountInput from "@/components/ui/masked-amount-input";
+import { useTranslations } from "next-intl";
 
 type TransactionFormProps = {
   data?: TransactionSelectModel;
@@ -58,6 +59,7 @@ type TransactionFormProps = {
 const TransactionForm = ({
   data: transactionToBeUpdated,
 }: TransactionFormProps) => {
+  const t = useTranslations("Components.TransactionForm");
   const [isPending, startTransition] = useTransition();
   const closeGenericModal = useGenericModalStore(
     (state) => state.closeGenericModal
@@ -91,16 +93,13 @@ const TransactionForm = ({
       ]);
 
       if (!transactionCategories) {
-        toast.error(
-          "There was an error while getting budget categories. Please try again later."
-        );
+        toast.error(t("fetchCategoriesErrorMessage"));
         return;
       }
 
       if (accounts.length === 0) {
-        toast.error("No accounts found.", {
-          description:
-            " Please create an account first to create a transaction.",
+        toast.error(t("noAccountsFoundHeading"), {
+          description: t("noAccountsFoundDescription"),
         });
         return;
       }
@@ -126,9 +125,7 @@ const TransactionForm = ({
 
   const handleFormSubmit = async (values: TransactionSchemaType) => {
     if (entityId && compareMatchingKeys(transactionToBeUpdated, values)) {
-      toast.info("No changes detected.", {
-        description: "You haven't made any changes to the transaction.",
-      });
+      toast.info(t("noChangesMessage"));
       return;
     }
 
@@ -161,18 +158,15 @@ const TransactionForm = ({
     }
 
     if (result.error) {
-      toast.error("An error occurred.", {
+      toast.error(t("anErrorOccurred"), {
         description: result.error,
       });
     } else {
-      const successMessage = {
-        create: "Transaction has been created.",
-        update: "Transaction has been updated.",
-      };
+      const successMessage = t(
+        `successMessage.${entityId ? "update" : "create"}`
+      );
       router.refresh();
-      toast.success("Success!", {
-        description: successMessage[entityId ? "update" : "create"],
-      });
+      toast.success(successMessage);
       closeGenericModal();
     }
   };
@@ -223,7 +217,7 @@ const TransactionForm = ({
           name="accountId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Account</FormLabel>
+              <FormLabel>{t("accountIdField.label")}</FormLabel>
               <Select
                 onValueChange={(value) => {
                   field.onChange(value);
@@ -237,7 +231,9 @@ const TransactionForm = ({
                   <SelectTrigger disabled={loadingAccounts} ref={field.ref}>
                     <SelectValue
                       placeholder={
-                        loadingAccounts ? "Loading..." : "Select an account"
+                        loadingAccounts
+                          ? t("accountIdField.loading")
+                          : t("accountIdField.placeholder")
                       }
                     />
                   </SelectTrigger>
@@ -264,7 +260,7 @@ const TransactionForm = ({
           name="amount"
           render={({ field }) => (
             <FormItem>
-              <CurrencyFormLabel label="Amount" />
+              <CurrencyFormLabel label={t("amountField.label")} />
               <FormControl>
                 <div className="relative">
                   <TooltipProvider>
@@ -297,7 +293,7 @@ const TransactionForm = ({
                         </Button>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>Use [+] for incomes, [-] for expenses</p>
+                        <p>{t("amountField.amountSignToggleDescription")}</p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
@@ -315,8 +311,9 @@ const TransactionForm = ({
               <FormDescription>
                 {field?.value?.toString() && (
                   <>
-                    This will count as
-                    {Math.sign(field.value) === -1 ? " an expense" : " income"}
+                    {t(
+                      `amountField.amountSignInformation.${Math.sign(field.value) === -1 ? "expense" : "income"}`
+                    )}
                   </>
                 )}
               </FormDescription>
@@ -329,7 +326,7 @@ const TransactionForm = ({
           name="categoryId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Category</FormLabel>
+              <FormLabel>{t("categoryIdField.label")}</FormLabel>
               <div className="flex items-center gap-1">
                 <Combobox
                   key={JSON.stringify(
@@ -346,14 +343,14 @@ const TransactionForm = ({
                     "focus:outline focus:outline-1 focus:outline-offset-1 focus:outline-destructive",
                     !isPending && isTransactionCategoryListEmpty && "hidden"
                   )}
-                  triggerPlaceholder="Select a category"
+                  triggerPlaceholder={t("categoryIdField.placeholder")}
                   onSelect={(option) => {
                     field.onChange(+option.value);
                   }}
                 />
                 {!isPending && isTransactionCategoryListEmpty && (
                   <p className="mr-auto text-muted-foreground">
-                    Looks like there are no transaction categories yet.
+                    {t("categoryIdField.noCategoriesMessage")}
                   </p>
                 )}
                 <CreateTransactionCategoryPopover
@@ -372,10 +369,10 @@ const TransactionForm = ({
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Description</FormLabel>
+              <FormLabel>{t("descriptionField.label")}</FormLabel>
               <FormControl>
                 <Input
-                  placeholder={"Description to add to this transaction"}
+                  placeholder={t("descriptionField.placeholder")}
                   {...field}
                 />
               </FormControl>
@@ -387,11 +384,11 @@ const TransactionForm = ({
           className="w-full"
           type="submit"
           name="submit-transaction-form-button"
-          aria-label="Submit transaction form"
-          loading={form.formState.isSubmitting || isPending}
+          aria-label={t(`submitButtonLabel.${entityId ? "update" : "create"}`)}
+          loading={isPending}
           disabled={form.formState.isSubmitting || isPending}
         >
-          {!entityId ? "Create" : "Update"}
+          {t(`submitButtonLabel.${entityId ? "update" : "create"}`)}
         </Button>
       </form>
     </Form>

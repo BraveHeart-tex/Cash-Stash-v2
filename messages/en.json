@@ -321,7 +321,7 @@
       "budgetCategoryField": {
         "label": "Budget Category",
         "placeholder": "Select a budget category",
-        "noCategoriesMessage": "It appears you haven't created any budget categories yet."
+        "noCategoriesMessage": "You haven't created any budget categories yet."
       },
       "submitButtonLabel": {
         "create": "Create Budget",
@@ -437,6 +437,43 @@
       "emailFieldDescription": "<strong>Note</strong>: Please provide a valid email address for <u> account verification, password recovery, and other important communications. </u>",
       "submitButtonLabel": "Sign Up",
       "signInLink": "Already have an account? Sign in"
+    },
+    "TransactionForm": {
+      "fetchCategoriesErrorMessage": "There was an error while getting transaction categories. Please try again later.",
+      "noAccountsFoundHeading": "No accounts found",
+      "noAccountsFoundDescription": "Please create an account first to create a transaction.",
+      "noChangesMessage": "You haven't made any changes to the transaction.",
+      "anErrorOccurred": "An error occurred",
+      "successMessage": {
+        "create": "Transaction created successfully.",
+        "update": "Transaction updated successfully."
+      },
+      "accountIdField": {
+        "label": "Account",
+        "placeholder": "Select an account",
+        "loading": "Loading..."
+      },
+      "amountField": {
+        "label": "Amount",
+        "amountSignToggleDescription": "Use [+] for incomes, [-] for expenses",
+        "amountSignInformation": {
+          "expense": "This will count as an expense",
+          "income": "This will count as income"
+        }
+      },
+      "categoryIdField": {
+        "label": "Category",
+        "placeholder": "Select a category",
+        "noCategoriesMessage": "You haven't created any transaction categories yet."
+      },
+      "descriptionField": {
+        "label": "Description",
+        "placeholder": "Description to add to this transaction"
+      },
+      "submitButtonLabel": {
+        "create": "Create Transaction",
+        "update": "Update Transaction"
+      }
     },
     "PasswordRequirements": {
       "title": "Password Requirements",
