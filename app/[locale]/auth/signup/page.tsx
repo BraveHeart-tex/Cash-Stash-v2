@@ -1,9 +1,9 @@
-import { getUser } from "@/lib/auth/session";
-import { redirect } from "@/navigation";
 import RegisterForm from "@/components/auth/register-form";
-import { PAGE_ROUTES } from "@/lib/constants";
-import { Link } from "@/navigation";
 import Logo from "@/components/logo";
+import { getUser } from "@/lib/auth/session";
+import { PAGE_ROUTES } from "@/lib/constants";
+import { redirect } from "@/navigation";
+import { Link } from "@/navigation";
 
 const SignUpPage = async () => {
   const { user } = await getUser();

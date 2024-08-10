@@ -1,4 +1,6 @@
 "use client";
+import { Button } from "@/components/ui/button";
+import CurrencyFormLabel from "@/components/ui/currency-form-label";
 import {
   Form,
   FormControl,
@@ -7,22 +9,20 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import useZodResolver from "@/lib/zod-resolver-wrapper";
-import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import MaskedAmountInput from "@/components/ui/masked-amount-input";
+import type { GoalSelectModel } from "@/lib/database/schema";
+import { compareMatchingKeys } from "@/lib/utils/objectUtils/compareMatchingKeys";
+import useZodResolver from "@/lib/zod-resolver-wrapper";
 import { useRouter } from "@/navigation";
-import { useEffect, useTransition } from "react";
-import { GoalSchemaType, getGoalSchema } from "@/schemas/goal-schema";
+import { type GoalSchemaType, getGoalSchema } from "@/schemas/goal-schema";
 import { createGoal, updateGoal } from "@/server/goal";
 import useGenericModalStore from "@/store/genericModalStore";
-import { toast } from "sonner";
-import { GoalSelectModel } from "@/lib/database/schema";
-import CurrencyFormLabel from "@/components/ui/currency-form-label";
-import { compareMatchingKeys } from "@/lib/utils/objectUtils/compareMatchingKeys";
-import MaskedAmountInput from "@/components/ui/masked-amount-input";
-import { BaseValidatedResponse } from "@/typings/baseTypes";
+import type { BaseValidatedResponse } from "@/typings/baseTypes";
 import { useTranslations } from "next-intl";
+import { useEffect, useTransition } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 type GoalFormProps = {
   data?: GoalSelectModel;
@@ -35,7 +35,7 @@ const GoalForm = ({ data: goalToBeUpdated }: GoalFormProps) => {
   const [isPending, startTransition] = useTransition();
 
   const closeGenericModal = useGenericModalStore(
-    (state) => state.closeGenericModal
+    (state) => state.closeGenericModal,
   );
 
   const goalSchema = getGoalSchema({
@@ -53,18 +53,15 @@ const GoalForm = ({ data: goalToBeUpdated }: GoalFormProps) => {
 
   const entityId = goalToBeUpdated?.id;
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: this is intentional
   useEffect(() => {
-    if (goalToBeUpdated) {
-      const keys = Object.keys(
-        goalToBeUpdated ?? {}
-      ) as (keyof GoalSchemaType)[];
-      if (keys.length) {
-        keys.forEach((key) => {
-          form.setValue(key, goalToBeUpdated[key]);
-        });
-      }
+    if (!goalToBeUpdated) return;
+    const keys = Object.keys(goalToBeUpdated ?? {}) as (keyof GoalSchemaType)[];
+    if (!keys.length) return;
+
+    for (const key of keys) {
+      form.setValue(key, goalToBeUpdated[key]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [goalToBeUpdated]);
 
   const handleFormSubmit = async (values: GoalSchemaType) => {
@@ -76,7 +73,7 @@ const GoalForm = ({ data: goalToBeUpdated }: GoalFormProps) => {
     }
 
     startTransition(async () => {
-      let result;
+      let result: BaseValidatedResponse<GoalSelectModel>;
       if (entityId) {
         result = await updateGoal({
           goalId: entityId,
@@ -91,15 +88,15 @@ const GoalForm = ({ data: goalToBeUpdated }: GoalFormProps) => {
   };
 
   const processFormSubmissionResult = (
-    result: BaseValidatedResponse<GoalSelectModel>
+    result: BaseValidatedResponse<GoalSelectModel>,
   ) => {
     if (result.fieldErrors.length) {
-      result.fieldErrors.forEach((fieldError) => {
-        form.setError(fieldError.field as any, {
+      for (const fieldError of result.fieldErrors) {
+        form.setError(fieldError.field as keyof GoalSchemaType, {
           type: "manual",
           message: fieldError.message,
         });
-      });
+      }
     }
 
     if (result.error) {
@@ -108,7 +105,7 @@ const GoalForm = ({ data: goalToBeUpdated }: GoalFormProps) => {
       });
     } else {
       const successMessage = t(
-        `successMessage.${entityId ? "update" : "create"}`
+        `successMessage.${entityId ? "update" : "create"}`,
       );
       router.refresh();
       toast.success(successMessage);
@@ -117,7 +114,7 @@ const GoalForm = ({ data: goalToBeUpdated }: GoalFormProps) => {
   };
 
   const submitButtonLabel = t(
-    `submitButtonLabel.${entityId ? "update" : "create"}`
+    `submitButtonLabel.${entityId ? "update" : "create"}`,
   );
 
   return (

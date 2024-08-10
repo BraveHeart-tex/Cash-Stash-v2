@@ -1,16 +1,16 @@
 "use server";
+import { authenticatedAction } from "@/lib/auth/authUtils";
 import { CACHE_PREFIXES, CATEGORY_TYPES } from "@/lib/constants";
-import { processZodError } from "@/lib/utils/objectUtils/processZodError";
-import {
-  CategorySchemaType,
-  getCategorySchema,
-} from "@/schemas/category-schema";
-import { ZodError, z } from "zod";
 import categoryRepository from "@/lib/database/repository/categoryRepository";
-import logger from "@/lib/utils/logger";
 import redisService from "@/lib/redis/redisService";
 import { generateCachePrefixWithUserId } from "@/lib/redis/redisUtils";
+import logger from "@/lib/utils/logger";
+import { processZodError } from "@/lib/utils/objectUtils/processZodError";
 import {
+  type CategorySchemaType,
+  getCategorySchema,
+} from "@/schemas/category-schema";
+import type {
   CategoryType,
   CategoryUpdateModel,
   CreateCategoryReturnType,
@@ -20,8 +20,8 @@ import {
   GetPaginatedCategoriesReturnType,
   UpdateCategoryReturnType,
 } from "@/typings/categories";
-import { authenticatedAction } from "@/lib/auth/authUtils";
 import { getTranslations } from "next-intl/server";
+import { ZodError, z } from "zod";
 
 const getCategorySchemaWithTranslations = async () => {
   const zodT = await getTranslations("Zod.Category");
@@ -158,23 +158,23 @@ export const deleteCategory = authenticatedAction<
     const [response] = await categoryRepository.deleteCategory(id);
 
     if (response.affectedRows > 0) {
-      let prefix;
+      let prefix = "";
 
       if (type === CATEGORY_TYPES.BUDGET) {
         prefix = generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_BUDGETS,
-          user.id
+          user.id,
         );
       }
 
       if (type === CATEGORY_TYPES.TRANSACTION) {
         prefix = generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_TRANSACTIONS,
-          user.id
+          user.id,
         );
       }
 
-      await redisService.invalidateKeysStartingWith(prefix!);
+      await redisService.invalidateKeysStartingWith(prefix);
     }
 
     return response.affectedRows > 0;
@@ -202,7 +202,7 @@ export const updateCategory = authenticatedAction<
     }
 
     await redisService.invalidateKeysStartingWith(
-      generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_BUDGETS, user.id)
+      generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_BUDGETS, user.id),
     );
 
     return {

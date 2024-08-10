@@ -1,13 +1,13 @@
 "use client";
-import { FormEvent, useRef, useTransition } from "react";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import { sendPasswordResetEmail } from "@/server/auth";
+import { type FormEvent, useRef, useTransition } from "react";
 import { toast } from "sonner";
 
 const ForgotPassword = () => {
-  let [isPending, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleResetPassword = (e: FormEvent) => {

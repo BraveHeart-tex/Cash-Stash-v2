@@ -1,9 +1,9 @@
-import { useEffect, useState, useTransition } from "react";
 import AutoProgressInput from "@/components/auto-progress-input";
 import { Label } from "@/components/ui/label";
 import { activateTwoFactorAuthentication } from "@/server/auth";
-import { toast } from "sonner";
 import useAuthStore from "@/store/auth/authStore";
+import { useEffect, useState, useTransition } from "react";
+import { toast } from "sonner";
 
 type TwoFactorAuthenticationActivationInputProps = {
   label: string;
@@ -13,7 +13,7 @@ const TwoFactorAuthenticationActivationInput = ({
   label,
 }: TwoFactorAuthenticationActivationInputProps) => {
   const [code, setCode] = useState("");
-  let [isPending, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
   const user = useAuthStore((state) => state.user);
   const setUser = useAuthStore((state) => state.setUser);
 

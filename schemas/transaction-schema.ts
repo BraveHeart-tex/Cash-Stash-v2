@@ -10,7 +10,7 @@ type TransactionMessageConfig = {
 };
 
 export const getTransactionSchema = (
-  messageConfig: TransactionMessageConfig
+  messageConfig: TransactionMessageConfig,
 ) => {
   const {
     amountRequiredErrorMessage,

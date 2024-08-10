@@ -1,4 +1,5 @@
 "use client";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -7,29 +8,21 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import useZodResolver from "@/lib/zod-resolver-wrapper";
-import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { type ReminderSelectModel, reminders } from "@/lib/database/schema";
+import useZodResolver from "@/lib/zod-resolver-wrapper";
 import { useRouter } from "@/navigation";
-import { useEffect, useTransition } from "react";
 import useGenericModalStore from "@/store/genericModalStore";
+import { useEffect, useTransition } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { ReminderSelectModel, reminders } from "@/lib/database/schema";
 
-import reminderSchema, { ReminderSchemaType } from "@/schemas/reminder-schema";
-import { Textarea } from "@/components/ui/textarea";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { cn } from "@/lib/utils/stringUtils/cn";
-import { format } from "date-fns";
-import { CalendarIcon } from "@radix-ui/react-icons";
-import { Calendar } from "@/components/ui/calendar";
-import { createReminder, updateReminder } from "@/server/reminder";
-import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
 import {
   Select,
   SelectContent,
@@ -37,9 +30,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { compareMatchingKeys } from "@/lib/utils/objectUtils/compareMatchingKeys";
-import { BaseValidatedResponse } from "@/typings/baseTypes";
-import { ReminderUpdateModel } from "@/typings/reminders";
+import { cn } from "@/lib/utils/stringUtils/cn";
+import { generateOptionsFromEnums } from "@/lib/utils/stringUtils/generateOptionsFromEnums";
+import reminderSchema, {
+  type ReminderSchemaType,
+} from "@/schemas/reminder-schema";
+import { createReminder, updateReminder } from "@/server/reminder";
+import type { BaseValidatedResponse } from "@/typings/baseTypes";
+import type { ReminderUpdateModel } from "@/typings/reminders";
+import { CalendarIcon } from "@radix-ui/react-icons";
+import { format } from "date-fns";
 
 type ReminderFormProps = {
   data?: ReminderSelectModel;
@@ -49,25 +51,24 @@ const ReminderForm = ({ data: reminderToBeUpdated }: ReminderFormProps) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const closeGenericModal = useGenericModalStore(
-    (state) => state.closeGenericModal
+    (state) => state.closeGenericModal,
   );
   const form = useForm<ReminderSchemaType>({
     resolver: useZodResolver(reminderSchema),
   });
   const entityId = reminderToBeUpdated?.id;
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: This is intentional
   useEffect(() => {
-    if (reminderToBeUpdated) {
-      const keys = Object.keys(
-        reminderToBeUpdated ?? {}
-      ) as (keyof ReminderSchemaType)[];
-      if (keys.length) {
-        keys.forEach((key) => {
-          form.setValue(key, reminderToBeUpdated[key]);
-        });
-      }
+    if (!reminderToBeUpdated) return;
+    const keys = Object.keys(
+      reminderToBeUpdated ?? {},
+    ) as (keyof ReminderSchemaType)[];
+    if (!keys.length) return;
+
+    for (const key of keys) {
+      form.setValue(key, reminderToBeUpdated[key]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reminderToBeUpdated]);
 
   const handleFormSubmit = async (values: ReminderSchemaType) => {
@@ -79,7 +80,9 @@ const ReminderForm = ({ data: reminderToBeUpdated }: ReminderFormProps) => {
     }
 
     startTransition(async () => {
-      let result;
+      let result: BaseValidatedResponse<
+        ReminderSelectModel | ReminderUpdateModel
+      >;
 
       if (entityId) {
         result = await updateReminder({ ...values, id: entityId });
@@ -92,15 +95,15 @@ const ReminderForm = ({ data: reminderToBeUpdated }: ReminderFormProps) => {
   };
 
   const processFormSubmissionResult = (
-    result: BaseValidatedResponse<ReminderSelectModel | ReminderUpdateModel>
+    result: BaseValidatedResponse<ReminderSelectModel | ReminderUpdateModel>,
   ) => {
     if (result.fieldErrors.length) {
-      result.fieldErrors.forEach((fieldError) => {
-        form.setError(fieldError.field as any, {
+      for (const fieldError of result.fieldErrors) {
+        form.setError(fieldError.field as keyof ReminderSchemaType, {
           type: "manual",
           message: fieldError.message,
         });
-      });
+      }
     }
 
     if (result.error) {
@@ -129,11 +132,11 @@ const ReminderForm = ({ data: reminderToBeUpdated }: ReminderFormProps) => {
   };
 
   const recurrenceOptions = generateOptionsFromEnums(
-    reminders.recurrence.enumValues
+    reminders.recurrence.enumValues,
   );
 
   const reminderTypeOptions = generateOptionsFromEnums(
-    reminders.type.enumValues
+    reminders.type.enumValues,
   );
 
   return (
@@ -185,7 +188,7 @@ const ReminderForm = ({ data: reminderToBeUpdated }: ReminderFormProps) => {
                 onValueChange={(value) => {
                   field.onChange(value);
                 }}
-                defaultValue={reminderToBeUpdated?.type! || field.value}
+                defaultValue={reminderToBeUpdated?.type || field.value}
               >
                 <FormControl>
                   <SelectTrigger ref={field.ref}>
@@ -218,7 +221,9 @@ const ReminderForm = ({ data: reminderToBeUpdated }: ReminderFormProps) => {
                   onValueChange={(value) => {
                     field.onChange(value);
                   }}
-                  defaultValue={reminderToBeUpdated?.recurrence! || field.value}
+                  defaultValue={
+                    reminderToBeUpdated?.recurrence || field.value || "DAILY"
+                  }
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -256,7 +261,7 @@ const ReminderForm = ({ data: reminderToBeUpdated }: ReminderFormProps) => {
                           variant={"outline"}
                           className={cn(
                             "w-full pl-3 text-left font-normal",
-                            !field.value && "text-muted-foreground"
+                            !field.value && "text-muted-foreground",
                           )}
                         >
                           {field.value ? (
@@ -271,7 +276,7 @@ const ReminderForm = ({ data: reminderToBeUpdated }: ReminderFormProps) => {
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
                         mode="single"
-                        selected={field.value!}
+                        selected={field.value || new Date()}
                         onSelect={field.onChange}
                         disablePastDays
                         initialFocus

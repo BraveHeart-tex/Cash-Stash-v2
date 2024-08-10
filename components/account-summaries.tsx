@@ -1,10 +1,10 @@
 import AccountCard from "@/components/account-card";
-import CreateAccountButton from "@/components/create-buttons/create-account-button";
 import AnimatePresenceClient from "@/components/animations/animate-presence";
-import { Link } from "@/navigation";
+import CreateAccountButton from "@/components/create-buttons/create-account-button";
 import { Button } from "@/components/ui/button";
 import { PAGE_ROUTES } from "@/lib/constants";
-import { AccountWithTransactions } from "@/typings/accounts";
+import { Link } from "@/navigation";
+import type { AccountWithTransactions } from "@/typings/accounts";
 import { useTranslations } from "next-intl";
 
 type AccountSummariesProps = {

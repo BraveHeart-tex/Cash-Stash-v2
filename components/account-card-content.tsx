@@ -1,24 +1,24 @@
 "use client";
-import { useRouter } from "@/navigation";
-import { motion } from "framer-motion";
-import { useGenericConfirmStore } from "@/store/genericConfirmStore";
-import useGenericModalStore from "@/store/genericModalStore";
-import { deleteAccount } from "@/server/account";
 import ActionPopover, {
-  PopoverActionOption,
+  type PopoverActionOption,
 } from "@/components/action-popover";
-import { toast } from "sonner";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import { cn } from "@/lib/utils/stringUtils/cn";
-import {
-  FaTrash,
-  FaEdit,
-  FaRegCreditCard,
-  FaMoneyBillWave,
-} from "react-icons/fa";
+import { useRouter } from "@/navigation";
+import { deleteAccount } from "@/server/account";
 import useAuthStore from "@/store/auth/authStore";
-import { AccountWithTransactions } from "@/typings/accounts";
+import { useGenericConfirmStore } from "@/store/genericConfirmStore";
+import useGenericModalStore from "@/store/genericModalStore";
+import type { AccountWithTransactions } from "@/typings/accounts";
+import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
+import {
+  FaEdit,
+  FaMoneyBillWave,
+  FaRegCreditCard,
+  FaTrash,
+} from "react-icons/fa";
+import { toast } from "sonner";
 
 type AccountCardContentProps = {
   account: AccountWithTransactions;
@@ -26,7 +26,7 @@ type AccountCardContentProps = {
   showPopover?: boolean;
   setSelectedAccount?: (
     // eslint-disable-next-line no-unused-vars
-    account: AccountWithTransactions
+    account: AccountWithTransactions,
   ) => void;
 };
 
@@ -39,14 +39,14 @@ const AccountCardContent = ({
   const categoryT = useTranslations("Enums.AccountCategory");
   const t = useTranslations("Components.AccountCard");
   const preferredCurrency = useAuthStore(
-    (state) => state.user?.preferredCurrency
+    (state) => state.user?.preferredCurrency,
   );
   const router = useRouter();
   const openGenericModal = useGenericModalStore(
-    (state) => state.openGenericModal
+    (state) => state.openGenericModal,
   );
   const showGenericConfirm = useGenericConfirmStore(
-    (state) => state.showConfirm
+    (state) => state.showConfirm,
   );
 
   const handleDeleteAccount = () => {
@@ -129,7 +129,7 @@ const AccountCardContent = ({
       key={account.id}
       className={cn(
         "border-1 relative flex flex-col gap-2 rounded-md border bg-card p-4 shadow-sm",
-        className
+        className,
       )}
     >
       {showPopover && (

@@ -1,15 +1,15 @@
-import { FaCalendar, FaMoneyBill } from "react-icons/fa";
 import QueryStringComboBox, {
-  QueryStringComboboxItem,
+  type QueryStringComboboxItem,
 } from "@/components/query-string-combobox";
 import RouteFiltersPopover, {
-  GenericFilterOption,
+  type GenericFilterOption,
 } from "@/components/route-filters-popover";
 import RouteSearchInput from "@/components/route-search-input";
 import TransactionCategoryCombobox from "@/components/transactions/transaction-category-combobox";
-import { getCategoriesByType } from "@/server/category";
 import { CATEGORY_TYPES } from "@/lib/constants";
+import { getCategoriesByType } from "@/server/category";
 import { getTranslations } from "next-intl/server";
+import { FaCalendar, FaMoneyBill } from "react-icons/fa";
 
 type TransactionsPageFiltersProps = {
   shouldRenderPopover: boolean;
@@ -62,13 +62,13 @@ const TransactionsPageFilters = async ({
 }: TransactionsPageFiltersProps) => {
   const t = await getTranslations("Transactions");
   const initialTransactionCategories = await getCategoriesByType(
-    CATEGORY_TYPES.TRANSACTION
+    CATEGORY_TYPES.TRANSACTION,
   );
 
   const translatedOptions = transactionsFilterOptions.map((option) => ({
     ...option,
     label: t(
-      `RouteFiltersPopover.${option.data.sortBy}.${option.data.sortDirection}`
+      `RouteFiltersPopover.${option.data.sortBy}.${option.data.sortDirection}`,
     ),
   })) as GenericFilterOption<TransactionFilterData>[];
 

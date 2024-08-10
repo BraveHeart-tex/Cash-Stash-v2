@@ -1,12 +1,5 @@
-import { useMediaQuery } from "usehooks-ts";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/drawer";
+import AccountCardContent from "@/components/account-card-content";
+import TransactionCard from "@/components/transactions/transaction-card";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -15,10 +8,17 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import TransactionCard from "@/components/transactions/transaction-card";
-import { AccountSelectModel } from "@/lib/database/schema";
-import AccountCardContent from "@/components/account-card-content";
-import { TransactionWithCategoryAndAccountName } from "@/typings/transactions";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
+import type { AccountSelectModel } from "@/lib/database/schema";
+import type { TransactionWithCategoryAndAccountName } from "@/typings/transactions";
+import { useMediaQuery } from "usehooks-ts";
 
 type LatestAccountTransactionsDialogProps = {
   selectedAccount:

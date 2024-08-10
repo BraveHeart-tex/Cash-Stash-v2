@@ -1,6 +1,6 @@
-import { ReminderSelectModel } from "@/lib/database/schema";
-import { ReminderSchemaType } from "@/schemas/reminder-schema";
-import {
+import type { ReminderSelectModel } from "@/lib/database/schema";
+import type { ReminderSchemaType } from "@/schemas/reminder-schema";
+import type {
   BasePaginatedActionParams,
   BasePaginatedResponse,
   BaseValidatedResponse,

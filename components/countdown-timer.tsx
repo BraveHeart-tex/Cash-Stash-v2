@@ -39,7 +39,7 @@ const CountDownTimer = ({
         setTime(time - 1);
       }, 1000);
     } else {
-      onTimerEnd && onTimerEnd();
+      onTimerEnd?.();
     }
 
     return () => {
@@ -85,7 +85,7 @@ const CountDownTimer = ({
               style={{
                 width: `${(time / countDownFrom) * 100}%`,
               }}
-            ></div>
+            />
           </div>
         </>
       );
@@ -99,6 +99,7 @@ const CountDownTimer = ({
             viewBox="0 0 36 36"
             preserveAspectRatio="xMidYMid meet"
           >
+            <title>{parts.join(":")}</title>
             <circle
               className="stroke-current text-primary"
               cx="18"

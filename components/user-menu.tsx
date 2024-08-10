@@ -1,23 +1,23 @@
 "use client";
-import { useState, useTransition } from "react";
-import { logout } from "@/server/auth";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import useAuthStore from "@/store/auth/authStore";
 import { Label } from "@/components/ui/label";
-import ModeToggle from "@/components/ui/mode-toggle";
-import { useTranslations } from "next-intl";
 import LocaleToggle from "@/components/ui/locale-toggle";
+import ModeToggle from "@/components/ui/mode-toggle";
+import { logout } from "@/server/auth";
+import useAuthStore from "@/store/auth/authStore";
+import { useTranslations } from "next-intl";
+import { useState, useTransition } from "react";
 
 const UserMenu = () => {
   const t = useTranslations("Components.UserMenu");
   const [isOpen, setIsOpen] = useState(false);
-  let [isPending, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
   const user = useAuthStore((state) => state.user);
 
   const avatarPlaceholder = user?.name ? user.name[0] : "";

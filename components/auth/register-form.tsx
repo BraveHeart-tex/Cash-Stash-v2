@@ -1,4 +1,7 @@
 "use client";
+import PasswordInput from "@/components/auth/password-input";
+import PasswordRequirements from "@/components/auth/password-requirements";
+import Logo from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -8,17 +11,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useForm } from "react-hook-form";
-import useZodResolver from "@/lib/zod-resolver-wrapper";
-import {
-  register as registerUser,
-  validateReCAPTCHAToken,
-} from "@/server/auth";
-import {
-  RegisterSchemaType,
-  getRegisterSchema,
-} from "@/schemas/register-schema";
-import { motion } from "framer-motion";
 import {
   Form,
   FormControl,
@@ -29,16 +21,24 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import PasswordRequirements from "@/components/auth/password-requirements";
 import { PAGE_ROUTES } from "@/lib/constants";
-import { useTransition } from "react";
-import PasswordInput from "@/components/auth/password-input";
-import { toast } from "sonner";
-import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
-import Logo from "@/components/logo";
+import useZodResolver from "@/lib/zod-resolver-wrapper";
 import { Link, useRouter } from "@/navigation";
-import { useTranslations } from "next-intl";
+import {
+  type RegisterSchemaType,
+  getRegisterSchema,
+} from "@/schemas/register-schema";
+import {
+  register as registerUser,
+  validateReCAPTCHAToken,
+} from "@/server/auth";
+import { motion } from "framer-motion";
 import DOMPurify from "isomorphic-dompurify";
+import { useTranslations } from "next-intl";
+import { useTransition } from "react";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 const RegisterForm = () => {
   const t = useTranslations("Components.RegisterForm");
@@ -62,7 +62,7 @@ const RegisterForm = () => {
 
   const handleRegisterFormSubmit = async (data: RegisterSchemaType) => {
     if (!executeRecaptcha) return;
-    let captchaToken = await executeRecaptcha();
+    const captchaToken = await executeRecaptcha();
 
     if (!captchaToken) {
       toast.error(t("captchaValidationFailedMessage"));
@@ -93,7 +93,7 @@ const RegisterForm = () => {
   };
 
   const processFormSubmissionResult = (
-    result: Awaited<ReturnType<typeof registerUser>>
+    result: Awaited<ReturnType<typeof registerUser>>,
   ) => {
     if (result.fieldErrors.length) {
       result.fieldErrors.forEach((fieldError) => {
@@ -175,7 +175,7 @@ const RegisterForm = () => {
                             t.markup("emailFieldDescription", {
                               strong: (chunks) => `<strong>${chunks}</strong> `,
                               u: (chunks) => `<u>${chunks}</u>`,
-                            })
+                            }),
                           ),
                         }}
                       ></FormDescription>

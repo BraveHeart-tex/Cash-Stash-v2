@@ -1,4 +1,6 @@
 "use client";
+import ActionPopover from "@/components/action-popover";
+import DataLabel from "@/components/data-label";
 import {
   Card,
   CardContent,
@@ -6,21 +8,19 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { deleteTransactionById } from "@/server/transaction";
-import { useRouter } from "@/navigation";
-import { HTMLMotionProps, motion } from "framer-motion";
-import DataLabel from "@/components/data-label";
-import { useGenericConfirmStore } from "@/store/genericConfirmStore";
-import useGenericModalStore from "@/store/genericModalStore";
-import ActionPopover from "@/components/action-popover";
-import { toast } from "sonner";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import { cn } from "@/lib/utils/stringUtils/cn";
-import { FaEdit, FaTrash } from "react-icons/fa";
-import { format } from "date-fns";
+import { useRouter } from "@/navigation";
+import { deleteTransactionById } from "@/server/transaction";
 import useAuthStore from "@/store/auth/authStore";
-import { TransactionWithCategoryAndAccountName } from "@/typings/transactions";
+import { useGenericConfirmStore } from "@/store/genericConfirmStore";
+import useGenericModalStore from "@/store/genericModalStore";
+import type { TransactionWithCategoryAndAccountName } from "@/typings/transactions";
+import { format } from "date-fns";
+import { type HTMLMotionProps, motion } from "framer-motion";
 import { useTranslations } from "next-intl";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import { toast } from "sonner";
 
 type TransactionCardProps = {
   transaction: TransactionWithCategoryAndAccountName;
@@ -35,13 +35,13 @@ const TransactionCard = ({
 }: TransactionCardProps) => {
   const t = useTranslations("Components.TransactionCard");
   const preferredCurrency = useAuthStore(
-    (state) => state.user?.preferredCurrency
+    (state) => state.user?.preferredCurrency,
   );
   const showGenericConfirm = useGenericConfirmStore(
-    (state) => state.showConfirm
+    (state) => state.showConfirm,
   );
   const openGenericModal = useGenericModalStore(
-    (state) => state.openGenericModal
+    (state) => state.openGenericModal,
   );
   const router = useRouter();
 
@@ -117,7 +117,7 @@ const TransactionCard = ({
               classNames={{
                 value: cn(
                   "font-semibold",
-                  isIncome ? "text-success" : "text-destructive"
+                  isIncome ? "text-success" : "text-destructive",
                 ),
               }}
             />

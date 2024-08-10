@@ -1,6 +1,6 @@
 "use client";
 import AccountCard from "@/components/account-card";
-import { AccountWithTransactions } from "@/typings/accounts";
+import type { AccountWithTransactions } from "@/typings/accounts";
 import { motion } from "framer-motion";
 
 type AccountInformationProps = {

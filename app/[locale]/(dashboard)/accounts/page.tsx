@@ -1,11 +1,11 @@
-import { getPaginatedAccounts } from "@/server/account";
 import RoutePaginationControls from "@/components/route-pagination-controls";
-import { AccountSelectModel } from "@/lib/database/schema";
+import type { AccountSelectModel } from "@/lib/database/schema";
+import { getPaginatedAccounts } from "@/server/account";
 
-import AccountsNotFoundMessage from "@/components/accounts/accounts-not-found-message";
-import AccountsPageHeader from "@/components/accounts/accounts-page-header";
-import AccountsPageFilters from "@/components/accounts/accounts-page-filters";
 import AccountCardsList from "@/components/accounts/account-cards-list";
+import AccountsNotFoundMessage from "@/components/accounts/accounts-not-found-message";
+import AccountsPageFilters from "@/components/accounts/accounts-page-filters";
+import AccountsPageHeader from "@/components/accounts/accounts-page-header";
 import { getTranslations } from "next-intl/server";
 
 type AccountsPageSearchParamsType = {
@@ -21,7 +21,7 @@ type AccountPageProps = {
 };
 
 const AccountsPage = async ({ searchParams }: AccountPageProps) => {
-  const pageNumber = parseInt(searchParams.page) || 1;
+  const pageNumber = Number.parseInt(searchParams.page) || 1;
   const query = searchParams.query || "";
   const category = searchParams.category || "";
   const sortBy = searchParams.sortBy || "";

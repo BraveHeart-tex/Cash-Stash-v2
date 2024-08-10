@@ -9,11 +9,11 @@ const GoalsNotFoundMessage = ({ pageHasParams }: GoalsNotFoundMessageProps) => {
   const t = useTranslations("Goals.GoalsNotFoundMessage");
 
   const heading = t(
-    `${pageHasParams ? "pageHasParams" : "noGoalsFound"}.heading`
+    `${pageHasParams ? "pageHasParams" : "noGoalsFound"}.heading`,
   );
 
   const message = t(
-    `${pageHasParams ? "pageHasParams" : "noGoalsFound"}.message`
+    `${pageHasParams ? "pageHasParams" : "noGoalsFound"}.message`,
   );
 
   return (

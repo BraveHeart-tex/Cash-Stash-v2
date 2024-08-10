@@ -1,7 +1,7 @@
-import { eq, InferInsertModel } from "drizzle-orm";
-import { twoFactorAuthenticationSecrets } from "@/lib/database/schema";
 import { db } from "@/lib/database/connection";
 import userRepository from "@/lib/database/repository/userRepository";
+import { twoFactorAuthenticationSecrets } from "@/lib/database/schema";
+import { type InferInsertModel, eq } from "drizzle-orm";
 
 type TwoFactorAuthenticationSecretInsertModel = InferInsertModel<
   typeof twoFactorAuthenticationSecrets
@@ -21,6 +21,7 @@ const twoFactorAuthenticationSecretRepository = {
     return secret;
   },
   async removeTwoFactorAuthenticationSecret(userId: string) {
+    // FIXME: This is not transactional
     await db.transaction(async (trx) => {
       await userRepository.updateUser(userId, {
         prefersTwoFactorAuthentication: 0,

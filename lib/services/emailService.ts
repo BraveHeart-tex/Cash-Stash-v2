@@ -1,4 +1,4 @@
-import nodemailer, { Transporter } from "nodemailer";
+import nodemailer, { type Transporter } from "nodemailer";
 
 type SendEmailOptions = {
   from: string;
@@ -12,7 +12,7 @@ class EmailService {
   constructor() {
     this.transporter = nodemailer.createTransport({
       host: process.env.EMAIL_HOST,
-      port: parseInt(process.env.EMAIL_PORT!),
+      port: Number.parseInt(process.env.EMAIL_PORT as string),
       secure: true,
       tls: {
         rejectUnauthorized: false,

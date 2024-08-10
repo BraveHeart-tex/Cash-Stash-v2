@@ -1,15 +1,15 @@
 import "@/app/globals.css";
-import { Inter } from "next/font/google";
-import { ThemeProvider } from "@/components/theme-provider";
-import { Metadata } from "next";
-import RedirectionPathToaster from "@/components/redirection-path-toaster";
-import { ReactNode } from "react";
-import SonnerToaster from "@/components/ui/sonner";
 import GoogleCaptchaWrapper from "@/components/google-captcha-wrapper";
+import RedirectionPathToaster from "@/components/redirection-path-toaster";
+import { ThemeProvider } from "@/components/theme-provider";
+import SonnerToaster from "@/components/ui/sonner";
 import { THEME_OPTIONS } from "@/lib/constants";
-import { NextIntlClientProvider } from "next-intl";
 import { pick } from "@/lib/utils/objectUtils/pick";
+import type { Metadata } from "next";
+import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
+import { Inter } from "next/font/google";
+import type { ReactNode } from "react";
 
 const InterFont = Inter({
   weight: ["300", "400", "500", "600", "700"],

@@ -1,12 +1,12 @@
-import { CATEGORY_TYPES } from "@/lib/constants";
-import {
+import type { CATEGORY_TYPES } from "@/lib/constants";
+import type {
   CategoryInsertModel,
   CategorySelectModel,
 } from "@/lib/database/schema";
-import { CategoryUpdateModel, FieldError } from "@/server/types";
-import {
+import type {
   BasePaginatedActionParams,
   BasePaginatedResponse,
+  FieldError,
 } from "@/typings/baseTypes";
 
 export type CategoryType = (typeof CATEGORY_TYPES)[keyof typeof CATEGORY_TYPES];

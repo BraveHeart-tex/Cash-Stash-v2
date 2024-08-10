@@ -1,11 +1,11 @@
-import { Lucia } from "lucia";
-import { DrizzleMySQLAdapter } from "@lucia-auth/adapter-drizzle";
-import mysql from "mysql2";
-import { drizzle } from "drizzle-orm/mysql2";
 import { sessions, users } from "@/lib/database/schema";
 import * as schema from "@/lib/database/schema";
-import * as dotenv from "dotenv";
 import QueryLogger from "@/lib/utils/queryLogger";
+import { DrizzleMySQLAdapter } from "@lucia-auth/adapter-drizzle";
+import * as dotenv from "dotenv";
+import { drizzle } from "drizzle-orm/mysql2";
+import { Lucia } from "lucia";
+import mysql from "mysql2";
 
 dotenv.config();
 

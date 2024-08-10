@@ -1,14 +1,11 @@
-const isObject = (value: any): boolean => {
+const isObject = (value: unknown): boolean => {
   return value !== null && typeof value === "object";
 };
 
-/**
- * Compares two objects deeply for equality.
- * @param {any} obj1 - The first object to compare.
- * @param {any} obj2 - The second object to compare.
- * @returns {boolean} Returns true if the objects are deeply equal, otherwise false.
- */
-export const compareDeepObjectEquality = (obj1: any, obj2: any): boolean => {
+export const compareDeepObjectEquality = (
+  obj1: Record<string, unknown>,
+  obj2: Record<string, unknown>,
+): boolean => {
   if (obj1 === obj2) return true;
 
   if (obj1 == null || obj2 == null) return false;
@@ -24,7 +21,11 @@ export const compareDeepObjectEquality = (obj1: any, obj2: any): boolean => {
     const areObjects = isObject(value1) && isObject(value2);
 
     if (
-      (areObjects && !compareDeepObjectEquality(value1, value2)) ||
+      (areObjects &&
+        !compareDeepObjectEquality(
+          value1 as Record<string, unknown>,
+          value2 as Record<string, unknown>,
+        )) ||
       (!areObjects && value1 !== value2)
     ) {
       return false;

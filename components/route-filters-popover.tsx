@@ -1,16 +1,22 @@
 "use client";
+import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { BsFilterLeft } from "react-icons/bs";
-import { useQueryStates, parseAsString, UseQueryStatesKeysMap } from "nuqs";
-import { v4 as uuidv4 } from "uuid";
 import { compareDeepObjectEquality } from "@/lib/utils/objectUtils/compareDeepObjectEquality";
-import { useState } from "react";
 import { useTranslations } from "next-intl";
+import {
+  type UseQueryStatesKeysMap,
+  type Values,
+  parseAsString,
+  useQueryStates,
+} from "nuqs";
+import type React from "react";
+import { useState } from "react";
+import { BsFilterLeft } from "react-icons/bs";
+import { v4 as uuidv4 } from "uuid";
 
 export type GenericFilterOption<T> = {
   label: string;
@@ -18,13 +24,13 @@ export type GenericFilterOption<T> = {
   icon: React.JSX.Element;
 };
 
-type RouteFiltersPopoverProps<T extends Record<string, any>> = {
+type RouteFiltersPopoverProps<T extends Record<string, string>> = {
   options: GenericFilterOption<T>[];
   queryKeys: Array<keyof T>;
   triggerLabel?: string;
 };
 
-const RouteFiltersPopover = <T extends Record<string, any>>({
+const RouteFiltersPopover = <T extends Record<string, string>>({
   options,
   queryKeys,
   triggerLabel,
@@ -33,14 +39,18 @@ const RouteFiltersPopover = <T extends Record<string, any>>({
   const [isOpen, setIsOpen] = useState(false);
   const [activeQueryKey, setActiveQueryKey] = useQueryStates(
     {
-      ...queryKeys.reduce((acc, key) => {
-        acc[key] = parseAsString.withDefault("");
-        return acc;
-      }, {} as UseQueryStatesKeysMap<any>),
+      ...queryKeys.reduce(
+        (acc, key) => {
+          // @ts-ignore
+          acc[key] = parseAsString.withDefault("");
+          return acc;
+        },
+        {} as UseQueryStatesKeysMap<unknown>,
+      ),
     },
     {
       shallow: false,
-    }
+    },
   );
 
   const optionsWithIds = options.map((option) => ({
@@ -50,17 +60,21 @@ const RouteFiltersPopover = <T extends Record<string, any>>({
 
   const handleClearFilters = () => {
     setActiveQueryKey(
-      queryKeys.reduce((acc, key) => {
-        // @ts-ignore
-        acc[key] = "";
-        return acc;
-      }, {} as UseQueryStatesKeysMap<any>)
+      queryKeys.reduce(
+        (acc, key) => {
+          // @ts-ignore
+          acc[key] = "";
+          return acc;
+        },
+        {} as UseQueryStatesKeysMap<unknown>,
+      ),
     );
     setIsOpen(false);
   };
 
   const hasActiveFilter = Object.keys(activeQueryKey).some(
-    (key) => activeQueryKey[key] !== ""
+    // biome-ignore lint/complexity/noBannedTypes: it's intentional :(
+    (key) => activeQueryKey[key as keyof Values<{}>] !== "",
   );
 
   const heading = t("heading");

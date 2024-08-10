@@ -4,7 +4,7 @@ import CategoriesPageHeader from "@/components/categories/categories-page-header
 import CategoryCardList from "@/components/categories/category-card-list";
 import RoutePaginationControls from "@/components/route-pagination-controls";
 import { getPaginatedCategories } from "@/server/category";
-import { CategoryType } from "@/typings/categories";
+import type { CategoryType } from "@/typings/categories";
 
 type CategoriesPageSearchParamsType = {
   page: string;
@@ -21,12 +21,12 @@ const CategoriesPage = async ({ searchParams }: CategoriesPageProps) => {
 
   const { categories, ...result } = await getPaginatedCategories({
     query,
-    pageNumber: parseInt(page),
+    pageNumber: Number.parseInt(page),
     type,
   });
 
   const pageHasParams = Object.values(searchParams).some(
-    (param) => param !== ""
+    (param) => param !== "",
   );
 
   return (

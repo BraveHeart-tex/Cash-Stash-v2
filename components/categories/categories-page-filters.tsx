@@ -1,5 +1,5 @@
-import RouteSearchInput from "@/components/route-search-input";
 import QueryStringComboBox from "@/components/query-string-combobox";
+import RouteSearchInput from "@/components/route-search-input";
 import { CATEGORY_TYPES } from "@/lib/constants";
 import { useTranslations } from "next-intl";
 

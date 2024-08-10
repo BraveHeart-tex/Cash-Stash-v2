@@ -35,7 +35,7 @@ export const getGoalSchema = (message: GoalSchemaMessageConfig) => {
         })
         .min(0, currentAmountTooSmall)
         .default(0)
-        .transform((val) => (isNaN(val) ? 0 : val)),
+        .transform((val) => (Number.isNaN(val) ? 0 : val)),
       progress: z.number().default(0),
     })
     .superRefine((data) => {

@@ -1,12 +1,12 @@
+import type { NavigationItem } from "@/typings/constants";
 import { AiOutlineTransaction } from "react-icons/ai";
+import { BiCategory } from "react-icons/bi";
 import { FaCog, FaMoneyBill, FaPiggyBank } from "react-icons/fa";
+import { FaDesktop, FaMoon, FaSun } from "react-icons/fa";
 import { MdDashboard, MdOutlineAccountBalanceWallet } from "react-icons/md";
+import { MdOutlineColorLens } from "react-icons/md";
 import { SiConvertio } from "react-icons/si";
 import { TbReportAnalytics } from "react-icons/tb";
-import { BiCategory } from "react-icons/bi";
-import { FaDesktop, FaMoon, FaSun } from "react-icons/fa";
-import { MdOutlineColorLens } from "react-icons/md";
-import { NavigationItem } from "@/typings/constants";
 
 export const PRIMARY_COLOR = "#c4002b" as const;
 export const PRIMARY_FOREGROUND_COLOR = "#fefcfa" as const;
@@ -57,11 +57,11 @@ export const CAPTCHA_SITE_KEY =
   "6LecwqYpAAAAAEtHM7rnQ8gYCTtI4-fSF6_LK_rs" as const;
 
 export const EMAIL_VERIFICATION_REDIRECTION_PATHS = {
-  INVALID_EMAIL: PAGE_ROUTES.LOGIN_ROUTE + "?error=invalid-email",
-  EXPIRED_CODE: PAGE_ROUTES.LOGIN_ROUTE + "?error=expired-code",
-  INVALID_CODE: PAGE_ROUTES.LOGIN_ROUTE + "?error=invalid-code",
-  TOO_MANY_REQUESTS: PAGE_ROUTES.LOGIN_ROUTE + "?error=too-many-requests",
-  VERIFICATION_TIMEOUT: PAGE_ROUTES.LOGIN_ROUTE + "?error=verification-timeout",
+  INVALID_EMAIL: `${PAGE_ROUTES.LOGIN_ROUTE}?error=invalid-email`,
+  EXPIRED_CODE: `${PAGE_ROUTES.LOGIN_ROUTE}?error=expired-code`,
+  INVALID_CODE: `${PAGE_ROUTES.LOGIN_ROUTE}?error=invalid-code`,
+  TOO_MANY_REQUESTS: `${PAGE_ROUTES.LOGIN_ROUTE}?error=too-many-requests`,
+  VERIFICATION_TIMEOUT: `${PAGE_ROUTES.LOGIN_ROUTE}?error=verification-timeout`,
 } as const;
 
 export const MONTHS_OF_THE_YEAR = [

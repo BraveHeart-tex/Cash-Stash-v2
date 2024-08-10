@@ -1,7 +1,7 @@
 export const generateOptionsFromEnums = (
   enumValues: string[],
   translations: Record<string, string> = {},
-  separator = "_"
+  separator = "_",
 ) => {
   return enumValues.map((value) => {
     return {

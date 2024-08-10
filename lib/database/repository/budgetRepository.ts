@@ -1,8 +1,12 @@
 import { getPageSizeAndSkipAmount } from "@/lib/constants";
 import { db } from "@/lib/database/connection";
-import { budgets, BudgetInsertModel, categories } from "@/lib/database/schema";
-import { and, asc, desc, eq, like, sql, getTableColumns } from "drizzle-orm";
+import {
+  type BudgetInsertModel,
+  budgets,
+  categories,
+} from "@/lib/database/schema";
 import logger from "@/lib/utils/logger";
+import { and, asc, desc, eq, getTableColumns, like, sql } from "drizzle-orm";
 
 type GetMultipleBudgetsParams = {
   page: number;
@@ -153,10 +157,10 @@ const budgetRepository = {
         and(
           eq(budgets.userId, userId),
           like(budgets.name, `%${query}%`),
-          categoryCondition
-        )
+          categoryCondition,
+        ),
       )
-      .orderBy(orderByCondition!)
+      .orderBy(orderByCondition)
       .limit(pageSize)
       .offset(skipAmount);
 
@@ -169,8 +173,8 @@ const budgetRepository = {
         and(
           eq(budgets.userId, userId),
           like(budgets.name, `%${query}%`),
-          categoryCondition
-        )
+          categoryCondition,
+        ),
       );
 
     try {

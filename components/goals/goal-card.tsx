@@ -1,19 +1,19 @@
 "use client";
+import ActionPopover from "@/components/action-popover";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { motion } from "framer-motion";
-import { useRouter } from "@/navigation";
-import { useGenericConfirmStore } from "@/store/genericConfirmStore";
-import useGenericModalStore from "@/store/genericModalStore";
-import { deleteGoal } from "@/server/goal";
-import ActionPopover from "@/components/action-popover";
-import { toast } from "sonner";
-import { GoalSelectModel } from "@/lib/database/schema";
+import type { GoalSelectModel } from "@/lib/database/schema";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import { cn } from "@/lib/utils/stringUtils/cn";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { useRouter } from "@/navigation";
+import { deleteGoal } from "@/server/goal";
 import useAuthStore from "@/store/auth/authStore";
+import { useGenericConfirmStore } from "@/store/genericConfirmStore";
+import useGenericModalStore from "@/store/genericModalStore";
+import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import { toast } from "sonner";
 
 type GoalCardProps = {
   goal: GoalSelectModel;
@@ -22,13 +22,13 @@ type GoalCardProps = {
 const GoalCard = ({ goal }: GoalCardProps) => {
   const t = useTranslations("Components.GoalCard");
   const preferredCurrency = useAuthStore(
-    (state) => state.user?.preferredCurrency
+    (state) => state.user?.preferredCurrency,
   );
   const showGenericConfirm = useGenericConfirmStore(
-    (state) => state.showConfirm
+    (state) => state.showConfirm,
   );
   const openGenericModal = useGenericModalStore(
-    (state) => state.openGenericModal
+    (state) => state.openGenericModal,
   );
   const router = useRouter();
 

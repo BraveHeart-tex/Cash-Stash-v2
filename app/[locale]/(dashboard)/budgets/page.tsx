@@ -1,11 +1,11 @@
-import { getPaginatedBudgets } from "@/server/budget";
-import RoutePaginationControls from "@/components/route-pagination-controls";
-import { getCategoriesByType } from "@/server/category";
-import { CATEGORY_TYPES } from "@/lib/constants";
-import BudgetsPageHeader from "@/components/budgets/budgets-page-header";
-import BudgetsPageFilters from "@/components/budgets/budgets-page-filters";
 import BudgetCardsList from "@/components/budgets/budget-cards-list";
 import BudgetsNotFoundMessage from "@/components/budgets/budgets-not-found-message";
+import BudgetsPageFilters from "@/components/budgets/budgets-page-filters";
+import BudgetsPageHeader from "@/components/budgets/budgets-page-header";
+import RoutePaginationControls from "@/components/route-pagination-controls";
+import { CATEGORY_TYPES } from "@/lib/constants";
+import { getPaginatedBudgets } from "@/server/budget";
+import { getCategoriesByType } from "@/server/category";
 
 type BudgetsPageSearchParamsType = {
   page: string;
@@ -21,7 +21,7 @@ type BudgetsPageProps = {
 
 const BudgetsPage = async ({ searchParams }: BudgetsPageProps) => {
   const actionParams = {
-    pageNumber: parseInt(searchParams.page) || 1,
+    pageNumber: Number.parseInt(searchParams.page) || 1,
     query: searchParams.query || "",
     category: Number(searchParams.category),
     sortBy: searchParams.sortBy || "",

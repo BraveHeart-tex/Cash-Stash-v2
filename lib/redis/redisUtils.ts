@@ -1,21 +1,19 @@
 import { CACHE_PREFIXES } from "@/lib/constants";
-import { GoalSelectModel } from "@/lib/database/schema";
+import type { GoalSelectModel } from "@/lib/database/schema";
 import redisService from "@/lib/redis/redisService";
-import { BudgetWithCategory } from "@/typings/budgets";
+import type { BudgetWithCategory } from "@/typings/budgets";
 
 type Entity = {
-  [key: string]: any;
+  [key: string]: unknown;
 };
 
 type MappingConfig<T> = {
-  // eslint-disable-next-line no-unused-vars
   [K in keyof T]: (value: string) => T[K];
 };
 
 const mapRedisHashToEntity = <T extends Entity>(
   hash: Record<string, string> | null,
-  // eslint-disable-next-line no-unused-vars
-  mappingConfig: MappingConfig<T>
+  mappingConfig: MappingConfig<T>,
 ): T | null => {
   if (!hash) {
     return null;
@@ -33,17 +31,17 @@ const mapRedisHashToEntity = <T extends Entity>(
 
 export const generateCachePrefixWithUserId = (
   prefix: string,
-  userId: string
+  userId: string,
 ) => {
   return `${prefix}:${userId}`;
 };
 
-export const getVerifyVerificationCodeRateLimitKey = (ipAdress: string) => {
-  return `${CACHE_PREFIXES.VERIFY_VERIFICATION_CODE_RATE_LIMIT}:${ipAdress}`;
+export const getVerifyVerificationCodeRateLimitKey = (ipAddress: string) => {
+  return `${CACHE_PREFIXES.VERIFY_VERIFICATION_CODE_RATE_LIMIT}:${ipAddress}`;
 };
 
-export const getSendVerificationCodeRateLimitKey = (ipAdress: string) => {
-  return `${CACHE_PREFIXES.SEND_VERIFICATION_CODE_RATE_LIMIT}:${ipAdress}`;
+export const getSendVerificationCodeRateLimitKey = (ipAddress: string) => {
+  return `${CACHE_PREFIXES.SEND_VERIFICATION_CODE_RATE_LIMIT}:${ipAddress}`;
 };
 
 export const getAccountKey = (accountId: number) =>
@@ -180,7 +178,7 @@ export const getPaginatedTransactionsKey = ({
   return (
     generateCachePrefixWithUserId(
       CACHE_PREFIXES.PAGINATED_TRANSACTIONS,
-      userId
+      userId,
     ) +
     JSON.stringify({
       userId,
@@ -196,7 +194,7 @@ export const getPaginatedTransactionsKey = ({
 };
 
 export const mapRedisHashToBudget = (
-  budgetFromCache: Record<string, string> | null
+  budgetFromCache: Record<string, string> | null,
 ): BudgetWithCategory | null => {
   const mappingConfig = {
     id: (value: string) => Number(value),
@@ -213,12 +211,12 @@ export const mapRedisHashToBudget = (
 
   return mapRedisHashToEntity<BudgetWithCategory>(
     budgetFromCache,
-    mappingConfig
+    mappingConfig,
   );
 };
 
 export const mapRedisHashToGoal = (
-  goalFromCache: Record<string, string> | null
+  goalFromCache: Record<string, string> | null,
 ): GoalSelectModel | null => {
   const mappingConfig = {
     id: (value: string) => Number(value),
@@ -242,8 +240,8 @@ export const checkRateLimitGeneric = async (key: string) => {
   return count;
 };
 
-export const checkRateLimit = async (ipAdress: string) => {
-  const key = getLoginRateLimitKey(ipAdress);
+export const checkRateLimit = async (ipAddress: string) => {
+  const key = getLoginRateLimitKey(ipAddress);
   const count = await redisService.incr(key);
   if (count === 1) {
     await redisService.expire(key, 60);
@@ -252,9 +250,9 @@ export const checkRateLimit = async (ipAdress: string) => {
 };
 
 export const checkIPBasedSendVerificationCodeRateLimit = async (
-  ipAdress: string
+  ipAddress: string,
 ) => {
-  const key = getSendVerificationCodeRateLimitKey(ipAdress);
+  const key = getSendVerificationCodeRateLimitKey(ipAddress);
   const count = await redisService.incr(key);
   if (count === 1) {
     await redisService.expire(key, 60);
@@ -263,7 +261,7 @@ export const checkIPBasedSendVerificationCodeRateLimit = async (
 };
 
 export const checkUserIdBasedSendVerificationCodeRateLimit = async (
-  userId: string
+  userId: string,
 ) => {
   const key = `${CACHE_PREFIXES.SEND_VERIFICATION_CODE_RATE_LIMIT}:${userId}`;
   const count = await redisService.incr(key);
@@ -275,9 +273,9 @@ export const checkUserIdBasedSendVerificationCodeRateLimit = async (
 
 export const checkSignUpRateLimit = async (
   userId: string,
-  ipAdress: string
+  ipAddress: string,
 ) => {
-  const key = getSignUpRateLimitKey(userId, ipAdress);
+  const key = getSignUpRateLimitKey(userId, ipAddress);
   const count = await redisService.incr(key);
   if (count === 1) {
     await redisService.expire(key, 60);
@@ -285,8 +283,8 @@ export const checkSignUpRateLimit = async (
   return count;
 };
 
-export const verifyVerificationCodeRateLimit = async (ipAdress: string) => {
-  const key = getVerifyVerificationCodeRateLimitKey(ipAdress);
+export const verifyVerificationCodeRateLimit = async (ipAddress: string) => {
+  const key = getVerifyVerificationCodeRateLimitKey(ipAddress);
   const count = await redisService.incr(key);
   if (count === 1) {
     await redisService.expire(key, 60);
@@ -295,9 +293,9 @@ export const verifyVerificationCodeRateLimit = async (ipAdress: string) => {
 };
 
 export const verifyResetPasswordLinkRequestRateLimit = async (
-  ipAdress: string
+  ipAddress: string,
 ) => {
-  const key = `${CACHE_PREFIXES.RESET_PASSWORD_LINK_REQUEST_RATE_LIMIT}:${ipAdress}`;
+  const key = `${CACHE_PREFIXES.RESET_PASSWORD_LINK_REQUEST_RATE_LIMIT}:${ipAddress}`;
   const count = await redisService.incr(key);
   if (count === 1) {
     await redisService.expire(key, 60);
@@ -305,8 +303,8 @@ export const verifyResetPasswordLinkRequestRateLimit = async (
   return count;
 };
 
-export const checkIpBasedTwoFactorAuthRateLimit = async (ipAdress: string) => {
-  const key = `${CACHE_PREFIXES.TWO_FACTOR_AUTH_RATE_LIMIT}:${ipAdress}`;
+export const checkIpBasedTwoFactorAuthRateLimit = async (ipAddress: string) => {
+  const key = `${CACHE_PREFIXES.TWO_FACTOR_AUTH_RATE_LIMIT}:${ipAddress}`;
   const count = await redisService.incr(key);
   if (count === 1) {
     await redisService.expire(key, 60);
@@ -315,7 +313,7 @@ export const checkIpBasedTwoFactorAuthRateLimit = async (ipAdress: string) => {
 };
 
 export const checkUserIdBasedTwoFactorAuthRateLimit = async (
-  userId: string
+  userId: string,
 ) => {
   const key = `${CACHE_PREFIXES.TWO_FACTOR_AUTH_RATE_LIMIT}:${userId}`;
   const count = await redisService.incr(key);

@@ -1,11 +1,11 @@
+import type { TransactionPageSearchParams } from "@/app/[locale]/(dashboard)/transactions/page";
 import MotionDiv from "@/components/animations/motion-div";
+import IncomeAndExpenseChart from "@/components/income-expense-chart";
+import { transactionTableColumns } from "@/components/reports/transactions-data-table/transaction-table-columns";
+import { DataTable } from "@/components/ui/data-table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getChartData } from "@/server";
 import { getPaginatedTransactions } from "@/server/transaction";
-import { DataTable } from "@/components/ui/data-table";
-import { transactionTableColumns } from "@/components/reports/transactions-data-table/transaction-table-columns";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import IncomeAndExpenseChart from "@/components/income-expense-chart";
-import { TransactionPageSearchParams } from "@/app/[locale]/(dashboard)/transactions/page";
 import { getTranslations } from "next-intl/server";
 
 type ReportsPageProps = {
@@ -25,7 +25,7 @@ const ReportsPage = async ({ searchParams }: ReportsPageProps) => {
     getChartData(),
     getPaginatedTransactions({
       transactionType: transactionType as "all" | "income" | "expense",
-      accountId: parseInt(accountId),
+      accountId: Number.parseInt(accountId),
       sortBy: sortBy as "createdAt" | "amount",
       sortDirection: sortDirection as "asc" | "desc",
       pageNumber: 1,

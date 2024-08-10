@@ -1,8 +1,8 @@
 "use client";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { NAVIGATION_ITEMS } from "@/lib/constants";
-import { TabsList, TabsTrigger, Tabs } from "@/components/ui/tabs";
+import { Link, usePathname } from "@/navigation";
 import { motion } from "framer-motion";
-import { usePathname, Link } from "@/navigation";
 import { useTranslations } from "next-intl";
 
 const NavigationTabsList = () => {
@@ -31,8 +31,9 @@ const NavigationTabsList = () => {
                     className="absolute inset-0 rounded-md bg-gradient-to-r from-primary to-primary/70"
                   />
                 )}
-                <span className={`relative z-10 flex items-center`}>
+                <span className="relative z-10 flex items-center">
                   <page.icon className={"mr-1 h-6 w-6"} />
+                  {/* biome-ignore lint/suspicious/noExplicitAny: it's intentional */}
                   {t(`${page.link}.label` as any)}
                 </span>
               </Link>

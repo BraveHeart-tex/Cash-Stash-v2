@@ -1,4 +1,5 @@
 "use client";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -7,9 +8,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { getGenericDialogContent } from "@/lib/getGenericModalContent";
-import { useMediaQuery } from "usehooks-ts";
 import {
   Drawer,
   DrawerClose,
@@ -18,7 +16,9 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
+import { getGenericDialogContent } from "@/lib/getGenericModalContent";
 import useGenericModalStore from "@/store/genericModalStore";
+import { useMediaQuery } from "usehooks-ts";
 
 type GenericModalProps = {
   cancelLabel?: string;

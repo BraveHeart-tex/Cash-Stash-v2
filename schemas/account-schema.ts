@@ -22,7 +22,7 @@ export const getAccountSchema = (messageConfig: MessageConfig) => {
         required_error: balanceErrorMessage,
         invalid_type_error: balanceErrorMessage,
       })
-      .transform((val) => (isNaN(val) ? 0 : val))
+      .transform((val) => (Number.isNaN(val) ? 0 : val))
       .default(0),
     category: z
       .enum(accounts.category.enumValues, {

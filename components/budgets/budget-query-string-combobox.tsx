@@ -1,10 +1,10 @@
 "use client";
-import useCategoriesStore from "@/store/categoriesStore";
 import QueryStringComboBox from "@/components/query-string-combobox";
 import { CATEGORY_TYPES } from "@/lib/constants";
-import { useEffect } from "react";
-import { CategorySelectModel } from "@/lib/database/schema";
+import type { CategorySelectModel } from "@/lib/database/schema";
+import useCategoriesStore from "@/store/categoriesStore";
 import { useTranslations } from "next-intl";
+import { useEffect } from "react";
 
 type BudgetQueryStringComboboxProps = {
   initialBudgetCategories: CategorySelectModel[];
@@ -15,7 +15,7 @@ const BudgetQueryStringCombobox = ({
 }: BudgetQueryStringComboboxProps) => {
   const t = useTranslations("Components.BudgetQueryStringCombobox");
   const budgetOptions = useCategoriesStore((state) => state.categories).filter(
-    (category) => category.type === CATEGORY_TYPES.BUDGET
+    (category) => category.type === CATEGORY_TYPES.BUDGET,
   );
   const setCategories = useCategoriesStore((state) => state.setCategories);
 

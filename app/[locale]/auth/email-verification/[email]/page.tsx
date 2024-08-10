@@ -1,6 +1,7 @@
-import { checkEmailValidityBeforeVerification } from "@/server/auth";
 import EmailVerificationInput from "@/components/auth/email-verification-input";
 import EmailVerificationTimer from "@/components/auth/email-verification-timer";
+import Logo from "@/components/logo";
+import ResendVerificationTokenButton from "@/components/resend-verification-token-button";
 import {
   Card,
   CardContent,
@@ -16,8 +17,7 @@ import {
   PAGE_ROUTES,
 } from "@/lib/constants";
 import { redirect } from "@/navigation";
-import ResendVerificationTokenButton from "@/components/resend-verification-token-button";
-import Logo from "@/components/logo";
+import { checkEmailValidityBeforeVerification } from "@/server/auth";
 
 type EmailVerificationPageProps = {
   params: {

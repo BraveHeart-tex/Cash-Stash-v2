@@ -1,10 +1,10 @@
 "use client";
-import { cn } from "@/lib/utils/stringUtils/cn";
 import { Button } from "@/components/ui/button";
-import useGenericModalStore from "@/store/genericModalStore";
-import { FaPlus } from "react-icons/fa";
+import { cn } from "@/lib/utils/stringUtils/cn";
 import { useRouter } from "@/navigation";
+import useGenericModalStore from "@/store/genericModalStore";
 import { useTranslations } from "next-intl";
+import { FaPlus } from "react-icons/fa";
 
 type CreateCategoryButtonProps = {
   className?: string;
@@ -14,10 +14,10 @@ const CreateCategoryButton = ({ className }: CreateCategoryButtonProps) => {
   const t = useTranslations("Components.CreateCategoryButton");
   const router = useRouter();
   const closeGenericModal = useGenericModalStore(
-    (state) => state.closeGenericModal
+    (state) => state.closeGenericModal,
   );
   const openGenericModal = useGenericModalStore(
-    (state) => state.openGenericModal
+    (state) => state.openGenericModal,
   );
 
   const buttonLabel = t("buttonLabel");

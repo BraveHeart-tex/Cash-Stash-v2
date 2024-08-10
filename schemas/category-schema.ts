@@ -8,7 +8,7 @@ type CategorySchemaMessageConfig = {
 };
 
 export const getCategorySchema = (
-  messageConfig: CategorySchemaMessageConfig
+  messageConfig: CategorySchemaMessageConfig,
 ) => {
   const {
     nameRequiredErrorMessage,

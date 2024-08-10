@@ -1,11 +1,11 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { FaRegClock } from "react-icons/fa";
-import ReminderCard from "@/components/reminder-card";
 import AnimatePresenceClient from "@/components/animations/animate-presence";
 import MotionDiv from "@/components/animations/motion-div";
+import ReminderCard from "@/components/reminder-card";
+import { Button } from "@/components/ui/button";
+import type { ReminderSelectModel } from "@/lib/database/schema";
 import useGenericModalStore from "@/store/genericModalStore";
-import { ReminderSelectModel } from "@/lib/database/schema";
+import { FaRegClock } from "react-icons/fa";
 
 const NotificationsAndReminders = ({
   reminders,
@@ -13,7 +13,7 @@ const NotificationsAndReminders = ({
   reminders: ReminderSelectModel[];
 }) => {
   const openGenericModal = useGenericModalStore(
-    (state) => state.openGenericModal
+    (state) => state.openGenericModal,
   );
 
   const noRemindersState = () => (

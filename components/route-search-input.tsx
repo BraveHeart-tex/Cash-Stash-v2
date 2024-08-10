@@ -1,11 +1,11 @@
 "use client";
-import { ChangeEvent, useEffect } from "react";
 import { Input } from "@/components/ui/input";
-import { useDebounceValue } from "usehooks-ts";
-import { FaSearch } from "react-icons/fa";
-import { useQueryState } from "nuqs";
 import { Label } from "@/components/ui/label";
 import { useTranslations } from "next-intl";
+import { useQueryState } from "nuqs";
+import { type ChangeEvent, useEffect } from "react";
+import { FaSearch } from "react-icons/fa";
+import { useDebounceValue } from "usehooks-ts";
 
 type RouteSearchInputProps = {
   placeholder: string;
@@ -25,8 +25,7 @@ const RouteSearchInput = ({ placeholder }: RouteSearchInputProps) => {
 
   useEffect(() => {
     setSearchQuery(debouncedQuery);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedQuery]);
+  }, [debouncedQuery, setSearchQuery]);
 
   return (
     <div className="w-full lg:w-96">

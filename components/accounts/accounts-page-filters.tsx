@@ -2,7 +2,7 @@ import QueryStringComboBox from "@/components/query-string-combobox";
 import RouteFiltersPopover from "@/components/route-filters-popover";
 import RouteSearchInput from "@/components/route-search-input";
 import {
-  AccountSelectModel,
+  type AccountSelectModel,
   accounts as accountsTable,
 } from "@/lib/database/schema";
 import { useTranslations } from "next-intl";

@@ -1,26 +1,11 @@
 "use server";
+import {
+  authenticatedAction,
+  authenticatedActionWithNoParams,
+  sendEmailVerificationCode,
+  sendResetPasswordLink,
+} from "@/lib/auth/authUtils";
 import { getUser } from "@/lib/auth/session";
-import { Argon2id } from "oslo/password";
-import { LoginSchemaType, getLoginSchema } from "@/schemas/login-schema";
-import {
-  RegisterSchemaType,
-  getRegisterSchema,
-} from "@/schemas/register-schema";
-import { ZodError } from "zod";
-import { cookies, headers } from "next/headers";
-import { redirect } from "@/navigation";
-import { createTOTPKeyURI, TOTPController } from "oslo/otp";
-import { decodeHex, encodeHex } from "oslo/encoding";
-import {
-  checkRateLimit,
-  checkIPBasedSendVerificationCodeRateLimit,
-  checkSignUpRateLimit,
-  checkUserIdBasedSendVerificationCodeRateLimit,
-  verifyVerificationCodeRateLimit,
-  verifyResetPasswordLinkRequestRateLimit,
-  checkIpBasedTwoFactorAuthRateLimit,
-  checkUserIdBasedTwoFactorAuthRateLimit,
-} from "@/lib/redis/redisUtils";
 import {
   EMAIL_VERIFICATION_REDIRECTION_PATHS,
   MAX_LOGIN_REQUESTS_PER_MINUTE,
@@ -32,35 +17,50 @@ import {
   SEND_VERIFICATION_CODE_RATE_LIMIT,
   getResetPasswordUrl,
 } from "@/lib/constants";
-import {
-  authenticatedAction,
-  authenticatedActionWithNoParams,
-  sendEmailVerificationCode,
-  sendResetPasswordLink,
-} from "@/lib/auth/authUtils";
-import { revalidatePath } from "next/cache";
-import { isWithinExpirationDate } from "oslo";
 import { db, lucia } from "@/lib/database/connection";
-import userRepository from "@/lib/database/repository/userRepository";
 import emailVerificationCodeRepository from "@/lib/database/repository/emailVerificationCodeRepository";
 import passwordResetTokenRepository from "@/lib/database/repository/passwordResetTokenRepository";
 import twoFactorAuthenticationSecretRepository from "@/lib/database/repository/twoFactorAuthenticationSecretRepository";
-import { processZodError } from "@/lib/utils/objectUtils/processZodError";
+import userRepository from "@/lib/database/repository/userRepository";
 import { twoFactorAuthenticationSecrets } from "@/lib/database/schema";
-import { eq } from "drizzle-orm";
+import {
+  checkIPBasedSendVerificationCodeRateLimit,
+  checkIpBasedTwoFactorAuthRateLimit,
+  checkRateLimit,
+  checkSignUpRateLimit,
+  checkUserIdBasedSendVerificationCodeRateLimit,
+  checkUserIdBasedTwoFactorAuthRateLimit,
+  verifyResetPasswordLinkRequestRateLimit,
+  verifyVerificationCodeRateLimit,
+} from "@/lib/redis/redisUtils";
 import logger from "@/lib/utils/logger";
-import { getTranslations } from "next-intl/server";
+import { processZodError } from "@/lib/utils/objectUtils/processZodError";
+import { redirect } from "@/navigation";
+import { type LoginSchemaType, getLoginSchema } from "@/schemas/login-schema";
+import {
+  type RegisterSchemaType,
+  getRegisterSchema,
+} from "@/schemas/register-schema";
+import { createPasswordResetToken } from "@/server/passwordResetToken";
 import {
   generateEmailVerificationCode,
   verifyVerificationCode,
 } from "@/server/verificationCode";
-import { createPasswordResetToken } from "@/server/passwordResetToken";
-import { ActivateTwoFactorAuthenticationReturnType } from "@/typings/auth";
+import type { ActivateTwoFactorAuthenticationReturnType } from "@/typings/auth";
+import { eq } from "drizzle-orm";
+import { getTranslations } from "next-intl/server";
+import { revalidatePath } from "next/cache";
+import { cookies, headers } from "next/headers";
+import { isWithinExpirationDate } from "oslo";
+import { decodeHex, encodeHex } from "oslo/encoding";
+import { TOTPController, createTOTPKeyURI } from "oslo/otp";
+import { Argon2id } from "oslo/password";
+import { ZodError } from "zod";
 
 export const login = async (values: LoginSchemaType) => {
   const header = headers();
   const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
-    ","
+    ",",
   )[0];
   const count = await checkRateLimit(ipAddress);
 
@@ -96,7 +96,7 @@ export const login = async (values: LoginSchemaType) => {
 
     const isPasswordValid = await new Argon2id().verify(
       existingUser.hashedPassword,
-      data.password
+      data.password,
     );
 
     if (!isPasswordValid) {
@@ -123,7 +123,7 @@ export const login = async (values: LoginSchemaType) => {
     cookies().set(
       sessionCookie.name,
       sessionCookie.value,
-      sessionCookie.attributes
+      sessionCookie.attributes,
     );
 
     return {
@@ -172,7 +172,7 @@ export const register = async (values: RegisterSchemaType) => {
     if (userExists && !userExists.emailVerified) {
       const header = headers();
       const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
-        ","
+        ",",
       )[0];
       const count = await checkSignUpRateLimit(userExists.id, ipAddress);
 
@@ -213,7 +213,7 @@ export const register = async (values: RegisterSchemaType) => {
         email: data.email,
         hashedPassword,
       },
-      true
+      true,
     );
 
     const { affectedRows, user } = createUserResponse;
@@ -227,7 +227,7 @@ export const register = async (values: RegisterSchemaType) => {
 
     const verificationCode = await generateEmailVerificationCode(
       user.id,
-      user.email
+      user.email,
     );
 
     await sendEmailVerificationCode(user.email, verificationCode);
@@ -272,7 +272,7 @@ export const logout = async () => {
   cookies().set(
     sessionCookie.name,
     sessionCookie.value,
-    sessionCookie.attributes
+    sessionCookie.attributes,
   );
   return redirect(PAGE_ROUTES.LOGIN_ROUTE);
 };
@@ -291,7 +291,7 @@ export const checkEmailValidityBeforeVerification = async (email: string) => {
     const verificationCode =
       await emailVerificationCodeRepository.getByEmailAndUserId(
         email,
-        userWithEmail.id
+        userWithEmail.id,
       );
 
     if (!verificationCode) {
@@ -305,7 +305,8 @@ export const checkEmailValidityBeforeVerification = async (email: string) => {
       hasValidVerificationCode: !!verificationCode,
       timeLeft: verificationCode?.expiresAt
         ? Math.floor(
-            (new Date(verificationCode.expiresAt).getTime() - Date.now()) / 1000
+            (new Date(verificationCode.expiresAt).getTime() - Date.now()) /
+              1000,
           )
         : 0,
     };
@@ -333,7 +334,7 @@ export const handleEmailVerification = async (email: string, code: string) => {
     if (!isValid) {
       const header = headers();
       const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
-        ","
+        ",",
       )[0];
       const verificationCount =
         await verifyVerificationCodeRateLimit(ipAddress);
@@ -366,7 +367,7 @@ export const handleEmailVerification = async (email: string, code: string) => {
     cookies().set(
       sessionCookie.name,
       sessionCookie.value,
-      sessionCookie.attributes
+      sessionCookie.attributes,
     );
 
     await emailVerificationCodeRepository.deleteByUserId(user.id);
@@ -386,11 +387,11 @@ export const handleEmailVerification = async (email: string, code: string) => {
 
 export const resendEmailVerificationCode = async (email: string) => {
   const actionT = await getTranslations(
-    "Actions.Auth.resendEmailVerificationCode"
+    "Actions.Auth.resendEmailVerificationCode",
   );
   const header = headers();
   const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
-    ","
+    ",",
   )[0];
   const count = await checkIPBasedSendVerificationCodeRateLimit(ipAddress);
   if (count >= SEND_VERIFICATION_CODE_RATE_LIMIT) {
@@ -410,7 +411,7 @@ export const resendEmailVerificationCode = async (email: string) => {
   }
 
   const userIdBasedCount = await checkUserIdBasedSendVerificationCodeRateLimit(
-    user.id
+    user.id,
   );
 
   if (userIdBasedCount >= SEND_VERIFICATION_CODE_RATE_LIMIT) {
@@ -422,12 +423,12 @@ export const resendEmailVerificationCode = async (email: string) => {
 
   const verificationCode = await generateEmailVerificationCode(
     user.id,
-    user.email
+    user.email,
   );
 
   await sendEmailVerificationCode(user.email, verificationCode);
 
-  revalidatePath(PAGE_ROUTES.EMAIL_VERIFICATION_ROUTE + "/" + email, "layout");
+  revalidatePath(`${PAGE_ROUTES.EMAIL_VERIFICATION_ROUTE}/${email}`, "layout");
 
   return {
     isError: false,
@@ -439,7 +440,7 @@ export const sendPasswordResetEmail = async (email: string) => {
   const actionT = await getTranslations("Actions.Auth.sendPasswordResetEmail");
   const header = headers();
   const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
-    ","
+    ",",
   )[0];
   const count = await verifyResetPasswordLinkRequestRateLimit(ipAddress);
   if (count >= MAX_RESET_PASSWORD_LINK_REQUESTS_PER_MINUTE) {
@@ -542,7 +543,7 @@ export const resetPassword = async ({
   cookies().set(
     sessionCookie.name,
     sessionCookie.value,
-    sessionCookie.attributes
+    sessionCookie.attributes,
   );
 
   return {
@@ -565,7 +566,7 @@ export const enableTwoFactorAuthentication = authenticatedActionWithNoParams(
     });
 
     return createTOTPKeyURI("CashStash", user.email, twoFactorSecret);
-  }
+  },
 );
 
 export const activateTwoFactorAuthentication = authenticatedAction<
@@ -573,11 +574,11 @@ export const activateTwoFactorAuthentication = authenticatedAction<
   string
 >(async (otp, { user }) => {
   const t = await getTranslations(
-    "Actions.Auth.activateTwoFactorAuthentication"
+    "Actions.Auth.activateTwoFactorAuthentication",
   );
 
   const result = await twoFactorAuthenticationSecretRepository.getByUserId(
-    user.id
+    user.id,
   );
 
   if (!result) {
@@ -589,7 +590,7 @@ export const activateTwoFactorAuthentication = authenticatedAction<
 
   const isValid = await new TOTPController().verify(
     otp,
-    decodeHex(result.secret)
+    decodeHex(result.secret),
   );
 
   if (!isValid) {
@@ -612,7 +613,7 @@ export const activateTwoFactorAuthentication = authenticatedAction<
 export const validateOTP = async (otp: string, email: string) => {
   const header = headers();
   const ipAddress = (header.get("x-forwarded-for") ?? "127.0.0.1").split(
-    ","
+    ",",
   )[0];
   const t = await getTranslations("Actions.Auth.validateOTP");
   const count = await checkIpBasedTwoFactorAuthRateLimit(ipAddress);
@@ -636,7 +637,7 @@ export const validateOTP = async (otp: string, email: string) => {
   }
 
   const userIdBasedCount = await checkUserIdBasedTwoFactorAuthRateLimit(
-    user.id
+    user.id,
   );
 
   if (userIdBasedCount >= MAX_TWO_FACTOR_AUTH_ATTEMPTS) {
@@ -648,7 +649,7 @@ export const validateOTP = async (otp: string, email: string) => {
   }
 
   const result = await twoFactorAuthenticationSecretRepository.getByUserId(
-    user.id
+    user.id,
   );
 
   if (!result) {
@@ -661,7 +662,7 @@ export const validateOTP = async (otp: string, email: string) => {
 
   const isValid = await new TOTPController().verify(
     otp,
-    decodeHex(result.secret)
+    decodeHex(result.secret),
   );
 
   if (!isValid) {
@@ -678,7 +679,7 @@ export const validateOTP = async (otp: string, email: string) => {
   cookies().set(
     sessionCookie.name,
     sessionCookie.value,
-    sessionCookie.attributes
+    sessionCookie.attributes,
   );
 
   return {
@@ -695,11 +696,11 @@ export const disableTwoFactorAuthentication = async () => {
   }
 
   const actionT = await getTranslations(
-    "Actions.Auth.disableTwoFactorAuthentication"
+    "Actions.Auth.disableTwoFactorAuthentication",
   );
   try {
     await twoFactorAuthenticationSecretRepository.removeTwoFactorAuthenticationSecret(
-      user.id
+      user.id,
     );
 
     await userRepository.updateUser(user.id, {
@@ -769,6 +770,6 @@ export const getTwoFactorAuthURI = async () => {
   return createTOTPKeyURI(
     "CashStash",
     user.email,
-    decodeHex(twoFactorAuthenticationSecret.secret)
+    decodeHex(twoFactorAuthenticationSecret.secret),
   );
 };

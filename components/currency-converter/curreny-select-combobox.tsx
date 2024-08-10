@@ -1,12 +1,12 @@
 "use client";
-import { useQueryState } from "nuqs";
-import { CURRENCIES, FLAGS_BY_CURRENCY_SYMBOL } from "@/lib/constants";
-import Combobox from "@/components/ui/combobox";
 import { Button } from "@/components/ui/button";
-import { FaChevronDown } from "react-icons/fa";
+import Combobox from "@/components/ui/combobox";
+import { CURRENCIES, FLAGS_BY_CURRENCY_SYMBOL } from "@/lib/constants";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import { getTranslatedLabelForCurrency } from "@/lib/utils/translationUtils/getTranslatedLabelForCurrency";
 import { useTranslations } from "next-intl";
+import { useQueryState } from "nuqs";
+import { FaChevronDown } from "react-icons/fa";
 
 const CurrencySelectCombobox = ({
   queryKey,

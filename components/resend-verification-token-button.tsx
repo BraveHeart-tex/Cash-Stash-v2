@@ -1,11 +1,11 @@
 "use client";
-import { resendEmailVerificationCode } from "@/server/auth";
 import { Button } from "@/components/ui/button";
+import { resendEmailVerificationCode } from "@/server/auth";
 import { useTransition } from "react";
 import { toast } from "sonner";
 
 const ResendVerificationTokenButton = ({ email }: { email: string }) => {
-  let [isPending, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
 
   const handleRequestAgain = async () => {
     startTransition(async () => {

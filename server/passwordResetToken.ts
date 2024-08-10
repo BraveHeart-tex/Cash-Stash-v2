@@ -1,11 +1,11 @@
 "use server";
-import { TimeSpan, createDate } from "oslo";
 import { FORGOT_PASSWORD_LINK_EXPIRATION_MINUTES } from "@/lib/constants";
-import { generateId } from "lucia";
 import { db } from "@/lib/database/connection";
 import { passwordResetTokens } from "@/lib/database/schema";
+import { convertISOToMysqlDateTime } from "@/lib/utils/dateUtils/convertISOToMysqlDateTime";
 import { eq } from "drizzle-orm";
-import { convertISOToMysqlDatetime } from "@/lib/utils/dateUtils/convertISOToMysqlDatetime";
+import { generateId } from "lucia";
+import { TimeSpan, createDate } from "oslo";
 
 export const createPasswordResetToken = async (userId: string) => {
   await db
@@ -16,10 +16,10 @@ export const createPasswordResetToken = async (userId: string) => {
   await db.insert(passwordResetTokens).values({
     id: tokenId,
     userId,
-    expiresAt: convertISOToMysqlDatetime(
+    expiresAt: convertISOToMysqlDateTime(
       createDate(
-        new TimeSpan(FORGOT_PASSWORD_LINK_EXPIRATION_MINUTES, "m")
-      ).toISOString()
+        new TimeSpan(FORGOT_PASSWORD_LINK_EXPIRATION_MINUTES, "m"),
+      ).toISOString(),
     ),
   });
 

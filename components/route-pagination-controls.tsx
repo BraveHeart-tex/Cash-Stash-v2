@@ -1,9 +1,9 @@
 "use client";
-import { useQueryState } from "nuqs";
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
+import { useQueryState } from "nuqs";
 import { useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { useTranslations } from "next-intl";
 
 type PaginationControlsProps = {
   currentPage: number;
@@ -30,7 +30,9 @@ const RoutePaginationControls = ({
     setChangingPage(true);
     setPage((prevPage) => {
       const nextPage =
-        type === "increment" ? parseInt(prevPage) + 1 : parseInt(prevPage) - 1;
+        type === "increment"
+          ? Number.parseInt(prevPage) + 1
+          : Number.parseInt(prevPage) - 1;
       return nextPage.toString();
     });
     setChangingPage(false);

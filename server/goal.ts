@@ -1,27 +1,27 @@
 "use server";
-import { GoalSchemaType, getGoalSchema } from "@/schemas/goal-schema";
-import { ZodError } from "zod";
+import { authenticatedAction } from "@/lib/auth/authUtils";
+import { CACHE_PREFIXES } from "@/lib/constants";
+import goalRepository from "@/lib/database/repository/goalRepository";
+import type { GoalSelectModel } from "@/lib/database/schema";
+import redisService from "@/lib/redis/redisService";
 import {
   generateCachePrefixWithUserId,
   getGoalKey,
   getPaginatedGoalsKeys,
   mapRedisHashToGoal,
 } from "@/lib/redis/redisUtils";
-import { CACHE_PREFIXES } from "@/lib/constants";
-import goalRepository from "@/lib/database/repository/goalRepository";
-import redisService from "@/lib/redis/redisService";
-import { GoalSelectModel } from "@/lib/database/schema";
-import { processZodError } from "@/lib/utils/objectUtils/processZodError";
 import logger from "@/lib/utils/logger";
-import {
+import { processZodError } from "@/lib/utils/objectUtils/processZodError";
+import { type GoalSchemaType, getGoalSchema } from "@/schemas/goal-schema";
+import type {
   CreateGoalReturnType,
   DeleteGoalReturnType,
   GetPaginatedGoalsParams,
   GetPaginatedGoalsReturnType,
   UpdateGoalReturnType,
 } from "@/typings/goals";
-import { authenticatedAction } from "@/lib/auth/authUtils";
 import { getTranslations } from "next-intl/server";
+import { ZodError } from "zod";
 
 const getGoalSchemaWithTranslations = async () => {
   const zodT = await getTranslations("Zod.Goal");
@@ -59,7 +59,7 @@ export const createGoal = authenticatedAction<
 
     await Promise.all([
       redisService.invalidateKeysStartingWith(
-        generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_GOALS, user.id)
+        generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_GOALS, user.id),
       ),
       redisService.hset(getGoalKey(goal.id), goal),
     ]);
@@ -104,7 +104,7 @@ export const updateGoal = authenticatedAction<
 
     const { affectedRows, updatedGoal } = await goalRepository.update(
       goalId,
-      validatedData
+      validatedData,
     );
 
     if (affectedRows === 0 || !updatedGoal)
@@ -115,7 +115,7 @@ export const updateGoal = authenticatedAction<
 
     await Promise.all([
       redisService.invalidateKeysStartingWith(
-        generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_GOALS, user.id)
+        generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_GOALS, user.id),
       ),
       redisService.hset(getGoalKey(updatedGoal.id), updatedGoal),
     ]);
@@ -216,7 +216,10 @@ export const deleteGoal = authenticatedAction<DeleteGoalReturnType, number>(
 
       await Promise.all([
         redisService.invalidateKeysStartingWith(
-          generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_GOALS, user.id)
+          generateCachePrefixWithUserId(
+            CACHE_PREFIXES.PAGINATED_GOALS,
+            user.id,
+          ),
         ),
         redisService.del(getGoalKey(goalId)),
       ]);
@@ -228,5 +231,5 @@ export const deleteGoal = authenticatedAction<DeleteGoalReturnType, number>(
         error: actionT("internalErrorMessage"),
       };
     }
-  }
+  },
 );

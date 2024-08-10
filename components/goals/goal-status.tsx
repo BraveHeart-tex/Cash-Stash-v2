@@ -1,10 +1,10 @@
-import GoalCard from "@/components/goals/goal-card";
-import CreateGoalButton from "@/components/create-buttons/create-goal-button";
 import AnimatePresenceClient from "@/components/animations/animate-presence";
+import CreateGoalButton from "@/components/create-buttons/create-goal-button";
+import GoalCard from "@/components/goals/goal-card";
 import { Button } from "@/components/ui/button";
-import { Link } from "@/navigation";
 import { PAGE_ROUTES } from "@/lib/constants";
-import { GoalSelectModel } from "@/lib/database/schema";
+import type { GoalSelectModel } from "@/lib/database/schema";
+import { Link } from "@/navigation";
 import { useTranslations } from "next-intl";
 
 type GoalStatusProps = { goals: GoalSelectModel[] };

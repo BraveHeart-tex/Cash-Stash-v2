@@ -1,19 +1,22 @@
 "use server";
 
-import { TimeSpan, createDate, isWithinExpirationDate } from "oslo";
-import { generateRandomString, alphabet } from "oslo/crypto";
 import {
   EMAIL_VERIFICATION_CODE_EXPIRY_MINUTES,
   EMAIL_VERIFICATION_CODE_LENGTH,
 } from "@/lib/constants";
 import { db } from "@/lib/database/connection";
-import { emailVerificationCode, UserSelectModel } from "@/lib/database/schema";
+import {
+  type UserSelectModel,
+  emailVerificationCode,
+} from "@/lib/database/schema";
+import { convertISOToMysqlDateTime } from "@/lib/utils/dateUtils/convertISOToMysqlDateTime";
 import { and, eq } from "drizzle-orm";
-import { convertISOToMysqlDatetime } from "@/lib/utils/dateUtils/convertISOToMysqlDatetime";
+import { TimeSpan, createDate, isWithinExpirationDate } from "oslo";
+import { alphabet, generateRandomString } from "oslo/crypto";
 
 export const generateEmailVerificationCode = async (
   userId: string,
-  email: string
+  email: string,
 ): Promise<string> => {
   await db
     .delete(emailVerificationCode)
@@ -21,17 +24,17 @@ export const generateEmailVerificationCode = async (
 
   const code = generateRandomString(
     EMAIL_VERIFICATION_CODE_LENGTH,
-    alphabet("0-9")
+    alphabet("0-9"),
   );
 
   await db.insert(emailVerificationCode).values({
     userId,
     email,
     code,
-    expiresAt: convertISOToMysqlDatetime(
+    expiresAt: convertISOToMysqlDateTime(
       createDate(
-        new TimeSpan(EMAIL_VERIFICATION_CODE_EXPIRY_MINUTES, "m")
-      ).toISOString()
+        new TimeSpan(EMAIL_VERIFICATION_CODE_EXPIRY_MINUTES, "m"),
+      ).toISOString(),
     ),
   });
 
@@ -40,7 +43,7 @@ export const generateEmailVerificationCode = async (
 
 export const verifyVerificationCode = async (
   user: UserSelectModel,
-  code: string
+  code: string,
 ) => {
   const [verificationCode] = await db
     .select()
@@ -48,8 +51,8 @@ export const verifyVerificationCode = async (
     .where(
       and(
         eq(emailVerificationCode.userId, user.id),
-        eq(emailVerificationCode.code, code)
-      )
+        eq(emailVerificationCode.code, code),
+      ),
     );
 
   if (!verificationCode) {

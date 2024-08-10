@@ -1,11 +1,11 @@
-import Redis from "ioredis";
 import logger from "@/lib/utils/logger";
+import Redis from "ioredis";
 
 let instance: RedisService;
 
 class RedisService extends Redis {
   private constructor() {
-    super(process.env.REDIS_CONNECTION_STRING!);
+    super(process.env.REDIS_CONNECTION_STRING as string);
   }
 
   static getInstance(): RedisService {
@@ -25,7 +25,7 @@ class RedisService extends Redis {
   async invalidateKeysMatchingPrefixes(prefixes: string[]) {
     const keys = await this.keys("*");
     const keysToDelete = keys.filter((key) =>
-      prefixes.some((prefix) => key.startsWith(prefix))
+      prefixes.some((prefix) => key.startsWith(prefix)),
     );
     if (keysToDelete.length === 0) return;
     return this.del(keysToDelete);

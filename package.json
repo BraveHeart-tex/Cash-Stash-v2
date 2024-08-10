@@ -2,22 +2,27 @@
   "name": "cashstash",
   "version": "0.1.0",
   "private": true,
-  "type": "commonjs",
+  "type": "module",
   "lint-staged": {
-    "*.{ts,tsx}": "eslint --fix"
+    "*.{js,jsx,ts,tsx,json,cjs,mjs,md,css}": [
+      "biome check --write --organize-imports-enabled=false --no-errors-on-unmatched --config-path=./biome.json"
+    ]
   },
   "scripts": {
     "dev": "next dev",
-    "email-dev": "email dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "test": "jest --watch",
-    "prettier": "prettier --write '**/*.{ts,tsx,js,jsx,json,css,scss,md}' --ignore-path .prettierignore",
-    "precommit": "pretty-quick --staged && lint-staged",
-    "prepare": "husky install .husky",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
     "db:seed": "tsx ./lib/database/seed.ts",
-    "db:clean": "tsx ./lib/database/clean.ts"
+    "db:truncate": "tsx ./lib/database/truncateAllTables.ts",
+    "db:drop": "tsx ./lib/database/dropAllTables.ts",
+    "email:dev": "email dev",
+    "prepare": "husky install .husky"
   },
   "resolutions": {
     "@radix-ui/react-dismissable-layer": "^1.0.5",
@@ -56,8 +61,8 @@
     "cmdk": "^1.0.0",
     "date-fns": "^2.30.0",
     "dotenv": "^16.4.5",
-    "drizzle-orm": "^0.30.1",
-    "eslint-config-next": "^14.2.1",
+    "drizzle-orm": "^0.32.0",
+    "drizzle-zod": "^0.5.1",
     "framer-motion": "^10.18.0",
     "ioredis": "^5.3.2",
     "isomorphic-dompurify": "^2.9.0",
@@ -93,6 +98,7 @@
     "zustand": "^4.5.2"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.8.0",
     "@faker-js/faker": "^8.4.1",
     "@types/bcrypt": "^5.0.2",
     "@types/node": "20.2.3",
@@ -104,14 +110,9 @@
     "@types/uuid": "^9.0.8",
     "autoprefixer": "^10.4.18",
     "drizzle-kit": "^0.20.14",
-    "eslint": "8.41.0",
-    "eslint-plugin-import": "^2.29.1",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
     "postcss": "^8.4.35",
-    "prettier": "^3.2.5",
-    "prettier-plugin-tailwindcss": "^0.5.14",
-    "pretty-quick": "^4.0.0",
     "tailwindcss": "^3.4.1"
   }
 }

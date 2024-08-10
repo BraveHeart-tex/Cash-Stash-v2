@@ -1,18 +1,18 @@
 "use client";
 
-import { CATEGORY_TYPES } from "@/lib/constants";
-import { CategorySelectModel } from "@/lib/database/schema";
-import { motion } from "framer-motion";
 import ActionPopover from "@/components/action-popover";
-import { FaEdit, FaTrash } from "react-icons/fa";
-import useGenericModalStore from "@/store/genericModalStore";
-import { useGenericConfirmStore } from "@/store/genericConfirmStore";
-import { deleteCategory } from "@/server/category";
-import { toast } from "sonner";
-import { useTransition } from "react";
+import { CATEGORY_TYPES } from "@/lib/constants";
+import type { CategorySelectModel } from "@/lib/database/schema";
 import { useRouter } from "@/navigation";
-import { CategoryType } from "@/typings/categories";
+import { deleteCategory } from "@/server/category";
+import { useGenericConfirmStore } from "@/store/genericConfirmStore";
+import useGenericModalStore from "@/store/genericModalStore";
+import type { CategoryType } from "@/typings/categories";
+import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
+import { useTransition } from "react";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import { toast } from "sonner";
 
 type CategoryCardProps = {
   category: CategorySelectModel;
@@ -20,22 +20,22 @@ type CategoryCardProps = {
 
 const CategoryCard = ({ category }: CategoryCardProps) => {
   const t = useTranslations("Components.CategoryCard");
-  let [, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const router = useRouter();
   const openGenericModal = useGenericModalStore(
-    (state) => state.openGenericModal
+    (state) => state.openGenericModal,
   );
   const closeGenericModal = useGenericModalStore(
-    (state) => state.closeGenericModal
+    (state) => state.closeGenericModal,
   );
   const showGenericConfirm = useGenericConfirmStore(
-    (state) => state.showConfirm
+    (state) => state.showConfirm,
   );
   const categoryTypeKeys = Object.keys(
-    CATEGORY_TYPES
+    CATEGORY_TYPES,
   ) as (keyof typeof CATEGORY_TYPES)[];
 
-  let formattedCategoryType = categoryTypeKeys
+  const formattedCategoryType = categoryTypeKeys
     .find((key) => CATEGORY_TYPES[key] === category.type)
     ?.toLowerCase()
     .replace(/^\w/, (c) => c.toUpperCase());

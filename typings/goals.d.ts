@@ -1,5 +1,5 @@
-import { GoalSelectModel } from "@/lib/database/schema";
-import {
+import type { GoalSelectModel } from "@/lib/database/schema";
+import type {
   BasePaginatedActionParams,
   BasePaginatedResponse,
   BaseValidatedResponse,

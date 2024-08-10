@@ -62,11 +62,11 @@ export function maskString(input: string, options: MaskOptions) {
   if (includeThousandsSeparator) {
     integerPart = integerPart.replace(
       /\B(?=(\d{3})+(?!\d))/g,
-      thousandsSeparatorSymbol
+      thousandsSeparatorSymbol,
     );
   }
 
-  let maskedString = isNegative ? "-" + prefix : prefix;
+  let maskedString = isNegative ? `-${prefix}` : prefix;
   maskedString += integerPart;
   if (allowDecimal && decimalPart !== undefined) {
     maskedString += decimalSymbol + decimalPart;

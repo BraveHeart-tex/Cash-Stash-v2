@@ -16,7 +16,7 @@ const CreateAccountButton = ({
 }: CreateAccountButtonProps) => {
   const t = useTranslations("Components.CreateAccountButton");
   const openGenericModal = useGenericModalStore(
-    (state) => state.openGenericModal
+    (state) => state.openGenericModal,
   );
   return (
     <Button
@@ -39,7 +39,7 @@ const CreateAccountButton = ({
       <div
         className={cn(
           "flex items-center gap-2",
-          minimizeOnMobile && "hidden md:flex"
+          minimizeOnMobile && "hidden md:flex",
         )}
       >
         <FaPiggyBank size={18} /> {t("label")}

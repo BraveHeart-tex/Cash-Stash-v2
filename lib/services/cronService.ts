@@ -1,14 +1,14 @@
 import { ACCOUNT_VERIFICATION_EXPIRATION_PERIOD_DAYS } from "@/lib/constants";
 import { db } from "@/lib/database/connection";
-import { users } from "@/lib/database/schema";
-import { and, eq, lte } from "drizzle-orm";
-import { convertISOToMysqlDatetime } from "@/lib/utils/dateUtils/convertISOToMysqlDatetime";
-import { isExchangeRateResponse } from "@/lib/utils/typeGuards/isExchangeRateResponse";
-import { isExchangeRateResponseError } from "@/lib/utils/typeGuards/isExchangeRateError";
 import currencyRatesRepository from "@/lib/database/repository/currencyRatesRepository";
-import exchangeRatesService from "@/lib/services/exchangeRatesService";
 import emailVerificationCodeRepository from "@/lib/database/repository/emailVerificationCodeRepository";
+import { users } from "@/lib/database/schema";
+import exchangeRatesService from "@/lib/services/exchangeRatesService";
+import { convertISOToMysqlDateTime } from "@/lib/utils/dateUtils/convertISOToMysqlDateTime";
 import logger from "@/lib/utils/logger";
+import { isExchangeRateResponseError } from "@/lib/utils/typeGuards/isExchangeRateError";
+import { isExchangeRateResponse } from "@/lib/utils/typeGuards/isExchangeRateResponse";
+import { and, eq, lte } from "drizzle-orm";
 
 const cronService = {
   async deleteUnverifiedAccounts() {
@@ -17,8 +17,8 @@ const cronService = {
         new Date().getTime() -
         ACCOUNT_VERIFICATION_EXPIRATION_PERIOD_DAYS * 24 * 60 * 60 * 1000;
 
-      const expirationDateString = convertISOToMysqlDatetime(
-        new Date(expirationTimeValue).toISOString()
+      const expirationDateString = convertISOToMysqlDateTime(
+        new Date(expirationTimeValue).toISOString(),
       );
 
       await db
@@ -26,8 +26,8 @@ const cronService = {
         .where(
           and(
             eq(users.emailVerified, 0),
-            lte(users.createdAt, expirationDateString)
-          )
+            lte(users.createdAt, expirationDateString),
+          ),
         );
 
       return true;
@@ -56,23 +56,23 @@ const cronService = {
               symbol: currency,
               rate,
             };
-          }
+          },
         );
 
         const upsertPromises = mappedRates.map(({ symbol, rate }) =>
-          currencyRatesRepository.updateCurrencyRate({ symbol, rate })
+          currencyRatesRepository.updateCurrencyRate({ symbol, rate }),
         );
 
         await Promise.all(upsertPromises);
 
         return true;
-      } else if (isExchangeRateResponseError(data)) {
+      }
+      if (isExchangeRateResponseError(data)) {
         logger.error("Error updating currency rates", data.description);
         return false;
-      } else {
-        logger.error("Error updating currency rates");
-        return false;
       }
+      logger.error("Error updating currency rates");
+      return false;
     } catch (error) {
       logger.error("Error updating currency rates", error);
       return false;

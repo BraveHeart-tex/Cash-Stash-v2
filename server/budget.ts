@@ -1,19 +1,22 @@
 "use server";
-import { BudgetSchemaType, getBudgetSchema } from "@/schemas/budget-schema";
-import { BudgetSelectModel } from "@/lib/database/schema";
-import { ZodError } from "zod";
+import { authenticatedAction } from "@/lib/auth/authUtils";
+import { CACHE_PREFIXES } from "@/lib/constants";
+import budgetRepository from "@/lib/database/repository/budgetRepository";
+import type { BudgetSelectModel } from "@/lib/database/schema";
+import redisService from "@/lib/redis/redisService";
 import {
   generateCachePrefixWithUserId,
   getBudgetKey,
   getPaginatedBudgetsKey,
   mapRedisHashToBudget,
 } from "@/lib/redis/redisUtils";
-import { CACHE_PREFIXES } from "@/lib/constants";
-import budgetRepository from "@/lib/database/repository/budgetRepository";
-import redisService from "@/lib/redis/redisService";
-import { processZodError } from "@/lib/utils/objectUtils/processZodError";
 import logger from "@/lib/utils/logger";
+import { processZodError } from "@/lib/utils/objectUtils/processZodError";
 import {
+  type BudgetSchemaType,
+  getBudgetSchema,
+} from "@/schemas/budget-schema";
+import type {
   CreateBudgetReturnType,
   DeleteBudgetReturnType,
   GetPaginatedBudgetsParams,
@@ -21,7 +24,7 @@ import {
   UpdateBudgetReturnType,
 } from "@/typings/budgets";
 import { getTranslations } from "next-intl/server";
-import { authenticatedAction } from "@/lib/auth/authUtils";
+import { ZodError } from "zod";
 
 export const createBudget = authenticatedAction<
   CreateBudgetReturnType,
@@ -56,7 +59,10 @@ export const createBudget = authenticatedAction<
 
     await Promise.all([
       redisService.invalidateKeysStartingWith(
-        generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_BUDGETS, user.id)
+        generateCachePrefixWithUserId(
+          CACHE_PREFIXES.PAGINATED_BUDGETS,
+          user.id,
+        ),
       ),
       redisService.hset(getBudgetKey(budget.id), budget),
     ]);
@@ -118,7 +124,7 @@ export const updateBudget = authenticatedAction<
 
     const { affectedRows, updatedBudget } = await budgetRepository.update(
       budgetId,
-      updateBudgetDto
+      updateBudgetDto,
     );
 
     if (affectedRows === 0 || !updatedBudget) {
@@ -130,7 +136,10 @@ export const updateBudget = authenticatedAction<
 
     await Promise.all([
       redisService.invalidateKeysStartingWith(
-        generateCachePrefixWithUserId(CACHE_PREFIXES.PAGINATED_BUDGETS, user.id)
+        generateCachePrefixWithUserId(
+          CACHE_PREFIXES.PAGINATED_BUDGETS,
+          user.id,
+        ),
       ),
       redisService.hset(getBudgetKey(updatedBudget.id), updatedBudget),
     ]);
@@ -226,8 +235,8 @@ export const deleteBudget = authenticatedAction<DeleteBudgetReturnType, number>(
         redisService.invalidateKeysStartingWith(
           generateCachePrefixWithUserId(
             CACHE_PREFIXES.PAGINATED_BUDGETS,
-            user.id
-          )
+            user.id,
+          ),
         ),
         redisService.del(getBudgetKey(budgetId)),
       ]);
@@ -241,5 +250,5 @@ export const deleteBudget = authenticatedAction<DeleteBudgetReturnType, number>(
         error: "We encountered a problem while deleting the budget.",
       };
     }
-  }
+  },
 );

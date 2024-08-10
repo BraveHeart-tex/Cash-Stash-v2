@@ -1,5 +1,6 @@
-import { TransactionSelectModel } from "@/lib/database/schema";
-import {
+import type { TransactionSelectModel } from "@/lib/database/schema";
+import type { TransactionSchemaType } from "@/schemas/transaction-schema";
+import type {
   BasePaginatedActionParams,
   BasePaginatedResponse,
   BaseValidatedResponse,

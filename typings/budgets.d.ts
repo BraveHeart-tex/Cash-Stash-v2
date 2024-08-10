@@ -1,5 +1,5 @@
-import { BudgetSelectModel } from "@/lib/database/schema";
-import {
+import type { BudgetSelectModel } from "@/lib/database/schema";
+import type {
   BasePaginatedActionParams,
   BasePaginatedResponse,
   BaseValidatedResponse,

@@ -1,4 +1,8 @@
 "use client";
+import CreateBudgetCategoryPopover from "@/components/budgets/create-budget-category-popover";
+import { Button } from "@/components/ui/button";
+import Combobox from "@/components/ui/combobox";
+import CurrencyFormLabel from "@/components/ui/currency-form-label";
 import {
   Form,
   FormControl,
@@ -7,28 +11,27 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import useZodResolver from "@/lib/zod-resolver-wrapper";
-import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "@/navigation";
-import { useEffect, useMemo, useTransition } from "react";
-import { BudgetSchemaType, getBudgetSchema } from "@/schemas/budget-schema";
-import { createBudget, updateBudget } from "@/server/budget";
-import useGenericModalStore from "@/store/genericModalStore";
-import { toast } from "sonner";
-import { BudgetSelectModel } from "@/lib/database/schema";
-import CurrencyFormLabel from "@/components/ui/currency-form-label";
-import useCategoriesStore from "@/store/categoriesStore";
-import { CATEGORY_TYPES } from "@/lib/constants";
-import { getCategoriesByType } from "@/server/category";
-import { compareMatchingKeys } from "@/lib/utils/objectUtils/compareMatchingKeys";
-import Combobox from "@/components/ui/combobox";
-import { cn } from "@/lib/utils/stringUtils/cn";
-import CreateBudgetCategoryPopover from "@/components/budgets/create-budget-category-popover";
 import MaskedAmountInput from "@/components/ui/masked-amount-input";
-import { BaseValidatedResponse } from "@/typings/baseTypes";
+import { CATEGORY_TYPES } from "@/lib/constants";
+import type { BudgetSelectModel } from "@/lib/database/schema";
+import { compareMatchingKeys } from "@/lib/utils/objectUtils/compareMatchingKeys";
+import { cn } from "@/lib/utils/stringUtils/cn";
+import useZodResolver from "@/lib/zod-resolver-wrapper";
+import { useRouter } from "@/navigation";
+import {
+  type BudgetSchemaType,
+  getBudgetSchema,
+} from "@/schemas/budget-schema";
+import { createBudget, updateBudget } from "@/server/budget";
+import { getCategoriesByType } from "@/server/category";
+import useCategoriesStore from "@/store/categoriesStore";
+import useGenericModalStore from "@/store/genericModalStore";
+import type { BaseValidatedResponse } from "@/typings/baseTypes";
 import { useTranslations } from "next-intl";
+import { useEffect, useMemo, useTransition } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 type BudgetFormProps = {
   data?: BudgetSelectModel;
@@ -39,7 +42,7 @@ const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
   const zodT = useTranslations("Zod.Budget");
   const [isPending, startTransition] = useTransition();
   const closeGenericModal = useGenericModalStore(
-    (state) => state.closeGenericModal
+    (state) => state.closeGenericModal,
   );
   const router = useRouter();
   const budgetSchema = getBudgetSchema({
@@ -54,7 +57,7 @@ const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
     resolver: useZodResolver(budgetSchema),
   });
   const budgetCategories = useCategoriesStore(
-    (state) => state.categories
+    (state) => state.categories,
   ).filter((category) => category.type === CATEGORY_TYPES.BUDGET);
   const setCategories = useCategoriesStore((state) => state.setCategories);
 
@@ -111,7 +114,7 @@ const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
   };
 
   const processFormSubmissionResult = (
-    result: BaseValidatedResponse<BudgetSelectModel>
+    result: BaseValidatedResponse<BudgetSelectModel>,
   ) => {
     if (result.fieldErrors.length) {
       result.fieldErrors.forEach((fieldError) => {
@@ -224,17 +227,18 @@ const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
                 <div className="flex items-center gap-1">
                   <Combobox
                     key={JSON.stringify(
-                      form.watch("categoryId")?.toString() + budgetCategories
+                      form.watch("categoryId")?.toString() + budgetCategories,
                     )}
                     ref={field.ref}
                     options={budgetCategoryOptions}
                     contentClassName="z-[100]"
                     defaultOption={budgetCategoryOptions.find(
-                      (category) => +category.value === form.watch("categoryId")
+                      (category) =>
+                        +category.value === form.watch("categoryId"),
                     )}
                     triggerClassName={cn(
                       "focus:outline focus:outline-1 focus:outline-offset-1 focus:outline-destructive",
-                      !isPending && isBudgetCategoryListEmpty && "hidden"
+                      !isPending && isBudgetCategoryListEmpty && "hidden",
                     )}
                     triggerPlaceholder={t("budgetCategoryField.placeholder")}
                     onSelect={(option) => {

@@ -1,0 +1,74 @@
+{
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "editor.defaultFormatter": "biomejs.biome",
+  "biome.enabled": true,
+  "eslint.enable": false,
+  "gitlens.currentLine.enabled": false,
+  "[postcss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "search.exclude": {
+    "**/*.code-search": true,
+    "**/bower_components": true,
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/coverage": true,
+    "**/.next": true,
+    "**/.cache": true,
+    "**/.git": true,
+    "**/.hg": true,
+    "**/.svn": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/yarn.lock": true,
+    "**/package-lock.json": true,
+    "**/pnpm-lock.yaml": true,
+    "**/npm-debug.log": true,
+    "**/yarn-debug.log": true,
+    "**/yarn-error.log": true,
+    "**/pnpm-debug.log": true,
+    "**/env.local": true,
+    "**/.idea": true,
+    "**/tsconfig.tsbuildinfo": true,
+    "**/[0-9]*_snapshot.json": true
+  },
+  "files.exclude": {
+    "**/.git": true,
+    "**/node_modules": false,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": false,
+    "**/*.class": true
+  },
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    "**/env/**": true,
+    "**/venv/**": true,
+    "env-*": true
+  },
+  "cSpell.words": [
+    "biomejs",
+    "cashstash",
+    "clsx",
+    "cmdk",
+    "dismissable",
+    "dompurify",
+    "hookform",
+    "nuqs",
+    "paralleldrive",
+    "recaptcha",
+    "serwist",
+    "sonner",
+    "tailwindcss",
+    "tanstack",
+    "usehooks",
+    "uuidv",
+    "vaul",
+    "zustand"
+  ]
+}

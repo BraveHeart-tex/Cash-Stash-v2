@@ -1,17 +1,17 @@
 "use client";
-import { CategorySelectModel } from "@/lib/database/schema";
-import useCategoriesStore from "@/store/categoriesStore";
-import { useState } from "react";
+import CategoryForm from "@/components/categories/category-form";
+import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { FaPlus } from "react-icons/fa";
-import CategoryForm from "@/components/categories/category-form";
 import { CATEGORY_TYPES } from "@/lib/constants";
+import type { CategorySelectModel } from "@/lib/database/schema";
+import useCategoriesStore from "@/store/categoriesStore";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
+import { FaPlus } from "react-icons/fa";
 
 type CreateTransactionCategoryPopoverProps = {
   // eslint-disable-next-line no-unused-vars

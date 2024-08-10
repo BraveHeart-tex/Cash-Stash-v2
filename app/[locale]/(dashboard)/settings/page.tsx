@@ -45,19 +45,19 @@ const SettingsPage = async () => {
             internationalizationConfig={{
               twoFactorSettingsTitle: t("twoFactorSettingsTitle"),
               twoFactorAlreadyEnableDescription: t(
-                "twoFactorAlreadyEnableDescription"
+                "twoFactorAlreadyEnableDescription",
               ),
               twoFactorSettingsDescription: t("twoFactorSettingsDescription"),
               twoFactorDisableDialogTitle: t("twoFactorDisableDialogTitle"),
               twoFactorDisableDialogMessage: t("twoFactorDisableDialogMessage"),
               twoFactorDisableDialogPrimaryActionLabel: t(
-                "twoFactorDisableDialogPrimaryActionLabel"
+                "twoFactorDisableDialogPrimaryActionLabel",
               ),
               twoFactorEnableDialogTitle: t("twoFactorEnableDialogTitle"),
               twoFactorEnableDialogMessage: t("twoFactorEnableDialogMessage"),
               twoFactorToastInfoMessage: t("twoFactorToastInfoMessage"),
               twoFactorEnableDialogPrimaryActionLabel: t(
-                "twoFactorEnableDialogPrimaryActionLabel"
+                "twoFactorEnableDialogPrimaryActionLabel",
               ),
               twoFactorEnablePending: t("twoFactorEnablePending"),
               twoFactorEnableCTA: t("twoFactorEnableCTA"),
@@ -67,7 +67,7 @@ const SettingsPage = async () => {
               twoFactorFormStepTwo: t("twoFactorFormStepTwo"),
               twoFactorFormStepThree: t("twoFactorFormStepThree"),
               twoFactorCopyToClipboardSuccessMessage: t(
-                "twoFactorCopyToClipboardSuccessMessage"
+                "twoFactorCopyToClipboardSuccessMessage",
               ),
               twoFactorCopyToClipboardCTA: t("twoFactorCopyToClipboardCTA"),
               twoFactorCodeInputLabel: t("twoFactorCodeInputLabel"),

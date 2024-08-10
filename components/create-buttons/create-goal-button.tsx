@@ -16,7 +16,7 @@ const CreateGoalButton = ({
 }: CreateGoalButtonProps) => {
   const t = useTranslations("Components.CreateGoalButton");
   const openGenericModal = useGenericModalStore(
-    (state) => state.openGenericModal
+    (state) => state.openGenericModal,
   );
 
   const label = t("label");
@@ -42,7 +42,7 @@ const CreateGoalButton = ({
       <div
         className={cn(
           "flex items-center gap-2",
-          minimizeOnMobile && "hidden md:flex"
+          minimizeOnMobile && "hidden md:flex",
         )}
       >
         <FaBullseye size={18} />

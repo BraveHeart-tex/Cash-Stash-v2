@@ -1,5 +1,5 @@
 import BarChartComponent from "@/components/charts/bar-chart";
-import { MonthlyTransactionsData } from "@/typings/reports";
+import type { MonthlyTransactionsData } from "@/typings/reports";
 
 type IncomeAndExpenseChartProps = {
   monthlyTransactionsData: MonthlyTransactionsData[];

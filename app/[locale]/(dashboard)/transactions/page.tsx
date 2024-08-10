@@ -1,10 +1,10 @@
-import { getPaginatedTransactions } from "@/server/transaction";
-import TransactionList from "@/components/transactions/transaction-list";
-import { getCurrentUserAccountsThatHaveTransactions } from "@/server/account";
 import RoutePaginationControls from "@/components/route-pagination-controls";
-import TransactionsPageHeader from "@/components/transactions/transactions-page-header";
-import TransactionsPageFilters from "@/components/transactions/transactions-page-filters";
+import TransactionList from "@/components/transactions/transaction-list";
 import TransactionsNotFoundMessage from "@/components/transactions/transactions-not-found-message";
+import TransactionsPageFilters from "@/components/transactions/transactions-page-filters";
+import TransactionsPageHeader from "@/components/transactions/transactions-page-header";
+import { getCurrentUserAccountsThatHaveTransactions } from "@/server/account";
+import { getPaginatedTransactions } from "@/server/transaction";
 
 export type TransactionPageSearchParams = {
   transactionType?: string;
@@ -32,11 +32,11 @@ const TransactionsPage = async ({ searchParams }: TransactionsPageProps) => {
   } = searchParams;
   const actionParams = {
     transactionType,
-    accountId: accountId ? parseInt(accountId) : undefined,
+    accountId: accountId ? Number.parseInt(accountId) : undefined,
     sortBy: (sortBy || "createdAt") as "amount" | "createdAt",
     sortDirection: (sortDirection || "desc") as "asc" | "desc",
     categoryId: categoryId || undefined,
-    pageNumber: page ? parseInt(page) : 1,
+    pageNumber: page ? Number.parseInt(page) : 1,
     query,
   };
 
@@ -53,7 +53,7 @@ const TransactionsPage = async ({ searchParams }: TransactionsPageProps) => {
   const pageHasParams = Object.keys(searchParams)
     .filter((key) => key !== "page")
     .some(
-      (key: string) => !!searchParams[key as keyof TransactionPageSearchParams]
+      (key: string) => !!searchParams[key as keyof TransactionPageSearchParams],
     );
 
   return (

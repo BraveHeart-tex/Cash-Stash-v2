@@ -1,5 +1,5 @@
 import TransactionCard from "@/components/transactions/transaction-card";
-import { TransactionWithCategoryAndAccountName } from "@/typings/transactions";
+import type { TransactionWithCategoryAndAccountName } from "@/typings/transactions";
 
 type TransactionListProps = {
   transactions: TransactionWithCategoryAndAccountName[];

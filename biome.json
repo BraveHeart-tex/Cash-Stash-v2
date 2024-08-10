@@ -1,0 +1,59 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.8.0/schema.json",
+  "organizeImports": {
+    "enabled": true
+  },
+  "files": {
+    "ignore": [
+      "drizzle/**",
+      "node_modules/**",
+      ".next/**",
+      ".idea",
+      "./src/styles/quill.css"
+    ]
+  },
+  "formatter": {
+    "lineWidth": 80,
+    "enabled": true,
+    "formatWithErrors": false,
+    "indentStyle": "space",
+    "ignore": ["node_modules/**", ".next/**", ".idea", "globals.css"]
+  },
+  "css": {
+    "formatter": {
+      "enabled": true
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "arrowParentheses": "always",
+      "bracketSameLine": false,
+      "bracketSpacing": true,
+      "jsxQuoteStyle": "double",
+      "quoteProperties": "asNeeded",
+      "semicolons": "always"
+    }
+  },
+  "json": {
+    "formatter": {
+      "trailingCommas": "none"
+    }
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "suspicious": {
+        "noConsoleLog": "error"
+      },
+      "correctness": {
+        "all": true,
+        "useHookAtTopLevel": "error",
+        "noUnusedImports": "warn",
+        "noUnusedVariables": "warn",
+        "noUnreachable": "error"
+      },
+      "recommended": true
+    },
+    "ignore": ["node_modules/**", ".next/**", ".idea", ".vscode"]
+  }
+}

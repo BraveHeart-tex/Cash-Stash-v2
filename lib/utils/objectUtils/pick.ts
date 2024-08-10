@@ -7,7 +7,7 @@
  */
 export function pick<T extends Record<string, unknown>, K extends keyof T>(
   obj: T,
-  keys: K[]
+  keys: K[],
 ): Pick<T, K> {
   return keys.reduce(
     (acc, key) => {
@@ -16,6 +16,6 @@ export function pick<T extends Record<string, unknown>, K extends keyof T>(
       }
       return acc;
     },
-    {} as Pick<T, K>
+    {} as Pick<T, K>,
   );
 }

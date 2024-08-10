@@ -1,6 +1,8 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import PasswordInput from "@/components/auth/password-input";
+import PasswordRequirements from "@/components/auth/password-requirements";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -10,19 +12,17 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import useZodResolver from "@/lib/zod-resolver-wrapper";
-import resetPasswordSchema, {
-  ResetPasswordSchemaType,
-} from "@/schemas/reset-password-schema";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { useTransition } from "react";
-import { resetPassword } from "@/server/auth";
 import { PAGE_ROUTES } from "@/lib/constants";
-import { toast } from "sonner";
-import PasswordInput from "@/components/auth/password-input";
-import PasswordRequirements from "@/components/auth/password-requirements";
+import useZodResolver from "@/lib/zod-resolver-wrapper";
 import { useRouter } from "@/navigation";
+import resetPasswordSchema, {
+  type ResetPasswordSchemaType,
+} from "@/schemas/reset-password-schema";
+import { resetPassword } from "@/server/auth";
+import { useTransition } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 type ResetPasswordFormProps = {
   email: string;
@@ -30,7 +30,7 @@ type ResetPasswordFormProps = {
 };
 
 const ResetPasswordForm = ({ email, token }: ResetPasswordFormProps) => {
-  let [isPending, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const form = useForm<ResetPasswordSchemaType>({
     resolver: useZodResolver(resetPasswordSchema),

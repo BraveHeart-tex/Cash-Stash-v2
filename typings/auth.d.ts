@@ -1,3 +1,5 @@
+import type { User } from "lucia";
+
 /* eslint-disable no-unused-vars */
 export type AuthenticatedFunctionContext = {
   user: User;
@@ -10,14 +12,14 @@ export type OptionalParameter<T> = T extends undefined
 // Define a type to extract the parameters type
 export type ExtractParams<T> = T extends (
   params: infer P,
-  context: AuthenticatedFunctionContext
-) => any
+  context: AuthenticatedFunctionContext,
+) => unknown
   ? P
   : never;
 
 export type AuthenticatedFunction<T, P> = (
   params: P,
-  context: AuthenticatedFunctionContext
+  context: AuthenticatedFunctionContext,
 ) => Promise<T>;
 
 export type ActivateTwoFactorAuthenticationReturnType =

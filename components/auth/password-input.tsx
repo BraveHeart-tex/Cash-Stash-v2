@@ -1,4 +1,5 @@
 "use client";
+import useCapsLock from "@/components/hooks/useCapsLock";
 import {
   FormControl,
   FormDescription,
@@ -7,11 +8,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { BsCapslock } from "react-icons/bs";
-import useCapsLock from "@/components/hooks/useCapsLock";
-import { ControllerRenderProps, FieldValues } from "react-hook-form";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
+import type { ControllerRenderProps, FieldValues } from "react-hook-form";
+import { BsCapslock } from "react-icons/bs";
 
 type PasswordInputProps<T extends FieldValues> = {
   field: ControllerRenderProps<T, any>;

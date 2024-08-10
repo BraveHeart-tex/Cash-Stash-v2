@@ -1,3 +1,6 @@
+import type { PAGE_ROUTES } from "@/lib/constants";
+import type { IconType } from "react-icons/lib";
+
 export type NavigationItem = {
   label: string;
   icon: IconType;

@@ -1,16 +1,17 @@
-import { migrate } from "drizzle-orm/mysql2/migrator";
 import { db } from "@/lib/database/connection";
+import { migrate } from "drizzle-orm/mysql2/migrator";
 
-const main = async () => {
+const migrateSchemaChanges = async () => {
   try {
     await migrate(db, {
       migrationsFolder: "./lib/database/migrations",
     });
-    console.log("Migrations complete");
+    console.info("Migrations completed successfully");
   } catch (error) {
-    console.log(error);
+    console.error("migrateSchemaChanges error", error);
+  } finally {
+    process.exit(0);
   }
-  process.exit(0);
 };
 
-main();
+migrateSchemaChanges();

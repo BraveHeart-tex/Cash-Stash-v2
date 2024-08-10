@@ -1,8 +1,8 @@
 import { getPageSizeAndSkipAmount } from "@/lib/constants";
 import { db } from "@/lib/database/connection";
-import { GoalInsertModel, goals } from "@/lib/database/schema";
-import { and, asc, desc, eq, like, sql } from "drizzle-orm";
+import { type GoalInsertModel, goals } from "@/lib/database/schema";
 import logger from "@/lib/utils/logger";
+import { and, asc, desc, eq, like, sql } from "drizzle-orm";
 
 type GetMultipleGoalsParams = {
   page: number;
@@ -127,7 +127,7 @@ const goalRepository = {
       .select()
       .from(goals)
       .where(and(eq(goals.userId, userId), like(goals.name, `%${query}%`)))
-      .orderBy(orderByCondition!)
+      .orderBy(orderByCondition)
       .limit(pageSize)
       .offset(skipAmount);
 
@@ -151,6 +151,7 @@ const goalRepository = {
         totalCount,
       };
     } catch (error) {
+      logger.error("Error fetching goals", error);
       return {
         goals: [],
         totalCount: 0,

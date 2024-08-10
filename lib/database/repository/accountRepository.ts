@@ -1,13 +1,13 @@
 import { getPageSizeAndSkipAmount } from "@/lib/constants";
 import { db } from "@/lib/database/connection";
 import {
-  AccountInsertModel,
+  type AccountInsertModel,
+  type AccountSelectModel,
   accounts,
-  AccountSelectModel,
   transactions,
 } from "@/lib/database/schema";
 import logger from "@/lib/utils/logger";
-import { AccountWithTransactions } from "@/typings/accounts";
+import type { AccountWithTransactions } from "@/typings/accounts";
 import { and, asc, desc, eq, getTableColumns, like, sql } from "drizzle-orm";
 
 type GetMultipleAccountsParams = {
@@ -98,7 +98,7 @@ const accountRepository = {
       where: and(
         eq(accounts.userId, userId),
         like(accounts.name, `%${query}%`),
-        categoryCondition
+        categoryCondition,
       ),
       orderBy: orderByCondition,
       limit: pageSize,
@@ -114,8 +114,8 @@ const accountRepository = {
         and(
           eq(accounts.userId, userId),
           like(accounts.name, `%${query}%`),
-          categoryCondition
-        )
+          categoryCondition,
+        ),
       );
 
     try {
@@ -223,7 +223,7 @@ const accountRepository = {
     } catch (error) {
       logger.error(
         "Error fetching accounts with transactions by user id",
-        error
+        error,
       );
       return [];
     }

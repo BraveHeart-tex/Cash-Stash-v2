@@ -1,12 +1,12 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { FaMoneyBill } from "react-icons/fa";
-import { Link } from "@/navigation";
 import { PAGE_ROUTES } from "@/lib/constants";
-import { cn } from "@/lib/utils/stringUtils/cn";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
+import { cn } from "@/lib/utils/stringUtils/cn";
+import { Link } from "@/navigation";
 import useAuthStore from "@/store/auth/authStore";
-import { InsightsData } from "@/typings/reports";
+import type { InsightsData } from "@/typings/reports";
+import { FaMoneyBill } from "react-icons/fa";
 
 type FinancialInsightsProps = {
   insightsData: InsightsData | null;
@@ -19,7 +19,7 @@ const SavingsRate = ({ value }: { value: number }) => (
     <p
       className={cn(
         "font-semibold",
-        value > 0 ? "text-success" : "text-destructive"
+        value > 0 ? "text-success" : "text-destructive",
       )}
     >
       {value > 0
@@ -34,7 +34,7 @@ const SavingsRate = ({ value }: { value: number }) => (
 // and add vs last month if data is available
 const FinancialInsights = ({ insightsData }: FinancialInsightsProps) => {
   const preferredCurrency = useAuthStore(
-    (state) => state.user?.preferredCurrency
+    (state) => state.user?.preferredCurrency,
   );
   const noInsightsData = Object.keys(insightsData || {}).length === 0;
 
@@ -84,7 +84,7 @@ const FinancialInsights = ({ insightsData }: FinancialInsightsProps) => {
   ];
 
   const isAllZero = mappedData.every(
-    (data) => parseFloat(data.value as string) === 0
+    (data) => Number.parseFloat(data.value as string) === 0,
   );
 
   if (isAllZero) {
@@ -112,7 +112,7 @@ const FinancialInsights = ({ insightsData }: FinancialInsightsProps) => {
             <h3 className="text-lg font-bold">{data.name}</h3>
             <p>{formatMoney(+data.value, preferredCurrency)}</p>
           </div>
-        )
+        ),
       )}
     </div>
   );

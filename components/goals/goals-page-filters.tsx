@@ -1,10 +1,10 @@
-import { GiPayMoney } from "react-icons/gi";
 import RouteFiltersPopover, {
-  GenericFilterOption,
+  type GenericFilterOption,
 } from "@/components/route-filters-popover";
 import RouteSearchInput from "@/components/route-search-input";
-import { FaPiggyBank } from "react-icons/fa";
 import { useTranslations } from "next-intl";
+import { FaPiggyBank } from "react-icons/fa";
+import { GiPayMoney } from "react-icons/gi";
 
 const goalFilters = [
   {
@@ -56,7 +56,7 @@ const GoalsPageFilters = ({ shouldRenderPopover }: GoalsPageFiltersProps) => {
   const mappedGoals = goalFilters.map((filter) => ({
     ...filter,
     label: t(
-      `RouteFiltersPopover.${filter.data.sortBy}.${filter.data.sortDirection}`
+      `RouteFiltersPopover.${filter.data.sortBy}.${filter.data.sortDirection}`,
     ),
   })) as GenericFilterOption<GoalFilterData>[];
 

@@ -1,17 +1,17 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { MdPhonelinkSetup } from "react-icons/md";
-import { useGenericConfirmStore } from "@/store/genericConfirmStore";
-import { useTransition } from "react";
 import { enableTwoFactorAuthentication } from "@/server/auth";
 import useAuthStore from "@/store/auth/authStore";
+import { useGenericConfirmStore } from "@/store/genericConfirmStore";
+import { useTransition } from "react";
+import { MdPhonelinkSetup } from "react-icons/md";
 
 const UserSettings = () => {
   const setUri = useAuthStore((state) => state.setUri);
   const [isPending, startTransition] = useTransition();
   const showGenericConfirm = useGenericConfirmStore(
-    (state) => state.showConfirm
+    (state) => state.showConfirm,
   );
   const handleEnableTwoFactorAuth = () => {
     showGenericConfirm({

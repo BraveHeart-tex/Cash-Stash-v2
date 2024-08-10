@@ -1,10 +1,10 @@
-import TransactionCard from "@/components/transactions/transaction-card";
-import CreateTransactionButton from "@/components/create-buttons/create-transaction-button";
 import AnimatePresenceClient from "@/components/animations/animate-presence";
+import CreateTransactionButton from "@/components/create-buttons/create-transaction-button";
+import TransactionCard from "@/components/transactions/transaction-card";
 import { Button } from "@/components/ui/button";
-import { Link } from "@/navigation";
 import { PAGE_ROUTES } from "@/lib/constants";
-import { TransactionWithCategoryAndAccountName } from "@/typings/transactions";
+import { Link } from "@/navigation";
+import type { TransactionWithCategoryAndAccountName } from "@/typings/transactions";
 import { useTranslations } from "next-intl";
 
 type TransactionHistoryProps = {

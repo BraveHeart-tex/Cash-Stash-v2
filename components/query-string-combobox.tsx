@@ -1,5 +1,4 @@
 "use client";
-import { useQueryState } from "nuqs";
 import Combobox from "@/components/ui/combobox";
 import { Label } from "@/components/ui/label";
 import {
@@ -12,6 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useTranslations } from "next-intl";
+import { useQueryState } from "nuqs";
 
 export type QueryStringComboboxItem = {
   label: string;

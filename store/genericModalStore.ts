@@ -1,4 +1,4 @@
-import { GenericDialogKeyType } from "@/typings/genericModal";
+import type { GenericDialogKeyType } from "@/typings/genericModal";
 import { create } from "zustand";
 
 type GenericModalState = {
@@ -8,9 +8,8 @@ type GenericModalState = {
   dialogDescription?: string;
   mode: "edit" | "create";
   key: GenericDialogKeyType | null;
-  props: Record<string, any>;
-  data: Record<string, any>;
-  // eslint-disable-next-line no-unused-vars
+  props: Record<string, unknown>;
+  data: Record<string, unknown>;
   openGenericModal: (params: Partial<GenericModalState>) => void;
   closeGenericModal: () => void;
 };

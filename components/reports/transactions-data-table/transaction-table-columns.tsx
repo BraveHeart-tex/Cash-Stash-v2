@@ -4,8 +4,8 @@ import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import { generateLabelFromEnumValue } from "@/lib/utils/stringUtils/generateLabelFromEnumValue";
 import useAuthStore from "@/store/auth/authStore";
-import { TransactionWithCategoryAndAccountName } from "@/typings/transactions";
-import { ColumnDef } from "@tanstack/react-table";
+import type { TransactionWithCategoryAndAccountName } from "@/typings/transactions";
+import type { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { FaArrowsUpDown } from "react-icons/fa6";
 
@@ -21,7 +21,7 @@ export const transactionTableColumns: ColumnDef<TransactionWithAccount>[] = [
     cell: ({ row }) => {
       const formattedDate = format(
         new Date(row.getValue("createdAt")),
-        "dd MMM yyyy HH:mm"
+        "dd MMM yyyy HH:mm",
       );
       return <div>{formattedDate}</div>;
     },
@@ -43,16 +43,16 @@ export const transactionTableColumns: ColumnDef<TransactionWithAccount>[] = [
     cell: ({ row }) => {
       // eslint-disable-next-line react-hooks/rules-of-hooks
       const preferredCurrency = useAuthStore(
-        (state) => state.user?.preferredCurrency
+        (state) => state.user?.preferredCurrency,
       );
-      const amount = parseFloat(row.getValue("amount"));
+      const amount = Number.parseFloat(row.getValue("amount"));
       const formattedMoney = formatMoney(amount, preferredCurrency);
 
       return (
         <div
           className={cn(
             "font-medium",
-            amount > 0 ? "text-success" : "text-destructive"
+            amount > 0 ? "text-success" : "text-destructive",
           )}
         >
           {formattedMoney}

@@ -6,6 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Label } from "@/components/ui/label";
 import { LOCALES } from "@/lib/constants";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import { usePathname, useRouter } from "@/navigation";
@@ -13,18 +14,17 @@ import { useLocale, useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import { useTransition } from "react";
 import { FaCheck } from "react-icons/fa";
-import { Label } from "@/components/ui/label";
 
 const LocaleToggle = () => {
   const t = useTranslations("Components.LocaleToggle");
-  let [, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const pathname = usePathname();
-  const params = useParams();
+  const params = useParams<{ locale: string }>();
+
   const router = useRouter();
   const locale = useLocale();
 
-  const fullUrl =
-    pathname + "?" + new URLSearchParams(params as any).toString();
+  const fullUrl = `${pathname}?${new URLSearchParams(params).toString()}`;
 
   const handleLocaleSwitch = (locale: string) => {
     startTransition(() => {
@@ -55,7 +55,7 @@ const LocaleToggle = () => {
               key={localeValue}
               className={cn(
                 "flex cursor-pointer items-center gap-1 text-base font-medium",
-                locale === localeValue && "text-primary"
+                locale === localeValue && "text-primary",
               )}
               aria-label={t("switchItemAriaLabel", {
                 language: t(localeValue),

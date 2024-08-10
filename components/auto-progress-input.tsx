@@ -1,16 +1,16 @@
 "use client";
-import {
-  useState,
-  useRef,
-  RefObject,
-  KeyboardEvent,
-  ClipboardEvent,
-  HTMLInputTypeAttribute,
-  Fragment,
-} from "react";
 import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils/stringUtils/cn";
 import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils/stringUtils/cn";
+import {
+  type ClipboardEvent,
+  Fragment,
+  type HTMLInputTypeAttribute,
+  type KeyboardEvent,
+  type RefObject,
+  useRef,
+  useState,
+} from "react";
 
 type AutoProgressInputProps = {
   length: number;
@@ -29,7 +29,7 @@ const AutoProgressInput = ({
   const [values, setValues] = useState(new Array(length).fill(""));
   const refs: RefObject<HTMLInputElement>[] = Array.from({ length }, () =>
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    useRef<HTMLInputElement>(null)
+    useRef<HTMLInputElement>(null),
   );
 
   const handleChange = (index: number, value: string) => {
@@ -47,7 +47,7 @@ const AutoProgressInput = ({
 
   const handleKeyDown = (
     index: number,
-    event: KeyboardEvent<HTMLInputElement>
+    event: KeyboardEvent<HTMLInputElement>,
   ) => {
     // Move focus to the previous input if backspace is pressed and index is not the first
     if (event.key === "Backspace" && !values[index] && index > 0) {
@@ -81,7 +81,7 @@ const AutoProgressInput = ({
             id={`auto-progress-input-${index + 1}`}
             className={cn(
               "mr-[0.5em] w-[3em] bg-background text-center",
-              loading && "animate-pulse opacity-50"
+              loading && "animate-pulse opacity-50",
             )}
             autoComplete="off"
             aria-label={`Auto progress input field ${index + 1}`}

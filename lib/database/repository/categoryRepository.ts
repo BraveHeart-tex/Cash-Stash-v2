@@ -1,8 +1,8 @@
-import { and, eq, like, sql } from "drizzle-orm";
-import { db } from "@/lib/database/connection";
-import { CategoryInsertModel, categories } from "@/lib/database/schema";
 import { getPageSizeAndSkipAmount } from "@/lib/constants";
-import { CategoryType, CategoryUpdateModel } from "@/typings/categories";
+import { db } from "@/lib/database/connection";
+import { type CategoryInsertModel, categories } from "@/lib/database/schema";
+import type { CategoryType, CategoryUpdateModel } from "@/typings/categories";
+import { and, eq, like, sql } from "drizzle-orm";
 
 type GetMultipleCategoriesParams = {
   query?: string;
@@ -60,8 +60,8 @@ const categoryRepository = {
         and(
           eq(categories.userId, userId),
           like(categories.name, `%${query}%`),
-          categoryTypeCondition
-        )
+          categoryTypeCondition,
+        ),
       )
       .limit(pageSize)
       .offset(skipAmount);
@@ -75,8 +75,8 @@ const categoryRepository = {
         and(
           eq(categories.userId, userId),
           like(categories.name, `%${query}%`),
-          categoryTypeCondition
-        )
+          categoryTypeCondition,
+        ),
       );
 
     const [categoriesResult, [totalCountResult]] = await Promise.all([

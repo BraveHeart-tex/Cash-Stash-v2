@@ -4,7 +4,7 @@ import { parseCurrencyToNumber } from "@/lib/utils/numberUtils/parseCurrencyToNu
 import getCurrencyAmblem from "@/lib/utils/stringUtils/getCurrencyAmblem";
 import { maskString } from "@/lib/utils/stringUtils/maskString";
 import useAuthStore from "@/store/auth/authStore";
-import { ChangeEvent, forwardRef, useEffect, useState } from "react";
+import { type ChangeEvent, forwardRef, useEffect, useState } from "react";
 
 type MaskedAmountInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   // eslint-disable-next-line no-unused-vars
@@ -15,13 +15,13 @@ type MaskedAmountInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
 const MaskedAmountInput = forwardRef<HTMLInputElement, MaskedAmountInputProps>(
   ({ onMaskedValueChange, initialValue = "", ...props }, ref) => {
     const preferredCurrency = useAuthStore(
-      (state) => state.user?.preferredCurrency
+      (state) => state.user?.preferredCurrency,
     );
     const maskConfig = {
       prefix: getCurrencyAmblem(preferredCurrency!),
     };
     const [maskedValue, setMaskedValue] = useState(
-      initialValue ? maskString(initialValue.toString(), maskConfig) : ""
+      initialValue ? maskString(initialValue.toString(), maskConfig) : "",
     );
 
     useEffect(() => {
@@ -48,7 +48,7 @@ const MaskedAmountInput = forwardRef<HTMLInputElement, MaskedAmountInputProps>(
         {...props}
       />
     );
-  }
+  },
 );
 
 MaskedAmountInput.displayName = "MaskedAmountInput";

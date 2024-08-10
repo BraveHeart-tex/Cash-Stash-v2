@@ -1,13 +1,12 @@
 "use client";
 import { motion } from "framer-motion";
+import type React from "react";
 
 const GenericNotFound = ({
   renderTitle,
   renderMessage,
 }: {
-  // eslint-disable-next-line no-unused-vars
   renderTitle: (props: { className: string }) => React.ReactNode;
-  // eslint-disable-next-line no-unused-vars
   renderMessage: (props: { className: string }) => React.ReactNode;
 }) => {
   return (

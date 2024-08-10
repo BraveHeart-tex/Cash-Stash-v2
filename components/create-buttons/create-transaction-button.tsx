@@ -1,13 +1,13 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import type { AccountSelectModel } from "@/lib/database/schema";
+import { cn } from "@/lib/utils/stringUtils/cn";
+import { canUserCreateTransaction } from "@/server/transaction";
+import useGenericModalStore from "@/store/genericModalStore";
+import { useTranslations } from "next-intl";
 import { useTransition } from "react";
 import { FaExchangeAlt, FaPlus } from "react-icons/fa";
-import { cn } from "@/lib/utils/stringUtils/cn";
-import useGenericModalStore from "@/store/genericModalStore";
-import { canUserCreateTransaction } from "@/server/transaction";
 import { toast } from "sonner";
-import { AccountSelectModel } from "@/lib/database/schema";
-import { useTranslations } from "next-intl";
 
 type CreateTransactionButtonProps = {
   className?: string;
@@ -20,9 +20,9 @@ const CreateTransactionButton = ({
 }: CreateTransactionButtonProps) => {
   const t = useTranslations("Components.CreateTransactionButton");
   const createAccountT = useTranslations("Components.CreateAccountButton");
-  let [isPending, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
   const openGenericModal = useGenericModalStore(
-    (state) => state.openGenericModal
+    (state) => state.openGenericModal,
   );
 
   const openCreateTransactionModal = (accountId?: number) => {
@@ -80,7 +80,7 @@ const CreateTransactionButton = ({
       className={cn(
         "font-semibold",
         isPending && "cursor-not-allowed opacity-50",
-        className
+        className,
       )}
       type="button"
       name="create-transaction"
@@ -94,7 +94,7 @@ const CreateTransactionButton = ({
       <div
         className={cn(
           "flex items-center gap-[14px] whitespace-nowrap",
-          minimizeOnMobile && "hidden md:flex"
+          minimizeOnMobile && "hidden md:flex",
         )}
       >
         <FaExchangeAlt className="text-xl" />

@@ -1,10 +1,10 @@
 import AccountSummaries from "@/components/account-summaries";
 import BudgetStatus from "@/components/budget-status";
+import BarChartComponent from "@/components/charts/bar-chart";
 import FinancialInsights from "@/components/financial-insights";
 import GoalStatus from "@/components/goals/goal-status";
 import NotificationsAndReminders from "@/components/notification-and-reminders";
 import TransactionHistory from "@/components/transaction-history";
-import BarChartComponent from "@/components/charts/bar-chart";
 import {
   Card,
   CardContent,
@@ -12,12 +12,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getPaginatedTransactions } from "@/server/transaction";
-import { getPaginatedAccounts } from "@/server/account";
 import { fetchInsightsDataAction, getChartData } from "@/server";
+import { getPaginatedAccounts } from "@/server/account";
 import { getPaginatedBudgets } from "@/server/budget";
 import { getPaginatedGoals } from "@/server/goal";
 import { getPaginatedReminders } from "@/server/reminder";
+import { getPaginatedTransactions } from "@/server/transaction";
 import { getTranslations } from "next-intl/server";
 
 const Dashboard = async () => {

@@ -1,6 +1,6 @@
 import { FLAGS_BY_CURRENCY_SYMBOL } from "@/lib/constants";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
-import { ConvertCurrencyType } from "@/typings/currencies";
+import type { ConvertCurrencyType } from "@/typings/currencies";
 
 type ConvertedCurrencyListItemProps = {
   item: ConvertCurrencyType;

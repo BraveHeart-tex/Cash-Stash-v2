@@ -1,7 +1,8 @@
 "use client";
 import AutoProgressInput from "@/components/auto-progress-input";
-import { useState, useTransition } from "react";
-import { validateOTP } from "@/server/auth";
+import Logo from "@/components/logo";
+import TwoFactorAuthenticationTimer from "@/components/two-factor-authentication-timer";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -10,14 +11,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import TwoFactorAuthenticationTimer from "@/components/two-factor-authentication-timer";
-import { toast } from "sonner";
-import Logo from "@/components/logo";
 import { PAGE_ROUTES } from "@/lib/constants";
 import { useRouter } from "@/navigation";
-import { Button } from "@/components/ui/button";
+import { validateOTP } from "@/server/auth";
 import { useLocale } from "next-intl";
 import { redirect as nextRedirect } from "next/navigation";
+import { useState, useTransition } from "react";
+import { toast } from "sonner";
 
 type TwoFactorAuthenticationFormProps = {
   email: string;

@@ -1,20 +1,23 @@
 "use client";
-import UserMenu from "@/components/user-menu";
-import { Link } from "@/navigation";
-import { useEffect } from "react";
-import { User } from "lucia";
-import useAuthStore from "@/store/auth/authStore";
-import { PAGE_ROUTES } from "@/lib/constants";
-import ModeToggle from "@/components/ui/mode-toggle";
 import Logo from "@/components/logo";
+import ModeToggle from "@/components/ui/mode-toggle";
+import UserMenu from "@/components/user-menu";
+import { PAGE_ROUTES } from "@/lib/constants";
+import { Link } from "@/navigation";
+import useAuthStore from "@/store/auth/authStore";
+import type { User } from "lucia";
+import { useEffect } from "react";
 
-const Navbar = ({ user }: { user: User | null }) => {
+type NavbarProps = {
+  user: User | null;
+};
+
+const Navbar = ({ user }: NavbarProps) => {
   const setCurrentUser = useAuthStore((state) => state.setUser);
 
   useEffect(() => {
     setCurrentUser(user);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [user, setCurrentUser]);
 
   return (
     <div className="mb-6 bg-primary p-4 shadow-sm dark:border-b dark:bg-background">

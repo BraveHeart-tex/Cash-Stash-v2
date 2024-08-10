@@ -1,6 +1,6 @@
-import { cache } from "react";
-import { cookies } from "next/headers";
 import { lucia } from "@/lib/database/connection";
+import { cookies } from "next/headers";
+import { cache } from "react";
 
 export const getUser = cache(async () => {
   const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
@@ -8,12 +8,12 @@ export const getUser = cache(async () => {
   const { user, session } = await lucia.validateSession(sessionId);
 
   try {
-    if (session && session.fresh) {
+    if (session?.fresh) {
       const sessionCookie = lucia.createSessionCookie(session.id);
       cookies().set(
         sessionCookie.name,
         sessionCookie.value,
-        sessionCookie.attributes
+        sessionCookie.attributes,
       );
     }
     if (!session) {
@@ -21,7 +21,7 @@ export const getUser = cache(async () => {
       cookies().set(
         sessionCookie.name,
         sessionCookie.value,
-        sessionCookie.attributes
+        sessionCookie.attributes,
       );
     }
   } catch {

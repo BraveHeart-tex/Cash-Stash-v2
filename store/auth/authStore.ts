@@ -1,6 +1,4 @@
-/* eslint-disable no-unused-vars */
-
-import { User } from "lucia";
+import type { User } from "lucia";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
@@ -13,7 +11,7 @@ type AuthStoreState = {
 
 const useAuthStore = create<AuthStoreState, [["zustand/devtools", never]]>(
   devtools(
-    (set, get) => ({
+    (set, _get) => ({
       user: null,
       setUser: (user) => {
         set((state) => ({
@@ -29,8 +27,8 @@ const useAuthStore = create<AuthStoreState, [["zustand/devtools", never]]>(
     }),
     {
       name: "AuthStore",
-    }
-  )
+    },
+  ),
 );
 
 export default useAuthStore;

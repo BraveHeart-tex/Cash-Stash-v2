@@ -1,5 +1,5 @@
-import { GoalSelectModel } from "@/lib/database/schema";
 import GoalCard from "@/components/goals/goal-card";
+import type { GoalSelectModel } from "@/lib/database/schema";
 
 type GoalCardsListProps = {
   goals: GoalSelectModel[];

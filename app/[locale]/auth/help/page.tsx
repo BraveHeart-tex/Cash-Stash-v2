@@ -1,3 +1,7 @@
+import ForgotPassword from "@/components/auth/forgot-password";
+import Logo from "@/components/logo";
+import ResendVerificationEmailInput from "@/components/resend-verification-token-input";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -5,13 +9,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import ForgotPassword from "@/components/auth/forgot-password";
 import { PAGE_ROUTES } from "@/lib/constants";
-import ResendVerificationEmailInput from "@/components/resend-verification-token-input";
-import { FaArrowLeft } from "react-icons/fa6";
-import Logo from "@/components/logo";
 import { Link } from "@/navigation";
+import { FaArrowLeft } from "react-icons/fa6";
 
 type SignInHelpPageProps = {
   searchParams: {

@@ -1,4 +1,4 @@
-import { CategorySelectModel } from "@/lib/database/schema";
+import type { CategorySelectModel } from "@/lib/database/schema";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
@@ -35,11 +35,11 @@ const useCategoriesStore = create<
       const { categories } = get();
       set({
         categories: categories.map((c) =>
-          c.id === category.id ? category : c
+          c.id === category.id ? category : c,
         ),
       });
     },
-  }))
+  })),
 );
 
 export default useCategoriesStore;

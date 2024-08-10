@@ -1,17 +1,17 @@
 "use client";
+import TwoFactorAuthenticationActivationInput from "@/components/settings/two-factor-authentication-activation-input";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/navigation";
-import useAuthStore from "@/store/auth/authStore";
-import { toast } from "sonner";
-import { FaCopy } from "react-icons/fa";
-import QRCode from "react-qr-code";
-import TwoFactorAuthenticationActivationInput from "@/components/settings/two-factor-authentication-activation-input";
-import { useEffect, useTransition } from "react";
 import { getTwoFactorAuthURI } from "@/server/auth";
+import useAuthStore from "@/store/auth/authStore";
+import { useEffect, useTransition } from "react";
+import { FaCopy } from "react-icons/fa";
 import { ImSpinner2 } from "react-icons/im";
+import QRCode from "react-qr-code";
+import { toast } from "sonner";
 
 type TwoFactorAuthenticationActivationProps = {
-  internationalzationConfig: {
+  internationalizationConfig: {
     twoFactorFormStepOne: string;
     twoFactorFormStepTwo: string;
     twoFactorFormStepThree: string;
@@ -22,9 +22,9 @@ type TwoFactorAuthenticationActivationProps = {
 };
 
 const TwoFactorAuthenticationActivation = ({
-  internationalzationConfig,
+  internationalizationConfig,
 }: TwoFactorAuthenticationActivationProps) => {
-  let [isPending, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
   const user = useAuthStore((state) => state.user);
 
   const uri = useAuthStore((state) => state.uri);
@@ -41,20 +41,21 @@ const TwoFactorAuthenticationActivation = ({
     twoFactorCopyToClipboardSuccessMessage,
     twoFactorCopyToClipboardCTA,
     twoFactorCodeInputLabel,
-  } = internationalzationConfig;
+  } = internationalizationConfig;
 
   const handleCopyToClipBoard = async () => {
-    await navigator.clipboard.writeText(secret!);
+    if (!secret) return;
+    await navigator.clipboard.writeText(secret);
     toast.info(twoFactorCopyToClipboardSuccessMessage);
   };
 
-  const shoudlGetUri =
+  const shouldGetUri =
     !uri &&
     user?.prefersTwoFactorAuthentication &&
     !user.activatedTwoFactorAuthentication;
 
   useEffect(() => {
-    if (shoudlGetUri) {
+    if (shouldGetUri) {
       startTransition(async () => {
         const uriResponse = await getTwoFactorAuthURI();
         if (uriResponse) {
@@ -62,7 +63,7 @@ const TwoFactorAuthenticationActivation = ({
         }
       });
     }
-  }, [shoudlGetUri, setUri]);
+  }, [shouldGetUri, setUri]);
 
   return (
     <div className="mt-5 rounded-sm border bg-card p-4 text-foreground shadow-sm lg:p-10">

@@ -4,7 +4,7 @@ import NavigationTabs from "@/components/navigation-tabs";
 import GenericConfirmDialog from "@/components/ui/generic-confirm-dialog";
 import { getUser } from "@/lib/auth/session";
 import { getTranslations } from "next-intl/server";
-import React from "react";
+import type React from "react";
 
 const DashboardMainLayout = async ({
   children,
@@ -22,7 +22,7 @@ const DashboardMainLayout = async ({
       <GenericConfirmDialog
         internationalizationConfig={{
           defaultSecondaryActionLabel: t(
-            "GenericConfirmDialog.defaultSecondaryActionLabel"
+            "GenericConfirmDialog.defaultSecondaryActionLabel",
           ),
         }}
       />

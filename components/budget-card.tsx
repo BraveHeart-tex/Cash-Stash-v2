@@ -1,19 +1,19 @@
 "use client";
-import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
-import { useRouter } from "@/navigation";
-import { motion } from "framer-motion";
-import { useGenericConfirmStore } from "@/store/genericConfirmStore";
-import useGenericModalStore from "@/store/genericModalStore";
-import { deleteBudget } from "@/server/budget";
 import ActionPopover from "@/components/action-popover";
-import { toast } from "sonner";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import { cn } from "@/lib/utils/stringUtils/cn";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { useRouter } from "@/navigation";
+import { deleteBudget } from "@/server/budget";
 import useAuthStore from "@/store/auth/authStore";
-import { BudgetWithCategory } from "@/typings/budgets";
+import { useGenericConfirmStore } from "@/store/genericConfirmStore";
+import useGenericModalStore from "@/store/genericModalStore";
+import type { BudgetWithCategory } from "@/typings/budgets";
+import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import { toast } from "sonner";
 
 type BudgetCardProps = {
   budget: BudgetWithCategory;
@@ -22,13 +22,13 @@ type BudgetCardProps = {
 const BudgetCard = ({ budget }: BudgetCardProps) => {
   const t = useTranslations("Components.BudgetCard");
   const preferredCurrency = useAuthStore(
-    (state) => state.user?.preferredCurrency
+    (state) => state.user?.preferredCurrency,
   );
   const showGenericConfirm = useGenericConfirmStore(
-    (state) => state.showConfirm
+    (state) => state.showConfirm,
   );
   const openGenericModal = useGenericModalStore(
-    (state) => state.openGenericModal
+    (state) => state.openGenericModal,
   );
   const router = useRouter();
 
@@ -110,7 +110,7 @@ const BudgetCard = ({ budget }: BudgetCardProps) => {
           <Badge
             className={cn(
               "select-none",
-              getBadgeColor(budget.spentAmount / budget.budgetAmount)
+              getBadgeColor(budget.spentAmount / budget.budgetAmount),
             )}
           >
             {budget.progress.toFixed(0)}%

@@ -1,4 +1,5 @@
 "use client";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -8,9 +9,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import useZodResolver from "@/lib/zod-resolver-wrapper";
-import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -19,40 +17,42 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import useZodResolver from "@/lib/zod-resolver-wrapper";
 import { useRouter } from "@/navigation";
 import { useEffect, useMemo, useState, useTransition } from "react";
+import { useForm } from "react-hook-form";
 
-import { getCurrentUserAccounts } from "@/server/account";
-import { createTransaction, updateTransaction } from "@/server/transaction";
-import useGenericModalStore from "@/store/genericModalStore";
-import { toast } from "sonner";
-import {
-  AccountSelectModel,
-  TransactionSelectModel,
-} from "@/lib/database/schema";
-import CurrencyFormLabel from "@/components/ui/currency-form-label";
-import { compareMatchingKeys } from "@/lib/utils/objectUtils/compareMatchingKeys";
-import useCategoriesStore from "@/store/categoriesStore";
-import { CATEGORY_TYPES } from "@/lib/constants";
-import { getCategoriesByType } from "@/server/category";
 import CreateTransactionCategoryPopover from "@/components/transactions/create-transaction-category-popover";
 import Combobox from "@/components/ui/combobox";
-import { cn } from "@/lib/utils/stringUtils/cn";
-import { FaMinus, FaPlus, FaQuestion } from "react-icons/fa";
-import useAuthStore from "@/store/auth/authStore";
+import CurrencyFormLabel from "@/components/ui/currency-form-label";
+import MaskedAmountInput from "@/components/ui/masked-amount-input";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { BaseValidatedResponse } from "@/typings/baseTypes";
-import MaskedAmountInput from "@/components/ui/masked-amount-input";
-import { useTranslations } from "next-intl";
+import { CATEGORY_TYPES } from "@/lib/constants";
+import type {
+  AccountSelectModel,
+  TransactionSelectModel,
+} from "@/lib/database/schema";
+import { compareMatchingKeys } from "@/lib/utils/objectUtils/compareMatchingKeys";
+import { cn } from "@/lib/utils/stringUtils/cn";
 import {
-  TransactionSchemaType,
+  type TransactionSchemaType,
   getTransactionSchema,
 } from "@/schemas/transaction-schema";
+import { getCurrentUserAccounts } from "@/server/account";
+import { getCategoriesByType } from "@/server/category";
+import { createTransaction, updateTransaction } from "@/server/transaction";
+import useAuthStore from "@/store/auth/authStore";
+import useCategoriesStore from "@/store/categoriesStore";
+import useGenericModalStore from "@/store/genericModalStore";
+import type { BaseValidatedResponse } from "@/typings/baseTypes";
+import { useTranslations } from "next-intl";
+import { FaMinus, FaPlus, FaQuestion } from "react-icons/fa";
+import { toast } from "sonner";
 
 type TransactionFormProps = {
   data?: TransactionSelectModel;
@@ -66,10 +66,10 @@ const TransactionForm = ({
 
   const [isPending, startTransition] = useTransition();
   const closeGenericModal = useGenericModalStore(
-    (state) => state.closeGenericModal
+    (state) => state.closeGenericModal,
   );
   const preferredCurrency = useAuthStore(
-    (state) => state.user?.preferredCurrency
+    (state) => state.user?.preferredCurrency,
   );
   const [accounts, setAccounts] = useState<AccountSelectModel[]>([]);
   const router = useRouter();
@@ -85,7 +85,7 @@ const TransactionForm = ({
     resolver: useZodResolver(transactionSchema),
   });
   const transactionsCategories = useCategoriesStore(
-    (state) => state.categories
+    (state) => state.categories,
   ).filter((category) => category.type === CATEGORY_TYPES.TRANSACTION);
   const setCategories = useCategoriesStore((state) => state.setCategories);
   const entityId = transactionToBeUpdated?.id;
@@ -123,10 +123,10 @@ const TransactionForm = ({
   }, []);
 
   const setDefaultFormValues = (
-    transactionToBeUpdated: TransactionSelectModel
+    transactionToBeUpdated: TransactionSelectModel,
   ) => {
     const keys = Object.keys(
-      transactionToBeUpdated ?? {}
+      transactionToBeUpdated ?? {},
     ) as (keyof TransactionSchemaType)[];
     if (keys.length) {
       keys.forEach((key) => {
@@ -158,7 +158,7 @@ const TransactionForm = ({
   };
 
   const processFormSubmissionResult = (
-    result: BaseValidatedResponse<TransactionSelectModel>
+    result: BaseValidatedResponse<TransactionSelectModel>,
   ) => {
     if (result.fieldErrors.length) {
       result.fieldErrors.forEach((fieldError) => {
@@ -175,7 +175,7 @@ const TransactionForm = ({
       });
     } else {
       const successMessage = t(
-        `successMessage.${entityId ? "update" : "create"}`
+        `successMessage.${entityId ? "update" : "create"}`,
       );
       router.refresh();
       toast.success(successMessage);
@@ -293,7 +293,7 @@ const TransactionForm = ({
                             "absolute left-1 top-1 h-7 w-7",
                             field.value !== undefined &&
                               Math.sign(field.value) !== -1 &&
-                              "bg-success text-success-foreground"
+                              "bg-success text-success-foreground",
                           )}
                           onClick={() => {
                             if (field.value === undefined) return;
@@ -324,7 +324,7 @@ const TransactionForm = ({
                 {field?.value?.toString() && (
                   <>
                     {t(
-                      `amountField.amountSignInformation.${Math.sign(field.value) === -1 ? "expense" : "income"}`
+                      `amountField.amountSignInformation.${Math.sign(field.value) === -1 ? "expense" : "income"}`,
                     )}
                   </>
                 )}
@@ -343,17 +343,17 @@ const TransactionForm = ({
                 <Combobox
                   key={JSON.stringify(
                     form.watch("categoryId")?.toString() +
-                      transactionsCategories
+                      transactionsCategories,
                   )}
                   ref={field.ref}
                   options={transactionCategoryOptions}
                   contentClassName="z-[100]"
                   defaultOption={transactionCategoryOptions.find(
-                    (category) => +category.value === form.watch("categoryId")
+                    (category) => +category.value === form.watch("categoryId"),
                   )}
                   triggerClassName={cn(
                     "focus:outline focus:outline-1 focus:outline-offset-1 focus:outline-destructive",
-                    !isPending && isTransactionCategoryListEmpty && "hidden"
+                    !isPending && isTransactionCategoryListEmpty && "hidden",
                   )}
                   triggerPlaceholder={t("categoryIdField.placeholder")}
                   onSelect={(option) => {

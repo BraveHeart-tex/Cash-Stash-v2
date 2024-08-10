@@ -9,17 +9,17 @@ export async function GET() {
     if (!cronJobStatus) {
       return NextResponse.json(
         { message: "Error running cron job" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
     return NextResponse.json({ message: "Cron job ran successfully!" });
   } catch (error) {
-    logger.error("Error running cron job");
+    logger.error("Error running cron job", error);
 
     return NextResponse.json(
       { message: "Error running cron job" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -7,10 +7,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { useEffect, useRef, useTransition } from "react";
-import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import { Button } from "@/components/ui/button";
-import { useMediaQuery } from "usehooks-ts";
 import {
   Drawer,
   DrawerContent,
@@ -19,6 +16,9 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
+import { useGenericConfirmStore } from "@/store/genericConfirmStore";
+import { useEffect, useRef, useTransition } from "react";
+import { useMediaQuery } from "usehooks-ts";
 
 type GenericConfirmDialogProps = {
   internationalizationConfig: {
@@ -42,7 +42,7 @@ const GenericConfirmDialog = ({
   } = useGenericConfirmStore((state) => state);
   const actionRef = useRef<HTMLButtonElement | null>(null);
   const isMobile = useMediaQuery("(max-width: 768px)");
-  let [, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   useEffect(() => {
     if (visible && actionRef?.current) {

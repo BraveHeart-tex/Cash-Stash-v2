@@ -1,4 +1,8 @@
 "use client";
+import PasswordInput from "@/components/auth/password-input";
+import TwoFactorAuthenticationForm from "@/components/auth/two-factor-authentication-form";
+import LoggedInIllustration from "@/components/logged-in-illustration";
+import Logo from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -8,11 +12,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useForm } from "react-hook-form";
-import { getLoginSchema, LoginSchemaType } from "@/schemas/login-schema";
-import { useState, useTransition } from "react";
-import { login, validateReCAPTCHAToken } from "@/server/auth";
-import { motion } from "framer-motion";
 import {
   Form,
   FormControl,
@@ -23,14 +22,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { PAGE_ROUTES } from "@/lib/constants";
-import TwoFactorAuthenticationForm from "@/components/auth/two-factor-authentication-form";
-import PasswordInput from "@/components/auth/password-input";
-import { toast } from "sonner";
-import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
-import LoggedInIllustration from "@/components/logged-in-illustration";
-import Logo from "@/components/logo";
-import { Link, useRouter } from "@/navigation";
 import useZodResolver from "@/lib/zod-resolver-wrapper";
+import { Link, useRouter } from "@/navigation";
+import { type LoginSchemaType, getLoginSchema } from "@/schemas/login-schema";
+import { login, validateReCAPTCHAToken } from "@/server/auth";
+import { motion } from "framer-motion";
+import { useState, useTransition } from "react";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 type LoginFormProps = {
   internationalizationConfig: {
@@ -58,7 +58,7 @@ type LoginFormProps = {
 
 const LoginForm = ({ internationalizationConfig }: LoginFormProps) => {
   const { executeRecaptcha } = useGoogleReCaptcha();
-  let [isPending, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
   const [showTwoFactorForm, setShowTwoFactorForm] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const router = useRouter();
@@ -97,7 +97,7 @@ const LoginForm = ({ internationalizationConfig }: LoginFormProps) => {
   const handleLoginFormSubmit = async (data: LoginSchemaType) => {
     if (!executeRecaptcha) return;
     startTransition(async () => {
-      let captchaToken = await executeRecaptcha();
+      const captchaToken = await executeRecaptcha();
       const isCaptchaTokenValid = await validateReCAPTCHAToken(captchaToken);
 
       if (!isCaptchaTokenValid) {
@@ -124,15 +124,15 @@ const LoginForm = ({ internationalizationConfig }: LoginFormProps) => {
   };
 
   const processFormSubmissionResult = (
-    result: Awaited<ReturnType<typeof login>>
+    result: Awaited<ReturnType<typeof login>>,
   ) => {
     if (result.fieldErrors.length) {
-      result.fieldErrors.forEach((fieldError) => {
-        form.setError(fieldError.field as any, {
+      for (const fieldError of result.fieldErrors) {
+        form.setError(fieldError.field as keyof LoginSchemaType, {
           type: "manual",
           message: fieldError.message,
         });
-      });
+      }
     }
 
     if (result.error) {
@@ -159,7 +159,7 @@ const LoginForm = ({ internationalizationConfig }: LoginFormProps) => {
     visible: { opacity: 1, y: 0 },
   };
 
-  const signUpQuestion = signUpText.split("? ")[0] + "?";
+  const signUpQuestion = `${signUpText.split("? ")[0]}?`;
   const signUpCTA = signUpText.split("? ")[1];
 
   return (
@@ -195,7 +195,6 @@ const LoginForm = ({ internationalizationConfig }: LoginFormProps) => {
               <form
                 className="flex flex-col gap-4"
                 onSubmit={form.handleSubmit(handleLoginFormSubmit)}
-                data-testid="login-form"
                 name="login-form"
                 aria-label="login-form"
               >
@@ -232,7 +231,6 @@ const LoginForm = ({ internationalizationConfig }: LoginFormProps) => {
                   aria-label={signInButtonLabel}
                   className="font-semibold"
                   disabled={isPending}
-                  data-testid="login-button"
                 >
                   {signInButtonLabel}
                 </Button>

@@ -1,26 +1,26 @@
-import { RegisterConfirmEmail } from "@/emails/register-confirm-email";
-import { render } from "@react-email/render";
-import { PAGE_ROUTES } from "@/lib/constants";
-import { User } from "lucia";
 import ForgotPasswordEmail from "@/emails/forgot-password-email";
-import emailService from "@/lib/services/emailService";
+import { RegisterConfirmEmail } from "@/emails/register-confirm-email";
 import { getUser } from "@/lib/auth/session";
+import { PAGE_ROUTES } from "@/lib/constants";
+import emailService from "@/lib/services/emailService";
 import { redirect } from "@/navigation";
-import { AuthenticatedFunction, OptionalParameter } from "@/typings/auth";
+import type { AuthenticatedFunction, OptionalParameter } from "@/typings/auth";
+import { render } from "@react-email/render";
+import type { User } from "lucia";
 
 export const sendEmailVerificationCode = async (
   email: string,
-  code: string
+  code: string,
 ) => {
   const emailHTML = render(
     RegisterConfirmEmail({
       validationCode: code,
       validationUrl: `${process.env.NEXT_PUBLIC_BASE_URL}${PAGE_ROUTES.EMAIL_VERIFICATION_ROUTE}/${email}`,
-    })
+    }),
   );
 
   const options = {
-    from: process.env.EMAIL_USER!,
+    from: process.env.EMAIL_USER as string,
     to: email,
     subject: "Confirm your email address",
     html: emailHTML,
@@ -33,11 +33,11 @@ export const sendResetPasswordLink = async (email: string, url: string) => {
   const emailHTML = render(
     ForgotPasswordEmail({
       url,
-    })
+    }),
   );
 
   const options = {
-    from: process.env.EMAIL_USER!,
+    from: process.env.EMAIL_USER as string,
     to: email,
     subject: "Reset your password",
     html: emailHTML,
@@ -47,7 +47,7 @@ export const sendResetPasswordLink = async (email: string, url: string) => {
 };
 
 export function authenticatedAction<T, P = undefined>(
-  logic: AuthenticatedFunction<T, P>
+  logic: AuthenticatedFunction<T, P>,
   // eslint-disable-next-line no-unused-vars
 ): (params: OptionalParameter<AuthenticatedFunction<T, P>>) => Promise<T> {
   return async (params: OptionalParameter<AuthenticatedFunction<T, P>>) => {
@@ -63,7 +63,7 @@ export function authenticatedAction<T, P = undefined>(
 
 export function authenticatedActionWithNoParams<T>(
   // eslint-disable-next-line no-unused-vars
-  logic: (user: User) => Promise<T>
+  logic: (user: User) => Promise<T>,
 ) {
   return async () => {
     const { user } = await getUser();

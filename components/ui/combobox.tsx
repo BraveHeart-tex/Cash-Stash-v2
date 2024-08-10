@@ -1,12 +1,5 @@
 "use client";
-import { forwardRef, useEffect, useMemo, useState } from "react";
-import { cn } from "@/lib/utils/stringUtils/cn";
 import { Button } from "@/components/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import {
   Command,
   CommandEmpty,
@@ -14,11 +7,18 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { FaCheck, FaSort } from "react-icons/fa";
-import { motion, AnimatePresence } from "framer-motion";
-import { useMediaQuery } from "usehooks-ts";
-import { IconType } from "react-icons/lib";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils/stringUtils/cn";
+import { AnimatePresence, motion } from "framer-motion";
 import { useTranslations } from "next-intl";
+import { forwardRef, useEffect, useMemo, useState } from "react";
+import { FaCheck, FaSort } from "react-icons/fa";
+import type { IconType } from "react-icons/lib";
+import { useMediaQuery } from "usehooks-ts";
 
 export type ComboboxOption = {
   icon?: IconType;
@@ -50,14 +50,14 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
       trigger,
       triggerPlaceholder,
     },
-    ref
+    ref,
   ) => {
     const t = useTranslations("Components.Combobox");
     const isMobile = useMediaQuery("(max-width: 768px)");
     const [isOpen, setIsOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedOption, setSelectedOption] = useState<ComboboxOption | null>(
-      defaultOption || null
+      defaultOption || null,
     );
 
     useEffect(() => {
@@ -119,7 +119,7 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
               aria-expanded={isOpen}
               className={cn(
                 "w-full justify-between truncate",
-                triggerClassName
+                triggerClassName,
               )}
               onClick={() => setIsOpen(!isOpen)}
             >
@@ -168,7 +168,7 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
                             whileTap={{ scale: 0.97 }}
                             className={cn(
                               selectedOption?.value === option.value &&
-                                "font-semibold text-primary"
+                                "font-semibold text-primary",
                             )}
                           >
                             <span className="flex items-center gap-2">
@@ -182,7 +182,7 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
                                 "ml-auto h-4 w-4",
                                 selectedOption?.value === option.value
                                   ? "opacity-100"
-                                  : "opacity-0"
+                                  : "opacity-0",
                               )}
                             />
                           </motion.li>
@@ -197,7 +197,7 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
         </PopoverContent>
       </Popover>
     );
-  }
+  },
 );
 Combobox.displayName = "Combobox";
 

@@ -1,10 +1,11 @@
-import { AccountSelectModel } from "@/lib/database/schema";
-import { AccountSchemaType } from "@/schemas/account-schema";
-import {
+import type { AccountSelectModel } from "@/lib/database/schema";
+import type { AccountSchemaType } from "@/schemas/account-schema";
+import type {
   BasePaginatedActionParams,
+  BasePaginatedResponse,
   BaseValidatedResponse,
 } from "@/typings/baseTypes";
-import { TransactionWithCategoryAndAccountName } from "@/typings/transactions";
+import type { TransactionWithCategoryAndAccountName } from "@/typings/transactions";
 
 export type RegisterBankAccountReturnType =
   BaseValidatedResponse<AccountSelectModel>;

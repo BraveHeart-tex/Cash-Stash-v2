@@ -1,37 +1,37 @@
 "use server";
 import {
+  authenticatedAction,
+  authenticatedActionWithNoParams,
+} from "@/lib/auth/authUtils";
+import { getUser } from "@/lib/auth/session";
+import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
+import accountRepository from "@/lib/database/repository/accountRepository";
+import transactionRepository from "@/lib/database/repository/transactionRepository";
+import type { TransactionSelectModel } from "@/lib/database/schema";
+import redisService from "@/lib/redis/redisService";
+import {
   generateCachePrefixWithUserId,
   getAccountKey,
   getAccountTransactionsKey,
   getPaginatedTransactionsKey,
   getTransactionKey,
 } from "@/lib/redis/redisUtils";
-import { getUser } from "@/lib/auth/session";
+import logger from "@/lib/utils/logger";
+import { processZodError } from "@/lib/utils/objectUtils/processZodError";
+import { redirect } from "@/navigation";
 import {
-  TransactionSchemaType,
+  type TransactionSchemaType,
   getTransactionSchema,
 } from "@/schemas/transaction-schema";
-import { redirect } from "@/navigation";
-import { ZodError } from "zod";
-import { CACHE_PREFIXES, PAGE_ROUTES } from "@/lib/constants";
-import redisService from "@/lib/redis/redisService";
-import transactionRepository from "@/lib/database/repository/transactionRepository";
-import accountRepository from "@/lib/database/repository/accountRepository";
-import { TransactionSelectModel } from "@/lib/database/schema";
-import { processZodError } from "@/lib/utils/objectUtils/processZodError";
-import logger from "@/lib/utils/logger";
-import {
+import type {
   CreateTransactionReturnType,
   GetPaginatedTransactionsParams,
   GetPaginatedTransactionsReturnType,
   UpdateTransactionParam,
   UpdateTransactionReturnType,
 } from "@/typings/transactions";
-import {
-  authenticatedAction,
-  authenticatedActionWithNoParams,
-} from "@/lib/auth/authUtils";
 import { getTranslations } from "next-intl/server";
+import { ZodError } from "zod";
 
 const getTranslatedTransactionSchema = async () => {
   const zodT = await getTranslations("Zod.Transaction");
@@ -50,7 +50,7 @@ export const createTransaction = authenticatedAction<
   TransactionSchemaType
 >(async (values, { user }) => {
   const actionT = await getTranslations(
-    "Actions.Transaction.createTransaction"
+    "Actions.Transaction.createTransaction",
   );
   try {
     const transactionSchema = await getTranslatedTransactionSchema();
@@ -75,17 +75,17 @@ export const createTransaction = authenticatedAction<
       redisService.invalidateKeysMatchingPrefixes([
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_ACCOUNTS,
-          user.id
+          user.id,
         ),
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_TRANSACTIONS,
-          user.id
+          user.id,
         ),
         getAccountTransactionsKey(validatedData.accountId),
       ]),
       redisService.hset(
         getTransactionKey(createdTransaction.id),
-        createdTransaction
+        createdTransaction,
       ),
       redisService.hset(getAccountKey(validatedData.accountId), updatedAccount),
     ]);
@@ -113,7 +113,7 @@ export const updateTransaction = authenticatedAction<
   UpdateTransactionParam
 >(async ({ transactionId, values, oldTransaction }, { user }) => {
   const actionT = await getTranslations(
-    "Actions.Transaction.updateTransaction"
+    "Actions.Transaction.updateTransaction",
   );
   try {
     const { amount: oldAmount, accountId: oldAccountId } = oldTransaction;
@@ -145,11 +145,11 @@ export const updateTransaction = authenticatedAction<
       redisService.invalidateKeysMatchingPrefixes([
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_ACCOUNTS,
-          user.id
+          user.id,
         ),
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_TRANSACTIONS,
-          user.id
+          user.id,
         ),
         getAccountTransactionsKey(validatedData.accountId),
       ]),
@@ -176,7 +176,7 @@ export const updateTransaction = authenticatedAction<
 export const deleteTransactionById = authenticatedAction(
   async (transactionToDelete: TransactionSelectModel, { user }) => {
     const actionT = await getTranslations(
-      "Actions.Transaction.deleteTransactionById"
+      "Actions.Transaction.deleteTransactionById",
     );
     try {
       const { affectedRows } =
@@ -192,11 +192,11 @@ export const deleteTransactionById = authenticatedAction(
         redisService.invalidateKeysMatchingPrefixes([
           generateCachePrefixWithUserId(
             CACHE_PREFIXES.PAGINATED_ACCOUNTS,
-            user.id
+            user.id,
           ),
           generateCachePrefixWithUserId(
             CACHE_PREFIXES.PAGINATED_TRANSACTIONS,
-            user.id
+            user.id,
           ),
           getAccountTransactionsKey(transactionToDelete.accountId),
         ]),
@@ -211,7 +211,7 @@ export const deleteTransactionById = authenticatedAction(
         error: actionT("errorMessage"),
       };
     }
-  }
+  },
 );
 
 export const getPaginatedTransactions = authenticatedAction<
@@ -293,7 +293,7 @@ export const getPaginatedTransactions = authenticatedAction<
           totalCount,
         }),
         "EX",
-        60 * 60 * 24
+        60 * 60 * 24,
       );
 
       return {
@@ -313,9 +313,9 @@ export const getPaginatedTransactions = authenticatedAction<
         currentPage: 1,
       };
     }
-  }
+  },
 );
 
 export const canUserCreateTransaction = authenticatedActionWithNoParams(
-  async (user) => await accountRepository.checkIfUserHasAccount(user.id)
+  async (user) => await accountRepository.checkIfUserHasAccount(user.id),
 );

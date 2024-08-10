@@ -1,14 +1,14 @@
 "use client";
-import Combobox, { ComboboxOption } from "@/components/ui/combobox";
-import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
-import useAuthStore from "@/store/auth/authStore";
-import { useGenericConfirmStore } from "@/store/genericConfirmStore";
-import { toast } from "sonner";
+import Combobox, { type ComboboxOption } from "@/components/ui/combobox";
 import {
   convertTransactionsToNewCurrency,
   updateUserCurrencyPreference,
 } from "@/server/user";
+import useAuthStore from "@/store/auth/authStore";
+import { useGenericConfirmStore } from "@/store/genericConfirmStore";
+import { useState, useTransition } from "react";
+import { toast } from "sonner";
 
 type CurrencyComboboxProps = {
   currencies: ComboboxOption[];
@@ -51,31 +51,31 @@ const CurrencyCombobox = ({
     changeCurrencySaveLabel,
   } = internationalizationConfig;
 
-  let [isPending, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
   const [selectedCurrency, setSelectedCurrency] =
     useState<ComboboxOption | null>(null);
 
   const setUser = useAuthStore((state) => state.setUser);
   const showGenericConfirm = useGenericConfirmStore(
-    (state) => state.showConfirm
+    (state) => state.showConfirm,
   );
   const userPreferredCurrency = useAuthStore(
-    (state) => state.user?.preferredCurrency
+    (state) => state.user?.preferredCurrency,
   );
   const userSelectedCurrency = currencies.find(
-    (item) => item.value === userPreferredCurrency
+    (item) => item.value === userPreferredCurrency,
   );
 
   const askCurrencyConversion = (
     oldSymbol: string,
-    selectedCurrency: ComboboxOption
+    selectedCurrency: ComboboxOption,
   ) => {
     showGenericConfirm({
       title: convertCurrencyDialogTitle,
       message: convertCurrencyDialogDescription,
       onConfirm() {
         const updateCurrencyConversion = () => {
-          return new Promise(async (resolve, reject) => {
+          return new Promise((resolve, reject) => {
             startTransition(async () => {
               const response = await convertTransactionsToNewCurrency({
                 oldSymbol,
@@ -105,16 +105,16 @@ const CurrencyCombobox = ({
   };
 
   const handleCurrencySaveConfirm = () => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
       if (!selectedCurrency) {
         reject(currencySaveRejectMessage);
         return;
       }
 
       startTransition(async () => {
-        const oldSymbol = userSelectedCurrency?.value!;
+        const oldSymbol = userSelectedCurrency?.value || "";
         const response = await updateUserCurrencyPreference(
-          selectedCurrency.value
+          selectedCurrency.value,
         );
 
         if (response?.error) {

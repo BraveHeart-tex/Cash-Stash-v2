@@ -1,20 +1,20 @@
 "use client";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import useAuthStore from "@/store/auth/authStore";
-import { MonthlyTransactionsData } from "@/typings/reports";
+import type { MonthlyTransactionsData } from "@/typings/reports";
 import {
-  BarChart,
   Bar,
+  BarChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
 } from "recharts";
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   const preferredCurrency = useAuthStore(
-    (state) => state.user?.preferredCurrency
+    (state) => state.user?.preferredCurrency,
   );
   if (active && payload && payload.length) {
     return (

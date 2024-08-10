@@ -1,7 +1,7 @@
 import { db } from "@/lib/database/connection";
-import { UserInsertModel, users } from "@/lib/database/schema";
-import { and, eq, InferSelectModel } from "drizzle-orm";
+import { type UserInsertModel, users } from "@/lib/database/schema";
 import logger from "@/lib/utils/logger";
+import { type InferSelectModel, and, eq } from "drizzle-orm";
 
 export type UserSelectModel = InferSelectModel<typeof users>;
 

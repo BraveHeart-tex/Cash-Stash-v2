@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -8,18 +8,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import useZodResolver from "@/lib/zod-resolver-wrapper";
-import {
-  CategorySchemaType,
-  getCategorySchema,
-} from "@/schemas/category-schema";
-import { useEffect, useTransition } from "react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { CATEGORY_TYPES } from "@/lib/constants";
-import { createCategory, updateCategory } from "@/server/category";
-import { toast } from "sonner";
-import { CategorySelectModel } from "@/lib/database/schema";
 import {
   Select,
   SelectContent,
@@ -27,13 +16,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { CATEGORY_TYPES } from "@/lib/constants";
+import type { CategorySelectModel } from "@/lib/database/schema";
 import { compareMatchingKeys } from "@/lib/utils/objectUtils/compareMatchingKeys";
+import useZodResolver from "@/lib/zod-resolver-wrapper";
 import {
+  type CategorySchemaType,
+  getCategorySchema,
+} from "@/schemas/category-schema";
+import { createCategory, updateCategory } from "@/server/category";
+import type {
   CategoryUpdateModel,
   CreateCategoryReturnType,
   UpdateCategoryReturnType,
 } from "@/typings/categories";
 import { useTranslations } from "next-intl";
+import type React from "react";
+import { useEffect, useTransition } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 type CategoryFormProps = {
   // eslint-disable-next-line no-unused-vars
@@ -49,7 +50,7 @@ const CategoryForm = ({
   showTypeOptions = true,
   defaultTypeValue = CATEGORY_TYPES.BUDGET,
 }: CategoryFormProps) => {
-  let [isPending, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
   const t = useTranslations("Components.CategoryForm");
   const zodT = useTranslations("Zod.Category");
 
@@ -70,11 +71,11 @@ const CategoryForm = ({
   useEffect(() => {
     if (categoryToUpdate) {
       const keys = Object.keys(
-        categoryToUpdate
+        categoryToUpdate,
       ) as (keyof CategorySchemaType)[];
-      keys.forEach((key) => {
+      for (const key of keys) {
         form.setValue(key, categoryToUpdate[key]);
-      });
+      }
     }
   }, [categoryToUpdate, form]);
 
@@ -103,15 +104,15 @@ const CategoryForm = ({
   };
 
   const processFormSubmissionResult = (
-    result: Awaited<CreateCategoryReturnType | UpdateCategoryReturnType>
+    result: Awaited<CreateCategoryReturnType | UpdateCategoryReturnType>,
   ) => {
     if ("fieldErrors" in result) {
-      result.fieldErrors.forEach((fieldError) => {
-        form.setError(fieldError.field as any, {
+      for (const fieldError of result.fieldErrors) {
+        form.setError(fieldError.field as keyof CategorySchemaType, {
           type: "manual",
           message: fieldError.message,
         });
-      });
+      }
 
       return toast.error(t("anErrorOccurredMessage"), {
         description: result.error,

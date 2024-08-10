@@ -1,15 +1,15 @@
 "use client";
-import { useQueryState } from "nuqs";
 import CurrencyConverterListItem from "@/components/currency-converter/converted-currency-list-item";
-import { Input } from "@/components/ui/input";
-import { useState } from "react";
-import { Label } from "@/components/ui/label";
-import { FaSearch } from "react-icons/fa";
-import { MdQuestionMark } from "react-icons/md";
 import { Button } from "@/components/ui/button";
-import { FaXmark } from "react-icons/fa6";
-import { ConvertCurrencyType } from "@/typings/currencies";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import type { ConvertCurrencyType } from "@/typings/currencies";
 import { useTranslations } from "next-intl";
+import { useQueryState } from "nuqs";
+import { useState } from "react";
+import { FaSearch } from "react-icons/fa";
+import { FaXmark } from "react-icons/fa6";
+import { MdQuestionMark } from "react-icons/md";
 
 type ConvertedCurrencyListProps = {
   currencyList: ConvertCurrencyType[];
@@ -29,7 +29,7 @@ const ConvertedCurrencyList = ({
     (item) =>
       item.symbol !== selectedCurrency &&
       (item?.label?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.symbol.toLowerCase().includes(searchQuery.toLowerCase()))
+        item.symbol.toLowerCase().includes(searchQuery.toLowerCase())),
   );
 
   return (

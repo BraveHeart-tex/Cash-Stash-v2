@@ -1,10 +1,13 @@
+import BudgetQueryStringCombobox from "@/components/budgets/budget-query-string-combobox";
 import RouteFiltersPopover from "@/components/route-filters-popover";
 import RouteSearchInput from "@/components/route-search-input";
-import BudgetQueryStringCombobox from "@/components/budgets/budget-query-string-combobox";
-import { GiPayMoney } from "react-icons/gi";
-import { FaPiggyBank } from "react-icons/fa";
-import { BudgetSelectModel, CategorySelectModel } from "@/lib/database/schema";
+import type {
+  BudgetSelectModel,
+  CategorySelectModel,
+} from "@/lib/database/schema";
 import { useTranslations } from "next-intl";
+import { FaPiggyBank } from "react-icons/fa";
+import { GiPayMoney } from "react-icons/gi";
 
 type BudgetsPageFiltersProps = {
   budgets: BudgetSelectModel[];

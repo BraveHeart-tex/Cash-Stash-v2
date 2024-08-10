@@ -1,5 +1,4 @@
 "use client";
-import useAuthStore from "@/store/auth/authStore";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,11 +9,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import QRCode from "react-qr-code";
-import { FaCopy } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
-import { useMediaQuery } from "usehooks-ts";
 import {
   Drawer,
   DrawerContent,
@@ -23,6 +18,11 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
+import useAuthStore from "@/store/auth/authStore";
+import { FaCopy } from "react-icons/fa";
+import QRCode from "react-qr-code";
+import { toast } from "sonner";
+import { useMediaQuery } from "usehooks-ts";
 
 const UriBarcodeDialog = () => {
   const uri = useAuthStore((state) => state.uri);

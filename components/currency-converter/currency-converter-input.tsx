@@ -1,18 +1,18 @@
 "use client";
 
-import { useQueryState } from "nuqs";
-import { Input } from "@/components/ui/input";
-import { useDebounceValue } from "usehooks-ts";
-import { useEffect, useState } from "react";
 import CurrencySelectCombobox from "@/components/currency-converter/curreny-select-combobox";
-import { format } from "date-fns";
-import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
+import { format } from "date-fns";
+import { useTranslations } from "next-intl";
+import { useQueryState } from "nuqs";
+import { useEffect, useState } from "react";
 import {
   HiOutlineSwitchHorizontal,
   HiOutlineSwitchVertical,
 } from "react-icons/hi";
-import { useTranslations } from "next-intl";
+import { useDebounceValue } from "usehooks-ts";
 
 type CurrencyConverterInputProps = {
   updatedAt: string;
@@ -68,7 +68,7 @@ const CurrencyConverterInput = ({
 
   const maskedConvertedToCurrencyAmount = formatMoney(
     convertedToCurrencyAmount,
-    toCurrency || "EUR"
+    toCurrency || "EUR",
   );
 
   const handleCurrencySwitch = () => {

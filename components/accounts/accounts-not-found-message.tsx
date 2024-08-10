@@ -11,10 +11,10 @@ const AccountsNotFoundMessage = ({
   const t = useTranslations("Accounts.AccountsNotFoundMessage");
 
   const heading = t(
-    `${pageHasParams ? "pageHasParams" : "noAccountsFound"}.heading`
+    `${pageHasParams ? "pageHasParams" : "noAccountsFound"}.heading`,
   );
   const message = t(
-    `${pageHasParams ? "pageHasParams" : "noAccountsFound"}.message`
+    `${pageHasParams ? "pageHasParams" : "noAccountsFound"}.message`,
   );
 
   return (

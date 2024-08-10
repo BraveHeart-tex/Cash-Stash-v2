@@ -1,7 +1,7 @@
-import { verifyRequestOrigin } from "lucia";
-import { NextRequest, NextResponse } from "next/server";
-import createIntlMiddleware from "next-intl/middleware";
 import { LOCALES } from "@/lib/constants";
+import { verifyRequestOrigin } from "lucia";
+import createIntlMiddleware from "next-intl/middleware";
+import { type NextRequest, NextResponse } from "next/server";
 
 export async function middleware(request: NextRequest) {
   const authorizationToken = request.headers.get("Authorization") || "";

@@ -1,9 +1,8 @@
 "use client";
-import { AnimatePresence, AnimatePresenceProps } from "framer-motion";
+import { AnimatePresence, type AnimatePresenceProps } from "framer-motion";
+import type { PropsWithChildren } from "react";
 
-type AnimatePresenceClientProps = AnimatePresenceProps & {
-  children: React.ReactNode;
-};
+type AnimatePresenceClientProps = AnimatePresenceProps & PropsWithChildren;
 
 const AnimatePresenceClient = ({
   children,

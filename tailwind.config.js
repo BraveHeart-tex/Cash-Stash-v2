@@ -82,7 +82,7 @@ module.exports = {
     },
   },
   plugins: [
-    plugin(function ({ addVariant }) {
+    plugin(({ addVariant }) => {
       addVariant("monokai-dark", ".monokai-dark &");
     }),
     require("tailwindcss-animate"),

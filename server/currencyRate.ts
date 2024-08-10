@@ -1,12 +1,12 @@
 "use server";
 
+import { authenticatedAction } from "@/lib/auth/authUtils";
 import { CURRENCIES } from "@/lib/constants";
 import currencyRatesRepository from "@/lib/database/repository/currencyRatesRepository";
 import logger from "@/lib/utils/logger";
-import { ConvertCurrencyType } from "@/typings/currencies";
-import { authenticatedAction } from "@/lib/auth/authUtils";
-import { getTranslations } from "next-intl/server";
 import { getTranslatedLabelForCurrency } from "@/lib/utils/translationUtils/getTranslatedLabelForCurrency";
+import type { ConvertCurrencyType } from "@/typings/currencies";
+import { getTranslations } from "next-intl/server";
 
 type ConvertCurrencyParams = {
   currency: string;
@@ -26,14 +26,14 @@ export const convertCurrency = authenticatedAction<
   try {
     const currencyRates = await currencyRatesRepository.getCurrencyRates();
     const convertedAmounts: { [key: string]: number } = {};
-    const mappedAmount = parseFloat(amount || "1");
+    const mappedAmount = Number.parseFloat(amount || "1");
 
     const getExchangeRate = (symbol: string) => currencyRates[symbol] || null;
 
     const convertCurrency = (
       amount: number,
       fromCurrency: string,
-      toCurrency: string
+      toCurrency: string,
     ) => {
       const fromRate = getExchangeRate(fromCurrency);
       const toRate = getExchangeRate(toCurrency);
@@ -46,11 +46,11 @@ export const convertCurrency = authenticatedAction<
     };
 
     for (const currencyRate in currencyRates) {
-      if (currencyRates.hasOwnProperty(currencyRate)) {
+      if (Object.hasOwn(currencyRates, currencyRate)) {
         const convertedAmount = convertCurrency(
           mappedAmount,
           currency,
-          currencyRate
+          currencyRate,
         );
 
         if (convertedAmount) {
@@ -73,7 +73,7 @@ export const convertCurrency = authenticatedAction<
           label: translatedLabel || label,
           amount: value,
         };
-      }
+      },
     );
 
     return {

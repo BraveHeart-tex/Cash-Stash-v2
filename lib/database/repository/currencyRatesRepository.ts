@@ -1,7 +1,10 @@
-import { eq } from "drizzle-orm";
 import { db } from "@/lib/database/connection";
-import { CurrencyRateInsertModel, currencyRates } from "@/lib/database/schema";
+import {
+  type CurrencyRateInsertModel,
+  currencyRates,
+} from "@/lib/database/schema";
 import logger from "@/lib/utils/logger";
+import { eq } from "drizzle-orm";
 
 const currencyRatesRepository = {
   async updateCurrencyRate(rateToUpdate: CurrencyRateInsertModel) {
@@ -34,7 +37,7 @@ const currencyRatesRepository = {
           acc[curr.symbol] = curr.rate;
           return acc;
         },
-        {} as Record<string, number>
+        {} as Record<string, number>,
       );
     } catch (error) {
       logger.error("Error getting currency rates", error);

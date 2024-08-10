@@ -16,7 +16,7 @@ const CreateBudgetButton = ({
 }: CreateBudgetButtonProps) => {
   const t = useTranslations("Components.CreateBudgetButton");
   const openGenericModal = useGenericModalStore(
-    (state) => state.openGenericModal
+    (state) => state.openGenericModal,
   );
 
   const buttonLabel = t("buttonLabel");
@@ -45,7 +45,7 @@ const CreateBudgetButton = ({
       <div
         className={cn(
           "flex items-center gap-2",
-          minimizeOnMobile && "hidden md:flex"
+          minimizeOnMobile && "hidden md:flex",
         )}
       >
         <FaMoneyBillAlt size={18} /> {buttonLabel}

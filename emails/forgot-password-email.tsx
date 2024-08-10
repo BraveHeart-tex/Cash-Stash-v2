@@ -1,7 +1,7 @@
 import {
   FOREGROUND_COLOR,
-  MUTED_FOREGROUND_COLOR,
   FORGOT_PASSWORD_LINK_EXPIRATION_MINUTES,
+  MUTED_FOREGROUND_COLOR,
 } from "@/lib/constants";
 import {
   Body,
@@ -16,7 +16,6 @@ import {
   Text,
 } from "@react-email/components";
 import { Link } from "@react-email/components";
-import * as React from "react";
 
 type ForgotPasswordEmailProps = {
   url: string;

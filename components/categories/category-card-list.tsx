@@ -1,5 +1,5 @@
-import { CategorySelectModel } from "@/lib/database/schema";
 import CategoryCard from "@/components/categories/category-card";
+import type { CategorySelectModel } from "@/lib/database/schema";
 
 type CategoryCardListProps = {
   categories: CategorySelectModel[];

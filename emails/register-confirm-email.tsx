@@ -1,9 +1,9 @@
 import {
+  EMAIL_VERIFICATION_CODE_EXPIRY_MINUTES,
   FOREGROUND_COLOR,
   MUTED_FOREGROUND_COLOR,
   PRIMARY_COLOR,
   PRIMARY_FOREGROUND_COLOR,
-  EMAIL_VERIFICATION_CODE_EXPIRY_MINUTES,
 } from "@/lib/constants";
 import {
   Body,
@@ -18,8 +18,6 @@ import {
   Text,
 } from "@react-email/components";
 import { Link } from "@react-email/components";
-
-import * as React from "react";
 
 type RegisterConfirmEmailProps = {
   validationCode: string;

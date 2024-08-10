@@ -1,18 +1,20 @@
 "use server";
-import { processZodError } from "@/lib/utils/objectUtils/processZodError";
-import reminderSchema, { ReminderSchemaType } from "@/schemas/reminder-schema";
-import { ZodError } from "zod";
+import { authenticatedAction } from "@/lib/auth/authUtils";
 import reminderRepository from "@/lib/database/repository/reminderRepository";
-import { convertISOToMysqlDatetime } from "@/lib/utils/dateUtils/convertISOToMysqlDatetime";
+import { convertISOToMysqlDateTime } from "@/lib/utils/dateUtils/convertISOToMysqlDateTime";
 import logger from "@/lib/utils/logger";
-import {
+import { processZodError } from "@/lib/utils/objectUtils/processZodError";
+import reminderSchema, {
+  type ReminderSchemaType,
+} from "@/schemas/reminder-schema";
+import type {
   CreateReminderReturnType,
   GetPaginatedRemindersParams,
   GetPaginatedRemindersResponse,
   ReminderUpdateModel,
   UpdateReminderReturnType,
 } from "@/typings/reminders";
-import { authenticatedAction } from "@/lib/auth/authUtils";
+import { ZodError } from "zod";
 
 export const createReminder = authenticatedAction<
   CreateReminderReturnType,
@@ -24,7 +26,7 @@ export const createReminder = authenticatedAction<
     const createdReminder = await reminderRepository.create({
       ...validatedData,
       reminderDate: validatedData.reminderDate
-        ? convertISOToMysqlDatetime(validatedData.reminderDate.toISOString())
+        ? convertISOToMysqlDateTime(validatedData.reminderDate.toISOString())
         : null,
       userId: user.id,
     });
@@ -63,7 +65,7 @@ export const updateReminder = authenticatedAction<
     const affectedRows = await reminderRepository.update(reminder.id, {
       ...validatedData,
       reminderDate: validatedData.reminderDate
-        ? convertISOToMysqlDatetime(validatedData.reminderDate.toISOString())
+        ? convertISOToMysqlDateTime(validatedData.reminderDate.toISOString())
         : null,
     });
 

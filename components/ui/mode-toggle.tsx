@@ -1,11 +1,11 @@
 "use client";
 
-import Combobox, { ComboboxOption } from "@/components/ui/combobox";
+import Combobox, { type ComboboxOption } from "@/components/ui/combobox";
+import { THEME_OPTIONS } from "@/lib/constants";
+import { cn } from "@/lib/utils/stringUtils/cn";
+import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-import { cn } from "@/lib/utils/stringUtils/cn";
-import { THEME_OPTIONS } from "@/lib/constants";
-import { useTranslations } from "next-intl";
 
 type ModeToggleProps = {
   triggerClassName?: string;
@@ -27,6 +27,7 @@ const ModeToggle = ({ triggerClassName }: ModeToggleProps) => {
 
   const mappedOptions: ComboboxOption[] = THEME_OPTIONS.map((item) => ({
     ...item,
+    // biome-ignore lint/suspicious/noExplicitAny: It's intentional
     label: t(`${item.value}.label` as any),
   }));
 

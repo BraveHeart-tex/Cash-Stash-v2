@@ -1,10 +1,10 @@
 "use client";
-import { redirect } from "@/navigation";
 import CountDownTimer from "@/components/countdown-timer";
 import {
   EMAIL_VERIFICATION_CODE_EXPIRY_SECONDS,
   EMAIL_VERIFICATION_REDIRECTION_PATHS,
 } from "@/lib/constants";
+import { redirect } from "@/navigation";
 import { toast } from "sonner";
 
 const EmailVerificationTimer = ({ time }: { time: number }) => {

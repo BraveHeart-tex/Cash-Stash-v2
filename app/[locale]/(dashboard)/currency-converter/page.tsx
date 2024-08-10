@@ -1,9 +1,9 @@
-import { convertCurrency } from "@/server/currencyRate";
 import ConvertedCurrencyList from "@/components/currency-converter/converted-currency-list";
 import CurrencyConverterInput from "@/components/currency-converter/currency-converter-input";
 import { getUser } from "@/lib/auth/session";
 import { PAGE_ROUTES } from "@/lib/constants";
 import { redirect } from "@/navigation";
+import { convertCurrency } from "@/server/currencyRate";
 import { getTranslations } from "next-intl/server";
 
 const CurrencyConverterPage = async ({

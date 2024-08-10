@@ -36,7 +36,7 @@ const PasswordRequirements = ({ password = "" }: { password: string }) => {
             key={index}
             className={cn(
               "flex items-center gap-1 font-semibold text-destructive",
-              validation.isValid && "text-success"
+              validation.isValid && "text-success",
             )}
           >
             {validation.isValid ? (

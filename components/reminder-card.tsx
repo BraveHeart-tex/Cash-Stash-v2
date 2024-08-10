@@ -1,7 +1,7 @@
-import MotionDiv from "@/components/animations/motion-div";
-import useGenericModalStore from "@/store/genericModalStore";
-import { ReminderSelectModel } from "@/lib/database/schema";
 import ActionPopover from "@/components/action-popover";
+import MotionDiv from "@/components/animations/motion-div";
+import type { ReminderSelectModel } from "@/lib/database/schema";
+import useGenericModalStore from "@/store/genericModalStore";
 import { FaCheck, FaEdit, FaTrash } from "react-icons/fa";
 
 type ReminderCardProps = {
@@ -10,7 +10,7 @@ type ReminderCardProps = {
 
 const ReminderCard = ({ reminder }: ReminderCardProps) => {
   const openGenericModal = useGenericModalStore(
-    (state) => state.openGenericModal
+    (state) => state.openGenericModal,
   );
 
   const handleEditReminder = () => {

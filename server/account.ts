@@ -1,18 +1,24 @@
 "use server";
-import { ZodError } from "zod";
+import {
+  authenticatedAction,
+  authenticatedActionWithNoParams,
+} from "@/lib/auth/authUtils";
+import { CACHE_PREFIXES } from "@/lib/constants";
+import accountRepository from "@/lib/database/repository/accountRepository";
+import redisService from "@/lib/redis/redisService";
 import {
   generateCachePrefixWithUserId,
   getAccountKey,
   getPaginatedAccountsKey,
 } from "@/lib/redis/redisUtils";
-import { CACHE_PREFIXES } from "@/lib/constants";
-import { AccountSchemaType, getAccountSchema } from "@/schemas/account-schema";
-import accountRepository from "@/lib/database/repository/accountRepository";
-import redisService from "@/lib/redis/redisService";
-import { processZodError } from "@/lib/utils/objectUtils/processZodError";
 import logger from "@/lib/utils/logger";
+import { processZodError } from "@/lib/utils/objectUtils/processZodError";
 import { generateLabelFromEnumValue } from "@/lib/utils/stringUtils/generateLabelFromEnumValue";
 import {
+  type AccountSchemaType,
+  getAccountSchema,
+} from "@/schemas/account-schema";
+import type {
   DeleteAccountReturnType,
   GetPaginatedAccountsParams,
   GetPaginatedAccountsReturnType,
@@ -20,12 +26,9 @@ import {
   UpdateBankAccountParams,
   UpdateBankAccountReturnType,
 } from "@/typings/accounts";
+import type { User } from "lucia";
 import { getTranslations } from "next-intl/server";
-import { User } from "lucia";
-import {
-  authenticatedAction,
-  authenticatedActionWithNoParams,
-} from "@/lib/auth/authUtils";
+import { ZodError } from "zod";
 
 const getAccountSchemaWithTranslations = async () => {
   const zodT = await getTranslations("Zod.Account");
@@ -55,7 +58,7 @@ export const registerBankAccount = authenticatedAction<
 
     const { affectedRows, account } = await accountRepository.create(
       accountDto,
-      true
+      true,
     );
 
     if (affectedRows === 0 || !account) {
@@ -66,8 +69,8 @@ export const registerBankAccount = authenticatedAction<
       redisService.invalidateKeysStartingWith(
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_ACCOUNTS,
-          user.id
-        )
+          user.id,
+        ),
       ),
       redisService.hset(getAccountKey(account.id), account),
     ]);
@@ -129,7 +132,7 @@ export const updateBankAccount = authenticatedAction<
 
     const { affectedRows, updatedAccount } = await accountRepository.update(
       accountId,
-      updateDto
+      updateDto,
     );
 
     if (affectedRows === 0 || !updatedAccount) {
@@ -143,14 +146,14 @@ export const updateBankAccount = authenticatedAction<
       redisService.invalidateKeysStartingWith(
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_ACCOUNTS,
-          user.id
-        )
+          user.id,
+        ),
       ),
       redisService.invalidateKeysStartingWith(
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_TRANSACTIONS,
-          user.id
-        )
+          user.id,
+        ),
       ),
       redisService.hset(getAccountKey(accountId), updatedAccount),
     ]);
@@ -252,7 +255,7 @@ export const getPaginatedAccounts = authenticatedAction<
       cacheKey,
       JSON.stringify({ accounts, totalCount }),
       "EX",
-      5 * 60
+      5 * 60,
     );
 
     return {
@@ -290,11 +293,11 @@ export const deleteAccount = authenticatedAction<
       redisService.invalidateKeysMatchingPrefixes([
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_ACCOUNTS,
-          user.id
+          user.id,
         ),
         generateCachePrefixWithUserId(
           CACHE_PREFIXES.PAGINATED_TRANSACTIONS,
-          user.id
+          user.id,
         ),
       ]),
       redisService.del(getAccountKey(accountId)),
@@ -302,6 +305,7 @@ export const deleteAccount = authenticatedAction<
 
     return { data: t("successMessage") };
   } catch (error) {
+    logger.error("Error deleting bank account", error);
     return { error: t("anErrorOccurred") };
   }
 });
@@ -309,11 +313,11 @@ export const deleteAccount = authenticatedAction<
 export const getCurrentUserAccounts = authenticatedActionWithNoParams(
   async (user) => {
     return await accountRepository.getByUserId(user.id);
-  }
+  },
 );
 
 export const getCurrentUserAccountsThatHaveTransactions =
   authenticatedActionWithNoParams(
     async (user: User) =>
-      await accountRepository.getAccountsThatHaveTransactions(user.id)
+      await accountRepository.getAccountsThatHaveTransactions(user.id),
   );

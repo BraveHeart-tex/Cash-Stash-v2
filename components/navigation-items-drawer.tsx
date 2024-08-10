@@ -1,4 +1,5 @@
 "use client";
+import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerClose,
@@ -9,14 +10,13 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { Button } from "@/components/ui/button";
-import { FaBars, FaChevronRight } from "react-icons/fa";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
 import { NAVIGATION_ITEMS } from "@/lib/constants";
 import { Link } from "@/navigation";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
+import { FaBars, FaChevronRight } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
 
 const NavigationItemsDrawer = () => {

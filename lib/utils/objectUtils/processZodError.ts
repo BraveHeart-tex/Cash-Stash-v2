@@ -1,4 +1,4 @@
-import { ZodError } from "zod";
+import type { ZodError } from "zod";
 
 /**
  * Processes a ZodError instance and extracts error information.
@@ -9,7 +9,7 @@ export const processZodError = (error: ZodError) => {
   const fieldErrors = error.flatten().fieldErrors;
   const errorMessages = Object.entries(fieldErrors).map(
     // eslint-disable-next-line no-unused-vars
-    ([_, message]) => `${message}`
+    ([_, message]) => `${message}`,
   );
 
   const errorMessage = errorMessages.join(", ");

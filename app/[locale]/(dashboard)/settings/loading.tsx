@@ -9,6 +9,7 @@ const SettingsPageSkeleton = () => {
       </div>
       <div className="mt-6 flex flex-col gap-4">
         {Array.from({ length: 4 }).map((_, index) => (
+          // biome-ignore lint/suspicious/noArrayIndexKey: it's intentional
           <div className="flex flex-col gap-1" key={index}>
             <Skeleton className="mt-2 h-[40px] w-[70%] rounded-md lg:w-[300px]" />
             <Skeleton className="mt-2 h-[40px] w-full rounded-md lg:w-[600px]" />

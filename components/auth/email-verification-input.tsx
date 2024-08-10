@@ -1,13 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
 import AutoProgressInput from "@/components/auto-progress-input";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { handleEmailVerification } from "@/server/auth";
+import { Label } from "@/components/ui/label";
 import { EMAIL_VERIFICATION_CODE_LENGTH } from "@/lib/constants";
-import { toast } from "sonner";
 import { useRouter } from "@/navigation";
+import { handleEmailVerification } from "@/server/auth";
+import { useCallback, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const EmailVerificationInput = ({ email }: { email: string }) => {
   const router = useRouter();

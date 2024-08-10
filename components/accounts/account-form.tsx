@@ -1,4 +1,6 @@
 "use client";
+import { Button } from "@/components/ui/button";
+import CurrencyFormLabel from "@/components/ui/currency-form-label";
 import {
   Form,
   FormControl,
@@ -7,10 +9,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import useZodResolver from "@/lib/zod-resolver-wrapper";
-import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import MaskedAmountInput from "@/components/ui/masked-amount-input";
 import {
   Select,
   SelectContent,
@@ -18,18 +18,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { registerBankAccount, updateBankAccount } from "@/server/account";
-import { useRouter } from "@/navigation";
-import { useEffect, useTransition } from "react";
-import useGenericModalStore from "@/store/genericModalStore";
-import { AccountSchemaType, getAccountSchema } from "@/schemas/account-schema";
-import { toast } from "sonner";
-import { AccountSelectModel, accounts } from "@/lib/database/schema";
-import CurrencyFormLabel from "@/components/ui/currency-form-label";
+import { type AccountSelectModel, accounts } from "@/lib/database/schema";
 import { compareMatchingKeys } from "@/lib/utils/objectUtils/compareMatchingKeys";
-import MaskedAmountInput from "@/components/ui/masked-amount-input";
-import { BaseValidatedResponse } from "@/typings/baseTypes";
+import useZodResolver from "@/lib/zod-resolver-wrapper";
+import { useRouter } from "@/navigation";
+import {
+  type AccountSchemaType,
+  getAccountSchema,
+} from "@/schemas/account-schema";
+import { registerBankAccount, updateBankAccount } from "@/server/account";
+import useGenericModalStore from "@/store/genericModalStore";
+import type { BaseValidatedResponse } from "@/typings/baseTypes";
 import { useTranslations } from "next-intl";
+import { useEffect, useTransition } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 type AccountFormProps = {
   data?: AccountSelectModel;
@@ -47,7 +50,7 @@ const AccountForm = ({
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const closeGenericModal = useGenericModalStore(
-    (state) => state.closeGenericModal
+    (state) => state.closeGenericModal,
   );
   const accountSchema = getAccountSchema({
     balanceErrorMessage: zodT("balanceErrorMessage"),
@@ -63,7 +66,7 @@ const AccountForm = ({
   useEffect(() => {
     if (accountToBeUpdated) {
       const keys = Object.keys(
-        accountToBeUpdated
+        accountToBeUpdated,
       ) as (keyof AccountSchemaType)[];
       keys.forEach((key) => {
         form.setValue(key, accountToBeUpdated[key]);
@@ -97,7 +100,7 @@ const AccountForm = ({
   };
 
   const processFormSubmissionResult = (
-    result: BaseValidatedResponse<AccountSelectModel>
+    result: BaseValidatedResponse<AccountSelectModel>,
   ) => {
     if (result.fieldErrors.length) {
       result.fieldErrors.forEach((fieldError) => {

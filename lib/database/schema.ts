@@ -1,3 +1,10 @@
+import { createId } from "@paralleldrive/cuid2";
+import {
+  type InferInsertModel,
+  type InferSelectModel,
+  relations,
+  sql,
+} from "drizzle-orm";
 import {
   datetime,
   double,
@@ -10,13 +17,6 @@ import {
   unique,
   varchar,
 } from "drizzle-orm/mysql-core";
-import {
-  InferInsertModel,
-  InferSelectModel,
-  relations,
-  sql,
-} from "drizzle-orm";
-import { createId } from "@paralleldrive/cuid2";
 
 export const accounts = mysqlTable(
   "Account",
@@ -46,20 +46,20 @@ export const accounts = mysqlTable(
       .default(sql`CURRENT_TIMESTAMP(3)`)
       .notNull(),
     updatedAt: datetime("updatedAt", { mode: "string", fsp: 3 }).default(
-      sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`
+      sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`,
     ),
   },
   (table) => {
     return {
       id: primaryKey({ columns: [table.id], name: "Account_id" }),
       userAccountsUserIdFkey: index("userAccounts_userId_fkey").on(
-        table.userId
+        table.userId,
       ),
       userAccountsAccountNameUserIdAndCategoryUnique: unique(
-        "accounts_userId_name_category_unique"
+        "accounts_userId_name_category_unique",
       ).on(table.name, table.userId, table.category),
     };
-  }
+  },
 );
 
 export const accountRelations = relations(accounts, ({ one, many }) => ({
@@ -99,18 +99,18 @@ export const budgets = mysqlTable(
       .default(sql`CURRENT_TIMESTAMP(3)`)
       .notNull(),
     updatedAt: datetime("updatedAt", { mode: "string", fsp: 3 }).default(
-      sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`
+      sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`,
     ),
   },
   (table) => {
     return {
       budgetsUserIdFKey: index("budgets_userId_fkey").on(table.userId),
       budgetsCategoryIdFkey: index("budgets_categoryId_fkey").on(
-        table.categoryId
+        table.categoryId,
       ),
       budgetId: primaryKey({ columns: [table.id], name: "Budget_id" }),
     };
-  }
+  },
 );
 
 export const budgetRelations = relations(budgets, ({ one }) => ({
@@ -136,23 +136,23 @@ export const emailVerificationCode = mysqlTable(
   (table) => {
     return {
       emailVerificationCodesUserIdFkey: index(
-        "emailVerificationCodes_userId_fkey"
+        "emailVerificationCodes_userId_fkey",
       ).on(table.userId),
       emailVerificationCodesEmailFkey: index(
-        "emailVerificationCodes_email_fkey"
+        "emailVerificationCodes_email_fkey",
       ).on(table.email),
       emailVerificationCodeId: primaryKey({
         columns: [table.id],
         name: "EmailVerificationCode_id",
       }),
       emailVerificationCodeUserIdKey: unique(
-        "EmailVerificationCode_userId_key"
+        "EmailVerificationCode_userId_key",
       ).on(table.userId),
       emailVerificationCodeEmailKey: unique(
-        "EmailVerificationCode_email_key"
+        "EmailVerificationCode_email_key",
       ).on(table.email),
     };
-  }
+  },
 );
 
 export const emailVerificationCodeRelations = relations(
@@ -162,7 +162,7 @@ export const emailVerificationCodeRelations = relations(
       fields: [emailVerificationCode.userId],
       references: [users.id],
     }),
-  })
+  }),
 );
 
 export const goals = mysqlTable(
@@ -188,7 +188,7 @@ export const goals = mysqlTable(
       .default(sql`CURRENT_TIMESTAMP(3)`)
       .notNull(),
     updatedAt: datetime("updatedAt", { mode: "string", fsp: 3 }).default(
-      sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`
+      sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`,
     ),
   },
   (table) => {
@@ -196,7 +196,7 @@ export const goals = mysqlTable(
       goalsUserIdFkey: index("goals_userId_fkey").on(table.userId),
       goalId: primaryKey({ columns: [table.id], name: "Goal_id" }),
     };
-  }
+  },
 );
 
 export const goalRelations = relations(goals, ({ one }) => ({
@@ -220,17 +220,17 @@ export const passwordResetTokens = mysqlTable(
   (table) => {
     return {
       passwordResetTokensUserIdFkey: index(
-        "passwordResetTokens_user_id_fkey"
+        "passwordResetTokens_user_id_fkey",
       ).on(table.userId),
       passwordResetTokenId: primaryKey({
         columns: [table.id],
         name: "PasswordResetToken_id",
       }),
       passwordResetTokenUserIdKey: unique("PasswordResetToken_user_id_key").on(
-        table.userId
+        table.userId,
       ),
     };
-  }
+  },
 );
 
 export const passwordResetTokenRelations = relations(
@@ -240,7 +240,7 @@ export const passwordResetTokenRelations = relations(
       fields: [passwordResetTokens.userId],
       references: [users.id],
     }),
-  })
+  }),
 );
 
 export const reminders = mysqlTable(
@@ -262,7 +262,7 @@ export const reminders = mysqlTable(
       .default(sql`CURRENT_TIMESTAMP(3)`)
       .notNull(),
     updatedAt: datetime("updatedAt", { mode: "string", fsp: 3 }).default(
-      sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`
+      sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`,
     ),
     markedAsReadAt: datetime("markedAsReadAt", { mode: "string", fsp: 3 }),
     status: mysqlEnum("status", ["PENDING", "COMPLETED"]).default("PENDING"),
@@ -287,7 +287,7 @@ export const reminders = mysqlTable(
       remindersUserIdFkey: index("reminders_userId_fkey").on(table.userId),
       reminderId: primaryKey({ columns: [table.id], name: "Reminder_id" }),
     };
-  }
+  },
 );
 
 export const reminderRelations = relations(reminders, ({ one }) => ({
@@ -315,7 +315,7 @@ export const sessions = mysqlTable(
       sessionsUserIdFkey: index("sessions_userId_fkey").on(table.userId),
       sessionId: primaryKey({ columns: [table.id], name: "Session_id" }),
     };
-  }
+  },
 );
 
 export const sessionRelations = relations(sessions, ({ one }) => ({
@@ -337,7 +337,7 @@ export const transactions = mysqlTable(
       .default(sql`CURRENT_TIMESTAMP(3)`)
       .notNull(),
     updatedAt: datetime("updatedAt", { mode: "string", fsp: 3 }).default(
-      sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`
+      sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`,
     ),
     description: varchar("description", { length: 191 }).notNull(),
     categoryId: int("categoryId")
@@ -361,20 +361,20 @@ export const transactions = mysqlTable(
   (table) => {
     return {
       transactionsCategoryIdFkey: index("transactions_categoryId_fkey").on(
-        table.categoryId
+        table.categoryId,
       ),
       transactionsUserIdFkey: index("transactions_userId_fkey").on(
-        table.userId
+        table.userId,
       ),
       transactionsAccountIdFkey: index("transaction_account_id_fkey").on(
-        table.accountId
+        table.accountId,
       ),
       transactionId: primaryKey({
         columns: [table.id],
         name: "Transaction_id",
       }),
     };
-  }
+  },
 );
 
 export const transactionRelations = relations(transactions, ({ one }) => ({
@@ -405,23 +405,23 @@ export const twoFactorAuthenticationSecrets = mysqlTable(
       .notNull()
       .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
     createdAt: datetime("createdAt", { mode: "string", fsp: 3 }).default(
-      sql`CURRENT_TIMESTAMP(3)`
+      sql`CURRENT_TIMESTAMP(3)`,
     ),
   },
   (table) => {
     return {
       twoFactorAuthenticationSecretsUserIdFkey: index(
-        "twoFactorAuthenticationSecrets_userId_fkey"
+        "twoFactorAuthenticationSecrets_userId_fkey",
       ).on(table.userId),
       twoFactorAuthenticationSecretId: primaryKey({
         columns: [table.id],
         name: "TwoFactorAuthenticationSecret_id",
       }),
       twoFactorAuthenticationSecretUserIdKey: unique(
-        "TwoFactorAuthenticationSecret_userId_key"
+        "TwoFactorAuthenticationSecret_userId_key",
       ).on(table.userId),
     };
-  }
+  },
 );
 
 export const twoFactorAuthenticationSecretRelations = relations(
@@ -431,7 +431,7 @@ export const twoFactorAuthenticationSecretRelations = relations(
       fields: [twoFactorAuthenticationSecrets.userId],
       references: [users.id],
     }),
-  })
+  }),
 );
 
 export const users = mysqlTable(
@@ -450,13 +450,13 @@ export const users = mysqlTable(
       .default(sql`CURRENT_TIMESTAMP(3)`)
       .notNull(),
     updatedAt: datetime("updatedAt", { mode: "string", fsp: 3 }).default(
-      sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`
+      sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`,
     ),
     prefersTwoFactorAuthentication: tinyint("prefersTwoFactorAuthentication")
       .default(0)
       .notNull(),
     activatedTwoFactorAuthentication: tinyint(
-      "activatedTwoFactorAuthentication"
+      "activatedTwoFactorAuthentication",
     ).default(0),
     preferredCurrency: varchar("preferredCurrency", { length: 3 })
       .default("USD")
@@ -467,7 +467,7 @@ export const users = mysqlTable(
       userId: primaryKey({ columns: [table.id], name: "User_id" }),
       userEmailKey: unique("User_email_key").on(table.email),
     };
-  }
+  },
 );
 
 export const userRelations = relations(users, ({ one, many }) => ({
@@ -489,7 +489,7 @@ export const currencyRates = mysqlTable(
     rate: double("rate").notNull(),
     symbol: varchar("symbol", { length: 191 }).notNull(),
     updatedAt: datetime("updatedAt", { mode: "string", fsp: 3 }).default(
-      sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`
+      sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`,
     ),
   },
   (table) => {
@@ -500,7 +500,7 @@ export const currencyRates = mysqlTable(
         name: "CurrencyRate_id",
       }),
     };
-  }
+  },
 );
 
 export const categories = mysqlTable(
@@ -527,10 +527,10 @@ export const categories = mysqlTable(
       uniqueNameUserType: unique("unique_name_user_type").on(
         table.name,
         table.userId,
-        table.type
+        table.type,
       ),
     };
-  }
+  },
 );
 
 export const categoryRelations = relations(categories, ({ one, many }) => ({

@@ -1,13 +1,13 @@
 "use client";
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { IconType } from "react-icons/lib";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils/stringUtils/cn";
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import type { IconType } from "react-icons/lib";
 
 export type PopoverActionOption = {
   icon: IconType;
@@ -44,7 +44,7 @@ const ActionPopover = ({
   };
 
   const visibleOptions = options.filter((option) =>
-    "visible" in option ? option.visible : true
+    "visible" in option ? option.visible : true,
   );
 
   return (
@@ -52,7 +52,7 @@ const ActionPopover = ({
       <PopoverTrigger
         className={cn(
           positionAbsolute && "absolute outline-none focus:outline-none",
-          triggerClassName
+          triggerClassName,
         )}
       >
         {renderTrigger()}

@@ -1,7 +1,5 @@
-/* eslint-disable no-unused-vars */
 import { LOG_COLORS } from "@/lib/constants";
 
-// Define log levels
 enum LogLevel {
   DEBUG = "debug",
   INFO = "info",
@@ -10,14 +8,14 @@ enum LogLevel {
 }
 
 interface ILogger {
-  debug: (...args: any[]) => void;
-  info: (...args: any[]) => void;
-  warn: (...args: any[]) => void;
-  error: (...args: any[]) => void;
+  debug: (...args: unknown[]) => void;
+  info: (...args: unknown[]) => void;
+  warn: (...args: unknown[]) => void;
+  error: (...args: unknown[]) => void;
 }
 
 class Logger implements ILogger {
-  private log(level: LogLevel, ...args: any[]) {
+  private log(level: LogLevel, ...args: unknown[]) {
     switch (level) {
       case LogLevel.DEBUG:
         console.debug(`${LOG_COLORS.GREEN}[DEBUG]`, ...args, LOG_COLORS.RESET);
@@ -32,23 +30,23 @@ class Logger implements ILogger {
         console.error(`${LOG_COLORS.RED}[ERROR]`, ...args, LOG_COLORS.RESET);
         break;
       default:
-        console.log(...args);
+        console.info(...args);
     }
   }
 
-  debug(...args: any[]) {
+  debug(...args: unknown[]) {
     this.log(LogLevel.DEBUG, ...args);
   }
 
-  info(...args: any[]) {
+  info(...args: unknown[]) {
     this.log(LogLevel.INFO, ...args);
   }
 
-  warn(...args: any[]) {
+  warn(...args: unknown[]) {
     this.log(LogLevel.WARN, ...args);
   }
 
-  error(...args: any[]) {
+  error(...args: unknown[]) {
     this.log(LogLevel.ERROR, ...args);
   }
 }

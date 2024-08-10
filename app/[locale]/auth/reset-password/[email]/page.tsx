@@ -1,3 +1,5 @@
+import Logo from "@/components/logo";
+import ResetPasswordForm from "@/components/reset-password-form";
 import {
   Card,
   CardContent,
@@ -8,8 +10,6 @@ import {
 import { getUser } from "@/lib/auth/session";
 import { PAGE_ROUTES } from "@/lib/constants";
 import { redirect } from "@/navigation";
-import ResetPasswordForm from "@/components/reset-password-form";
-import Logo from "@/components/logo";
 import { checkResetPasswordEmailAndToken } from "@/server/auth";
 
 type ResetPasswordPageProps = {

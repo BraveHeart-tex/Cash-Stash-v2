@@ -1,23 +1,25 @@
 "use client";
-import { FormEvent, useRef, useTransition } from "react";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { resendEmailVerificationCode } from "@/server/auth";
+import { type FormEvent, useRef, useTransition } from "react";
 import { toast } from "sonner";
 
 const ResendVerificationEmailInput = () => {
-  let [isPending, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
   const ref = useRef<HTMLInputElement>(null);
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
+
     const email = ref.current?.value;
     if (!email) return;
 
     startTransition(async () => {
+      if (!ref.current) return;
       const response = await resendEmailVerificationCode(email);
-      ref.current!.value = "";
+      ref.current.value = "";
       if (response.isError) {
         toast.error(response.message);
         return;

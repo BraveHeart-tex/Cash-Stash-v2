@@ -1,6 +1,6 @@
 "use client";
-import { HTMLMotionProps, motion } from "framer-motion";
-import { HTMLAttributes } from "react";
+import { type HTMLMotionProps, motion } from "framer-motion";
+import type { HTMLAttributes } from "react";
 
 const MotionDiv = ({
   children,

@@ -1,23 +1,23 @@
 "use server";
+import { authenticatedAction } from "@/lib/auth/authUtils";
 import { PAGE_ROUTES } from "@/lib/constants";
 import { db } from "@/lib/database/connection";
 import currencyRatesRepository from "@/lib/database/repository/currencyRatesRepository";
 import userRepository from "@/lib/database/repository/userRepository";
 import { accounts, budgets, goals, transactions } from "@/lib/database/schema";
-import { eq, sql } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
-import logger from "@/lib/utils/logger";
 import redisService from "@/lib/redis/redisService";
-import { authenticatedAction } from "@/lib/auth/authUtils";
-import { UpdateUserCurrencyPreferenceReturnType } from "@/typings/user-actions";
+import logger from "@/lib/utils/logger";
+import type { UpdateUserCurrencyPreferenceReturnType } from "@/typings/user-actions";
+import { eq, sql } from "drizzle-orm";
 import { getTranslations } from "next-intl/server";
+import { revalidatePath } from "next/cache";
 
 export const updateUserCurrencyPreference = authenticatedAction<
   UpdateUserCurrencyPreferenceReturnType,
   string
 >(async (symbol: string, { user }) => {
   const actionT = await getTranslations(
-    "Actions.User.updateUserCurrencyPreference"
+    "Actions.User.updateUserCurrencyPreference",
   );
   if (symbol.length !== 3) {
     return {
@@ -55,10 +55,10 @@ type ConvertTransactionsToNewCurrencyParams = {
 export const convertTransactionsToNewCurrency = authenticatedAction(
   async (
     { oldSymbol, newSymbol }: ConvertTransactionsToNewCurrencyParams,
-    { user }
+    { user },
   ) => {
     const actionT = await getTranslations(
-      "Actions.User.convertTransactionsToNewCurrency"
+      "Actions.User.convertTransactionsToNewCurrency",
     );
     if (newSymbol.length !== 3) {
       return {
@@ -129,5 +129,5 @@ export const convertTransactionsToNewCurrency = authenticatedAction(
         error: actionT("internalErrorMessage"),
       };
     }
-  }
+  },
 );

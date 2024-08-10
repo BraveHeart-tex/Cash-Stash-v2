@@ -1,26 +1,26 @@
-import {
-  accounts,
-  AccountSelectModel,
-  categories,
-  TransactionInsertModel,
-  transactions,
-  TransactionSelectModel,
-} from "@/lib/database/schema";
+import { getPageSizeAndSkipAmount } from "@/lib/constants";
 import { db } from "@/lib/database/connection";
 import accountRepository from "@/lib/database/repository/accountRepository";
+import {
+  type AccountSelectModel,
+  type TransactionInsertModel,
+  type TransactionSelectModel,
+  accounts,
+  categories,
+  transactions,
+} from "@/lib/database/schema";
+import logger from "@/lib/utils/logger";
 import {
   and,
   asc,
   desc,
   eq,
+  getTableColumns,
   gt,
   like,
   lt,
   sql,
-  getTableColumns,
 } from "drizzle-orm";
-import { getPageSizeAndSkipAmount } from "@/lib/constants";
-import logger from "@/lib/utils/logger";
 
 type CreateTransactionReturnType = {
   affectedRows: number;
@@ -54,7 +54,7 @@ const transactionRepository = {
     }
   },
   async create(
-    data: TransactionInsertModel
+    data: TransactionInsertModel,
   ): Promise<CreateTransactionReturnType> {
     try {
       return await db.transaction(async (trx) => {
@@ -81,7 +81,7 @@ const transactionRepository = {
           accountId,
           {
             balance: newBalance,
-          }
+          },
         );
 
         if (!affectedRows || !updatedAccount) {
@@ -120,7 +120,7 @@ const transactionRepository = {
       accountId: number;
       amount: number;
     },
-    transactionDto: Partial<TransactionSelectModel> & { id: number }
+    transactionDto: Partial<TransactionSelectModel> & { id: number },
   ) {
     try {
       return await db.transaction(async (trx) => {
@@ -245,7 +245,7 @@ const transactionRepository = {
 
       const validSortBy = sortByOptions.includes(sortBy) ? sortBy : "createdAt";
       const validSortDirection = sortDirections.includes(
-        sortDirection.toLowerCase()
+        sortDirection.toLowerCase(),
       )
         ? sortDirection
         : "desc";
@@ -292,8 +292,8 @@ const transactionRepository = {
           eq(transactions.categoryId, categoryId || transactions.categoryId),
           eq(transactions.accountId, accountId || transactions.accountId),
           like(transactions.description, `%${query}%`),
-          transactionTypeCondition
-        )
+          transactionTypeCondition,
+        ),
       )
       .orderBy(transactionOrderByCondition)
       .limit(pageSize)
@@ -310,8 +310,8 @@ const transactionRepository = {
           eq(transactions.accountId, accountId || transactions.accountId),
           eq(transactions.categoryId, categoryId || transactions.categoryId),
           like(transactions.description, `%${query}%`),
-          transactionTypeCondition
-        )
+          transactionTypeCondition,
+        ),
       );
 
     try {

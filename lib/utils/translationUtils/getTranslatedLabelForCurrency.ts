@@ -1,13 +1,13 @@
 /* eslint-disable no-unused-vars */
-import { Formats, TranslationValues } from "next-intl";
+import type { Formats, TranslationValues } from "next-intl";
 
 export const getTranslatedLabelForCurrency = (
   t: (
     key: "currencies",
     values?: TranslationValues | undefined,
-    formats?: Partial<Formats> | undefined
+    formats?: Partial<Formats> | undefined,
   ) => string,
-  currencySymbol: string
+  currencySymbol: string,
 ) => {
   return t("currencies")
     .split(", ")

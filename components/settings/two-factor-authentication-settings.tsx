@@ -1,4 +1,6 @@
 "use client";
+import TwoFactorAuthenticationActivation from "@/components/settings/two-factor-authentication-activation";
+import { Button } from "@/components/ui/button";
 import {
   disableTwoFactorAuthentication,
   enableTwoFactorAuthentication,
@@ -6,10 +8,8 @@ import {
 import useAuthStore from "@/store/auth/authStore";
 import { useGenericConfirmStore } from "@/store/genericConfirmStore";
 import { useTransition } from "react";
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
 import { MdOutlineScreenLockPortrait } from "react-icons/md";
-import TwoFactorAuthenticationActivation from "@/components/settings/two-factor-authentication-activation";
+import { toast } from "sonner";
 
 type TwoFactorAuthenticationSettingsProps = {
   internationalizationConfig: {
@@ -44,7 +44,7 @@ const TwoFactorAuthenticationSettings = ({
   const setUri = useAuthStore((state) => state.setUri);
   const setUser = useAuthStore((state) => state.setUser);
   const showConfirm = useGenericConfirmStore((state) => state.showConfirm);
-  let [isPending, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
 
   const {
     twoFactorSettingsTitle,
@@ -128,7 +128,7 @@ const TwoFactorAuthenticationSettings = ({
       </p>
       {shouldShowActiviationForm ? (
         <TwoFactorAuthenticationActivation
-          internationalzationConfig={internationalizationConfig}
+          internationalizationConfig={internationalizationConfig}
         />
       ) : null}
       {shouldShowEnableButton ? (

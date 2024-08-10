@@ -1,10 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
-import { Resolver } from "react-hook-form";
+import type { Resolver } from "react-hook-form";
 import * as z from "zod";
 
 const useZodResolver = (
-  schema: z.ZodSchema
+  schema: z.ZodSchema,
 ): Resolver<z.infer<typeof schema>> => {
   const t = useTranslations("Zod.ErrorMap");
 

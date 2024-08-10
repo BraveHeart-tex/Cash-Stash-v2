@@ -20,8 +20,8 @@ type GenericConfirmStoreState = {
   loading: boolean;
   onConfirm: () => void;
   onDeny: () => void;
-  onConfirmResult: any;
-  onDenyResult: any;
+  onConfirmResult: unknown;
+  onDenyResult: unknown;
   callPrimaryAction: () => void;
   callSecondaryAction: () => void;
   showConfirm: (confirmObject: GenericConfirmObject) => void;
@@ -106,6 +106,6 @@ export const useGenericConfirmStore = create<
     }),
     {
       name: "GenericConfirmStore",
-    }
-  )
+    },
+  ),
 );

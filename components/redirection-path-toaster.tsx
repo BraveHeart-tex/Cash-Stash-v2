@@ -6,10 +6,6 @@ import { toast } from "sonner";
 const RedirectionPathToaster = () => {
   const [path, setPath] = useState("");
 
-  const showErrorToastByPath = (message: string) => {
-    toast.error(message);
-  };
-
   useEffect(() => {
     setPath(window.location.href);
   }, []);
@@ -29,11 +25,13 @@ const RedirectionPathToaster = () => {
     };
 
     const showToastByPath = () => {
-      Object.entries(errorMessages).forEach(([errorPath, errorMessage]) => {
-        if (path.includes(errorPath)) {
-          showErrorToastByPath(errorMessage);
+      const messages = Object.values(errorMessages);
+      for (const message of messages) {
+        if (path.includes(message)) {
+          toast.error(message);
+          return;
         }
-      });
+      }
     };
 
     if (path) showToastByPath();

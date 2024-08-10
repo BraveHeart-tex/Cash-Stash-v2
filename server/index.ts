@@ -1,9 +1,10 @@
 "use server";
-import { MONTHS_OF_THE_YEAR } from "@/lib/constants";
-import { and, eq, gt, lt, sql } from "drizzle-orm";
-import { transactions } from "@/lib/database/schema";
-import { db } from "@/lib/database/connection";
 import { authenticatedActionWithNoParams } from "@/lib/auth/authUtils";
+import { MONTHS_OF_THE_YEAR } from "@/lib/constants";
+import { db } from "@/lib/database/connection";
+import { transactions } from "@/lib/database/schema";
+import logger from "@/lib/utils/logger";
+import { and, eq, gt, lt, sql } from "drizzle-orm";
 
 export const fetchMonthlyTransactionsData = authenticatedActionWithNoParams(
   async (user) => {
@@ -31,7 +32,7 @@ export const fetchMonthlyTransactionsData = authenticatedActionWithNoParams(
     const expenses = await aggregateByType(false);
 
     return { incomes, expenses };
-  }
+  },
 );
 
 export const fetchInsightsDataAction = authenticatedActionWithNoParams(
@@ -67,7 +68,7 @@ export const fetchInsightsDataAction = authenticatedActionWithNoParams(
       netIncome,
       savingsRate,
     };
-  }
+  },
 );
 
 export const getChartData = authenticatedActionWithNoParams(async (user) => {
@@ -101,6 +102,7 @@ export const getChartData = authenticatedActionWithNoParams(async (user) => {
       data,
     };
   } catch (error) {
+    logger.error("Error fetching chart data", error);
     return { error: "An error occurred." };
   }
 });

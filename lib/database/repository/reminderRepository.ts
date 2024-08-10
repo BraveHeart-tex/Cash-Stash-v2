@@ -1,8 +1,8 @@
-import { and, between, eq, like, sql } from "drizzle-orm";
-import { db } from "@/lib/database/connection";
-import { ReminderInsertModel, reminders } from "@/lib/database/schema";
 import { getPageSizeAndSkipAmount } from "@/lib/constants";
+import { db } from "@/lib/database/connection";
+import { type ReminderInsertModel, reminders } from "@/lib/database/schema";
 import logger from "@/lib/utils/logger";
+import { and, between, eq, like, sql } from "drizzle-orm";
 
 type GetMultipleRemindersParams = {
   userId: string;
@@ -82,8 +82,8 @@ const reminderRepository = {
         and(
           eq(reminders.userId, userId),
           like(reminders.title, `%${query}%`),
-          dateFilterCondition
-        )
+          dateFilterCondition,
+        ),
       )
       .limit(pageSize)
       .offset(skipAmount);
@@ -94,7 +94,7 @@ const reminderRepository = {
       })
       .from(reminders)
       .where(
-        and(eq(reminders.userId, userId), like(reminders.title, `%${query}%`))
+        and(eq(reminders.userId, userId), like(reminders.title, `%${query}%`)),
       );
 
     try {
@@ -108,6 +108,7 @@ const reminderRepository = {
         totalCount: totalCount.count,
       };
     } catch (error) {
+      logger.error("Error fetching paginated reminders", error);
       return {
         reminders: [],
         totalCount: 0,

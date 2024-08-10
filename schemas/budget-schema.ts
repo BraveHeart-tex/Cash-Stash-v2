@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-type InternatilizationConfig = {
+type internationalizationConfig = {
   blankName: string;
   budgetAmountRequired: string;
   budgetAmountPositive: string;
@@ -10,7 +10,7 @@ type InternatilizationConfig = {
 };
 
 export const getBudgetSchema = (
-  internatilizationConfig: InternatilizationConfig
+  internationalizationConfig: internationalizationConfig,
 ) => {
   const {
     blankName,
@@ -19,7 +19,7 @@ export const getBudgetSchema = (
     budgetAmountInvalid,
     budgetAmountRequired,
     spentAmountNegative,
-  } = internatilizationConfig;
+  } = internationalizationConfig;
 
   return z
     .object({
@@ -30,7 +30,7 @@ export const getBudgetSchema = (
           required_error: budgetAmountRequired,
         })
         .positive(budgetAmountPositive)
-        .transform((val) => (isNaN(val) ? 1 : val)),
+        .transform((val) => (Number.isNaN(val) ? 1 : val)),
       categoryId: z.coerce
         .number()
         .min(1, budgetCategoryRequired)
@@ -39,13 +39,13 @@ export const getBudgetSchema = (
       spentAmount: z.coerce
         .number()
         .nonnegative(spentAmountNegative)
-        .transform((val) => (isNaN(val) ? 0 : val))
+        .transform((val) => (Number.isNaN(val) ? 0 : val))
         .default(0),
       progress: z.number().default(0),
     })
     .superRefine((data) => {
-      if (isNaN(data.budgetAmount)) data.budgetAmount = 1;
-      if (isNaN(data.spentAmount)) data.spentAmount = 0;
+      if (Number.isNaN(data.budgetAmount)) data.budgetAmount = 1;
+      if (Number.isNaN(data.spentAmount)) data.spentAmount = 0;
 
       data.progress = Math.floor((data.spentAmount / data.budgetAmount) * 100);
 
