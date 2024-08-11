@@ -28,8 +28,8 @@ const AccountSummaries = ({ accounts }: AccountSummariesProps) => {
     <div>
       <ul className="grid grid-cols-1 gap-4 pr-2">
         <AnimatePresenceClient>
-          {accounts.map((account, index) => (
-            <AccountCard account={account} key={account.id + index} />
+          {accounts.map((account) => (
+            <AccountCard account={account} key={account.id} />
           ))}
           <Button className="ml-auto mt-2 w-max">
             <Link href={PAGE_ROUTES.ACCOUNTS_ROUTE} className="capitalize">

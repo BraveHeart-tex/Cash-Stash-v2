@@ -4,17 +4,13 @@ const useCapsLock = () => {
   const [capsLockActive, setCapsLockActive] = useState(false);
 
   useEffect(() => {
-    const wasCapsLockActived = (event: KeyboardEvent) => {
-      if (
-        event.getModifierState &&
-        event.getModifierState("CapsLock") &&
-        !capsLockActive
-      ) {
+    const wasCapsLockActivated = (event: KeyboardEvent) => {
+      if (event.getModifierState?.("CapsLock") && !capsLockActive) {
         setCapsLockActive(true);
       }
     };
 
-    const wasCapsLockDeactived = (event: KeyboardEvent) => {
+    const wasCapsLockDeactivated = (event: KeyboardEvent) => {
       if (
         event.getModifierState &&
         !event.getModifierState("CapsLock") &&
@@ -24,12 +20,12 @@ const useCapsLock = () => {
       }
     };
 
-    document.addEventListener("keydown", wasCapsLockActived);
-    document.addEventListener("keyup", wasCapsLockDeactived);
+    document.addEventListener("keydown", wasCapsLockActivated);
+    document.addEventListener("keyup", wasCapsLockDeactivated);
 
     return () => {
-      document.removeEventListener("keydown", wasCapsLockActived);
-      document.removeEventListener("keyup", wasCapsLockDeactived);
+      document.removeEventListener("keydown", wasCapsLockActivated);
+      document.removeEventListener("keyup", wasCapsLockDeactivated);
     };
   }, [capsLockActive]);
 

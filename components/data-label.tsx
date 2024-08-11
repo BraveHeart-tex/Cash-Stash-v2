@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils/stringUtils/cn";
 
 type DataLabelProps = {
   label: string;
-  value: any;
+  value: number | string;
   classNames?: {
     container?: string;
     label?: string;

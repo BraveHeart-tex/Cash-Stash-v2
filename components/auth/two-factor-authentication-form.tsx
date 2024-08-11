@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { PAGE_ROUTES } from "@/lib/constants";
+import { PAGE_ROUTES, TWO_FACTOR_AUTH_CODE_LENGTH } from "@/lib/constants";
 import { useRouter } from "@/navigation";
 import { validateOTP } from "@/server/auth";
 import { useLocale } from "next-intl";
@@ -76,7 +76,7 @@ const TwoFactorAuthenticationForm = ({
             <Label>{twoFactorFormCodeLabel}</Label>
             <AutoProgressInput
               loading={isPending}
-              length={6}
+              length={TWO_FACTOR_AUTH_CODE_LENGTH}
               onChange={setCode}
             />
           </div>
@@ -85,7 +85,7 @@ const TwoFactorAuthenticationForm = ({
             name="two-factor-authentication"
             className="self-end"
             onClick={() => handleOTPValidation()}
-            disabled={isPending || code.length < 6}
+            disabled={isPending || code.length < TWO_FACTOR_AUTH_CODE_LENGTH}
             loading={isPending}
           >
             {twoFactorFormButtonLabel}

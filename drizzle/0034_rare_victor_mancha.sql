@@ -1,2 +1,0 @@
-ALTER TABLE `Account` ADD CONSTRAINT `userAccounts_aN_uI_c_unique` UNIQUE(`name`,`userId`,`category`);--> statement-breakpoint
-ALTER TABLE `Account` DROP INDEX `userAccounts_accountName_userId_and_category_unique`;

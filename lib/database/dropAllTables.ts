@@ -8,22 +8,15 @@ const dropAllTables = async () => {
     await trx.execute(
       sql`
         START TRANSACTION;
+          SET @tables = NULL;
+          SELECT GROUP_CONCAT(table_name) INTO @tables
+          FROM information_schema.tables
+          WHERE table_schema = DATABASE();
 
-        SET FOREIGN_KEY_CHECKS = 0;
-
-        SET @tables = NULL;
-        SELECT GROUP_CONCAT('\\\`', table_name, '\\\`') INTO @tables
-        FROM information_schema.tables 
-        WHERE table_schema = (SELECT DATABASE());
-
-        SET @sql = CONCAT('DROP TABLE IF EXISTS ', @tables);
-        PREPARE stmt FROM @sql;
-        
-        EXECUTE stmt;
-        DEALLOCATE PREPARE stmt;
-
-        SET FOREIGN_KEY_CHECKS = 1;
-
+          SET @tables = CONCAT('DROP TABLE IF EXISTS ', @tables);
+          PREPARE stmt FROM @tables;
+          EXECUTE stmt;
+          DEALLOCATE PREPARE stmt;
         COMMIT;
       `,
     );

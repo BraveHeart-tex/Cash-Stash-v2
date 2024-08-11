@@ -69,15 +69,12 @@ const CategoryForm = ({
   const isEditMode = !!categoryToUpdate;
 
   useEffect(() => {
-    if (categoryToUpdate) {
-      const keys = Object.keys(
-        categoryToUpdate,
-      ) as (keyof CategorySchemaType)[];
-      for (const key of keys) {
-        form.setValue(key, categoryToUpdate[key]);
-      }
+    if (!categoryToUpdate) return;
+    const keys = Object.keys(categoryToUpdate) as (keyof CategorySchemaType)[];
+    for (const key of keys) {
+      form.setValue(key, categoryToUpdate[key]);
     }
-  }, [categoryToUpdate, form]);
+  }, [categoryToUpdate, form.setValue]);
 
   const handleFormSubmit = async (values: CategorySchemaType) => {
     if (isEditMode && compareMatchingKeys(categoryToUpdate, values)) {

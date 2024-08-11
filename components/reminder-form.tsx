@@ -58,7 +58,6 @@ const ReminderForm = ({ data: reminderToBeUpdated }: ReminderFormProps) => {
   });
   const entityId = reminderToBeUpdated?.id;
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: This is intentional
   useEffect(() => {
     if (!reminderToBeUpdated) return;
     const keys = Object.keys(
@@ -69,7 +68,7 @@ const ReminderForm = ({ data: reminderToBeUpdated }: ReminderFormProps) => {
     for (const key of keys) {
       form.setValue(key, reminderToBeUpdated[key]);
     }
-  }, [reminderToBeUpdated]);
+  }, [reminderToBeUpdated, form.setValue]);
 
   const handleFormSubmit = async (values: ReminderSchemaType) => {
     if (entityId && compareMatchingKeys(reminderToBeUpdated, values)) {

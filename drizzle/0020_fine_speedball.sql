@@ -1,1 +1,0 @@
-ALTER TABLE `Currency` ADD `flagEmoji` varchar(191);

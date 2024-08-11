@@ -1,7 +1,5 @@
 "use client";
-import ActionPopover, {
-  type PopoverActionOption,
-} from "@/components/action-popover";
+import ActionPopover, {} from "@/components/action-popover";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import { useRouter } from "@/navigation";
@@ -96,7 +94,7 @@ const AccountCardContent = ({
     });
   };
 
-  const popoverActions: PopoverActionOption[] = [
+  const popoverActions = [
     {
       icon: FaRegCreditCard,
       label: "Show Latest Transactions",
@@ -118,7 +116,7 @@ const AccountCardContent = ({
       label: "Delete",
       onClick: handleDeleteAccount,
     },
-  ];
+  ] as const;
 
   return (
     <motion.div
@@ -137,7 +135,7 @@ const AccountCardContent = ({
           heading={t("accountActionsHeading")}
           options={popoverActions.map((item) => ({
             ...item,
-            label: t(item.label as any),
+            label: t(item.label),
           }))}
           positionAbsolute
           triggerClassName="top-0 right-0"

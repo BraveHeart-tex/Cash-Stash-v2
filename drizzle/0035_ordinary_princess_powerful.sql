@@ -1,1 +1,0 @@
-ALTER TABLE `Account` ADD CONSTRAINT `userAccounts_unique` UNIQUE(`name`,`userId`(50),`category`);

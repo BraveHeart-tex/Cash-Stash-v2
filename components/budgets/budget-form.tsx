@@ -77,17 +77,15 @@ const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
   }, [setCategories, categoryErrorMessage]);
 
   useEffect(() => {
-    if (budgetToBeUpdated) {
-      const keys = Object.keys(budgetToBeUpdated) as (keyof BudgetSchemaType)[];
+    if (!budgetToBeUpdated) return;
 
-      if (keys.length) {
-        keys.forEach((key) => {
-          form.setValue(key, budgetToBeUpdated[key]);
-        });
-      }
+    const keys = Object.keys(budgetToBeUpdated) as (keyof BudgetSchemaType)[];
+    if (!keys.length) return;
+
+    for (const key of keys) {
+      form.setValue(key, budgetToBeUpdated[key]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [budgetToBeUpdated]);
+  }, [budgetToBeUpdated, form.setValue]);
 
   const handleFormSubmit = async (values: BudgetSchemaType) => {
     if (isPending) return;
@@ -99,7 +97,7 @@ const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
     }
 
     startTransition(async () => {
-      let result;
+      let result: BaseValidatedResponse<BudgetSelectModel>;
       if (entityId) {
         result = await updateBudget({
           budgetId: entityId,
@@ -117,12 +115,12 @@ const BudgetForm = ({ data: budgetToBeUpdated }: BudgetFormProps) => {
     result: BaseValidatedResponse<BudgetSelectModel>,
   ) => {
     if (result.fieldErrors.length) {
-      result.fieldErrors.forEach((fieldError) => {
-        form.setError(fieldError.field as any, {
+      for (const fieldError of result.fieldErrors) {
+        form.setError(fieldError.field as keyof BudgetSchemaType, {
           type: "manual",
           message: fieldError.message,
         });
-      });
+      }
     }
 
     if (result.error) {

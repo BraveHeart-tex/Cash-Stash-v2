@@ -22,7 +22,7 @@ const twoFactorAuthenticationSecretRepository = {
   },
   async removeTwoFactorAuthenticationSecret(userId: string) {
     // FIXME: This is not transactional
-    await db.transaction(async (trx) => {
+    await db.transaction(async (_trx) => {
       await userRepository.updateUser(userId, {
         prefersTwoFactorAuthentication: 0,
       });

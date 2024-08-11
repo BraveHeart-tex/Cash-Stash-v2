@@ -46,7 +46,6 @@ import {
 import { getCurrentUserAccounts } from "@/server/account";
 import { getCategoriesByType } from "@/server/category";
 import { createTransaction, updateTransaction } from "@/server/transaction";
-import useAuthStore from "@/store/auth/authStore";
 import useCategoriesStore from "@/store/categoriesStore";
 import useGenericModalStore from "@/store/genericModalStore";
 import type { BaseValidatedResponse } from "@/typings/baseTypes";
@@ -68,9 +67,7 @@ const TransactionForm = ({
   const closeGenericModal = useGenericModalStore(
     (state) => state.closeGenericModal,
   );
-  const preferredCurrency = useAuthStore(
-    (state) => state.user?.preferredCurrency,
-  );
+
   const [accounts, setAccounts] = useState<AccountSelectModel[]>([]);
   const router = useRouter();
   const transactionSchema = getTransactionSchema({
@@ -94,8 +91,7 @@ const TransactionForm = ({
     if (transactionToBeUpdated && Object.keys(transactionToBeUpdated).length) {
       setDefaultFormValues(transactionToBeUpdated);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [transactionToBeUpdated, preferredCurrency]);
+  }, [transactionToBeUpdated]);
 
   useEffect(() => {
     startTransition(async () => {
@@ -119,8 +115,7 @@ const TransactionForm = ({
       setCategories(transactionCategories);
       setAccounts(accounts);
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [setCategories, t]);
 
   const setDefaultFormValues = (
     transactionToBeUpdated: TransactionSelectModel,
@@ -128,10 +123,10 @@ const TransactionForm = ({
     const keys = Object.keys(
       transactionToBeUpdated ?? {},
     ) as (keyof TransactionSchemaType)[];
-    if (keys.length) {
-      keys.forEach((key) => {
-        form.setValue(key, transactionToBeUpdated[key]);
-      });
+    if (!keys.length) return;
+
+    for (const key of keys) {
+      form.setValue(key, transactionToBeUpdated[key]);
     }
   };
 
@@ -142,7 +137,7 @@ const TransactionForm = ({
     }
 
     startTransition(async () => {
-      let result;
+      let result: BaseValidatedResponse<TransactionSelectModel>;
       if (entityId) {
         result = await updateTransaction({
           transactionId: entityId,
@@ -161,12 +156,12 @@ const TransactionForm = ({
     result: BaseValidatedResponse<TransactionSelectModel>,
   ) => {
     if (result.fieldErrors.length) {
-      result.fieldErrors.forEach((fieldError) => {
-        form.setError(fieldError.field as any, {
+      for (const fieldError of result.fieldErrors) {
+        form.setError(fieldError.field as keyof TransactionSchemaType, {
           type: "manual",
           message: fieldError.message,
         });
-      });
+      }
     }
 
     if (result.error) {

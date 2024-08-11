@@ -1,8 +1,11 @@
 "use client";
 import { CAPTCHA_SITE_KEY } from "@/lib/constants";
+import type { PropsWithChildren } from "react";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 
-const GoogleCaptchaWrapper = ({ children }: { children: React.ReactNode }) => {
+type GoogleCaptchaWrapperProps = PropsWithChildren;
+
+const GoogleCaptchaWrapper = ({ children }: GoogleCaptchaWrapperProps) => {
   return (
     <GoogleReCaptchaProvider
       reCaptchaKey={CAPTCHA_SITE_KEY ?? "NOT DEFINED"}

@@ -4,7 +4,6 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import {
   type ClipboardEvent,
-  Fragment,
   type HTMLInputTypeAttribute,
   type KeyboardEvent,
   type RefObject,
@@ -28,7 +27,7 @@ const AutoProgressInput = ({
 }: AutoProgressInputProps) => {
   const [values, setValues] = useState(new Array(length).fill(""));
   const refs: RefObject<HTMLInputElement>[] = Array.from({ length }, () =>
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    // biome-ignore lint/correctness/useHookAtTopLevel: This is intended
     useRef<HTMLInputElement>(null),
   );
 
@@ -70,9 +69,11 @@ const AutoProgressInput = ({
   return (
     <div className="flex items-center">
       {values.map((value, index) => (
-        <Fragment key={index}>
+        <>
           <Label
             htmlFor={`auto-progress-input-${index + 1}`}
+            // biome-ignore lint/suspicious/noArrayIndexKey: This is fine
+            key={index}
             className="sr-only"
           >
             Input {index + 1}
@@ -85,7 +86,8 @@ const AutoProgressInput = ({
             )}
             autoComplete="off"
             aria-label={`Auto progress input field ${index + 1}`}
-            key={index}
+            // biome-ignore lint/suspicious/noArrayIndexKey: This is fine
+            key={index + 1}
             ref={refs[index]}
             type={type}
             disabled={loading}
@@ -95,7 +97,7 @@ const AutoProgressInput = ({
             onChange={(e) => handleChange(index, e.target.value)}
             onKeyDown={(e) => handleKeyDown(index, e)}
           />
-        </Fragment>
+        </>
       ))}
     </div>
   );

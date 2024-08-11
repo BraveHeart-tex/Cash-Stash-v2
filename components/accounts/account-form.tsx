@@ -64,16 +64,13 @@ const AccountForm = ({
   const entityId = accountToBeUpdated?.id;
 
   useEffect(() => {
-    if (accountToBeUpdated) {
-      const keys = Object.keys(
-        accountToBeUpdated,
-      ) as (keyof AccountSchemaType)[];
-      keys.forEach((key) => {
-        form.setValue(key, accountToBeUpdated[key]);
-      });
+    if (!accountToBeUpdated) return;
+    const keys = Object.keys(accountToBeUpdated) as (keyof AccountSchemaType)[];
+    if (!keys.length) return;
+    for (const key of keys) {
+      form.setValue(key, accountToBeUpdated[key]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [accountToBeUpdated]);
+  }, [accountToBeUpdated, form.setValue]);
 
   const handleFormSubmit = async (values: AccountSchemaType) => {
     if (entityId && compareMatchingKeys(accountToBeUpdated, values)) {
@@ -84,7 +81,7 @@ const AccountForm = ({
     }
 
     startTransition(async () => {
-      let result;
+      let result: BaseValidatedResponse<AccountSelectModel>;
 
       if (entityId) {
         result = await updateBankAccount({
@@ -103,12 +100,12 @@ const AccountForm = ({
     result: BaseValidatedResponse<AccountSelectModel>,
   ) => {
     if (result.fieldErrors.length) {
-      result.fieldErrors.forEach((fieldError) => {
-        form.setError(fieldError.field as any, {
+      for (const fieldError of result.fieldErrors) {
+        form.setError(fieldError.field as keyof AccountSchemaType, {
           type: "manual",
           message: fieldError.message,
         });
-      });
+      }
     }
 
     if (result.error) {
@@ -125,7 +122,7 @@ const AccountForm = ({
         description: successMessage[entityId ? "update" : "create"],
       });
       closeGenericModal();
-      afterSave?.(result.data!);
+      afterSave?.(result.data);
     }
   };
 

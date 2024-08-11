@@ -9,7 +9,8 @@
       "node_modules/**",
       ".next/**",
       ".idea",
-      "./src/styles/quill.css"
+      "./src/styles/quill.css",
+      "sw.js"
     ]
   },
   "formatter": {

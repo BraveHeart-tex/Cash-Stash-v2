@@ -1,1 +1,0 @@
-ALTER TABLE `Budget` MODIFY COLUMN `category` varchar(50) NOT NULL;

@@ -21,8 +21,7 @@ const BudgetQueryStringCombobox = ({
 
   useEffect(() => {
     setCategories(initialBudgetCategories);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialBudgetCategories]);
+  }, [initialBudgetCategories, setCategories]);
 
   return (
     <QueryStringComboBox

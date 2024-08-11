@@ -84,7 +84,7 @@ const RegisterForm = () => {
         return;
       }
 
-      router.push(PAGE_ROUTES.EMAIL_VERIFICATION_ROUTE + `/${data.email}`);
+      router.push(`${PAGE_ROUTES.EMAIL_VERIFICATION_ROUTE}/${data.email}`);
 
       toast.success(t("accountCreatedSuccessfullyMessage"), {
         description: t("accountCreatedSuccessfullyDescription"),
@@ -96,12 +96,12 @@ const RegisterForm = () => {
     result: Awaited<ReturnType<typeof registerUser>>,
   ) => {
     if (result.fieldErrors.length) {
-      result.fieldErrors.forEach((fieldError) => {
-        form.setError(fieldError.field as any, {
+      for (const fieldError of result.fieldErrors) {
+        form.setError(fieldError.field as keyof RegisterSchemaType, {
           type: "manual",
           message: fieldError.message,
         });
-      });
+      }
     }
 
     if (result.error) {
@@ -116,7 +116,7 @@ const RegisterForm = () => {
     visible: { opacity: 1, y: 0 },
   };
 
-  const signInCtaQuestion = t("signInLink").split("?")[0] + "?";
+  const signInCtaQuestion = `${t("signInLink").split("?")[0]}?`;
   const signInCta = t("signInLink").split("?")[1];
 
   return (
@@ -170,6 +170,7 @@ const RegisterForm = () => {
                       </FormControl>
                       <FormDescription
                         className="text-[0.9em]"
+                        // biome-ignore lint/security/noDangerouslySetInnerHtml: HTML comes from the translations file
                         dangerouslySetInnerHTML={{
                           __html: DOMPurify.sanitize(
                             t.markup("emailFieldDescription", {
@@ -178,7 +179,7 @@ const RegisterForm = () => {
                             }),
                           ),
                         }}
-                      ></FormDescription>
+                      />
                       <FormMessage />
                     </FormItem>
                   )}

@@ -53,7 +53,6 @@ const GoalForm = ({ data: goalToBeUpdated }: GoalFormProps) => {
 
   const entityId = goalToBeUpdated?.id;
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: this is intentional
   useEffect(() => {
     if (!goalToBeUpdated) return;
     const keys = Object.keys(goalToBeUpdated ?? {}) as (keyof GoalSchemaType)[];
@@ -62,7 +61,7 @@ const GoalForm = ({ data: goalToBeUpdated }: GoalFormProps) => {
     for (const key of keys) {
       form.setValue(key, goalToBeUpdated[key]);
     }
-  }, [goalToBeUpdated]);
+  }, [goalToBeUpdated, form.setValue]);
 
   const handleFormSubmit = async (values: GoalSchemaType) => {
     if (entityId && compareMatchingKeys(goalToBeUpdated, values)) {

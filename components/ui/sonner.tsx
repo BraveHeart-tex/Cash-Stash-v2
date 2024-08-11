@@ -1,6 +1,7 @@
 "use client";
 
 import { useTheme } from "next-themes";
+import type React from "react";
 import { Toaster as Sonner } from "sonner";
 import { useMediaQuery } from "usehooks-ts";
 

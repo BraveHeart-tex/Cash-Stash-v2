@@ -50,6 +50,7 @@ export const FORGOT_PASSWORD_LINK_EXPIRATION_MINUTES = 60 as const;
 
 export const ACCOUNT_VERIFICATION_EXPIRATION_PERIOD_DAYS = 7 as const;
 export const TWO_FACTOR_AUTH_INPUT_TIMEOUT_SECONDS = 180 as const;
+export const TWO_FACTOR_AUTH_CODE_LENGTH = 6 as const;
 
 export const MAX_TWO_FACTOR_AUTH_ATTEMPTS = 3 as const;
 

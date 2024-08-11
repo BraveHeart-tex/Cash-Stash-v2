@@ -1,12 +1,13 @@
 "use client";
 
-import CurrencySelectCombobox from "@/components/currency-converter/curreny-select-combobox";
+import CurrencySelectCombobox from "@/components/currency-converter/currency-select-combobox";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { formatMoney } from "@/lib/utils/numberUtils/formatMoney";
 import { format } from "date-fns";
 import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
+import type React from "react";
 import { useEffect, useState } from "react";
 import {
   HiOutlineSwitchHorizontal,
@@ -41,15 +42,13 @@ const CurrencyConverterInput = ({
 
   useEffect(() => {
     setAmount(debouncedAmount);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedAmount]);
+  }, [debouncedAmount, setAmount]);
 
   const toggleMask = (value: string, mask: boolean) => {
     if (mask) {
       return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    } else {
-      return value.replace(/,/g, "");
     }
+    return value.replace(/,/g, "");
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {

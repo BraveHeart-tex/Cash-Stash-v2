@@ -1,1 +1,0 @@
-ALTER TABLE `Account` MODIFY COLUMN `balance` decimal(10,2) NOT NULL;

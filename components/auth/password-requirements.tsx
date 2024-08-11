@@ -2,7 +2,11 @@ import { cn } from "@/lib/utils/stringUtils/cn";
 import { useTranslations } from "next-intl";
 import { MdCheck, MdClear, MdPassword } from "react-icons/md";
 
-const PasswordRequirements = ({ password = "" }: { password: string }) => {
+type PasswordRequirementsProps = {
+  password: string;
+};
+
+const PasswordRequirements = ({ password = "" }: PasswordRequirementsProps) => {
   const t = useTranslations("Components.PasswordRequirements");
 
   const validations = [
@@ -22,7 +26,7 @@ const PasswordRequirements = ({ password = "" }: { password: string }) => {
       label: "1 number",
       isValid: password.match(/[0-9]/),
     },
-  ];
+  ] as const;
 
   return (
     <div className="mt-4 rounded-md border p-2">
@@ -31,9 +35,9 @@ const PasswordRequirements = ({ password = "" }: { password: string }) => {
         {t("title")}:
       </h2>
       <ul>
-        {validations.map((validation, index) => (
+        {validations.map((validation) => (
           <li
-            key={index}
+            key={validation.label}
             className={cn(
               "flex items-center gap-1 font-semibold text-destructive",
               validation.isValid && "text-success",
@@ -44,7 +48,7 @@ const PasswordRequirements = ({ password = "" }: { password: string }) => {
             ) : (
               <MdClear className="text-xl" />
             )}
-            {t(validation.label as any)}
+            {t(validation.label)}
           </li>
         ))}
       </ul>

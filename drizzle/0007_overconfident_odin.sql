@@ -1,1 +1,0 @@
-ALTER TABLE `User` ADD `activatedTwoFactorAuthentication` tinyint DEFAULT 0;

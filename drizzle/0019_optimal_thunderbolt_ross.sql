@@ -1,1 +1,0 @@
-ALTER TABLE `CurrencyRate` ADD `updatedAt` datetime(3) DEFAULT CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3);

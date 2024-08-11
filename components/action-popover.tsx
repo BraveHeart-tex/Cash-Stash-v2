@@ -7,10 +7,11 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-import type { IconType } from "react-icons/lib";
+import type React from "react";
+import type * as lib from "react-icons/lib";
 
 export type PopoverActionOption = {
-  icon: IconType;
+  icon: lib.IconType;
   label: string;
   onClick: () => void;
   visible?: boolean;

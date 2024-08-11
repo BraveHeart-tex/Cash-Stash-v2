@@ -1,1 +1,0 @@
-ALTER TABLE `User` ADD `preferredCurrency` varchar(3) DEFAULT 'USD' NOT NULL;

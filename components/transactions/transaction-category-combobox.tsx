@@ -19,9 +19,9 @@ const TransactionCategoryCombobox = ({
   );
   const setCategories = useCategoriesStore((state) => state.setCategories);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Not a big deal
   useEffect(() => {
     setCategories(initialTransactionCategories);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialTransactionCategories]);
 
   return (

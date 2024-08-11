@@ -12,7 +12,13 @@ import {
   YAxis,
 } from "recharts";
 
-const CustomTooltip = ({ active, payload, label }: any) => {
+type CustomTooltipProps = {
+  active: boolean;
+  payload: { value: number }[];
+  label: string;
+};
+
+const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
   const preferredCurrency = useAuthStore(
     (state) => state.user?.preferredCurrency,
   );

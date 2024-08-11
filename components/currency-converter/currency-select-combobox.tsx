@@ -41,19 +41,11 @@ const CurrencySelectCombobox = ({
         </Button>
       }
       defaultOption={{
-        label:
-          getTranslatedLabelForCurrency(t, selectedOption.symbol) +
-          " (" +
-          selectedOption.symbol +
-          ")",
+        label: `${getTranslatedLabelForCurrency(t, selectedOption.symbol)} (${selectedOption.symbol})`,
         value: selectedOption.symbol,
       }}
       options={CURRENCIES.map((item) => ({
-        label:
-          getTranslatedLabelForCurrency(t, item.symbol) +
-          " (" +
-          item.symbol +
-          ")",
+        label: `${getTranslatedLabelForCurrency(t, item.symbol)} (${item.symbol})`,
         value: item.symbol,
       }))}
     />

@@ -1,15 +1,12 @@
 "use client";
+import type { NAVIGATION_ITEMS } from "@/lib/constants";
 import { cn } from "@/lib/utils/stringUtils/cn";
 import { Link } from "@/navigation";
 import { usePathname } from "@/navigation";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef } from "react";
 
-type PageItem = {
-  label: string;
-  link: string;
-  icon: React.ElementType;
-};
+type PageItem = (typeof NAVIGATION_ITEMS)[number];
 
 const MobileTabsListItem = ({ page }: { page: PageItem }) => {
   const t = useTranslations("NavigationItems");
@@ -21,7 +18,7 @@ const MobileTabsListItem = ({ page }: { page: PageItem }) => {
     if (isActive && elementRef.current) {
       elementRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [isActive, elementRef]);
+  }, [isActive]);
 
   return (
     <Link
@@ -36,7 +33,8 @@ const MobileTabsListItem = ({ page }: { page: PageItem }) => {
     >
       <page.icon className="mb-2 h-5 w-5 text-muted-foreground group-[.active-tab]:text-primary" />
       <span className="text-xs text-muted-foreground group-[.active-tab]:text-primary md:text-sm">
-        {t(`${page.link}.label` as any)}
+        {/* @ts-expect-error */}
+        {t(`${page.link}.label`)}
       </span>
     </Link>
   );

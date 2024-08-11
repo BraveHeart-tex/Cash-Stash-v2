@@ -15,6 +15,7 @@ import {
 import { cn } from "@/lib/utils/stringUtils/cn";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTranslations } from "next-intl";
+import type React from "react";
 import { forwardRef, useEffect, useMemo, useState } from "react";
 import { FaCheck, FaSort } from "react-icons/fa";
 import type { IconType } from "react-icons/lib";

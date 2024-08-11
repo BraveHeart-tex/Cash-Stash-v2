@@ -14,7 +14,7 @@ import type { ControllerRenderProps, FieldValues } from "react-hook-form";
 import { BsCapslock } from "react-icons/bs";
 
 type PasswordInputProps<T extends FieldValues> = {
-  field: ControllerRenderProps<T, any>;
+  field: ControllerRenderProps<T>;
 };
 
 function PasswordInput<T extends FieldValues>({

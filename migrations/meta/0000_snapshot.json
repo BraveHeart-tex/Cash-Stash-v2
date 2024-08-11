@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "5dac16f5-954b-41b9-b553-ff21f9309a58",
-  "prevId": "48075dac-1428-49af-8fa7-5d9950b4f872",
+  "id": "dda5583f-39ed-481e-80b2-144350703b25",
+  "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "Account": {
       "name": "Account",
@@ -23,7 +23,7 @@
         },
         "balance": {
           "name": "balance",
-          "type": "double",
+          "type": "double(10,2)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -84,7 +84,12 @@
           "columns": ["id"]
         }
       },
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "accounts_userId_name_category_unique": {
+          "name": "accounts_userId_name_category_unique",
+          "columns": ["name", "userId", "category"]
+        }
+      }
     },
     "Budget": {
       "name": "Budget",
@@ -105,14 +110,14 @@
         },
         "budgetAmount": {
           "name": "budgetAmount",
-          "type": "double",
+          "type": "double(10,2)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
         "spentAmount": {
           "name": "spentAmount",
-          "type": "double",
+          "type": "double(10,2)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -131,13 +136,12 @@
           "notNull": true,
           "autoincrement": false
         },
-        "category": {
-          "name": "category",
-          "type": "enum('FOOD','TRANSPORTATION','ENTERTAINMENT','UTILITIES','SHOPPING','HOUSING','OTHER')",
+        "categoryId": {
+          "name": "categoryId",
+          "type": "int",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
-          "default": "'OTHER'"
+          "autoincrement": false
         },
         "createdAt": {
           "name": "createdAt",
@@ -161,6 +165,11 @@
           "name": "budgets_userId_fkey",
           "columns": ["userId"],
           "isUnique": false
+        },
+        "budgets_categoryId_fkey": {
+          "name": "budgets_categoryId_fkey",
+          "columns": ["categoryId"],
+          "isUnique": false
         }
       },
       "foreignKeys": {
@@ -169,6 +178,15 @@
           "tableFrom": "Budget",
           "tableTo": "User",
           "columnsFrom": ["userId"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "Budget_categoryId_Category_id_fk": {
+          "name": "Budget_categoryId_Category_id_fk",
+          "tableFrom": "Budget",
+          "tableTo": "Category",
+          "columnsFrom": ["categoryId"],
           "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "cascade"
@@ -181,6 +199,133 @@
         }
       },
       "uniqueConstraints": {}
+    },
+    "Category": {
+      "name": "Category",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "datetime(3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP(3)"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "datetime(3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)"
+        },
+        "type": {
+          "name": "type",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "userId": {
+          "name": "userId",
+          "type": "varchar(128)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "user_id_fkey": {
+          "name": "user_id_fkey",
+          "columns": ["userId"],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "Category_userId_User_id_fk": {
+          "name": "Category_userId_User_id_fk",
+          "tableFrom": "Category",
+          "tableTo": "User",
+          "columnsFrom": ["userId"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "Category_id": {
+          "name": "Category_id",
+          "columns": ["id"]
+        }
+      },
+      "uniqueConstraints": {
+        "unique_name_user_type": {
+          "name": "unique_name_user_type",
+          "columns": ["name", "userId", "type"]
+        }
+      }
+    },
+    "CurrencyRate": {
+      "name": "CurrencyRate",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "rate": {
+          "name": "rate",
+          "type": "double",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "symbol": {
+          "name": "symbol",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "datetime(3)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "CurrencyRate_id": {
+          "name": "CurrencyRate_id",
+          "columns": ["id"]
+        }
+      },
+      "uniqueConstraints": {
+        "CurrencyRate_symbol_key": {
+          "name": "CurrencyRate_symbol_key",
+          "columns": ["symbol"]
+        }
+      }
     },
     "EmailVerificationCode": {
       "name": "EmailVerificationCode",
@@ -280,14 +425,14 @@
         },
         "goalAmount": {
           "name": "goalAmount",
-          "type": "double",
+          "type": "double(10,2)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
         "currentAmount": {
           "name": "currentAmount",
-          "type": "double",
+          "type": "double(10,2)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -359,8 +504,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "userId": {
-          "name": "userId",
+        "user_id": {
+          "name": "user_id",
           "type": "varchar(128)",
           "primaryKey": false,
           "notNull": true,
@@ -377,16 +522,16 @@
       "indexes": {
         "passwordResetTokens_user_id_fkey": {
           "name": "passwordResetTokens_user_id_fkey",
-          "columns": ["userId"],
+          "columns": ["user_id"],
           "isUnique": false
         }
       },
       "foreignKeys": {
-        "PasswordResetToken_userId_User_id_fk": {
-          "name": "PasswordResetToken_userId_User_id_fk",
+        "PasswordResetToken_user_id_User_id_fk": {
+          "name": "PasswordResetToken_user_id_User_id_fk",
           "tableFrom": "PasswordResetToken",
           "tableTo": "User",
-          "columnsFrom": ["userId"],
+          "columnsFrom": ["user_id"],
           "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "cascade"
@@ -401,7 +546,7 @@
       "uniqueConstraints": {
         "PasswordResetToken_user_id_key": {
           "name": "PasswordResetToken_user_id_key",
-          "columns": ["userId"]
+          "columns": ["user_id"]
         }
       }
     },
@@ -424,7 +569,7 @@
         },
         "description": {
           "name": "description",
-          "type": "varchar(191)",
+          "type": "varchar(512)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -433,7 +578,7 @@
           "name": "reminderDate",
           "type": "datetime(3)",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false
         },
         "userId": {
@@ -465,6 +610,30 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
+        },
+        "status": {
+          "name": "status",
+          "type": "enum('PENDING','COMPLETED')",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'PENDING'"
+        },
+        "type": {
+          "name": "type",
+          "type": "enum('ONE_TIME','RECURRING')",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'ONE_TIME'"
+        },
+        "recurrence": {
+          "name": "recurrence",
+          "type": "enum('DAILY','EVERY_2_DAYS','EVERY_3_DAYS','EVERY_4_DAYS','EVERY_5_DAYS','EVERY_6_DAYS','WEEKLY','EVERY_TWO_WEEKS','MONTHLY','WEEKDAYS','WEEKENDS','YEARLY')",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'DAILY'"
         }
       },
       "indexes": {
@@ -556,7 +725,7 @@
         },
         "amount": {
           "name": "amount",
-          "type": "double",
+          "type": "double(10,2)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -584,13 +753,12 @@
           "notNull": true,
           "autoincrement": false
         },
-        "category": {
-          "name": "category",
-          "type": "enum('FOOD','TRANSPORTATION','ENTERTAINMENT','UTILITIES','SHOPPING','HOUSING','OTHER')",
+        "categoryId": {
+          "name": "categoryId",
+          "type": "int",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
-          "default": "'OTHER'"
+          "autoincrement": false
         },
         "accountId": {
           "name": "accountId",
@@ -608,6 +776,11 @@
         }
       },
       "indexes": {
+        "transactions_categoryId_fkey": {
+          "name": "transactions_categoryId_fkey",
+          "columns": ["categoryId"],
+          "isUnique": false
+        },
         "transactions_userId_fkey": {
           "name": "transactions_userId_fkey",
           "columns": ["userId"],
@@ -620,6 +793,15 @@
         }
       },
       "foreignKeys": {
+        "Transaction_categoryId_Category_id_fk": {
+          "name": "Transaction_categoryId_Category_id_fk",
+          "tableFrom": "Transaction",
+          "tableTo": "Category",
+          "columnsFrom": ["categoryId"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
         "Transaction_accountId_Account_id_fk": {
           "name": "Transaction_accountId_Account_id_fk",
           "tableFrom": "Transaction",
@@ -773,6 +955,22 @@
           "notNull": true,
           "autoincrement": false,
           "default": 0
+        },
+        "activatedTwoFactorAuthentication": {
+          "name": "activatedTwoFactorAuthentication",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "preferredCurrency": {
+          "name": "preferredCurrency",
+          "type": "varchar(3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'USD'"
         }
       },
       "indexes": {},
@@ -791,10 +989,13 @@
       }
     }
   },
-  "schemas": {},
   "_meta": {
     "schemas": {},
     "tables": {},
     "columns": {}
+  },
+  "internal": {
+    "tables": {},
+    "indexes": {}
   }
 }

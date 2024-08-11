@@ -1,1 +1,0 @@
-ALTER TABLE `Reminder` ADD `status` enum('PENDING','COMPLETED') DEFAULT 'PENDING';

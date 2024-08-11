@@ -4,7 +4,6 @@ import type { ConvertCurrencyType } from "@/typings/currencies";
 
 type ConvertedCurrencyListItemProps = {
   item: ConvertCurrencyType;
-  // eslint-disable-next-line no-unused-vars
   setSelectedCurrency: (value: string) => void;
 };
 
@@ -18,6 +17,7 @@ const CurrencyConverterListItem = ({
       title={item.label}
       className="flex cursor-pointer items-center justify-between text-ellipsis rounded-md p-2 hover:bg-accent"
       onClick={() => setSelectedCurrency(item.symbol)}
+      onKeyUp={() => setSelectedCurrency(item.symbol)}
     >
       <div className="flex items-center">
         <span className="mr-1 text-lg">

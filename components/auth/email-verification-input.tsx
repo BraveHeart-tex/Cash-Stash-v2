@@ -38,7 +38,7 @@ const EmailVerificationInput = ({ email }: { email: string }) => {
     if (verificationCode.length === EMAIL_VERIFICATION_CODE_LENGTH) {
       verifyEmail();
     }
-  }, [email, verificationCode, verifyEmail]);
+  }, [verificationCode, verifyEmail]);
 
   return (
     <div className="mt-4 flex w-full lg:items-center lg:justify-center">
