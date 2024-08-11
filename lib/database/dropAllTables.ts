@@ -3,13 +3,13 @@ import logger from "@/lib/utils/logger";
 import { sql } from "drizzle-orm";
 
 const dropAllTables = async () => {
-  if (process.env.NODE_ENV !== "development") return;
   await db.transaction(async (trx) => {
     await trx.execute(
       sql`
-        START TRANSACTION;
+          START TRANSACTION;
           SET @tables = NULL;
-          SELECT GROUP_CONCAT(table_name) INTO @tables
+          SELECT GROUP_CONCAT(table_name)
+          INTO @tables
           FROM information_schema.tables
           WHERE table_schema = DATABASE();
 
@@ -17,15 +17,15 @@ const dropAllTables = async () => {
           PREPARE stmt FROM @tables;
           EXECUTE stmt;
           DEALLOCATE PREPARE stmt;
-        COMMIT;
+          COMMIT;
       `,
     );
   });
 };
 
 dropAllTables()
-  .catch((e) => {
-    logger.error(e);
+  .catch((error) => {
+    logger.error("drop all tables error: ", error);
     process.exit(1);
   })
   .finally(async () => {
