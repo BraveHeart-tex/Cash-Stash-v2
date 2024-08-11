@@ -4,14 +4,7 @@
     "enabled": true
   },
   "files": {
-    "ignore": [
-      "drizzle/**",
-      "node_modules/**",
-      ".next/**",
-      ".idea",
-      "./src/styles/quill.css",
-      "sw.js"
-    ]
+    "ignore": ["drizzle/**", "node_modules/**", ".next/**", ".idea", "sw.js"]
   },
   "formatter": {
     "lineWidth": 80,
