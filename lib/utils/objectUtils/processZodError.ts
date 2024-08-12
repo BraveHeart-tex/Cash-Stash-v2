@@ -8,7 +8,6 @@ import type { ZodError } from "zod";
 export const processZodError = (error: ZodError) => {
   const fieldErrors = error.flatten().fieldErrors;
   const errorMessages = Object.entries(fieldErrors).map(
-    // eslint-disable-next-line no-unused-vars
     ([_, message]) => `${message}`,
   );
 

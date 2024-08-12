@@ -49,7 +49,6 @@ export const sendResetPasswordLink = async (email: string, url: string) => {
 
 export function authenticatedAction<T, P = undefined>(
   logic: AuthenticatedFunction<T, P>,
-  // eslint-disable-next-line no-unused-vars
 ): (params: OptionalParameter<AuthenticatedFunction<T, P>>) => Promise<T> {
   return async (params: OptionalParameter<AuthenticatedFunction<T, P>>) => {
     const { user } = await getUser();
@@ -63,7 +62,6 @@ export function authenticatedAction<T, P = undefined>(
 }
 
 export function authenticatedActionWithNoParams<T>(
-  // eslint-disable-next-line no-unused-vars
   logic: (user: User) => Promise<T>,
 ) {
   return async () => {

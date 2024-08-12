@@ -23,7 +23,6 @@ type AccountCardContentProps = {
   className?: string;
   showPopover?: boolean;
   setSelectedAccount?: (
-    // eslint-disable-next-line no-unused-vars
     account: AccountWithTransactions,
   ) => void;
 };

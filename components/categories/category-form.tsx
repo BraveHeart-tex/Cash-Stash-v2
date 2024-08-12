@@ -37,7 +37,6 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 type CategoryFormProps = {
-  // eslint-disable-next-line no-unused-vars
   afterSave?: (values: CategorySelectModel) => void;
   defaultTypeValue?: (typeof CATEGORY_TYPES)[keyof typeof CATEGORY_TYPES];
   showTypeOptions: boolean;
