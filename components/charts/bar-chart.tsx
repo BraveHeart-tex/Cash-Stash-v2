@@ -8,15 +8,12 @@ import {
   CartesianGrid,
   ResponsiveContainer,
   Tooltip,
+  type TooltipProps,
   XAxis,
   YAxis,
 } from "recharts";
 
-type CustomTooltipProps = {
-  active: boolean;
-  payload: { value: number }[];
-  label: string;
-};
+type CustomTooltipProps = TooltipProps<number, string>;
 
 const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
   const preferredCurrency = useAuthStore(
@@ -28,11 +25,11 @@ const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
         <p className="font-semibold text-primary">{`${label}`}</p>
         <p className="text-success">
           <span className="font-semibold">Income: </span>
-          {formatMoney(payload[0].value, preferredCurrency)}
+          {formatMoney(payload[0].value || 0, preferredCurrency)}
         </p>
         <p className="text-destructive">
           <span className="font-semibold">Expense: </span>
-          {formatMoney(payload[1].value, preferredCurrency)}
+          {formatMoney(payload[1].value || 0, preferredCurrency)}
         </p>
       </div>
     );
@@ -76,7 +73,13 @@ const BarChartComponent = ({
         />
         <Tooltip
           cursor={{ fill: "#374151", opacity: 0.2 }}
-          content={<CustomTooltip />}
+          content={({ active, label, payload }) => (
+            <CustomTooltip
+              active={active}
+              label={label}
+              payload={payload as CustomTooltipProps["payload"]}
+            />
+          )}
           labelClassName="text-primary underline"
         />
         <Bar

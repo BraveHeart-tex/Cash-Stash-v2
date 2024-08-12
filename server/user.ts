@@ -2,11 +2,12 @@
 import { authenticatedAction } from "@/lib/auth/authUtils";
 import { PAGE_ROUTES } from "@/lib/constants";
 import { db } from "@/lib/database/connection";
-import currencyRatesRepository from "@/lib/database/repository/currencyRatesRepository";
+import * as currencyRatesRepository from "@/lib/database/repository/currencyRatesRepository";
 import userRepository from "@/lib/database/repository/userRepository";
 import { accounts, budgets, goals, transactions } from "@/lib/database/schema";
 import redisService from "@/lib/redis/redisService";
 import logger from "@/lib/utils/logger";
+import type { RateSymbol } from "@/schemas/exchange-rate-response-schema";
 import type { UpdateUserCurrencyPreferenceReturnType } from "@/typings/user-actions";
 import { eq, sql } from "drizzle-orm";
 import { getTranslations } from "next-intl/server";
@@ -48,8 +49,8 @@ export const updateUserCurrencyPreference = authenticatedAction<
 });
 
 type ConvertTransactionsToNewCurrencyParams = {
-  oldSymbol: string;
-  newSymbol: string;
+  oldSymbol: RateSymbol;
+  newSymbol: RateSymbol;
 };
 
 export const convertTransactionsToNewCurrency = authenticatedAction(

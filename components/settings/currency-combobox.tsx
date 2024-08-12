@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import Combobox, { type ComboboxOption } from "@/components/ui/combobox";
+import type { RateSymbol } from "@/schemas/exchange-rate-response-schema";
 import {
   convertTransactionsToNewCurrency,
   updateUserCurrencyPreference,
@@ -78,8 +79,8 @@ const CurrencyCombobox = ({
           return new Promise((resolve, reject) => {
             startTransition(async () => {
               const response = await convertTransactionsToNewCurrency({
-                oldSymbol,
-                newSymbol: selectedCurrency.value,
+                oldSymbol: oldSymbol as RateSymbol,
+                newSymbol: selectedCurrency.value as RateSymbol,
               });
 
               if (response?.error) {

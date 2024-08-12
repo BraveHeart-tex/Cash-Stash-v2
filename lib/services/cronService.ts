@@ -1,13 +1,11 @@
 import { ACCOUNT_VERIFICATION_EXPIRATION_PERIOD_DAYS } from "@/lib/constants";
 import { db } from "@/lib/database/connection";
-import currencyRatesRepository from "@/lib/database/repository/currencyRatesRepository";
+import * as currencyRatesRepository from "@/lib/database/repository/currencyRatesRepository";
 import emailVerificationCodeRepository from "@/lib/database/repository/emailVerificationCodeRepository";
 import { users } from "@/lib/database/schema";
-import exchangeRatesService from "@/lib/services/exchangeRatesService";
+import * as exchangeRatesService from "@/lib/services/exchangeRatesService";
 import { convertISOToMysqlDateTime } from "@/lib/utils/dateUtils/convertISOToMysqlDateTime";
 import logger from "@/lib/utils/logger";
-import { isExchangeRateResponseError } from "@/lib/utils/typeGuards/isExchangeRateError";
-import { isExchangeRateResponse } from "@/lib/utils/typeGuards/isExchangeRateResponse";
 import { and, eq, lte } from "drizzle-orm";
 
 export const deleteUnverifiedAccounts = async () => {
@@ -48,31 +46,19 @@ export const deleteExpiredEmailVerificationTokens = async () => {
 
 export const updateCurrencyRates = async () => {
   try {
-    const data = await exchangeRatesService.getLatestRates();
+    const exchangeRatesResponse =
+      await exchangeRatesService.getLatestExchangeRates();
 
-    if (isExchangeRateResponseError(data)) {
-      logger.error("Error updating currency rates", data.description);
-      return false;
-    }
+    if (exchangeRatesResponse === null) return;
 
-    if (isExchangeRateResponse(data)) {
-      const mappedRates = Object.entries(data.rates).map(([currency, rate]) => {
-        return {
-          symbol: currency,
-          rate,
-        };
-      });
+    const upsertResult = await currencyRatesRepository.upsertCurrencyRates(
+      exchangeRatesResponse.rates,
+    );
 
-      const upsertPromises = mappedRates.map(({ symbol, rate }) =>
-        currencyRatesRepository.updateCurrencyRate({ symbol, rate }),
-      );
+    if (!upsertResult) return;
 
-      await Promise.all(upsertPromises);
-
-      return true;
-    }
+    return true;
   } catch (error) {
     logger.error("Error updating currency rates", error);
-    return false;
   }
 };

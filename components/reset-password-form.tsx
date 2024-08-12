@@ -66,7 +66,8 @@ const ResetPasswordForm = ({ email, token }: ResetPasswordFormProps) => {
           name="password"
           render={({ field }) => (
             <div>
-              <PasswordInput field={field} />
+              {/* biome-ignore lint/suspicious/noExplicitAny: Will be fixed later */}
+              <PasswordInput field={field as any} />
               <PasswordRequirements password={field.value} />
             </div>
           )}

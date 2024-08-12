@@ -2,7 +2,7 @@
 
 import { authenticatedAction } from "@/lib/auth/authUtils";
 import { CURRENCIES } from "@/lib/constants";
-import currencyRatesRepository from "@/lib/database/repository/currencyRatesRepository";
+import * as currencyRatesRepository from "@/lib/database/repository/currencyRatesRepository";
 import logger from "@/lib/utils/logger";
 import { getTranslatedLabelForCurrency } from "@/lib/utils/translationUtils/getTranslatedLabelForCurrency";
 import type { ConvertCurrencyType } from "@/typings/currencies";

@@ -1,49 +1,57 @@
 import { db } from "@/lib/database/connection";
-import {
-  type CurrencyRateInsertModel,
-  currencyRates,
-} from "@/lib/database/schema";
+import { currencyRates } from "@/lib/database/schema";
 import logger from "@/lib/utils/logger";
-import { eq } from "drizzle-orm";
+import type {
+  ExchangeRateResponse,
+  RateSymbol,
+} from "@/schemas/exchange-rate-response-schema";
+import { eq, sql } from "drizzle-orm";
 
-const currencyRatesRepository = {
-  async updateCurrencyRate(rateToUpdate: CurrencyRateInsertModel) {
-    const { symbol, rate } = rateToUpdate;
-    return await db
+export const upsertCurrencyRates = async (
+  currencyRatesData: ExchangeRateResponse["rates"],
+) => {
+  try {
+    const upsertPayload = Object.entries(currencyRatesData).map(
+      ([symbol, rate]) => {
+        return {
+          symbol,
+          rate,
+        };
+      },
+    );
+
+    await db
       .insert(currencyRates)
-      .values({
-        symbol,
-        rate,
-      })
+      .values(upsertPayload)
       .onDuplicateKeyUpdate({
         set: {
-          rate,
+          rate: sql`VALUES(rate)`,
         },
       });
-  },
-  async getCurrencyRateBySymbol(symbol: string) {
-    const [currencyRate] = await db
-      .select()
-      .from(currencyRates)
-      .where(eq(currencyRates.symbol, symbol));
 
-    return currencyRate;
-  },
-
-  async getCurrencyRates() {
-    try {
-      return (await db.select().from(currencyRates)).reduce(
-        (acc, curr) => {
-          acc[curr.symbol] = curr.rate;
-          return acc;
-        },
-        {} as Record<string, number>,
-      );
-    } catch (error) {
-      logger.error("Error getting currency rates", error);
-      return {};
-    }
-  },
+    return true;
+  } catch (error) {
+    logger.error("Error upserting currency rates", error);
+  }
 };
 
-export default currencyRatesRepository;
+export const getCurrencyRateBySymbol = async (currencySymbol: RateSymbol) => {
+  return db.query.currencyRates.findFirst({
+    where: () => eq(currencyRates.symbol, currencySymbol),
+  });
+};
+
+export const getCurrencyRates = async () => {
+  try {
+    return (await db.select().from(currencyRates)).reduce(
+      (acc, curr) => {
+        acc[curr.symbol] = curr.rate;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
+  } catch (error) {
+    logger.error("Error getting currency rates", error);
+    return {};
+  }
+};

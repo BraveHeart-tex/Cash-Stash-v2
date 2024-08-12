@@ -1,23 +1,27 @@
 import { env } from "@/env";
 import logger from "@/lib/utils/logger";
+import { exchangeRateResponseSchema } from "@/schemas/exchange-rate-response-schema";
 
-const exchangeRatesService = {
-  getLatestRates: async () => {
-    try {
-      const URL = `https://openexchangerates.org/api/latest.json?app_id=${env.OPEN_EXCHANGE_RATE_APP_ID}&prettyprint=false&show_alternative=false`;
-      const response = await fetch(URL, {
-        method: "GET",
-        headers: {
-          accept: "application/json",
-        },
-      });
+export const getLatestExchangeRates = async () => {
+  try {
+    const endpoint = `https://openexchangerates.org/api/latest.json?app_id=${env.OPEN_EXCHANGE_RATE_APP_ID}&prettyprint=false&show_alternative=false`;
+    const response = await fetch(endpoint, {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+      },
+    });
+    const data = await response.json();
 
-      return await response.json();
-    } catch (error) {
-      logger.error("Error fetching exchange rates", error);
+    const validatedResponse = exchangeRateResponseSchema.safeParse(data);
+
+    if (!validatedResponse.success) {
       return null;
     }
-  },
-};
 
-export default exchangeRatesService;
+    return validatedResponse.data;
+  } catch (error) {
+    logger.error("Error fetching exchange rates", error);
+    return null;
+  }
+};
