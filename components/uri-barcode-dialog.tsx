@@ -42,6 +42,7 @@ const UriBarcodeDialog = () => {
   };
 
   const handleCopyToClipBoard = async () => {
+    if (!secret) return;
     await navigator.clipboard.writeText(secret);
     toast.info("Code copied to clipboard.");
   };

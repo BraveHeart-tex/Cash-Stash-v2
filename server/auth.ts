@@ -1,4 +1,5 @@
 "use server";
+import { env } from "@/env";
 import {
   authenticatedAction,
   authenticatedActionWithNoParams,
@@ -731,7 +732,7 @@ type RecaptchaResponse = {
 export const validateReCAPTCHAToken = async (token: string) => {
   try {
     const validationUrl = "https://www.google.com/recaptcha/api/siteverify";
-    const responseBody = `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${token}`;
+    const responseBody = `secret=${env.RECAPTCHA_SECRET_KEY}&response=${token}`;
 
     const response = await fetch(validationUrl, {
       method: "POST",

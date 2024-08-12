@@ -2,16 +2,17 @@ import { LOCALES } from "@/lib/constants";
 import { verifyRequestOrigin } from "lucia";
 import createIntlMiddleware from "next-intl/middleware";
 import { type NextRequest, NextResponse } from "next/server";
+import { env } from "@/env";
 
 export async function middleware(request: NextRequest) {
   const authorizationToken = request.headers.get("Authorization") || "";
   const isCronJob = request.url.includes("/api/cron");
 
-  if (isCronJob && authorizationToken !== process.env.CRON_API_KEY) {
+  if (isCronJob && authorizationToken !== env.CRON_API_KEY) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
 
-  if (isCronJob && authorizationToken === process.env.CRON_API_KEY) {
+  if (isCronJob && authorizationToken === env.CRON_API_KEY) {
     return NextResponse.next();
   }
 

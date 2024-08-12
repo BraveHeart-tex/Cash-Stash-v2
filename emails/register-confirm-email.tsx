@@ -1,3 +1,4 @@
+import { env } from "@/env";
 import {
   EMAIL_VERIFICATION_CODE_EXPIRY_MINUTES,
   FOREGROUND_COLOR,
@@ -24,7 +25,7 @@ type RegisterConfirmEmailProps = {
   validationUrl: string;
 };
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+const baseUrl = env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
 export const RegisterConfirmEmail = ({
   validationCode,

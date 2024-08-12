@@ -1,3 +1,4 @@
+import { env } from "@/env";
 import type { NavigationItem } from "@/typings/constants";
 import { AiOutlineTransaction } from "react-icons/ai";
 import { BiCategory } from "react-icons/bi";
@@ -154,7 +155,7 @@ export const getPageSizeAndSkipAmount = (pageNumber: number) => {
 };
 
 export const getResetPasswordUrl = (email: string, token: string) => {
-  return `${process.env.NEXT_PUBLIC_BASE_URL}/auth/reset-password/${email}?token=${token}`;
+  return `${env.NEXT_PUBLIC_BASE_URL}/auth/reset-password/${email}?token=${token}`;
 };
 
 export const FLAGS_BY_CURRENCY_SYMBOL: {

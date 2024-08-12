@@ -1,4 +1,4 @@
-import cronService from "@/lib/services/cronService";
+import * as cronService from "@/lib/services/cronService";
 import logger from "@/lib/utils/logger";
 import { NextResponse } from "next/server";
 

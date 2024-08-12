@@ -1,3 +1,4 @@
+import { env } from "@/env";
 import {
   FOREGROUND_COLOR,
   FORGOT_PASSWORD_LINK_EXPIRATION_MINUTES,
@@ -21,7 +22,7 @@ type ForgotPasswordEmailProps = {
   url: string;
 };
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+const baseUrl = env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
 export const ForgotPasswordEmail = ({ url }: ForgotPasswordEmailProps) => (
   <Html>

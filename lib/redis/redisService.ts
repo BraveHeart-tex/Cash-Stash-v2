@@ -1,3 +1,4 @@
+import { env } from "@/env";
 import logger from "@/lib/utils/logger";
 import Redis from "ioredis";
 
@@ -5,7 +6,7 @@ let instance: RedisService;
 
 class RedisService extends Redis {
   private constructor() {
-    super(process.env.REDIS_CONNECTION_STRING as string);
+    super(env.REDIS_CONNECTION_STRING as string);
   }
 
   static getInstance(): RedisService {

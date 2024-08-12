@@ -117,7 +117,8 @@ const NavigationItemsDrawer = () => {
                     className="flex w-full items-center gap-2 text-left text-base font-medium text-foreground"
                   >
                     <item.icon size={18} />
-                    {t(`${item.link}.label`)}
+                    {/* biome-ignore lint/suspicious/noExplicitAny: Intentional*/}
+                    {t(`${item.link}.label` as any)}
                     <FaChevronRight className="ml-auto text-muted-foreground" />
                   </Link>
                 </Button>

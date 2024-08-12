@@ -1,5 +1,6 @@
 import ForgotPasswordEmail from "@/emails/forgot-password-email";
 import { RegisterConfirmEmail } from "@/emails/register-confirm-email";
+import { env } from "@/env";
 import { getUser } from "@/lib/auth/session";
 import { PAGE_ROUTES } from "@/lib/constants";
 import emailService from "@/lib/services/emailService";
@@ -15,12 +16,12 @@ export const sendEmailVerificationCode = async (
   const emailHTML = render(
     RegisterConfirmEmail({
       validationCode: code,
-      validationUrl: `${process.env.NEXT_PUBLIC_BASE_URL}${PAGE_ROUTES.EMAIL_VERIFICATION_ROUTE}/${email}`,
+      validationUrl: `${env.NEXT_PUBLIC_BASE_URL}${PAGE_ROUTES.EMAIL_VERIFICATION_ROUTE}/${email}`,
     }),
   );
 
   const options = {
-    from: process.env.EMAIL_USER as string,
+    from: env.EMAIL_USER as string,
     to: email,
     subject: "Confirm your email address",
     html: emailHTML,
@@ -37,7 +38,7 @@ export const sendResetPasswordLink = async (email: string, url: string) => {
   );
 
   const options = {
-    from: process.env.EMAIL_USER as string,
+    from: env.EMAIL_USER,
     to: email,
     subject: "Reset your password",
     html: emailHTML,

@@ -90,6 +90,9 @@ importers:
       '@serwist/sw':
         specifier: ^8.4.4
         version: 8.4.4
+      '@t3-oss/env-nextjs':
+        specifier: ^0.10.1
+        version: 0.10.1(typescript@5.3.3)(zod@3.22.4)
       '@tanstack/react-table':
         specifier: ^8.15.0
         version: 8.15.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -123,6 +126,9 @@ importers:
       isomorphic-dompurify:
         specifier: ^2.9.0
         version: 2.9.0
+      jiti:
+        specifier: ^1.21.6
+        version: 1.21.6
       lucia:
         specifier: ^3.0.1
         version: 3.0.1
@@ -2503,6 +2509,24 @@ packages:
   '@swc/types@0.1.5':
     resolution: {integrity: sha512-myfUej5naTBWnqOCc/MdVOLVjXUXtIA+NpDrDBKJtLLg2shUjBu3cZmB/85RyitKc55+lUUyl7oRfLOvkr2hsw==}
 
+  '@t3-oss/env-core@0.10.1':
+    resolution: {integrity: sha512-GcKZiCfWks5CTxhezn9k5zWX3sMDIYf6Kaxy2Gx9YEQftFcz8hDRN56hcbylyAO3t4jQnQ5ifLawINsNgCDpOg==}
+    peerDependencies:
+      typescript: '>=5.0.0'
+      zod: ^3.0.0
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
+  '@t3-oss/env-nextjs@0.10.1':
+    resolution: {integrity: sha512-iy2qqJLnFh1RjEWno2ZeyTu0ufomkXruUsOZludzDIroUabVvHsrSjtkHqwHp1/pgPUzN3yBRHMILW162X7x2Q==}
+    peerDependencies:
+      typescript: '>=5.0.0'
+      zod: ^3.0.0
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
   '@tanstack/react-table@8.15.0':
     resolution: {integrity: sha512-8K4RSROUtXUtfiezV6Ehl8z99axFrkQnxXi0vjWBJv3Tsm5x4EyrgXI7d2tOOMoANykKZLB6S1sGZGemoMRt7Q==}
     engines: {node: '>=12'}
@@ -3848,8 +3872,8 @@ packages:
     resolution: {integrity: sha512-7vuh85V5cdDofPyxn58nrPjBktZo0u9x1g8WtjQol+jZDaE+fhN+cIvTj11GndBnMnyfrUOG1sZQxCdjKh+DKg==}
     engines: {node: '>= 10.13.0'}
 
-  jiti@1.21.0:
-    resolution: {integrity: sha512-gFqAIbuKyyso/3G2qhiO2OM6shY6EPP/R0+mkDbyspxKazh8BXDC5FiFsUjlczgdNz/vfra0da2y+aHrusLG/Q==}
+  jiti@1.21.6:
+    resolution: {integrity: sha512-2yTgeWTWzMWkHu6Jp9NKgePDaYHbntiwvYuuJLbbN9vl7DC9DvXKOB2BC3ZZ92D3cvV/aflH0osDfwpHepQ53w==}
     hasBin: true
 
   js-beautify@1.15.1:
@@ -7390,6 +7414,19 @@ snapshots:
 
   '@swc/types@0.1.5': {}
 
+  '@t3-oss/env-core@0.10.1(typescript@5.3.3)(zod@3.22.4)':
+    dependencies:
+      zod: 3.22.4
+    optionalDependencies:
+      typescript: 5.3.3
+
+  '@t3-oss/env-nextjs@0.10.1(typescript@5.3.3)(zod@3.22.4)':
+    dependencies:
+      '@t3-oss/env-core': 0.10.1(typescript@5.3.3)(zod@3.22.4)
+      zod: 3.22.4
+    optionalDependencies:
+      typescript: 5.3.3
+
   '@tanstack/react-table@8.15.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
       '@tanstack/table-core': 8.14.0
@@ -7940,7 +7977,7 @@ snapshots:
     dependencies:
       '@types/node': 20.2.3
       cosmiconfig: 9.0.0(typescript@5.3.3)
-      jiti: 1.21.0
+      jiti: 1.21.6
       typescript: 5.3.3
 
   cosmiconfig@9.0.0(typescript@5.3.3):
@@ -8763,7 +8800,7 @@ snapshots:
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
-  jiti@1.21.0: {}
+  jiti@1.21.6: {}
 
   js-beautify@1.15.1:
     dependencies:
@@ -9894,7 +9931,7 @@ snapshots:
       fast-glob: 3.3.2
       glob-parent: 6.0.2
       is-glob: 4.0.3
-      jiti: 1.21.0
+      jiti: 1.21.6
       lilconfig: 2.1.0
       micromatch: 4.0.5
       normalize-path: 3.0.0
@@ -9921,7 +9958,7 @@ snapshots:
       fast-glob: 3.3.2
       glob-parent: 6.0.2
       is-glob: 4.0.3
-      jiti: 1.21.0
+      jiti: 1.21.6
       lilconfig: 2.1.0
       micromatch: 4.0.5
       normalize-path: 3.0.0

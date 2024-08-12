@@ -5,19 +5,20 @@ import { DrizzleMySQLAdapter } from "@lucia-auth/adapter-drizzle";
 import * as dotenv from "dotenv";
 import { drizzle } from "drizzle-orm/mysql2";
 import { Lucia } from "lucia";
-import mysql from "mysql2";
+import { type Pool, createPool } from "mysql2/promise";
+import { env } from "@/env";
 
 dotenv.config();
 
-export const pool = mysql.createPool({
-  uri: process.env.DATABASE_URL as string,
-  namedPlaceholders: true,
-  multipleStatements: true,
-});
+const globalForDb = globalThis as unknown as {
+  conn: Pool | undefined;
+};
 
-const asyncPool = pool.promise();
+const conn = globalForDb.conn ?? createPool({ uri: env.DATABASE_URL });
 
-export const db = drizzle(asyncPool, {
+if (env.NODE_ENV !== "production") globalForDb.conn = conn;
+
+export const db = drizzle(conn, {
   schema,
   mode: "default",
   logger: new QueryLogger(),
@@ -29,7 +30,7 @@ export const lucia = new Lucia(adapter, {
   sessionCookie: {
     expires: false,
     attributes: {
-      secure: process.env.NODE_ENV === "production",
+      secure: env.NODE_ENV === "production",
     },
   },
   getUserAttributes(databaseUserAttributes) {

@@ -122,7 +122,9 @@ const AccountForm = ({
         description: successMessage[entityId ? "update" : "create"],
       });
       closeGenericModal();
-      afterSave?.(result.data);
+      if (result?.data) {
+        afterSave?.(result.data);
+      }
     }
   };
 

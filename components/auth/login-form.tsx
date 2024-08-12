@@ -220,7 +220,8 @@ const LoginForm = ({ internationalizationConfig }: LoginFormProps) => {
                     control={form.control}
                     name="password"
                     render={({ field }) => (
-                      <PasswordInput<LoginSchemaType> field={field} />
+                      // biome-ignore lint/suspicious/noExplicitAny: Will come back to this later
+                      <PasswordInput<LoginSchemaType> field={field as any} />
                     )}
                   />
                 </div>

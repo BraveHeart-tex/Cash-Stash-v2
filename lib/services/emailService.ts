@@ -1,3 +1,4 @@
+import { env } from "@/env";
 import nodemailer, { type Transporter } from "nodemailer";
 
 type SendEmailOptions = {
@@ -11,15 +12,15 @@ class EmailService {
   private transporter: Transporter;
   constructor() {
     this.transporter = nodemailer.createTransport({
-      host: process.env.EMAIL_HOST,
-      port: Number.parseInt(process.env.EMAIL_PORT as string),
+      host: env.EMAIL_HOST,
+      port: Number.parseInt(env.EMAIL_PORT as string),
       secure: true,
       tls: {
         rejectUnauthorized: false,
       },
       auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD,
+        user: env.EMAIL_USER,
+        pass: env.EMAIL_PASSWORD,
       },
     });
   }

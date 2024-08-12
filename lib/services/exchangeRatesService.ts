@@ -1,9 +1,10 @@
+import { env } from "@/env";
 import logger from "@/lib/utils/logger";
 
 const exchangeRatesService = {
   getLatestRates: async () => {
     try {
-      const URL = `https://openexchangerates.org/api/latest.json?app_id=${process.env.OPEN_EXCHANGE_RATE_APP_ID}&prettyprint=false&show_alternative=false`;
+      const URL = `https://openexchangerates.org/api/latest.json?app_id=${env.OPEN_EXCHANGE_RATE_APP_ID}&prettyprint=false&show_alternative=false`;
       const response = await fetch(URL, {
         method: "GET",
         headers: {
