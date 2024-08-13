@@ -41,7 +41,6 @@ export const transactionTableColumns: ColumnDef<TransactionWithAccount>[] = [
       );
     },
     cell: ({ row }) => {
-      // eslint-disable-next-line react-hooks/rules-of-hooks
       const preferredCurrency = useAuthStore(
         (state) => state.user?.preferredCurrency,
       );

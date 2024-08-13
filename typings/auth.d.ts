@@ -1,6 +1,5 @@
 import type { User } from "lucia";
 
-/* eslint-disable no-unused-vars */
 export type AuthenticatedFunctionContext = {
   user: User;
 };

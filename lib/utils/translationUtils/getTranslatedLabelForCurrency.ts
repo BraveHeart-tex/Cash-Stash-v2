@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import type { Formats, TranslationValues } from "next-intl";
 
 export const getTranslatedLabelForCurrency = (
