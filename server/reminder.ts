@@ -1,7 +1,7 @@
 "use server";
 import { authenticatedAction } from "@/lib/auth/authUtils";
 import reminderRepository from "@/lib/database/repository/reminderRepository";
-import { convertISOToMysqlDateTime } from "@/lib/utils/dateUtils/convertISOToMysqlDateTime";
+import { convertToMysqlDateTime } from "@/lib/utils/dateUtils/convertToMysqlDateTime";
 import logger from "@/lib/utils/logger";
 import { processZodError } from "@/lib/utils/objectUtils/processZodError";
 import reminderSchema, {
@@ -26,7 +26,7 @@ export const createReminder = authenticatedAction<
     const createdReminder = await reminderRepository.create({
       ...validatedData,
       reminderDate: validatedData.reminderDate
-        ? convertISOToMysqlDateTime(validatedData.reminderDate.toISOString())
+        ? convertToMysqlDateTime(validatedData.reminderDate.toISOString())
         : null,
       userId: user.id,
     });
@@ -65,7 +65,7 @@ export const updateReminder = authenticatedAction<
     const affectedRows = await reminderRepository.update(reminder.id, {
       ...validatedData,
       reminderDate: validatedData.reminderDate
-        ? convertISOToMysqlDateTime(validatedData.reminderDate.toISOString())
+        ? convertToMysqlDateTime(validatedData.reminderDate.toISOString())
         : null,
     });
 

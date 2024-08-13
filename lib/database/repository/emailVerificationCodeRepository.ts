@@ -1,6 +1,6 @@
 import { db } from "@/lib/database/connection";
 import { emailVerificationCode } from "@/lib/database/schema";
-import { convertISOToMysqlDateTime } from "@/lib/utils/dateUtils/convertISOToMysqlDateTime";
+import { convertToMysqlDateTime } from "@/lib/utils/dateUtils/convertToMysqlDateTime";
 import logger from "@/lib/utils/logger";
 import { eq, lte } from "drizzle-orm";
 
@@ -31,7 +31,7 @@ const emailVerificationCodeRepository = {
   getByEmailAndUserId,
   deleteByUserId,
   async deleteExpiredCodes() {
-    const now = convertISOToMysqlDateTime(new Date().toISOString());
+    const now = convertToMysqlDateTime(new Date().toISOString());
 
     return await db
       .delete(emailVerificationCode)

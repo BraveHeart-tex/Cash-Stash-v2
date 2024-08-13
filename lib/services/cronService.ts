@@ -4,7 +4,7 @@ import * as currencyRatesRepository from "@/lib/database/repository/currencyRate
 import emailVerificationCodeRepository from "@/lib/database/repository/emailVerificationCodeRepository";
 import { users } from "@/lib/database/schema";
 import * as exchangeRatesService from "@/lib/services/exchangeRatesService";
-import { convertISOToMysqlDateTime } from "@/lib/utils/dateUtils/convertISOToMysqlDateTime";
+import { convertToMysqlDateTime } from "@/lib/utils/dateUtils/convertToMysqlDateTime";
 import logger from "@/lib/utils/logger";
 import { and, eq, lte } from "drizzle-orm";
 
@@ -14,7 +14,7 @@ export const deleteUnverifiedAccounts = async () => {
       new Date().getTime() -
       ACCOUNT_VERIFICATION_EXPIRATION_PERIOD_DAYS * 24 * 60 * 60 * 1000;
 
-    const expirationDateString = convertISOToMysqlDateTime(
+    const expirationDateString = convertToMysqlDateTime(
       new Date(expirationTimeValue).toISOString(),
     );
 

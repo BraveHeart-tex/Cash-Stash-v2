@@ -9,7 +9,7 @@ import {
   type UserSelectModel,
   emailVerificationCode,
 } from "@/lib/database/schema";
-import { convertISOToMysqlDateTime } from "@/lib/utils/dateUtils/convertISOToMysqlDateTime";
+import { convertToMysqlDateTime } from "@/lib/utils/dateUtils/convertToMysqlDateTime";
 import { and, eq } from "drizzle-orm";
 import { TimeSpan, createDate, isWithinExpirationDate } from "oslo";
 import { alphabet, generateRandomString } from "oslo/crypto";
@@ -31,7 +31,7 @@ export const generateEmailVerificationCode = async (
     userId,
     email,
     code,
-    expiresAt: convertISOToMysqlDateTime(
+    expiresAt: convertToMysqlDateTime(
       createDate(
         new TimeSpan(EMAIL_VERIFICATION_CODE_EXPIRY_MINUTES, "m"),
       ).toISOString(),
