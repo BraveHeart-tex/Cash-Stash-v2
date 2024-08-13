@@ -14,7 +14,6 @@ import { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 
 type CreateBudgetCategoryPopoverProps = {
-  // eslint-disable-next-line no-unused-vars
   onSave: (values: CategorySelectModel) => void;
 };
 

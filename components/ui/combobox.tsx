@@ -29,7 +29,6 @@ export type ComboboxOption = {
 
 type ComboboxProps = {
   options: ComboboxOption[];
-  // eslint-disable-next-line no-unused-vars
   onSelect: (option: ComboboxOption) => void;
   triggerClassName?: string;
   contentClassName?: string;

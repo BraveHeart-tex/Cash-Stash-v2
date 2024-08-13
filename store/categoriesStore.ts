@@ -4,13 +4,9 @@ import { devtools } from "zustand/middleware";
 
 type CategoriesStoreState = {
   categories: CategorySelectModel[];
-  // eslint-disable-next-line no-unused-vars
   setCategories: (categories: CategorySelectModel[]) => void;
-  // eslint-disable-next-line no-unused-vars
   addCategory: (category: CategorySelectModel) => void;
-  // eslint-disable-next-line no-unused-vars
   removeCategory: (category: CategorySelectModel) => void;
-  // eslint-disable-next-line no-unused-vars
   updateCategory: (category: CategorySelectModel) => void;
 };
 

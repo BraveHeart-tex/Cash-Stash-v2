@@ -13,7 +13,6 @@ import {
 
 type AutoProgressInputProps = {
   length: number;
-  // eslint-disable-next-line no-unused-vars
   onChange: (value: string) => void;
   type?: HTMLInputTypeAttribute;
   loading?: boolean;

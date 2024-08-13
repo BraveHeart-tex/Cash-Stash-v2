@@ -36,7 +36,6 @@ import { toast } from "sonner";
 
 type AccountFormProps = {
   data?: AccountSelectModel;
-  // eslint-disable-next-line no-unused-vars
   afterSave?: (values: AccountSelectModel) => void;
 };
 
